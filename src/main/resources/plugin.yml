@@ -1,0 +1,6 @@
+name: Lusk
+version: '${version}'
+main: me.jake.lusk.Lusk
+api-version: 1.19
+depend: [Skript]
+authors: [Jake]
