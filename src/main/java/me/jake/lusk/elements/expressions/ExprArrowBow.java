@@ -1,7 +1,6 @@
 package me.jake.lusk.elements.expressions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -46,15 +45,6 @@ public class ExprArrowBow extends SimpleExpression<ItemStack> {
             item = ((PlayerReadyArrowEvent) e).getBow();
         }
         return new ItemStack[]{item};
-    }
-
-    @Nullable
-    @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return null;
-    }
-    @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
     }
 
     @Override
