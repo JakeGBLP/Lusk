@@ -5,7 +5,6 @@ import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent;
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -16,7 +15,7 @@ public class EvtStopUsingItem extends SkriptEvent {
 
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
-            Skript.registerEvent("Flower Pot Manipulate", EvtStopUsingItem.class, PlayerStopUsingItemEvent.class,
+            Skript.registerEvent("Stop Using Item", EvtStopUsingItem.class, PlayerStopUsingItemEvent.class,
                             "stop using (item|%itemtype%)"
                     )
                     .description("This Event requires Paper.\n\nCalled when the server detects a player stopping using an item. Examples of this are letting go of the interact button when holding a bow, an edible item, or a spyglass.")

@@ -42,7 +42,7 @@ public class EvtBlockPath extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "Block Till";
+        return "Block Path";
     }
 
 }
