@@ -13,7 +13,7 @@ public class EvtArrowReady extends SkriptEvent {
 
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerReadyArrowEvent")) {
-            Skript.registerEvent("Arrow Ready", EvtDye.class, PlayerReadyArrowEvent.class, "arrow ready")
+            Skript.registerEvent("Arrow Ready", EvtArrowReady.class, PlayerReadyArrowEvent.class, "arrow (ready|choose)")
                     .description("This Event requires Paper.\n\nCalled when a player is firing a bow and the server is choosing an arrow to use.")
                     .examples("on arrow ready:\n\tbroadcast the arrow and the bow")
                     .since("1.0.0");

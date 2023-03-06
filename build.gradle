@@ -6,6 +6,7 @@ plugins {
 build.dependsOn(shadowJar)
 jar.enabled = false
 
+
 group = 'Lusk'
 version = '1.0.1'
 

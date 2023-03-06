@@ -29,7 +29,7 @@ public class ExprPlayerVersion extends SimplePropertyExpression<Player, Version>
     @Nullable
     public Version convert(Player p) {
         if (p != null) {
-            return Version.parse(Utils.versions.get(String.valueOf(p.getProtocolVersion())).toString());
+            return Version.parse(String.valueOf(Utils.versions.get(String.valueOf(p.getProtocolVersion()))));
         }
         return null;
     }

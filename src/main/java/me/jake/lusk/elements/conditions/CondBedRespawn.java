@@ -14,7 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Will Be Damaged")
+@Name("is Bed Respawn")
 @Description("This Condition requires Paper.\n\nChecks whether or not the player in the Post Respawn event has respawned at they bed.")
 @Examples({"""
         on post respawn:

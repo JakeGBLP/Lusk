@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("is Awake")
+@Name("is Critical")
 @Description("Checks if the damage is critical.")
 @Examples({"on damage:\n\tif critical:\n\t\tbroadcast \"ouch!\""})
 @Since("1.0.0")

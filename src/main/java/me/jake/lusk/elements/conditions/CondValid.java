@@ -8,14 +8,14 @@ import ch.njol.skript.doc.Since;
 import me.jake.lusk.classes.Version;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Faceplanted")
-@Description("Checks if the fox is faceplanted.")
-@Examples({"on damage of fox:\n\tif victim is faceplanted:\n\t\tcancel event"})
+@Name("is Valid Version")
+@Description("Checks if the string is a valid version")
+@Examples({"if \"1.19.2\" is a valid version:\n\tbroadcast version \"1.19.2\""})
 @Since("1.0.0")
 public class CondValid extends PropertyCondition<String> {
 
     static {
-        register(CondValid.class, "valid", "string");
+        register(CondValid.class, "[a] valid version", "string");
     }
 
     @Override

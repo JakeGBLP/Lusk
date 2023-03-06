@@ -18,12 +18,12 @@ import java.util.Objects;
 
 @Name("Decimal Round")
 @Description("To use this expression to the fullest, the maximum amount of decimals in the Skript config file should be changed to a higher one.\n\nThis expression crops down the amount of decimals by rounding, similar to how PI (3.14159265359) is often rounded as 3.1416 <- 6 instead of 5 cuz it rounded up.\nIf you want to \"crop\" the decimals (remove last x decimals from the number) you need to round down.")
-@Examples({"broadcast 1.2345 rounded up at 2"})
+@Examples({"broadcast 1.2345 rounded up to 3 decimal places"})
 @Since("1.0.0")
 public class ExprDecimalRound extends SimpleExpression<Number> {
     static {
         Skript.registerExpression(ExprDecimalRound.class, Number.class, ExpressionType.SIMPLE,
-                "%number% round[ed] [(down:down|up:up)[ward[s]]] at [index|decimal] %number%");
+                "%number% rounded [(down:down|up:up)[ward[s]]] to %number% [decimal] places");
     }
 
     private Expression<Number> number;

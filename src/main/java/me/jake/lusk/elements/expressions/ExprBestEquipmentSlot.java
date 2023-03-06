@@ -6,25 +6,18 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.skript.util.slot.Slot;
 import ch.njol.util.Kleenean;
-import me.jake.lusk.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-@Name("Slipperiness")
+@Name("Best Equipment Slot")
 @Description("""
         Returns a value that represents how 'slippery' the block is. Blocks with higher slipperiness, like ice can be slid on further by the player and other entities.
         Most blocks have a default slipperiness of 0.6.

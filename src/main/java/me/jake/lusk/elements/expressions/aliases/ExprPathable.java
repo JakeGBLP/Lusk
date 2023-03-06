@@ -16,8 +16,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 @Name("Tillables")
 @Description("Returns all the tillable blocks.")
 @Examples({"broadcast all tillables"})
@@ -33,7 +31,7 @@ public class ExprPathable extends SimpleExpression<ItemType> {
     }
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
-        return Utils.toItemTypes(List.of(Utils.getPathables()));
+        return Utils.toItemTypes(Utils.getPathables());
     }
 
     @Override

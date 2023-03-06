@@ -11,7 +11,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Defending")
+@Name("Fox Is Defending")
 @Description("Checks if the fox is defending.")
 @Examples({"on damage of fox:\n\tif victim is defending:\n\t\tcancel event"})
 @Since("1.0.0")

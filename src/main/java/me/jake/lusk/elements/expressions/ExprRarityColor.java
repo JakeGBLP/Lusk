@@ -15,8 +15,8 @@ import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-@Name("Rarity Color")
-@Description("Returns the color of a rarity (only works for item rarities)")
+@Name("Item Rarity Color")
+@Description("Returns the color of an item's rarity.")
 @Examples({"broadcast rarity color of rarity of tool\nbroadcast rarity color of rarity of heart of the sea"})
 @Since("1.0.0")
 public class ExprRarityColor extends SimpleExpression<SkriptColor> {

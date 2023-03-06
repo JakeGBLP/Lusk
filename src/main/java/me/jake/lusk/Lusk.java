@@ -10,8 +10,8 @@ import ch.njol.skript.SkriptAddon;
 
 public class Lusk extends JavaPlugin {
 
-    public static Lusk instance;
-    SkriptAddon addon;
+    private static Lusk instance;
+    private SkriptAddon addon;
 
 
     public void onEnable() {
@@ -27,7 +27,7 @@ public class Lusk extends JavaPlugin {
         Bukkit.getLogger().info("[Lusk] has been enabled!");
     }
 
-    public Lusk getInstance() {
+    public static Lusk getInstance() {
         return instance;
     }
 

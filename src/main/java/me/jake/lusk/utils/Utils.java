@@ -2,18 +2,16 @@ package me.jake.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.util.SkriptColor;
-import me.jake.lusk.Lusk;
 import me.jake.lusk.classes.Version;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Utils {
 
@@ -130,10 +128,6 @@ public class Utils {
         return result.doubleValue();
     }
 
-    public static Plugin getPlugin() {
-        return Lusk.instance;
-    }
-
     public static boolean isStrippable(Material material) {
         String type = material.toString();
         return ((type.contains("_LOG") || type.contains("_WOOD") || type.contains("WARPED_STEM") || type.contains("CRIMSON_STEM") || type.contains("HYPHAE") || type.contains("EXPOSED") || type.contains("WEATHERED") || type.contains("OXIDIZED")) && (!type.contains("STRIPPED")));
@@ -148,19 +142,32 @@ public class Utils {
         return (material.toString().contains("_SHOVEL"));
     }
 
-    public static Material[] getPathables() {
-        return new Material[]{Material.DIRT,Material.COARSE_DIRT,Material.GRASS_BLOCK,Material.ROOTED_DIRT,Material.MYCELIUM,Material.PODZOL};
+    public static ArrayList<Material> getPathables() {
+        return new ArrayList<Material>(){{
+            add(Material.DIRT);
+            add(Material.COARSE_DIRT);
+            add(Material.GRASS_BLOCK);
+            add(Material.ROOTED_DIRT);
+            add(Material.MYCELIUM);
+            add(Material.PODZOL);
+        }};
     }
 
-    public static Material[] getTillables() {
-        return new Material[]{Material.DIRT,Material.COARSE_DIRT,Material.DIRT_PATH,Material.GRASS_BLOCK,Material.ROOTED_DIRT};
+    public static ArrayList<Material> getTillables() {
+        return new ArrayList<Material>(){{
+            add(Material.DIRT);
+            add(Material.COARSE_DIRT);
+            add(Material.DIRT_PATH);
+            add(Material.GRASS_BLOCK);
+            add(Material.ROOTED_DIRT);
+        }};
     }
     public static boolean isPathable(Material material) {
-        return Arrays.stream(getPathables()).toList().contains(material);
+        return getPathables().contains(material);
     }
 
     public static boolean isTillable(Material material) {
-        return Arrays.stream(getTillables()).toList().contains(material);
+        return getTillables().contains(material);
     }
 
     public static ItemType[] toItemTypes(List<Material> materials) {

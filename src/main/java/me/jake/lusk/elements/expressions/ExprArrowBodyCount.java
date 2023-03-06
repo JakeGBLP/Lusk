@@ -45,7 +45,6 @@ public class ExprArrowBodyCount extends SimpleExpression<Number> {
         } else {
             number = ((ArrowBodyCountChangeEvent) e).getNewAmount();
         }
-
         return new Number[]{number};
     }
 

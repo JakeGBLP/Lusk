@@ -15,9 +15,9 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Small Font")
+@Name("Small Capital Case")
 @Description("Returns the given string with the small font.")
-@Examples({"broadcast player's name as tiny font"})
+@Examples({"broadcast player's name in small caps"})
 @Since("1.0.0")
 public class ExprCases extends SimpleExpression<String> {
     static {

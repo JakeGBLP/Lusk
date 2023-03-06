@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Rarity")
+@Name("Item/Enchantment Rarity")
 @Description("Returns the rarity of an item/enchantment")
 @Examples({"broadcast rarity of tool\nbroadcast rarity of mending"})
 @Since("1.0.0")

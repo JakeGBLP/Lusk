@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Blast Resistance")
+@Name("Block Blast Resistance")
 @Description("""
         Obtains the blast resistance value (also known as block "durability").
         This value is used in explosions to calculate whether a block should be broken or not.

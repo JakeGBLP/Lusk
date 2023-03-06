@@ -12,7 +12,6 @@ import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.entity.ArrowBodyCountChangeEvent;
-import org.bukkit.event.entity.BatToggleSleepEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
 
@@ -24,10 +23,6 @@ public class SimpleEvents {
                 .since("1.0.0");
         Skript.registerEvent("Arrow Body Count Change", SimpleEvent.class, ArrowBodyCountChangeEvent.class, "arrow [body] count chang(e|ing)")
                 .description("Called when an arrow enters or exists an entity's body.")
-                .examples("")
-                .since("1.0.0");
-        Skript.registerEvent("Bat Toggle Sleep", SimpleEvent.class, BatToggleSleepEvent.class, "bat (toggle sleep|sleep toggle)")
-                .description("Called when a bat attempts to sleep or wake up from its slumber.")
                 .examples("")
                 .since("1.0.0");
         if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {

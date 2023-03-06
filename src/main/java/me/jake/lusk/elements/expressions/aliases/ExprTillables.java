@@ -15,7 +15,6 @@ import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
 
 @Name("Tillables")
 @Description("Returns all the tillable blocks.")
@@ -32,7 +31,7 @@ public class ExprTillables extends SimpleExpression<ItemType> {
     }
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
-        return Utils.toItemTypes(List.of(Utils.getTillables()));
+        return Utils.toItemTypes(Utils.getTillables());
     }
 
     @Override
