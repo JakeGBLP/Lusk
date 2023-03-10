@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EvtLecternPageChange extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
             Skript.registerEvent("Lectern Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
