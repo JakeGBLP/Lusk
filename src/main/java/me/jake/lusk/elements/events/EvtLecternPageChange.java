@@ -13,7 +13,7 @@ public class EvtLecternPageChange extends SkriptEvent {
 
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
-            Skript.registerEvent("Item Frame Change", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
+            Skript.registerEvent("Lectern Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
                             "lectern page flip [to the] left",
                                     "lectern page flip [to the] right",
                                     "lectern page [flip]"
