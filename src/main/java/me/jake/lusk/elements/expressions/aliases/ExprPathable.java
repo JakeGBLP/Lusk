@@ -16,9 +16,9 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Tillables")
-@Description("Returns all the tillable blocks.")
-@Examples({"broadcast all tillables"})
+@Name("Pathables")
+@Description("Returns all the pathable blocks.")
+@Examples({"broadcast all pathable"})
 @Since("1.0.0")
 public class ExprPathable extends SimpleExpression<ItemType> {
     static {

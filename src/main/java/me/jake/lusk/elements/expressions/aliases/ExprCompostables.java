@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Tillables")
+@Name("Compostables")
 @Description("Returns all the compostable blocks.")
 @Examples({"broadcast all compostable"})
 @Since("1.0.0")
