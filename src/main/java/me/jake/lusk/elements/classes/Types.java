@@ -9,9 +9,10 @@ import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent.Reason;
 import me.jake.lusk.classes.Version;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
@@ -141,5 +142,63 @@ public class Types {
                         return toString(v, 0) + " version (" + v + ")";
                     }
                 }));
+        // 1.0.2
+        // Experimental
+        Classes.registerClass(new ClassInfo<>(Display.Billboard.class, "billboard")
+                .user("billboards?")
+                .name("Billboard")
+                .description("All the Billboards.")
+                .usage(Arrays.toString(Display.Billboard.values()))
+                .examples("")
+                .since("1.0.2")
+                .parser(new Parser<Display.Billboard>() {
+                    @Override
+                    public Display.Billboard parse(final @NotNull String s, final @NotNull ParseContext context) {
+                        try {
+                            return Display.Billboard.valueOf(s.toUpperCase());
+                        } catch(IllegalArgumentException ex) {
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    public @NotNull String toString(final Display.Billboard b, final int flags) {
+                        return b.toString();
+                    }
+
+                    @Override
+                    public @NotNull String toVariableNameString(final Display.Billboard b) {
+                        return "" + b.name();
+                    }
+                })
+                .serializer(new EnumSerializer<>(Display.Billboard.class)));
+        Classes.registerClass(new ClassInfo<>(ItemDisplay.ItemDisplayTransform.class, "itemdisplaytransform")
+                .user("item ?display ?transforms?")
+                .name("Item Display Transform")
+                .description("All the Item Display Transform.")
+                .usage(Arrays.toString(ItemDisplay.ItemDisplayTransform.values()))
+                .examples("")
+                .since("1.0.2")
+                .parser(new Parser<ItemDisplay.ItemDisplayTransform>() {
+                    @Override
+                    public ItemDisplay.ItemDisplayTransform parse(final @NotNull String s, final @NotNull ParseContext context) {
+                        try {
+                            return ItemDisplay.ItemDisplayTransform.valueOf(s.toUpperCase());
+                        } catch(IllegalArgumentException ex) {
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    public @NotNull String toString(final ItemDisplay.ItemDisplayTransform t, final int flags) {
+                        return t.toString();
+                    }
+
+                    @Override
+                    public @NotNull String toVariableNameString(final ItemDisplay.ItemDisplayTransform t) {
+                        return "" + t.name();
+                    }
+                })
+                .serializer(new EnumSerializer<>(ItemDisplay.ItemDisplayTransform.class)));
     }
 }

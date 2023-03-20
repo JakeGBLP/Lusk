@@ -13,7 +13,7 @@ public class AddonComparators {
 
         // Custom
 
-        // Version (>|<)[=] Version
+        // Version
         Comparators.registerComparator(Version.class, Version.class, new Comparator<>() {
             @Override
             public @NotNull Relation compare(Version v1, Version v2) {

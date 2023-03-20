@@ -8,7 +8,7 @@ jar.enabled = false
 
 
 group = 'Lusk'
-version = '1.0.1'
+version = '1.0.2'
 
 compileJava {options.encoding = "UTF-8"}
 
@@ -25,12 +25,17 @@ repositories {
     maven {
         url 'https://repo.skriptlang.org/releases'
     }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly  'com.github.SkriptLang:Skript:2.6.3'
+    implementation "org.joml:joml:1.10.5"
     implementation 'org.bstats:bstats-bukkit:3.0.1'
+
 }
 shadowJar {
     ant.replace(file: 'src/main/resources/plugin.yml', token: '@VERSION@', value: this.version)
