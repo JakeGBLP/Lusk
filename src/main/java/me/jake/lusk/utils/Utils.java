@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -511,5 +513,17 @@ public class Utils {
             }
         }
         return string;
+    }
+    public static Vector toBukkitVector(EulerAngle angle) {
+        double x = angle.getX();
+        double y = angle.getY();
+        double z = angle.getZ();
+        return new Vector(x,y,z);
+    }
+    public static EulerAngle toEulerAngle(Vector vector) {
+        double x = vector.getX();
+        double y = vector.getY();
+        double z = vector.getZ();
+        return new EulerAngle(x,y,z);
     }
 }
