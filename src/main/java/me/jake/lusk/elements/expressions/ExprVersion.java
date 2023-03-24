@@ -14,6 +14,7 @@ import me.jake.lusk.classes.Version;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 @Name("Version")

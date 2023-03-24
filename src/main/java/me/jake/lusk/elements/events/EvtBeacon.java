@@ -5,12 +5,12 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.coll.CollectionUtils;
+import io.papermc.paper.event.block.BeaconActivatedEvent;
+import io.papermc.paper.event.block.BeaconDeactivatedEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import io.papermc.paper.event.block.BeaconActivatedEvent;
-import io.papermc.paper.event.block.BeaconDeactivatedEvent;
-
+@SuppressWarnings("unused")
 public class EvtBeacon extends SkriptEvent {
 
     static {

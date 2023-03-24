@@ -10,8 +10,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.Objects;
 
+import java.util.Objects;
+@SuppressWarnings("unused")
 public class EvtBlockTill extends SkriptEvent {
 
     static {

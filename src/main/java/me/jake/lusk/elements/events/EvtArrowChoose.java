@@ -9,6 +9,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class EvtArrowChoose extends SkriptEvent {
 
     static {

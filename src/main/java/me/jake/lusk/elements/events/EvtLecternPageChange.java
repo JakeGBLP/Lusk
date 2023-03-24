@@ -8,7 +8,7 @@ import io.papermc.paper.event.player.PlayerLecternPageChangeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@SuppressWarnings("unused")
 public class EvtLecternPageChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {

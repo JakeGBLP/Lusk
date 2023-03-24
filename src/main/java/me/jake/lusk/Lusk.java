@@ -1,14 +1,15 @@
 package me.jake.lusk;
 
-import java.io.IOException;
-
+import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAddon;
 import me.jake.lusk.utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import ch.njol.skript.Skript;
-import ch.njol.skript.SkriptAddon;
 
+import java.io.IOException;
+
+@SuppressWarnings("unused")
 public class Lusk extends JavaPlugin {
 
     private static Lusk instance;
@@ -24,14 +25,20 @@ public class Lusk extends JavaPlugin {
             e.printStackTrace();
         }
         int pluginId = 17730;
+
+        @SuppressWarnings("unused")
         Metrics metrics = new Metrics(this, pluginId);
         Utils.setEverything();
         Bukkit.getLogger().info("[Lusk] has been enabled!");
     }
 
+    @SuppressWarnings("unused")
+
     public static Lusk getInstance() {
         return instance;
     }
+
+    @SuppressWarnings("unused")
 
     public SkriptAddon getAddonInstance() {
         return addon;

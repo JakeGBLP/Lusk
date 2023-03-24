@@ -9,6 +9,7 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @Name("Block Slipperiness")
 @Description("""
         Returns a value that represents how 'slippery' the block is. Blocks with higher slipperiness, like ice can be slid on further by the player and other entities.

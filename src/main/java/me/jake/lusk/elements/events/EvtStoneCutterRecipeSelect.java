@@ -8,7 +8,7 @@ import io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@SuppressWarnings("unused")
 public class EvtStoneCutterRecipeSelect extends SkriptEvent {
 
     static {

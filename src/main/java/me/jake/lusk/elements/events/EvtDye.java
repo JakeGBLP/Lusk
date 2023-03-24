@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-
+@SuppressWarnings("unused")
 public class EvtDye extends SkriptEvent {
 
     static {

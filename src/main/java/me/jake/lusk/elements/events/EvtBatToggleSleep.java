@@ -9,6 +9,7 @@ import org.bukkit.event.entity.BatToggleSleepEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class EvtBatToggleSleep extends SkriptEvent {
 
     static {

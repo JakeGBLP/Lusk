@@ -15,6 +15,7 @@ import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @Name("Item Rarity Color")
 @Description("Returns the color of an item's rarity.")
 @Examples({"broadcast rarity color of rarity of tool\nbroadcast rarity color of rarity of heart of the sea"})

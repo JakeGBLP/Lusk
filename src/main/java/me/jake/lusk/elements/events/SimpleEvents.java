@@ -19,7 +19,7 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
-
+@SuppressWarnings("unused")
 public class SimpleEvents {
     static {
         // 1.0.0

@@ -12,6 +12,7 @@ import ch.njol.util.Kleenean;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 
 @Name("Make Trigger Advancements")

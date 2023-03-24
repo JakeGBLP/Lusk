@@ -8,7 +8,7 @@ import io.papermc.paper.event.entity.EntityInsideBlockEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@SuppressWarnings("unused")
 public class EvtEntityInsideBlock extends SkriptEvent {
 
     static {

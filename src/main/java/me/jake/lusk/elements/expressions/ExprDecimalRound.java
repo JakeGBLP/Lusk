@@ -14,7 +14,9 @@ import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
+
 
 @Name("Decimal Round")
 @Description("To use this expression to the fullest, the maximum amount of decimals in the Skript config file should be changed to a higher one.\n\nThis expression crops down the amount of decimals by rounding, similar to how PI (3.14159265359) is often rounded as 3.1416 <- 6 instead of 5 cuz it rounded up.\nIf you want to \"crop\" the decimals (remove last x decimals from the number) you need to round down.")

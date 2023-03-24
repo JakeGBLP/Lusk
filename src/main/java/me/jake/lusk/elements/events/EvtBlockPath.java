@@ -10,12 +10,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
+
+@SuppressWarnings("unused")
 public class EvtBlockPath extends SkriptEvent {
 
     static {
-        Skript.registerEvent("Dirt Path", EvtBlockPath.class, PlayerInteractEvent.class, "[dirt] path[ing|ed]")
+        Skript.registerEvent("Block Path", EvtBlockPath.class, PlayerInteractEvent.class, "[block] path[ing|ed]")
                 .description("Called when a player changes a block by right clicking it with a shovel.")
                 .examples("on path:\n\tbroadcast \"a block has been pathed!\"")
                 .since("1.0.0");
