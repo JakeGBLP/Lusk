@@ -31,9 +31,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
     compileOnly 'io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly  'com.github.SkriptLang:Skript:2.6.3'
-    implementation "org.joml:joml:1.10.5"
     implementation 'org.bstats:bstats-bukkit:3.0.1'
 
 }
