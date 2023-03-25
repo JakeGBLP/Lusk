@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+
 @SuppressWarnings("unused")
 public class EvtLoomPatternSelect extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
             Skript.registerEvent("Loom Pattern Select", EvtLoomPatternSelect.class, PlayerLoomPatternSelectEvent.class, "[loom] pattern select [of %-patterntypes%]")
@@ -34,7 +34,6 @@ public class EvtLoomPatternSelect extends SkriptEvent {
 
     @Nullable
     private PatternType[] types = new PatternType[0];
-
 
     @Override
     public boolean init(Literal @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
@@ -64,5 +63,4 @@ public class EvtLoomPatternSelect extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "loom pattern select" + (types == null ? "" : " " + Arrays.toString(types));
     }
-
 }

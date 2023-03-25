@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+
 @SuppressWarnings("unused")
 public class EvtDye extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityDyeEvent")) {
             Skript.registerEvent("Dye Event", EvtDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")

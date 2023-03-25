@@ -8,7 +8,7 @@ import ch.njol.skript.doc.Since;
 import me.jake.lusk.classes.Version;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Valid Version")
+@Name("Version - is Valid")
 @Description("Checks if the string is a valid version")
 @Examples({"if \"1.19.2\" is a valid version:\n\tbroadcast version \"1.19.2\""})
 @Since("1.0.0")

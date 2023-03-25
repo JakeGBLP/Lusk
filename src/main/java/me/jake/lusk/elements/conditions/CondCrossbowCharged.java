@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Crossbow Charged")
+@Name("Crossbow - is Charged")
 @Description("Checks if a crossbow is charged.")
 @Examples({""})
 @Since("1.0.1")

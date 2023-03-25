@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-@Name("Make Trigger Advancements")
+@Name("Cancel Advancements")
 @Description("This Effect requires Paper.\n\nCan only be used in a Slot Change Event.\nSets whether or not the event should trigger advancements.")
 @Examples({"""
            on item obtain:

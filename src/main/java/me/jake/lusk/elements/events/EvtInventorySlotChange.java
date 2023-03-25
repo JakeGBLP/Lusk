@@ -8,9 +8,9 @@ import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtInventorySlotChange extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerInventorySlotChangeEvent")) {
             Skript.registerEvent("Player Inventory Slot Change", EvtInventorySlotChange.class, PlayerInventorySlotChangeEvent.class,

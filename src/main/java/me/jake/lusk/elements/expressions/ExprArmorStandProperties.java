@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Armor Stand Properties")
+@Name("Armorstand - Properties")
 @Description("Gets and sets a specific armor stand property.")
 @Examples({"broadcast arms of target","set marker of target to true"})
 @Since("1.0.2")

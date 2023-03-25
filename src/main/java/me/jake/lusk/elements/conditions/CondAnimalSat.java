@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Name("Animal Is Sat")
+@Name("Animal - is Sat")
 @Description("Checks if an entity is sitting.\n(Cats, Wolves, Parrots, Pandas and Foxes)")
 @Examples({"on damage of wolf, cat or fox:\n\tif victim is sitting:\n\t\tcancel event"})
 @Since("1.0.0")

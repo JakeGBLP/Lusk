@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-@Name("Escape Reason")
+@Name("Enderman - Escape Reason")
 @Description("Returns the Escape Reason in an Enderman Escape Event.\nThis Expression requires Paper.")
 @Examples({"on enderman escape:\n\tbroadcast the escape reason"})
 @Since("1.0.0")

@@ -10,9 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtStopUsingItem extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
             Skript.registerEvent("Stop Using Item", EvtStopUsingItem.class, PlayerStopUsingItemEvent.class,
@@ -48,5 +48,4 @@ public class EvtStopUsingItem extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "Stop using " + (itemType == null ? "item" : itemType);
     }
-
 }

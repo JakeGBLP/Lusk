@@ -11,7 +11,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Fox Is Faceplanted")
+@Name("Fox - is Faceplanted")
 @Description("Checks if the fox is faceplanted.")
 @Examples({"on damage of fox:\n\tif victim is faceplanted:\n\t\tcancel event"})
 @Since("1.0.0")

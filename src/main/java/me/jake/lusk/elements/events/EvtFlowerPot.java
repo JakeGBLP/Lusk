@@ -10,9 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtFlowerPot extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
             Skript.registerEvent("Flower Pot Manipulate", EvtFlowerPot.class, PlayerFlowerPotManipulateEvent.class,
@@ -53,5 +53,4 @@ public class EvtFlowerPot extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "flower potting" + (flower == null ? "" : " " + flower);
     }
-
 }

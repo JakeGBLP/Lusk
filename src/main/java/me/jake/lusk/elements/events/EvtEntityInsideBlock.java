@@ -8,9 +8,9 @@ import io.papermc.paper.event.entity.EntityInsideBlockEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtEntityInsideBlock extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
             Skript.registerEvent("Entity Inside Block", EvtEntityInsideBlock.class, EntityInsideBlockEvent.class, "[entity] (collide with [a] block|in[side] [a] block)")
@@ -61,5 +61,4 @@ public class EvtEntityInsideBlock extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "entity in block";
     }
-
 }

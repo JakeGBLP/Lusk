@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Item Rarity Color")
-@Description("Returns the color of an item's rarity.")
+@Description("Returns the color of an item's rarity.\nSome enchantment rarities happen to be named the same as some item rarities, this expression is solely for Item Rarities.")
 @Examples({"broadcast rarity color of rarity of tool\nbroadcast rarity color of rarity of heart of the sea"})
 @Since("1.0.0")
 public class ExprRarityColor extends SimpleExpression<SkriptColor> {
@@ -42,7 +42,6 @@ public class ExprRarityColor extends SimpleExpression<SkriptColor> {
             return new SkriptColor[]{};
         }
     }
-
 
     @Override
     public boolean isSingle() {

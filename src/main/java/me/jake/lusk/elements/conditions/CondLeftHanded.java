@@ -4,7 +4,6 @@ package me.jake.lusk.elements.conditions;
 Credits: Sovde
 */
 
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
@@ -19,7 +18,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Left Handed")
+@Name("Entity - is Left Handed")
 @Description("Checks if an entity is left handed")
 @Examples({"on damage of player:\n\tif victim is left handed:\n\t\tbroadcast \"A left handed man has been attacked!\""})
 @Since("1.0.0")

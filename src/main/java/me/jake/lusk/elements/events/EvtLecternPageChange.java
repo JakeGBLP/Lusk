@@ -56,5 +56,4 @@ public class EvtLecternPageChange extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "lectern page flip" + (action == null ? "" : " to the " + action.toString().toLowerCase());
     }
-
 }

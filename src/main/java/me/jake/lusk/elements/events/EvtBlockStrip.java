@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class EvtBlockStrip extends SkriptEvent {
-
     static {
         Skript.registerEvent("Strip", EvtBlockStrip.class, PlayerInteractEvent.class, "[block] strip[p(ed|ing)]", "[block] axe", "[block] deoxidize")
                 .description("Called when a player changes a block by right clicking it with an axe.")

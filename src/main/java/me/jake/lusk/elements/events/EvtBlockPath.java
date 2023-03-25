@@ -13,10 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-
 @SuppressWarnings("unused")
 public class EvtBlockPath extends SkriptEvent {
-
     static {
         Skript.registerEvent("Block Path", EvtBlockPath.class, PlayerInteractEvent.class, "[block] path[ing|ed]")
                 .description("Called when a player changes a block by right clicking it with a shovel.")

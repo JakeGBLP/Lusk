@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class EvtBatToggleSleep extends SkriptEvent {
-
     static {
         Skript.registerEvent("Bat Sleep/Wake up", EvtBatToggleSleep.class, BatToggleSleepEvent.class, "bat (:sleep|wake up)")
                 .description("Called when a bat attempts to sleep or wake up from its slumber.")

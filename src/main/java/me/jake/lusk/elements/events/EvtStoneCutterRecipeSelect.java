@@ -8,9 +8,9 @@ import io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtStoneCutterRecipeSelect extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent")) {
             Skript.registerEvent("StoneCutter Recipe Select", EvtStoneCutterRecipeSelect.class, PlayerStonecutterRecipeSelectEvent.class, "[stonecutt(er|ing)] recipe select")
@@ -37,5 +37,4 @@ public class EvtStoneCutterRecipeSelect extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "stonecutter recipe select";
     }
-
 }

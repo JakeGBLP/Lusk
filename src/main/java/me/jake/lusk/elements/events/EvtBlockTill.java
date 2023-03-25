@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class EvtBlockTill extends SkriptEvent {
-
     static {
         Skript.registerEvent("Till", EvtBlockTill.class, PlayerInteractEvent.class, "[dirt] till[ing|ed]")
                 .description("Called when a player changes a block by right clicking it with a hoe.")

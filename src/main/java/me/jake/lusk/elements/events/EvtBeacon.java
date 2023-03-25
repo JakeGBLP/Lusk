@@ -10,9 +10,9 @@ import io.papermc.paper.event.block.BeaconDeactivatedEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtBeacon extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.block.BeaconActivatedEvent") && Skript.classExists("io.papermc.paper.event.block.BeaconDeactivatedEvent")) {
             Skript.registerEvent("Beacon on/off", EvtBeacon.class, CollectionUtils.array(BeaconActivatedEvent.class, BeaconDeactivatedEvent.class),

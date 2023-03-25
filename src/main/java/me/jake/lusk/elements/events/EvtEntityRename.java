@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+
 @SuppressWarnings("unused")
 public class EvtEntityRename extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
             Skript.registerEvent("Entity Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
@@ -29,7 +29,6 @@ public class EvtEntityRename extends SkriptEvent {
 
     @Nullable
     private EntityData<?>[] types = new EntityData<?>[0];
-
 
     @Override
     public boolean init(Literal @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
@@ -59,5 +58,4 @@ public class EvtEntityRename extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "entity rename" + (types == null ? "" : " " + Arrays.toString(types));
     }
-
 }

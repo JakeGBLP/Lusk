@@ -9,7 +9,7 @@ import me.jake.lusk.utils.Utils;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is NPC")
+@Name("Citizens - is NPC")
 @Description("Checks if an entity is an NPC. (Citizens)")
 @Examples({"on right click:\n\tif entity is npc:\n\t\tbroadcast \"you clicked an NPC!\""})
 @Since("1.0.0")
@@ -17,7 +17,7 @@ public class CondNPC extends PropertyCondition<Entity> {
 
     static {
         register(CondNPC.class, "(npc|citizen)", "entity");
-        }
+    }
 
     @Override
     public boolean check(Entity entity) {

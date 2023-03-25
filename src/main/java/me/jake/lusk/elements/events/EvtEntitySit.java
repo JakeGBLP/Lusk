@@ -8,9 +8,9 @@ import io.papermc.paper.event.entity.EntityToggleSitEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtEntitySit extends SkriptEvent {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityToggleSitEvent")) {
             Skript.registerEvent("Sit/Stand up", EvtEntitySit.class, EntityToggleSitEvent.class,
@@ -42,5 +42,4 @@ public class EvtEntitySit extends SkriptEvent {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "entity " + (sit ? "sitting down" : "standing up");
     }
-
 }

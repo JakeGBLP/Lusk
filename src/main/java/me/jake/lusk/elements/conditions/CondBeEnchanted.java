@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-@Name("Can Be Enchanted")
-@Description("Checks if an item can be enchanted with an Enchantment")
+@Name("Can Be Enchanted with")
+@Description("Checks if an item can be enchanted with an Enchantment.")
 @Examples({"if tool of player can be enchanted with sharpness:"})
 @Since("1.0.0")
 public class CondBeEnchanted extends Condition {

@@ -6,7 +6,6 @@ import me.jake.lusk.utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.IOException;
 
 @SuppressWarnings("unused")
@@ -14,7 +13,6 @@ public class Lusk extends JavaPlugin {
 
     private static Lusk instance;
     private SkriptAddon addon;
-
 
     public void onEnable() {
         instance = this;
@@ -25,7 +23,6 @@ public class Lusk extends JavaPlugin {
             e.printStackTrace();
         }
         int pluginId = 17730;
-
         @SuppressWarnings("unused")
         Metrics metrics = new Metrics(this, pluginId);
         Utils.setEverything();
@@ -33,13 +30,11 @@ public class Lusk extends JavaPlugin {
     }
 
     @SuppressWarnings("unused")
-
     public static Lusk getInstance() {
         return instance;
     }
 
     @SuppressWarnings("unused")
-
     public SkriptAddon getAddonInstance() {
         return addon;
     }
