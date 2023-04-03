@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprPercentage extends SimpleExpression<Number> {
     static {
-        Skript.registerExpression(ExprPercentage.class, Number.class, ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprPercentage.class, Number.class, ExpressionType.COMBINED,
                 "%number%([ ]\\%| percent) (of|from) %number%");
     }
 

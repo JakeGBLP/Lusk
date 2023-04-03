@@ -6,6 +6,7 @@ import me.jake.lusk.utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.IOException;
 
 @SuppressWarnings("unused")
@@ -18,6 +19,7 @@ public class Lusk extends JavaPlugin {
         instance = this;
         addon = Skript.registerAddon(this);
         try {
+            Utils.setEverything();
             addon.loadClasses("me.jake.lusk", "elements");
         } catch (IOException e) {
             e.printStackTrace();
@@ -25,7 +27,6 @@ public class Lusk extends JavaPlugin {
         int pluginId = 17730;
         @SuppressWarnings("unused")
         Metrics metrics = new Metrics(this, pluginId);
-        Utils.setEverything();
         Bukkit.getLogger().info("[Lusk] has been enabled!");
     }
 

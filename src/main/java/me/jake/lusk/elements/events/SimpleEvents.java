@@ -7,18 +7,26 @@ import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
-import io.papermc.paper.event.block.BellRingEvent;
-import io.papermc.paper.event.block.CompostItemEvent;
+import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
+import io.papermc.paper.event.block.*;
+import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import io.papermc.paper.event.entity.EntityCompostItemEvent;
+import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
+import org.bukkit.event.block.BrewingStartEvent;
+import org.bukkit.event.block.CampfireStartEvent;
+import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.event.entity.ArrowBodyCountChangeEvent;
-import org.bukkit.event.inventory.FurnaceExtractEvent;
-import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
-import org.bukkit.event.inventory.PrepareGrindstoneEvent;
+import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
+import org.bukkit.event.entity.EntityEnterLoveModeEvent;
+import org.bukkit.event.entity.EntityPoseChangeEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
+import org.bukkit.event.server.BroadcastMessageEvent;
+
 @SuppressWarnings("unused")
 public class SimpleEvents {
     static {
@@ -84,6 +92,8 @@ public class SimpleEvents {
         if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent")) {
             Skript.registerEvent("Player Start Spectating", SimpleEvent.class, PlayerStartSpectatingEntityEvent.class, "spectat(e|ing) [start|begin]")
                     .description("""
+                            Deprecated since 2.7: https://docs.skriptlang.org/nightly/master/docs.html?search=#spectate
+                            
                             This event requires Paper.
                                                         
                             Triggered when a player starts spectating an entity in spectator mode.""")
@@ -93,6 +103,8 @@ public class SimpleEvents {
         if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent")) {
             Skript.registerEvent("Player Stop Spectating", SimpleEvent.class, PlayerStopSpectatingEntityEvent.class, "spectat(e|ing) stop")
                     .description("""
+                            Deprecated since 2.7: https://docs.skriptlang.org/nightly/master/docs.html?search=#spectate
+                            
                             This event requires Paper.
                                                         
                             Triggered when a player stops spectating an entity in spectator mode.""")
@@ -166,6 +178,119 @@ public class SimpleEvents {
                             Called when an item is about to be composted by an entity.""")
                     .examples("")
                     .since("1.0.1");
+        }
+
+        // 1.0.2
+
+        // Whitelist Events
+        if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
+            Skript.registerEvent("Whitelist Verify", SimpleEvent.class, ProfileWhitelistVerifyEvent.class, "whitelist verify")
+                    .description("""
+                            This event requires Paper.
+                                                        
+                            Fires when the server needs to verify if a player is whitelisted. Plugins may override/control the servers whitelist with this event, and dynamically change the kick message.""")
+                    .examples("")
+                    .since("1.0.2");
+        }
+        // Dispense Events
+        if (Skript.classExists("io.papermc.paper.event.block.BlockFailedDispenseEvent")) {
+            Skript.registerEvent("Dispense Fail", SimpleEvent.class, BlockFailedDispenseEvent.class, "dispense fail","failed dispense")
+                    .description("""
+                            This event requires Paper.
+                                                        
+                            Called when a block tries to dispense an item, but its inventory is empty.""")
+                    .examples("")
+                    .since("1.0.2");
+        }
+        if (Skript.classExists("io.papermc.paper.event.block.BlockPreDispenseEvent")) {
+            Skript.registerEvent("Pre Dispense", SimpleEvent.class, BlockPreDispenseEvent.class, "pre dispense")
+                    .description("""
+                            This event requires Paper.
+                                                        
+                            Called when a block is about to dispense an item.""")
+                    .examples("")
+                    .since("1.0.2");
+        }
+        // Broadcast Event
+        Skript.registerEvent("Broadcast", SimpleEvent.class, BroadcastMessageEvent.class, "broadcast")
+                    .description("""
+                            Called when a message is broadcast internally, I think.""")
+                    .examples("")
+                    .since("1.0.2");
+
+        // Brewing Events
+        Skript.registerEvent("Brewing Start", SimpleEvent.class, BrewingStartEvent.class, "brewing start")
+                .description("""
+                            Called when a brewing stand starts to brew.""")
+                .examples("")
+                .since("1.0.2");
+        Skript.registerEvent("Brew", SimpleEvent.class, BrewEvent.class, "brew")
+                .description("""
+                            Called when a Brewing Stand brews.""")
+                .examples("")
+                .since("1.0.2");
+        Skript.registerEvent("Brewing Stand Fuel", SimpleEvent.class, BrewingStandFuelEvent.class, "brewing stand fuel")
+                .description("""
+                            Called when an ItemStack is about to increase the fuel level of a brewing stand.""")
+                .examples("")
+                .since("1.0.2");
+        // Campfire Events
+        Skript.registerEvent("Campfire Start", SimpleEvent.class, CampfireStartEvent.class, "campfire [start]")
+                .description("""
+                            Called when a Campfire starts to cook.""")
+                .examples("")
+                .since("1.0.2");
+        // Cauldron Events
+        Skript.registerEvent("Cauldron Level Change", SimpleEvent.class, CauldronLevelChangeEvent.class, "cauldron [level change]")
+                .description("""
+                            Called when a Cauldron's level changes.'""")
+                .examples("")
+                .since("1.0.2");
+        // EnderDragon Events
+        if (Skript.classExists("io.papermc.paper.event.block.DragonEggFormEvent")) {
+            Skript.registerEvent("Dragon Egg Form", SimpleEvent.class, DragonEggFormEvent.class, "dragon egg (form|spawn|create)")
+                    .description("""
+                            Called when the EnderDragon is defeated, causing a Dragon Egg to form.
+                            This event can be cancelled by default depending on server configuration and whether or not the dragon had already been killed.""")
+                    .examples("")
+                    .since("1.0.2");
+        }
+        Skript.registerEvent("Ender Dragon Change Phase", SimpleEvent.class, EnderDragonChangePhaseEvent.class, "ender dragon change phase","ender dragon phase change ","ender dragon phase")
+                .description("""
+                            Called when an EnderDragon switches phase.""")
+                .examples("")
+                .since("1.0.2");
+        // Elder Guardian Events
+        if (Skript.classExists("io.papermc.paper.event.entity.ElderGuardianAppearanceEvent")) {
+            Skript.registerEvent("Elder Guardian Appear", SimpleEvent.class, ElderGuardianAppearanceEvent.class, "elder guardian appear")
+                    .description("""
+                            Called when an ElderGuardian appears in front of a Player.""")
+                    .examples("")
+                    .since("1.0.2");
+        }
+        // Love Mode Event
+        Skript.registerEvent("Entity Enter Love Mode", SimpleEvent.class, EntityEnterLoveModeEvent.class, "love [mode enter]")
+                .description("""
+                        Called when an entity enters love mode.
+                        This can be cancelled but the item will still be consumed that was used to make the entity enter into love mode.""")
+                .examples("")
+                .since("1.0.2");
+        // Pose Event
+        Skript.registerEvent("Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose [change]")
+                .description("""
+                        Called when an entity changes its pose.""")
+                .examples("")
+                .since("1.0.2");
+        // Damage Push
+        if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
+            Skript.registerEvent("Entity Pushed by Attack", SimpleEvent.class, EntityPushedByEntityAttackEvent.class, "(damage|attack) push")
+                    .description("""
+                            Fired when an entity is pushed by another entity's attack.
+                            The acceleration vector can be modified. If this event is cancelled, the entity will not get pushed.
+                                                        
+                            Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
+                    .examples("")
+                    .since("1.0.2");
         }
     }
 }

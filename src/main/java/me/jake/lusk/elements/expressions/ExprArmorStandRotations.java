@@ -20,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 @Name("ArmorStand - Rotations")
@@ -88,13 +89,13 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
         if (entity != null) {
             if (entity instanceof ArmorStand armorStand) {
                 switch (property) {
-                    case "left arm" -> armorStand.setLeftArmPose(Utils.toEulerAngle(vector));
-                    case "right arm" -> armorStand.setRightArmPose(Utils.toEulerAngle(vector));
-                    case "left leg" -> armorStand.setLeftLegPose(Utils.toEulerAngle(vector));
-                    case "right leg" -> armorStand.setRightLegPose(Utils.toEulerAngle(vector));
-                    case "head" -> armorStand.setHeadPose(Utils.toEulerAngle(vector));
-                    case "body" -> armorStand.setBodyPose(Utils.toEulerAngle(vector));
-                    case "" -> armorStand.setRotation(VectorMath.notchYaw(VectorMath.getYaw(vector)),VectorMath.notchPitch(VectorMath.getPitch(vector)));
+                    case "left arm" -> Utils.setLeftArmRotation(armorStand,vector);
+                    case "right arm" -> Utils.setRightArmRotation(armorStand,vector);
+                    case "left leg" -> Utils.setLeftLegRotation(armorStand,vector);
+                    case "right leg" -> Utils.setRightLegRotation(armorStand,vector);
+                    case "head" -> Utils.setHeadRotation(armorStand,vector);
+                    case "body" -> Utils.setBodyRotation(armorStand,vector);
+                    case "" -> Utils.setFullRotation(armorStand,vector);
                 }
             }
         }

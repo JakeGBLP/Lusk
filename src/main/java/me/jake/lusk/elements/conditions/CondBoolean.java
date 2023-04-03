@@ -20,7 +20,6 @@ import java.util.Objects;
 @Examples({"if {isJailed::%uuid of player%}:\n\tbroadcast \"%player% is Jailed!\""})
 @Since("1.0.0")
 public class CondBoolean extends Condition {
-
     static {
         Skript.registerCondition(CondBoolean.class, "%boolean%", "!%boolean%");
     }

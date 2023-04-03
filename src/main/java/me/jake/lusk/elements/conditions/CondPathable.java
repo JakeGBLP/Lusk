@@ -23,10 +23,10 @@ public class CondPathable extends PropertyCondition<Object> {
     @Override
     public boolean check(Object o) {
         if (o != null) {
-            if (o instanceof Block) {
-                return Utils.isPathable(((Block)o).getType());
-            } else if (o instanceof ItemType) {
-                return Utils.isPathable(((ItemType)o).getMaterial());
+            if (o instanceof Block block) {
+                return Utils.isPathable(block.getType());
+            } else if (o instanceof ItemType itemType) {
+                return Utils.isPathable(itemType.getMaterial());
             }
         }
         return false;

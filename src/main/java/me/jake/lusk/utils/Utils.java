@@ -1,12 +1,18 @@
 package me.jake.lusk.utils;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
+import ch.njol.skript.bukkitutil.EntityUtils;
+import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.util.SkriptColor;
+import ch.njol.util.VectorMath;
 import me.jake.lusk.classes.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -15,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public class Utils {
 
     // Main method
@@ -36,6 +43,8 @@ public class Utils {
         setFlowers();
         setCompostablesWithChances();
         setCompostables();
+        setShearables();
+        setSkriptVersion();
     }
 
     // Fields
@@ -56,7 +65,8 @@ public class Utils {
     private static ArrayList<Material> flowers;
     private static HashMap<Material, Integer> compostablesWithChances;
     private static ArrayList<Material> compostables;
-
+    private static ArrayList<EntityData> shearables;
+    private static Version skriptVersion;
     // Set
     public static void setServerVersion() {
         serverVersion = Version.parse(Bukkit.getMinecraftVersion());
@@ -187,6 +197,7 @@ public class Utils {
                 add(Material.WAXED_EXPOSED_CUT_COPPER);
                 add(Material.WAXED_EXPOSED_CUT_COPPER_SLAB);
                 add(Material.WAXED_EXPOSED_CUT_COPPER_STAIRS);
+
             }
         }};
     }
@@ -194,6 +205,19 @@ public class Utils {
         axeables = new ArrayList<>() {{
             addAll(getWaxables());
             addAll(getStrippables());
+            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 20))) {
+                add(Material.OAK_HANGING_SIGN);
+                add(Material.SPRUCE_HANGING_SIGN);
+                add(Material.BIRCH_HANGING_SIGN);
+                add(Material.JUNGLE_HANGING_SIGN);
+                add(Material.DARK_OAK_HANGING_SIGN);
+                add(Material.ACACIA_HANGING_SIGN);
+                add(Material.CRIMSON_HANGING_SIGN);
+                add(Material.WARPED_HANGING_SIGN);
+                add(Material.MANGROVE_HANGING_SIGN);
+                add(Material.BAMBOO_HANGING_SIGN);
+                add(Material.CHERRY_HANGING_SIGN);
+            }
         }};
     }
     public static void setSaplings() {
@@ -354,6 +378,17 @@ public class Utils {
         }};
     }
 
+    public static void setShearables() {
+        shearables = new ArrayList<>() {{
+            add(EntityUtils.toSkriptEntityData(EntityType.MUSHROOM_COW));
+            add(EntityUtils.toSkriptEntityData(EntityType.SHEEP));
+            add(EntityUtils.toSkriptEntityData(EntityType.SNOWMAN));
+        }};
+    }
+    public static void setSkriptVersion() {
+        skriptVersion = Version.parse(Skript.getVersion().toString());
+    }
+
     // Get
     public static Version getServerVersion() {
         return serverVersion;
@@ -409,10 +444,13 @@ public class Utils {
     public static ArrayList<Material> getCompostables() {
         return compostables;
     }
-    public static int getCompostChance(Material material) {
-        return getCompostablesWithChances().get(material) != null ? getCompostablesWithChances().get(material) : 0;
-    }
 
+    public static ArrayList<EntityData> getShearables() {
+        return shearables;
+    }
+    public static Version getSkriptVersion() {
+        return skriptVersion;
+    }
     // Conditions
     public static boolean isCrawling(Player player) {
         if (!player.isSwimming() && !player.isGliding()) {
@@ -456,7 +494,9 @@ public class Utils {
     public static boolean isCompostable(Material material) {
         return getCompostablesWithChances().containsKey(material);
     }
-
+    public static boolean isShearable(EntityData entityData) {
+        return getShearables().contains(entityData);
+    }
     // Other
 
     public static ItemType[] toItemTypes(List<Material> materials) {
@@ -486,9 +526,12 @@ public class Utils {
                     return Boolean.getBoolean(value);
                 }
             }
-
         }
         return null;
+    }
+
+    public static int getCompostChance(Material material) {
+        return getCompostablesWithChances().get(material) != null ? getCompostablesWithChances().get(material) : 0;
     }
 
     public static double roundToDecimal(double number, double index, int round) {
@@ -525,5 +568,27 @@ public class Utils {
         double y = vector.getY();
         double z = vector.getZ();
         return new EulerAngle(x,y,z);
+    }
+
+    public static void setLeftArmRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setLeftArmPose(Utils.toEulerAngle(vector));
+    }
+    public static void setRightArmRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setRightArmPose(Utils.toEulerAngle(vector));
+    }
+    public static void setLeftLegRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setLeftLegPose(Utils.toEulerAngle(vector));
+    }
+    public static void setRightLegRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setRightLegPose(Utils.toEulerAngle(vector));
+    }
+    public static void setBodyRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setBodyPose(Utils.toEulerAngle(vector));
+    }
+    public static void setHeadRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setHeadPose(Utils.toEulerAngle(vector));
+    }
+    public static void setFullRotation(ArmorStand armorStand, Vector vector) {
+        armorStand.setRotation(VectorMath.notchYaw(VectorMath.getYaw(vector)),VectorMath.notchPitch(VectorMath.getPitch(vector)));
     }
 }

@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"on damage:\n\tif critical:\n\t\tbroadcast \"ouch!\""})
 @Since("1.0.0")
 public class CondCritical extends Condition {
-
     static {
         Skript.registerCondition(CondCritical.class, "[the] damage is critical",
                                                                 "[the] damage is(n't| not) critical");

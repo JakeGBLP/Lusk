@@ -12,23 +12,28 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtBatToggleSleep extends SkriptEvent {
     static {
-        Skript.registerEvent("Bat Sleep/Wake up", EvtBatToggleSleep.class, BatToggleSleepEvent.class, "bat (:sleep|wake up)")
+        Skript.registerEvent("Bat Sleep/Wake up", EvtBatToggleSleep.class, BatToggleSleepEvent.class, "bat sleep","bat wake up","bat sleep toggle")
                 .description("Called when a bat attempts to sleep or wake up from its slumber.")
-                .examples("on wake up:\n\tbroadcast \"A bat has woken up!\"")
-                .since("1.0.0");
+                .examples("on bat wake up:\n\tbroadcast \"A bat has woken up!\"")
+                .since("1.0.0+, 1.0.2+ (Toggle)");
     }
 
-    private boolean sleeping;
+    private Boolean sleep;
 
     @Override
-    public boolean init(Literal<?> @NotNull [] args, int matchedPattern, ParseResult parseResult) {
-        sleeping = parseResult.hasTag("sleep");
+    public boolean init(Literal<?> @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
+        if (matchedPattern == 0) {
+            sleep = true;
+        } else if (matchedPattern == 1) {
+            sleep = false;
+        }
         return true;
     }
 
     @Override
     public boolean check(@NotNull Event e) {
-        if (sleeping) {
+        if (sleep == null) return true;
+        if (sleep) {
             return !((BatToggleSleepEvent) e).isAwake();
         } else {
             return ((BatToggleSleepEvent) e).isAwake();
@@ -37,7 +42,7 @@ public class EvtBatToggleSleep extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "bat " + (sleeping ? "sleep" : "wake up");
+        return "bat " + (sleep == null ? "sleep toggle" : (sleep ? "sleep" : "wake up"));
     }
 
 }

@@ -26,8 +26,8 @@ public class ExprWardenAnger extends SimpleExpression<Integer> {
         if (Skript.classExists("io.papermc.paper.event.entity.WardenAngerChangeEvent")) {
             Skript.registerExpression(ExprWardenAnger.class, Integer.class, ExpressionType.SIMPLE,
                     "[the] old anger [level] [of [the] warden]",
-                            "[the] new anger [level] [of [the] warden]",
-                            "[the] anger [level] [of [the] warden]");
+                    "[the] new anger [level] [of [the] warden]",
+                    "[the] anger [level] [of [the] warden]");
         }
     }
 

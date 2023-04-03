@@ -18,7 +18,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 @Name("Entity Color")
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
 @Examples({"on dye:\n\tbroadcast the color"})

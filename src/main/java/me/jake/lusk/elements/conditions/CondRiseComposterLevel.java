@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Will Raise Composter Level")
-@Description("This Condition requires Paper.\n\nChecks whether or not the the composter's level will rise in a Compost Item Event")
+@Description("This Condition requires Paper.\n\nChecks whether or not the composter's level will rise in a Compost Item Event")
 @Examples({"""
         on hopper compost:
           if the composter level will be raised:
@@ -37,9 +37,7 @@ public class CondRiseComposterLevel extends Condition {
             Skript.error("This condition can only be used in the Hopper Compost event!");
             return false;
         }
-        if (parser.hasTag("negated") || matchedPattern == 1) {
-            setNegated(true);
-        }
+        setNegated(matchedPattern == 1);
         return true;
     }
 

@@ -10,15 +10,17 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import me.jake.lusk.classes.Version;
+import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("is Bed Respawn")
-@Description("This Condition requires Paper.\n\nChecks whether or not the player in the Post Respawn event has respawned at they bed.")
+@Description("Deprecated since 2.7: https://docs.skriptlang.org/nightly/master/docs.html?search=#CondRespawnLocation\n\nThis Condition requires Paper.\n\nChecks whether or not the player in the Post Respawn event has respawned at they bed.")
 @Examples({"""
         on post respawn:
-          if player has respawned at their bed:
+          if player will respawn at their bed:
             broadcast "bed"
           else:
             broadcast "no bed"
@@ -27,9 +29,11 @@ import org.jetbrains.annotations.Nullable;
 public class CondBedRespawn extends Condition {
 
     static {
-        if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
-            Skript.registerCondition(CondBedRespawn.class, "[the] player (has respawned|will respawn|respawns) at their bed",
-                                                                       "[the] player (has( not|n't) respawned|w(on't|ill not) respawn) at their bed");
+        if (!Utils.getSkriptVersion().isNewerThan(new Version(2, 6, 4))) {
+            if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
+                Skript.registerCondition(CondBedRespawn.class, "[the] player will respawn at [their] bed",
+                        "[the] player w(on't|ill not) respawn at [their] bed");
+            }
         }
     }
 

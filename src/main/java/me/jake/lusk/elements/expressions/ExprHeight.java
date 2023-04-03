@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Entity Height")
-@Description("Returns the Height of an Entity in blocks.")
+@Description("Returns the Height of an Entity.")
 @Examples({"broadcast height of target"})
 @Since("1.0.0")
 public class ExprHeight extends SimplePropertyExpression<Entity, Double> {

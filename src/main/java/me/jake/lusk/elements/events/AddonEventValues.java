@@ -11,19 +11,33 @@ import ch.njol.skript.util.slot.Slot;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
+import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import io.papermc.paper.event.entity.EntityInsideBlockEvent;
+import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import io.papermc.paper.event.player.*;
+import io.papermc.paper.event.world.border.WorldBorderEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
+import org.bukkit.event.block.BrewingStartEvent;
+import org.bukkit.event.entity.EntityEnterLoveModeEvent;
+import org.bukkit.event.entity.EntityPoseChangeEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -263,5 +277,88 @@ public final class AddonEventValues {
                 return e.getTotalCookTime();
             }
         }, 0);
+
+        // 1.0.2
+
+        // WorldBorder Events
+        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
+            EventValues.registerEventValue(WorldBorderEvent.class, World.class, new Getter<World, WorldBorderEvent>() {
+                @Override
+                public @NotNull World get(final WorldBorderEvent e) {
+                    return Objects.requireNonNull(e.getWorld());
+                }
+            }, 0);
+        }
+        // Whitelist Events
+        if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
+            EventValues.registerEventValue(ProfileWhitelistVerifyEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, ProfileWhitelistVerifyEvent>() {
+                @Override
+                public @NotNull OfflinePlayer get(final ProfileWhitelistVerifyEvent e) {
+                    return Bukkit.getOfflinePlayer(Objects.requireNonNull(e.getPlayerProfile().getId()));
+                }
+            }, 0);
+        }
+        // Dispense Events
+        if (Skript.classExists("io.papermc.paper.event.block.BlockPreDispenseEvent")) {
+            EventValues.registerEventValue(BlockPreDispenseEvent.class, Slot.class, new Getter<Slot, BlockPreDispenseEvent>() {
+                @Override
+                public @NotNull Slot get(final BlockPreDispenseEvent e) {
+                    Inventory inventory = ((InventoryHolder)e.getBlock()).getInventory();
+                    Slot slot = new InventorySlot(inventory, e.getSlot());
+                    slot.setItem(e.getItemStack());
+                    return slot;
+                }
+            }, 0);
+        }
+        // Brewing Events
+        EventValues.registerEventValue(BrewingStartEvent.class, Inventory.class, new Getter<Inventory, BrewingStartEvent>() {
+            @Override
+            public @NotNull Inventory get(final BrewingStartEvent e) {
+                return ((InventoryHolder)e.getBlock()).getInventory();
+            }
+        }, 0);
+        EventValues.registerEventValue(BrewingStartEvent.class, ItemType.class, new Getter<ItemType, BrewingStartEvent>() {
+            @Override
+            public @NotNull ItemType get(final BrewingStartEvent e) {
+                BrewerInventory inventory = ((BrewingStand)e.getBlock()).getInventory();
+                return new ItemType(Objects.requireNonNull(inventory.getIngredient()));
+            }
+        }, 0);
+        EventValues.registerEventValue(BrewEvent.class, Inventory.class, new Getter<Inventory, BrewEvent>() {
+            @Override
+            public @NotNull Inventory get(final BrewEvent e) {
+                return e.getContents();
+            }
+        }, 0);
+        // Elder Guardian Events
+        EventValues.registerEventValue(ElderGuardianAppearanceEvent.class, Player.class, new Getter<Player, ElderGuardianAppearanceEvent>() {
+            @Override
+            public @NotNull Player get(final ElderGuardianAppearanceEvent e) {
+                return e.getAffectedPlayer();
+            }
+        }, 0);
+        // Love Mode Event
+        EventValues.registerEventValue(EntityEnterLoveModeEvent.class, Player.class, new Getter<Player, EntityEnterLoveModeEvent>() {
+            @Override
+            public @NotNull Player get(final EntityEnterLoveModeEvent e) {
+                return (Player) Objects.requireNonNull(e.getHumanEntity());
+            }
+        }, 0);
+        // Pose Event
+        EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<Pose, EntityPoseChangeEvent>() {
+            @Override
+            public @NotNull Pose get(final EntityPoseChangeEvent e) {
+                return e.getPose();
+            }
+        }, 0);
+        // Damage Push
+        if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
+            EventValues.registerEventValue(EntityPushedByEntityAttackEvent.class, Vector.class, new Getter<Vector, EntityPushedByEntityAttackEvent>() {
+                @Override
+                public @NotNull Vector get(final EntityPushedByEntityAttackEvent e) {
+                    return e.getAcceleration();
+                }
+            }, 0);
+        }
     }
 }

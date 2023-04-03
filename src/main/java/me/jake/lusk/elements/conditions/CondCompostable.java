@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples("if tool of player is compostable:")
 @Since("1.0.1")
 public class CondCompostable extends PropertyCondition<Object> {
-
     static {
         register(CondCompostable.class, "compostable", "itemtype/block");
     }
