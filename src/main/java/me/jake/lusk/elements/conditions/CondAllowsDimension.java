@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 @Name("Sever allows Nether/End")
 @Description("Checks if the server allows the Nether or the End")
 @Examples({"if the server does not allow the end:\n\tbroadcast \"No End here!\""})
-@Since("1.0.0")
+@Since("1.0.0+")
 public class CondAllowsDimension extends Condition {
 
     static {

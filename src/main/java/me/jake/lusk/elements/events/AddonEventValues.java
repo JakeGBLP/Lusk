@@ -28,6 +28,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
+import org.bukkit.event.block.BlockDamageAbortEvent;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.entity.EntityEnterLoveModeEvent;
@@ -360,5 +361,11 @@ public final class AddonEventValues {
                 }
             }, 0);
         }
+        EventValues.registerEventValue(BlockDamageAbortEvent.class, Player.class, new Getter<Player, BlockDamageAbortEvent>() {
+            @Override
+            public @NotNull Player get(final BlockDamageAbortEvent e) {
+                return e.getPlayer();
+            }
+        }, 0);
     }
 }

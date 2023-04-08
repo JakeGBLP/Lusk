@@ -10,10 +10,13 @@ import me.jake.lusk.classes.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -112,6 +115,7 @@ public class Utils {
             put(759,new Version(1,19));
             put(760,new Version(1,19,2));
             put(761,new Version(1,19,3));
+            put(762,new Version(1,19,4));
         }};
     }
 
@@ -557,6 +561,48 @@ public class Utils {
         }
         return string;
     }
+    public static boolean canCriticalDamage(Entity entity) {
+        if (entity instanceof Player attacker) {
+            if (attacker.getFallDistance() > 0) {
+                if (!entity.isOnGround()) {
+                    if (!attacker.hasPotionEffect(PotionEffectType.BLINDNESS)) {
+                        if (!attacker.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
+                            if (!attacker.isClimbing()) {
+                                if (attacker.getAttackCooldown() > 0.9) {
+                                    if (!attacker.isSprinting()) {
+                                        if (!attacker.isInWater()) {
+                                            return attacker.getVehicle() == null;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    private static Entity getCriticalEntity(Event event) {
+        if (event instanceof EntityDamageByEntityEvent damageByEntityEvent) {
+            if (damageByEntityEvent.getDamager() instanceof AbstractArrow arrow) {
+                return arrow;
+            }
+            return damageByEntityEvent.getDamager();
+        } else if (event instanceof EntityDeathEvent deathEvent) {
+            return getCriticalEntity(deathEvent.getEntity().getLastDamageCause());
+        } else if (event instanceof VehicleDamageEvent vehicleDamageEvent) {
+            return vehicleDamageEvent.getAttacker();
+        } else if (event instanceof VehicleDestroyEvent vehicleDestroyEvent) {
+            return vehicleDestroyEvent.getAttacker();
+        }
+        return null;
+    }
+    public static boolean isCritical(Event event) {
+        Entity entity = getCriticalEntity(event);
+        return (canCriticalDamage(entity));
+    }
+
     public static Vector toBukkitVector(EulerAngle angle) {
         double x = angle.getX();
         double y = angle.getY();

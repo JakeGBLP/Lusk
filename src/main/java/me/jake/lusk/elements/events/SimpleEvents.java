@@ -8,17 +8,18 @@ import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
 import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
-import io.papermc.paper.event.block.*;
+import io.papermc.paper.event.block.BlockFailedDispenseEvent;
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import io.papermc.paper.event.block.CompostItemEvent;
+import io.papermc.paper.event.block.DragonEggFormEvent;
 import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import io.papermc.paper.event.entity.EntityCompostItemEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
-import org.bukkit.event.block.BlockDispenseArmorEvent;
-import org.bukkit.event.block.BrewingStartEvent;
-import org.bukkit.event.block.CampfireStartEvent;
-import org.bukkit.event.block.CauldronLevelChangeEvent;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.ArrowBodyCountChangeEvent;
 import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.entity.EntityEnterLoveModeEvent;
@@ -27,7 +28,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.server.BroadcastMessageEvent;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class SimpleEvents {
     static {
         // 1.0.0
@@ -52,11 +53,17 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.0");
         }
-        if (Skript.classExists("io.papermc.paper.event.block.BellRingEvent")) {
-            Skript.registerEvent("Bell Ring", SimpleEvent.class, BellRingEvent.class, "bell r(ung|ing[(ed|ing)])")
-                    .description("This Event requires Paper.\n\nCalled when a bell is rung.")
+        Class<? extends Event> bellRingEventClass = null;
+        if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
+            bellRingEventClass = org.bukkit.event.block.BellRingEvent.class;
+        } else if (Skript.classExists("io.papermc.paper.event.block.BellRingEvent")) {
+            bellRingEventClass = io.papermc.paper.event.block.BellRingEvent.class;
+        }
+        if (bellRingEventClass != null) {
+            Skript.registerEvent("Bell Ring", SimpleEvent.class, bellRingEventClass, "bell r(ung|ing[(ed|ing)])")
+                    .description("Called when a bell is rung.")
                     .examples("")
-                    .since("1.0.0");
+                    .since("1.0.0+ (Paper), 1.0.2+ (Spigot)");
         }
         if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail")
@@ -292,5 +299,11 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.2");
         }
+
+        Skript.registerEvent("Block Break Abort", SimpleEvent.class, BlockDamageAbortEvent.class, "[block] (break|mine) (abort|stop|cancel)","block damage (abort|stop|cancel)")
+                .description("""
+                        Called when a player stops damaging a Block.""")
+                .examples("")
+                .since("1.0.2");
     }
 }
