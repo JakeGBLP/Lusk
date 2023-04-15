@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
              cancel advancements"""})
 @Since("1.0.0")
 public class EffCancelAdvancements extends Effect {
-
     static {
         Skript.registerEffect(EffCancelAdvancements.class, "cancel [the] advancements", "uncancel [the] advancements");
     }

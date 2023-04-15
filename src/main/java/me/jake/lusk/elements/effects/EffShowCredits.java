@@ -22,9 +22,8 @@ import java.util.Arrays;
            show the credits to all players"""})
 @Since("1.0.0")
 public class EffShowCredits extends Effect {
-
     static {
-        Skript.registerEffect(EffShowCredits.class, "show [the] (credits|end poem) to %players%");
+        Skript.registerEffect(EffShowCredits.class, "show [the] ((win|victory) screen|end (credits|poem)|credits) to %players%");
     }
 
     private Expression<Player> players;

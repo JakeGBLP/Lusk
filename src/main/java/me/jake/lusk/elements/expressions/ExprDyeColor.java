@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     static {
         Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, ExpressionType.SIMPLE,
-                "[the] [entity] [dye] color");
+                "[the] [entity] dye color");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

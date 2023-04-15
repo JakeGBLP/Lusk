@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
              broadcast "Infinite brewing fuel!\""""})
 @Since("1.0.2")
 public class EffCancelConsumingBrewingFuel extends Effect {
-
     static {
         Skript.registerEffect(EffCancelConsumingBrewingFuel.class, "cancel brewing fuel consume", "uncancel brewing fuel consume");
     }

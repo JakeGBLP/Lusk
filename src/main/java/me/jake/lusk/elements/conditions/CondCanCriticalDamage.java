@@ -21,7 +21,7 @@ import java.util.Objects;
 @Name("can Critical Damage")
 @Description("Checks if a player is in position to inflict a critical hit.\n\nRead https://minecraft.fandom.com/wiki/Damage#Critical_hit for more info.")
 @Examples({"if player can critical damage:"})
-@Since("1.0.2+")
+@Since("1.0.2")
 public class CondCanCriticalDamage extends Condition {
     static {
         Skript.registerCondition(CondCanCriticalDamage.class,

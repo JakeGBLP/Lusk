@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -16,19 +15,16 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"on damage of fox:\n\tif victim is leaping:\n\t\tcancel event"})
 @Since("1.0.0")
 public class CondFoxLeaping extends PropertyCondition<LivingEntity> {
-
     static {
         register(CondFoxLeaping.class, "leaping", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity != null) {
-            if (entity.getType() == EntityType.FOX) {
-                return ((Fox) entity).isLeaping();
-            } else {
-                Skript.error("You can only use this condition with Foxes!");
-            }
+        if (entity instanceof Fox fox) {
+            return fox.isLeaping();
+        } else {
+            Skript.error("You can only use this condition with Foxes!");
         }
         return false;
     }

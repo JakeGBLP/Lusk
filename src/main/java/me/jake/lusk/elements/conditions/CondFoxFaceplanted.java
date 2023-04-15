@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +22,10 @@ public class CondFoxFaceplanted extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity != null) {
-            if (entity.getType() == EntityType.FOX) {
-                return ((Fox) entity).isFaceplanted();
-            } else {
-                Skript.error("You can only use this condition with Foxes!");
-            }
+        if (entity instanceof Fox fox) {
+            return fox.isFaceplanted();
+        } else {
+            Skript.error("You can only use this condition with Foxes!");
         }
         return false;
     }

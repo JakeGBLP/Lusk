@@ -7,6 +7,7 @@ import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.VectorMath;
 import me.jake.lusk.classes.Version;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -47,6 +48,7 @@ public class Utils {
         setCompostablesWithChances();
         setCompostables();
         setShearables();
+        setSittables();
         setSkriptVersion();
     }
 
@@ -69,6 +71,7 @@ public class Utils {
     private static HashMap<Material, Integer> compostablesWithChances;
     private static ArrayList<Material> compostables;
     private static ArrayList<EntityData> shearables;
+    private static ArrayList<EntityData> sittables;
     private static Version skriptVersion;
     // Set
     public static void setServerVersion() {
@@ -389,6 +392,17 @@ public class Utils {
             add(EntityUtils.toSkriptEntityData(EntityType.SNOWMAN));
         }};
     }
+
+    public static void setSittables() {
+        sittables = new ArrayList<>() {{
+            add(EntityUtils.toSkriptEntityData(EntityType.CAT));
+            add(EntityUtils.toSkriptEntityData(EntityType.WOLF));
+            add(EntityUtils.toSkriptEntityData(EntityType.PARROT));
+            add(EntityUtils.toSkriptEntityData(EntityType.PANDA));
+            add(EntityUtils.toSkriptEntityData(EntityType.FOX));
+        }};
+    }
+
     public static void setSkriptVersion() {
         skriptVersion = Version.parse(Skript.getVersion().toString());
     }
@@ -448,9 +462,11 @@ public class Utils {
     public static ArrayList<Material> getCompostables() {
         return compostables;
     }
-
     public static ArrayList<EntityData> getShearables() {
         return shearables;
+    }
+    public static ArrayList<EntityData> getSittables() {
+        return sittables;
     }
     public static Version getSkriptVersion() {
         return skriptVersion;
@@ -496,10 +512,13 @@ public class Utils {
         return getWaxables().contains(material);
     }
     public static boolean isCompostable(Material material) {
-        return getCompostablesWithChances().containsKey(material);
+        return getCompostables().contains(material);
     }
     public static boolean isShearable(EntityData entityData) {
         return getShearables().contains(entityData);
+    }
+    public static boolean isSittable(EntityData entityData) {
+        return getSittables().contains(entityData);
     }
     // Other
 
@@ -598,6 +617,11 @@ public class Utils {
         }
         return null;
     }
+
+    public static boolean tristateBoolean(TriState triState) {
+        return Boolean.TRUE.equals(triState.toBoolean());
+    }
+
     public static boolean isCritical(Event event) {
         Entity entity = getCriticalEntity(event);
         return (canCriticalDamage(entity));
@@ -615,7 +639,6 @@ public class Utils {
         double z = vector.getZ();
         return new EulerAngle(x,y,z);
     }
-
     public static void setLeftArmRotation(ArmorStand armorStand, Vector vector) {
         armorStand.setLeftArmPose(Utils.toEulerAngle(vector));
     }

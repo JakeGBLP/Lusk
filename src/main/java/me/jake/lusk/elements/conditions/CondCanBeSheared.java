@@ -65,7 +65,7 @@ public class CondCanBeSheared extends Condition {
             return isNegated();
         } else if (entity instanceof Cow) {
             return !isNegated();
-    }
+        }
         return false;
     }
 }

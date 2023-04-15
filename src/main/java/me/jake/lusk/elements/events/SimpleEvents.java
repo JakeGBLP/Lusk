@@ -11,7 +11,6 @@ import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
 import io.papermc.paper.event.block.BlockFailedDispenseEvent;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import io.papermc.paper.event.block.CompostItemEvent;
-import io.papermc.paper.event.block.DragonEggFormEvent;
 import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import io.papermc.paper.event.entity.EntityCompostItemEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
@@ -254,14 +253,6 @@ public class SimpleEvents {
                 .examples("")
                 .since("1.0.2");
         // EnderDragon Events
-        if (Skript.classExists("io.papermc.paper.event.block.DragonEggFormEvent")) {
-            Skript.registerEvent("Dragon Egg Form", SimpleEvent.class, DragonEggFormEvent.class, "dragon egg (form|spawn|create)")
-                    .description("""
-                            Called when the EnderDragon is defeated, causing a Dragon Egg to form.
-                            This event can be cancelled by default depending on server configuration and whether or not the dragon had already been killed.""")
-                    .examples("")
-                    .since("1.0.2");
-        }
         Skript.registerEvent("Ender Dragon Change Phase", SimpleEvent.class, EnderDragonChangePhaseEvent.class, "ender dragon change phase","ender dragon phase change ","ender dragon phase")
                 .description("""
                             Called when an EnderDragon switches phase.""")
@@ -283,7 +274,7 @@ public class SimpleEvents {
                 .examples("")
                 .since("1.0.2");
         // Pose Event
-        Skript.registerEvent("Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose [change]")
+        Skript.registerEvent("Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose change")
                 .description("""
                         Called when an entity changes its pose.""")
                 .examples("")
@@ -299,10 +290,11 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.2");
         }
-
-        Skript.registerEvent("Block Break Abort", SimpleEvent.class, BlockDamageAbortEvent.class, "[block] (break|mine) (abort|stop|cancel)","block damage (abort|stop|cancel)")
+        // Bell Resonate Event
+        Skript.registerEvent("Bell Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonate")
                 .description("""
-                        Called when a player stops damaging a Block.""")
+                        Called when a bell resonated after being rung and highlights nearby raiders.
+                        A bell will only resonate if raiders are in the vicinity of the bell.""")
                 .examples("")
                 .since("1.0.2");
     }

@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
              cancel composter level rise"""})
 @Since("1.0.0")
 public class EffCancelComposterRising extends Effect {
-
     static {
         Skript.registerEffect(EffCancelComposterRising.class, "cancel [the] composter [level] rise", "uncancel [the] composter [level] rise");
     }
