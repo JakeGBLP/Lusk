@@ -618,6 +618,14 @@ public class Utils {
         return null;
     }
 
+    public static int getTotalNeededXP(int level) {
+        if (level <= 15)
+            return (level * level) + (6 * level);
+        if (level <= 30)
+            return (int) (2.5 * (level * level) - (40.5 * level) + 360);
+        return (int) (4.5 * (level * level) - (162.5 * level) + 2220);
+    }
+
     public static boolean tristateBoolean(TriState triState) {
         return Boolean.TRUE.equals(triState.toBoolean());
     }
