@@ -214,20 +214,12 @@ Expressions:
 - WorldBorder - Past/Future Center
 - WorldBorder - Past/Future Size
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Types:
+- Bounding Box
+- Cauldron Change Reason
+- Ender Dragon Phase
+- Equipment Slot
+- Pattern Type
+- Pose
+- Spawn Category
+- Version
