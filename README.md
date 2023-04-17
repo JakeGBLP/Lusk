@@ -118,6 +118,27 @@ Conditions
 - WorldBorder - Change is Instant
 
 
+Effects:
+- Allay Dance
+- Cancel Advancements
+- Cancel Composter Level Rise
+- Cancel Consuming Brewing Fuel
+- Duplicate Allay
+- Enderman - Randomly Teleport
+- [un]Enforce Whitelist
+- Show Fake Experience (Clientside)
+- Do Nothing
+- Show Credits
+- Toggle Whitelist
+- Villager - Head Shake
+- Villager - Zombify
+- Wake Up
+- Warden Disturbance
+
+
+
+
+
 # Documentation
 
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk) or [![Get on skUnity](https://skunity.com/branding/buttons/get_on_docs.png)](https://docs.skunity.com/syntax/search/addon:lusk)
