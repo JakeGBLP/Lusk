@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("High Speed Swimming Splash Sound")
+@Name("Entity - High Speed Swimming Splash Sound")
 @Description("Returns the Sound this entity makes when splashing in water at high speeds. For most entities, this is just 'ENTITY_GENERIC_SPLASH'.")
 @Examples({"broadcast high speed swimming splash sound of target"})
 @Since("1.0.2")

@@ -10,7 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity Category")
+@Name("Entity - Category")
 @Description("A classification of entities which may behave differently than others or be affected uniquely by enchantments and potion effects among other things.")
 @Examples({"broadcast entity category of target"})
 @Since("1.0.2")

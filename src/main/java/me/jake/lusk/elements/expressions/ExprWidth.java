@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity Width")
+@Name("Entity - Width")
 @Description("Returns the Width of an Entity.")
 @Examples({"broadcast width of target"})
 @Since("1.0.2")
