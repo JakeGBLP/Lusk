@@ -69,7 +69,7 @@ Events:
 - on WorldBorder Change (3 in 1)
 
 
-Conditions
+Conditions:
 - Allay - Can Be Duplicated
 - Animal - is Dancing
 - Animal - is Interested
