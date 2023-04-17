@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Warden;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -25,16 +26,16 @@ import java.util.Arrays;
 @Since("1.0.2")
 public class EffWardenDisturbance extends Effect {
     static {
-        Skript.registerEffect(EffWardenDisturbance.class, "disturb %entities% from %location%");
+        Skript.registerEffect(EffWardenDisturbance.class, "disturb %livingentities% from %location%");
     }
 
-    private Expression<Entity> entitiesExpression;
+    private Expression<LivingEntity> entitiesExpression;
     private Expression<Location> locationExpression;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
-        entitiesExpression = (Expression<Entity>) expressions[0];
+        entitiesExpression = (Expression<LivingEntity>) expressions[0];
         locationExpression = (Expression<Location>) expressions[1];
         return true;
     }
@@ -48,7 +49,7 @@ public class EffWardenDisturbance extends Effect {
     protected void execute(@NotNull Event event) {
         Location location = locationExpression.getSingle(event);
         if (location == null) return;
-        for (Entity entity : entitiesExpression.getArray(event)) {
+        for (LivingEntity entity : entitiesExpression.getArray(event)) {
             if (entity instanceof Warden warden) {
                 warden.setDisturbanceLocation(location);
             }

@@ -12,7 +12,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Sittable;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Animal - is Sat")
+@Name("Animal - is Sitting")
 @Description("Checks if an entity is sitting.\n(Cats, Wolves, Parrots, Pandas and Foxes)")
 @Examples({"on damage of wolf, cat or fox:\n\tif victim is sitting:\n\t\tcancel event"})
 @Since("1.0.0")
@@ -24,10 +24,9 @@ public class CondAnimalSat extends PropertyCondition<LivingEntity> {
     @Override
     public boolean check(LivingEntity entity) {
         if (entity != null) {
-            if (Utils.isSittable(EntityData.fromEntity(entity))) {
-                return ((Sittable) entity).isSitting();
+            if (entity instanceof Sittable sittable) {
+                return sittable.isSitting();
             }
-            Skript.error("You can only use this condition with Cats, Wolves, Parrots, Pandas and Foxes!");
         }
         return false;
     }

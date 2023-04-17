@@ -11,10 +11,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Parrot;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Parrot/Allay - is Dancing")
+@Name("Animal - is Dancing")
 @Description("Checks if an entity is dancing.\n(Parrot, Allay)")
 @Examples({"on damage of parrot:\n\tif victim is dancing:\n\t\tcancel event\n\t\tbroadcast \"The vibe won't stop!\""})
-@Since("1.0.2+")
+@Since("1.0.2")
 public class CondAnimalDancing extends PropertyCondition<LivingEntity> {
     static {
         register(CondAnimalDancing.class, "dancing", "livingentities");
@@ -26,8 +26,6 @@ public class CondAnimalDancing extends PropertyCondition<LivingEntity> {
             return parrot.isDancing();
         } else if (entity instanceof Allay allay) {
             return allay.isDancing();
-        } else {
-            Skript.error("You can only use this condition with Allays and Parrots!");
         }
         return false;
     }

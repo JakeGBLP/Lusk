@@ -25,7 +25,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprLastDeathLocation extends SimpleExpression<Location> {
     static {
         Skript.registerExpression(ExprLastDeathLocation.class, Location.class, ExpressionType.COMBINED,
-                "[the] last death location of %player%");
+                "[the] last death location of %player%",
+                "%player%'[s] last death location");
 
     }
     private Expression<Player> playerExpression;

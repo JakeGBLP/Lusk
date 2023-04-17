@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Crossbow - is Charged")
 @Description("Checks if a crossbow is charged.")
-@Examples({""})
+@Examples({"if tool of player is changed:"})
 @Since("1.0.1")
 public class CondCrossbowCharged extends PropertyCondition<ItemStack> {
 

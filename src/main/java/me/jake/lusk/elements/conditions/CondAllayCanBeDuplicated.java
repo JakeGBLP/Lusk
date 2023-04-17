@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,15 +22,15 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class CondAllayCanBeDuplicated extends Condition {
     static {
-        Skript.registerCondition(CondAllayCanBeDuplicated.class, "%entity% can be duplicated",
-                                                                "%entity% can(n't|not) be duplicated");
+        Skript.registerCondition(CondAllayCanBeDuplicated.class, "%livingentity% can be duplicated",
+                                                                "%livingentity% can(n't|not) be duplicated");
     }
 
-    private Expression<Entity> entityExpression;
+    private Expression<LivingEntity> entityExpression;
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        entityExpression = (Expression<Entity>) expressions[0];
+        entityExpression = (Expression<LivingEntity>) expressions[0];
         setNegated(matchedPattern == 1);
         return true;
     }
@@ -42,7 +43,7 @@ public class CondAllayCanBeDuplicated extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        Entity entity = entityExpression.getSingle(event);
+        LivingEntity entity = entityExpression.getSingle(event);
         if (entity instanceof Allay allay) {
             return isNegated() ^ allay.canDuplicate();
         }

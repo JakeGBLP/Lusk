@@ -9,26 +9,29 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Allay;
+import org.bukkit.entity.Enderman;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Has Seen Credits")
-@Description("Checks if a player has seen the end credits.")
-@Examples({"if target has seen the credits:"})
+@Name("Enderman - Has Been Looked At")
+@Description("Checks if an enderman has been looked at.")
+@Examples({"if target has been looked at:"})
 @Since("1.0.2")
-public class CondHasSeenCredits extends Condition {
+public class CondEndermanHasBeenLookedAt extends Condition {
     static {
-        Skript.registerCondition(CondHasSeenCredits.class, "%player% has seen [the] ((win|victory) screen|end (credits|poem)|credits)",
-                "%player% has(n't| not) seen [the] ((win|victory) screen|end (credits|poem)|credits)");
+        Skript.registerCondition(CondEndermanHasBeenLookedAt.class, "%livingentity% has been (looked|stared) at",
+                                                                "%livingentity% has(n't| not) been (looked|stared) at");
     }
 
-    private Expression<Player> playerExpression;
+    private Expression<LivingEntity> entityExpression;
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        playerExpression = (Expression<Player>) expressions[0];
+        entityExpression = (Expression<LivingEntity>) expressions[0];
         setNegated(matchedPattern == 1);
         return true;
     }
@@ -36,14 +39,14 @@ public class CondHasSeenCredits extends Condition {
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         assert event != null;
-        return playerExpression.getSingle(event) + " has" + (isNegated() ? "n't" : "") + " seen the end poem";
+        return entityExpression.getSingle(event) + " can" + (isNegated() ? "'t" : "") + " be duplicated";
     }
 
     @Override
     public boolean check(@NotNull Event event) {
-        Player player = playerExpression.getSingle(event);
-        if (player != null) {
-            return isNegated() ^ player.hasSeenWinScreen();
+        LivingEntity entity = entityExpression.getSingle(event);
+        if (entity instanceof Enderman enderman) {
+            return isNegated() ^ enderman.hasBeenStaredAt();
         }
         return false;
     }

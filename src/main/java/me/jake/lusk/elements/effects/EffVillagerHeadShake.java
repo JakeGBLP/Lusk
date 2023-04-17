@@ -10,6 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -23,14 +24,14 @@ import javax.annotation.Nullable;
 @Since("1.0.2+")
 public class EffVillagerHeadShake extends Effect {
     static {
-        Skript.registerEffect(EffVillagerHeadShake.class, "make %entities% shake head","shake %entities%'[s] head");
+        Skript.registerEffect(EffVillagerHeadShake.class, "make %livingentities% shake head","shake %livingentities%'[s] head");
     }
 
-    private Expression<Entity> entityExpression;
+    private Expression<LivingEntity> entityExpression;
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
-        entityExpression = (Expression<Entity>) expressions[0];
+        entityExpression = (Expression<LivingEntity>) expressions[0];
         return true;
     }
 
@@ -41,8 +42,8 @@ public class EffVillagerHeadShake extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        Entity[] entities = entityExpression.getArray(event);
-        for (Entity entity : entities) {
+        LivingEntity[] entities = entityExpression.getArray(event);
+        for (LivingEntity entity : entities) {
             if (entity instanceof Villager villager) {
                 villager.shakeHead();
             }

@@ -11,7 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Wolf;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Fox/Wolf - is Interested")
+@Name("Animal - is Interested")
 @Description("Checks if an entity is interested.\n(Wolf, Fox)")
 @Examples({"on damage of wolf:\n\tif victim is interested:\n\t\tcancel event"})
 @Since("1.0.0")

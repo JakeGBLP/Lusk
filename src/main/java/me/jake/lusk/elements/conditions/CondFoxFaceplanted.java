@@ -17,15 +17,13 @@ import org.jetbrains.annotations.NotNull;
 public class CondFoxFaceplanted extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondFoxFaceplanted.class, "faceplanted", "livingentities");
+        register(CondFoxFaceplanted.class, "face[ ]planted", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
         if (entity instanceof Fox fox) {
             return fox.isFaceplanted();
-        } else {
-            Skript.error("You can only use this condition with Foxes!");
         }
         return false;
     }

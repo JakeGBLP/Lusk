@@ -39,7 +39,7 @@ public class ExprPercentage extends SimpleExpression<Number> {
         Number n = number.getSingle(e);
         if (n != null) {
             if (p != null) {
-                return new Number[]{p.doubleValue()/n.doubleValue()};
+                return new Number[]{p.doubleValue()/100*n.doubleValue()};
             }
         }
         return new Number[0];

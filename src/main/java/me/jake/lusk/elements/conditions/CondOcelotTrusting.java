@@ -23,8 +23,6 @@ public class CondOcelotTrusting extends PropertyCondition<LivingEntity> {
     public boolean check(LivingEntity entity) {
         if (entity instanceof Ocelot ocelot) {
             return ocelot.isTrusting();
-        } else {
-            Skript.error("You can only use this condition with Allays and Parrots!");
         }
         return false;
     }

@@ -23,8 +23,6 @@ public class CondFoxLeaping extends PropertyCondition<LivingEntity> {
     public boolean check(LivingEntity entity) {
         if (entity instanceof Fox fox) {
             return fox.isLeaping();
-        } else {
-            Skript.error("You can only use this condition with Foxes!");
         }
         return false;
     }

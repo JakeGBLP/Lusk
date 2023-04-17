@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"if player is climbing:"})
 @Since("1.0.2")
 public class CondClimbing extends PropertyCondition<LivingEntity> {
-
     static {
         register(CondClimbing.class, "climbing", "livingentity");
     }

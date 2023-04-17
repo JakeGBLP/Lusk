@@ -12,36 +12,40 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Ocelot - Trusting State")
-@Description("Returns whether or not the ocelot trusts players.\nCan be set.")
-@Examples({"broadcast trusting state of target"})
+@Name("Animal - Interested State")
+@Description("Returns whether or not an entity is interested.\n(Wolf, Fox)")
+@Examples({"broadcast interested state of target"})
 @Since("1.0.2")
-public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
+public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
     static {
-        Skript.registerExpression(ExprOcelotTrustingState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [ocelot] trust[ing] state of %entity%");
-    }
+        Skript.registerExpression(ExprAnimalInterestedState.class, Boolean.class, ExpressionType.COMBINED,
+                "[the] interested state of %livingentity%",
+                "%livingentity%'[s] interested state");
 
-    private Expression<Entity> entityExpression;
+    }
+    private Expression<LivingEntity> livingEntityExpression;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
+        livingEntityExpression = (Expression<LivingEntity>) exprs[0];
         return true;
     }
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Ocelot ocelot) {
-            return new Boolean[]{ocelot.isTrusting()};
+        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
+        boolean bool;if (livingEntity instanceof Wolf wolf) {
+            bool = wolf.isInterested();
+        } else if (livingEntity instanceof Fox fox) {
+            bool = fox.isInterested();
+        } else {
+            bool = false;
         }
-        return new Boolean[0];
+        return new Boolean[]{bool};
     }
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
@@ -52,11 +56,13 @@ public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
     }
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Ocelot ocelot) {
-            ocelot.setTrusting(aBoolean);
+        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
+        if (bool == null) return;
+        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
+        if (livingEntity instanceof Wolf wolf) {
+            wolf.setInterested(bool);
+        } else if (livingEntity instanceof Fox fox) {
+            fox.setInterested(bool);
         }
     }
 
@@ -72,6 +78,6 @@ public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the ocelot trusting state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the interested state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
     }
 }

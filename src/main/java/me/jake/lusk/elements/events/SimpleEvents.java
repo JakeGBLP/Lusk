@@ -217,13 +217,6 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.2");
         }
-        // Broadcast Event
-        Skript.registerEvent("Broadcast", SimpleEvent.class, BroadcastMessageEvent.class, "broadcast")
-                    .description("""
-                            Called when a message is broadcast internally, I think.""")
-                    .examples("")
-                    .since("1.0.2");
-
         // Brewing Events
         Skript.registerEvent("Brewing Start", SimpleEvent.class, BrewingStartEvent.class, "brewing start")
                 .description("""

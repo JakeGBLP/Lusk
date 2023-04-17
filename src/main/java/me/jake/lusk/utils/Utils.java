@@ -10,6 +10,7 @@ import me.jake.lusk.classes.Version;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Rotation;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -21,9 +22,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 public class Utils {
@@ -50,6 +53,7 @@ public class Utils {
         setShearables();
         setSittables();
         setSkriptVersion();
+        setItemFrameRotations();
     }
 
     // Fields
@@ -73,7 +77,20 @@ public class Utils {
     private static ArrayList<EntityData> shearables;
     private static ArrayList<EntityData> sittables;
     private static Version skriptVersion;
+    private static HashMap<Integer, Rotation> itemFrameRotations;
     // Set
+    public static void setItemFrameRotations() {
+        itemFrameRotations = new HashMap<>() {{
+            put(0,Rotation.NONE);
+            put(45,Rotation.CLOCKWISE_45);
+            put(90,Rotation.CLOCKWISE);
+            put(135,Rotation.CLOCKWISE_135);
+            put(180,Rotation.FLIPPED);
+            put(225,Rotation.FLIPPED_45);
+            put(270,Rotation.COUNTER_CLOCKWISE);
+            put(315,Rotation.COUNTER_CLOCKWISE_45);
+        }};
+    }
     public static void setServerVersion() {
         serverVersion = Version.parse(Bukkit.getMinecraftVersion());
     }
@@ -408,6 +425,9 @@ public class Utils {
     }
 
     // Get
+    public static HashMap<Integer, Rotation> getItemFrameRotations() {
+        return itemFrameRotations;
+    }
     public static Version getServerVersion() {
         return serverVersion;
     }
@@ -624,6 +644,17 @@ public class Utils {
         if (level <= 30)
             return (int) (2.5 * (level * level) - (40.5 * level) + 360);
         return (int) (4.5 * (level * level) - (162.5 * level) + 2220);
+    }
+
+
+    @Nullable
+    public static Object getHashMapKeyFromValue(HashMap<?,?> hashMap, Object value) {
+        for(Map.Entry<?, ?> entry: hashMap.entrySet()) {
+            if(entry.getValue() == value) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static boolean tristateBoolean(TriState triState) {

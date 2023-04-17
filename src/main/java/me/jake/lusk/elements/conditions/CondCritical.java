@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 @Name("is Critical")
 @Description("Checks if the damage is critical.\nCan be used in damage/death/destroy events.\n\nRead https://minecraft.fandom.com/wiki/Damage#Critical_hit for more info.")
 @Examples({"on damage:\n\tif critical:\n\t\tbroadcast \"ouch!\""})
-@Since("1.0.0")
+@Since("1.0.0, 1.0.2+ (Fixed and Expanded)")
 public class CondCritical extends Condition {
     static {
         Skript.registerCondition(CondCritical.class, "[the] damage is critical",
@@ -45,6 +45,6 @@ public class CondCritical extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return (isNegated()) ^ Utils.isCritical(event);
+        return isNegated() ^ Utils.isCritical(event);
     }
 }

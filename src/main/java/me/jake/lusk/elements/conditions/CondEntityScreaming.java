@@ -9,23 +9,19 @@ import ch.njol.skript.doc.Since;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Entity - is Angry")
-@Description("Checks if an entity is angry.\n(Warden, PigZombie, Wolf, Enderman)")
-@Examples({"on damage of wolf:\n\tif victim is angry:\n\t\tcancel event"})
+@Name("Entity - is Screaming")
+@Description("Checks if an entity is screaming.\n(Enderman, Goat)")
+@Examples({"on damage of enderman:\n\tif victim is screaming:\n\t\tcancel event"})
 @Since("1.0.2")
-public class CondEntityAngry extends PropertyCondition<LivingEntity> {
+public class CondEntityScreaming extends PropertyCondition<LivingEntity> {
     static {
-        register(CondEntityAngry.class, "angry", "livingentities");
+        register(CondEntityScreaming.class, "screaming", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof PigZombie pigZombie) {
-            return pigZombie.isAngry();
-        } else if (entity instanceof Wolf wolf) {
-            return wolf.isAngry();
-        } else if (entity instanceof Warden warden) {
-            return warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
+        if (entity instanceof Goat goat) {
+            return goat.isScreaming();
         } else if (entity instanceof Enderman enderman) {
             return enderman.isScreaming();
         }
@@ -34,6 +30,6 @@ public class CondEntityAngry extends PropertyCondition<LivingEntity> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "angry";
+        return "screaming";
     }
 }
