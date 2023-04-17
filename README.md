@@ -140,6 +140,94 @@ Effects:
 - Warden Disturbance
 
 
+Expressions:
+- Allay - Duplication Cooldown
+- Allay - Duplication State
+- Allay - Jukebox
+- Animal - Interested State
+- Animal - Sitting State
+- Armorstand - Properties
+- Armorstand - Rotations
+- Arrow Body Count
+- Axeables
+- Best Equipment Slot
+- Block Blast Resistance
+- Block Slipperiness
+- Bounding Box - Entity
+- Brewing - Fuel
+- Brewing - Fuel Level
+- Brewing - Ingredient
+- Brewing Stand Fuel Power
+- Cauldron - Change Reason
+- Chosen Arrow/Bow
+- Compostables
+- Composter Level
+- Decimal Round
+- Ender Dragon Phase (past/future)
+- Enderman - Escape Reason
+- Enderman - Has Been Looked At State
+- Enderman - Held Block
+- Entity - Angry State
+- Entity - Screaming State
+- Entity - Variant
+- Entity - Category
+- Entity - Height
+- Entity - Origin Location
+- Entity - Pose
+- Entity - Width
+- Entity Color
+- Equipment Slots
+- Fox - Properties
+- Item Compost Chance
+- Item Frame - Rotation
+- Item Rarity - Color
+- Item/Enchantment Rarity
+- Last Death Location
+- Loom Pattern Type
+- Love Duration
+- Maximum Enchantment Level
+- Minimum Enchantment Level
+- Ocelot - Trusting State
+- Pathables
+- Percentage
+- Player Version
+- Previous Gamemode
+- Pusher
+- Shearables
+- Sittables
+- Small Caps
+- Entity - Spawn Category
+- Entity - Spawn Reason
+- Stonecutter Result
+- Strippables
+- Entity - Swimming Sound
+- Entity - Swimming Splash Sound
+- Entity - High Speed Swimming Splash Sound
+- Tillables
+- Unenchanted
+- Version
+- Warden - Anger
+- Warden - Prey
+- Warden Anger (Event)
+- Waxables
+- WorldBorder - Change Duration
+- WorldBorder - Past/Future Center
+- WorldBorder - Past/Future Size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
