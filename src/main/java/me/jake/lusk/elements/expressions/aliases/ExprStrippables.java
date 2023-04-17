@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Strippable")
+@Name("Strippables")
 @Description("Returns all the strippable blocks.")
 @Examples({"broadcast all strippables"})
 @Since("1.0.1")

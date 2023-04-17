@@ -9,13 +9,13 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Swimming Sound")
-@Description("Returns the Sound this entity makes while swimming.")
-@Examples({"broadcast swimming sound of target"})
+@Name("Swimming Splash Sound")
+@Description("Returns the Sound this entity makes when splashing in water. For most entities, this is just 'ENTITY_GENERIC_SPLASH'.")
+@Examples({"broadcast swimming splash sound of target"})
 @Since("1.0.2")
-public class ExprSwimSound extends SimplePropertyExpression<Entity, String> {
+public class ExprEntitySwimSplashSound extends SimplePropertyExpression<Entity, String> {
     static {
-        register(ExprSwimSound.class, String.class, "swim[ming] sound", "entity");
+        register(ExprEntitySwimSplashSound.class, String.class, "swim[ming] splash sound", "entity");
     }
 
     @Override
@@ -27,13 +27,13 @@ public class ExprSwimSound extends SimplePropertyExpression<Entity, String> {
     @Nullable
     public String convert(Entity e) {
         if (e != null) {
-            return e.getSwimSound().name();
+            return e.getSwimSplashSound().name();
         }
         return null;
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "swimming sound";
+        return "swimming splash sound";
     }
 }

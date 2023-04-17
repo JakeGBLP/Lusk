@@ -9,7 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Maximum Enchantment Level")
+@Name("Enchantment - Maximum Level")
 @Description("Returns the Maximum Vanilla Level for an Enchantment.")
 @Examples({"broadcast max level of sharpness"})
 @Since("1.0.0")

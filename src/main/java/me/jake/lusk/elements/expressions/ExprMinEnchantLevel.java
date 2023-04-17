@@ -9,7 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Minimum Enchantment Level")
+@Name("Enchantment - Minimum Level")
 @Description("Returns the Minimum Vanilla Level for an Enchantment.\nThere really isn't much of a reason to use this expression as every enchantment starts at 0.. \n\nUnless Mojang wants to prove me wrong.")
 @Examples({"broadcast minimum enchantment level of protection"})
 @Since("1.0.0")

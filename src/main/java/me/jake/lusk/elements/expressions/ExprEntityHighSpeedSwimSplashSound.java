@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Sound this entity makes when splashing in water at high speeds. For most entities, this is just 'ENTITY_GENERIC_SPLASH'.")
 @Examples({"broadcast high speed swimming splash sound of target"})
 @Since("1.0.2")
-public class ExprHighSpeedSwimSplashSound extends SimplePropertyExpression<Entity, String> {
+public class ExprEntityHighSpeedSwimSplashSound extends SimplePropertyExpression<Entity, String> {
     static {
-        register(ExprHighSpeedSwimSplashSound.class, String.class, "high speed swim[ming] splash sound", "entity");
+        register(ExprEntityHighSpeedSwimSplashSound.class, String.class, "high speed swim[ming] splash sound", "entity");
     }
 
     @Override

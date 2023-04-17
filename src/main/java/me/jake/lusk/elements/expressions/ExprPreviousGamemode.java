@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Previous Gamemode")
+@Name("Player - Previous Gamemode")
 @Description("Returns the previous gamemode of a player.")
 @Examples({"broadcast previous gamemode of player"})
 @Since("1.0.2")

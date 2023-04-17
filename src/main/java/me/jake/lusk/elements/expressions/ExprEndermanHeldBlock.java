@@ -27,9 +27,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-@Name("Enderman - Has Been Looked At State")
-@Description("Returns whether or not an enderman has been looked at.")
-@Examples({"broadcast has been looked at state of target"})
+@Name("Enderman - Held Block")
+@Description("Returns the Held Block of an Enderman.")
+@Examples({"broadcast held block of target"})
 @Since("1.0.2")
 public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
     static {
@@ -48,7 +48,6 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
     @Override
     protected BlockData @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        boolean bool;
         if (livingEntity instanceof Enderman enderman) {
             return new BlockData[]{enderman.getCarriedBlock()};
         }

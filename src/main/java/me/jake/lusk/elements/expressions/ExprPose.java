@@ -10,7 +10,7 @@ import org.bukkit.entity.Pose;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity Pose")
+@Name("Entity - Pose")
 @Description("Returns the entity's current pose. Note that the pose is only updated at the end of a tick, so it may be inconsistent.")
 @Examples({"broadcast pose of target"})
 @Since("1.0.2")

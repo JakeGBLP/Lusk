@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Player Version")
+@Name("Player - Client Version")
 @Description("Returns the Minecraft Version of a player, only major versions ) are included.")
 @Examples({"broadcast version of player\n\nkick player due to \"stop using 1.8!\" if version of player = \"1.8.9\""})
 @Since("1.0.0")

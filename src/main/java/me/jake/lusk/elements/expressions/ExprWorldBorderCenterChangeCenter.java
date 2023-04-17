@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("WorldBorder - New/Old Size")
+@Name("WorldBorder - New/Old Center")
 @Description("Returns the new/old anger of the warden in the World Border Change events.\nCan be set only within the Start variant of the event.")
 @Examples({""})
 @Since("1.0.2")

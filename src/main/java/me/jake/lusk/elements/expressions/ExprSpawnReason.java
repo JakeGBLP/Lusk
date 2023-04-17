@@ -10,7 +10,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Spawn Reason")
+@Name("Entity - Spawn Reason")
 @Description("Gets the spawn reason that initially spawned this entity.")
 @Examples({"broadcast spawn reason of target"})
 @Since("1.0.2")

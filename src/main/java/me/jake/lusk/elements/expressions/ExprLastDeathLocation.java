@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Last Death Location")
+@Name("Entity - Last Death Location")
 @Description("Returns the location in which the player has last died.")
 @Examples({"broadcast last death location of target"})
 @Since("1.0.2")

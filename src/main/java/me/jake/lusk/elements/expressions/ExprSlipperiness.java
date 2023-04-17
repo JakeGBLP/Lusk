@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Block Slipperiness")
+@Name("Block - Slipperiness")
 @Description("""
         Returns a value that represents how 'slippery' the block is. Blocks with higher slipperiness, like ice can be slid on further by the player and other entities.
         Most blocks have a default slipperiness of 0.6.
