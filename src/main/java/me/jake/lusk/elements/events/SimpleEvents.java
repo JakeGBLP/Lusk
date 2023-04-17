@@ -25,7 +25,6 @@ import org.bukkit.event.entity.EntityEnterLoveModeEvent;
 import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
-import org.bukkit.event.server.BroadcastMessageEvent;
 
 @SuppressWarnings({"unused", "deprecation"})
 public class SimpleEvents {

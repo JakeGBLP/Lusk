@@ -14,7 +14,6 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

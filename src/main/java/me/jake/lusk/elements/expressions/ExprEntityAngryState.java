@@ -12,7 +12,6 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
