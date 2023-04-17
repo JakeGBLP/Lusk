@@ -3,6 +3,10 @@
 
 Lusk is a Misc Skript Addon that adds a lot of useful features to Skript!
 
+# Documentation
+
+[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk) or [![Get on skUnity](https://skunity.com/branding/buttons/get_on_docs.png)](https://docs.skunity.com/syntax/search/addon:lusk)
+
 # Features (1.0.2)
 
 
@@ -139,6 +143,3 @@ Effects:
 
 
 
-# Documentation
-
-[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk) or [![Get on skUnity](https://skunity.com/branding/buttons/get_on_docs.png)](https://docs.skunity.com/syntax/search/addon:lusk)
