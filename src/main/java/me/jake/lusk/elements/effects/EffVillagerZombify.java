@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-@Name("Zombify Villager")
+@Name("Villager - Zombify")
 @Description("Converts Villagers into Zombie Villagers as if they were killed by a Zombie.")
 @Examples({"""
            zombify target"""})

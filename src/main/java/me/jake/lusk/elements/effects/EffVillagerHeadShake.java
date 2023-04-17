@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-@Name("Zombify Head Shake")
+@Name("Vllager - Head Shake")
 @Description("Make a villager shake his head.")
 @Examples({"""
            make target shake head"""})
