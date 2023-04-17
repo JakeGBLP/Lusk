@@ -1,4 +1,4 @@
-package me.jake.lusk.elements.conditions;
+package me.jake.lusk.elements.conditions.aliases;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
@@ -9,21 +9,21 @@ import ch.njol.skript.entity.EntityData;
 import me.jake.lusk.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Shearable")
-@Description("Checks if an entity can normally be sheared. (This condition will pass even if the entity is not ready to be sheared")
-@Examples("if target is shearable:")
+@Name("is Sittable")
+@Description("Checks if an entity can normally sit.")
+@Examples("if target is sittable:")
 @Since("1.0.2")
-public class CondShearable extends PropertyCondition<Object> {
+public class CondSittable extends PropertyCondition<Object> {
 
     static {
-        register(CondShearable.class, "shearable", "entitydata");
+        register(CondSittable.class, "sittable", "entitydata");
     }
 
     @Override
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof EntityData<?> entityData) {
-                return Utils.isShearable(entityData);
+                return Utils.isSittable(entityData);
             }
         }
         return false;
@@ -31,6 +31,6 @@ public class CondShearable extends PropertyCondition<Object> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "shearable";
+        return "sittable";
     }
 }

@@ -8,7 +8,6 @@ import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.VectorMath;
 import me.jake.lusk.classes.Version;
 import net.kyori.adventure.util.TriState;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
 import org.bukkit.block.data.BlockData;
@@ -92,7 +91,7 @@ public class Utils {
         }};
     }
     public static void setServerVersion() {
-        serverVersion = Version.parse(Bukkit.getMinecraftVersion());
+        serverVersion = Version.parse(String.valueOf(Skript.getMinecraftVersion()));
     }
     public static void setSmallCapsLetters() {
         smallCapsLetters = "ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
@@ -645,7 +644,6 @@ public class Utils {
             return (int) (2.5 * (level * level) - (40.5 * level) + 360);
         return (int) (4.5 * (level * level) - (162.5 * level) + 2220);
     }
-
 
     @Nullable
     public static Object getHashMapKeyFromValue(HashMap<?,?> hashMap, Object value) {

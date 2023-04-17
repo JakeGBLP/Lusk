@@ -31,16 +31,16 @@ public class EvtItemFrameChange extends SkriptEvent {
         }
     }
 
-    private PlayerItemFrameChangeEvent.ItemFrameChangeAction action;
+    private String action;
 
     @Override
     public boolean init(Literal<?> @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
         if (parseResult.hasTag("place")) {
-            action = PlayerItemFrameChangeEvent.ItemFrameChangeAction.PLACE;
+            action = "PLACE";
         } else if (parseResult.hasTag("remove")) {
-            action = PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE;
+            action = "REMOVE";
         } else if (parseResult.hasTag("rotate")) {
-            action = PlayerItemFrameChangeEvent.ItemFrameChangeAction.ROTATE;
+            action = "ROTATE";
         }
         return true;
     }
@@ -50,15 +50,15 @@ public class EvtItemFrameChange extends SkriptEvent {
         if (action == null) {
             return true;
         }
-        return action == ((PlayerItemFrameChangeEvent)e).getAction();
+        return action.equals(((PlayerItemFrameChangeEvent) e).getAction().toString());
     }
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return switch (action) {
-            case PLACE -> "item frame place";
-            case REMOVE -> "item frame remove";
-            case ROTATE -> "item frame rotate";
+            case "PLACE" -> "item frame place";
+            case "REMOVE" -> "item frame remove";
+            case "ROTATE" -> "item frame rotate";
             default -> "item frame interact";
         };
     }

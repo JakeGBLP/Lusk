@@ -332,12 +332,14 @@ public final class AddonEventValues {
             }
         }, 0);
         // Elder Guardian Events
-        EventValues.registerEventValue(ElderGuardianAppearanceEvent.class, Player.class, new Getter<Player, ElderGuardianAppearanceEvent>() {
-            @Override
-            public @NotNull Player get(final ElderGuardianAppearanceEvent e) {
-                return e.getAffectedPlayer();
-            }
-        }, 0);
+        if (Skript.classExists("io.papermc.paper.event.entity.ElderGuardianAppearanceEvent")) {
+            EventValues.registerEventValue(ElderGuardianAppearanceEvent.class, Player.class, new Getter<Player, ElderGuardianAppearanceEvent>() {
+                @Override
+                public @NotNull Player get(final ElderGuardianAppearanceEvent e) {
+                    return e.getAffectedPlayer();
+                }
+            }, 0);
+        }
         // Love Mode Event
         EventValues.registerEventValue(EntityEnterLoveModeEvent.class, Player.class, new Getter<Player, EntityEnterLoveModeEvent>() {
             @Override
