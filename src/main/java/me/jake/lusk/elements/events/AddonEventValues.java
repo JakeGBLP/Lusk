@@ -12,6 +12,7 @@ import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
 import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
+import io.papermc.paper.event.block.BellRingEvent;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import io.papermc.paper.event.entity.EntityInsideBlockEvent;
@@ -369,5 +370,21 @@ public final class AddonEventValues {
                 return e.getPlayer();
             }
         }, 0);
+        // Bell Ring
+        if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
+            EventValues.registerEventValue(org.bukkit.event.block.BellRingEvent.class, Entity.class, new Getter<Entity, org.bukkit.event.block.BellRingEvent>() {
+                @Override
+                public @NotNull Entity get(final org.bukkit.event.block.BellRingEvent e) {
+                    return Objects.requireNonNull(e.getEntity());
+                }
+            }, 0);
+        } else if (Skript.classExists("io.papermc.paper.event.block.BellRingEvent")) {
+            EventValues.registerEventValue(BellRingEvent.class, Entity.class, new Getter<Entity, BellRingEvent>() {
+                @Override
+                public @NotNull Entity get(final BellRingEvent e) {
+                    return Objects.requireNonNull(e.getEntity());
+                }
+            }, 0);
+        }
     }
 }
