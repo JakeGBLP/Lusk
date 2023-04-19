@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-@Name("Allay Dance")
+@Name("Allay - Start/Stop Dance")
 @Description("Forces an Allay to start/stop dancing.\nIf the jukebox is specified but the provided block is not a jukebox, the Allay will start dancing without one.")
 @Examples({"""
            make target start dancing"""})
-@Since("1.0.2+")
+@Since("1.0.2")
 public class EffAllayDance extends Effect {
     static {
         Skript.registerEffect(EffAllayDance.class,

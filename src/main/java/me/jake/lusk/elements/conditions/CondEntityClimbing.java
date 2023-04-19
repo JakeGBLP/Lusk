@@ -8,13 +8,13 @@ import ch.njol.skript.doc.Since;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("is Climbing")
+@Name("Entity - is Climbing")
 @Description("Checks if a living entity is climbing (Ladders, vines, spiders etc).")
 @Examples({"if player is climbing:"})
 @Since("1.0.2")
-public class CondClimbing extends PropertyCondition<LivingEntity> {
+public class CondEntityClimbing extends PropertyCondition<LivingEntity> {
     static {
-        register(CondClimbing.class, "climbing", "livingentity");
+        register(CondEntityClimbing.class, "climbing", "livingentity");
     }
 
     @Override

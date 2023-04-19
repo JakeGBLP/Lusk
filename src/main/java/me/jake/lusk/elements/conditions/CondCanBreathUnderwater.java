@@ -14,7 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Can Breath Underwater")
+@Name("Entity - Can Breath Underwater")
 @Description("Checks if a living entity can breath underwater.")
 @Examples({"if {_entity} can breath underwater:"})
 @Since("1.0.2")

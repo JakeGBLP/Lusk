@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-@Name("Duplicate Allay")
+@Name("Allay - Duplicate")
 @Description("Forces an allay to duplicate itself without dance or item necessary.")
 @Examples({"""
            force duplicate (entities where [input is an allay])"""})
-@Since("1.0.2+")
+@Since("1.0.2")
 public class EffAllayDuplicate extends Effect {
     static {
         Skript.registerEffect(EffAllayDuplicate.class, "[force] duplicate %livingentities%");

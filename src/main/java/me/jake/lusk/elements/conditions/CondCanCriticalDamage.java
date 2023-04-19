@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-@Name("can Critical Damage")
+@Name("Player - Can Critical Damage")
 @Description("Checks if a player is in position to inflict a critical hit.\n\nRead https://minecraft.fandom.com/wiki/Damage#Critical_hit for more info.")
 @Examples({"if player can critical damage:"})
 @Since("1.0.2")
