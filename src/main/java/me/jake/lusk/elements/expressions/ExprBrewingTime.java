@@ -10,6 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.block.Block;
@@ -23,9 +24,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the brewing time of a Brewing Stand (the time before the brewing is over, 0 seconds = finished, 20 seconds = just started. Can be set to a longer time, progress won't be displayed until it reaches 20 seconds).\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
 @Since("1.0.2")
-public class ExprBrewingTime extends SimpleExpression<Integer> {
+public class ExprBrewingTime extends SimpleExpression<Timespan> {
     static {
-        Skript.registerExpression(ExprBrewingTime.class, Integer.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.COMBINED,
                 "[the] brewing time of %block%");
     }
 
@@ -37,34 +38,34 @@ public class ExprBrewingTime extends SimpleExpression<Integer> {
         return true;
     }
     @Override
-    protected Integer @NotNull [] get(@NotNull Event e) {
+    protected Timespan @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
         if (block != null) {
             BlockState blockState = block.getState();
             if (blockState instanceof BrewingStand brewingStand) {
-                return new Integer[]{brewingStand.getBrewingTime()};
+                return new Timespan[]{Timespan.fromTicks_i(brewingStand.getBrewingTime())};
             }
         }
-        return new Integer[0];
+        return new Timespan[0];
     }
 
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
+            return CollectionUtils.array(Timespan[].class);
         } else {
             return new Class[0];
         }
     }
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null) return;
+        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
+        if (timespan == null) return;
         Block block = blockExpression.getSingle(e);
         if (block != null) {
             BlockState blockState = block.getState();
             if (blockState instanceof BrewingStand brewingStand) {
-                brewingStand.setBrewingTime(integer);
+                brewingStand.setBrewingTime(((int) timespan.getTicks_i()));
                 brewingStand.update();
             }
         }
@@ -76,8 +77,8 @@ public class ExprBrewingTime extends SimpleExpression<Integer> {
     }
 
     @Override
-    public @NotNull Class<? extends Integer> getReturnType() {
-        return Integer.class;
+    public @NotNull Class<? extends Timespan> getReturnType() {
+        return Timespan.class;
     }
 
     @Override

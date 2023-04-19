@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"if player is in powdered snow:"})
 @Since("1.0.2")
 public class CondInPowderedSnow extends PropertyCondition<Entity> {
-
     static {
         register(CondInPowderedSnow.class, "in powdered snow", "entity");
     }
