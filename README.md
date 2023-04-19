@@ -69,7 +69,7 @@ Events:
 - on WorldBorder Change (3 in 1)
 
 
-Conditions
+Conditions:
 - Allay - Can Be Duplicated
 - Animal - is Dancing
 - Animal - is Interested
@@ -214,20 +214,12 @@ Expressions:
 - WorldBorder - Past/Future Center
 - WorldBorder - Past/Future Size
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Types:
+- Bounding Box
+- Cauldron Change Reason
+- Ender Dragon Phase
+- Equipment Slot
+- Pattern Type
+- Pose
+- Spawn Category
+- Version
