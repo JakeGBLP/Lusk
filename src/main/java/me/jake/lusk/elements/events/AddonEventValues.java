@@ -38,7 +38,6 @@ import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
-import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -58,28 +57,56 @@ public final class AddonEventValues {
                     return e.getTargetEntity();
                 }
             }, 0);
-        } if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {
-            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Block.class, new Getter<Block, PrepareGrindstoneEvent>() {
+        } if (Skript.classExists("org.bukkit.event.inventory.PrepareGrindstoneEvent")) {
+            EventValues.registerEventValue(org.bukkit.event.inventory.PrepareGrindstoneEvent.class, Block.class, new Getter<Block, org.bukkit.event.inventory.PrepareGrindstoneEvent>() {
                 @Override
-                public @NotNull Block get(final PrepareGrindstoneEvent e) {
+                public @NotNull Block get(final org.bukkit.event.inventory.PrepareGrindstoneEvent e) {
                     return Objects.requireNonNull(e.getInventory().getLocation()).getBlock();
                 }
             }, 0);
-            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Inventory.class, new Getter<Inventory, PrepareGrindstoneEvent>() {
+            EventValues.registerEventValue(org.bukkit.event.inventory.PrepareGrindstoneEvent.class, Inventory.class, new Getter<Inventory, org.bukkit.event.inventory.PrepareGrindstoneEvent>() {
                 @Override
-                public @NotNull Inventory get(final PrepareGrindstoneEvent e) {
+                public @NotNull Inventory get(final org.bukkit.event.inventory.PrepareGrindstoneEvent e) {
                     return Objects.requireNonNull(e.getInventory());
                 }
             }, 0);
-            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Location.class, new Getter<Location, PrepareGrindstoneEvent>() {
+            EventValues.registerEventValue(org.bukkit.event.inventory.PrepareGrindstoneEvent.class, Location.class, new Getter<Location, org.bukkit.event.inventory.PrepareGrindstoneEvent>() {
                 @Override
-                public @NotNull Location get(final PrepareGrindstoneEvent e) {
+                public @NotNull Location get(final org.bukkit.event.inventory.PrepareGrindstoneEvent e) {
                     return Objects.requireNonNull(e.getInventory().getLocation());
                 }
             }, 0);
-            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Slot.class, new Getter<Slot, PrepareGrindstoneEvent>() {
+            EventValues.registerEventValue(org.bukkit.event.inventory.PrepareGrindstoneEvent.class, Slot.class, new Getter<Slot, org.bukkit.event.inventory.PrepareGrindstoneEvent>() {
                 @Override
-                public @NotNull Slot get(final PrepareGrindstoneEvent e) {
+                public @NotNull Slot get(final org.bukkit.event.inventory.PrepareGrindstoneEvent e) {
+                    Slot slot = new InventorySlot(e.getInventory(), 2);
+                    slot.setItem(e.getResult());
+                    slot.setAmount(Objects.requireNonNull(e.getResult()).getAmount());
+                    return slot;
+                }
+            }, 0);
+        } else if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {
+            EventValues.registerEventValue(com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent.class, Block.class, new Getter<Block, com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Block get(final com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory().getLocation()).getBlock();
+                }
+            }, 0);
+            EventValues.registerEventValue(com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent.class, Inventory.class, new Getter<Inventory, com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Inventory get(final com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory());
+                }
+            }, 0);
+            EventValues.registerEventValue(com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent.class, Location.class, new Getter<Location, com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Location get(final com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory().getLocation());
+                }
+            }, 0);
+            EventValues.registerEventValue(com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent.class, Slot.class, new Getter<Slot, com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Slot get(final com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent e) {
                     Slot slot = new InventorySlot(e.getInventory(), 2);
                     slot.setItem(e.getResult());
                     slot.setAmount(Objects.requireNonNull(e.getResult()).getAmount());

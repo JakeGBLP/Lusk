@@ -44,11 +44,17 @@ public class SimpleEvents {
                     .description("Called when a player changes their main hand in the client settings.")
                     .examples("")
                     .since("1.0.0");
-        } if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {
-            Skript.registerEvent("Grindstone Prepare", SimpleEvent.class, PrepareGrindstoneEvent.class, "grindstone prepar(e[d]|ing)")
+        }
+        Class<? extends Event> prepareGrindstoneEvent = null;
+        if (Skript.classExists("org.bukkit.event.inventory.PrepareGrindstoneEvent")) {
+            prepareGrindstoneEvent = org.bukkit.event.inventory.PrepareGrindstoneEvent.class;
+        } else if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {
+            prepareGrindstoneEvent = com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent.class;
+        } if (prepareGrindstoneEvent != null) {
+            Skript.registerEvent("Grindstone Prepare", SimpleEvent.class, prepareGrindstoneEvent, "grindstone prepar(e[d]|ing)")
                     .description("Called when an item is put in a slot for repair or unenchanting in a grindstone.")
                     .examples("")
-                    .since("1.0.0");
+                    .since("1.0.0, 1.0.3 (Spigot)");
         }
         Class<? extends Event> bellRingEventClass = null;
         if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
@@ -59,7 +65,7 @@ public class SimpleEvents {
             Skript.registerEvent("Bell Ring", SimpleEvent.class, bellRingEventClass, "bell r(ung|ing[(ed|ing)])")
                     .description("Called when a bell is rung.")
                     .examples("")
-                    .since("1.0.0+ (Paper), 1.0.2+ (Spigot)");
+                    .since("1.0.0 (Paper), 1.0.2 (Spigot)");
         } if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail")
                     .description("This Event requires Paper.\n\nCalled when a player attempts to sleep but fails..")

@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"if player is slim:"})
 @Since("1.0.2")
 public class CondSlim extends PropertyCondition<Player> {
-
     static {
         register(CondSlim.class, "slim", "player");
     }
