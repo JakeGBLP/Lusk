@@ -8,6 +8,7 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.slot.EquipmentSlot;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
+import com.destroystokyo.paper.event.block.BeaconEffectEvent;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
@@ -50,47 +51,42 @@ public final class AddonEventValues {
     }
 
     static {
-
-        // 1.0.0
-
-        // Dispense Armor Event
-        EventValues.registerEventValue(BlockDispenseArmorEvent.class, Entity.class, new Getter<Entity, BlockDispenseArmorEvent>() {
-            @Override
-            public @NotNull Entity get(final BlockDispenseArmorEvent e) {
-                return e.getTargetEntity();
-            }
-        }, 0);
-        EventValues.registerEventValue(PrepareGrindstoneEvent.class, Block.class, new Getter<Block, PrepareGrindstoneEvent>() {
-            @Override
-            public @NotNull Block get(final PrepareGrindstoneEvent e) {
-                return Objects.requireNonNull(e.getInventory().getLocation()).getBlock();
-            }
-        }, 0);
-        EventValues.registerEventValue(PrepareGrindstoneEvent.class, Inventory.class, new Getter<Inventory, PrepareGrindstoneEvent>() {
-            @Override
-            public @NotNull Inventory get(final PrepareGrindstoneEvent e) {
-                return Objects.requireNonNull(e.getInventory());
-            }
-        }, 0);
-        EventValues.registerEventValue(PrepareGrindstoneEvent.class, Location.class, new Getter<Location, PrepareGrindstoneEvent>() {
-            @Override
-            public @NotNull Location get(final PrepareGrindstoneEvent e) {
-                return Objects.requireNonNull(e.getInventory().getLocation());
-            }
-        }, 0);
-        EventValues.registerEventValue(PrepareGrindstoneEvent.class, Slot.class, new Getter<Slot, PrepareGrindstoneEvent>() {
-            @Override
-            public @NotNull Slot get(final PrepareGrindstoneEvent e) {
-                Slot slot = new InventorySlot(e.getInventory(), 2);
-                slot.setItem(e.getResult());
-                slot.setAmount(Objects.requireNonNull(e.getResult()).getAmount());
-                return slot;
-            }
-        }, 0);
-
-        // Paper
-
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
+        if (Skript.classExists("org.bukkit.event.block.BlockDispenseArmorEvent")) {
+            EventValues.registerEventValue(BlockDispenseArmorEvent.class, Entity.class, new Getter<Entity, BlockDispenseArmorEvent>() {
+                @Override
+                public @NotNull Entity get(final BlockDispenseArmorEvent e) {
+                    return e.getTargetEntity();
+                }
+            }, 0);
+        } if (Skript.classExists("com.destroystokyo.paper.event.inventory.PrepareGrindstoneEvent")) {
+            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Block.class, new Getter<Block, PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Block get(final PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory().getLocation()).getBlock();
+                }
+            }, 0);
+            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Inventory.class, new Getter<Inventory, PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Inventory get(final PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory());
+                }
+            }, 0);
+            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Location.class, new Getter<Location, PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Location get(final PrepareGrindstoneEvent e) {
+                    return Objects.requireNonNull(e.getInventory().getLocation());
+                }
+            }, 0);
+            EventValues.registerEventValue(PrepareGrindstoneEvent.class, Slot.class, new Getter<Slot, PrepareGrindstoneEvent>() {
+                @Override
+                public @NotNull Slot get(final PrepareGrindstoneEvent e) {
+                    Slot slot = new InventorySlot(e.getInventory(), 2);
+                    slot.setItem(e.getResult());
+                    slot.setAmount(Objects.requireNonNull(e.getResult()).getAmount());
+                    return slot;
+                }
+            }, 0);
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             EventValues.registerEventValue(PlayerBedFailEnterEvent.class, Block.class, new Getter<Block, PlayerBedFailEnterEvent>() {
                 @Override
                 public @NotNull Block get(final PlayerBedFailEnterEvent e) {
@@ -103,16 +99,14 @@ public final class AddonEventValues {
                     return Objects.requireNonNull(e.getBed().getLocation());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
             EventValues.registerEventValue(EntityInsideBlockEvent.class, Block.class, new Getter<Block, EntityInsideBlockEvent>() {
                 @Override
                 public @NotNull Block get(final EntityInsideBlockEvent e) {
                     return Objects.requireNonNull(e.getBlock());
                 }
             }, 0);
-        }
-        if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent")) {
+        } if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent")) {
             EventValues.registerEventValue(PlayerStartSpectatingEntityEvent.class, Entity.class, new Getter<Entity, PlayerStartSpectatingEntityEvent>() {
                 @Override
                 public @NotNull Entity get(final PlayerStartSpectatingEntityEvent e) {
@@ -131,16 +125,14 @@ public final class AddonEventValues {
                     return Objects.requireNonNull(e.getNewSpectatorTarget());
                 }
             }, 1);
-        }
-        if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent")) {
+        } if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent")) {
             EventValues.registerEventValue(PlayerStopSpectatingEntityEvent.class, Entity.class, new Getter<Entity, PlayerStopSpectatingEntityEvent>() {
                 @Override
                 public @NotNull Entity get(final PlayerStopSpectatingEntityEvent e) {
                     return Objects.requireNonNull(e.getSpectatorTarget());
                 }
             }, 0);
-        }
-         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
              EventValues.registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, new Getter<ItemStack, PlayerFlowerPotManipulateEvent>() {
                  @Override
                  public @NotNull ItemStack get(final PlayerFlowerPotManipulateEvent e) {
@@ -153,8 +145,7 @@ public final class AddonEventValues {
                      return Objects.requireNonNull(e.getFlowerpot());
                  }
              }, 0);
-         }
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
             EventValues.registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, new Getter<Entity, PlayerItemFrameChangeEvent>() {
                 @Override
                 public @NotNull Entity get(final PlayerItemFrameChangeEvent e) {
@@ -167,24 +158,21 @@ public final class AddonEventValues {
                     return Objects.requireNonNull(e.getItemStack());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
             EventValues.registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, new Getter<PatternType, PlayerLoomPatternSelectEvent>() {
                 @Override
                 public @NotNull PatternType get(final PlayerLoomPatternSelectEvent e) {
                     return Objects.requireNonNull(e.getPatternType());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
             EventValues.registerEventValue(PlayerNameEntityEvent.class, Entity.class, new Getter<Entity, PlayerNameEntityEvent>() {
                 @Override
                 public @NotNull Entity get(final PlayerNameEntityEvent e) {
                     return Objects.requireNonNull(e.getEntity());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
             EventValues.registerEventValue(PlayerStopUsingItemEvent.class, ItemStack.class, new Getter<ItemStack, PlayerStopUsingItemEvent>() {
                 @Override
                 public @NotNull ItemStack get(final PlayerStopUsingItemEvent e) {
@@ -197,24 +185,21 @@ public final class AddonEventValues {
                     return Timespan.fromTicks_i(e.getTicksHeldFor());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.player.PrePlayerAttackEntityEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PrePlayerAttackEntityEvent")) {
             EventValues.registerEventValue(PrePlayerAttackEntityEvent.class, Entity.class, new Getter<Entity, PrePlayerAttackEntityEvent>() {
                 @Override
                 public @NotNull Entity get(final PrePlayerAttackEntityEvent e) {
                     return Objects.requireNonNull(e.getAttacked());
                 }
             }, 0);
-        }
-        if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
+        } if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
             EventValues.registerEventValue(PlayerPostRespawnEvent.class, Location.class, new Getter<Location, PlayerPostRespawnEvent>() {
                 @Override
                 public @NotNull Location get(final PlayerPostRespawnEvent e) {
                     return Objects.requireNonNull(e.getRespawnedLocation());
                 }
             }, 0);
-        }
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerInventorySlotChangeEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerInventorySlotChangeEvent")) {
             EventValues.registerEventValue(PlayerInventorySlotChangeEvent.class, ItemStack.class, new Getter<ItemStack, PlayerInventorySlotChangeEvent>() {
                 @Override
                 public @NotNull ItemStack get(PlayerInventorySlotChangeEvent event) {
@@ -239,69 +224,56 @@ public final class AddonEventValues {
                     }
                 }
             }, 0);
-        }
-
-        // 1.0.1
-
-        // Furnace Extract Event
-        EventValues.registerEventValue(FurnaceExtractEvent.class, Slot.class, new Getter<Slot, FurnaceExtractEvent>() {
-            @Override
-            public @NotNull Slot get(final FurnaceExtractEvent e) {
-                Slot slot = new InventorySlot(Objects.requireNonNull(e.getPlayer().getOpenInventory().getTopInventory()), 2);
-                slot.setItem(e.getPlayer().getOpenInventory().getCursor());
-                slot.setAmount(Objects.requireNonNull(e.getPlayer().getOpenInventory().getCursor()).getAmount());
-                return slot;
-            }
-        }, 0);
-        EventValues.registerEventValue(FurnaceExtractEvent.class, Inventory.class, new Getter<Inventory, FurnaceExtractEvent>() {
-            @Override
-            public @NotNull Inventory get(final FurnaceExtractEvent e) {
-                return e.getPlayer().getOpenInventory().getTopInventory();
-            }
-        }, 0);
-        EventValues.registerEventValue(FurnaceExtractEvent.class, ItemType.class, new Getter<ItemType, FurnaceExtractEvent>() {
-            @Override
-            public @NotNull ItemType get(final FurnaceExtractEvent e) {
-                return new ItemType(e.getItemType());
-            }
-        }, 0);
-        EventValues.registerEventValue(FurnaceExtractEvent.class, Integer.class, new Getter<Integer, FurnaceExtractEvent>() {
-            @Override
-            public @NotNull Integer get(final FurnaceExtractEvent e) {
-                return e.getItemAmount();
-            }
-        }, 0);
-
-        // Furnace Start Smelting
-        EventValues.registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, new Getter<Integer, FurnaceStartSmeltEvent>() {
-            @Override
-            public @NotNull Integer get(final FurnaceStartSmeltEvent e) {
-                return e.getTotalCookTime();
-            }
-        }, 0);
-
-        // 1.0.2
-
-        // WorldBorder Events
-        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
+        } if (Skript.classExists("org.bukkit.event.inventory.FurnaceExtractEvent")) {
+            EventValues.registerEventValue(FurnaceExtractEvent.class, Slot.class, new Getter<Slot, FurnaceExtractEvent>() {
+                @Override
+                public @NotNull Slot get(final FurnaceExtractEvent e) {
+                    Slot slot = new InventorySlot(Objects.requireNonNull(e.getPlayer().getOpenInventory().getTopInventory()), 2);
+                    slot.setItem(e.getPlayer().getOpenInventory().getCursor());
+                    slot.setAmount(Objects.requireNonNull(e.getPlayer().getOpenInventory().getCursor()).getAmount());
+                    return slot;
+                }
+            }, 0);
+            EventValues.registerEventValue(FurnaceExtractEvent.class, Inventory.class, new Getter<Inventory, FurnaceExtractEvent>() {
+                @Override
+                public @NotNull Inventory get(final FurnaceExtractEvent e) {
+                    return e.getPlayer().getOpenInventory().getTopInventory();
+                }
+            }, 0);
+            EventValues.registerEventValue(FurnaceExtractEvent.class, ItemType.class, new Getter<ItemType, FurnaceExtractEvent>() {
+                @Override
+                public @NotNull ItemType get(final FurnaceExtractEvent e) {
+                    return new ItemType(e.getItemType());
+                }
+            }, 0);
+            EventValues.registerEventValue(FurnaceExtractEvent.class, Integer.class, new Getter<Integer, FurnaceExtractEvent>() {
+                @Override
+                public @NotNull Integer get(final FurnaceExtractEvent e) {
+                    return e.getItemAmount();
+                }
+            }, 0);
+        } if (Skript.classExists("org.bukkit.event.inventory.FurnaceStartSmeltEvent")) {
+            EventValues.registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, new Getter<Integer, FurnaceStartSmeltEvent>() {
+                @Override
+                public @NotNull Integer get(final FurnaceStartSmeltEvent e) {
+                    return e.getTotalCookTime();
+                }
+            }, 0);
+        } if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             EventValues.registerEventValue(WorldBorderEvent.class, World.class, new Getter<World, WorldBorderEvent>() {
                 @Override
                 public @NotNull World get(final WorldBorderEvent e) {
                     return Objects.requireNonNull(e.getWorld());
                 }
             }, 0);
-        }
-        // Whitelist Events
-        if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
+        } if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
             EventValues.registerEventValue(ProfileWhitelistVerifyEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, ProfileWhitelistVerifyEvent>() {
                 @Override
                 public @NotNull OfflinePlayer get(final ProfileWhitelistVerifyEvent e) {
                     return Bukkit.getOfflinePlayer(Objects.requireNonNull(e.getPlayerProfile().getId()));
                 }
             }, 0);
-        }
-        // Dispense Events
-        if (Skript.classExists("io.papermc.paper.event.block.BlockPreDispenseEvent")) {
+        } if (Skript.classExists("io.papermc.paper.event.block.BlockPreDispenseEvent")) {
             EventValues.registerEventValue(BlockPreDispenseEvent.class, Slot.class, new Getter<Slot, BlockPreDispenseEvent>() {
                 @Override
                 public @NotNull Slot get(final BlockPreDispenseEvent e) {
@@ -311,67 +283,63 @@ public final class AddonEventValues {
                     return slot;
                 }
             }, 0);
-        }
-        // Brewing Events
-        EventValues.registerEventValue(BrewingStartEvent.class, Inventory.class, new Getter<Inventory, BrewingStartEvent>() {
-            @Override
-            public @NotNull Inventory get(final BrewingStartEvent e) {
-                return ((InventoryHolder)e.getBlock()).getInventory();
-            }
-        }, 0);
-        EventValues.registerEventValue(BrewingStartEvent.class, ItemType.class, new Getter<ItemType, BrewingStartEvent>() {
-            @Override
-            public @NotNull ItemType get(final BrewingStartEvent e) {
-                BrewerInventory inventory = ((BrewingStand)e.getBlock()).getInventory();
-                return new ItemType(Objects.requireNonNull(inventory.getIngredient()));
-            }
-        }, 0);
-        EventValues.registerEventValue(BrewEvent.class, Inventory.class, new Getter<Inventory, BrewEvent>() {
-            @Override
-            public @NotNull Inventory get(final BrewEvent e) {
-                return e.getContents();
-            }
-        }, 0);
-        // Elder Guardian Events
-        if (Skript.classExists("io.papermc.paper.event.entity.ElderGuardianAppearanceEvent")) {
+        } if (Skript.classExists("org.bukkit.event.block.BrewingStartEvent")) {
+            EventValues.registerEventValue(BrewingStartEvent.class, Inventory.class, new Getter<Inventory, BrewingStartEvent>() {
+                @Override
+                public @NotNull Inventory get(final BrewingStartEvent e) {
+                    return ((InventoryHolder) e.getBlock()).getInventory();
+                }
+            }, 0);
+            EventValues.registerEventValue(BrewingStartEvent.class, ItemType.class, new Getter<ItemType, BrewingStartEvent>() {
+                @Override
+                public @NotNull ItemType get(final BrewingStartEvent e) {
+                    BrewerInventory inventory = ((BrewingStand) e.getBlock()).getInventory();
+                    return new ItemType(Objects.requireNonNull(inventory.getIngredient()));
+                }
+            }, 0);
+        } if (Skript.classExists("org.bukkit.event.inventory.BrewEvent")) {
+            EventValues.registerEventValue(BrewEvent.class, Inventory.class, new Getter<Inventory, BrewEvent>() {
+                @Override
+                public @NotNull Inventory get(final BrewEvent e) {
+                    return e.getContents();
+                }
+            }, 0);
+        } if (Skript.classExists("io.papermc.paper.event.entity.ElderGuardianAppearanceEvent")) {
             EventValues.registerEventValue(ElderGuardianAppearanceEvent.class, Player.class, new Getter<Player, ElderGuardianAppearanceEvent>() {
                 @Override
                 public @NotNull Player get(final ElderGuardianAppearanceEvent e) {
                     return e.getAffectedPlayer();
                 }
             }, 0);
-        }
-        // Love Mode Event
-        EventValues.registerEventValue(EntityEnterLoveModeEvent.class, Player.class, new Getter<Player, EntityEnterLoveModeEvent>() {
-            @Override
-            public @NotNull Player get(final EntityEnterLoveModeEvent e) {
-                return (Player) Objects.requireNonNull(e.getHumanEntity());
-            }
-        }, 0);
-        // Pose Event
-        EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<Pose, EntityPoseChangeEvent>() {
-            @Override
-            public @NotNull Pose get(final EntityPoseChangeEvent e) {
-                return e.getPose();
-            }
-        }, 0);
-        // Damage Push
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
+        } if (Skript.classExists(" org.bukkit.event.entity.EntityEnterLoveModeEvent")) {
+            EventValues.registerEventValue(EntityEnterLoveModeEvent.class, Player.class, new Getter<Player, EntityEnterLoveModeEvent>() {
+                @Override
+                public @NotNull Player get(final EntityEnterLoveModeEvent e) {
+                    return (Player) Objects.requireNonNull(e.getHumanEntity());
+                }
+            }, 0);
+        } if (Skript.classExists(" org.bukkit.event.entity.EntityPoseChangeEvent")) {
+            EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<Pose, EntityPoseChangeEvent>() {
+                @Override
+                public @NotNull Pose get(final EntityPoseChangeEvent e) {
+                    return e.getPose();
+                }
+            }, 0);
+        } if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
             EventValues.registerEventValue(EntityPushedByEntityAttackEvent.class, Vector.class, new Getter<Vector, EntityPushedByEntityAttackEvent>() {
                 @Override
                 public @NotNull Vector get(final EntityPushedByEntityAttackEvent e) {
                     return e.getAcceleration();
                 }
             }, 0);
-        }
-        EventValues.registerEventValue(BlockDamageAbortEvent.class, Player.class, new Getter<Player, BlockDamageAbortEvent>() {
-            @Override
-            public @NotNull Player get(final BlockDamageAbortEvent e) {
-                return e.getPlayer();
-            }
-        }, 0);
-        // Bell Ring
-        if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
+        } if (Skript.classExists("org.bukkit.event.block.BlockDamageAbortEvent")) {
+            EventValues.registerEventValue(BlockDamageAbortEvent.class, Player.class, new Getter<Player, BlockDamageAbortEvent>() {
+                @Override
+                public @NotNull Player get(final BlockDamageAbortEvent e) {
+                    return e.getPlayer();
+                }
+            }, 0);
+        } if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
             EventValues.registerEventValue(org.bukkit.event.block.BellRingEvent.class, Entity.class, new Getter<Entity, org.bukkit.event.block.BellRingEvent>() {
                 @Override
                 public @NotNull Entity get(final org.bukkit.event.block.BellRingEvent e) {
@@ -383,6 +351,14 @@ public final class AddonEventValues {
                 @Override
                 public @NotNull Entity get(final BellRingEvent e) {
                     return Objects.requireNonNull(e.getEntity());
+                }
+            }, 0);
+        }
+        if (Skript.classExists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
+            EventValues.registerEventValue(BeaconEffectEvent.class, Player.class, new Getter<Player, BeaconEffectEvent>() {
+                @Override
+                public @NotNull Player get(final BeaconEffectEvent e) {
+                    return e.getPlayer();
                 }
             }, 0);
         }
