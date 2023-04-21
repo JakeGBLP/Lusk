@@ -20,12 +20,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Beacon - Applied Effect")
 @Description("Returns the potion effect being applied in the Beacon Effect Applied Event.\n This expression can be set.")
-@Examples({"on dye:\n\tbroadcast the color"})
+@Examples({"on beacon effect applied:\n\tbroadcast the applied effect"})
 @Since("1.0.3")
 public class ExprBeaconAppliedEffect extends SimpleExpression<PotionEffect> {
     static {
         Skript.registerExpression(ExprBeaconAppliedEffect.class, PotionEffect.class, ExpressionType.SIMPLE,
-                "[the] applied [beacon] effect");
+                "[the] applied [beacon] [potion] effect");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

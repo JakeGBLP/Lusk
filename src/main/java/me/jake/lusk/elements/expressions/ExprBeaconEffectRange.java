@@ -1,7 +1,6 @@
 package me.jake.lusk.elements.expressions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -13,23 +12,21 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import org.bukkit.Material;
+import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
-import org.bukkit.block.Jukebox;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("JukeBox - Record")
-@Description("Returns the music disc within a jukebox.\nCan be set, reset and deleted.")
-@Examples({"broadcast the music disc of {_j}"})
+@Name("Beacon - Effect Range")
+@Description("Returns effect range of a beacon.\nCan be set and reset.\nSetting it to a negative value will reset it.\nResetting it will set it to the default range based on the pyramid tier.")
+@Examples({"broadcast the effect range of {_beacon}"})
 @Since("1.0.3")
-public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
+public class ExprBeaconEffectRange extends SimpleExpression<Double> {
     static {
-        Skript.registerExpression(ExprJukeBoxRecord.class, ItemType.class, ExpressionType.SIMPLE,
-                "[the] ([music] disc|record) (inside [of]|of|[with]in) %block%",
-                "%block%'[s] ([music] disc|record)");
+        Skript.registerExpression(ExprBeaconEffectRange.class, Double.class, ExpressionType.SIMPLE,
+                "[the] effect range of %block%",
+                "%block%'[s] effect range");
     }
 
     private Expression<Block> blockExpression;
@@ -40,18 +37,18 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
         return true;
     }
     @Override
-    protected ItemType @NotNull [] get(@NotNull Event e) {
+    protected Double @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Jukebox jukebox) {
-            return new ItemType[]{new ItemType(jukebox.getRecord())};
+        if (block.getState() instanceof Beacon beacon) {
+            return new Double[]{beacon.getEffectRange()};
         }
-        return new ItemType[0];
+        return new Double[0];
     }
 
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-            return CollectionUtils.array(ItemStack[].class);
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
+            return CollectionUtils.array(Double[].class);
         } else {
             return new Class[0];
         }
@@ -59,14 +56,14 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Jukebox jukebox) {
-            if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-                jukebox.setRecord(new ItemStack(Material.AIR));
+        if (block.getState() instanceof Beacon beacon) {
+            if (mode == Changer.ChangeMode.RESET) {
+                beacon.resetEffectRange();
             } else {
-                ItemStack itemStack = delta instanceof ItemStack[] ? ((ItemStack[]) delta)[0] : null;
-                if (itemStack != null) jukebox.setRecord(itemStack);
+                Double aDouble = delta instanceof Double[] ? ((Double[]) delta)[0] : null;
+                if (aDouble != null) beacon.setEffectRange(aDouble);
             }
-            jukebox.update();
+            beacon.update();
         }
     }
 
@@ -76,12 +73,12 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
     }
 
     @Override
-    public @NotNull Class<? extends ItemType> getReturnType() {
-        return ItemType.class;
+    public @NotNull Class<? extends Double> getReturnType() {
+        return Double.class;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the music disc of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the effect range of " + (e == null ? "" : blockExpression.getSingle(e));
     }
 }
