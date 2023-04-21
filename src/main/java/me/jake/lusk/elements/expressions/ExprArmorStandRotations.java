@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-@Name("ArmorStand - Rotations")
+@Name("Armor Stand - Rotations")
 @Description("Gets and sets a specific armor stand property.")
 @Examples({"broadcast rotation of target","set head rotation of target to vector(1,0,0)\n# sad armor stand :("})
 @Since("1.0.2")
@@ -58,19 +58,17 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
     @Override
     protected Vector @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity != null) {
-            if (entity instanceof ArmorStand armorStand) {
-                return switch (property) {
-                    case "left arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftArmPose())};
-                    case "right arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightArmPose())};
-                    case "left leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftLegPose())};
-                    case "right leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightLegPose())};
-                    case "head" -> new Vector[]{Utils.toBukkitVector(armorStand.getHeadPose())};
-                    case "body" -> new Vector[]{Utils.toBukkitVector(armorStand.getBodyPose())};
-                    case "" -> new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(),armorStand.getLocation().getPitch())};
-                    default -> new Vector[0];
-                };
-            }
+        if (entity instanceof ArmorStand armorStand) {
+            return switch (property) {
+                case "left arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftArmPose())};
+                case "right arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightArmPose())};
+                case "left leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftLegPose())};
+                case "right leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightLegPose())};
+                case "head" -> new Vector[]{Utils.toBukkitVector(armorStand.getHeadPose())};
+                case "body" -> new Vector[]{Utils.toBukkitVector(armorStand.getBodyPose())};
+                case "" -> new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(),armorStand.getLocation().getPitch())};
+                default -> new Vector[0];
+            };
         }
         return new Vector[0];
     }
@@ -86,17 +84,15 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
         Vector vector = delta instanceof Vector[] ? ((Vector[]) delta)[0] : null;
         if (vector == null) return;
         LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity != null) {
-            if (entity instanceof ArmorStand armorStand) {
-                switch (property) {
-                    case "left arm" -> Utils.setLeftArmRotation(armorStand,vector);
-                    case "right arm" -> Utils.setRightArmRotation(armorStand,vector);
-                    case "left leg" -> Utils.setLeftLegRotation(armorStand,vector);
-                    case "right leg" -> Utils.setRightLegRotation(armorStand,vector);
-                    case "head" -> Utils.setHeadRotation(armorStand,vector);
-                    case "body" -> Utils.setBodyRotation(armorStand,vector);
-                    case "" -> Utils.setFullRotation(armorStand,vector);
-                }
+        if (entity instanceof ArmorStand armorStand) {
+            switch (property) {
+                case "left arm" -> Utils.setLeftArmRotation(armorStand,vector);
+                case "right arm" -> Utils.setRightArmRotation(armorStand,vector);
+                case "left leg" -> Utils.setLeftLegRotation(armorStand,vector);
+                case "right leg" -> Utils.setRightLegRotation(armorStand,vector);
+                case "head" -> Utils.setHeadRotation(armorStand,vector);
+                case "body" -> Utils.setBodyRotation(armorStand,vector);
+                case "" -> Utils.setFullRotation(armorStand,vector);
             }
         }
     }

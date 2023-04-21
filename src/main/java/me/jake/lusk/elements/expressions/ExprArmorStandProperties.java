@@ -18,19 +18,19 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Armorstand - Properties")
+@Name("Armor Stand - Properties")
 @Description("Gets and sets a specific armor stand property.")
 @Examples({"broadcast arms of target","set marker of target to true"})
 @Since("1.0.2")
 public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprArmorStandProperties.class, Boolean.class, ExpressionType.COMBINED,
-                "small of %livingentity%",
-                "[the] arms of %livingentity%",
-                "[the] base plate of %livingentity%",
-                "[the] marker of %livingentity%",
-                "[the] [can] tick status of %livingentity%",
-                "[the] [can] move status of %livingentity%");
+                "[the] small [state] of %livingentity%",
+                "[the] arms [visibility|state] of %livingentity%",
+                "[the] base plate [visibility|state] of %livingentity%",
+                "[the] marker [state] of %livingentity%",
+                "[the] [can] tick stat(us|e) of %livingentity%",
+                "[the] [can] move stat(us|e) of %livingentity%");
 
     }
     private Expression<LivingEntity> livingEntityExpression;
@@ -44,18 +44,16 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity != null) {
-            if (entity instanceof ArmorStand armorStand) {
-                return switch (property) {
-                    case "small" -> new Boolean[]{armorStand.isSmall()};
-                    case "arms" -> new Boolean[]{armorStand.hasArms()};
-                    case "base plate" -> new Boolean[]{armorStand.hasBasePlate()};
-                    case "marker" -> new Boolean[]{armorStand.isMarker()};
-                    case "can tick status" -> new Boolean[]{armorStand.canTick()};
-                    case "can move status" -> new Boolean[]{armorStand.canMove()};
-                    default -> new Boolean[0];
-                };
-            }
+        if (entity instanceof ArmorStand armorStand) {
+            return switch (property) {
+                case "small" -> new Boolean[]{armorStand.isSmall()};
+                case "arms" -> new Boolean[]{armorStand.hasArms()};
+                case "base plate" -> new Boolean[]{armorStand.hasBasePlate()};
+                case "marker" -> new Boolean[]{armorStand.isMarker()};
+                case "can tick status" -> new Boolean[]{armorStand.canTick()};
+                case "can move status" -> new Boolean[]{armorStand.canMove()};
+                default -> new Boolean[0];
+            };
         }
         return new Boolean[0];
     }
@@ -71,16 +69,14 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
         Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
         if (bool == null) return;
         LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity != null) {
-            if (entity instanceof ArmorStand armorStand) {
-                switch (property) {
-                    case "case" -> armorStand.setSmall(bool);
-                    case "arms" -> armorStand.setArms(bool);
-                    case "base plate" -> armorStand.setBasePlate(bool);
-                    case "marker" -> armorStand.setMarker(bool);
-                    case "can tick status" -> armorStand.setCanTick(bool);
-                    case "can move status" -> armorStand.setCanMove(bool);
-                }
+        if (entity instanceof ArmorStand armorStand) {
+            switch (property) {
+                case "small" -> armorStand.setSmall(bool);
+                case "arms" -> armorStand.setArms(bool);
+                case "base plate" -> armorStand.setBasePlate(bool);
+                case "marker" -> armorStand.setMarker(bool);
+                case "can tick status" -> armorStand.setCanTick(bool);
+                case "can move status" -> armorStand.setCanMove(bool);
             }
         }
     }
