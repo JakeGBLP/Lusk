@@ -21,6 +21,7 @@ Events:
 - on Arrow Choose
 - on Bat Sleep/Wake Up/Toggle
 - on Beacon On/Off/Toggle
+- on Beacon Effect Applied
 - on Bell Resonate
 - on Bell Ring
 - on Block Path
@@ -78,15 +79,23 @@ Conditions:
 - Animal - is Dancing
 - Animal - is Interested
 - Animal - is Sitting
+- Beacon - Applied Effect is Primary Effect
+- Bell - is Resonating
+- Bell - is Ringing
 - Boolean
-- Can Be Enchanted With
-- Can Breath Underwater
-- Can Critical Damage
+- Cat - Has Head Up
+- Cat - Lying Down
 - Citizens - is NPC
-- Crossbow - is Charged
+- Crossbow/Wither/Wither Skull - is Charged
+- Dolphin - Has Fish
 - Enderman - Has Been Looked At
 - Entity - Can Be Sheared
+- Entity - Can Breath Underwater
 - Entity - is Angry
+- Entity - is Awake
+- Entity - is Climbing
+- Entity - is Converting
+- Entity - is Hand Raised
 - Entity - is In Powdered Snow
 - Entity - is Left Handed
 - Entity - is Screaming
@@ -95,13 +104,17 @@ Conditions:
 - Fox - is Defending
 - Fox - is Faceplanted
 - Fox - is Leaping
+- Goat - Has Left/Right Horn
 - Has Seen Credits
+- Horse - is Eating
+- Horse - is Eating Grass
+- Horse - is Rearing
+- Iron Golem - Created By a Player
 - is Axeable
 - is Bed Respawn
-- is Climbing
 - is Compostable
 - is Crawling
-- is Critical  |  **Spigot**
+- is Critical
 - is Pathable
 - is Placing in Pot
 - is Shearable
@@ -110,20 +123,30 @@ Conditions:
 - is Strippable
 - is Tillable
 - is Waxable
-- Living Entity - is Awake
+- Item - Can Be Enchanted With
+- JukeBox - Has Record
+- Jukebox - is Playing
+- Llama - Has Caravan Tail
+- Llama - is In Caravan
+- Neher/End - is Allowed
 - Ocelot - is Trusting
+- Player - Can Critical Damage
 - Player - is Slim
-- Server Allows Nether/End
 - Should Trigger Advancements
+- Sign - is Editable
+- Sign - is Glowing
+- Skeleton Horse - is Trapped
 - Version - is Valid
 - Warden - is Agitated
 - Warden - is Calm
 - Whitelist is Enabled
 - Whitelist is Enforced
-- Will be Damaged (Pre Damage Event)
-- Will Consume Brewing Fuel (Brewing Stand Fuel Event)
-- Will Raise Composter Level (Compost Event)
+- Will Be Damaged
+- Will Consume Brewing Fuel
+- Will Raise Composter Level
 - WorldBorder - Change is Instant
+- Zombie - is Raising Its Arms
+- Zombie - Should Burn In Day
 
 
 Effects:
@@ -134,6 +157,11 @@ Effects:
 - Duplicate Allay
 - Enderman - Randomly Teleport
 - [un]Enforce Whitelist
+- Goat - Ram
+- JukeBox - Eject Disc
+- JukeBox - Start/Stop Playing
+- Llama - Join Caravan
+- Llama - Leave Caravan
 - Show Fake Experience (Clientside)
 - Do Nothing
 - Show Credits
@@ -155,6 +183,13 @@ Expressions:
 - Arrow Body Count
 - Axeables
 - Best Equipment Slot
+- Beacon - Affected Entities
+- Beacon - Applied Effect
+- Beacon - Effect Range
+- Beacon - Effects
+- Beacon - Pyramid Tier
+- Bell - Resonation Time
+- Bell - Shaking Time
 - Block Blast Resistance
 - Block Slipperiness
 - Bounding Box - Entity
@@ -162,11 +197,17 @@ Expressions:
 - Brewing - Fuel Level
 - Brewing - Ingredient
 - Brewing Stand Fuel Power
+- Cat - Head Up State
+- Cat - Lying Down State
 - Cauldron - Change Reason
+- Chicken - Egg Lay Time
 - Chosen Arrow/Bow
+- Command Block - Command
 - Compostables
 - Composter Level
-- Decimal Round
+- Dolphin - Has Fish State
+- Dolphin - Moist Level
+- Dolphin - Treasure
 - Ender Dragon Phase (past/future)
 - Enderman - Escape Reason
 - Enderman - Has Been Looked At State
@@ -178,15 +219,31 @@ Expressions:
 - Entity - Height
 - Entity - Origin Location
 - Entity - Pose
+- Entity - Raised Hand
+- Entity - Raised Hand Remaining Tim
+- Entity - Raised Hand Time
 - Entity - Width
 - Entity Color
 - Equipment Slots
+- Fireball - Item
 - Fox - Properties
+- Goat - Left/Right Horn State
+- Horse - Domestication Level
+- Horse - Eating Grass State
+- Horse - Eating State
+- Horse - Jump Strength
+- Horse - Maximum Domestication Levl
+- Horse - Rearing State
+- Iron Golem - Created By a Player State
 - Item Compost Chance
 - Item Frame - Rotation
 - Item Rarity - Color
 - Item/Enchantment Rarity
+- JukeBox - Record
 - Last Death Location
+- Llama - Caravan Head
+- Llama - Caravan Tail
+- Llama - Strength
 - Loom Pattern Type
 - Love Duration
 - Maximum Enchantment Level
@@ -202,6 +259,10 @@ Expressions:
 - Small Caps
 - Entity - Spawn Category
 - Entity - Spawn Reason
+- Sign - Editable State
+- Sign . Glowing State
+- Skeleton Horse - Trap Time
+- Skeleton Horse - Trapped State
 - Stonecutter Result
 - Strippables
 - Entity - Swimming Sound
@@ -217,6 +278,8 @@ Expressions:
 - WorldBorder - Change Duration
 - WorldBorder - Past/Future Center
 - WorldBorder - Past/Future Size
+- Zombie - Raised Arms State
+- Zombie - Should Burn In Day State
 
 Types:
 - Bounding Box
