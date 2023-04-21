@@ -11,7 +11,7 @@ For anything reach out to me on Discord (Jake*#8891) or open an Issue about it.
 
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk) or [![Get on skUnity](https://skunity.com/branding/buttons/get_on_docs.png)](https://docs.skunity.com/syntax/search/addon:lusk)
 
-# Features (1.0.2)
+# Features (1.0.3)
 
 
 Events:
