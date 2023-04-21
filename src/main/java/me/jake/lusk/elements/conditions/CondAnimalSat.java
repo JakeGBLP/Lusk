@@ -20,11 +20,7 @@ public class CondAnimalSat extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity != null) {
-            if (entity instanceof Sittable sittable) {
-                return sittable.isSitting();
-            }
-        }
+        if (entity instanceof Sittable sittable) return sittable.isSitting();
         return false;
     }
 

@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"on right click:\n\tif entity is npc:\n\t\tbroadcast \"you clicked an NPC!\""})
 @Since("1.0.0")
 public class CondNPC extends PropertyCondition<Entity> {
-
     static {
         register(CondNPC.class, "(npc|citizen)", "entity");
     }

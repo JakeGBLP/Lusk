@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"on damage of player:\n\tif victim is crawling:\n\t\tif chance of 0.5:\n\t\t\tcancel event\n\t\t\tsend \"Your attack has failed!\" to attacker"})
 @Since("1.0.0")
 public class CondPlayerCrawling extends PropertyCondition<Player> {
-
     static {
         register(CondPlayerCrawling.class, "crawling", "player");
     }

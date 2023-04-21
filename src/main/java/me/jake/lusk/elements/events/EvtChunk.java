@@ -4,7 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import me.jake.lusk.classes.Version;
+import com.vdurmont.semver4j.Semver;
 import me.jake.lusk.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtChunk extends SkriptEvent {
     static {
-        if (!Utils.getSkriptVersion().isNewerThan(new Version(2, 6, 4))) {
+        if (Utils.getSkriptVersion().isLowerThanOrEqualTo(new Semver("2.6.4"))) {
             if (!Skript.classExists("ch.njol.skript.events.bukkit.EventPlayerEnterChunk")) {
                 Skript.registerEvent("Chunk Enter Event", EvtChunk.class, PlayerMoveEvent.class, "chunk enter")
                         .description("Deprecated since 2.7: https://docs.skriptlang.org/nightly/master/docs.html?search=#player_chunk_enters\n\nCalled when a player enters a chunk.")

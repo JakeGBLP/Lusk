@@ -10,7 +10,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import me.jake.lusk.classes.Version;
+import com.vdurmont.semver4j.Semver;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 @Description("Returns a Version")
 @Examples({"if player's version < version \"1.19.2\":\n\tbroadcast \"%player% can't play on this server\"\nelse:\n\tkick player"})
 @Since("1.0.0")
-public class ExprVersion extends SimpleExpression<Version> {
+public class ExprVersion extends SimpleExpression<Semver> {
     static {
-        Skript.registerExpression(ExprVersion.class, Version.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprVersion.class, Semver.class, ExpressionType.COMBINED,
                 "[the] version[s] %strings%");
     }
 
@@ -35,18 +35,16 @@ public class ExprVersion extends SimpleExpression<Version> {
         return true;
     }
     @Override
-    protected Version @NotNull [] get(@NotNull Event e) {
+    protected Semver @NotNull [] get(@NotNull Event e) {
         String[] s = strings.getArray(e);
         if (s.length != 0) {
-            ArrayList<Version> v = new ArrayList<>();
+            ArrayList<Semver> v = new ArrayList<>();
             for (String value : s) {
-                if (Version.parse(value) != null) {
-                    v.add(Version.parse(value));
-                }
+                v.add(new Semver(value, Semver.SemverType.LOOSE));
             }
-            return v.toArray(new Version[0]);
+            return v.toArray(new Semver[0]);
         }
-        return new Version[0];
+        return new Semver[0];
     }
 
     @Override
@@ -55,8 +53,8 @@ public class ExprVersion extends SimpleExpression<Version> {
     }
 
     @Override
-    public @NotNull Class<? extends Version> getReturnType() {
-        return Version.class;
+    public @NotNull Class<? extends Semver> getReturnType() {
+        return Semver.class;
     }
 
     @Override

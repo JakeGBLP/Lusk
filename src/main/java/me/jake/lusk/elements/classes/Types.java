@@ -7,7 +7,7 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent.Reason;
-import me.jake.lusk.classes.Version;
+import com.vdurmont.semver4j.Semver;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Pose;
@@ -22,8 +22,6 @@ import java.util.Arrays;
 
 public class Types {
     static {
-
-        // 1.0.0
         Classes.registerClass(new ClassInfo<>(EquipmentSlot.class, "equipmentslot")
                 .user("equipment ?slots?")
                 .name("Equipment Slot")
@@ -80,7 +78,6 @@ public class Types {
                     }
                 })
                 .serializer(new EnumSerializer<>(PatternType.class)));
-        // Paper
         if (Skript.classExists("com.destroystokyo.paper.event.entity.EndermanEscapeEvent.Reason")) {
             Classes.registerClass(new ClassInfo<>(Reason.class, "endermanescapereason")
                     .user("ender ?man ?escape ?reasons?")
@@ -111,42 +108,39 @@ public class Types {
                     })
                     .serializer(new EnumSerializer<>(Reason.class)));
         }
-        // Custom
-        Classes.registerClass(new ClassInfo<>(Version.class, "version")
+        Classes.registerClass(new ClassInfo<>(Semver.class, "version")
                 .user("versions?")
                 .name("Version")
                 .description("A Minecraft Version")
                 .usage("")
                 .examples("")
                 .since("1.0.0")
-                .parser(new Parser<Version>() {
+                .parser(new Parser<Semver>() {
                     @Override
-                    @Nullable
-                    public Version parse(final @NotNull String s, final @NotNull ParseContext context) {
-                        return Version.parse(s);
+                    public @NotNull Semver parse(final @NotNull String s, final @NotNull ParseContext context) {
+                        return new Semver(s, Semver.SemverType.LOOSE);
                     }
 
                     @Override
                     public boolean canParse(final @NotNull ParseContext context) {
-                        return true;
+                        return false;
                     }
 
                     @Override
-                    public @NotNull String toString(final Version v, final int flags) {
+                    public @NotNull String toString(final Semver v, final int flags) {
                         return v.toString();
                     }
 
                     @Override
-                    public @NotNull String toVariableNameString(final Version v) {
+                    public @NotNull String toVariableNameString(final Semver v) {
                         return v.toString();
                     }
 
                     @Override
-                    public @NotNull String getDebugMessage(final Version v) {
+                    public @NotNull String getDebugMessage(final Semver v) {
                         return toString(v, 0) + " version (" + v + ")";
                     }
                 }));
-        // 1.0.2
         Classes.registerClass(new ClassInfo<>(Pose.class, "pose")
                 .user("poses?")
                 .name("Pose")

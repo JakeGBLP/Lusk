@@ -21,9 +21,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-@Name("Composter Level")
+@Name("Composter - Level")
 @Description("Returns a composter's level.\nCan be changed.")
 @Examples("""
 on compost:
@@ -71,6 +69,8 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block b = block.getSingle(e);
         if (b == null) return;
+        Object blockDataTag = Utils.getBlockDataTag(b.getBlockData(), "level");
+        if (blockDataTag == null) return;
         String value;
         switch (mode) {
             case RESET, DELETE:
@@ -80,10 +80,10 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
                 value = delta[0].toString();
                 break;
             case REMOVE:
-                value = String.valueOf(Integer.parseInt(Objects.requireNonNull(Utils.getBlockDataTag(b.getBlockData(), "level")).toString()) - (Integer) delta[0]);
+                value = String.valueOf(Integer.parseInt(blockDataTag.toString()) - (Integer) delta[0]);
                 break;
             case ADD:
-                value = String.valueOf(Integer.parseInt(Objects.requireNonNull(Utils.getBlockDataTag(b.getBlockData(), "level")).toString()) + (Integer) delta[0]);
+                value = String.valueOf(Integer.parseInt(blockDataTag.toString()) + (Integer) delta[0]);
                 break;
             default:
                 return;

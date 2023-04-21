@@ -13,15 +13,13 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @Name("Boolean")
 @Description("Returns if the given object is true or false.")
 @Examples({"if {isJailed::%uuid of player%}:\n\tbroadcast \"%player% is Jailed!\""})
-@Since("1.0.0")
+@Since("1.0.0, 1.0.3 (not)")
 public class CondBoolean extends Condition {
     static {
-        Skript.registerCondition(CondBoolean.class, "%boolean%", "!%boolean%");
+        Skript.registerCondition(CondBoolean.class, "%boolean%", "(!|not )%boolean%");
     }
 
     private Expression<Boolean> bool;
@@ -36,8 +34,7 @@ public class CondBoolean extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        assert event != null;
-        return (isNegated() ? "!" : "") + Objects.requireNonNull(bool.getSingle(event));
+        return (isNegated() ? "!" : "") + (event == null ? "" : bool.getSingle(event));
     }
 
     @Override

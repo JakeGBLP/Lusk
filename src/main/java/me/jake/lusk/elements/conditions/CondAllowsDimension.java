@@ -9,32 +9,44 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
+import me.jake.lusk.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Sever allows Nether/End")
+@Name("Nether/End - is Allowed")
 @Description("Checks if the server allows the Nether or the End")
 @Examples({"if the server does not allow the end:\n\tbroadcast \"No End here!\""})
-@Since("1.0.0")
+@Since("1.0.0, 1.0.3 (is Allowed)")
 public class CondAllowsDimension extends Condition {
     static {
-        Skript.registerCondition(CondAllowsDimension.class, "[the] server allows [the] (:nether|end)", "[the] server does(n'| no)t allow [the] (:nether|end)");
+        Skript.registerCondition(CondAllowsDimension.class,
+                "[the] server allows [the] end",
+                "[the] server allows [the] nether",
+                "[the] server does(n'| no)t allow [the] end",
+                "[the] server does(n'| no)t allow [the] nether",
+                "[the] end is allowed",
+                "[the] nether is allowed",
+                "[the] end is(n't| not) allowed",
+                "[the] nether is(n't| not) allowed");
     }
 
     private boolean nether;
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        nether = parser.hasTag("nether");
-        setNegated(matchedPattern == 1);
+        nether = !Utils.isEven(matchedPattern);
+        setNegated(switch (matchedPattern) {
+            case 2,3,6,7 -> true;
+            default -> false;
+        });
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the server " + (isNegated() ? "does not allow" : "allows") + " the " + (nether ? "nether" : "end");
+        return "the " + (nether ? "nether" : "end") + " is" + (isNegated() ? " not" : "") + " allowed";
     }
 
     @Override

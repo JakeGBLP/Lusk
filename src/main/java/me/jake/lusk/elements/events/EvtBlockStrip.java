@@ -5,12 +5,12 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import me.jake.lusk.utils.Utils;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class EvtBlockStrip extends SkriptEvent {
@@ -31,7 +31,11 @@ public class EvtBlockStrip extends SkriptEvent {
          PlayerInteractEvent event = ((PlayerInteractEvent)e);
          if (Utils.isAxe(event.getMaterial())) {
              if (event.getAction().isRightClick()) {
-                 return Utils.isAxeable(Objects.requireNonNull(event.getClickedBlock()).getType());
+                 Block block = event.getClickedBlock();
+                 if (block != null) {
+                     Material material = block.getType();
+                     return Utils.isAxeable(material);
+                 }
              }
          }
          return false;

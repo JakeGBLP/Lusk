@@ -15,8 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @Name("Item - Can Be Enchanted with")
 @Description("Checks if an item can be enchanted with an Enchantment.")
 @Examples({"if tool of player can be enchanted with sharpness:"})
@@ -42,11 +40,15 @@ public class CondCanBeEnchanted extends Condition {
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         assert event != null;
-        return Objects.requireNonNull(item.getSingle(event)) + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + Objects.requireNonNull(enchantment.getSingle(event));
+        return item.getSingle(event) + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + enchantment.getSingle(event);
     }
 
     @Override
     public boolean check(@NotNull Event event) {
-        return isNegated() ^ Objects.requireNonNull(enchantment.getSingle(event)).canEnchantItem(Objects.requireNonNull(item.getSingle(event)));
+        Enchantment e = enchantment.getSingle(event);
+        if (e == null) return false;
+        ItemStack i = item.getSingle(event);
+        if (i == null) return false;
+        return isNegated() ^ e.canEnchantItem(i);
     }
 }

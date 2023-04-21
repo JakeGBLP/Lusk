@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
         """})
 @Since("1.0.2")
 public class CondIsInstantWorldBorderChange extends Condition {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
             Skript.registerCondition(CondIsInstantWorldBorderChange.class, "[the] world[ ]border change is instant",

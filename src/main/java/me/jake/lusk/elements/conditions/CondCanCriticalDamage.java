@@ -16,8 +16,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @Name("Player - Can Critical Damage")
 @Description("Checks if a player is in position to inflict a critical hit.\n\nRead https://minecraft.fandom.com/wiki/Damage#Critical_hit for more info.")
 @Examples({"if player can critical damage:"})
@@ -45,8 +43,11 @@ public class CondCanCriticalDamage extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        assert event != null;
-        return Objects.requireNonNull(playerExpression.getSingle(event)) + " can" + (isNegated() ? "'t" : "") + " inflict a critical hit";
+        Player player = null;
+        if (event != null) {
+            player = playerExpression.getSingle(event);
+        }
+        return (player != null ? player : "") + " can" + (isNegated() ? "'t" : "") + " inflict a critical hit";
     }
 
     @Override

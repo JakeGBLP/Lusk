@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Item Compost Chance")
+@Name("Item - Compost Chance")
 @Description("Returns an item's chance of successfully composting.")
 @Examples({""})
 @Since("1.0.1")

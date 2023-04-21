@@ -6,8 +6,7 @@ import ch.njol.skript.bukkitutil.EntityUtils;
 import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.VectorMath;
-import me.jake.lusk.classes.Version;
-import net.kyori.adventure.util.TriState;
+import com.vdurmont.semver4j.Semver;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
 import org.bukkit.block.data.BlockData;
@@ -56,9 +55,9 @@ public class Utils {
     }
 
     // Fields
-    private static Version serverVersion;
+    private static Semver serverVersion;
     private static String smallCapsLetters;
-    private static HashMap<Integer, Version> versions;
+    private static HashMap<Integer, Semver> versions;
     private static HashMap<String, SkriptColor> rarityColors;
     private static ArrayList<Material> tillables;
     private static ArrayList<Material> pathables;
@@ -75,7 +74,7 @@ public class Utils {
     private static ArrayList<Material> compostables;
     private static ArrayList<EntityData> shearables;
     private static ArrayList<EntityData> sittables;
-    private static Version skriptVersion;
+    private static Semver skriptVersion;
     private static HashMap<Integer, Rotation> itemFrameRotations;
     // Set
     public static void setItemFrameRotations() {
@@ -91,50 +90,50 @@ public class Utils {
         }};
     }
     public static void setServerVersion() {
-        serverVersion = Version.parse(String.valueOf(Skript.getMinecraftVersion()));
+        serverVersion = new Semver(String.valueOf(Skript.getMinecraftVersion()));
     }
     public static void setSmallCapsLetters() {
         smallCapsLetters = "ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
     }
     public static void setVersions() {
         versions = new HashMap<>() {{
-            put(4, new Version(1,7,5));
-            put(5,new Version(1,7,10));
-            put(47,new Version(1,8,9));
-            put(107,new Version(1,9));
-            put(108,new Version(1,9,1));
-            put(109,new Version(1,9,2));
-            put(110,new Version(1,9,4));
-            put(210,new Version(1,10,2));
-            put(315,new Version(1,11));
-            put(316,new Version(1,11,2));
-            put(335,new Version(1,12));
-            put(338,new Version(1,12,1));
-            put(340,new Version(1,12,2));
-            put(393,new Version(1,13));
-            put(401,new Version(1,13,1));
-            put(404,new Version(1,13,2));
-            put(477,new Version(1,14));
-            put(480,new Version(1,14,1));
-            put(485,new Version(1,14,2));
-            put(490,new Version(1,14,3));
-            put(498,new Version(1,14,4));
-            put(573,new Version(1,15));
-            put(575,new Version(1,15,1));
-            put(577,new Version(1,15,2));
-            put(735,new Version(1,16));
-            put(736,new Version(1,16,1));
-            put(751,new Version(1,16,2));
-            put(753,new Version(1,16,3));
-            put(754,new Version(1,16,5));
-            put(755,new Version(1,17));
-            put(756,new Version(1,17,1));
-            put(757,new Version(1,18,1));
-            put(758,new Version(1,18,2));
-            put(759,new Version(1,19));
-            put(760,new Version(1,19,2));
-            put(761,new Version(1,19,3));
-            put(762,new Version(1,19,4));
+            put(4, new Semver("1.7.5"));
+            put(5,new Semver("1.7.10"));
+            put(47,new Semver("1.8.9"));
+            put(107,new Semver("1.9.0"));
+            put(108,new Semver("1.9.1"));
+            put(109,new Semver("1.9.2"));
+            put(110,new Semver("1.9.4"));
+            put(210,new Semver("1.10.2"));
+            put(315,new Semver("1.11.0"));
+            put(316,new Semver("1.11.2"));
+            put(335,new Semver("1.12.0"));
+            put(338,new Semver("1.12.1"));
+            put(340,new Semver("1.12.2"));
+            put(393,new Semver("1.13.0"));
+            put(401,new Semver("1.13.1"));
+            put(404,new Semver("1.13.2"));
+            put(477,new Semver("1.14.0"));
+            put(480,new Semver("1.14.1"));
+            put(485,new Semver("1.14.2"));
+            put(490,new Semver("1.14.3"));
+            put(498,new Semver("1.14.4"));
+            put(573,new Semver("1.15.0"));
+            put(575,new Semver("1.15.1"));
+            put(577,new Semver("1.15.2"));
+            put(735,new Semver("1.16.0"));
+            put(736,new Semver("1.16.1"));
+            put(751,new Semver("1.16.2"));
+            put(753,new Semver("1.16.3"));
+            put(754,new Semver("1.16.5"));
+            put(755,new Semver("1.17.0"));
+            put(756,new Semver("1.17.1"));
+            put(757,new Semver("1.18.1"));
+            put(758,new Semver("1.18.2"));
+            put(759,new Semver("1.19.0"));
+            put(760,new Semver("1.19.2"));
+            put(761,new Semver("1.19.3"));
+            put(762,new Semver("1.19.4"));
         }};
     }
 
@@ -181,11 +180,11 @@ public class Utils {
             add(Material.DARK_OAK_WOOD);
             add(Material.ACACIA_LOG);
             add(Material.ACACIA_WOOD);
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 19))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
                 add(Material.MANGROVE_LOG);
                 add(Material.MANGROVE_WOOD);
             }
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 16))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.16.0"))) {
                 add(Material.CRIMSON_HYPHAE);
                 add(Material.CRIMSON_STEM);
                 add(Material.WARPED_HYPHAE);
@@ -195,7 +194,7 @@ public class Utils {
     }
     public static void setWaxables() {
         waxables = new ArrayList<>() {{
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 17))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.17.0"))) {
                 add(Material.OXIDIZED_COPPER);
                 add(Material.OXIDIZED_CUT_COPPER);
                 add(Material.OXIDIZED_CUT_COPPER_SLAB);
@@ -228,7 +227,7 @@ public class Utils {
         axeables = new ArrayList<>() {{
             addAll(getWaxables());
             addAll(getStrippables());
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 20))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.20.0"))) {
                 add(Material.OAK_HANGING_SIGN);
                 add(Material.SPRUCE_HANGING_SIGN);
                 add(Material.BIRCH_HANGING_SIGN);
@@ -251,7 +250,7 @@ public class Utils {
             add(Material.JUNGLE_SAPLING);
             add(Material.DARK_OAK_SAPLING);
             add(Material.ACACIA_SAPLING);
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 19))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
                 add(Material.MANGROVE_PROPAGULE);
             }
         }};
@@ -265,7 +264,7 @@ public class Utils {
             add(Material.DARK_OAK_LEAVES);
             add(Material.ACACIA_LEAVES);
             add(Material.AZALEA_LEAVES);
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 19))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
                 add(Material.MANGROVE_LEAVES);
             }
         }};
@@ -296,7 +295,7 @@ public class Utils {
             put(Material.GLOW_BERRIES,30);
             put(Material.GRASS,30);
             put(Material.HANGING_ROOTS,30);
-            if (getServerVersion().isNewerThanOrEqualTo(new Version(1, 19))) {
+            if (getServerVersion().isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
                 put(Material.MANGROVE_ROOTS,30);
             }
             put(Material.KELP,30);
@@ -420,20 +419,20 @@ public class Utils {
     }
 
     public static void setSkriptVersion() {
-        skriptVersion = Version.parse(Skript.getVersion().toString());
+        skriptVersion = new Semver(Skript.getVersion().toString());
     }
 
     // Get
     public static HashMap<Integer, Rotation> getItemFrameRotations() {
         return itemFrameRotations;
     }
-    public static Version getServerVersion() {
+    public static Semver getServerVersion() {
         return serverVersion;
     }
-    public static HashMap<Integer, Version> getVersions() {
+    public static HashMap<Integer, Semver> getVersions() {
         return versions;
     }
-    public static Version getPlayerVersion(int protocolNumber) {
+    public static Semver getPlayerVersion(int protocolNumber) {
         return getVersions().get(protocolNumber);
     }
     public static String getSmallCapsLetters() {
@@ -487,7 +486,7 @@ public class Utils {
     public static ArrayList<EntityData> getSittables() {
         return sittables;
     }
-    public static Version getSkriptVersion() {
+    public static Semver getSkriptVersion() {
         return skriptVersion;
     }
     // Conditions
@@ -655,8 +654,8 @@ public class Utils {
         return null;
     }
 
-    public static boolean tristateBoolean(TriState triState) {
-        return Boolean.TRUE.equals(triState.toBoolean());
+    public static boolean isEven(int integer) {
+        return (integer % 2 == 0);
     }
 
     public static boolean isCritical(Event event) {

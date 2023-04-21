@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"on damage of fox:\n\tif victim is faceplanted:\n\t\tcancel event"})
 @Since("1.0.0")
 public class CondFoxFaceplanted extends PropertyCondition<LivingEntity> {
-
     static {
         register(CondFoxFaceplanted.class, "face[ ]planted", "livingentities");
     }

@@ -9,7 +9,7 @@ import org.bukkit.entity.Bat;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Living Entity - is Awake")
+@Name("Entity - is Awake")
 @Description("Checks the current waking state of a living entity.")
 @Examples({"on damage of bat:\n\tcancel event if victim is not awake"})
 @Since("1.0.0")

@@ -25,8 +25,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @Name("Enderman - Held Block")
 @Description("Returns the Held Block of an Enderman.")
 @Examples({"broadcast held block of target"})
@@ -81,9 +79,12 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
                     blockData = Bukkit.createBlockData(material);
                 }
             } else if (o instanceof Slot slot) {
-                Material material = Objects.requireNonNull(slot.getItem()).getType();
-                if (material.isBlock()) {
-                    blockData = Bukkit.createBlockData(material);
+                ItemStack itemStack = slot.getItem();
+                if (itemStack != null) {
+                    Material material = itemStack.getType();
+                    if (material.isBlock()) {
+                        blockData = Bukkit.createBlockData(material);
+                    }
                 }
             }
         } else {

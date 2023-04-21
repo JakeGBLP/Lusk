@@ -17,16 +17,14 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @Name("Entity - Can Be Sheared")
 @Description("Checks if an entity is ready to be sheared.\n\nWhen using Paper this condition can be used with mushroom cows and snow golems.")
 @Examples({"if target can be sheared:"})
-@Since("1.0.2")
+@Since("1.0.2, 1.0.3 (Fixed Typo)")
 public class CondCanBeSheared extends Condition {
     static {
         Skript.registerCondition(CondCanBeSheared.class, "%entity% can be (sheared|shorn)",
-                                                                "%entity% can(n't|not) be (sheared|shorn)",
+                                                                "%entity% can('t|not) be (sheared|shorn)",
                                                                 "%entity% is (sheared|shorn)",
                                                                 "%entity% is(n't| not) (sheared|shorn)");
     }
@@ -53,9 +51,11 @@ public class CondCanBeSheared extends Condition {
     @Override
     public boolean check(@NotNull Event event) {
         Entity entity = entityExpression.getSingle(event);
+        if (entity == null) return false;
         if (paper) {
-            if (Utils.isShearable(EntityUtils.toSkriptEntityData(Objects.requireNonNull(entity).getType()))) {
-                return isNegated() ^ ((Shearable) Objects.requireNonNull(entity)).readyToBeSheared();
+            EntityType entityType = entity.getType();
+            if (Utils.isShearable(EntityUtils.toSkriptEntityData(entityType))) {
+                return isNegated() ^ ((Shearable) entity).readyToBeSheared();
             }
         } else if (entity instanceof Sheep sheep) {
             return isNegated() ^ !sheep.isSheared();

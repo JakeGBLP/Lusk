@@ -7,8 +7,8 @@ build.dependsOn(shadowJar)
 jar.enabled = false
 
 
-group = 'Lusk'
-version = '1.0.3-beta1'
+group = "Lusk"
+version = "1.0.3"
 
 compileJava {options.encoding = "UTF-8"}
 
@@ -35,6 +35,8 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT'
     compileOnly  'com.github.SkriptLang:Skript:2.6.3'
     implementation 'org.bstats:bstats-bukkit:3.0.1'
+    implementation "com.vdurmont:semver4j:3.1.0"
+
 
 }
 shadowJar {

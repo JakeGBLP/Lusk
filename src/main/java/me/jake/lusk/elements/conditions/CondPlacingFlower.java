@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
                                 """})
 @Since("1.0.0")
 public class CondPlacingFlower extends Condition {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
             Skript.registerCondition(CondPlacingFlower.class, "[the] (flower|plant|item) is being (:placed|picked up)",

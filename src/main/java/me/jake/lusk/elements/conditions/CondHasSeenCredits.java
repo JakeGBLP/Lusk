@@ -35,8 +35,7 @@ public class CondHasSeenCredits extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        assert event != null;
-        return playerExpression.getSingle(event) + " has" + (isNegated() ? "n't" : "") + " seen the end poem";
+        return (event == null ? "" : playerExpression.getSingle(event)) + " has" + (isNegated() ? "n't" : "") + " seen the end poem";
     }
 
     @Override

@@ -6,12 +6,11 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import me.jake.lusk.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class EvtBlockPath extends SkriptEvent {
@@ -32,9 +31,12 @@ public class EvtBlockPath extends SkriptEvent {
         PlayerInteractEvent event = (PlayerInteractEvent)e;
         if (event.getAction().isRightClick()) {
             if (Utils.isShovel(event.getMaterial())) {
-                Material material = Objects.requireNonNull(event.getClickedBlock()).getType();
-                if (event.getClickedBlock().getLocation().add(0,1,0).getBlock().getType().isAir()) {
-                    return Utils.isPathable(material);
+                Block block = event.getClickedBlock();
+                if (block != null) {
+                    Material material = block.getType();
+                    if (event.getClickedBlock().getLocation().add(0, 1, 0).getBlock().getType().isAir()) {
+                        return Utils.isPathable(material);
+                    }
                 }
             }
         }

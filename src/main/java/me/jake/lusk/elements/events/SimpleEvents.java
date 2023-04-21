@@ -23,7 +23,10 @@ import org.bukkit.event.entity.ArrowBodyCountChangeEvent;
 import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.entity.EntityEnterLoveModeEvent;
 import org.bukkit.event.entity.EntityPoseChangeEvent;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.BrewEvent;
+import org.bukkit.event.inventory.BrewingStandFuelEvent;
+import org.bukkit.event.inventory.FurnaceExtractEvent;
+import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
 
 @SuppressWarnings({"unused", "deprecation"})

@@ -10,7 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
-import me.jake.lusk.classes.Version;
+import com.vdurmont.semver4j.Semver;
 import me.jake.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondBedRespawn extends Condition {
 
     static {
-        if (!Utils.getSkriptVersion().isNewerThan(new Version(2, 6, 4))) {
+        if (Utils.getSkriptVersion().isLowerThanOrEqualTo(new Semver("2.6.4"))) {
             if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
                 Skript.registerCondition(CondBedRespawn.class, "[the] player will respawn at [their] bed",
                         "[the] player w(on't|ill not) respawn at [their] bed");

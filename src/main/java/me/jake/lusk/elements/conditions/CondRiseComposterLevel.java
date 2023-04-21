@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
         """})
 @Since("1.0.0")
 public class CondRiseComposterLevel extends Condition {
-
     static {
         if (Skript.classExists("io.papermc.paper.event.block.CompostItemEvent")) {
             Skript.registerCondition(CondRiseComposterLevel.class, "[the] composter level will be raised",

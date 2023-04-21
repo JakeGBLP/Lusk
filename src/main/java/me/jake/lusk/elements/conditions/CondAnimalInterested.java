@@ -1,6 +1,5 @@
 package me.jake.lusk.elements.conditions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -26,8 +25,6 @@ public class CondAnimalInterested extends PropertyCondition<LivingEntity> {
             return fox.isInterested();
         } else if (entity instanceof Wolf wolf) {
             return wolf.isInterested();
-        } else {
-            Skript.error("You can only use this condition with Foxes and Wolves!");
         }
         return false;
     }
