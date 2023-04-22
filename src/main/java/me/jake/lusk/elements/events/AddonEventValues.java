@@ -37,6 +37,7 @@ import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.entity.EntityEnterLoveModeEvent;
 import org.bukkit.event.entity.EntityPoseChangeEvent;
+import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
@@ -406,11 +407,26 @@ public final class AddonEventValues {
                     return entity;
                 }
             }, 0);
-        }
-        if (Skript.classExists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
+        } if (Skript.classExists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
             EventValues.registerEventValue(BeaconEffectEvent.class, Player.class, new Getter<Player, BeaconEffectEvent>() {
                 @Override
                 public @NotNull Player get(final BeaconEffectEvent e) {
+                    return e.getPlayer();
+                }
+            }, 0);
+        } if (Skript.classExists("io.papermc.paper.event.player.PlayerChangeBeaconEffectEvent")) {
+            EventValues.registerEventValue(PlayerChangeBeaconEffectEvent.class, Block.class, new Getter<Block, PlayerChangeBeaconEffectEvent>() {
+                @Override
+                public @NotNull Block get(final PlayerChangeBeaconEffectEvent e) {
+                    Block block = e.getBeacon();
+                    assert block != null;
+                    return block;
+                }
+            }, 0);
+        } if (Skript.classExists("org.bukkit.event.entity.PlayerLeashEntityEvent")) {
+            EventValues.registerEventValue(PlayerLeashEntityEvent.class, Player.class, new Getter<Player, PlayerLeashEntityEvent>() {
+                @Override
+                public @NotNull Player get(final PlayerLeashEntityEvent e) {
                     return e.getPlayer();
                 }
             }, 0);

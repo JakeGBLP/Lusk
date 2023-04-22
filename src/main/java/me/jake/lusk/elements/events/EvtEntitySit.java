@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtEntitySit extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityToggleSitEvent")) {
-            Skript.registerEvent("Sit/Stand up", EvtEntitySit.class, EntityToggleSitEvent.class,
+            Skript.registerEvent("Entity - Sit/Stand up Event", EvtEntitySit.class, EntityToggleSitEvent.class,
                             "[entity] sit:s(at|it[ting]) [down]",
                             "[entity] st(ood|and[ing]) [up]",
                             "[entity] sit toggle[d]")

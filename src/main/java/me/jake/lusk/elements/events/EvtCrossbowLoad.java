@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtCrossbowLoad extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent")) {
-            Skript.registerEvent("Crossbow Load", EvtCrossbowLoad.class, EntityLoadCrossbowEvent.class, "[entity] (crossbow load|load of crossbow)")
+            Skript.registerEvent("Crossbow - Load Event", EvtCrossbowLoad.class, EntityLoadCrossbowEvent.class, "[entity] (crossbow load|load of crossbow)")
                     .description("Called when a LivingEntity loads a crossbow with a projectile.\n\nThis event requires Paper.")
                     .examples("")
                     .since("1.0.1");

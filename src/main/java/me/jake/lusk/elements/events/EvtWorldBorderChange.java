@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtWorldBorderChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
-            Skript.registerEvent("WorldBorder - Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
+            Skript.registerEvent("WorldBorder - Change/Center Change Event", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
                             "world[ ]border start chang(e|ing)",
                             "world[ ]border stop chang(e|ing)",
                             "world[ ]border center change"

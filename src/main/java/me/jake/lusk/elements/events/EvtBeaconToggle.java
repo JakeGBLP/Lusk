@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtBeaconToggle extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.block.BeaconActivatedEvent") && Skript.classExists("io.papermc.paper.event.block.BeaconDeactivatedEvent")) {
-            Skript.registerEvent("Beacon on/off", EvtBeaconToggle.class, CollectionUtils.array(BeaconActivatedEvent.class, BeaconDeactivatedEvent.class),
+            Skript.registerEvent("Beacon - Toggle Event", EvtBeaconToggle.class, CollectionUtils.array(BeaconActivatedEvent.class, BeaconDeactivatedEvent.class),
                             "beacon activat(e[d]|ing)",
                             "beacon deactivat(e[d]|ing)",
                             "beacon toggle")

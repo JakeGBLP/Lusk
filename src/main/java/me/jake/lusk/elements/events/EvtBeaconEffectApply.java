@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtBeaconEffectApply extends SkriptEvent {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
-            Skript.registerEvent("Beacon Effect Applied", EvtBeaconEffectApply.class, BeaconEffectEvent.class, "beacon effect [appl(ied|y)]")
+            Skript.registerEvent("Beacon - Effect Applied Event", EvtBeaconEffectApply.class, BeaconEffectEvent.class, "beacon effect [appl(ied|y)]")
                     .description("This Event requires Paper.\n\nCalled when a beacon effect is being applied to a player.")
                     .examples("on beacon effect:\n\tbroadcast \"A beacon has applied its effect!\"")
                     .since("1.0.3");

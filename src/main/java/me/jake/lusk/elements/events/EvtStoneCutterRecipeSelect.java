@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtStoneCutterRecipeSelect extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent")) {
-            Skript.registerEvent("StoneCutter Recipe Select", EvtStoneCutterRecipeSelect.class, PlayerStonecutterRecipeSelectEvent.class, "[stonecutt(er|ing)] recipe select")
+            Skript.registerEvent("StoneCutter - Recipe Select Event", EvtStoneCutterRecipeSelect.class, PlayerStonecutterRecipeSelectEvent.class, "[stonecutt(er|ing)] recipe select")
                     .description("This Event requires Paper.\n\nCalled when a player selects a recipe in a stonecutter inventory.")
                     .examples("""
                             on stonecutter recipe select:

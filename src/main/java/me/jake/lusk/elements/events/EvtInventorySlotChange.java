@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtInventorySlotChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerInventorySlotChangeEvent")) {
-            Skript.registerEvent("Player Inventory Slot Change", EvtInventorySlotChange.class, PlayerInventorySlotChangeEvent.class,
+            Skript.registerEvent("Player - Inventory Slot Change Event", EvtInventorySlotChange.class, PlayerInventorySlotChangeEvent.class,
                             "[player] [inventory] slot change", "[player] item (obtain|get)", "[player] item lose"
                     )
                     .description("This Event requires Paper.\n\nCalled when a slot contents change in a player's inventory.")

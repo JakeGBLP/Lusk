@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class EvtDye extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityDyeEvent")) {
-            Skript.registerEvent("Dye Event", EvtDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")
+            Skript.registerEvent("Entity - Dye Event", EvtDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")
                     .description("This Event requires Paper.\n\nCalled when a player dyes an entity (Wolf, Cat or sheep).")
                     .examples("on dye of sheep:\n\tbroadcast the dye color")
                     .since("1.0.0");

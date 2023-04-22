@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Beacon - Applied Effect")
-@Description("Returns the potion effect being applied in the Beacon Effect Applied Event.\n This expression can be set.")
+@Description("Returns the potion effect being applied in the Beacon Effect Applied Event.\nThis expression can be set.")
 @Examples({"on beacon effect applied:\n\tbroadcast the applied effect"})
 @Since("1.0.3")
 public class ExprBeaconAppliedEffect extends SimpleExpression<PotionEffect> {

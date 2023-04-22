@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtFlowerPot extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
-            Skript.registerEvent("Flower Pot Manipulate", EvtFlowerPot.class, PlayerFlowerPotManipulateEvent.class,
+            Skript.registerEvent("Flower Pot - Manipulate Event", EvtFlowerPot.class, PlayerFlowerPotManipulateEvent.class,
                             "[flower] pot[t(ed|ing)] [of %itemtype%]"
                     )
                     .description("Called when a player places an item in or takes an item out of a flowerpot.")

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtItemFrameChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
-            Skript.registerEvent("Item Frame Change", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
+            Skript.registerEvent("Item Frame - Change Event", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
                             "item[ ]frame [place:(insert|place)|:remove|:rotate|interact|change]"
                     )
                     .description("This Event requires Paper.\n\nCalled when an ItemFrame is having an item rotated, added, or removed from it.")

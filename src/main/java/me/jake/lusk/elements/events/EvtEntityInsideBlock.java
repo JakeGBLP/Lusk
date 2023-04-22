@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtEntityInsideBlock extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
-            Skript.registerEvent("Entity Inside Block", EvtEntityInsideBlock.class, EntityInsideBlockEvent.class, "[entity] (collide with [a] block|in[side] [a] block)")
+            Skript.registerEvent("Entity - Inside Block Event", EvtEntityInsideBlock.class, EntityInsideBlockEvent.class, "[entity] (collide with [a] block|in[side] [a] block)")
                     .description("""
                             This Event requires Paper.
 

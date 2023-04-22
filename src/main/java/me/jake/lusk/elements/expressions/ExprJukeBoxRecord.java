@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3")
 public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
     static {
-        Skript.registerExpression(ExprJukeBoxRecord.class, ItemType.class, ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprJukeBoxRecord.class, ItemType.class, ExpressionType.COMBINED,
                 "[the] ([music] disc|record) (inside [of]|of|[with]in) %block%",
                 "%block%'[s] ([music] disc|record)");
     }

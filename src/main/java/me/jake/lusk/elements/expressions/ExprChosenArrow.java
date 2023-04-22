@@ -22,9 +22,11 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprChosenArrow extends SimpleExpression<ItemStack> {
     static {
-        Skript.registerExpression(ExprChosenArrow.class, ItemStack.class, ExpressionType.SIMPLE,
-                "[the] [chosen|readied] arrow",
-                        "[the] [cross]bow");
+        if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerReadyArrowEvent")) {
+            Skript.registerExpression(ExprChosenArrow.class, ItemStack.class, ExpressionType.SIMPLE,
+                    "[the] [chosen|readied] arrow",
+                    "[the] [cross]bow");
+        }
     }
 
     private boolean arrow;

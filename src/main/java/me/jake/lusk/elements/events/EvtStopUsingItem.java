@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtStopUsingItem extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
-            Skript.registerEvent("Stop Using Item", EvtStopUsingItem.class, PlayerStopUsingItemEvent.class,
+            Skript.registerEvent("Player - Stop Using Item Event", EvtStopUsingItem.class, PlayerStopUsingItemEvent.class,
                             "stop using (item|%itemtype%)"
                     )
                     .description("This Event requires Paper.\n\nCalled when the server detects a player stopping using an item. Examples of this are letting go of the interact button when holding a bow, an edible item, or a spyglass.")

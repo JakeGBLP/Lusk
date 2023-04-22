@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class EvtEntityRename extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
-            Skript.registerEvent("Entity Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
+            Skript.registerEvent("Entity - Rename Event", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
                     .description("This Event requires Paper.\n\nCalled when the player is attempting to rename a mob.")
                     .examples("""
                             on entity rename of pig:

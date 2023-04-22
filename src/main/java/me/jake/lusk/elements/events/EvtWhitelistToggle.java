@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtWhitelistToggle extends SkriptEvent {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.server.WhitelistToggleEvent")) {
-            Skript.registerEvent("Whitelist Toggle", EvtWhitelistToggle.class, WhitelistToggleEvent.class,
+            Skript.registerEvent("Whitelist - Toggle Event", EvtWhitelistToggle.class, WhitelistToggleEvent.class,
                             "whitelist enable",
                             "whitelist disable",
                             "whitelist toggle")

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtBlockTill extends SkriptEvent {
     static {
-        Skript.registerEvent("Till", EvtBlockTill.class, PlayerInteractEvent.class, "[dirt] till[ing|ed]")
+        Skript.registerEvent("Block - Till Event", EvtBlockTill.class, PlayerInteractEvent.class, "[dirt] till[ing|ed]")
                 .description("Called when a player changes a block by right clicking it with a hoe.")
                 .examples("on till:\n\tbroadcast \"a block has been tilled!\"")
                 .since("1.0.0");
