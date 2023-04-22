@@ -144,26 +144,26 @@ Conditions:
 
 
 Effects:
- • Allay - Duplicate
- • Allay - Start/Stop Dance
- • Cancel Advancements
- • Cancel Composter Level Rise
- • Cancel Consuming Brewing Fuel
- • Enderman - Randomly Teleport
- • Enforce Whitelist
- • Fake Experience
- • Goat - Ram
- • JukeBox - Eject Disc
- • JukeBox - Start/Stop Playing
- • Llama - Join Caravan
- • Llama - Leave Caravan
- • Pass
- • Show Credits
- • Toggle Whitelist
- • Villager - Zombify
- • Vllager - Head Shake
- • Wake Up
- • Warden Disturbance
+ - Allay - Duplicate
+ - Allay - Start/Stop Dance
+ - Cancel Advancements
+ - Cancel Composter Level Rise
+ - Cancel Consuming Brewing Fuel
+ - Enderman - Randomly Teleport
+ - Enforce Whitelist
+ - Fake Experience
+ - Goat - Ram
+ - JukeBox - Eject Disc
+ - JukeBox - Start/Stop Playing
+ - Llama - Join Caravan
+ - Llama - Leave Caravan
+ - Pass
+ - Show Credits
+ - Toggle Whitelist
+ - Villager - Zombify
+ - Vllager - Head Shake
+ - Wake Up
+ - Warden Disturbance
 
 
 Expressions:
