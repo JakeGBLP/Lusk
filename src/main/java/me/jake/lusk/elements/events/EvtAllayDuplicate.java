@@ -25,7 +25,7 @@ public class EvtAllayDuplicate extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        CreatureSpawnEvent event = (CreatureSpawnEvent)e;
+        CreatureSpawnEvent event = (CreatureSpawnEvent) e;
         return event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.DUPLICATION;
     }
 

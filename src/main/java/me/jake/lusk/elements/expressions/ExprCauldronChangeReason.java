@@ -18,12 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Cauldron - Change Reason")
 @Description("Returns the Change Reason in a Cauldron Level Change Event.")
-@Examples({"on cauldron level change:\n\tbroadcast the change reason"})
+@Examples({"on cauldron level change:\n\tbroadcast the cauldron change reason"})
 @Since("1.0.2")
-public class ExprChangeReason extends SimpleExpression<CauldronLevelChangeEvent.ChangeReason> {
+public class ExprCauldronChangeReason extends SimpleExpression<CauldronLevelChangeEvent.ChangeReason> {
     static {
-        Skript.registerExpression(ExprChangeReason.class, CauldronLevelChangeEvent.ChangeReason.class, ExpressionType.SIMPLE,
-                    "[the] [cauldron] change reason");
+        Skript.registerExpression(ExprCauldronChangeReason.class, CauldronLevelChangeEvent.ChangeReason.class, ExpressionType.SIMPLE,
+                "[the] cauldron change reason");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
@@ -33,9 +33,10 @@ public class ExprChangeReason extends SimpleExpression<CauldronLevelChangeEvent.
         }
         return true;
     }
+
     @Override
     protected CauldronLevelChangeEvent.ChangeReason @NotNull [] get(@NotNull Event e) {
-        return new CauldronLevelChangeEvent.ChangeReason[]{((CauldronLevelChangeEvent)e).getReason()};
+        return new CauldronLevelChangeEvent.ChangeReason[]{((CauldronLevelChangeEvent) e).getReason()};
     }
 
     @Override

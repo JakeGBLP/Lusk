@@ -18,9 +18,9 @@ import javax.annotation.Nullable;
 @Name("Cancel Consuming Brewing Fuel")
 @Description("Sets whether the fuel of the brewing stand in the Brewing Stand Fuel Event will be reduced / consumed.")
 @Examples({"""
-           on brewing stand fuel:
-             cancel brewing fuel consume
-             broadcast "Infinite brewing fuel!\""""})
+        on brewing stand fuel:
+          cancel brewing fuel consume
+          broadcast "Infinite brewing fuel!\""""})
 @Since("1.0.2")
 public class EffCancelConsumingBrewingFuel extends Effect {
     static {
@@ -46,6 +46,6 @@ public class EffCancelConsumingBrewingFuel extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((BrewingStandFuelEvent)event).setConsuming(negated);
+        ((BrewingStandFuelEvent) event).setConsuming(negated);
     }
 }

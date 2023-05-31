@@ -36,6 +36,7 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
         entityExpression = (Expression<Entity>) exprs[0];
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
@@ -56,6 +57,7 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;

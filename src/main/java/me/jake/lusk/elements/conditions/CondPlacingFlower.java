@@ -17,18 +17,18 @@ import org.jetbrains.annotations.Nullable;
 @Name("is Placing in Pot")
 @Description("This Condition requires Paper.\n\nChecks whether or not the item is being placed inside the flower pot in a Flower Pot Manipulate Event.")
 @Examples({"""
-                            on potting of cornflower:
-                              if the plant is being placed:
-                                broadcast "placed"
-                              else if the plant is being picked up:
-                                broadcast "picked up"
-                                """})
+        on potting of cornflower:
+          if the plant is being placed:
+            broadcast "placed"
+          else if the plant is being picked up:
+            broadcast "picked up"
+            """})
 @Since("1.0.0")
 public class CondPlacingFlower extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
             Skript.registerCondition(CondPlacingFlower.class, "[the] (flower|plant|item) is being (:placed|picked up)",
-                                                                "[the] (flower|plant|item) is(n't| not) being (:placed|picked up)");
+                    "[the] (flower|plant|item) is(n't| not) being (:placed|picked up)");
         }
     }
 
@@ -40,8 +40,8 @@ public class CondPlacingFlower extends Condition {
             Skript.error("This condition can only be used in the Flower Pot Manipulate event!");
             return false;
         }
-        placed = matchedPattern == 1;
-        setNegated(parser.hasTag("negated"));
+        placed = parser.hasTag("placed");
+        setNegated(matchedPattern == 1);
         return true;
     }
 

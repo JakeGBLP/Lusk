@@ -27,8 +27,8 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, ExpressionType.SIMPLE,
                     "[the] old center",
-                            "[the] new center",
-                            "[the] center");
+                    "[the] new center",
+                    "[the] center");
         }
     }
 
@@ -46,9 +46,10 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
         }
         return true;
     }
+
     @Override
     protected Location @NotNull [] get(@NotNull Event e) {
-        WorldBorderCenterChangeEvent event = (WorldBorderCenterChangeEvent)e;
+        WorldBorderCenterChangeEvent event = (WorldBorderCenterChangeEvent) e;
         Location location;
         if (past) {
             location = event.getOldCenter();
@@ -57,6 +58,7 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
         }
         return new Location[]{location};
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -64,6 +66,7 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Location location = delta instanceof Location[] ? ((Location[]) delta)[0] : null;

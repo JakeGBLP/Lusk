@@ -33,6 +33,7 @@ public class ExprLlamaCaravanHead extends SimpleExpression<Entity> {
         entityExpression = (Expression<Entity>) exprs[0];
         return true;
     }
+
     @Override
     protected Entity @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);

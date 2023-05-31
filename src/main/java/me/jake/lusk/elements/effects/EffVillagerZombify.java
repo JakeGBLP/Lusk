@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Villager - Zombify")
 @Description("Converts Villagers into Zombie Villagers as if they were killed by a Zombie.")
 @Examples({"""
-           zombify target"""})
+        zombify target"""})
 @Since("1.0.2+")
 public class EffVillagerZombify extends Effect {
     static {
@@ -27,6 +27,7 @@ public class EffVillagerZombify extends Effect {
     }
 
     private Expression<LivingEntity> entityExpression;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {

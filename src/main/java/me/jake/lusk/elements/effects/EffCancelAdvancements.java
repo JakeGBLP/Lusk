@@ -18,8 +18,8 @@ import javax.annotation.Nullable;
 @Name("Cancel Advancements")
 @Description("This Effect requires Paper.\n\nCan only be used in a Slot Change Event.\nSets whether or not the event should trigger advancements.")
 @Examples({"""
-           on item obtain:
-             cancel advancements"""})
+        on item obtain:
+          cancel advancements"""})
 @Since("1.0.0")
 public class EffCancelAdvancements extends Effect {
     static {
@@ -45,6 +45,6 @@ public class EffCancelAdvancements extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((PlayerInventorySlotChangeEvent)event).setShouldTriggerAdvancements(negated);
+        ((PlayerInventorySlotChangeEvent) event).setShouldTriggerAdvancements(negated);
     }
 }

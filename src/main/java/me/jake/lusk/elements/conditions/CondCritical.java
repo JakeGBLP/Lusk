@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondCritical extends Condition {
     static {
         Skript.registerCondition(CondCritical.class, "[the] damage is critical",
-                                                             "[the] damage is(n't| not) critical");
+                "[the] damage is(n't| not) critical");
     }
 
     @Override

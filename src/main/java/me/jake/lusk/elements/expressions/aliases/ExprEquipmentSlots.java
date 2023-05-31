@@ -28,6 +28,7 @@ public class ExprEquipmentSlots extends SimpleExpression<EquipmentSlot> {
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         return true;
     }
+
     @Override
     protected EquipmentSlot @NotNull [] get(@NotNull Event e) {
         return EquipmentSlot.values();

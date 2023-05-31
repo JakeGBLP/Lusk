@@ -22,23 +22,23 @@ public class EvtBlockStrip extends SkriptEvent {
     }
 
     @Override
-    public boolean init(Literal @NotNull [] args, int matchedPattern,@NotNull ParseResult parseResult) {
+    public boolean init(Literal @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
         return true;
     }
 
     @Override
     public boolean check(@NotNull Event e) {
-         PlayerInteractEvent event = ((PlayerInteractEvent)e);
-         if (Utils.isAxe(event.getMaterial())) {
-             if (event.getAction().isRightClick()) {
-                 Block block = event.getClickedBlock();
-                 if (block != null) {
-                     Material material = block.getType();
-                     return Utils.isAxeable(material);
-                 }
-             }
-         }
-         return false;
+        PlayerInteractEvent event = ((PlayerInteractEvent) e);
+        if (Utils.isAxe(event.getMaterial())) {
+            if (event.getAction().isRightClick()) {
+                Block block = event.getClickedBlock();
+                if (block != null) {
+                    Material material = block.getType();
+                    return Utils.isAxeable(material);
+                }
+            }
+        }
+        return false;
     }
 
     @Override

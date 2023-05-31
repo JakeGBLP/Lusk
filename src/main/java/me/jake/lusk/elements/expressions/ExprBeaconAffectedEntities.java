@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3")
 public class ExprBeaconAffectedEntities extends SimpleExpression<LivingEntity> {
     static {
-        Skript.registerExpression(ExprBeaconAffectedEntities.class, LivingEntity.class, ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprBeaconAffectedEntities.class, LivingEntity.class, ExpressionType.COMBINED,
                 "[the] entities affected by %block%",
                 "[the] affected entities of %block%",
                 "%block%'[s] affected entities");
@@ -36,11 +36,14 @@ public class ExprBeaconAffectedEntities extends SimpleExpression<LivingEntity> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected LivingEntity @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Beacon beacon) {
-            return beacon.getEntitiesInRange().toArray(new LivingEntity[0]);
+        if (block != null) {
+            if (block.getState() instanceof Beacon beacon) {
+                return beacon.getEntitiesInRange().toArray(new LivingEntity[0]);
+            }
         }
         return new LivingEntity[0];
     }

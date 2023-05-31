@@ -22,18 +22,18 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Love Duration")
 @Description("Returns the love duration of an animal.\n Can be set.")
-@Examples({"on love:\n\tbroadcast the love duration","broadcast love duration of target"})
+@Examples({"on love:\n\tbroadcast the love duration", "broadcast love duration of target"})
 @Since("1.0.2, 1.0.3 (per Entity)")
 public class ExprLoveDuration extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprLoveDuration.class, Timespan.class, ExpressionType.COMBINED,
                 "[the] love duration",
-                        "[the] love duration of %entity%",
-                        "%entity%'[s] love duration");
+                "[the] love duration of %entity%",
+                "%entity%'[s] love duration");
     }
 
-    private Expression<Entity> entityExpression = null;
     boolean event;
+    private Expression<Entity> entityExpression = null;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
@@ -43,11 +43,13 @@ public class ExprLoveDuration extends SimpleExpression<Timespan> {
                 Skript.error("An entity must be specified outside of the Love event!");
                 return false;
             }
-        } if (exprs.length == 1) {
+        }
+        if (exprs.length == 1) {
             entityExpression = (Expression<Entity>) exprs[0];
         }
         return true;
     }
+
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         if (event && entityExpression == null) {
@@ -69,6 +71,7 @@ public class ExprLoveDuration extends SimpleExpression<Timespan> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;

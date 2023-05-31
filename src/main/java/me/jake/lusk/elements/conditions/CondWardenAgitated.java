@@ -1,6 +1,5 @@
 package me.jake.lusk.elements.conditions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -23,8 +22,6 @@ public class CondWardenAgitated extends PropertyCondition<LivingEntity> {
     public boolean check(LivingEntity entity) {
         if (entity instanceof Warden warden) {
             return warden.getAngerLevel() == Warden.AngerLevel.AGITATED;
-        } else {
-            Skript.error("You can only use this condition with Wardens");
         }
         return false;
     }

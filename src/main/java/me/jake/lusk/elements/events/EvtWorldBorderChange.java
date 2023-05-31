@@ -32,7 +32,9 @@ public class EvtWorldBorderChange extends SkriptEvent {
                     .since("1.0.2");
         }
     }
+
     private int pattern;
+
     @Override
     public boolean init(Literal<?> @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
         pattern = matchedPattern;
@@ -41,12 +43,11 @@ public class EvtWorldBorderChange extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        if (e instanceof WorldBorderBoundsChangeEvent event) {
+        if (e instanceof WorldBorderBoundsChangeEvent) {
             return pattern == 0;
-        } else if (e instanceof WorldBorderBoundsChangeFinishEvent event) {
+        } else if (e instanceof WorldBorderBoundsChangeFinishEvent) {
             return pattern == 1;
         } else {
-            WorldBorderCenterChangeEvent event = (WorldBorderCenterChangeEvent)e;
             return pattern == 2;
         }
     }

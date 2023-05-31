@@ -42,14 +42,17 @@ public class ExprBeaconEffects extends SimpleExpression<PotionEffect> {
         primary = matchedPattern == 0 || matchedPattern == 1;
         return true;
     }
+
     @Override
     protected PotionEffect @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Beacon beacon) {
-            if (primary) {
-                return new PotionEffect[]{beacon.getPrimaryEffect()};
-            } else {
-                return new PotionEffect[]{beacon.getSecondaryEffect()};
+        if (block != null) {
+            if (block.getState() instanceof Beacon beacon) {
+                if (primary) {
+                    return new PotionEffect[]{beacon.getPrimaryEffect()};
+                } else {
+                    return new PotionEffect[]{beacon.getSecondaryEffect()};
+                }
             }
         }
         return new PotionEffect[0];
@@ -63,11 +66,12 @@ public class ExprBeaconEffects extends SimpleExpression<PotionEffect> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         PotionEffectType potionEffectType = delta instanceof PotionEffectType[] ? ((PotionEffectType[]) delta)[0] : null;
         Block block = blockExpression.getSingle(e);
-        if (potionEffectType == null) return;
+        if (potionEffectType == null || block == null) return;
         if (block.getState() instanceof Beacon beacon) {
             if (primary) {
                 beacon.setPrimaryEffect(potionEffectType);

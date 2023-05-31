@@ -38,7 +38,7 @@ public class CondAllowsDimension extends Condition {
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         nether = !Utils.isEven(matchedPattern);
         setNegated(switch (matchedPattern) {
-            case 2,3,6,7 -> true;
+            case 2, 3, 6, 7 -> true;
             default -> false;
         });
         return true;

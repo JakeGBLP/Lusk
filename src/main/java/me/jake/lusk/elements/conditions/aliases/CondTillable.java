@@ -24,9 +24,9 @@ public class CondTillable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof Block) {
-                return Utils.isTillable(((Block)o).getType());
+                return Utils.isTillable(((Block) o).getType());
             } else if (o instanceof ItemType) {
-                return Utils.isTillable(((ItemType)o).getMaterial());
+                return Utils.isTillable(((ItemType) o).getMaterial());
             }
         }
         return false;

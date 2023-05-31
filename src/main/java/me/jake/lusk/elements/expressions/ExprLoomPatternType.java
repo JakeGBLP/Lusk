@@ -21,15 +21,15 @@ import org.jetbrains.annotations.Nullable;
 @Name("Loom Pattern Type")
 @Description("Gets the pattern type selected in a Loom Pattern Select event")
 @Examples("""
-                            on pattern select of border:
-                              set pattern to creeper
+        on pattern select of border:
+          set pattern to creeper
 
-                            on pattern select:
-                              broadcast event-patterntype
+        on pattern select:
+          broadcast event-patterntype
 
-                            on pattern select of bricks:
-                              broadcast the selected pattern
-                              """)
+        on pattern select of bricks:
+          broadcast the selected pattern
+          """)
 @Since("1.0.0")
 public class ExprLoomPatternType extends SimpleExpression<PatternType> {
     static {
@@ -46,6 +46,7 @@ public class ExprLoomPatternType extends SimpleExpression<PatternType> {
         }
         return true;
     }
+
     @Override
     protected PatternType @NotNull [] get(@NotNull Event e) {
         return new PatternType[]{((PlayerLoomPatternSelectEvent) e).getPatternType()};
@@ -58,6 +59,7 @@ public class ExprLoomPatternType extends SimpleExpression<PatternType> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         PatternType patternType = delta instanceof PatternType[] ? ((PatternType[]) delta)[0] : null;

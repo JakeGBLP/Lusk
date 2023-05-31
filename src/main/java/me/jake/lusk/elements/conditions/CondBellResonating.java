@@ -9,9 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Bell;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Bell - is Ringing")
-@Description("Checks if a bell is ringing.")
-@Examples({"on bell ring:\n\tif event-block is ringing:\n\t\tcancel event\n\t\t"})
+@Name("Bell - is Resonating")
+@Description("Checks if a bell is resonating.")
+@Examples({"on bell ring:\n\tif event-block is resonating:\n\t\tcancel event\n\t\t"})
 @Since("1.0.3")
 public class CondBellResonating extends PropertyCondition<Object> {
     static {

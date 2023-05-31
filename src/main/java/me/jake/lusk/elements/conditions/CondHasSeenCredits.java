@@ -25,6 +25,7 @@ public class CondHasSeenCredits extends Condition {
     }
 
     private Expression<Player> playerExpression;
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {

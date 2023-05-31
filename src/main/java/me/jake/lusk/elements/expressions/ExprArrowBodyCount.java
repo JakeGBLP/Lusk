@@ -22,10 +22,11 @@ import org.jetbrains.annotations.Nullable;
 public class ExprArrowBodyCount extends SimpleExpression<Number> {
     static {
         Skript.registerExpression(ExprArrowBodyCount.class, Number.class, ExpressionType.SIMPLE,
-                "(future) arrow [body] count",
-                        "(past) arrow [body] count",
-                        "arrow [body] count");
+                "future arrow [body] count",
+                "past arrow [body] count",
+                "arrow [body] count");
     }
+
     private Boolean past = null;
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
@@ -39,6 +40,7 @@ public class ExprArrowBodyCount extends SimpleExpression<Number> {
         }
         return false;
     }
+
     @Override
     protected Number @NotNull [] get(@NotNull Event e) {
         Number number;

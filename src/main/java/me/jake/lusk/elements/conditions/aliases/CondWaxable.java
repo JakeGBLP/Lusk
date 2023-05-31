@@ -24,9 +24,9 @@ public class CondWaxable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof Block) {
-                return Utils.isWaxable(((Block)o).getType());
+                return Utils.isWaxable(((Block) o).getType());
             } else if (o instanceof ItemType) {
-                return Utils.isWaxable(((ItemType)o).getMaterial());
+                return Utils.isWaxable(((ItemType) o).getMaterial());
             }
         }
         return false;

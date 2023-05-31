@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondEndermanHasBeenLookedAt extends Condition {
     static {
         Skript.registerCondition(CondEndermanHasBeenLookedAt.class, "%livingentity% has been (looked|stared) at",
-                                                                "%livingentity% has(n't| not) been (looked|stared) at");
+                "%livingentity% has(n't| not) been (looked|stared) at");
     }
 
     private Expression<LivingEntity> entityExpression;

@@ -39,6 +39,7 @@ public class ExprChosenArrow extends SimpleExpression<ItemStack> {
         arrow = matchedPattern == 0;
         return true;
     }
+
     @Override
     protected ItemStack @NotNull [] get(@NotNull Event e) {
         ItemStack item;

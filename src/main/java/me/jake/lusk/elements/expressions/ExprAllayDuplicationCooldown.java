@@ -29,6 +29,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
                 "[the] [allay] duplication cooldown of %entity%");
 
     }
+
     private Expression<Entity> entityExpression;
 
     @SuppressWarnings("unchecked")
@@ -36,6 +37,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
         entityExpression = (Expression<Entity>) exprs[0];
         return true;
     }
+
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
@@ -44,6 +46,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
         }
         return new Timespan[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
@@ -51,6 +54,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Entity entity = entityExpression.getSingle(e);

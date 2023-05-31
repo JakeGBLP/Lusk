@@ -45,6 +45,7 @@ public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
         }
         return true;
     }
+
     @Override
     protected EnderDragon.Phase @NotNull [] get(@NotNull Event e) {
         EnderDragon.Phase phase;
@@ -64,6 +65,7 @@ public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         EnderDragon.Phase phase = delta instanceof EnderDragon.Phase[] ? ((EnderDragon.Phase[]) delta)[0] : null;
@@ -83,5 +85,6 @@ public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (past == null ? "" : (past ? " past" : " future")) + " ender dragon phase";    }
+        return "the" + (past == null ? "" : (past ? " past" : " future")) + " ender dragon phase";
+    }
 }

@@ -23,9 +23,9 @@ public class CondCompostable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof Block) {
-                return Utils.isCompostable(((Block)o).getType());
+                return Utils.isCompostable(((Block) o).getType());
             } else if (o instanceof ItemType) {
-                return Utils.isCompostable(((ItemType)o).getMaterial());
+                return Utils.isCompostable(((ItemType) o).getMaterial());
             }
         }
         return false;

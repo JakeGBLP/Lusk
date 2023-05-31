@@ -38,6 +38,7 @@ public class ExprPusher extends SimpleExpression<Entity> {
         }
         return true;
     }
+
     @Override
     protected Entity @NotNull [] get(@NotNull Event e) {
         return new Entity[]{((EntityPushedByEntityAttackEvent) e).getPushedBy()};

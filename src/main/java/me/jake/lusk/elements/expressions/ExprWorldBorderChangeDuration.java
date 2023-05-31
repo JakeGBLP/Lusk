@@ -37,11 +37,13 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
         }
         return true;
     }
+
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
-        WorldBorderBoundsChangeEvent event = (WorldBorderBoundsChangeEvent)e;
+        WorldBorderBoundsChangeEvent event = (WorldBorderBoundsChangeEvent) e;
         return new Timespan[]{new Timespan(event.getDuration())};
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -49,6 +51,7 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;

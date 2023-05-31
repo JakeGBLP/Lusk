@@ -33,13 +33,14 @@ public class ExprPercentage extends SimpleExpression<Number> {
         percentage = (Expression<Number>) exprs[1];
         return true;
     }
+
     @Override
     protected Number @NotNull [] get(@NotNull Event e) {
         Number p = percentage.getSingle(e);
         Number n = number.getSingle(e);
         if (n != null) {
             if (p != null) {
-                return new Number[]{p.doubleValue()/100*n.doubleValue()};
+                return new Number[]{p.doubleValue() / 100 * n.doubleValue()};
             }
         }
         return new Number[0];

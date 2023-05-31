@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondDolphinHasFish extends Condition {
     static {
         Skript.registerCondition(CondDolphinHasFish.class, "%entity% has [a] fish",
-                                                             "%entity% does(n't| not) have [a] fish");
+                "%entity% does(n't| not) have [a] fish");
     }
 
     private Expression<Entity> entityExpression;

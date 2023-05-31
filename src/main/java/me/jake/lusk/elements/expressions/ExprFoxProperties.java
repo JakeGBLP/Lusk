@@ -35,6 +35,7 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
                 "%livingentity%'[s] [fox] face[ ]planted state");
 
     }
+
     private Expression<LivingEntity> livingEntityExpression;
 
     private int pattern;
@@ -45,19 +46,21 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
         pattern = matchedPattern;
         return true;
     }
+
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
         if (!(livingEntity instanceof Fox fox)) return new Boolean[]{false};
         boolean bool = switch (pattern) {
-            case 0,1 -> fox.isLeaping();
-            case 2,3 -> fox.isCrouching();
-            case 4,5 -> fox.isDefending();
-            case 6,7 -> fox.isFaceplanted();
+            case 0, 1 -> fox.isLeaping();
+            case 2, 3 -> fox.isCrouching();
+            case 4, 5 -> fox.isDefending();
+            case 6, 7 -> fox.isFaceplanted();
             default -> false;
         };
         return new Boolean[]{bool};
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -65,6 +68,7 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
@@ -91,12 +95,12 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         String state = switch (pattern) {
-            case 0,1 -> "leaping";
-            case 2,3 -> "crouching";
-            case 4,5 -> "defending";
-            case 6,7 -> "face planted";
+            case 0, 1 -> "leaping";
+            case 2, 3 -> "crouching";
+            case 4, 5 -> "defending";
+            case 6, 7 -> "face planted";
             default -> "";
         };
-        return "the "+ state +" state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the " + state + " state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
     }
 }

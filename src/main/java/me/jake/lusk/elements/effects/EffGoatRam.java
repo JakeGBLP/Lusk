@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Goat - Ram")
 @Description("Makes a goat ram an entity.")
 @Examples({"""
-           make target ram {llama}"""})
+        make target ram {llama}"""})
 @Since("1.0.3")
 public class EffGoatRam extends Effect {
     static {

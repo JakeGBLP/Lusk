@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondCatHasHeadUp extends Condition {
     static {
         Skript.registerCondition(CondCatHasHeadUp.class, "%entity% has [a] its head up",
-                                                             "%entity% does(n't| not) have [a] its head up");
+                "%entity% does(n't| not) have [a] its head up");
     }
 
     private Expression<Entity> entityExpression;

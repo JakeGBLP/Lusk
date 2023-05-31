@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Llama - Join Caravan")
 @Description("Makes a llama join another llama's caravan.")
 @Examples({"""
-           make target join caravan of {llama}"""})
+        make target join caravan of {llama}"""})
 @Since("1.0.3")
 public class EffLlamaJoinCaravan extends Effect {
     static {

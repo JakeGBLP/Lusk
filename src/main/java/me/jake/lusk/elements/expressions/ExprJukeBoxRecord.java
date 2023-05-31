@@ -39,11 +39,14 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Jukebox jukebox) {
-            return new ItemType[]{new ItemType(jukebox.getRecord())};
+        if (block != null) {
+            if (block.getState() instanceof Jukebox jukebox) {
+                return new ItemType[]{new ItemType(jukebox.getRecord())};
+            }
         }
         return new ItemType[0];
     }
@@ -56,6 +59,7 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block block = blockExpression.getSingle(e);

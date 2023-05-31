@@ -22,10 +22,11 @@ import org.jetbrains.annotations.Nullable;
 public class CondAllayCanBeDuplicated extends Condition {
     static {
         Skript.registerCondition(CondAllayCanBeDuplicated.class, "%livingentity% can be duplicated",
-                                                                "%livingentity% can(n't|not) be duplicated");
+                "%livingentity% can(n't|not) be duplicated");
     }
 
     private Expression<LivingEntity> entityExpression;
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {

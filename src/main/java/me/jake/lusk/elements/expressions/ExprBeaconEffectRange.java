@@ -36,11 +36,14 @@ public class ExprBeaconEffectRange extends SimpleExpression<Double> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Double @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Beacon beacon) {
-            return new Double[]{beacon.getEffectRange()};
+        if (block != null) {
+            if (block.getState() instanceof Beacon beacon) {
+                return new Double[]{beacon.getEffectRange()};
+            }
         }
         return new Double[0];
     }
@@ -53,9 +56,11 @@ public class ExprBeaconEffectRange extends SimpleExpression<Double> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block block = blockExpression.getSingle(e);
+        if (block == null) return;
         if (block.getState() instanceof Beacon beacon) {
             if (mode == Changer.ChangeMode.RESET) {
                 beacon.resetEffectRange();

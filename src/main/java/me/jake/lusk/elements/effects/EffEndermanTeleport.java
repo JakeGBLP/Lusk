@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Enderman - Randomly Teleport")
 @Description("Attempts to teleport an enderman to a random nearby location.")
 @Examples({"""
-           randomly teleport (entities where [input is an enderman])"""})
+        randomly teleport (entities where [input is an enderman])"""})
 @Since("1.0.2+")
 public class EffEndermanTeleport extends Effect {
     static {

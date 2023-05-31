@@ -35,6 +35,7 @@ public class ExprBeaconAppliedEffect extends SimpleExpression<PotionEffect> {
         }
         return true;
     }
+
     @Override
     protected PotionEffect @NotNull [] get(@NotNull Event e) {
         return new PotionEffect[]{((BeaconEffectEvent) e).getEffect()};
@@ -48,6 +49,7 @@ public class ExprBeaconAppliedEffect extends SimpleExpression<PotionEffect> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         PotionEffect potionEffect = delta instanceof PotionEffect[] ? ((PotionEffect[]) delta)[0] : null;

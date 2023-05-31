@@ -36,6 +36,7 @@ public class ExprFireballItem extends SimpleExpression<ItemStack> {
         entityExpression = (Expression<Entity>) exprs[0];
         return true;
     }
+
     @Override
     protected ItemStack @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
@@ -44,6 +45,7 @@ public class ExprFireballItem extends SimpleExpression<ItemStack> {
         }
         return new ItemStack[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -51,6 +53,7 @@ public class ExprFireballItem extends SimpleExpression<ItemStack> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         ItemStack itemStack = delta instanceof ItemStack[] ? ((ItemStack[]) delta)[0] : null;

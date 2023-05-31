@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("JukeBox - Eject Disc")
 @Description("Forces a jukebox to eject its disc.")
 @Examples({"""
-           eject the record of target block"""})
+        eject the record of target block"""})
 @Since("1.0.3")
 public class EffJukeBoxEject extends Effect {
     static {
@@ -43,8 +43,8 @@ public class EffJukeBoxEject extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        Block[] entities = blockExpression.getArray(event);
-        for (Block block : entities) {
+        Block[] blocks = blockExpression.getArray(event);
+        for (Block block : blocks) {
             if (block.getState() instanceof Jukebox jukebox) {
                 jukebox.eject();
             }

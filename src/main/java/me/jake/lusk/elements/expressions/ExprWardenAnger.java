@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 @Name("Warden - Anger")
 @Description("""
         Returns the anger of a warden.
-        
+                
         Angry = 80-150
         Agitated = 40-79
         Calm = 0-39
-        
+                
         Use the respective conditions to check for those 3 states.""")
 @Examples({"broadcast anger of target"})
 @Since("1.0.2")

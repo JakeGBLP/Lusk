@@ -14,13 +14,13 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity - Can Breath Underwater")
-@Description("Checks if a living entity can breath underwater.")
-@Examples({"if {_entity} can breath underwater:"})
+@Name("Entity - Can Breathe Underwater")
+@Description("Checks if a living entity can breathe underwater.")
+@Examples({"if {_entity} can breathe underwater:"})
 @Since("1.0.2")
 public class CondCanBreathUnderwater extends Condition {
     static {
-        Skript.registerCondition(CondCanBreathUnderwater.class, "%livingentity% can breath underwater","%livingentity% can(no| n')t breath underwater");
+        Skript.registerCondition(CondCanBreathUnderwater.class, "%livingentity% can breathe underwater", "%livingentity% can(no| n')t breathe underwater");
     }
 
     private Expression<LivingEntity> livingEntityExpression;
@@ -35,14 +35,14 @@ public class CondCanBreathUnderwater extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event == null ? "" : livingEntityExpression.getSingle(event))+" can" + (isNegated() ? "not" : "") + " breath underwater";
+        return (event == null ? "" : livingEntityExpression.getSingle(event)) + " can" + (isNegated() ? "not" : "") + " breathe underwater";
     }
 
     @Override
     public boolean check(@NotNull Event event) {
         LivingEntity entity = livingEntityExpression.getSingle(event);
         if (entity != null) {
-            return entity.canBreatheUnderwater();
+            return isNegated() ^ entity.canBreatheUnderwater();
         }
         return false;
     }

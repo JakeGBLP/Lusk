@@ -24,9 +24,9 @@ public class CondStrippable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof Block) {
-                return Utils.isStrippable(((Block)o).getType());
+                return Utils.isStrippable(((Block) o).getType());
             } else if (o instanceof ItemType) {
-                return Utils.isStrippable(((ItemType)o).getMaterial());
+                return Utils.isStrippable(((ItemType) o).getMaterial());
             }
         }
         return false;

@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("JukeBox - Start/Stop Playing")
 @Description("Makes a jukebox start/stop playing.")
 @Examples({"""
-           eject target block"""})
+        eject target block"""})
 @Since("1.0.3")
 public class EffJukeBoxPlay extends Effect {
     static {
@@ -45,8 +45,8 @@ public class EffJukeBoxPlay extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        Block[] entities = blockExpression.getArray(event);
-        for (Block block : entities) {
+        Block[] blocks = blockExpression.getArray(event);
+        for (Block block : blocks) {
             if (block.getState() instanceof Jukebox jukebox) {
                 if (start) {
                     jukebox.startPlaying();

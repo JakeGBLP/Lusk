@@ -24,13 +24,14 @@ import org.jetbrains.annotations.Nullable;
 public class CondCanBeSheared extends Condition {
     static {
         Skript.registerCondition(CondCanBeSheared.class, "%entity% can be (sheared|shorn)",
-                                                                "%entity% can('t|not) be (sheared|shorn)",
-                                                                "%entity% is (sheared|shorn)",
-                                                                "%entity% is(n't| not) (sheared|shorn)");
+                "%entity% can('t|not) be (sheared|shorn)",
+                "%entity% is (sheared|shorn)",
+                "%entity% is(n't| not) (sheared|shorn)");
     }
 
     private Expression<Entity> entityExpression;
     private boolean paper;
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {

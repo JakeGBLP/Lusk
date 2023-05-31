@@ -8,7 +8,7 @@ jar.enabled = false
 
 
 group = "Lusk"
-version = "1.0.4-beta1"
+version = "1.0.4-beta2"
 
 compileJava {options.encoding = "UTF-8"}
 
@@ -28,6 +28,9 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+    maven {
+        url "https://jitpack.io/"
+    }
 }
 
 dependencies {
@@ -36,7 +39,9 @@ dependencies {
     compileOnly  'com.github.SkriptLang:Skript:2.6.3'
     implementation 'org.bstats:bstats-bukkit:3.0.1'
     implementation "com.vdurmont:semver4j:3.1.0"
-
+    compileOnly "com.github.ShaneBeee:SkBee:2.9.0"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    compileOnly group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
 
 }
 shadowJar {

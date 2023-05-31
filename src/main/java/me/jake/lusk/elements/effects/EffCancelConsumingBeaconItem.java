@@ -18,8 +18,8 @@ import javax.annotation.Nullable;
 @Name("Beacon - Cancel Consuming Item")
 @Description("Sets whether the item in the Beacon Effect Change Event will be consumed.")
 @Examples({"""
-           on beacon effect change:
-             cancel beacon item consume"""})
+        on beacon effect change:
+          cancel beacon item consume"""})
 @Since("1.0.4")
 public class EffCancelConsumingBeaconItem extends Effect {
     static {
@@ -45,6 +45,6 @@ public class EffCancelConsumingBeaconItem extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((PlayerChangeBeaconEffectEvent)event).setConsumeItem(negated);
+        ((PlayerChangeBeaconEffectEvent) event).setConsumeItem(negated);
     }
 }

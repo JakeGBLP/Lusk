@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondBeaconAppliedEffectPrimary extends Condition {
     static {
         Skript.registerCondition(CondBeaconAppliedEffectPrimary.class, "[the] applied [beacon] effect is [the] primary [beacon] effect",
-                                                             "[the] applied [beacon] effect is(n't| not) [the] primary [beacon] effect",
+                "[the] applied [beacon] effect is(n't| not) [the] primary [beacon] effect",
                 "[the] applied [beacon] effect is [the] secondary [beacon] effect",
                 "[the] applied [beacon] effect is(n't| not) [the] secondary [beacon] effect");
     }

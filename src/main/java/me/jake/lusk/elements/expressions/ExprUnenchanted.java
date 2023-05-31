@@ -34,6 +34,7 @@ public class ExprUnenchanted extends SimpleExpression<ItemType> {
         itemTypeExpression = (Expression<ItemType>) exprs[0];
         return true;
     }
+
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         ItemType itemType = itemTypeExpression.getSingle(e);

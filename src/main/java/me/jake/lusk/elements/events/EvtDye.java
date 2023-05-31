@@ -6,7 +6,6 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import io.papermc.paper.event.entity.EntityDyeEvent;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,10 +40,9 @@ public class EvtDye extends SkriptEvent {
         if (types == null) {
             return true;
         }
-        final @NotNull EntityType entity = ((EntityDyeEvent) e).getEntityType();
-        for (final EntityData<?> type : types) {
+        for (EntityData<?> type : types) {
             if (type != null) {
-                if (String.valueOf(type).toUpperCase().equals(entity.toString())) {
+                if (type.isInstance(((EntityDyeEvent) e).getEntity())) {
                     return true;
                 }
             }

@@ -20,27 +20,30 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Armor Stand - Properties")
 @Description("Gets and sets a specific armor stand property.")
-@Examples({"broadcast arms of target","set marker of target to true"})
+@Examples({"broadcast arms of target", "set marker of target to true"})
 @Since("1.0.2")
 public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprArmorStandProperties.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] small [state] of %livingentity%",
-                "[the] arms [visibility|state] of %livingentity%",
-                "[the] base plate [visibility|state] of %livingentity%",
-                "[the] marker [state] of %livingentity%",
+                "[the] [is] small [state] of %livingentity%",
+                "[the] [has] arms [visibility|state] of %livingentity%",
+                "[the] [has] base plate [visibility [state]|state] of %livingentity%",
+                "[the] [is] marker [state] of %livingentity%",
                 "[the] [can] tick stat(us|e) of %livingentity%",
                 "[the] [can] move stat(us|e) of %livingentity%");
 
     }
+
     private Expression<LivingEntity> livingEntityExpression;
     private String property;
+
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
         property = matchedPattern == 0 ? "small" : (matchedPattern == 1 ? "arms" : (matchedPattern == 2 ? "base plate" : (matchedPattern == 3 ? "marker" : (matchedPattern == 4 ? "can tick status" : "can move status"))));
         return true;
     }
+
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = livingEntityExpression.getSingle(e);
@@ -57,6 +60,7 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
         }
         return new Boolean[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -64,6 +68,7 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;

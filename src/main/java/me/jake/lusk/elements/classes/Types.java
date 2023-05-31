@@ -13,6 +13,7 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
+import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public class Types {
                     public EquipmentSlot parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return EquipmentSlot.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -62,7 +63,7 @@ public class Types {
                     public PatternType parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return PatternType.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -153,7 +154,7 @@ public class Types {
                     public Pose parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return Pose.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -181,7 +182,7 @@ public class Types {
                     public SpawnCategory parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return SpawnCategory.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -231,8 +232,8 @@ public class Types {
                         return toString(b, 0) + " bounding box (" + b + ")";
                     }
                 }));
-        Classes.registerClass(new ClassInfo<>(CauldronLevelChangeEvent.ChangeReason.class, "changereason")
-                .user("change ?reasons?")
+        Classes.registerClass(new ClassInfo<>(CauldronLevelChangeEvent.ChangeReason.class, "cauldronchangereason")
+                .user("cauldron ?change ?reasons?")
                 .name("Cauldron Change Reason")
                 .description("All the Cauldron Change Reasons.")
                 .usage(Arrays.toString(CauldronLevelChangeEvent.ChangeReason.values()))
@@ -243,7 +244,7 @@ public class Types {
                     public CauldronLevelChangeEvent.ChangeReason parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return CauldronLevelChangeEvent.ChangeReason.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -271,7 +272,7 @@ public class Types {
                     public EnderDragon.Phase parse(final @NotNull String s, final @NotNull ParseContext context) {
                         try {
                             return EnderDragon.Phase.valueOf(s.toUpperCase());
-                        } catch(IllegalArgumentException ex) {
+                        } catch (IllegalArgumentException ex) {
                             return null;
                         }
                     }
@@ -287,5 +288,33 @@ public class Types {
                     }
                 })
                 .serializer(new EnumSerializer<>(EnderDragon.Phase.class)));
+        Classes.registerClass(new ClassInfo<>(EntityUnleashEvent.UnleashReason.class, "unleashreason")
+                .user("unleash ?reasons?")
+                .name("Unleash Reason")
+                .description("All the Unleash Reasons.")
+                .usage(Arrays.toString(EnderDragon.Phase.values()))
+                .examples("")
+                .since("1.0.4")
+                .parser(new Parser<EntityUnleashEvent.UnleashReason>() {
+                    @Override
+                    public EntityUnleashEvent.UnleashReason parse(final @NotNull String s, final @NotNull ParseContext context) {
+                        try {
+                            return EntityUnleashEvent.UnleashReason.valueOf(s.toUpperCase());
+                        } catch (IllegalArgumentException ex) {
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    public @NotNull String toString(final EntityUnleashEvent.UnleashReason p, final int flags) {
+                        return p.toString();
+                    }
+
+                    @Override
+                    public @NotNull String toVariableNameString(final EntityUnleashEvent.UnleashReason p) {
+                        return "" + p.name();
+                    }
+                })
+                .serializer(new EnumSerializer<>(EntityUnleashEvent.UnleashReason.class)));
     }
 }

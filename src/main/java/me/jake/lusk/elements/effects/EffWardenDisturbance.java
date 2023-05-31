@@ -21,7 +21,7 @@ import java.util.Arrays;
 @Name("Warden Disturbance")
 @Description("Makes the warden sense a disturbance at the provided location.")
 @Examples({"""
-           """})
+        """})
 @Since("1.0.2")
 public class EffWardenDisturbance extends Effect {
     static {

@@ -32,8 +32,8 @@ public class EvtChunk extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        Location from = ((PlayerMoveEvent)e).getFrom();
-        Location to = ((PlayerMoveEvent)e).getTo();
+        Location from = ((PlayerMoveEvent) e).getFrom();
+        Location to = ((PlayerMoveEvent) e).getTo();
         return from.getChunk() != to.getChunk();
     }
 

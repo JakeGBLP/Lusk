@@ -39,6 +39,7 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
                 "[the] variant of %livingentity%",
                 "%livingentity%'[s] variant");
     }
+
     private Expression<LivingEntity> livingEntityExpression;
 
     @SuppressWarnings("unchecked")
@@ -46,6 +47,7 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
         return true;
     }
+
     @Override
     protected Object @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
@@ -76,6 +78,7 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
         }
         return new String[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -83,6 +86,7 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         String variant = delta instanceof String[] ? ((String[]) delta)[0] : null;

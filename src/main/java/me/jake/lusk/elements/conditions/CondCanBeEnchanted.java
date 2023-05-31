@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondCanBeEnchanted extends Condition {
     static {
         Skript.registerCondition(CondCanBeEnchanted.class, "%itemstack% can be enchanted with %enchantment%",
-                                                                "%itemstack% can(n't|not) be enchanted with %enchantment%");
+                "%itemstack% can(n't|not) be enchanted with %enchantment%");
     }
 
     private Expression<ItemStack> item;

@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Llama - Leave Caravan")
 @Description("Makes a llama leave its caravan.")
 @Examples({"""
-           make target leave its caravan"""})
+        make target leave its caravan"""})
 @Since("1.0.3")
 public class EffLlamaLeaveCaravan extends Effect {
     static {

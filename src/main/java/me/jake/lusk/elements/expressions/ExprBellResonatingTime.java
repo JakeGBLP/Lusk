@@ -34,11 +34,14 @@ public class ExprBellResonatingTime extends SimpleExpression<Timespan> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block instanceof Bell bell) {
-            return new Timespan[]{Timespan.fromTicks_i(bell.getResonatingTicks())};
+        if (block != null) {
+            if (block.getState() instanceof Bell bell) {
+                return new Timespan[]{Timespan.fromTicks_i(bell.getResonatingTicks())};
+            }
         }
         return new Timespan[0];
     }

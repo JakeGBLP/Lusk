@@ -37,10 +37,12 @@ public class ExprBestEquipmentSlot extends SimpleExpression<EquipmentSlot> {
         itemTypeExpression = (Expression<ItemType>) exprs[0];
         return true;
     }
+
     @Override
     public boolean isSingle() {
         return true;
     }
+
     @Override
     protected EquipmentSlot @NotNull [] get(@NotNull Event e) {
         ItemType i = itemTypeExpression.getSingle(e);

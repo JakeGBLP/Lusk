@@ -37,7 +37,7 @@ public class EvtWardenSniff extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        EntityPoseChangeEvent event = (EntityPoseChangeEvent)e;
+        EntityPoseChangeEvent event = (EntityPoseChangeEvent) e;
         if (!(event.getEntity() instanceof Warden)) return false;
         if (start == null) return true;
         if (start) {

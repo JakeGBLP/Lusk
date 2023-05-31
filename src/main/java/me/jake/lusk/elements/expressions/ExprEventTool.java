@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity - Used Hand/Item")
+@Name("Entity - Active Item")
 @Description("Returns the item used in an event, slot is included.")
 @Examples({""})
 @Since("1.0.4")

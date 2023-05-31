@@ -20,18 +20,20 @@ import java.util.Arrays;
 @Name("Fake Experience")
 @Description("Send an experience change. This fakes an experience change packet for a user. This will not actually change the experience points in any way.\nProgress must be within 0 and 100.")
 @Examples({"""
-           show fake xp level 69 and progress 50% to all players"""})
+        show fake xp level 69 and progress 50% to all players"""})
 @Since("1.0.2")
 public class EffFakeExperience extends Effect {
     static {
         Skript.registerEffect(EffFakeExperience.class, "show [fake] [[e]xp[erience]] level %integer% and progress %number%\\% to %players%",
-                                                        "show [fake] [[e]xp[erience]] level %integer% to %players%",
-                                                        "show [fake] [[e]xp[erience]] progress %number%\\% to %players%");
+                "show [fake] [[e]xp[erience]] level %integer% to %players%",
+                "show [fake] [[e]xp[erience]] progress %number%\\% to %players%");
     }
+
     private Expression<Integer> level;
     private Expression<Number> progress;
     private Expression<Player> players;
     private int pattern;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
@@ -78,7 +80,8 @@ public class EffFakeExperience extends Effect {
         Integer lvl = null;
         if (pattern == 0 || pattern == 1) {
             lvl = level.getSingle(event);
-        } if (pattern == 0 || pattern == 2) {
+        }
+        if (pattern == 0 || pattern == 2) {
             xp = progress.getSingle(event);
         }
         for (Player player : players.getArray(event)) {
@@ -87,10 +90,10 @@ public class EffFakeExperience extends Effect {
                 player.sendExperienceChange(xp.floatValue() / 100);
             } else if (pattern == 1) {
                 if (lvl == null) return;
-                int calcNext = Utils.getTotalNeededXP(player.getLevel()+1);
+                int calcNext = Utils.getTotalNeededXP(player.getLevel() + 1);
                 int calcCurrent = Utils.getTotalNeededXP(player.getLevel());
                 int calcFull = calcNext - calcCurrent;
-                xp = (player.getTotalExperience()-calcCurrent)/calcFull;
+                xp = (player.getTotalExperience() - calcCurrent) / calcFull;
                 player.sendExperienceChange(xp.floatValue() / 100, lvl);
             } else {
                 if (lvl == null || xp == null) return;

@@ -27,7 +27,7 @@ public class CondTriggerAdvancements extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerInventorySlotChangeEvent")) {
             Skript.registerCondition(CondTriggerAdvancements.class, "[the] event will trigger [any] advancements",
-                                                                       "[the] event w(ill not|on't) trigger [any] advancements");
+                    "[the] event w(ill not|on't) trigger [any] advancements");
         }
     }
 

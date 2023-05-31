@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondWhitelistEnforced extends Condition {
     static {
         Skript.registerCondition(CondWhitelistEnforced.class, "[the] whitelist is enforced",
-                    "[the] whitelist is not enforced");
+                "[the] whitelist is not enforced");
     }
 
     @Override

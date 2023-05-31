@@ -18,6 +18,9 @@ import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PlayerChangeBeaconEffectEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
+import me.jake.lusk.events.PlayerEntityCollideEvent;
+import me.jake.lusk.events.PlayerShieldDownEvent;
+import me.jake.lusk.events.PlayerShieldUpEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
@@ -25,7 +28,9 @@ import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
+import org.bukkit.event.player.PlayerUnleashEntityEvent;
 
 @SuppressWarnings({"unused", "deprecation"})
 public class SimpleEvents {
@@ -313,12 +318,51 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.4");
         }
-        if (Skript.classExists("org.bukkit.event.entity.PlayerLeashEntityEvent")) {
-            Skript.registerEvent("Player - Leash Event", SimpleEvent.class, PlayerLeashEntityEvent.class, "leash")
+        if (Skript.classExists("org.bukkit.event.entity.PlayerUnleashEntityEvent")) {
+            Skript.registerEvent("Player - Unleash Event", SimpleEvent.class, PlayerUnleashEntityEvent.class, "unleash")
                     .description("""
-                            Called immediately prior to a creature being leashed by a player.""")
+                            Called prior to an entity being unleashed due to a player's action.""")
                     .examples("")
                     .since("1.0.4");
         }
+        if (Skript.classExists("org.bukkit.event.block.FluidLevelChangeEvent")) {
+            Skript.registerEvent("Block - Fluid Level Change Event", SimpleEvent.class, FluidLevelChangeEvent.class, "fluid level change")
+                    .description("""
+                            Called when the fluid level of a block changes due to changes in adjacent blocks.""")
+                    .examples("")
+                    .since("1.0.4");
+        }
+        if (Skript.classExists("org.bukkit.event.block.MoistureChangeEvent")) {
+            Skript.registerEvent("Block - Moisture Change Event", SimpleEvent.class, MoistureChangeEvent.class, "moist[ure] [level] change")
+                    .description("""
+                            Called when the moisture level of a soil block changes.""")
+                    .examples("")
+                    .since("1.0.4");
+        }
+        if (Skript.classExists("org.bukkit.event.player.PlayerAttemptPickupItemEvent")) {
+            Skript.registerEvent("Player - Pickup Attempt Event", SimpleEvent.class, PlayerAttemptPickupItemEvent.class, "[player] pickup attempt", "[player] attempt to pickup")
+                    .description("""
+                            Called when a player attempts to pick an item up from the ground.""")
+                    .examples("")
+                    .since("1.0.4");
+        }
+        Skript.registerEvent("Player - Entity Collide Event", SimpleEvent.class, PlayerEntityCollideEvent.class, "player collide [with entity]")
+                .description("""
+                        Called when a player collides with another entity.""")
+                .examples("")
+                .since("1.0.4");
+        if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
+            Skript.registerEvent("Player - Shield Lower Event", SimpleEvent.class, PlayerShieldDownEvent.class, "[player] shield (down|off|lower[ed])")
+                    .description("""
+                            Called when a player stops defending with a shield.""")
+                    .examples("")
+                    .since("1.0.4");
+        }
+        Skript.registerEvent("Player - Shield Raise Event", SimpleEvent.class, PlayerShieldUpEvent.class, "[player] shield (up|on|(use|raise)[d])")
+                .description("""
+                        Called when a player starts defending with a shield.
+                        This event is called right before the shield is used, to use the is defending condition: wait a tick.""")
+                .examples("")
+                .since("1.0.4");
     }
 }

@@ -37,6 +37,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
@@ -57,6 +58,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;

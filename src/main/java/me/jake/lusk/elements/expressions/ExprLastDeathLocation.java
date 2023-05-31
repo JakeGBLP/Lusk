@@ -29,6 +29,7 @@ public class ExprLastDeathLocation extends SimpleExpression<Location> {
                 "%player%'[s] last death location");
 
     }
+
     private Expression<Player> playerExpression;
 
     @SuppressWarnings("unchecked")
@@ -36,6 +37,7 @@ public class ExprLastDeathLocation extends SimpleExpression<Location> {
         playerExpression = (Expression<Player>) exprs[0];
         return true;
     }
+
     @Override
     protected Location @NotNull [] get(@NotNull Event e) {
         Player p = playerExpression.getSingle(e);
@@ -44,6 +46,7 @@ public class ExprLastDeathLocation extends SimpleExpression<Location> {
         }
         return new Location[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -51,6 +54,7 @@ public class ExprLastDeathLocation extends SimpleExpression<Location> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Location location = delta instanceof Location[] ? ((Location[]) delta)[0] : null;

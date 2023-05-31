@@ -38,6 +38,7 @@ public class ExprStonecutterResult extends SimpleExpression<ItemStack> {
         }
         return true;
     }
+
     @Override
     protected ItemStack @NotNull [] get(@NotNull Event e) {
         return new ItemStack[]{((PlayerStonecutterRecipeSelectEvent) e).getStonecuttingRecipe().getResult()};

@@ -25,7 +25,7 @@ import java.util.Objects;
 
 @Name("Armor Stand - Rotations")
 @Description("Gets and sets a specific armor stand property.")
-@Examples({"broadcast rotation of target","set head rotation of target to vector(1,0,0)\n# sad armor stand :("})
+@Examples({"broadcast rotation of target", "set head rotation of target to vector(1,0,0)\n# sad armor stand :("})
 @Since("1.0.2")
 public class ExprArmorStandRotations extends SimpleExpression<Vector> {
     static {
@@ -39,8 +39,10 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
                 "[the] rotation of %livingentity%");
 
     }
+
     private Expression<LivingEntity> livingEntityExpression;
     private String property;
+
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
@@ -55,6 +57,7 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
         };
         return true;
     }
+
     @Override
     protected Vector @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = livingEntityExpression.getSingle(e);
@@ -66,12 +69,14 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
                 case "right leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightLegPose())};
                 case "head" -> new Vector[]{Utils.toBukkitVector(armorStand.getHeadPose())};
                 case "body" -> new Vector[]{Utils.toBukkitVector(armorStand.getBodyPose())};
-                case "" -> new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(),armorStand.getLocation().getPitch())};
+                case "" ->
+                        new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(), armorStand.getLocation().getPitch())};
                 default -> new Vector[0];
             };
         }
         return new Vector[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -79,6 +84,7 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Vector vector = delta instanceof Vector[] ? ((Vector[]) delta)[0] : null;
@@ -86,13 +92,13 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
         LivingEntity entity = livingEntityExpression.getSingle(e);
         if (entity instanceof ArmorStand armorStand) {
             switch (property) {
-                case "left arm" -> Utils.setLeftArmRotation(armorStand,vector);
-                case "right arm" -> Utils.setRightArmRotation(armorStand,vector);
-                case "left leg" -> Utils.setLeftLegRotation(armorStand,vector);
-                case "right leg" -> Utils.setRightLegRotation(armorStand,vector);
-                case "head" -> Utils.setHeadRotation(armorStand,vector);
-                case "body" -> Utils.setBodyRotation(armorStand,vector);
-                case "" -> Utils.setFullRotation(armorStand,vector);
+                case "left arm" -> Utils.setLeftArmRotation(armorStand, vector);
+                case "right arm" -> Utils.setRightArmRotation(armorStand, vector);
+                case "left leg" -> Utils.setLeftLegRotation(armorStand, vector);
+                case "right leg" -> Utils.setRightLegRotation(armorStand, vector);
+                case "head" -> Utils.setHeadRotation(armorStand, vector);
+                case "body" -> Utils.setBodyRotation(armorStand, vector);
+                case "" -> Utils.setFullRotation(armorStand, vector);
             }
         }
     }

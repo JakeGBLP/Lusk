@@ -36,6 +36,7 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
@@ -56,6 +57,7 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;

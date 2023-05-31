@@ -34,9 +34,10 @@ public class ExprBrewingFuelPower extends SimpleExpression<Integer> {
         }
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
-        return new Integer[]{((BrewingStandFuelEvent)e).getFuelPower()};
+        return new Integer[]{((BrewingStandFuelEvent) e).getFuelPower()};
     }
 
     @Override
@@ -47,11 +48,12 @@ public class ExprBrewingFuelPower extends SimpleExpression<Integer> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
         if (integer == null) return;
-        ((BrewingStandFuelEvent)e).setFuelPower(integer);
+        ((BrewingStandFuelEvent) e).setFuelPower(integer);
     }
 
     @Override

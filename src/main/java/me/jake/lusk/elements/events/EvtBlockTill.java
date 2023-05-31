@@ -28,7 +28,7 @@ public class EvtBlockTill extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        PlayerInteractEvent event = (PlayerInteractEvent)e;
+        PlayerInteractEvent event = (PlayerInteractEvent) e;
         if (event.getAction().isRightClick()) {
             if (Utils.isHoe(event.getMaterial())) {
                 Block block = event.getClickedBlock();

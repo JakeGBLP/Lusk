@@ -30,6 +30,7 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
                 "%livingentity%'[s] interested state");
 
     }
+
     private Expression<LivingEntity> livingEntityExpression;
 
     @SuppressWarnings("unchecked")
@@ -37,10 +38,12 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
         return true;
     }
+
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        boolean bool;if (livingEntity instanceof Wolf wolf) {
+        boolean bool;
+        if (livingEntity instanceof Wolf wolf) {
             bool = wolf.isInterested();
         } else if (livingEntity instanceof Fox fox) {
             bool = fox.isInterested();
@@ -49,6 +52,7 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
         }
         return new Boolean[]{bool};
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -56,6 +60,7 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;

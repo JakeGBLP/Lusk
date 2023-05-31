@@ -34,11 +34,14 @@ public class ExprBeaconPyramidTier extends SimpleExpression<Integer> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Beacon beacon) {
-            return new Integer[]{beacon.getTier()};
+        if (block != null) {
+            if (block.getState() instanceof Beacon beacon) {
+                return new Integer[]{beacon.getTier()};
+            }
         }
         return new Integer[0];
     }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Crossbow/Wither/Wither Skull - is Charged")
 @Description("Checks if a crossbow, wither or wither skull is charged.")
-@Examples({"if tool of player is changed:"})
+@Examples({"if tool of player is charged:"})
 @Since("1.0.1, 1.0.3 (Wither/Wither Skull)")
 public class CondCharged extends PropertyCondition<Object> {
 

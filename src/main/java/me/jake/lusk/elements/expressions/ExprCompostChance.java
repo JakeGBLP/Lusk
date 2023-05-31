@@ -33,6 +33,7 @@ public class ExprCompostChance extends SimpleExpression<Integer> {
         itemType = (Expression<ItemType>) exprs[0];
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         ItemType i = itemType.getSingle(e);

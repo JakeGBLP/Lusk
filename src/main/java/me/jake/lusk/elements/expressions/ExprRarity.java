@@ -35,6 +35,7 @@ public class ExprRarity extends SimpleExpression<String> {
         object = (Expression<Object>) exprs[0];
         return true;
     }
+
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
         Object o = object.getSingle(e);

@@ -35,14 +35,18 @@ public class ExprSignGlowingState extends SimpleExpression<Boolean> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Sign sign) {
-            return new Boolean[]{sign.isGlowingText()};
+        if (block != null) {
+            if (block.getState() instanceof Sign sign) {
+                return new Boolean[]{sign.isGlowingText()};
+            }
         }
         return new Boolean[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -50,6 +54,7 @@ public class ExprSignGlowingState extends SimpleExpression<Boolean> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;

@@ -45,6 +45,7 @@ public class ExprWardenEventAnger extends SimpleExpression<Integer> {
         }
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         int i;
@@ -55,6 +56,7 @@ public class ExprWardenEventAnger extends SimpleExpression<Integer> {
         }
         return new Integer[]{i};
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -62,6 +64,7 @@ public class ExprWardenEventAnger extends SimpleExpression<Integer> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;

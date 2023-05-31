@@ -20,12 +20,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Dye Event - Dye Color")
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
-@Examples({"on dye:\n\tbroadcast the color"})
+@Examples({"on dye:\n\tbroadcast the entity dye color"})
 @Since("1.0.0")
 public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     static {
         Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, ExpressionType.SIMPLE,
-                "[the] [entity] dye color");
+                "[the] entity dye color");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
@@ -35,6 +35,7 @@ public class ExprDyeColor extends SimpleExpression<SkriptColor> {
         }
         return true;
     }
+
     @Override
     protected SkriptColor @NotNull [] get(@NotNull Event e) {
         return new SkriptColor[]{SkriptColor.fromDyeColor(((EntityDyeEvent) e).getColor())};
@@ -48,6 +49,7 @@ public class ExprDyeColor extends SimpleExpression<SkriptColor> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         SkriptColor color = delta instanceof SkriptColor[] ? ((SkriptColor[]) delta)[0] : null;

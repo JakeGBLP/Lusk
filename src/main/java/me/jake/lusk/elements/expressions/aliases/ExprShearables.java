@@ -30,6 +30,7 @@ public class ExprShearables extends SimpleExpression<EntityData> {
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         return true;
     }
+
     @Override
     protected EntityData @NotNull [] get(@NotNull Event e) {
         return Utils.getShearables().toArray(new EntityData[0]);

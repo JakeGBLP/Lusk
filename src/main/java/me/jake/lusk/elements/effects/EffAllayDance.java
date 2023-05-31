@@ -20,7 +20,7 @@ import java.util.Arrays;
 @Name("Allay - Start/Stop Dance")
 @Description("Forces an Allay to start/stop dancing.\nIf the jukebox is specified but the provided block is not a jukebox, the Allay will start dancing without one.")
 @Examples({"""
-           make target start dancing"""})
+        make target start dancing"""})
 @Since("1.0.2")
 public class EffAllayDance extends Effect {
     static {
@@ -28,8 +28,10 @@ public class EffAllayDance extends Effect {
                 "make %livingentities% start dancing",
                 "make %livingentities% stop dancing");
     }
+
     private Expression<LivingEntity> entityExpression;
     private int pattern;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {

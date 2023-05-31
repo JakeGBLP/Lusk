@@ -28,7 +28,7 @@ public class CondIsInstantWorldBorderChange extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
             Skript.registerCondition(CondIsInstantWorldBorderChange.class, "[the] world[ ]border change is instant",
-                                                                       "[the] world[ ]border change is not instant");
+                    "[the] world[ ]border change is not instant");
         }
     }
 

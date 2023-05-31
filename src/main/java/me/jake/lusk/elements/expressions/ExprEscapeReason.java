@@ -35,9 +35,10 @@ public class ExprEscapeReason extends SimpleExpression<EndermanEscapeEvent.Reaso
         }
         return true;
     }
+
     @Override
     protected EndermanEscapeEvent.Reason @NotNull [] get(@NotNull Event e) {
-        return new EndermanEscapeEvent.Reason[]{((EndermanEscapeEvent)e).getReason()};
+        return new EndermanEscapeEvent.Reason[]{((EndermanEscapeEvent) e).getReason()};
     }
 
     @Override

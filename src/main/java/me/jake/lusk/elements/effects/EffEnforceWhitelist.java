@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 @Since("1.0.2")
 public class EffEnforceWhitelist extends Effect {
     static {
-        Skript.registerEffect(EffEnforceWhitelist.class, "enforce [the] [server] whitelist","unenforce [the] [server] whitelist");
+        Skript.registerEffect(EffEnforceWhitelist.class, "enforce [the] [server] whitelist", "unenforce [the] [server] whitelist");
     }
 
     private boolean negated;

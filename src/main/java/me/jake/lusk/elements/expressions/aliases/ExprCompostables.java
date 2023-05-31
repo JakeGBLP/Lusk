@@ -17,18 +17,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Compostables")
-@Description("Returns all the compostable blocks.")
+@Description("Returns all the compostable items.")
 @Examples({"broadcast all compostable"})
 @Since("1.0.0")
 public class ExprCompostables extends SimpleExpression<ItemType> {
     static {
         Skript.registerExpression(ExprCompostables.class, ItemType.class, ExpressionType.SIMPLE,
-                "[all [[of] the]|the] compostable[ block]s");
+                "[all [[of] the]|the] compostable[ (item|block)]s");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         return true;
     }
+
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         return Utils.toItemTypes(Utils.getCompostables());

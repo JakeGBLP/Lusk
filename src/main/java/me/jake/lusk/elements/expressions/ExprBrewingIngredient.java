@@ -38,6 +38,7 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
         blockExpression = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
@@ -61,6 +62,7 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         ItemType itemType = delta instanceof ItemType[] ? ((ItemType[]) delta)[0] : null;

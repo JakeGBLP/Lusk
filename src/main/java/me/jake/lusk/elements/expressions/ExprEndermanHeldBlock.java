@@ -36,6 +36,7 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
                 "%livingentity%'[s] (held|carried) block");
 
     }
+
     private Expression<LivingEntity> livingEntityExpression;
 
     @SuppressWarnings("unchecked")
@@ -43,6 +44,7 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
         return true;
     }
+
     @Override
     protected BlockData @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
@@ -51,6 +53,7 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
         }
         return new BlockData[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         return switch (mode) {
@@ -58,6 +61,7 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
             default -> new Class[0];
         };
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);

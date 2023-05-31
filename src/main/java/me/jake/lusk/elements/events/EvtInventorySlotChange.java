@@ -20,7 +20,7 @@ public class EvtInventorySlotChange extends SkriptEvent {
                     .examples("""
                             on slot change:
                               broadcast past item and item and event-slot
-                            
+                                                        
                             on item obtain:
                               if item is a sword:
                                 set lore of event-slot to "&fThis is a sword."

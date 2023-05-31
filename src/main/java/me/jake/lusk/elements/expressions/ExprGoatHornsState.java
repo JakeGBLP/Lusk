@@ -38,6 +38,7 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
         left = matchedPattern == 0;
         return true;
     }
+
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
@@ -52,6 +53,7 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
         }
         return new Boolean[0];
     }
+
     @Override
     public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
@@ -59,6 +61,7 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
         }
         return new Class[0];
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;

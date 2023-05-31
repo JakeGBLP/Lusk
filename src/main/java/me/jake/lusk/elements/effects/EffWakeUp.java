@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 @Name("Wake Up")
 @Description("Wakes a player/villager up.")
 @Examples({"""
-           wake me up"""})
+        wake me up"""})
 @Since("1.0.2+")
 public class EffWakeUp extends Effect {
     static {
@@ -28,6 +28,7 @@ public class EffWakeUp extends Effect {
     }
 
     private Expression<LivingEntity> entityExpression;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {

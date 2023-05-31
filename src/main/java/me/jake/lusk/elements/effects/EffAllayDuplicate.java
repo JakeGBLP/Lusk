@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 @Name("Allay - Duplicate")
 @Description("Forces an allay to duplicate itself without dance or item necessary.")
 @Examples({"""
-           force duplicate (entities where [input is an allay])"""})
+        force duplicate (entities where [input is an allay])"""})
 @Since("1.0.2")
 public class EffAllayDuplicate extends Effect {
     static {
@@ -27,6 +27,7 @@ public class EffAllayDuplicate extends Effect {
     }
 
     private Expression<LivingEntity> entityExpression;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {

@@ -33,6 +33,7 @@ public class ExprRarityColor extends SimpleExpression<SkriptColor> {
         color = (Expression<String>) exprs[0];
         return true;
     }
+
     @Override
     protected SkriptColor @NotNull [] get(@NotNull Event e) {
         String c = color.getSingle(e);

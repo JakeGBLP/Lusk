@@ -19,14 +19,15 @@ import javax.annotation.Nullable;
 @Name("Vllager - Head Shake")
 @Description("Make a villager shake his head.")
 @Examples({"""
-           make target shake head"""})
+        make target shake head"""})
 @Since("1.0.2+")
 public class EffVillagerHeadShake extends Effect {
     static {
-        Skript.registerEffect(EffVillagerHeadShake.class, "make %livingentities% shake head","shake %livingentities%'[s] head");
+        Skript.registerEffect(EffVillagerHeadShake.class, "make %livingentities% shake head", "shake %livingentities%'[s] head");
     }
 
     private Expression<LivingEntity> entityExpression;
+
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {

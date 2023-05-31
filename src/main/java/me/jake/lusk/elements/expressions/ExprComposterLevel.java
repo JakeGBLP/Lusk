@@ -24,10 +24,10 @@ import org.jetbrains.annotations.Nullable;
 @Name("Composter - Level")
 @Description("Returns a composter's level.\nCan be changed.")
 @Examples("""
-on compost:
-  wait 1 tick
-  set composter level of block to 5
-""")
+        on compost:
+          wait 1 tick
+          set composter level of block to 5
+        """)
 @Since("1.0.1")
 public class ExprComposterLevel extends SimpleExpression<Integer> {
     static {
@@ -42,12 +42,13 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
         block = (Expression<Block>) exprs[0];
         return true;
     }
+
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Block b = block.getSingle(e);
         if (b != null) {
             if (b.getType() == Material.COMPOSTER) {
-                return new Integer[]{(Integer) Utils.getBlockDataTag(b.getBlockData(),"level")};
+                return new Integer[]{(Integer) Utils.getBlockDataTag(b.getBlockData(), "level")};
             }
         }
         return new Integer[0];
@@ -65,6 +66,7 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
             default -> new Class[0];
         };
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block b = block.getSingle(e);
@@ -89,7 +91,7 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
                 return;
         }
         BlockData oldBlockData = b.getBlockData();
-        String newBlockData = b.getType().getKey() + "[" + "level="+value+"]";
+        String newBlockData = b.getType().getKey() + "[" + "level=" + value + "]";
         try {
             BlockData blockData = Bukkit.createBlockData(newBlockData);
             blockData = oldBlockData.merge(blockData);
@@ -105,6 +107,6 @@ public class ExprComposterLevel extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the composter level of" + (e == null ? "" : " " +block.getSingle(e));
+        return "the composter level of" + (e == null ? "" : " " + block.getSingle(e));
     }
 }

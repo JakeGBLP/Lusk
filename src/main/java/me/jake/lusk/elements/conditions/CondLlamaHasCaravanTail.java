@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondLlamaHasCaravanTail extends Condition {
     static {
         Skript.registerCondition(CondLlamaHasCaravanTail.class, "%entity% has [a] caravan tail",
-                                                             "%entity% does(n't| not) have [a] caravan tail");
+                "%entity% does(n't| not) have [a] caravan tail");
     }
 
     private Expression<Entity> entityExpression;

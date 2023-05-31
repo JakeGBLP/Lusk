@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
+import com.vdurmont.semver4j.SemverException;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,13 +35,17 @@ public class ExprVersion extends SimpleExpression<Semver> {
         strings = (Expression<String>) exprs[0];
         return true;
     }
+
     @Override
     protected Semver @NotNull [] get(@NotNull Event e) {
         String[] s = strings.getArray(e);
         if (s.length != 0) {
             ArrayList<Semver> v = new ArrayList<>();
             for (String value : s) {
-                v.add(new Semver(value, Semver.SemverType.LOOSE));
+                try {
+                    v.add(new Semver(value, Semver.SemverType.LOOSE));
+                } catch (SemverException ignored) {
+                }
             }
             return v.toArray(new Semver[0]);
         }

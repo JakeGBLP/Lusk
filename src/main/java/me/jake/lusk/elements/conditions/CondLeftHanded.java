@@ -53,6 +53,6 @@ public class CondLeftHanded extends PropertyCondition<LivingEntity> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return (leftHand ? "left" : "right") +" handed";
+        return (leftHand ? "left" : "right") + " handed";
     }
 }

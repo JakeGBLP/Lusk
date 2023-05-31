@@ -8,14 +8,15 @@ import io.papermc.paper.event.player.PlayerLecternPageChangeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 @SuppressWarnings("unused")
 public class EvtLecternPageChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
             Skript.registerEvent("Lectern - Page Flip Event", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
                             "lectern page flip [to the] left",
-                                    "lectern page flip [to the] right",
-                                    "lectern page [flip]"
+                            "lectern page flip [to the] right",
+                            "lectern page [flip]"
                     )
                     .description("This Event requires Paper.\n\nCalled when a player flips the page in a Lectern.")
                     .examples("""
@@ -49,7 +50,7 @@ public class EvtLecternPageChange extends SkriptEvent {
         if (action == null) {
             return true;
         }
-        return action == ((PlayerLecternPageChangeEvent)e).getPageChangeDirection();
+        return action == ((PlayerLecternPageChangeEvent) e).getPageChangeDirection();
     }
 
     @Override

@@ -39,6 +39,7 @@ public class ExprBeaconNewEffects extends SimpleExpression<PotionEffectType> {
         primary = matchedPattern == 0;
         return true;
     }
+
     @Override
     protected PotionEffectType @NotNull [] get(@NotNull Event e) {
         PlayerChangeBeaconEffectEvent event = ((PlayerChangeBeaconEffectEvent) e);
@@ -59,6 +60,7 @@ public class ExprBeaconNewEffects extends SimpleExpression<PotionEffectType> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         PotionEffectType potionEffectType = delta instanceof PotionEffectType[] ? ((PotionEffectType[]) delta)[0] : null;

@@ -10,6 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import io.papermc.paper.event.block.CompostItemEvent;
+import io.papermc.paper.event.entity.EntityCompostItemEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,13 +27,13 @@ public class CondRiseComposterLevel extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.block.CompostItemEvent")) {
             Skript.registerCondition(CondRiseComposterLevel.class, "[the] composter level will be raised",
-                                                                       "[the] composter level w(ill not|on't) be raised");
+                    "[the] composter level w(ill not|on't) be raised");
         }
     }
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        if (!(getParser().isCurrentEvent(CompostItemEvent.class))) {
+        if (!(getParser().isCurrentEvent(CompostItemEvent.class, EntityCompostItemEvent.class))) {
             Skript.error("This condition can only be used in the Hopper Compost event!");
             return false;
         }
@@ -47,6 +48,9 @@ public class CondRiseComposterLevel extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
+        if (event instanceof EntityCompostItemEvent entityCompostItemEvent) {
+            return isNegated() ^ entityCompostItemEvent.willRaiseLevel();
+        }
         return (isNegated()) ^ ((CompostItemEvent) event).willRaiseLevel();
     }
 }

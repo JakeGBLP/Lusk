@@ -37,6 +37,7 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
         objectExpression = (Expression<Object>) exprs[0];
         return true;
     }
+
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
         Object o = objectExpression.getSingle(e);
@@ -58,6 +59,7 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
             return new Class[0];
         }
     }
+
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Object o = objectExpression.getSingle(e);
@@ -67,7 +69,7 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
                     commandBlock.setCommand("");
                 } else {
                     String string = delta instanceof String[] ? ((String[]) delta)[0] : null;
-                    if (string != null) commandBlock.setCommand(string);
+                    commandBlock.setCommand(string);
                 }
                 commandBlock.update();
             }
@@ -76,7 +78,7 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
                 commandMinecart.setCommand("");
             } else {
                 String string = delta instanceof String[] ? ((String[]) delta)[0] : null;
-                if (string != null) commandMinecart.setCommand(string);
+                commandMinecart.setCommand(string);
             }
         }
     }

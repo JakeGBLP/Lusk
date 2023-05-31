@@ -29,6 +29,7 @@ public class ExprStrippables extends SimpleExpression<ItemType> {
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         return true;
     }
+
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         return Utils.toItemTypes(Utils.getStrippables());

@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 @Since("1.0.2")
 public class EffPass extends Effect {
     static {
-        Skript.registerEffect(EffPass.class, "pass","do nothing");
+        Skript.registerEffect(EffPass.class, "pass", "do nothing");
     }
 
     @Override

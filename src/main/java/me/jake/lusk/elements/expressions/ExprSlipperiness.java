@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("""
         Returns a value that represents how 'slippery' the block is. Blocks with higher slipperiness, like ice can be slid on further by the player and other entities.
         Most blocks have a default slipperiness of 0.6.
-        
+                
         Only works for placeable item/blocks.
         """)
 @Examples({"broadcast slipperiness of packed ice"})

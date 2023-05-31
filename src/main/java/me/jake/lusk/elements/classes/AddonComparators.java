@@ -6,7 +6,6 @@ import com.vdurmont.semver4j.Semver;
 import org.jetbrains.annotations.NotNull;
 
 public class AddonComparators {
-    public AddonComparators() {}
     static {
         Comparators.registerComparator(Semver.class, Semver.class, new Comparator<>() {
             @Override
@@ -19,5 +18,8 @@ public class AddonComparators {
                 return true;
             }
         });
+    }
+
+    public AddonComparators() {
     }
 }

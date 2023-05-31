@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Name("Show Credits")
 @Description("Shows the player the win screen that normally is only displayed after one kills the ender dragon and exits the end for the first time.")
 @Examples({"""
-           show the credits to all players"""})
+        show the credits to all players"""})
 @Since("1.0.0")
 public class EffShowCredits extends Effect {
     static {

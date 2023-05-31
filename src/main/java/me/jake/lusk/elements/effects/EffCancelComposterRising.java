@@ -18,8 +18,8 @@ import javax.annotation.Nullable;
 @Name("Cancel Composter Level Rise")
 @Description("This Effect requires Paper.\n\nCan only be used in a Compost Item Event.\nSets whether or not the composter's level should rise.")
 @Examples({"""
-           on hopper compost:
-             cancel composter level rise"""})
+        on hopper compost:
+          cancel composter level rise"""})
 @Since("1.0.0")
 public class EffCancelComposterRising extends Effect {
     static {
@@ -45,6 +45,6 @@ public class EffCancelComposterRising extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((CompostItemEvent)event).setWillRaiseLevel(negated);
+        ((CompostItemEvent) event).setWillRaiseLevel(negated);
     }
 }
