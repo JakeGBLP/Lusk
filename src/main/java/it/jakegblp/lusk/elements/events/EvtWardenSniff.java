@@ -40,11 +40,7 @@ public class EvtWardenSniff extends SkriptEvent {
         EntityPoseChangeEvent event = (EntityPoseChangeEvent) e;
         if (!(event.getEntity() instanceof Warden)) return false;
         if (start == null) return true;
-        if (start) {
-            return event.getPose() == Pose.SNIFFING;
-        } else {
-            return event.getEntity().getPose() == Pose.SNIFFING;
-        }
+        return start ? event.getPose() == Pose.SNIFFING : event.getEntity().getPose() == Pose.SNIFFING;
     }
 
     @Override

@@ -1,7 +1,10 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'java'
 }
 
+build.dependsOn(shadowJar)
+jar.enabled = false
 group = "Lusk"
 version = "1.1"
 
@@ -23,6 +26,9 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+    maven {
+        url "https://jitpack.io/"
+    }
 }
 
 dependencies {
@@ -30,9 +36,16 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly  'com.github.SkriptLang:Skript:2.8.2'
     implementation 'org.bstats:bstats-bukkit:3.0.1'
-    compileOnly 'com.vdurmont:semver4j:3.1.0'
+    implementation 'com.vdurmont:semver4j:3.1.0'
+    shadow 'junit:junit:3.8.2'
 }
 
+shadowJar {
+    archiveBaseName.set('Lusk')
+    archiveClassifier.set('')
+    archiveVersion.set(project.version.toString())
+    relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
+}
 
 def targetJavaVersion = 17
 java {

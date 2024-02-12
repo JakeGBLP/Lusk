@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Width of an Entity.")
 @Examples({"broadcast width of target"})
 @Since("1.0.2")
-public class ExprWidth extends SimplePropertyExpression<Entity, Double> {
+public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
     static {
-        register(ExprWidth.class, Double.class, "width", "entity");
+        register(ExprEntityWidth.class, Double.class, "entity width", "entity");
     }
 
     @Override

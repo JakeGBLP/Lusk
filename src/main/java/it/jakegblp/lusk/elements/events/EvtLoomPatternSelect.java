@@ -45,16 +45,10 @@ public class EvtLoomPatternSelect extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        if (types == null) {
-            return true;
-        }
+        if (types == null) return true;
         final @NotNull PatternType patternType = ((PlayerLoomPatternSelectEvent) e).getPatternType();
         for (final PatternType type : types) {
-            if (type != null) {
-                if (type == patternType) {
-                    return true;
-                }
-            }
+            if (type == patternType) return true;
         }
         return false;
     }

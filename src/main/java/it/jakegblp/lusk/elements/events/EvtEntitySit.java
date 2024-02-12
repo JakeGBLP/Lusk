@@ -14,7 +14,7 @@ public class EvtEntitySit extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityToggleSitEvent")) {
             Skript.registerEvent("Entity - Sit/Stand up Event", EvtEntitySit.class, EntityToggleSitEvent.class,
-                            "[entity] sit:s(at|it[ting]) [down]",
+                            "[entity] s(at|it[ting]) [down]",
                             "[entity] st(ood|and[ing]) [up]",
                             "[entity] sit toggle[d]")
                     .description("Called when an entity sits down or stands up.\nThis event requires Paper.")
@@ -34,22 +34,15 @@ public class EvtEntitySit extends SkriptEvent {
 
     @Override
     public boolean init(Literal @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
-        if (matchedPattern == 0) {
-            sit = true;
-        } else if (matchedPattern == 1) {
-            sit = false;
-        }
+        sit = matchedPattern != 1;
         return true;
     }
 
     @Override
     public boolean check(@NotNull Event e) {
         if (sit == null) return true;
-        if (sit) {
-            return ((EntityToggleSitEvent) e).getSittingState();
-        } else {
-            return !((EntityToggleSitEvent) e).getSittingState();
-        }
+        return sit ^ ((EntityToggleSitEvent) e).getSittingState();
+
     }
 
     @Override

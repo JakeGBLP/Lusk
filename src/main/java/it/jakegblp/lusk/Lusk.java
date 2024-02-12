@@ -26,7 +26,6 @@ public class Lusk extends JavaPlugin {
         instance = this;
         addon = Skript.registerAddon(this);
         try {
-            Utils.setEverything();
             addon.loadClasses("it.jakegblp.lusk", "elements");
         } catch (IOException e) {
             e.printStackTrace();

@@ -20,10 +20,22 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"broadcast player's name in small caps"})
 @Since("1.0.0")
 public class ExprCases extends SimpleExpression<String> {
+    public static Character[] characters ={'ᴀ','ʙ','ᴄ','ᴅ','ᴇ','ғ','ɢ','ʜ','ɪ','ᴊ','ᴋ','ʟ','ᴍ','ɴ','ᴏ','ᴘ','ǫ','ʀ','s','ᴛ','ᴜ','ᴠ','ᴡ','x','ʏ','ᴢ'};
+    public static String toSmallFont(String string, boolean fully) {
+        String regex = fully ? "[a-zA-Z]" : "[a-z]";
+        for (String letter : string.split("")) {
+            if (letter.matches(regex)) {
+                string = string.replaceAll(letter, String.valueOf(characters[(Character.getNumericValue(letter.charAt(0)) - 10)]));
+            }
+        }
+        return string;
+    }
+
     static {
         Skript.registerExpression(ExprCases.class, String.class, ExpressionType.SIMPLE,
-                "%string% (in|as|using) [:fully] (small|tiny) (font |[upper[ ]]case|cap(s|ital[ case]))",
-                "[:fully] (small|tiny) (font |[upper[ ]]case|cap(s|ital[ case])) %string%");
+                "%string% in [:fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
+                "[:fully] (small|tiny) (font|[upper[ ]]case|cap(s|ital[ case])) %string%",
+                "[:fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
     }
 
     private Expression<String> string;
@@ -39,7 +51,9 @@ public class ExprCases extends SimpleExpression<String> {
 
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
-        return new String[]{Utils.toSmallFont(string.getSingle(e), fully)};
+        String s = string.getSingle(e);
+        if (s != null) return new String[]{toSmallFont(s, fully)};
+        return new String[0];
     }
 
     @Override

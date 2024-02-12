@@ -18,6 +18,7 @@ public class EvtCrossbowLoad extends SkriptEvent {
                     .examples("")
                     .since("1.0.1");
         }
+        // add event-itemstack
     }
 
     @Override

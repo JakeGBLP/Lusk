@@ -19,11 +19,11 @@ import org.jetbrains.annotations.Nullable;
 @Name("Axeables")
 @Description("Returns all the blocks that will change upon being right clicked holding an axe.")
 @Examples({"broadcast all axeables"})
-@Since("1.0.1")
+@Since("1.0.1, 1.1 (strippable)")
 public class ExprAxeables extends SimpleExpression<ItemType> {
     static {
         Skript.registerExpression(ExprAxeables.class, ItemType.class, ExpressionType.SIMPLE,
-                "[all [[of] the]|the] axeable[ block]s");
+                "[all [[of] the]|the] (axe|stripp)able[ block]s");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
