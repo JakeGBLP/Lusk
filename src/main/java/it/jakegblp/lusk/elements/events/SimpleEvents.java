@@ -5,8 +5,6 @@ import ch.njol.skript.lang.util.SimpleEvent;
 import com.destroystokyo.paper.event.entity.EndermanAttackPlayerEvent;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
-import com.destroystokyo.paper.event.player.PlayerStartSpectatingEntityEvent;
-import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
 import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
 import io.papermc.paper.event.block.BlockFailedDispenseEvent;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
@@ -16,21 +14,20 @@ import io.papermc.paper.event.entity.EntityCompostItemEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
-import io.papermc.paper.event.player.PlayerChangeBeaconEffectEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import it.jakegblp.lusk.events.PlayerEntityCollideEvent;
-import it.jakegblp.lusk.events.PlayerShieldDownEvent;
 import it.jakegblp.lusk.events.PlayerShieldUpEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
+import org.bukkit.event.entity.EntityEnterLoveModeEvent;
+import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
-import org.bukkit.event.player.PlayerUnleashEntityEvent;
 
 @SuppressWarnings({"unused", "deprecation"})
 public class SimpleEvents {

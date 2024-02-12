@@ -67,13 +67,13 @@ public class Utils {
         put(760, new Semver("1.19.2"));
         put(761, new Semver("1.19.3"));
         put(762, new Semver("1.19.4"));
-    }};;
+    }};
     private static final HashMap<String, SkriptColor> rarityColors = new HashMap<>() {{
         put("COMMON", SkriptColor.WHITE);
         put("UNCOMMON", SkriptColor.YELLOW);
         put("RARE", SkriptColor.LIGHT_CYAN);
         put("EPIC", SkriptColor.LIGHT_PURPLE);
-    }};;
+    }};
     private static final ArrayList<Material> tillables = new ArrayList<>() {{
         add(Material.DIRT);
         add(Material.COARSE_DIRT);
@@ -212,7 +212,7 @@ public class Utils {
         add(Material.LILAC);
         add(Material.ROSE_BUSH);
         add(Material.PEONY);
-    }},compostables = new ArrayList<>(getCompostablesWithChances().keySet().stream().toList());;
+    }},compostables = new ArrayList<>(getCompostablesWithChances().keySet().stream().toList());
     private static final HashMap<Material, Integer> compostablesWithChances = new HashMap<>() {{
         put(Material.BEETROOT_SEEDS, 30);
         put(Material.DRIED_KELP, 30);
@@ -287,7 +287,7 @@ public class Utils {
         put(Material.WARPED_WART_BLOCK, 85);
         put(Material.CAKE, 100);
         put(Material.PUMPKIN_PIE, 100);
-    }};;
+    }};
     private static final ArrayList<EntityData> shearables = new ArrayList<>() {{
         add(EntityUtils.toSkriptEntityData(EntityType.MUSHROOM_COW));
         add(EntityUtils.toSkriptEntityData(EntityType.SHEEP));
@@ -299,7 +299,7 @@ public class Utils {
         add(EntityUtils.toSkriptEntityData(EntityType.PANDA));
         add(EntityUtils.toSkriptEntityData(EntityType.FOX));
     }};
-    private static final Semver skriptVersion = new Semver(Skript.getVersion().toString());;
+    private static final Semver skriptVersion = new Semver(Skript.getVersion().toString());
     private static final HashMap<Integer, Rotation> itemFrameRotations = new HashMap<>() {{
         put(0, Rotation.NONE);
         put(45, Rotation.CLOCKWISE_45);
@@ -309,7 +309,7 @@ public class Utils {
         put(225, Rotation.FLIPPED_45);
         put(270, Rotation.COUNTER_CLOCKWISE);
         put(315, Rotation.COUNTER_CLOCKWISE_45);
-    }};;
+    }};
 
 
     public static HashMap<Integer, Rotation> getItemFrameRotations() {

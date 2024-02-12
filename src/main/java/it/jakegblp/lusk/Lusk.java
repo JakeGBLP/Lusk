@@ -5,7 +5,6 @@ import ch.njol.skript.SkriptAddon;
 import it.jakegblp.lusk.listeners.PlayerListener;
 import it.jakegblp.lusk.listeners.ShieldLowerListener;
 import it.jakegblp.lusk.listeners.ShieldRaiseListener;
-import it.jakegblp.lusk.utils.Utils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
