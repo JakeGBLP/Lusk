@@ -6,7 +6,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.entity.EntityData;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.jetbrains.annotations.NotNull;
 
 @Name("is Sittable")
@@ -23,7 +23,7 @@ public class CondSittable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof EntityData<?> entityData) {
-                return Utils.isSittable(entityData);
+                return Constants.sittables.contains(entityData);
             }
         }
         return false;

@@ -11,6 +11,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.Constants;
 import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class ExprTillables extends SimpleExpression<ItemType> {
 
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
-        return Utils.toItemTypes(Utils.getTillables());
+        return Utils.toItemTypes(Constants.tillables);
     }
 
     @Override

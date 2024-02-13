@@ -40,7 +40,7 @@ public class ExprBellResonatingTime extends SimpleExpression<Timespan> {
         Block block = blockExpression.getSingle(e);
         if (block != null) {
             if (block.getState() instanceof Bell bell) {
-                return new Timespan[]{Timespan.fromTicks_i(bell.getResonatingTicks())};
+                return new Timespan[]{Timespan.fromTicks(bell.getResonatingTicks())};
             }
         }
         return new Timespan[0];

@@ -44,7 +44,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
         if (block != null) {
             BlockState blockState = block.getState();
             if (blockState instanceof BrewingStand brewingStand) {
-                return new Timespan[]{Timespan.fromTicks_i(brewingStand.getBrewingTime())};
+                return new Timespan[]{Timespan.fromTicks(brewingStand.getBrewingTime())};
             }
         }
         return new Timespan[0];
@@ -67,7 +67,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
         if (block != null) {
             BlockState blockState = block.getState();
             if (blockState instanceof BrewingStand brewingStand) {
-                brewingStand.setBrewingTime(((int) timespan.getTicks_i()));
+                brewingStand.setBrewingTime(((int) timespan.getTicks()));
                 brewingStand.update();
             }
         }

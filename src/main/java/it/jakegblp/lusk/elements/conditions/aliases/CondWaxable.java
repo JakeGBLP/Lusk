@@ -6,7 +6,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +24,9 @@ public class CondWaxable extends PropertyCondition<Object> {
     public boolean check(Object o) {
         if (o != null) {
             if (o instanceof Block) {
-                return Utils.isWaxable(((Block) o).getType());
+                return Constants.waxables.contains(((Block) o).getType());
             } else if (o instanceof ItemType) {
-                return Utils.isWaxable(((ItemType) o).getMaterial());
+                return Constants.waxables.contains(((ItemType) o).getMaterial());
             }
         }
         return false;

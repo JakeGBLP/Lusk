@@ -4,7 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -30,12 +30,12 @@ public class EvtBlockPath extends SkriptEvent {
     public boolean check(@NotNull Event e) {
         PlayerInteractEvent event = (PlayerInteractEvent) e;
         if (event.getAction().isRightClick()) {
-            if (Utils.isShovel(event.getMaterial())) {
+            if (Constants.shovels.contains(event.getMaterial())) {
                 Block block = event.getClickedBlock();
                 if (block != null) {
                     Material material = block.getType();
                     if (event.getClickedBlock().getLocation().add(0, 1, 0).getBlock().getType().isAir()) {
-                        return Utils.isPathable(material);
+                        return Constants.pathables.contains(material);
                     }
                 }
             }

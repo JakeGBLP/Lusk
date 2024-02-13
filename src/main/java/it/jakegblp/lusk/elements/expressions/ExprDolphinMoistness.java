@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprDolphinMoistness extends SimpleExpression<Integer> {
     static {
         Skript.registerExpression(ExprDolphinMoistness.class, Integer.class, ExpressionType.COMBINED,
-                "[the] [dolphin] moist(ness| level) of %entity%");
+                "[the] [dolphin] moist(ness|ure| level) of %entity%");
     }
 
     private Expression<Entity> entityExpression;

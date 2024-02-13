@@ -42,7 +42,7 @@ public class ExprChickenEggLayTime extends SimpleExpression<Timespan> {
     protected Timespan @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = entityExpression.getSingle(e);
         if (entity instanceof Chicken chicken) {
-            return new Timespan[]{Timespan.fromTicks_i(chicken.getEggLayTime())};
+            return new Timespan[]{Timespan.fromTicks(chicken.getEggLayTime())};
         }
         return new Timespan[0];
     }
@@ -61,7 +61,7 @@ public class ExprChickenEggLayTime extends SimpleExpression<Timespan> {
         if (timespan == null) return;
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof Chicken chicken) {
-            chicken.setEggLayTime((int) timespan.getTicks_i());
+            chicken.setEggLayTime((int) timespan.getTicks());
         }
     }
 

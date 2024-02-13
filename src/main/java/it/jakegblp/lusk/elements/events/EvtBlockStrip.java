@@ -4,7 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -29,12 +29,12 @@ public class EvtBlockStrip extends SkriptEvent {
     @Override
     public boolean check(@NotNull Event e) {
         PlayerInteractEvent event = ((PlayerInteractEvent) e);
-        if (Utils.isAxe(event.getMaterial())) {
+        if (Constants.axes.contains(event.getMaterial())) {
             if (event.getAction().isRightClick()) {
                 Block block = event.getClickedBlock();
                 if (block != null) {
                     Material material = block.getType();
-                    return Utils.isAxeable(material);
+                    return Constants.axeables.contains(material);
                 }
             }
         }

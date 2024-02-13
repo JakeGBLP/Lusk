@@ -5,7 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.CitizensUtils;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class CondNPC extends PropertyCondition<Entity> {
 
     @Override
     public boolean check(Entity entity) {
-        return Utils.isNPC(entity);
+        return CitizensUtils.isNPC(entity);
     }
 
     @Override

@@ -11,7 +11,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class ExprShearables extends SimpleExpression<EntityData> {
 
     @Override
     protected EntityData @NotNull [] get(@NotNull Event e) {
-        return Utils.getShearables().toArray(new EntityData[0]);
+        return Constants.shearables.toArray(new EntityData[0]);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
     protected Timespan @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof Allay allay) {
-            return new Timespan[]{Timespan.fromTicks_i(allay.getDuplicationCooldown())};
+            return new Timespan[]{Timespan.fromTicks(allay.getDuplicationCooldown())};
         }
         return new Timespan[0];
     }
@@ -62,7 +62,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
         if (mode == Changer.ChangeMode.SET) {
             Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
             if (timespan == null) return;
-            allay.setDuplicationCooldown(timespan.getTicks_i());
+            allay.setDuplicationCooldown(timespan.getTicks());
         } else {
             allay.resetDuplicationCooldown();
         }

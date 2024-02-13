@@ -11,6 +11,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.Constants;
 import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,7 @@ public class ExprCompostChance extends SimpleExpression<Integer> {
     protected Integer @NotNull [] get(@NotNull Event e) {
         ItemType i = itemType.getSingle(e);
         if (i != null) {
-            if (Utils.isCompostable(i.getMaterial())) {
+            if (Constants.compostables.contains(i.getMaterial())) {
                 return new Integer[]{Utils.getCompostChance(i.getMaterial())};
             }
         }
