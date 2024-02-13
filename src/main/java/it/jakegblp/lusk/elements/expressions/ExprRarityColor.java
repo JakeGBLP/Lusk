@@ -11,7 +11,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,8 +37,8 @@ public class ExprRarityColor extends SimpleExpression<SkriptColor> {
     @Override
     protected SkriptColor @NotNull [] get(@NotNull Event e) {
         String c = color.getSingle(e);
-        if (Utils.getRarityColors().containsKey(c)) {
-            return new SkriptColor[]{Utils.getRarityColors().get(c)};
+        if (Constants.rarityColors.containsKey(c)) {
+            return new SkriptColor[]{Constants.rarityColors.get(c)};
         } else {
             return new SkriptColor[]{};
         }

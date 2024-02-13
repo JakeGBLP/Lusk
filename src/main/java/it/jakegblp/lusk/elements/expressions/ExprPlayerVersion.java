@@ -6,7 +6,7 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import com.vdurmont.semver4j.Semver;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class ExprPlayerVersion extends SimplePropertyExpression<Player, Semver> 
     @Nullable
     public Semver convert(Player p) {
         if (p != null) {
-            return Utils.getPlayerVersion(p.getProtocolVersion());
+            return Constants.versions.get(p.getProtocolVersion());
         }
         return null;
     }

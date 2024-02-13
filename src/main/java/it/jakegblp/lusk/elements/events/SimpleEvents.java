@@ -15,8 +15,6 @@ import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
-import it.jakegblp.lusk.events.PlayerEntityCollideEvent;
-import it.jakegblp.lusk.events.PlayerShieldUpEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
@@ -273,16 +271,5 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.4");
         }
-        Skript.registerEvent("Player - Entity Collide", SimpleEvent.class, PlayerEntityCollideEvent.class, "player collide [with entity]")
-                .description("""
-                        Called when a player collides with another entity.""")
-                .examples("")
-                .since("1.0.4");
-        Skript.registerEvent("Player - Shield Raise", SimpleEvent.class, PlayerShieldUpEvent.class, "[player] shield (up|on|(use|raise)[d])")
-                .description("""
-                        Called when a player starts defending with a shield.
-                        This event is called right before the shield is used, to use the is defending condition: wait a tick.""")
-                .examples("")
-                .since("1.0.4");
     }
 }

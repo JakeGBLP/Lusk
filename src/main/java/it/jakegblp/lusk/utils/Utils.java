@@ -75,21 +75,6 @@ public class Utils {
     public static boolean canCriticalDamage(Entity e) {
         return (e instanceof Player p && p.getFallDistance() < 0 && !e.isOnGround() && !p.hasPotionEffect(PotionEffectType.BLINDNESS) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING) && !p.isClimbing() && p.getAttackCooldown() > 0.9 && !p.isSprinting() && !p.isInWater() && p.getVehicle() == null);
     }
-
-    private static Entity getCriticalEntity(Event event) {
-        if (event instanceof EntityDamageByEntityEvent damageByEntityEvent) {
-            if (damageByEntityEvent.getDamager() instanceof AbstractArrow arrow) return arrow;
-            return damageByEntityEvent.getDamager();
-        } else if (event instanceof EntityDeathEvent deathEvent) {
-            return getCriticalEntity(deathEvent.getEntity().getLastDamageCause());
-        } else if (event instanceof VehicleDamageEvent vehicleDamageEvent) {
-            return vehicleDamageEvent.getAttacker();
-        } else if (event instanceof VehicleDestroyEvent vehicleDestroyEvent) {
-            return vehicleDestroyEvent.getAttacker();
-        }
-        return null;
-    }
-
     public static int getTotalNeededXP(int level) {
         if (level <= 15)
             return (level * level) + (6 * level);
@@ -112,10 +97,6 @@ public class Utils {
         return (integer % 2 == 0);
     }
 
-    public static boolean isCritical(Event event) {
-        Entity entity = getCriticalEntity(event);
-        return (canCriticalDamage(entity));
-    }
 
     public static Vector toBukkitVector(EulerAngle angle) {
         double x = angle.getX();
