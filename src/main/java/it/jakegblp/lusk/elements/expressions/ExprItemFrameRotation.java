@@ -12,6 +12,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import it.jakegblp.lusk.utils.Constants;
 import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
@@ -41,7 +42,7 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
     protected Integer @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof ItemFrame itemFrame) {
-            Object rawRotationNumber = Utils.getHashMapKeyFromValue(Utils.getItemFrameRotations(), itemFrame.getRotation());
+            Object rawRotationNumber = Utils.getHashMapKeyFromValue(Constants.itemFrameRotations, itemFrame.getRotation());
             if (rawRotationNumber != null) {
                 return new Integer[]{(int) rawRotationNumber};
             }
@@ -61,10 +62,10 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null || !Utils.getItemFrameRotations().containsKey(integer)) return;
+        if (integer == null || !Constants.itemFrameRotations.containsKey(integer)) return;
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof ItemFrame itemFrame) {
-            itemFrame.setRotation(Utils.getItemFrameRotations().get(integer));
+            itemFrame.setRotation(Constants.itemFrameRotations.get(integer));
         }
     }
 
