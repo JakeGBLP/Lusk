@@ -1,7 +1,6 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
-import ch.njol.skript.entity.EntityData;
 import ch.njol.util.VectorMath;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
