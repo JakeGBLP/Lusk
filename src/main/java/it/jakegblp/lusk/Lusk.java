@@ -2,11 +2,9 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
-import it.jakegblp.lusk.listeners.PlayerListener;
-import it.jakegblp.lusk.listeners.ShieldLowerListener;
-import it.jakegblp.lusk.listeners.ShieldRaiseListener;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -33,12 +31,6 @@ public class Lusk extends JavaPlugin {
         @SuppressWarnings("unused")
         Metrics metrics = new Metrics(this, pluginId);
         instance.getLogger().info("Has been enabled!");
-        PluginManager pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(new PlayerListener(this), this);
-        pluginManager.registerEvents(new ShieldRaiseListener(), this);
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerStopUsingItemEvent")) {
-            pluginManager.registerEvents(new ShieldLowerListener(), this);
-        }
         new UpdateChecker(this, 108428).getVersion(version -> {
             String thisVersion = this.getDescription().getVersion();
             if (thisVersion.equals(version)) {
@@ -49,6 +41,9 @@ public class Lusk extends JavaPlugin {
         });
     }
 
+    public void registerListener(Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener,this);
+    }
     @SuppressWarnings("unused")
     public SkriptAddon getAddonInstance() {
         return addon;
