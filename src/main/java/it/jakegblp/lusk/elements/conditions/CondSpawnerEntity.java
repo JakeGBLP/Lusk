@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.2")
 public class CondSpawnerEntity extends PropertyCondition<Entity> {
     static {
-        register(CondSpawnerEntity.class, "[a] spawner entity", "entity");
+        register(CondSpawnerEntity.class, "[a] spawner entity", "entities");
     }
 
     @Override

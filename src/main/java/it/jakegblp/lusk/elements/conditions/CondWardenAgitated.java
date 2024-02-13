@@ -20,10 +20,7 @@ public class CondWardenAgitated extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Warden warden) {
-            return warden.getAngerLevel() == Warden.AngerLevel.AGITATED;
-        }
-        return false;
+        return entity instanceof Warden warden && warden.getAngerLevel() == Warden.AngerLevel.AGITATED;
     }
 
     @Override

@@ -15,15 +15,12 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.4")
 public class CondLeashed extends PropertyCondition<Entity> {
     static {
-        register(CondLeashed.class, "leashed", "entity");
+        register(CondLeashed.class, "leashed", "entities");
     }
 
     @Override
     public boolean check(Entity e) {
-        if (e instanceof LivingEntity livingEntity) {
-            return livingEntity.isLeashed();
-        }
-        return false;
+        return e instanceof LivingEntity livingEntity && livingEntity.isLeashed();
     }
 
     @Override

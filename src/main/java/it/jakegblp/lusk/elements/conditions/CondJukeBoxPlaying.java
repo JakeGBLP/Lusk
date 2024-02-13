@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.3")
 public class CondJukeBoxPlaying extends PropertyCondition<Block> {
     static {
-        register(CondJukeBoxPlaying.class, "playing [[a] ([music] disc|record)]", "block");
+        register(CondJukeBoxPlaying.class, "playing [[a] ([music] disc|record)]", "blocks");
     }
 
     @Override

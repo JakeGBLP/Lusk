@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.elements.conditions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -21,12 +20,7 @@ public class CondWardenCalm extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Warden warden) {
-            return warden.getAngerLevel() == Warden.AngerLevel.CALM;
-        } else {
-            Skript.error("You can only use this condition with Wardens");
-        }
-        return false;
+        return entity instanceof Warden warden && warden.getAngerLevel() == Warden.AngerLevel.CALM;
     }
 
     @Override

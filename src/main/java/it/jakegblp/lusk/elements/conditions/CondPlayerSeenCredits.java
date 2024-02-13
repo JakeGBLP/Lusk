@@ -6,25 +6,26 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import org.bukkit.entity.Player;
-import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Player - is Slim")
-@Description("Checks if a player is slim.")
-@Examples({"if player is slim:"})
+@Name("Has Seen Credits")
+@Description("Checks if a player has seen the end credits.")
+@Examples({"if target has seen the credits:"})
 @Since("1.0.2")
-public class CondSlim extends PropertyCondition<Player> {
+public class CondPlayerSeenCredits extends PropertyCondition<Player> {
+
     static {
-        register(CondSlim.class, "slim", "players");
+        register(CondPlayerSeenCredits.class, PropertyType.HAVE, "seen credits", "players");
     }
 
     @Override
     public boolean check(Player player) {
-        return player != null && player.getPlayerProfile().getTextures().getSkinModel().equals(PlayerTextures.SkinModel.SLIM);
+        return player.hasSeenWinScreen();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "slim";
+        return "seen credits";
     }
+
 }

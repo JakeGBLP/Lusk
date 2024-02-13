@@ -13,50 +13,52 @@ import org.bukkit.entity.EntityType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static it.jakegblp.lusk.utils.Utils.Version;
+
 public class Constants {
 
-    public static final Semver serverVersion = new Semver(String.valueOf(Skript.getMinecraftVersion()));
+    public static final Semver serverVersion = Version(String.valueOf(Skript.getMinecraftVersion()));
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
-        put(4, new Semver("1.7.5"));
-        put(5, new Semver("1.7.10"));
-        put(47, new Semver("1.8.9"));
-        put(107, new Semver("1.9.0"));
-        put(108, new Semver("1.9.1"));
-        put(109, new Semver("1.9.2"));
-        put(110, new Semver("1.9.4"));
-        put(210, new Semver("1.10.2"));
-        put(315, new Semver("1.11.0"));
-        put(316, new Semver("1.11.2"));
-        put(335, new Semver("1.12.0"));
-        put(338, new Semver("1.12.1"));
-        put(340, new Semver("1.12.2"));
-        put(393, new Semver("1.13.0"));
-        put(401, new Semver("1.13.1"));
-        put(404, new Semver("1.13.2"));
-        put(477, new Semver("1.14.0"));
-        put(480, new Semver("1.14.1"));
-        put(485, new Semver("1.14.2"));
-        put(490, new Semver("1.14.3"));
-        put(498, new Semver("1.14.4"));
-        put(573, new Semver("1.15.0"));
-        put(575, new Semver("1.15.1"));
-        put(577, new Semver("1.15.2"));
-        put(735, new Semver("1.16.0"));
-        put(736, new Semver("1.16.1"));
-        put(751, new Semver("1.16.2"));
-        put(753, new Semver("1.16.3"));
-        put(754, new Semver("1.16.5"));
-        put(755, new Semver("1.17.0"));
-        put(756, new Semver("1.17.1"));
-        put(757, new Semver("1.18.1"));
-        put(758, new Semver("1.18.2"));
-        put(759, new Semver("1.19.0"));
-        put(760, new Semver("1.19.2"));
-        put(761, new Semver("1.19.3"));
-        put(762, new Semver("1.19.4"));
-        put(763, new Semver("1.20.1"));
-        put(764, new Semver("1.20.2"));
-        put(765, new Semver("1.20.4"));
+        put(4, Version("1.7.5"));
+        put(5, Version("1.7.10"));
+        put(47, Version("1.8.9"));
+        put(107, Version("1.9"));
+        put(108, Version("1.9.1"));
+        put(109, Version("1.9.2"));
+        put(110, Version("1.9.4"));
+        put(210, Version("1.10.2"));
+        put(315, Version("1.11.0"));
+        put(316, Version("1.11.2"));
+        put(335, Version("1.12.0"));
+        put(338, Version("1.12.1"));
+        put(340, Version("1.12.2"));
+        put(393, Version("1.13"));
+        put(401, Version("1.13.1"));
+        put(404, Version("1.13.2"));
+        put(477, Version("1.14.0"));
+        put(480, Version("1.14.1"));
+        put(485, Version("1.14.2"));
+        put(490, Version("1.14.3"));
+        put(498, Version("1.14.4"));
+        put(573, Version("1.15"));
+        put(575, Version("1.15.1"));
+        put(577, Version("1.15.2"));
+        put(735, Version("1.16.0"));
+        put(736, Version("1.16.1"));
+        put(751, Version("1.16.2"));
+        put(753, Version("1.16.3"));
+        put(754, Version("1.16.5"));
+        put(755, Version("1.17"));
+        put(756, Version("1.17.1"));
+        put(757, Version("1.18.1"));
+        put(758, Version("1.18.2"));
+        put(759, Version("1.19"));
+        put(760, Version("1.19.2"));
+        put(761, Version("1.19.3"));
+        put(762, Version("1.19.4"));
+        put(763, Version("1.20.1"));
+        put(764, Version("1.20.2"));
+        put(765, Version("1.20.4"));
     }};
     public static final HashMap<String, SkriptColor> rarityColors = new HashMap<>() {{
         put("COMMON", SkriptColor.WHITE);
@@ -71,7 +73,7 @@ public class Constants {
         put(Material.GLOW_BERRIES, 30);
         put(Material.SHORT_GRASS, 30);
         put(Material.HANGING_ROOTS, 30);
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             put(Material.MANGROVE_ROOTS, 30);
         }
         put(Material.KELP, 30);
@@ -185,18 +187,18 @@ public class Constants {
         add(Material.DARK_OAK_WOOD);
         add(Material.ACACIA_LOG);
         add(Material.ACACIA_WOOD);
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             add(Material.MANGROVE_LOG);
             add(Material.MANGROVE_WOOD);
         }
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.16.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.16"))) {
             add(Material.CRIMSON_HYPHAE);
             add(Material.CRIMSON_STEM);
             add(Material.WARPED_HYPHAE);
             add(Material.WARPED_STEM);
         }
     }},waxables = new ArrayList<>() {{
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.17.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.17"))) {
             add(Material.OXIDIZED_COPPER);
             add(Material.OXIDIZED_CUT_COPPER);
             add(Material.OXIDIZED_CUT_COPPER_SLAB);
@@ -226,7 +228,7 @@ public class Constants {
     }},axeables = new ArrayList<>() {{
         addAll(waxables);
         addAll(strippables);
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.20.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.20"))) {
             add(Material.OAK_HANGING_SIGN);
             add(Material.SPRUCE_HANGING_SIGN);
             add(Material.BIRCH_HANGING_SIGN);
@@ -246,7 +248,7 @@ public class Constants {
         add(Material.JUNGLE_SAPLING);
         add(Material.DARK_OAK_SAPLING);
         add(Material.ACACIA_SAPLING);
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             add(Material.MANGROVE_PROPAGULE);
         }
     }},leaves = new ArrayList<>() {{
@@ -257,7 +259,7 @@ public class Constants {
         add(Material.DARK_OAK_LEAVES);
         add(Material.ACACIA_LEAVES);
         add(Material.AZALEA_LEAVES);
-        if (serverVersion.isGreaterThanOrEqualTo(new Semver("1.19.0"))) {
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             add(Material.MANGROVE_LEAVES);
         }
     }},flowers = new ArrayList<>() {{
@@ -289,7 +291,7 @@ public class Constants {
         add(EntityUtils.toSkriptEntityData(EntityType.PANDA));
         add(EntityUtils.toSkriptEntityData(EntityType.FOX));
     }};
-    public static final Semver skriptVersion = new Semver(Skript.getVersion().toString());
+    public static final Semver skriptVersion = Version(Skript.getVersion().toString());
     public static final HashMap<Integer, Rotation> itemFrameRotations = new HashMap<>() {{
         put(0, Rotation.NONE);
         put(45, Rotation.CLOCKWISE_45);

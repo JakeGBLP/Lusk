@@ -21,10 +21,7 @@ public class CondSignEditable extends PropertyCondition<Block> {
 
     @Override
     public boolean check(Block block) {
-        if (block.getState() instanceof Sign sign) {
-            return sign.isEditable();
-        }
-        return false;
+        return block.getState() instanceof Sign sign && !sign.isWaxed();
     }
 
     @Override

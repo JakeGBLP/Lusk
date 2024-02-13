@@ -2,17 +2,12 @@ package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.util.VectorMath;
+import com.vdurmont.semver4j.Semver;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.vehicle.VehicleDamageEvent;
-import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -23,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Utils {
+    public static Semver Version(String s) {
+        return new Semver(s, Semver.SemverType.LOOSE);
+    }
     public static boolean isCrawling(Player player) {
         if (!player.isSwimming() && !player.isGliding()) {
             return Math.round(player.getHeight() * 10) == 6;
@@ -45,6 +43,7 @@ public class Utils {
         return itemTypes;
     }
 
+    // I really need to drop this
     public static Object getBlockDataTag(BlockData blockData, String tag) {
         String fullData = blockData.getAsString();
         if (fullData.contains("[")) {

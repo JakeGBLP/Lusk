@@ -19,22 +19,12 @@ public class CondEntityConverting extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Hoglin hoglin) {
-            return hoglin.isConverting();
-        } else if (entity instanceof Husk husk) {
-            return husk.isConverting();
-        } else if (entity instanceof Piglin piglin) {
-            return piglin.isConverting();
-        } else if (entity instanceof PigZombie pigZombie) {
-            return pigZombie.isConverting();
-        } else if (entity instanceof Skeleton skeleton) {
-            return skeleton.isConverting();
-        } else if (entity instanceof ZombieVillager zombieVillager) {
-            return zombieVillager.isConverting();
-        } else if (entity instanceof Zombie zombie) {
-            return zombie.isConverting();
-        }
-        return false;
+        return  (entity instanceof ZombieVillager zombieVillager && zombieVillager.isConverting()) ||
+                (entity instanceof PiglinAbstract piglin && piglin.isConverting()) ||
+                (entity instanceof Skeleton skeleton && skeleton.isConverting()) ||
+                (entity instanceof Hoglin hoglin && hoglin.isConverting()) ||
+                (entity instanceof Zombie zombie && zombie.isConverting()) ||
+                (entity instanceof Husk husk && husk.isConverting());
     }
 
     @Override

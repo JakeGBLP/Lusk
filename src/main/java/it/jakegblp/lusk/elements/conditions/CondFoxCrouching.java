@@ -20,10 +20,7 @@ public class CondFoxCrouching extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Fox fox) {
-            return fox.isCrouching();
-        }
-        return false;
+        return entity instanceof Fox fox && fox.isCrouching();
     }
 
     @Override

@@ -20,10 +20,7 @@ public class CondFoxDefending extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Fox fox) {
-            return fox.isDefending();
-        }
-        return false;
+        return entity instanceof Fox fox && fox.isDefending();
     }
 
     @Override

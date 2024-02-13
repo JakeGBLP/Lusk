@@ -5,9 +5,10 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import com.vdurmont.semver4j.Semver;
 import com.vdurmont.semver4j.SemverException;
 import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.Utils.Version;
 
 @Name("Version - is Valid")
 @Description("Checks if the string is a valid version")
@@ -16,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 public class CondVersionValid extends PropertyCondition<String> {
 
     static {
-        register(CondVersionValid.class, "[a] valid version", "string");
+        register(CondVersionValid.class, "[a] valid version[s]", "strings");
     }
 
     @Override
     public boolean check(String version) {
         try {
-            new Semver(version, Semver.SemverType.LOOSE);
+            Version(version);
         } catch (SemverException e) {
             return false;
         }
@@ -31,6 +32,6 @@ public class CondVersionValid extends PropertyCondition<String> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "a valid version";
+        return "valid version";
     }
 }

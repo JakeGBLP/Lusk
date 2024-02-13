@@ -15,15 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public class CondUnderwater extends PropertyCondition<Entity> {
 
     static {
-        register(CondUnderwater.class, "underwater", "entity");
+        register(CondUnderwater.class, "underwater", "entities");
     }
 
     @Override
     public boolean check(Entity entity) {
-        if (entity != null) {
-            return entity.isUnderWater();
-        }
-        return false;
+        return entity.isUnderWater();
     }
 
     @Override

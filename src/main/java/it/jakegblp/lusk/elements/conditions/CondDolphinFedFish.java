@@ -5,26 +5,28 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.SkeletonHorse;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Skeleton Horse - is Trapped")
-@Description("Checks if a skeleton horse is trapped.")
-@Examples({"on damage of skeleton horse:\n\tif victim is trapped:\n\t\tcancel event"})
+@Name("Dolphin - Has Fish")
+@Description("Checks if a dolphin has a fish.")
+@Examples({"on damage:\n\tif victim has a fish:\n\t\tbroadcast \"It has a fish!\""})
 @Since("1.0.3")
-public class CondSkeletonHorseTrapped extends PropertyCondition<LivingEntity> {
+public class CondDolphinFedFish extends PropertyCondition<LivingEntity> {
+
     static {
-        register(CondSkeletonHorseTrapped.class, "trapped", "livingentities");
+        register(CondDolphinFedFish.class, PropertyType.HAVE, "been fed fish", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        return entity instanceof SkeletonHorse skeletonHorse && skeletonHorse.isTrapped();
+        return entity instanceof Dolphin dolphin && dolphin.hasFish();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "trapped";
+        return "been fed fish";
     }
+
 }

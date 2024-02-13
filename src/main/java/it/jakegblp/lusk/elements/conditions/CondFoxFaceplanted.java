@@ -20,10 +20,7 @@ public class CondFoxFaceplanted extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Fox fox) {
-            return fox.isFaceplanted();
-        }
-        return false;
+        return entity instanceof Fox fox && fox.isFaceplanted();
     }
 
     @Override

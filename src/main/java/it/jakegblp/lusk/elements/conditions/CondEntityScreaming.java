@@ -21,12 +21,7 @@ public class CondEntityScreaming extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Goat goat) {
-            return goat.isScreaming();
-        } else if (entity instanceof Enderman enderman) {
-            return enderman.isScreaming();
-        }
-        return false;
+        return (entity instanceof Goat goat && goat.isScreaming()) || (entity instanceof Enderman enderman && enderman.isScreaming());
     }
 
     @Override

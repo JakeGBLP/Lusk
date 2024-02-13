@@ -13,17 +13,14 @@ import org.jetbrains.annotations.NotNull;
 @Description("Checks if a cat is laying down.")
 @Examples({"on damage of cat:\n\tif victim is laying down:\n\t\tcancel event"})
 @Since("1.0.3")
-public class CondCatLyingDown extends PropertyCondition<LivingEntity> {
+public class CondCatIsLyingDown extends PropertyCondition<LivingEntity> {
     static {
-        register(CondCatLyingDown.class, "lying down", "livingentities");
+        register(CondCatIsLyingDown.class, "lying down", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Cat cat) {
-            return cat.isLyingDown();
-        }
-        return false;
+        return entity instanceof Cat cat && cat.isLyingDown();
     }
 
     @Override

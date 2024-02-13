@@ -20,10 +20,7 @@ public class CondLlamaInCaravan extends PropertyCondition<Entity> {
 
     @Override
     public boolean check(Entity entity) {
-        if (entity instanceof Llama llama) {
-            return llama.inCaravan();
-        }
-        return false;
+        return entity instanceof Llama llama && llama.inCaravan();
     }
 
     @Override
