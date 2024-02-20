@@ -37,7 +37,7 @@ public class CondAllayCanBeDuplicated extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event != null ? entityExpression.getSingle(event) : "") + " can" + (isNegated() ? "'t" : "") + " be duplicated";
+        return (event != null ? entityExpression.toString(event,debug) : "") + " can" + (isNegated() ? "'t" : "") + " be duplicated";
     }
 
     @Override

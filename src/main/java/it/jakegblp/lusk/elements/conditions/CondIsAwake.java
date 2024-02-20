@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Entity - is Awake")
 @Description("Checks the current waking state of a living entity.")
-@Examples({"on damage of bat:\n\tcancel event if victim is not awake"})
+@Examples({"on damage:\n\tcancel event if victim is not awake"})
 @Since("1.0.0")
-public class CondBatAwake extends PropertyCondition<LivingEntity> {
+public class CondIsAwake extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondBatAwake.class, "awake", "livingentities");
+        register(CondIsAwake.class, "awake", "livingentities");
     }
 
     @Override
