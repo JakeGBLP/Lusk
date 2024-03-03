@@ -16,13 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Item - Can Be Enchanted with")
-@Description("Checks if an item can be enchanted with an Enchantment.")
+@Description("Checks if an item can be enchanted with an Enchantment.\nThis does not check if the enchantment conflicts with any enchantments already applied on the item.")
 @Examples({"if tool of player can be enchanted with sharpness:"})
 @Since("1.0.0")
 public class CondCanBeEnchanted extends Condition {
     static {
-        Skript.registerCondition(CondCanBeEnchanted.class, "%itemstack% can be enchanted with %enchantment%",
-                "%itemstack% can(n't|not) be enchanted with %enchantment%");
+        Skript.registerCondition(CondCanBeEnchanted.class, "%itemstack% can[no:('|no)t] be enchanted with %enchantment%");
     }
 
     private Expression<ItemStack> item;
@@ -33,14 +32,14 @@ public class CondCanBeEnchanted extends Condition {
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         item = (Expression<ItemStack>) expressions[0];
         enchantment = (Expression<Enchantment>) expressions[1];
-        setNegated(matchedPattern == 1);
+        setNegated(parser.hasTag("no"));
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        assert event != null;
-        return item.getSingle(event) + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + enchantment.getSingle(event);
+        boolean e = event != null;
+        return (e ? item.toString(event,debug) : "") + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + (e ? enchantment.toString(event,debug) : "");
     }
 
     @Override

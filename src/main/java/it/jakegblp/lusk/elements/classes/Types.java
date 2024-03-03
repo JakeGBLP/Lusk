@@ -2,14 +2,11 @@ package it.jakegblp.lusk.elements.classes;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.EnumClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 import com.vdurmont.semver4j.Semver;
-import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.wrappers.EnumWrapper;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.banner.PatternType;
@@ -143,7 +140,6 @@ public class Types {
                     .since("1.0.2"));
         }
         if (Skript.classExists("org.bukkit.entity.EnderDragon$Phase") && Classes.getExactClassInfo(EnderDragon.Phase.class) == null) {
-            Lusk.getInstance().getLogger().info("enderdragonphase enum loaded");
             EnumWrapper<EnderDragon.Phase> ENDERDRAGONPHASE_ENUM = new EnumWrapper<>(EnderDragon.Phase.class);
             Classes.registerClass(ENDERDRAGONPHASE_ENUM.getClassInfo("enderdragonphase")
                      .user("ender ?dragon ? phases?")
