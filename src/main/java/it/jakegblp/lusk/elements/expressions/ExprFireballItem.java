@@ -13,6 +13,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.SizedFireball;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprFireballItem extends SimpleExpression<ItemStack> {
     static {
         Skript.registerExpression(ExprFireballItem.class, ItemStack.class, ExpressionType.COMBINED,
-                "[the] [displayed] fireball item of %entity%");
+                "[the] [displayed] fireball item of %entity%",
+                "%entity%'[s] [displayed] fireball item");
     }
 
     private Expression<Entity> entityExpression;
@@ -47,21 +49,14 @@ public class ExprFireballItem extends SimpleExpression<ItemStack> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(ItemStack[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{ItemStack.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        ItemStack itemStack = delta instanceof ItemStack[] ? ((ItemStack[]) delta)[0] : null;
-        if (itemStack == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof SizedFireball fireball) {
-            fireball.setDisplayItem(itemStack);
-        }
+        if (delta[0] instanceof ItemStack itemStack)
+            if (entityExpression.getSingle(e) instanceof SizedFireball fireball) fireball.setDisplayItem(itemStack);
     }
 
     @Override
@@ -76,6 +71,6 @@ public class ExprFireballItem extends SimpleExpression<ItemStack> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the displayed fireball item of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the displayed fireball item of " + (e == null ? "" : entityExpression.toString(e, debug));
     }
 }

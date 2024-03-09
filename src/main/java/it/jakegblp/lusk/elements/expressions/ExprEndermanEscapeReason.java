@@ -15,15 +15,14 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 @Name("Enderman - Escape Reason")
 @Description("Returns the Escape Reason in an Enderman Escape Event.\nThis Expression requires Paper.")
 @Examples({"on enderman escape:\n\tbroadcast event-enderman escape reason"})
 @Since("1.0.0")
-public class ExprEscapeReason extends SimpleExpression<EndermanEscapeEvent.Reason> {
+public class ExprEndermanEscapeReason extends SimpleExpression<EndermanEscapeEvent.Reason> {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.entity.EndermanEscapeEvent")) {
-            Skript.registerExpression(ExprEscapeReason.class, EndermanEscapeEvent.Reason.class, ExpressionType.SIMPLE,
+            Skript.registerExpression(ExprEndermanEscapeReason.class, EndermanEscapeEvent.Reason.class, ExpressionType.SIMPLE,
                     "(the |event-)enderman escape reason");
         }
     }

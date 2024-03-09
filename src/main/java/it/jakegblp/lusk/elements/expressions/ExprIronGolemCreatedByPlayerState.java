@@ -20,12 +20,15 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Iron Golem - Created By a Player State")
 @Description("Returns whether or not an iron golem was created by a player.\nCan be set.")
-@Examples({"broadcast head up state of target"})
+@Examples({"broadcast whether the iron golem target was created by a player"})
 @Since("1.0.3")
 public class ExprIronGolemCreatedByPlayerState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprIronGolemCreatedByPlayerState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [iron golem] [was] (created|built) by ([a] player|players) state of %entity%");
+                "[the] iron golem [was] created by a player state of %entity%",
+                "%entity%'[s] iron golem [was] created by a player state",
+                "whether [the] iron golem %entity% was created by a player [or not]",
+                "whether [or not] [the] iron golem %entity% was created by a player");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +49,15 @@ public class ExprIronGolemCreatedByPlayerState extends SimpleExpression<Boolean>
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof IronGolem ironGolem) {
-            ironGolem.setPlayerCreated(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof IronGolem ironGolem)
+                ironGolem.setPlayerCreated(aBoolean);
     }
 
     @Override
@@ -75,6 +72,6 @@ public class ExprIronGolemCreatedByPlayerState extends SimpleExpression<Boolean>
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the iron golem was created by a player state of  " + (e == null ? "" : entityExpression.getSingle(e));
+        return "whether or not the iron golem "+ (e == null ? "" : entityExpression.toString(e,debug))+" was created by a player";
     }
 }

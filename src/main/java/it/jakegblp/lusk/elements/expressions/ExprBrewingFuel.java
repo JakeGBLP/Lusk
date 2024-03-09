@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBrewingFuel extends SimpleExpression<ItemType> {
     static {
         Skript.registerExpression(ExprBrewingFuel.class, ItemType.class, ExpressionType.COMBINED,
-                "[the] brewing fuel of %block%");
+                "[the] brewing fuel of %block%","%block%'[s] brewing fuel");
     }
 
     private Expression<Block> blockExpression;
@@ -42,37 +42,27 @@ public class ExprBrewingFuel extends SimpleExpression<ItemType> {
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
-                BrewerInventory brewerInventory = brewingStand.getInventory();
-                if (brewerInventory.getFuel() != null) {
-                    return new ItemType[]{new ItemType(brewerInventory.getFuel())};
-                }
+        if (block != null && block.getState() instanceof BrewingStand brewingStand) {
+            BrewerInventory brewerInventory = brewingStand.getInventory();
+            if (brewerInventory.getFuel() != null) {
+                return new ItemType[]{new ItemType(brewerInventory.getFuel())};
             }
         }
         return new ItemType[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(ItemType[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{ItemType.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        ItemType itemType = delta instanceof ItemType[] ? ((ItemType[]) delta)[0] : null;
-        if (itemType == null) return;
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
-                BrewerInventory brewerInventory = brewingStand.getInventory();
-                brewerInventory.setFuel(itemType.getRandom());
+        if (delta[0] instanceof ItemType itemType) {
+            Block block = blockExpression.getSingle(e);
+            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
+                brewingStand.getInventory().setFuel(itemType.getRandom());
+                brewingStand.update();
             }
         }
     }
@@ -89,6 +79,6 @@ public class ExprBrewingFuel extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the total brewing fuel of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the brewing fuel of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

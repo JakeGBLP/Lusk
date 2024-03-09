@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprMaxEnchantLevel extends SimplePropertyExpression<Enchantment, Integer> {
     static {
-        register(ExprMaxEnchantLevel.class, Integer.class, "max[imum] [enchant[ment]] level", "enchantment");
+        register(ExprMaxEnchantLevel.class, Integer.class, "max[imum] enchant[ment] level", "enchantment");
     }
 
     @Override
@@ -25,14 +25,11 @@ public class ExprMaxEnchantLevel extends SimplePropertyExpression<Enchantment, I
 
     @Nullable
     public Integer convert(Enchantment enchantment) {
-        if (enchantment != null) {
-            return enchantment.getMaxLevel();
-        }
-        return null;
+        return enchantment.getMaxLevel();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "max enchantment level";
+        return "maximum enchantment level";
     }
 }

@@ -28,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
     static {
         Skript.registerExpression(ExprJukeBoxRecord.class, ItemType.class, ExpressionType.COMBINED,
-                "[the] ([music] disc|record) (inside [of]|of|[with]in) %block%",
-                "%block%'[s] ([music] disc|record)");
+                "[the] [music] (disc|record) (of|[with]in) %block%",
+                "%block%'[s] [music] (disc|record)");
     }
 
     private Expression<Block> blockExpression;
@@ -52,24 +52,21 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-            return CollectionUtils.array(ItemStack[].class);
-        } else {
-            return new Class[0];
+            return new Class[]{ItemStack[].class};
         }
+        return null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Jukebox jukebox) {
-            if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-                jukebox.setRecord(new ItemStack(Material.AIR));
-            } else {
-                ItemStack itemStack = delta instanceof ItemStack[] ? ((ItemStack[]) delta)[0] : null;
-                if (itemStack != null) jukebox.setRecord(itemStack);
-            }
+        if (block != null && block.getState() instanceof Jukebox jukebox) {
+            if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE)
+                jukebox.setRecord(null);
+            else if (delta[0] instanceof ItemStack itemStack)
+                jukebox.setRecord(itemStack);
             jukebox.update();
         }
     }
@@ -86,6 +83,6 @@ public class ExprJukeBoxRecord extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the music disc of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the music disc of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

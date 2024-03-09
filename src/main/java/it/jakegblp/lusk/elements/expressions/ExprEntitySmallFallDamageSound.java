@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Sound this entity will make when falling from a small height.")
 @Examples({"broadcast small fall damage sound of target"})
 @Since("1.0.4")
-public class ExprEntitySmallFallDamageSound extends SimplePropertyExpression<Entity, String> {
+public class ExprEntitySmallFallDamageSound extends SimplePropertyExpression<LivingEntity, String> {
     static {
-        register(ExprEntitySmallFallDamageSound.class, String.class, "small fall damage sound", "entity");
+        register(ExprEntitySmallFallDamageSound.class, String.class, "small fall damage sound", "livingentities");
     }
 
     @Override
@@ -26,11 +26,8 @@ public class ExprEntitySmallFallDamageSound extends SimplePropertyExpression<Ent
 
     @Override
     @Nullable
-    public String convert(Entity e) {
-        if (e instanceof LivingEntity entity) {
-            return entity.getFallDamageSoundSmall().name();
-        }
-        return null;
+    public String convert(LivingEntity e) {
+        return e.getFallDamageSoundSmall().name();
     }
 
     @Override

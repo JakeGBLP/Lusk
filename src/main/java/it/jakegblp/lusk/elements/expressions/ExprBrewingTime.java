@@ -27,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBrewingTime extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] brewing time of %block%");
+                "[the] brewing time of %block%",
+                "%block%'[s] brewing time");
     }
 
     private Expression<Block> blockExpression;
@@ -51,22 +52,15 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Timespan[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return (mode == Changer.ChangeMode.SET) ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-        if (timespan == null) return;
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
+        if (delta[0] instanceof Timespan timespan) {
+            Block block = blockExpression.getSingle(e);
+            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 brewingStand.setBrewingTime(((int) timespan.getTicks()));
                 brewingStand.update();
             }
@@ -85,6 +79,6 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing time of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the brewing time of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

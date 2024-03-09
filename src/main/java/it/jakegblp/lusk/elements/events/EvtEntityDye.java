@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 @SuppressWarnings("unused")
-public class EvtDye extends SkriptEvent {
+public class EvtEntityDye extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityDyeEvent")) {
-            Skript.registerEvent("Entity - Dye Event", EvtDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")
+            Skript.registerEvent("Entity - on Dye", EvtEntityDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")
                     .description("This Event requires Paper.\n\nCalled when a player dyes an entity (Wolf, Cat or sheep).")
                     .examples("on dye of sheep:\n\tbroadcast the dye color")
                     .since("1.0.0");
@@ -37,9 +37,7 @@ public class EvtDye extends SkriptEvent {
 
     @Override
     public boolean check(@NotNull Event e) {
-        if (types == null) {
-            return true;
-        }
+        if (types == null) return true;
         for (EntityData<?> type : types) {
             if (type != null) {
                 if (type.isInstance(((EntityDyeEvent) e).getEntity())) {

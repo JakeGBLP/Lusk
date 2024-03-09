@@ -26,9 +26,7 @@ public class ExprWorldBorderChangeSize extends SimpleExpression<Double> {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             Skript.registerExpression(ExprWorldBorderChangeSize.class, Double.class, ExpressionType.SIMPLE,
-                    "[the] old size",
-                    "[the] new size",
-                    "[the] size");
+                    "[the] [future|:past] world[ ]border size");
         }
     }
 
@@ -36,65 +34,40 @@ public class ExprWorldBorderChangeSize extends SimpleExpression<Double> {
     private boolean set;
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
+        past = parseResult.hasTag("past");
         if (getParser().isCurrentEvent(WorldBorderBoundsChangeEvent.class)) {
-            if (matchedPattern == 0) {
-                past = true;
-            } else if (matchedPattern == 1) {
-                past = false;
-            }
             set = true;
             return true;
         } else if (getParser().isCurrentEvent(WorldBorderBoundsChangeFinishEvent.class)) {
-            if (matchedPattern == 0) {
-                past = true;
-            } else if (matchedPattern == 1) {
-                past = false;
-            }
             set = false;
             return true;
         }
-
         Skript.error("This expression can only be used in the World Border Change events.!");
         return false;
     }
 
     @Override
     protected Double @NotNull [] get(@NotNull Event e) {
-        Double i = null;
+        double i;
         if (e instanceof WorldBorderBoundsChangeEvent event) {
-            if (past) {
-                i = event.getOldSize();
-            } else {
-                i = event.getNewSize();
-            }
+            i = past ? event.getOldSize() : event.getNewSize();
+            return new Double[]{i};
         } else if (e instanceof WorldBorderBoundsChangeFinishEvent event) {
-            if (past) {
-                i = event.getOldSize();
-            } else {
-                i = event.getNewSize();
-            }
-        }
-        if (i != null) {
+            i = past ? event.getOldSize() : event.getNewSize();
             return new Double[]{i};
         }
         return new Double[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (set) {
-            if (mode == Changer.ChangeMode.SET) {
-                return CollectionUtils.array(Double[].class);
-            }
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return set && mode == Changer.ChangeMode.SET ? new Class[]{Double.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Double aDouble = delta instanceof Double[] ? ((Double[]) delta)[0] : null;
-        if (aDouble == null) return;
-        ((WorldBorderBoundsChangeEvent) e).setNewSize(aDouble);
+        if (delta[0] instanceof Double aDouble)
+            ((WorldBorderBoundsChangeEvent) e).setNewSize(aDouble);
     }
 
     @Override
@@ -109,6 +82,6 @@ public class ExprWorldBorderChangeSize extends SimpleExpression<Double> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (past == null ? "" : (past ? " past" : " future")) + " size";
+        return "the" + (past == null ? "" : (past ? " past" : " future")) + " worldborder size";
     }
 }

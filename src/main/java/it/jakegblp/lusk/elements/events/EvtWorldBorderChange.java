@@ -4,10 +4,14 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import ch.njol.util.coll.CollectionUtils;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeFinishEvent;
 import io.papermc.paper.event.world.border.WorldBorderCenterChangeEvent;
+import io.papermc.paper.event.world.border.WorldBorderEvent;
+import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtWorldBorderChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
-            Skript.registerEvent("WorldBorder - Change/Center Change Event", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
+            Skript.registerEvent("WorldBorder - on Change/Center Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
                             "world[ ]border start chang(e|ing)",
                             "world[ ]border stop chang(e|ing)",
                             "world[ ]border center change"
@@ -30,6 +34,12 @@ public class EvtWorldBorderChange extends SkriptEvent {
                                 broadcast "not instant"
                             """)
                     .since("1.0.2");
+            EventValues.registerEventValue(WorldBorderEvent.class, World.class, new Getter<>() {
+                @Override
+                public @NotNull World get(final WorldBorderEvent e) {
+                    return e.getWorld();
+                }
+            }, 0);
         }
     }
 

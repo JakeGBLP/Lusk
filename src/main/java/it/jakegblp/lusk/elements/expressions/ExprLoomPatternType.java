@@ -21,21 +21,21 @@ import org.jetbrains.annotations.Nullable;
 @Name("Loom Pattern Type")
 @Description("Gets the pattern type selected in a Loom Pattern Select event")
 @Examples("""
-        on pattern select of border:
-          set pattern to creeper
+on pattern select of border:
+  set the loom pattern to creeper
 
-        on pattern select:
-          broadcast event-patterntype
+on pattern select:
+  broadcast loom pattern
 
-        on pattern select of bricks:
-          broadcast the selected pattern
-          """)
+on pattern select of bricks:
+  broadcast the selected loom pattern
+""")
 @Since("1.0.0")
 public class ExprLoomPatternType extends SimpleExpression<PatternType> {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
             Skript.registerExpression(ExprLoomPatternType.class, PatternType.class, ExpressionType.SIMPLE,
-                    "[the] [selected] [loom] [banner] pattern [type]");
+                    "[the] [selected] loom [banner] pattern [type]");
         }
     }
 
@@ -53,18 +53,14 @@ public class ExprLoomPatternType extends SimpleExpression<PatternType> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(PatternType[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{PatternType.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        PatternType patternType = delta instanceof PatternType[] ? ((PatternType[]) delta)[0] : null;
-        if (patternType == null) return;
-        ((PlayerLoomPatternSelectEvent) e).setPatternType(patternType);
+        if (delta[0] instanceof PatternType patternType)
+            ((PlayerLoomPatternSelectEvent) e).setPatternType(patternType);
     }
 
     @Override

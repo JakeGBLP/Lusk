@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBeaconNewEffects extends SimpleExpression<PotionEffectType> {
     static {
         Skript.registerExpression(ExprBeaconNewEffects.class, PotionEffectType.class, ExpressionType.SIMPLE,
-                "[the] [new] primary [beacon] [potion] effect [type]",
+                "[the] [new] (:primary|secondary) [beacon] [potion] effect [type]",
                 "[the] [new] secondary [beacon] [potion] effect [type]");
     }
 
@@ -36,40 +36,28 @@ public class ExprBeaconNewEffects extends SimpleExpression<PotionEffectType> {
             Skript.error("This expression can only be used in the Beacon Effect Change Event!");
             return false;
         }
-        primary = matchedPattern == 0;
+        primary = parseResult.hasTag("primary");
         return true;
     }
 
     @Override
     protected PotionEffectType @NotNull [] get(@NotNull Event e) {
         PlayerChangeBeaconEffectEvent event = ((PlayerChangeBeaconEffectEvent) e);
-        PotionEffectType potionEffectType;
-        if (primary) {
-            potionEffectType = event.getPrimary();
-        } else {
-            potionEffectType = event.getSecondary();
-        }
+        PotionEffectType potionEffectType = primary ? event.getPrimary() : event.getSecondary();
         return new PotionEffectType[]{potionEffectType};
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(PotionEffectType[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{PotionEffectType.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        PotionEffectType potionEffectType = delta instanceof PotionEffectType[] ? ((PotionEffectType[]) delta)[0] : null;
-        if (potionEffectType == null) return;
-        PlayerChangeBeaconEffectEvent event = ((PlayerChangeBeaconEffectEvent) e);
-        if (primary) {
-            event.setPrimary(potionEffectType);
-        } else {
-            event.setSecondary(potionEffectType);
+        if (delta[0] instanceof PotionEffectType potionEffectType) {
+            PlayerChangeBeaconEffectEvent event = ((PlayerChangeBeaconEffectEvent) e);
+            if (primary) event.setPrimary(potionEffectType);
+            else event.setSecondary(potionEffectType);
         }
     }
 

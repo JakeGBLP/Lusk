@@ -22,6 +22,7 @@ public class Lusk extends JavaPlugin {
     public void onEnable() {
         instance = this;
         addon = Skript.registerAddon(this);
+        addon.setLanguageFileDirectory("lang");
         try {
             addon.loadClasses("it.jakegblp.lusk", "elements");
         } catch (IOException e) {

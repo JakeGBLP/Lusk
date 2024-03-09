@@ -27,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprItemFrameRotation extends SimpleExpression<Integer> {
     static {
         Skript.registerExpression(ExprItemFrameRotation.class, Integer.class, ExpressionType.COMBINED,
-                "[the] item frame rotation of %entity%");
+                "[the] item[ ]frame rotation of %entity%",
+                "%entity%'[s] item[ ]frame rotation");
     }
 
     private Expression<Entity> entityExpression;
@@ -51,22 +52,15 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Integer.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null || !Constants.itemFrameRotations.containsKey(integer)) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof ItemFrame itemFrame) {
-            itemFrame.setRotation(Constants.itemFrameRotations.get(integer));
-        }
+        if (delta[0] instanceof Integer integer && Constants.itemFrameRotations.containsKey(integer))
+            if (entityExpression.getSingle(e) instanceof ItemFrame itemFrame)
+                itemFrame.setRotation(Constants.itemFrameRotations.get(integer));
     }
 
     @Override
@@ -81,6 +75,6 @@ public class ExprItemFrameRotation extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the itemframe rotation of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the itemframe rotation of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

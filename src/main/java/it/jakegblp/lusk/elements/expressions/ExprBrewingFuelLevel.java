@@ -26,7 +26,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
     static {
         Skript.registerExpression(ExprBrewingFuelLevel.class, Integer.class, ExpressionType.COMBINED,
-                "[the] brewing fuel level of %block%");
+                "[the] brewing fuel level of %block%",
+                "%block%'[s] brewing fuel level");
     }
 
     private Expression<Block> blockExpression;
@@ -40,32 +41,22 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
-                return new Integer[]{brewingStand.getFuelLevel()};
-            }
+        if (block != null && block.getState() instanceof BrewingStand brewingStand) {
+            return new Integer[]{brewingStand.getFuelLevel()};
         }
         return new Integer[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Integer.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null) return;
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
+        if (delta[0] instanceof Integer integer) {
+            Block block = blockExpression.getSingle(e);
+            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 brewingStand.setFuelLevel(integer);
                 brewingStand.update();
             }
@@ -84,6 +75,6 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing fuel level of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the brewing fuel level of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

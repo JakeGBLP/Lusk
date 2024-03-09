@@ -33,7 +33,6 @@ public class ExprCases extends SimpleExpression<String> {
     static {
         Skript.registerExpression(ExprCases.class, String.class, ExpressionType.SIMPLE,
                 "%string% in [:fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
-                "[:fully] (small|tiny) (font|[upper[ ]]case|cap(s|ital[ case])) %string%",
                 "[:fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
     }
 
@@ -67,6 +66,6 @@ public class ExprCases extends SimpleExpression<String> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return (fully ? "fully " : "") + "small caps " + (e != null ? string.getSingle(e) : "");
+        return (fully ? "fully " : "") + "small caps " + (e != null ? string.toString(e,debug) : "");
     }
 }

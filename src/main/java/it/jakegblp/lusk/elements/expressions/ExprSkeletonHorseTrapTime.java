@@ -22,12 +22,13 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Skeleton Horse - Trap Time")
 @Description("Returns the trap time of the skeleton horse.")
-@Examples({"on damage of skeleton horse:\n\tbroadcast trap time of victim"})
+@Examples({"on damage of skeleton horse:\n\tbroadcast skeleton horse trap time of victim"})
 @Since("1.0.3")
 public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprSkeletonHorseTrapTime.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] [skeleton horse] trap time of %livingentity%");
+                "[the] skeleton horse trap[ped] time of %livingentity%",
+                "%livingentity%'[s] skeleton horse trap[ped] time");
     }
 
     private Expression<LivingEntity> entityExpression;
@@ -42,27 +43,21 @@ public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
     protected Timespan @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = entityExpression.getSingle(e);
         if (entity instanceof SkeletonHorse skeletonHorse) {
-            return new Timespan[]{Timespan.fromTicks_i(skeletonHorse.getTrapTime())};
+            return new Timespan[]{Timespan.fromTicks(skeletonHorse.getTrapTime())};
         }
         return new Timespan[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Timespan[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-        if (timespan == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof SkeletonHorse skeletonHorse) {
-            skeletonHorse.setTrapTime((int) timespan.getTicks_i());
-        }
+        if (delta[0] instanceof Timespan timespan)
+            if (entityExpression.getSingle(e) instanceof SkeletonHorse skeletonHorse)
+                skeletonHorse.setTrapTime((int) timespan.getTicks());
     }
 
 
@@ -78,6 +73,6 @@ public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the skeleton horse trap time of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the skeleton horse trap time of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

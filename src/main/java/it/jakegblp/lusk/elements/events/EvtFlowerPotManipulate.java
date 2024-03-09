@@ -5,17 +5,21 @@ import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public class EvtFlowerPot extends SkriptEvent {
+public class EvtFlowerPotManipulate extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
-            Skript.registerEvent("Flower Pot - Manipulate Event", EvtFlowerPot.class, PlayerFlowerPotManipulateEvent.class,
+            Skript.registerEvent("Flower Pot - on Manipulate", EvtFlowerPotManipulate.class, PlayerFlowerPotManipulateEvent.class,
                             "[flower] pot[t(ed|ing)] [of %itemtype%]"
                     )
                     .description("Called when a player places an item in or takes an item out of a flowerpot.")
@@ -27,6 +31,18 @@ public class EvtFlowerPot extends SkriptEvent {
                                 broadcast "picked up"
                                 """)
                     .since("1.0.0");
+            EventValues.registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, new Getter<>() {
+                @Override
+                public @NotNull ItemStack get(final PlayerFlowerPotManipulateEvent e) {
+                    return e.getItem();
+                }
+            }, 0);
+            EventValues.registerEventValue(PlayerFlowerPotManipulateEvent.class, Block.class, new Getter<>() {
+                @Override
+                public @NotNull Block get(final PlayerFlowerPotManipulateEvent e) {
+                    return e.getFlowerpot();
+                }
+            }, 0);
         }
     }
 

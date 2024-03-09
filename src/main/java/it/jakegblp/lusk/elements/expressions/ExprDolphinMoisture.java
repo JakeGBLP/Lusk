@@ -10,22 +10,24 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Horse - Maximum Domestication Level")
-@Description("Returns the maximum domestication level of an horse.\nCan be set.")
-@Examples({"broadcast max domestication level of target"})
+@Name("Dolphin - Moisture Level")
+@Description("Returns the moisture level of a dolphin.\nCan be set.")
+@Examples({"broadcast moisture of target"})
 @Since("1.0.3")
-public class ExprHorseMaxDomesticationLevel extends SimpleExpression<Integer> {
+public class ExprDolphinMoisture extends SimpleExpression<Integer> {
     static {
-        Skript.registerExpression(ExprHorseMaxDomesticationLevel.class, Integer.class, ExpressionType.COMBINED,
-                "[the] [horse] max[imum] domestication level of %entity%");
+        Skript.registerExpression(ExprDolphinMoisture.class, Integer.class, ExpressionType.COMBINED,
+                "[the] dolphin moist(ure|ness) of %entity%",
+                "%entity%'[s] dolphin moist(ure|ness)");
     }
 
     private Expression<Entity> entityExpression;
@@ -39,27 +41,23 @@ public class ExprHorseMaxDomesticationLevel extends SimpleExpression<Integer> {
     @Override
     protected Integer @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            return new Integer[]{horse.getMaxDomestication()};
+        if (entity instanceof Dolphin dolphin) {
+            return new Integer[]{dolphin.getMoistness()};
         }
         return new Integer[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return (mode == Changer.ChangeMode.SET) ? new Class[]{Integer.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            horse.setMaxDomestication(integer);
+        if (delta[0] instanceof Integer integer) {
+            if (entityExpression.getSingle(e) instanceof Dolphin dolphin) {
+                dolphin.setMoistness(integer);
+            }
         }
     }
 
@@ -75,6 +73,6 @@ public class ExprHorseMaxDomesticationLevel extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the horse maximum domestication level of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the dolphin moisture of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Block Blast Resistance")
+@Name("Block - Blast Resistance")
 @Description("""
         Obtains the blast resistance value (also known as block "durability").
         This value is used in explosions to calculate whether a block should be broken or not.
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprBlastResistance extends SimplePropertyExpression<ItemType, Float> {
     static {
-        register(ExprBlastResistance.class, Float.class, "[block] ([blast|explosion] resistance|(blast|explosion) durability)", "itemtype");
+        register(ExprBlastResistance.class, Float.class, "[block] blast resistance", "itemtypes");
     }
 
     @Override

@@ -26,10 +26,7 @@ public class ExprEntitySwimSplashSound extends SimplePropertyExpression<Entity, 
     @Override
     @Nullable
     public String convert(Entity e) {
-        if (e != null) {
-            return e.getSwimSplashSound().name();
-        }
-        return null;
+        return e.getSwimSplashSound().name();
     }
 
     @Override

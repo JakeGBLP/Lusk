@@ -19,20 +19,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Horse - Domestication Level")
-@Description("Returns the domestication level of an horse.\nCan be set.")
-@Examples({"broadcast domestication level of target"})
+@Description("Returns the domestication level and the maximum domestication level of an horse.\nCan be set.")
+@Examples({"broadcast horse domestication level of target"})
 @Since("1.0.3")
 public class ExprHorseDomesticationLevel extends SimpleExpression<Integer> {
     static {
         Skript.registerExpression(ExprHorseDomesticationLevel.class, Integer.class, ExpressionType.COMBINED,
-                "[the] [horse] domestication level of %entity%");
+                "[the] [max:max[imum]] horse domestication level of %entity%",
+                "%entity%'[s] [max:max[imum]] horse domestication level");
     }
 
     private Expression<Entity> entityExpression;
+    private boolean max;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         entityExpression = (Expression<Entity>) exprs[0];
+        max = parseResult.hasTag("max");
         return true;
     }
 
@@ -40,27 +43,22 @@ public class ExprHorseDomesticationLevel extends SimpleExpression<Integer> {
     protected Integer @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof AbstractHorse horse) {
-            return new Integer[]{horse.getDomestication()};
+            return new Integer[]{max ? horse.getMaxDomestication() : horse.getDomestication()};
         }
         return new Integer[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Integer.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            horse.setDomestication(integer);
-        }
+        if (delta[0] instanceof Integer integer)
+            if (entityExpression.getSingle(e) instanceof AbstractHorse horse)
+                if (max) horse.setMaxDomestication(integer);
+                else horse.setDomestication(integer);
     }
 
     @Override
@@ -75,6 +73,6 @@ public class ExprHorseDomesticationLevel extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the horse domestication level of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the "+ (max ? "max ":"") +"horse domestication level of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

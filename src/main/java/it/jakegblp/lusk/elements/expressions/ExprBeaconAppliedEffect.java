@@ -42,19 +42,14 @@ public class ExprBeaconAppliedEffect extends SimpleExpression<PotionEffect> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(PotionEffect[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{PotionEffect.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        PotionEffect potionEffect = delta instanceof PotionEffect[] ? ((PotionEffect[]) delta)[0] : null;
-        if (potionEffect == null) return;
-        ((BeaconEffectEvent) e).setEffect(potionEffect);
+        if (delta[0] instanceof PotionEffect potionEffect)
+            ((BeaconEffectEvent) e).setEffect(potionEffect);
     }
 
     @Override

@@ -25,60 +25,54 @@ import org.jetbrains.annotations.Nullable;
 public class ExprFoxProperties extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprFoxProperties.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [fox] leaping state of %livingentity%",
-                "%livingentity%'[s] [fox] leaping state",
-                "[the] [fox] crouching state of %livingentity%",
-                "%livingentity%'[s] [fox] crouching state",
-                "[the] [fox] defending state of %livingentity%",
-                "%livingentity%'[s] [fox] defending state",
-                "[the] [fox] face[ ]planted state of %livingentity%",
-                "%livingentity%'[s] [fox] face[ ]planted state");
+                "[the] fox [is] (1:leaping|2:crouching|3:defending|face[ ]planted) state of %livingentity%",
+                "%livingentity%'[s] fox [is] (:leaping|:crouching|:defending|face[ ]planted) state",
+                "whether [the] fox %livingentity% is (:leaping|:crouching|:defending|face[ ]planted) [or not]",
+                "whether [or not] [the] fox %livingentity% is (:leaping|:crouching|:defending|face[ ]planted)");
 
     }
 
     private Expression<LivingEntity> livingEntityExpression;
 
-    private int pattern;
+    private int mark;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         livingEntityExpression = (Expression<LivingEntity>) exprs[0];
-        pattern = matchedPattern;
+        mark = parseResult.mark;
         return true;
     }
 
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (!(livingEntity instanceof Fox fox)) return new Boolean[]{false};
-        boolean bool = switch (pattern) {
-            case 0, 1 -> fox.isLeaping();
-            case 2, 3 -> fox.isCrouching();
-            case 4, 5 -> fox.isDefending();
-            case 6, 7 -> fox.isFaceplanted();
-            default -> false;
-        };
-        return new Boolean[]{bool};
+        if (livingEntityExpression.getSingle(e) instanceof Fox fox) {
+            boolean bool = switch (mark) {
+                case 1 -> fox.isLeaping();
+                case 2 -> fox.isCrouching();
+                case 3 -> fox.isDefending();
+                default -> fox.isFaceplanted();
+            };
+            return new Boolean[]{bool};
+        }
+        return new Boolean[]{false};
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (!(livingEntity instanceof Fox fox)) return;
-        boolean bool = Boolean.TRUE.equals(delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null);
-        switch (pattern) {
-            case 0, 1 -> fox.setLeaping(bool);
-            case 2, 3 -> fox.setCrouching(bool);
-            case 4, 5 -> fox.setDefending(bool);
-            case 6, 7 -> fox.setFaceplanted(bool);
+        if (delta[0] instanceof Boolean bool) {
+            if (livingEntityExpression.getSingle(e) instanceof Fox fox) {
+                switch (mark) {
+                    case 1 -> fox.setLeaping(bool);
+                    case 2 -> fox.setCrouching(bool);
+                    case 3 -> fox.setDefending(bool);
+                    default -> fox.setFaceplanted(bool);
+                }
+            }
         }
     }
 
@@ -94,13 +88,12 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        String state = switch (pattern) {
-            case 0, 1 -> "leaping";
-            case 2, 3 -> "crouching";
-            case 4, 5 -> "defending";
-            case 6, 7 -> "face planted";
-            default -> "";
+        String state = switch (mark) {
+            case 1 -> "leaping";
+            case 2 -> "crouching";
+            case 3 -> "defending";
+            default -> "face planted";
         };
-        return "the " + state + " state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the fox is " + state + " state of " + (e == null ? "" : livingEntityExpression.toString(e, debug));
     }
 }

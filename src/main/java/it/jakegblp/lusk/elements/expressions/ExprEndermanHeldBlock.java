@@ -32,8 +32,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
     static {
         Skript.registerExpression(ExprEndermanHeldBlock.class, BlockData.class, ExpressionType.COMBINED,
-                "[the] (held|carried) block of %livingentity%",
-                "%livingentity%'[s] (held|carried) block");
+                "[the] [enderman] (held|carried) block[[ |-]data] of %livingentity%",
+                "%livingentity%'[s] [enderman] (held|carried) block[[ |-]data]");
 
     }
 
@@ -55,46 +55,45 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
         return switch (mode) {
-            case SET, RESET, DELETE -> CollectionUtils.array(Object[].class);
-            default -> new Class[0];
+            case SET, RESET, DELETE -> new Class[]{Block.class, BlockData.class,Slot.class,ItemStack.class,ItemType.class};
+            default -> null;
         };
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (!(livingEntity instanceof Enderman enderman)) return;
-        BlockData blockData = null;
-        if (mode == Changer.ChangeMode.SET) {
-            Object o = ((Object[]) delta)[0];
-            if (o instanceof BlockData blockData1) {
-                blockData = blockData1;
-            } else if (o instanceof Block block) {
-                blockData = block.getBlockData();
-            } else if (o instanceof ItemType itemType) {
-                if (itemType.getMaterial().isBlock()) {
-                    blockData = Bukkit.createBlockData(itemType.getMaterial());
-                }
-            } else if (o instanceof ItemStack itemStack) {
-                Material material = itemStack.getType();
-                if (material.isBlock()) {
-                    blockData = Bukkit.createBlockData(material);
-                }
-            } else if (o instanceof Slot slot) {
-                ItemStack itemStack = slot.getItem();
-                if (itemStack != null) {
+        if (livingEntity instanceof Enderman enderman) {
+            if (mode == Changer.ChangeMode.SET) {
+                Object o = delta[0];
+                if (o instanceof BlockData blockData1) {
+                    enderman.setCarriedBlock(blockData1);
+                } else if (o instanceof Block block) {
+                    enderman.setCarriedBlock(block.getBlockData());
+                } else if (o instanceof ItemType itemType) {
+                    if (itemType.getMaterial().isBlock()) {
+                        enderman.setCarriedBlock(Bukkit.createBlockData(itemType.getMaterial()));
+                    }
+                } else if (o instanceof ItemStack itemStack) {
                     Material material = itemStack.getType();
                     if (material.isBlock()) {
-                        blockData = Bukkit.createBlockData(material);
+                        enderman.setCarriedBlock(Bukkit.createBlockData(material));
+                    }
+                } else if (o instanceof Slot slot) {
+                    ItemStack itemStack = slot.getItem();
+                    if (itemStack != null) {
+                        Material material = itemStack.getType();
+                        if (material.isBlock()) {
+                            enderman.setCarriedBlock(Bukkit.createBlockData(material));
+                        }
                     }
                 }
+            } else {
+                enderman.setCarriedBlock(null);
             }
-        } else {
-            blockData = Bukkit.createBlockData(Material.AIR);
         }
-        enderman.setCarriedBlock(blockData);
     }
 
     @Override
@@ -109,6 +108,6 @@ public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the held block of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the enderman held block-data of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtBatToggleSleep extends SkriptEvent {
     static {
-        Skript.registerEvent("Bat - Sleep/Wake up Event", EvtBatToggleSleep.class, BatToggleSleepEvent.class, "bat sleep", "bat wake up", "bat sleep toggle")
+        Skript.registerEvent("Bat - on Sleep/Wake up", EvtBatToggleSleep.class, BatToggleSleepEvent.class, "bat sleep", "bat wake up", "bat sleep toggle")
                 .description("Called when a bat attempts to sleep or wake up from its slumber.")
                 .examples("on bat wake up:\n\tbroadcast \"A bat has woken up!\"")
-                .since("1.0.0+, 1.0.2+ (Toggle)");
+                .since("1.0.0, 1.0.2 (Toggle)");
     }
 
     private Boolean sleep;

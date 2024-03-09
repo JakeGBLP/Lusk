@@ -54,18 +54,15 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
 
     @Override
     public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? CollectionUtils.array(Boolean[].class) : null;
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Goat goat) {
-            if (left) goat.setLeftHorn(aBoolean);
-            else goat.setRightHorn(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Goat goat)
+                if (left) goat.setLeftHorn(aBoolean);
+                else goat.setRightHorn(aBoolean);
     }
 
     @Override

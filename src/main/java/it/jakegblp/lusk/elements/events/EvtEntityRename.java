@@ -6,7 +6,10 @@ import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerNameEntityEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +21,18 @@ import java.util.Arrays;
 public class EvtEntityRename extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
-            Skript.registerEvent("Entity - Rename Event", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
+            Skript.registerEvent("Entity - on Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
                     .description("This Event requires Paper.\n\nCalled when the player is attempting to rename a mob.")
                     .examples("""
                             on entity rename of pig:
                               broadcast entity's display name""")
                     .since("1.0.0");
+            EventValues.registerEventValue(PlayerNameEntityEvent.class, Entity.class, new Getter<>() {
+                @Override
+                public @NotNull Entity get(final PlayerNameEntityEvent e) {
+                    return e.getEntity();
+                }
+            }, 0);
         }
     }
 

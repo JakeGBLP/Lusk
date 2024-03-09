@@ -25,8 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprZombieShouldBurnInDayState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprZombieShouldBurnInDayState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] should burn (in|during) [the] day[light] state of %livingentity%",
-                "%livingentity%'[s] should burn (in|during) [the] day[light] state");
+                "[the] zombie should burn (in|during) [the] day[light] state of %livingentity%",
+                "%livingentity%'[s] zombie should burn (in|during) [the] day[light] state",
+                "whether [the] zombie %livingentity% should burn (in|during) [the] day[light] [or not]",
+                "whether [or not] [the] zombie %livingentity% should burn (in|during) [the] day[light]");
 
     }
 
@@ -48,21 +50,16 @@ public class ExprZombieShouldBurnInDayState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof Zombie zombie) {
-            zombie.setShouldBurnInDay(bool);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (livingEntityExpression.getSingle(e) instanceof Zombie zombie)
+                zombie.setShouldBurnInDay(aBoolean);
+
     }
 
     @Override
@@ -77,6 +74,6 @@ public class ExprZombieShouldBurnInDayState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the should burn in the daylight state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the zombie should burn in the daylight state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

@@ -18,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+import static it.jakegblp.lusk.utils.Utils.Version;
+
 @Name("Version")
 @Description("Returns a Version")
 @Examples({"if player's version < version \"1.19.2\":\n\tbroadcast \"%player% can't play on this server\"\nelse:\n\tkick player"})
@@ -43,7 +45,7 @@ public class ExprVersion extends SimpleExpression<Semver> {
             ArrayList<Semver> v = new ArrayList<>();
             for (String value : s) {
                 try {
-                    v.add(new Semver(value, Semver.SemverType.LOOSE));
+                    v.add(Version(value));
                 } catch (SemverException ignored) {
                 }
             }
@@ -64,7 +66,6 @@ public class ExprVersion extends SimpleExpression<Semver> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        assert e != null;
-        return "the version " + strings.getSingle(e);
+        return "the version " + (e == null ? "" : strings.toString(e,debug));
     }
 }

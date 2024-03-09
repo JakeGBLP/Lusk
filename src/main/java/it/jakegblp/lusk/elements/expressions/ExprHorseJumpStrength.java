@@ -25,7 +25,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprHorseJumpStrength extends SimpleExpression<Double> {
     static {
         Skript.registerExpression(ExprHorseJumpStrength.class, Double.class, ExpressionType.COMBINED,
-                "[the] [horse] jump[ing] (strength|force) of %entity%");
+                "[the] horse jump[ing] (strength|force) of %entity%",
+                "%entity%'[s] horse jump[ing] (strength|force)");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +47,15 @@ public class ExprHorseJumpStrength extends SimpleExpression<Double> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Double[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Double.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Double aDouble = delta instanceof Double[] ? ((Double[]) delta)[0] : null;
-        if (aDouble == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            horse.setJumpStrength(aDouble);
-        }
+        if (delta[0] instanceof Double aDouble)
+            if (entityExpression.getSingle(e) instanceof AbstractHorse horse)
+                horse.setJumpStrength(aDouble);
     }
 
     @Override
@@ -75,6 +70,6 @@ public class ExprHorseJumpStrength extends SimpleExpression<Double> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the horse jumping strength of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the horse jumping strength of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

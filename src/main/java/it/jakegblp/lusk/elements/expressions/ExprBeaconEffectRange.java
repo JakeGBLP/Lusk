@@ -38,23 +38,17 @@ public class ExprBeaconEffectRange extends SimpleExpression<Double> {
     }
 
     @Override
-    protected Double @NotNull [] get(@NotNull Event e) {
+    protected Double[] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Beacon beacon) {
-                return new Double[]{beacon.getEffectRange()};
-            }
+        if (block != null && block.getState() instanceof Beacon beacon) {
+            return new Double[]{beacon.getEffectRange()};
         }
-        return new Double[0];
+        return null;
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Double[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET ? new Class[]{Double.class} : null;
     }
 
     @Override
@@ -62,12 +56,8 @@ public class ExprBeaconEffectRange extends SimpleExpression<Double> {
         Block block = blockExpression.getSingle(e);
         if (block == null) return;
         if (block.getState() instanceof Beacon beacon) {
-            if (mode == Changer.ChangeMode.RESET) {
-                beacon.resetEffectRange();
-            } else {
-                Double aDouble = delta instanceof Double[] ? ((Double[]) delta)[0] : null;
-                if (aDouble != null) beacon.setEffectRange(aDouble);
-            }
+            if (mode == Changer.ChangeMode.RESET) beacon.resetEffectRange();
+            else if (delta[0] instanceof Double aDouble) beacon.setEffectRange(aDouble);
             beacon.update();
         }
     }
@@ -84,6 +74,6 @@ public class ExprBeaconEffectRange extends SimpleExpression<Double> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the effect range of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the effect range of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

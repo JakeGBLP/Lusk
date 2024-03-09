@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprRarity extends SimpleExpression<String> {
     static {
         Skript.registerExpression(ExprRarity.class, String.class, ExpressionType.SIMPLE,
-                "rarity of %enchantment/itemstack/itemtype%",
-                "%enchantment/itemstack/itemtype%'[s] rarity");
+                "rarity of %enchantment/itemtype%",
+                "%enchantment/itemtype%'[s] rarity");
     }
 
     private Expression<Object> object;
@@ -40,9 +40,7 @@ public class ExprRarity extends SimpleExpression<String> {
     protected String @NotNull [] get(@NotNull Event e) {
         Object o = object.getSingle(e);
         String string;
-        if (o instanceof ItemStack) {
-            string = ((ItemStack) o).getRarity().toString();
-        } else if (o instanceof ItemType) {
+        if (o instanceof ItemType) {
             string = new ItemStack(((ItemType) o).getMaterial()).getRarity().toString();
         } else if (o instanceof Enchantment) {
             string = ((Enchantment) o).getRarity().toString();
@@ -65,7 +63,6 @@ public class ExprRarity extends SimpleExpression<String> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        assert e != null;
-        return "rarity of " + object.getSingle(e);
+        return "rarity of " + (e == null ? "" : object.toString(e,debug));
     }
 }

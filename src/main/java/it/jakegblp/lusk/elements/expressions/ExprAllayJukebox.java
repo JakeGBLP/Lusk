@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class ExprAllayJukebox extends SimplePropertyExpression<Entity, Block> {
     static {
-        register(ExprAllayJukebox.class, Block.class, "jukebox", "entity");
+        register(ExprAllayJukebox.class, Block.class, "jukebox", "entities");
     }
 
     @Override
@@ -28,14 +28,7 @@ public class ExprAllayJukebox extends SimplePropertyExpression<Entity, Block> {
     @Override
     @Nullable
     public Block convert(Entity e) {
-        if (e != null) {
-            if (e instanceof Allay allay) {
-                if (allay.getJukebox() != null) {
-                    return allay.getJukebox().getBlock();
-                }
-            }
-        }
-        return null;
+        return (e instanceof Allay allay && allay.getJukebox() != null) ? allay.getJukebox().getBlock() : null;
     }
 
     @Override

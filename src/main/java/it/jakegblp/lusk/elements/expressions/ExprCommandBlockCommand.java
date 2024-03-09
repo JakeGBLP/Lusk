@@ -41,10 +41,8 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
         Object o = objectExpression.getSingle(e);
-        if (o instanceof Block block) {
-            if (block.getState() instanceof CommandBlock commandBlock) {
-                return new String[]{commandBlock.getCommand()};
-            }
+        if (o instanceof Block block && block.getState() instanceof CommandBlock commandBlock) {
+            return new String[]{commandBlock.getCommand()};
         } else if (o instanceof CommandMinecart commandMinecart) {
             return new String[]{commandMinecart.getCommand()};
         }
@@ -52,33 +50,30 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-            return CollectionUtils.array(String[].class);
-        } else {
-            return new Class[0];
+            return new Class[]{String.class};
         }
+        return null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Object o = objectExpression.getSingle(e);
-        if (o instanceof Block block) {
-            if (block.getState() instanceof CommandBlock commandBlock) {
-                if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-                    commandBlock.setCommand("");
-                } else {
-                    String string = delta instanceof String[] ? ((String[]) delta)[0] : null;
-                    commandBlock.setCommand(string);
-                }
-                commandBlock.update();
+        if (o instanceof Block block && block.getState() instanceof CommandBlock commandBlock) {
+            if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
+                commandBlock.setCommand("");
+            } else if (delta[0] instanceof String string){
+                commandBlock.setCommand(string);
+            } else {
+                return;
             }
+            commandBlock.update();
         } else if (o instanceof CommandMinecart commandMinecart) {
             if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
                 commandMinecart.setCommand("");
-            } else {
-                String string = delta instanceof String[] ? ((String[]) delta)[0] : null;
-                commandMinecart.setCommand(string);
+            } else if (delta[0] instanceof String string){
+            commandMinecart.setCommand(string);
             }
         }
     }
@@ -95,6 +90,6 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the command of " + (e == null ? "" : objectExpression.getSingle(e));
+        return "the command block command of " + (e == null ? "" : objectExpression.toString(e,debug));
     }
 }

@@ -20,57 +20,42 @@ import org.jetbrains.annotations.Nullable;
 
 
 @Name("Ender Dragon Phase")
-@Description("Returns the Ender Dragon phase in an Ender Dragon Phase Change Event.\nCan be set.")
-@Examples({"on ender dragon phase change:\n\tbroadcast the phase"})
+@Description("Returns the Ender Dragon phase in an Ender Dragon Phase Change Event.\nCan be set. (Setting will always change the NEW phase)")
+@Examples({"on ender dragon phase change:\n\tbroadcast the current ender dragon phase"})
 @Since("1.0.2")
 public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
     static {
         Skript.registerExpression(ExprEnderDragonPhase.class, EnderDragon.Phase.class, ExpressionType.SIMPLE,
-                "[the] old [[ender[ ]]dragon] phase",
-                "[the] new [[ender[ ]]dragon] phase",
-                "[the] [[ender[ ]]dragon] phase");
+                "(the |event-)[new|:current] ender[ ]dragon phase");
     }
 
-    private Boolean past = null;
+    private boolean current;
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
         if (!getParser().isCurrentEvent(EnderDragonChangePhaseEvent.class)) {
             Skript.error("This expression can only be used in the Ender Dragon Phase Change Event!");
             return false;
         }
-        if (matchedPattern == 0) {
-            past = true;
-        } else if (matchedPattern == 1) {
-            past = false;
-        }
+        current = parseResult.hasTag("current");
         return true;
     }
 
     @Override
     protected EnderDragon.Phase @NotNull [] get(@NotNull Event e) {
-        EnderDragon.Phase phase;
-
-        if (past == null || !past) {
-            phase = ((EnderDragonChangePhaseEvent) e).getNewPhase();
-        } else {
-            phase = ((EnderDragonChangePhaseEvent) e).getCurrentPhase();
-        }
+        EnderDragonChangePhaseEvent event = (EnderDragonChangePhaseEvent) e;
+        EnderDragon.Phase phase = current ? event.getCurrentPhase() : event.getNewPhase();
         return new EnderDragon.Phase[]{phase};
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(EnderDragon.Phase[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{EnderDragon.Phase.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        EnderDragon.Phase phase = delta instanceof EnderDragon.Phase[] ? ((EnderDragon.Phase[]) delta)[0] : null;
-        if (phase == null) return;
-        ((EnderDragonChangePhaseEvent) e).setNewPhase(phase);
+        if (delta[0] instanceof EnderDragon.Phase phase)
+            ((EnderDragonChangePhaseEvent) e).setNewPhase(phase);
     }
 
     @Override
@@ -85,6 +70,6 @@ public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (past == null ? "" : (past ? " past" : " future")) + " ender dragon phase";
+        return "the " + (current ? "current" : "new") + " ender dragon phase";
     }
 }

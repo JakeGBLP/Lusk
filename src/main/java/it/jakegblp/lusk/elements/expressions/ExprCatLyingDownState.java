@@ -25,7 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprCatLyingDownState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprCatLyingDownState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [cat] lying down state of %entity%");
+                "[the] cat [is] lying down state of %entity%",
+                "%entity%'[s] cat [is] lying down state",
+                "whether [the] cat %entity% is lying down [or not]",
+                "whether [or not] [the] cat %entity% is lying down");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +49,14 @@ public class ExprCatLyingDownState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Cat cat) {
-            cat.setLyingDown(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Cat cat) cat.setLyingDown(aBoolean);
     }
 
     @Override
@@ -75,6 +71,6 @@ public class ExprCatLyingDownState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the cat lying down state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the cat lying down state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

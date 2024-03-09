@@ -25,7 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprAllayDuplicationState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprAllayDuplicationState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [allay] duplication state of %entity%");
+                "[the] allay can be duplicated state of %entity%",
+                "%entity%'[s] allay can be duplicated state",
+                "whether [the] allay %entity% can be duplicated [or not]",
+                "whether [or not] [the] allay %entity% can be duplicated");
 
     }
 
@@ -40,28 +43,20 @@ public class ExprAllayDuplicationState extends SimpleExpression<Boolean> {
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Allay allay) {
-            return new Boolean[]{allay.canDuplicate()};
-        }
+        if (entity instanceof Allay allay) return new Boolean[]{allay.canDuplicate()};
         return new Boolean[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Allay allay) {
-            allay.setCanDuplicate(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Allay allay)
+                allay.setCanDuplicate(aBoolean);
     }
 
     @Override
@@ -76,6 +71,6 @@ public class ExprAllayDuplicationState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the allay duplication state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the allay can be duplicated state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

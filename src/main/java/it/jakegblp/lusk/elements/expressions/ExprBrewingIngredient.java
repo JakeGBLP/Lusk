@@ -28,7 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
     static {
         Skript.registerExpression(ExprBrewingIngredient.class, ItemType.class, ExpressionType.COMBINED,
-                "[the] brewing ingredient of %block%");
+                "[the] brewing ingredient of %block%",
+                "%block%'[s] brewing ingredient");
     }
 
     private Expression<Block> blockExpression;
@@ -55,22 +56,15 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(ItemType[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{ItemType.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        ItemType itemType = delta instanceof ItemType[] ? ((ItemType[]) delta)[0] : null;
-        if (itemType == null) return;
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
+        if (delta[0] instanceof ItemType itemType) {
+            Block block = blockExpression.getSingle(e);
+            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 BrewerInventory brewerInventory = brewingStand.getInventory();
                 brewerInventory.setIngredient(itemType.getRandom());
             }
@@ -89,6 +83,6 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing ingredient of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the brewing ingredient of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

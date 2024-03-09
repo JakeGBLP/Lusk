@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtWardenSniff extends SkriptEvent {
     static {
-        Skript.registerEvent("Warden - Sniff Toggle Event", EvtWardenSniff.class, EntityPoseChangeEvent.class,
+        Skript.registerEvent("Warden - on Sniff Toggle", EvtWardenSniff.class, EntityPoseChangeEvent.class,
                         "warden (sniff[ing] [start|begin]|start sniffing)",
                         "warden (sniff[ing] stop|stop sniffing)",
                         "warden (sniff toggle|toggle sniff)")

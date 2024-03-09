@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Height of an Entity.")
 @Examples({"broadcast height of target"})
 @Since("1.0.0")
-public class ExprHeight extends SimplePropertyExpression<Entity, Double> {
+public class ExprEntityHeight extends SimplePropertyExpression<Entity, Double> {
     static {
-        register(ExprHeight.class, Double.class, "height", "entity");
+        register(ExprEntityHeight.class, Double.class, "height", "entity");
     }
 
     @Override
@@ -26,10 +26,7 @@ public class ExprHeight extends SimplePropertyExpression<Entity, Double> {
     @Override
     @Nullable
     public Double convert(Entity e) {
-        if (e != null) {
-            return e.getHeight();
-        }
-        return null;
+        return e.getHeight();
     }
 
     @Override

@@ -26,10 +26,7 @@ public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
     @Override
     @Nullable
     public Double convert(Entity e) {
-        if (e != null) {
-            return e.getWidth();
-        }
-        return null;
+        return e.getWidth();
     }
 
     @Override

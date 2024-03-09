@@ -37,7 +37,6 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
                 "[the] right leg rotation of %livingentity%",
                 "[the] head rotation of %livingentity%",
                 "[the] rotation of %livingentity%");
-
     }
 
     private Expression<LivingEntity> livingEntityExpression;
@@ -60,8 +59,7 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
 
     @Override
     protected Vector @NotNull [] get(@NotNull Event e) {
-        LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity instanceof ArmorStand armorStand) {
+        if (livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand) {
             return switch (property) {
                 case "left arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftArmPose())};
                 case "right arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightArmPose())};
@@ -69,8 +67,7 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
                 case "right leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightLegPose())};
                 case "head" -> new Vector[]{Utils.toBukkitVector(armorStand.getHeadPose())};
                 case "body" -> new Vector[]{Utils.toBukkitVector(armorStand.getBodyPose())};
-                case "" ->
-                        new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(), armorStand.getLocation().getPitch())};
+                case "" -> new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(), armorStand.getLocation().getPitch())};
                 default -> new Vector[0];
             };
         }
@@ -78,28 +75,20 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Vector[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Vector.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Vector vector = delta instanceof Vector[] ? ((Vector[]) delta)[0] : null;
-        if (vector == null) return;
-        LivingEntity entity = livingEntityExpression.getSingle(e);
-        if (entity instanceof ArmorStand armorStand) {
-            switch (property) {
-                case "left arm" -> Utils.setLeftArmRotation(armorStand, vector);
-                case "right arm" -> Utils.setRightArmRotation(armorStand, vector);
-                case "left leg" -> Utils.setLeftLegRotation(armorStand, vector);
-                case "right leg" -> Utils.setRightLegRotation(armorStand, vector);
-                case "head" -> Utils.setHeadRotation(armorStand, vector);
-                case "body" -> Utils.setBodyRotation(armorStand, vector);
-                case "" -> Utils.setFullRotation(armorStand, vector);
-            }
+        if (delta[0] instanceof Vector vector && livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand) switch (property) {
+            case "left arm" -> Utils.setLeftArmRotation(armorStand, vector);
+            case "right arm" -> Utils.setRightArmRotation(armorStand, vector);
+            case "left leg" -> Utils.setLeftLegRotation(armorStand, vector);
+            case "right leg" -> Utils.setRightLegRotation(armorStand, vector);
+            case "head" -> Utils.setHeadRotation(armorStand, vector);
+            case "body" -> Utils.setBodyRotation(armorStand, vector);
+            case "" -> Utils.setFullRotation(armorStand, vector);
         }
     }
 
@@ -115,6 +104,6 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (Objects.equals(property, "") ? "" : " ") + property + " rotation of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the" + (Objects.equals(property, "") ? "" : " ") + property + " rotation of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

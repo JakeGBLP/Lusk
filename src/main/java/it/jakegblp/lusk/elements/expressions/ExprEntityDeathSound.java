@@ -15,9 +15,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Sound this entity will make on death.")
 @Examples({"broadcast death sound of target"})
 @Since("1.0.4")
-public class ExprEntityDeathSound extends SimplePropertyExpression<Entity, String> {
+public class ExprEntityDeathSound extends SimplePropertyExpression<LivingEntity, String> {
     static {
-        register(ExprEntityDeathSound.class, String.class, "death sound", "entity");
+        register(ExprEntityDeathSound.class, String.class, "death sound", "livingentities");
     }
 
     @Override
@@ -27,12 +27,9 @@ public class ExprEntityDeathSound extends SimplePropertyExpression<Entity, Strin
 
     @Override
     @Nullable
-    public String convert(Entity e) {
-        if (e instanceof LivingEntity entity) {
-            Sound sound = entity.getDeathSound();
-            assert sound != null;
-            return sound.name();
-        }
+    public String convert(LivingEntity e) {
+        Sound sound = e.getDeathSound();
+        if (sound != null) return sound.name();
         return null;
     }
 

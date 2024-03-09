@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -16,39 +17,13 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Beacon - Pyramid Tier")
-@Description("Returns pyramid tier of a beacon.")
-@Examples({"broadcast the pyramid tier of {_beacon}"})
+@Name("Beacon - Beacon Tier")
+@Description("Returns beacon tier of a beacon.")
+@Examples({"broadcast the beacon tier of {_beacon}"})
 @Since("1.0.3")
-public class ExprBeaconPyramidTier extends SimpleExpression<Integer> {
+public class ExprBeaconPyramidTier extends SimplePropertyExpression<Block, Integer> {
     static {
-        Skript.registerExpression(ExprBeaconPyramidTier.class, Integer.class, ExpressionType.SIMPLE,
-                "[the] (beacon|pyramid) tier of %block%",
-                "%block%'[s] (beacon|pyramid) tier");
-    }
-
-    private Expression<Block> blockExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        blockExpression = (Expression<Block>) exprs[0];
-        return true;
-    }
-
-    @Override
-    protected Integer @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Beacon beacon) {
-                return new Integer[]{beacon.getTier()};
-            }
-        }
-        return new Integer[0];
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
+        register(ExprBeaconPyramidTier.class, Integer.class, "(beacon|pyramid) tier", "blocks");
     }
 
     @Override
@@ -57,7 +32,13 @@ public class ExprBeaconPyramidTier extends SimpleExpression<Integer> {
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the pyramid tier of " + (e == null ? "" : blockExpression.getSingle(e));
+    @Nullable
+    public Integer convert(Block block) {
+        return block.getState() instanceof Beacon beacon ? beacon.getTier() : null;
+    }
+
+    @Override
+    protected @NotNull String getPropertyName() {
+        return "beacon tier";
     }
 }

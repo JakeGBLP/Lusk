@@ -2,10 +2,12 @@ package it.jakegblp.lusk.elements.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -24,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns either potion effect of a beacon.\nCan be set.")
 @Examples({"broadcast the primary effect of {_beacon}"})
 @Since("1.0.3")
-public class ExprBeaconEffects extends SimpleExpression<PotionEffect> {
+public class ExprBeaconEffects extends PropertyExpression<Block,PotionEffect> {
     static {
         Skript.registerExpression(ExprBeaconEffects.class, PotionEffect.class, ExpressionType.SIMPLE,
                 "[the] primary [potion] effect of %block%",
@@ -44,41 +46,29 @@ public class ExprBeaconEffects extends SimpleExpression<PotionEffect> {
     }
 
     @Override
-    protected PotionEffect @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Beacon beacon) {
-                if (primary) {
-                    return new PotionEffect[]{beacon.getPrimaryEffect()};
-                } else {
-                    return new PotionEffect[]{beacon.getSecondaryEffect()};
-                }
-            }
+    protected PotionEffect[] get(Event event, Block[] source) {
+        Block block = blockExpression.getSingle(event);
+        if (block != null && block.getState() instanceof Beacon beacon) {
+            return new PotionEffect[]{primary ? beacon.getPrimaryEffect() : beacon.getSecondaryEffect()};
         }
         return new PotionEffect[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(PotionEffectType[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{PotionEffectType.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        PotionEffectType potionEffectType = delta instanceof PotionEffectType[] ? ((PotionEffectType[]) delta)[0] : null;
-        Block block = blockExpression.getSingle(e);
-        if (potionEffectType == null || block == null) return;
-        if (block.getState() instanceof Beacon beacon) {
-            if (primary) {
-                beacon.setPrimaryEffect(potionEffectType);
-            } else {
-                beacon.setSecondaryEffect(potionEffectType);
+        if (delta[0] instanceof PotionEffectType potionEffectType) {
+            Block block = blockExpression.getSingle(e);
+            if (block == null) return;
+            if (block.getState() instanceof Beacon beacon) {
+                if (primary) beacon.setPrimaryEffect(potionEffectType);
+                else beacon.setSecondaryEffect(potionEffectType);
+                beacon.update();
             }
-            beacon.update();
         }
     }
 
@@ -94,6 +84,6 @@ public class ExprBeaconEffects extends SimpleExpression<PotionEffect> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the " + (primary ? "primary" : "secondary") + " potion effect of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the " + (primary ? "primary" : "secondary") + " potion effect of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

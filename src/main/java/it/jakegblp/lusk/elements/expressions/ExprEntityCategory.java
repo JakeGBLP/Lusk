@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class ExprEntityCategory extends SimplePropertyExpression<LivingEntity, EntityCategory> {
     static {
-        register(ExprEntityCategory.class, EntityCategory.class, "[entity] category", "livingentity");
+        register(ExprEntityCategory.class, EntityCategory.class, "[entity] category", "livingentities");
     }
 
     @Override
@@ -27,10 +27,7 @@ public class ExprEntityCategory extends SimplePropertyExpression<LivingEntity, E
     @Override
     @Nullable
     public EntityCategory convert(LivingEntity e) {
-        if (e != null) {
-            return e.getCategory();
-        }
-        return null;
+        return e.getCategory();
     }
 
     @Override

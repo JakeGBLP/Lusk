@@ -24,9 +24,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEntityAngryState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprEntityAngryState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] angr(y state|iness) of %livingentity%",
-                "%livingentity%'[s] angr(y state|iness)");
-
+                "[the] ang(ry|er) state of %entity%",
+                "%entity%'[s] ang(ry|er) state",
+                "whether %entity% is angry [or not]",
+                "whether [or not] %entity% is angry");
     }
 
     private Expression<LivingEntity> livingEntityExpression;
@@ -56,24 +57,21 @@ public class ExprEntityAngryState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof PigZombie pigZombie) {
-            pigZombie.setAngry(bool);
-        } else if (livingEntity instanceof Wolf wolf) {
-            wolf.setAngry(bool);
-        } else if (livingEntity instanceof Enderman enderman) {
-            enderman.setScreaming(bool);
+        if (delta[0] instanceof Boolean bool) {
+            LivingEntity livingEntity = livingEntityExpression.getSingle(e);
+            if (livingEntity instanceof PigZombie pigZombie) {
+                pigZombie.setAngry(bool);
+            } else if (livingEntity instanceof Wolf wolf) {
+                wolf.setAngry(bool);
+            } else if (livingEntity instanceof Enderman enderman) {
+                enderman.setScreaming(bool);
+            }
         }
     }
 
@@ -89,6 +87,6 @@ public class ExprEntityAngryState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the angry state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the angry state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

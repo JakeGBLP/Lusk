@@ -18,15 +18,17 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Enderman - Has Been Looked At State")
-@Description("Returns whether or not an enderman has been looked at.")
-@Examples({"broadcast has been looked at state of target"})
+@Name("Enderman - Has Been Stared At State")
+@Description("Returns whether or not an enderman has been stared at.")
+@Examples({"broadcast has been stared at state of target"})
 @Since("1.0.2")
-public class ExprEndermanHasBeenLookedAtState extends SimpleExpression<Boolean> {
+public class ExprEndermanBeenStaredAt extends SimpleExpression<Boolean> {
     static {
-        Skript.registerExpression(ExprEndermanHasBeenLookedAtState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] has been (looked|stared) at state of %livingentity%",
-                "%livingentity%'[s] has been (looked|stared) at state");
+        Skript.registerExpression(ExprEndermanBeenStaredAt.class, Boolean.class, ExpressionType.COMBINED,
+                "[the] enderman [has] been stared at state of %entity%",
+                "%entity%'[s] enderman [has] been stared at state",
+                "whether [the] enderman %entity% has been stared at [or not]",
+                "whether [or not] [the] enderman %entity% has been stared at");
 
     }
 
@@ -51,21 +53,16 @@ public class ExprEndermanHasBeenLookedAtState extends SimpleExpression<Boolean> 
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof Enderman enderman) {
-            enderman.setHasBeenStaredAt(bool);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (livingEntityExpression.getSingle(e) instanceof Enderman enderman) {
+                enderman.setHasBeenStaredAt(aBoolean);
+            }
     }
 
     @Override
@@ -80,6 +77,6 @@ public class ExprEndermanHasBeenLookedAtState extends SimpleExpression<Boolean> 
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the has been looked at state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the enderman has been stared at state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

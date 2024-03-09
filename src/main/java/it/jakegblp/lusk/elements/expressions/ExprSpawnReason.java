@@ -27,10 +27,7 @@ public class ExprSpawnReason extends SimplePropertyExpression<Entity, CreatureSp
     @Override
     @Nullable
     public CreatureSpawnEvent.SpawnReason convert(Entity e) {
-        if (e != null) {
-            return e.getEntitySpawnReason();
-        }
-        return null;
+        return e.getEntitySpawnReason();
     }
 
     @Override

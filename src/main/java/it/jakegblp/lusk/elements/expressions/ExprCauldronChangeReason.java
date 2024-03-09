@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprCauldronChangeReason extends SimpleExpression<CauldronLevelChangeEvent.ChangeReason> {
     static {
         Skript.registerExpression(ExprCauldronChangeReason.class, CauldronLevelChangeEvent.ChangeReason.class, ExpressionType.SIMPLE,
-                "[the] cauldron change reason");
+                "(the |event-)cauldron change reason");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

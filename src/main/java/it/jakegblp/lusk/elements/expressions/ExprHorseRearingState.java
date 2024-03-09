@@ -25,7 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprHorseRearingState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprHorseRearingState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [horse] rearing state of %entity%");
+                "[the] horse [is] rearing state of %entity%",
+                "%entity%'[s] horse [is] rearing state",
+                "whether [the] horse %entity% is rearing [or not]",
+                "whether [or not] [the] horse %entity% is rearing");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +49,15 @@ public class ExprHorseRearingState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            horse.setRearing(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof AbstractHorse horse)
+                horse.setRearing(aBoolean);
     }
 
     @Override
@@ -75,6 +72,6 @@ public class ExprHorseRearingState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the horse rearing state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the horse is rearing state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

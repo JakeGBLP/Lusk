@@ -4,8 +4,13 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerLecternPageChangeEvent;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class EvtLecternPageChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
-            Skript.registerEvent("Lectern - Page Flip Event", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
+            Skript.registerEvent("Lectern - on Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
                             "lectern page flip [to the] left",
                             "lectern page flip [to the] right",
                             "lectern page [flip]"
@@ -30,6 +35,18 @@ public class EvtLecternPageChange extends SkriptEvent {
                               broadcast "both"
                               """)
                     .since("1.0.0");
+            EventValues.registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, new Getter<>() {
+                @Override
+                public @NotNull ItemStack get(final PlayerLecternPageChangeEvent e) {
+                    return e.getBook();
+                }
+            }, 0);
+            EventValues.registerEventValue(PlayerLecternPageChangeEvent.class, Block.class, new Getter<>() {
+                @Override
+                public @NotNull Block get(final PlayerLecternPageChangeEvent e) {
+                    return e.getLectern().getBlock();
+                }
+            }, 0);
         }
     }
 

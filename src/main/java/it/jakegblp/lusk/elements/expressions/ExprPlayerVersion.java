@@ -26,12 +26,8 @@ public class ExprPlayerVersion extends SimplePropertyExpression<Player, Semver> 
     }
 
     @Override
-    @Nullable
     public Semver convert(Player p) {
-        if (p != null) {
-            return Constants.versions.get(p.getProtocolVersion());
-        }
-        return null;
+        return Constants.versions.get(p.getProtocolVersion());
     }
 
     @Override

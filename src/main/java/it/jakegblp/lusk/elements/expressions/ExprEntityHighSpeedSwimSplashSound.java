@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class ExprEntityHighSpeedSwimSplashSound extends SimplePropertyExpression<Entity, String> {
     static {
-        register(ExprEntityHighSpeedSwimSplashSound.class, String.class, "high speed swim[ming] splash sound", "entity");
+        register(ExprEntityHighSpeedSwimSplashSound.class, String.class, "high speed swim[ming] splash sound", "entities");
     }
 
     @Override
@@ -26,10 +26,7 @@ public class ExprEntityHighSpeedSwimSplashSound extends SimplePropertyExpression
     @Override
     @Nullable
     public String convert(Entity e) {
-        if (e != null) {
-            return e.getSwimHighSpeedSplashSound().name();
-        }
-        return null;
+        return e.getSwimHighSpeedSplashSound().name();
     }
 
     @Override

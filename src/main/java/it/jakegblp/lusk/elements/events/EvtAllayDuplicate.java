@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtAllayDuplicate extends SkriptEvent {
     static {
-        Skript.registerEvent("Allay - Duplicate Event", EvtAllayDuplicate.class, CreatureSpawnEvent.class, "allay duplicat(e[d]|ing|ion)")
+        Skript.registerEvent("Allay - on Duplicate", EvtAllayDuplicate.class, CreatureSpawnEvent.class, "allay duplicat(e[d]|ing|ion)")
                 .description("Called when an allay duplicates itself.")
                 .examples("on allay duplication:\n\tbroadcast event-entity")
-                .since("1.0.2+");
+                .since("1.0.2");
     }
 
     @Override

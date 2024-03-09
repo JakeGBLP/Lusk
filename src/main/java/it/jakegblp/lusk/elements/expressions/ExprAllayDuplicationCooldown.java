@@ -10,6 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.Time;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprAllayDuplicationCooldown.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] [allay] duplication cooldown of %entity%");
+                "[the] allay duplication cool[ ]down of %entity%");
 
     }
 
@@ -48,24 +49,18 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Timespan[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Entity entity = entityExpression.getSingle(e);
-        if (!(entity instanceof Allay allay)) return;
-        if (mode == Changer.ChangeMode.SET) {
-            Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-            if (timespan == null) return;
-            allay.setDuplicationCooldown(timespan.getTicks());
-        } else {
-            allay.resetDuplicationCooldown();
+        if (entityExpression.getSingle(e) instanceof Allay allay) {
+            if (mode == Changer.ChangeMode.SET && delta[0] instanceof Timespan timespan) {
+                allay.setDuplicationCooldown(timespan.getTicks());
+            } else allay.resetDuplicationCooldown();
         }
+
     }
 
     @Override
@@ -80,6 +75,6 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the allay duplication cooldown of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the allay duplication cooldown of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

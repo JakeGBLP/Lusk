@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class ExprEntityBoundingBox extends SimplePropertyExpression<Entity, BoundingBox> {
     static {
-        register(ExprEntityBoundingBox.class, BoundingBox.class, "bounding box", "entity");
+        register(ExprEntityBoundingBox.class, BoundingBox.class, "bounding box", "entities");
     }
 
     @Override
@@ -27,10 +27,7 @@ public class ExprEntityBoundingBox extends SimplePropertyExpression<Entity, Boun
     @Override
     @Nullable
     public BoundingBox convert(Entity e) {
-        if (e != null) {
-            return e.getBoundingBox();
-        }
-        return null;
+        return e.getBoundingBox();
     }
 
     @Override

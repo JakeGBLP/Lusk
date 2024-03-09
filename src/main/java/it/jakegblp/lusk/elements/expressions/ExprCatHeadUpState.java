@@ -25,7 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprCatHeadUpState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprCatHeadUpState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [cat] head up state of %entity%");
+                "[the] cat [is] looking up state of %entity%",
+                "%entity%'[s] cat [is] looking up state",
+                "whether [the] cat %entity% is looking up [or not]",
+                "whether [or not] [the] cat %entity% is looking up");
     }
 
     private Expression<Entity> entityExpression;
@@ -39,28 +42,19 @@ public class ExprCatHeadUpState extends SimpleExpression<Boolean> {
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Cat cat) {
-            return new Boolean[]{cat.isHeadUp()};
-        }
+        if (entity instanceof Cat cat) return new Boolean[]{cat.isHeadUp()};
         return new Boolean[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Cat cat) {
-            cat.setHeadUp(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Cat cat) cat.setHeadUp(aBoolean);
     }
 
     @Override
@@ -75,6 +69,6 @@ public class ExprCatHeadUpState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the cat head up state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the cat looking up state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

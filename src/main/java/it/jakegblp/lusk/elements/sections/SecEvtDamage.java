@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Name("Damage Section")
-@Description({
-        "Runs the code inside of it when the provided entity takes damage.",
-        "Local Variables that are:",
-        "- defined BEFORE this section CAN be used inside of it.",
-        "- defined AFTER this section CANNOT be used inside of it.",
-        "- defined INSIDE this section CANNOT be used outside of it."
-})
-@Examples({
+@Description("""
+"Runs the code inside of it when the provided entity takes damage.
+Local Variables that are:
+- defined BEFORE this section CAN be used inside of it.
+- defined AFTER this section CANNOT be used inside of it.
+- defined INSIDE this section CANNOT be used outside of it.
+""")
+@Examples(
 """
 command /a:
   trigger:
@@ -39,7 +39,7 @@ command /a:
       on damage of entity:
         set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
 """
-})
+)
 @Since("1.1")
 public class SecEvtDamage extends Section {
     private static class DamageEventEntity {
@@ -66,10 +66,7 @@ public class SecEvtDamage extends Section {
     }
 
     static {
-        Skript.registerSection(SecEvtDamage.class,
-            "[on] damage of %entity%",
-            "when %entity% get[s] damaged"
-        );
+        Skript.registerSection(SecEvtDamage.class,"[on] damage of %entity%","when %entity% get[s] damaged");
     }
 
     private Expression<Entity> victim;

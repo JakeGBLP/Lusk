@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -21,34 +22,9 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the time since the bell has been shaking.")
 @Examples({"on bell ring:\n\twait 5 seconds\n\tbroadcast shaking time of event-block"})
 @Since("1.0.3")
-public class ExprBellShakingTime extends SimpleExpression<Timespan> {
+public class ExprBellShakingTime extends SimplePropertyExpression<Block, Timespan> {
     static {
-        Skript.registerExpression(ExprBellShakingTime.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] shaking [time] of %block%");
-    }
-
-    private Expression<Block> blockExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        blockExpression = (Expression<Block>) exprs[0];
-        return true;
-    }
-
-    @Override
-    protected Timespan @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Bell bell) {
-                return new Timespan[]{Timespan.fromTicks(bell.getShakingTicks())};
-            }
-        }
-        return new Timespan[0];
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
+        register(ExprBellShakingTime.class, Timespan.class, "shaking time", "blocks");
     }
 
     @Override
@@ -57,7 +33,13 @@ public class ExprBellShakingTime extends SimpleExpression<Timespan> {
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the shaking time of " + (e == null ? "" : blockExpression.getSingle(e));
+    @Nullable
+    public Timespan convert(Block block) {
+        return block.getState() instanceof Bell bell ? Timespan.fromTicks(bell.getShakingTicks()) : null;
+    }
+
+    @Override
+    protected @NotNull String getPropertyName() {
+        return "shaking time";
     }
 }

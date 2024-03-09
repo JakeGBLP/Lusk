@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprMinEnchantLevel extends SimplePropertyExpression<Enchantment, Integer> {
     static {
-        register(ExprMinEnchantLevel.class, Integer.class, "min[imum] [enchant[ment]] level", "enchantment");
+        register(ExprMinEnchantLevel.class, Integer.class, "min[imum] enchant[ment] level", "enchantment");
     }
 
     @Override
@@ -25,14 +25,11 @@ public class ExprMinEnchantLevel extends SimplePropertyExpression<Enchantment, I
 
     @Nullable
     public Integer convert(Enchantment enchantment) {
-        if (enchantment != null) {
-            return enchantment.getStartLevel();
-        }
-        return null;
+        return enchantment.getStartLevel();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "min enchantment level";
+        return "minimum enchantment level";
     }
 }

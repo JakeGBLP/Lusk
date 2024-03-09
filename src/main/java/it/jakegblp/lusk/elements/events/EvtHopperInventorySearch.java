@@ -4,8 +4,11 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.HopperInventorySearchEvent;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,14 +16,19 @@ import org.jetbrains.annotations.Nullable;
 public class EvtHopperInventorySearch extends SkriptEvent {
     static {
         if (Skript.classExists("org.bukkit.event.inventory.HopperInventorySearchEvent")) {
-            Skript.registerEvent("Hopper - Inventory Search Event", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
-                            "on hopper inventory search",
-                            "on hopper source search",
-                            "on hopper destination search")
+            Skript.registerEvent("Hopper - on Inventory Search", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
+                            "hopper inventory search",
+                            "hopper source search",
+                            "hopper destination search")
                     .description("Called each time a Hopper attempts to find its source/attached containers.")
-                    .examples("""
-                            """)
+                    .examples("on hopper inventory search:\n\tbroadcast event-inventory")
                     .since("1.0.4");
+            EventValues.registerEventValue(HopperInventorySearchEvent.class, Inventory.class, new Getter<>() {
+                @Override
+                public @javax.annotation.Nullable Inventory get(final HopperInventorySearchEvent e) {
+                    return e.getInventory();
+                }
+            }, 0);
         }
     }
 

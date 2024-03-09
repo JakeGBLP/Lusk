@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class ExprPreviousGamemode extends SimplePropertyExpression<Player, GameMode> {
     static {
-        register(ExprPreviousGamemode.class, GameMode.class, "previous gamemode", "player");
+        register(ExprPreviousGamemode.class, GameMode.class, "previous game[ ]mode", "player");
     }
 
     @Override
@@ -25,12 +25,8 @@ public class ExprPreviousGamemode extends SimplePropertyExpression<Player, GameM
     }
 
     @Override
-    @Nullable
     public GameMode convert(Player player) {
-        if (player != null) {
-            return player.getPreviousGameMode();
-        }
-        return null;
+        return player.getPreviousGameMode();
     }
 
     @Override

@@ -14,6 +14,7 @@ import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import io.papermc.paper.event.entity.EntityDyeEvent;
+import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     static {
         Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, ExpressionType.SIMPLE,
-                "[the] entity dye color");
+                "[the |event-]entity dye color");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
@@ -42,19 +43,14 @@ public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(SkriptColor[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{SkriptColor[].class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        SkriptColor color = delta instanceof SkriptColor[] ? ((SkriptColor[]) delta)[0] : null;
-        if (color == null) return;
-        ((EntityDyeEvent) e).setColor(color.asDyeColor());
+        if (delta[0] instanceof SkriptColor color)
+            ((EntityDyeEvent) e).setColor(color.asDyeColor());
     }
 
     @Override

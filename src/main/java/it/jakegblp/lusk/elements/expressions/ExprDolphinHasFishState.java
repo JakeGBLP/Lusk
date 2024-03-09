@@ -25,7 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprDolphinHasFishState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprDolphinHasFishState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [dolphin] has fish state of %entity%");
+                "[the] dolphin [has] been fed fish state of %entity%",
+                "%entity%'[s] dolphin [has] been fed fish state",
+                "whether [the] dolphin %entity% has been fed fish [or not]",
+                "whether [or not [the] dolphin %entity% has been fed fish]");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +49,14 @@ public class ExprDolphinHasFishState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Dolphin dolphin) {
-            dolphin.setHasFish(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Dolphin dolphin) dolphin.setHasFish(aBoolean);
     }
 
     @Override
@@ -75,6 +71,6 @@ public class ExprDolphinHasFishState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the dolphin has fish state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the dolphin has been fed fish state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

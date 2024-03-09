@@ -27,8 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprLoveDuration extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprLoveDuration.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] love duration",
-                "[the] love duration of %entity%",
+                "[the] love duration [of %entity%]",
                 "%entity%'[s] love duration");
     }
 
@@ -38,11 +37,9 @@ public class ExprLoveDuration extends SimpleExpression<Timespan> {
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
         event = getParser().isCurrentEvent(EntityEnterLoveModeEvent.class);
-        if (!event) {
-            if (matchedPattern == 0) {
-                Skript.error("An entity must be specified outside of the Love event!");
-                return false;
-            }
+        if (!event && matchedPattern == 0 && exprs.length == 0) {
+            Skript.error("An entity must be specified outside of the Love event!");
+            return false;
         }
         if (exprs.length == 1) {
             entityExpression = (Expression<Entity>) exprs[0];
@@ -53,37 +50,30 @@ public class ExprLoveDuration extends SimpleExpression<Timespan> {
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         if (event && entityExpression == null) {
-            return new Timespan[]{Timespan.fromTicks_i(((EntityEnterLoveModeEvent) e).getTicksInLove())};
+            return new Timespan[]{Timespan.fromTicks(((EntityEnterLoveModeEvent) e).getTicksInLove())};
         } else {
             Entity entity = entityExpression.getSingle(e);
             if (entity instanceof Animals animal) {
-                return new Timespan[]{Timespan.fromTicks_i(animal.getLoveModeTicks())};
+                return new Timespan[]{Timespan.fromTicks(animal.getLoveModeTicks())};
             }
         }
         return new Timespan[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Timespan[].class);
-        } else {
-            return new Class[0];
-        }
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-        if (timespan == null) return;
-        if (entityExpression != null) {
-            Entity entity = entityExpression.getSingle(e);
-            if (entity instanceof Animals animal) {
-                animal.setLoveModeTicks((int) timespan.getTicks_i());
-            }
-        } else if (e instanceof EntityEnterLoveModeEvent entityEnterLoveModeEvent) {
-            entityEnterLoveModeEvent.setTicksInLove((int) timespan.getTicks_i());
-        }
+        if (delta[0] instanceof Timespan timespan)
+            if (entityExpression != null)
+                if (entityExpression.getSingle(e) instanceof Animals animal)
+                    animal.setLoveModeTicks((int) timespan.getTicks());
+
+            else if (e instanceof EntityEnterLoveModeEvent entityEnterLoveModeEvent)
+                entityEnterLoveModeEvent.setTicksInLove((int) timespan.getTicks());
     }
 
     @Override
@@ -98,6 +88,6 @@ public class ExprLoveDuration extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the love duration" + (entityExpression == null ? "" : (" of " + (e == null ? "" : entityExpression.getSingle(e))));
+        return "the love duration" + (entityExpression == null ? "" : (" of " + (e == null ? "" : entityExpression.toString(e,debug))));
     }
 }

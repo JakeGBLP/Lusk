@@ -54,23 +54,15 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof Wolf wolf) {
-            wolf.setInterested(bool);
-        } else if (livingEntity instanceof Fox fox) {
-            fox.setInterested(bool);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (livingEntityExpression.getSingle(e) instanceof Wolf wolf) wolf.setInterested(aBoolean);
+            else if (livingEntityExpression.getSingle(e) instanceof Fox fox) fox.setInterested(aBoolean);
     }
 
     @Override
@@ -85,6 +77,6 @@ public class ExprAnimalInterestedState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the interested state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the interested state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

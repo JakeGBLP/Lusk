@@ -1,0 +1,11 @@
+types:
+    equipmentslot: equipment slot¦s
+    patterntype: pattern type¦s
+    endermanescapereason: enderman escape reason¦s
+    version: version¦s
+    pose: pose¦s
+    spawncategory: spawn category¦s
+    boundingbox: bounding box¦s
+    cauldronchangereason: cauldron change reason¦s
+    enderdragonphase: ender dragon phase¦s
+    blockface: block face¦s

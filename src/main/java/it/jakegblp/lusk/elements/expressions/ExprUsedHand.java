@@ -36,6 +36,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+// remake this from scratch
+
 @Name("Used Hand")
 @Description("The hand used in events where you might need to distinguish between the main and offhand.")
 @Examples("set used hand to stone named \"no tool for you\"")

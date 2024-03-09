@@ -27,9 +27,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEntityScreamingState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprEntityScreamingState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] screaming state of %livingentity%",
-                "%livingentity%'[s] screaming state");
-
+                "[the] [is] screaming state of %entity%",
+                "%entity%'[s] [is] screaming state",
+                "whether %entity% is screaming [or not]",
+                "whether [or not] %entity% is screaming");
     }
 
     private Expression<LivingEntity> livingEntityExpression;
@@ -44,35 +45,23 @@ public class ExprEntityScreamingState extends SimpleExpression<Boolean> {
     protected Boolean @NotNull [] get(@NotNull Event e) {
         LivingEntity livingEntity = livingEntityExpression.getSingle(e);
         boolean bool;
-        if (livingEntity instanceof Goat goat) {
-            bool = goat.isScreaming();
-        } else if (livingEntity instanceof Enderman enderman) {
-            bool = enderman.isScreaming();
-        } else {
-            bool = false;
-        }
+        if (livingEntity instanceof Goat goat) bool = goat.isScreaming();
+        else if (livingEntity instanceof Enderman enderman) bool = enderman.isScreaming();
+        else bool = false;
         return new Boolean[]{bool};
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof PigZombie pigZombie) {
-            pigZombie.setAngry(bool);
-        } else if (livingEntity instanceof Goat goat) {
-            goat.setScreaming(bool);
-        } else if (livingEntity instanceof Enderman enderman) {
-            enderman.setScreaming(bool);
+        if (delta[0] instanceof Boolean aBoolean) {
+            LivingEntity livingEntity = livingEntityExpression.getSingle(e);
+            if (livingEntity instanceof Goat goat) goat.setScreaming(aBoolean);
+            else if (livingEntity instanceof Enderman enderman) enderman.setScreaming(aBoolean);
         }
     }
 
@@ -88,6 +77,6 @@ public class ExprEntityScreamingState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the screaming state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the is screaming state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

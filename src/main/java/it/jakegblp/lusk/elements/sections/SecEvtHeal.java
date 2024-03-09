@@ -22,24 +22,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 @Name("Heal Section")
-@Description({
-        "Runs the code inside of it when the provided entity gets healed.",
-        "Local Variables that are:",
-        "- defined BEFORE this section CAN be used inside of it.",
-        "- defined AFTER this section CANNOT be used inside of it.",
-        "- defined INSIDE this section CANNOT be used outside of it."
-})
-@Examples({
-        """
-        command /a:
-          trigger:
-            spawn pig at player:
-              set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
-              on heal of entity:
-                push entity upwards
-                broadcast "%entity% has been healed, yay"
-        """
-})
+@Description("""
+Runs the code inside of it when the provided entity gets healed.
+Local Variables that are:
+- defined BEFORE this section CAN be used inside of it.
+- defined AFTER this section CANNOT be used inside of it.
+- defined INSIDE this section CANNOT be used outside of it.
+""")
+@Examples("""
+command /a:
+  trigger:
+    spawn pig at player:
+      set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
+      on heal of entity:
+        push entity upwards
+        broadcast "%entity% has been healed, yay"
+""")
 @Since("1.1")
 public class SecEvtHeal extends Section {
     private static class HealEventEntity {
@@ -66,10 +64,7 @@ public class SecEvtHeal extends Section {
     }
 
     static {
-        Skript.registerSection(SecEvtHeal.class,
-            "[on] heal of %entity%",
-            "when %entity% get[s] healed"
-        );
+        Skript.registerSection(SecEvtHeal.class,"[on] heal of %entity%","when %entity% get[s] healed");
     }
 
     private Expression<Entity> entity;

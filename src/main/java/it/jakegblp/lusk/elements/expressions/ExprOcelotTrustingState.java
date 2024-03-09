@@ -19,13 +19,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Ocelot - Trusting State")
-@Description("Returns whether or not the ocelot trusts players.\nCan be set.")
-@Examples({"broadcast trusting state of target"})
+@Description("Returns whether or not an ocelot trusts players.\nCan be set.")
+@Examples({"broadcast ocelot trusting state of target"})
 @Since("1.0.2")
 public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprOcelotTrustingState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [ocelot] trust[ing] state of %entity%");
+                "[the] ocelot [is] trust[ing] state of %entity%",
+                "%entity%'[s] ocelot [is] trust[ing] state",
+                "whether [the] ocelot %entity% (is trusting|trusts players) [or not]",
+                "whether [or not] [the] ocelot %entity% (is trusting|trusts players)");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +49,15 @@ public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Ocelot ocelot) {
-            ocelot.setTrusting(aBoolean);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (entityExpression.getSingle(e) instanceof Ocelot ocelot)
+                ocelot.setTrusting(aBoolean);
     }
 
     @Override
@@ -75,6 +72,6 @@ public class ExprOcelotTrustingState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the ocelot trusting state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the ocelot trusting state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

@@ -25,12 +25,8 @@ public class ExprPose extends SimplePropertyExpression<Entity, Pose> {
     }
 
     @Override
-    @Nullable
     public Pose convert(Entity e) {
-        if (e != null) {
-            return e.getPose();
-        }
-        return null;
+        return e.getPose();
     }
 
     @Override

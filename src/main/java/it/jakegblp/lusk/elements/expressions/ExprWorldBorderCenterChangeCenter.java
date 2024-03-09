@@ -18,17 +18,15 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("WorldBorder - New/Old Center")
-@Description("Returns the new/old anger of the warden in the World Border Change events.\nCan be set only within the Start variant of the event.")
+@Name("Past/Future WorldBorder Center")
+@Description("Returns the past/future center of the worldborder in the World Border Change events.\nThe future center can be set.")
 @Examples({""})
 @Since("1.0.2")
 public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location> {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, ExpressionType.SIMPLE,
-                    "[the] old center",
-                    "[the] new center",
-                    "[the] center");
+                    "[the] [future|:past] world[ ]border center");
         }
     }
 
@@ -39,39 +37,26 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
             Skript.error("This expression can only be used in the World Border Change events.!");
             return false;
         }
-        if (matchedPattern == 0) {
-            past = true;
-        } else if (matchedPattern == 1) {
-            past = false;
-        }
+        past = parseResult.hasTag("past");
         return true;
     }
 
     @Override
     protected Location @NotNull [] get(@NotNull Event e) {
         WorldBorderCenterChangeEvent event = (WorldBorderCenterChangeEvent) e;
-        Location location;
-        if (past) {
-            location = event.getOldCenter();
-        } else {
-            location = event.getNewCenter();
-        }
+        Location location = past ? event.getOldCenter() : event.getNewCenter();
         return new Location[]{location};
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Location[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Location.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Location location = delta instanceof Location[] ? ((Location[]) delta)[0] : null;
-        if (location == null) return;
-        ((WorldBorderCenterChangeEvent) e).setNewCenter(location);
+        if (delta[0] instanceof Location location)
+            ((WorldBorderCenterChangeEvent) e).setNewCenter(location);
     }
 
     @Override
@@ -86,6 +71,6 @@ public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (past == null ? "" : (past ? " past" : " future")) + " center";
+        return "the" + (past == null ? "" : (past ? " past" : " future")) + " worldborder center";
     }
 }

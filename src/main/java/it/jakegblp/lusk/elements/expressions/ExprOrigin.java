@@ -26,12 +26,8 @@ public class ExprOrigin extends SimplePropertyExpression<Entity, Location> {
     }
 
     @Override
-    @Nullable
     public Location convert(Entity e) {
-        if (e != null) {
-            return e.getOrigin();
-        }
-        return null;
+        return e.getOrigin();
     }
 
     @Override

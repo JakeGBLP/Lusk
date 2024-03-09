@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Unenchanted")
-@Description("Returns the item without enchantments")
+@Name("Item - Unenchanted")
+@Description("Returns an item without enchantments")
 @Examples({"set tool to unenchanted tool\n# removes all the enchantments"})
 @Since("1.0.2")
 public class ExprUnenchanted extends SimpleExpression<ItemType> {
@@ -38,14 +38,12 @@ public class ExprUnenchanted extends SimpleExpression<ItemType> {
     @Override
     protected ItemType @NotNull [] get(@NotNull Event e) {
         ItemType itemType = itemTypeExpression.getSingle(e);
-        if (itemType != null) {
-            ItemStack itemStack = itemType.getRandom();
-            for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-                itemStack.removeEnchantment(enchantment);
-            }
-            return new ItemType[]{new ItemType(itemStack)};
+        if (itemType == null) return new ItemType[0];
+        ItemStack itemStack = itemType.getRandom();
+        for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
+            itemStack.removeEnchantment(enchantment);
         }
-        return new ItemType[0];
+        return new ItemType[]{new ItemType(itemStack)};
     }
 
 
@@ -61,7 +59,6 @@ public class ExprUnenchanted extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        assert e != null;
-        return "unenchanted " + itemTypeExpression.getSingle(e);
+        return "unenchanted " + (e == null ? "" : itemTypeExpression.toString(e,debug));
     }
 }

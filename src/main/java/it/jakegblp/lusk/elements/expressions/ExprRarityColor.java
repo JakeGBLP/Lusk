@@ -37,11 +37,8 @@ public class ExprRarityColor extends SimpleExpression<SkriptColor> {
     @Override
     protected SkriptColor @NotNull [] get(@NotNull Event e) {
         String c = color.getSingle(e);
-        if (Constants.rarityColors.containsKey(c)) {
-            return new SkriptColor[]{Constants.rarityColors.get(c)};
-        } else {
-            return new SkriptColor[]{};
-        }
+        if (Constants.rarityColors.containsKey(c)) return new SkriptColor[]{Constants.rarityColors.get(c)};
+        return new SkriptColor[0];
     }
 
     @Override
@@ -56,6 +53,6 @@ public class ExprRarityColor extends SimpleExpression<SkriptColor> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "rarity color of " + color;
+        return "rarity color of " + (e == null ? "" : color.toString(e,debug));
     }
 }

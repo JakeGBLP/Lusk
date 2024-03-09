@@ -407,9 +407,9 @@ public class SimpleEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.block.BellResonateEvent")) {
-            Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonate")
+            Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonate|raider[s] reveal")
                     .description("""
-                            Called when a bell resonated after being rung and highlights nearby raiders.
+                            Called when a bell resonates after being rung and highlights nearby raiders.
                             A bell will only resonate if raiders are in the vicinity of the bell.""")
                     .examples("")
                     .since("1.0.2");

@@ -27,10 +27,7 @@ public class ExprSpawnCategory extends SimplePropertyExpression<Entity, SpawnCat
     @Override
     @Nullable
     public SpawnCategory convert(Entity e) {
-        if (e != null) {
-            return e.getSpawnCategory();
-        }
-        return null;
+        return e.getSpawnCategory();
     }
 
     @Override

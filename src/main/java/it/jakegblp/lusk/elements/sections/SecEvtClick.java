@@ -26,23 +26,24 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Name("Click Section")
-@Description({
-        "Runs the code inside of it when the provided entity gets clicked.",
-        "Local Variables that are:",
-        "- defined BEFORE this section CAN be used inside of it.",
-        "- defined AFTER this section CANNOT be used inside of it.",
-        "- defined INSIDE this section CANNOT be used outside of it."
-})
-@Examples({
-        """
-        command /a:
-          trigger:
-            spawn pig at player:
-              set display name of entity to "&dPig"
-              on click on entity:
-                broadcast "%entity% has been clicked!"
-        """
-})
+@Description("""
+Runs the code inside of it when the provided entity gets clicked.
+Local Variables that are:
+- defined BEFORE this section CAN be used inside of it.
+- defined AFTER this section CANNOT be used inside of it.
+- defined INSIDE this section CANNOT be used outside of it.
+"""
+)
+@Examples(
+"""
+command /a:
+  trigger:
+    spawn pig at player:
+      set display name of entity to "&dPig"
+      on click on entity:
+        broadcast "%entity% has been clicked!"
+"""
+)
 @Since("1.1")
 public class SecEvtClick extends Section {
     private static class ClickEventData {
@@ -61,10 +62,6 @@ public class SecEvtClick extends Section {
                 if (!map.containsKey(uuid)) {
                     map.put(uuid,consumer);
                 }
-            //} else if (object instanceof Block block) {
-            //    if (!map.containsKey(block)) {
-            //        map.put(block,consumer);
-            //    }
             }
         }
         @EventHandler
@@ -74,13 +71,6 @@ public class SecEvtClick extends Section {
             if (map.containsKey(uuid))
                 map.get(uuid).accept(new ClickEventData(event,entity));
         }
-        //@EventHandler
-        //public static void onPlayerClick(PlayerInteractEvent event) {
-        //    Block block = event.getClickedBlock();
-        //    if (map.containsKey(block))
-//
-        //        map.get(block).accept(new ClickEventData(event,block));
-        //}
     }
 
     private static final ClickEventTracker entityInteractTracker = new ClickEventTracker(Lusk.getInstance());
@@ -88,10 +78,7 @@ public class SecEvtClick extends Section {
 
     static {
         Lusk.getInstance().registerListener(new ClickListener());
-        Skript.registerSection(SecEvtClick.class,
-            "[on] click on %entity%",
-            "when %entity% get[s] clicked"
-        );
+        Skript.registerSection(SecEvtClick.class,"[on] click on %entity%","when %entity% get[s] clicked");
     }
     private Expression<Entity> entityExpression;
     @Nullable
@@ -137,6 +124,6 @@ public class SecEvtClick extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "on click on "+(entityExpression.toString(event,b));
+        return "when "+(event != null ? entityExpression.toString(event,b) : "") + " gets clicked";
     }
 }

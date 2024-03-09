@@ -27,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprChickenEggLayTime extends SimpleExpression<Timespan> {
     static {
         Skript.registerExpression(ExprChickenEggLayTime.class, Timespan.class, ExpressionType.COMBINED,
-                "[the] [chicken] egg lay time of %livingentity%");
+                "[the] [chicken] egg lay time of %livingentity%",
+                "%livingentity%'[s] [chicken] egg lay time");
     }
 
     private Expression<LivingEntity> entityExpression;
@@ -48,21 +49,14 @@ public class ExprChickenEggLayTime extends SimpleExpression<Timespan> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Timespan[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-        if (timespan == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Chicken chicken) {
-            chicken.setEggLayTime((int) timespan.getTicks());
-        }
+        if (delta[0] instanceof Timespan timespan)
+            if (entityExpression.getSingle(e) instanceof Chicken chicken) chicken.setEggLayTime((int) timespan.getTicks());
     }
 
     @Override
@@ -77,6 +71,6 @@ public class ExprChickenEggLayTime extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the chicken egg lay time of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the chicken egg lay time of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtBlockStrip extends SkriptEvent {
     static {
-        Skript.registerEvent("Block - Strip Event", EvtBlockStrip.class, PlayerInteractEvent.class, "[block] strip[p(ed|ing)]", "[block] axe", "[block] deoxidize")
+        Skript.registerEvent("Block - on Block Strip", EvtBlockStrip.class, PlayerInteractEvent.class, "[block] strip[p(ed|ing)]", "[block] axe", "[block] deoxidize")
                 .description("Called when a player changes a block by right clicking it with an axe.")
                 .examples("on strip:\n\tbroadcast \"a block has been stripped!\"")
                 .since("1.0.0");

@@ -19,14 +19,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Animal - Sitting State")
-@Description("Returns the Sitting State of an entity.\n(Cats, Wolves, Parrots, Pandas and Foxes)")
+@Description("Returns whether an entity is sat. Can be set.\n(Cats, Wolves, Parrots, Pandas and Foxes)")
 @Examples({"broadcast sitting state of target"})
 @Since("1.0.2")
 public class ExprAnimalSatState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprAnimalSatState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] s(at [down]|it[ting [down]]) state of %livingentity%",
-                "%livingentity%'[s] s(at [down]|it[ting [down]]) state");
+                "[the] s(at|it[ting]) [down] state of %entity%",
+                "%entity%'[s] s(at|it[ting]) [down] state",
+                "whether %entity% is s(at|it[ting]) [down] [or not]",
+                "whether [or not] %entity% is s(at|it[ting]) [down]");
 
     }
 
@@ -49,21 +51,14 @@ public class ExprAnimalSatState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean bool = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (bool == null) return;
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        if (livingEntity instanceof Sittable sittable) {
-            sittable.setSitting(bool);
-        }
+        if (delta[0] instanceof Boolean aBoolean)
+            if (livingEntityExpression.getSingle(e) instanceof Sittable sittable) sittable.setSitting(aBoolean);
     }
 
     @Override
@@ -78,6 +73,6 @@ public class ExprAnimalSatState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the sitting state of " + (e == null ? "" : livingEntityExpression.getSingle(e));
+        return "the sitting state of " + (e == null ? "" : livingEntityExpression.toString(e,debug));
     }
 }

@@ -25,7 +25,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprLlamaStrength extends SimpleExpression<Integer> {
     static {
         Skript.registerExpression(ExprLlamaStrength.class, Integer.class, ExpressionType.COMBINED,
-                "[the] [llama] strength of %entity%");
+                "[the] llama strength of %entity%",
+                "%entity%'[s] llama strength");
     }
 
     private Expression<Entity> entityExpression;
@@ -46,21 +47,15 @@ public class ExprLlamaStrength extends SimpleExpression<Integer> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Integer[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Integer.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Integer integer = delta instanceof Integer[] ? ((Integer[]) delta)[0] : null;
-        if (integer == null) return;
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Llama llama) {
-            llama.setStrength(integer);
-        }
+        if (delta[0] instanceof Integer integer)
+            if (entityExpression.getSingle(e) instanceof Llama llama)
+                llama.setStrength(integer);
     }
 
     @Override
@@ -75,6 +70,6 @@ public class ExprLlamaStrength extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the llama strength of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the llama strength of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

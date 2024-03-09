@@ -25,43 +25,43 @@ import org.jetbrains.annotations.Nullable;
 public class ExprSignEditableState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprSignEditableState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] [sign] editable state of %block%");
+                "[the] sign [is] (editable|:waxed) state of %block%",
+                "%block%'[s] sign [is] (editable|:waxed) state",
+                "whether [the] sign %block% is (editable|:waxed) [or not]",
+                "whether [or not] [the] sign %block% is (editable|:waxed)");
     }
 
     private Expression<Block> blockExpression;
+    private boolean waxed;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         blockExpression = (Expression<Block>) exprs[0];
+        waxed = parseResult.hasTag("waxed");
         return true;
     }
 
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
         Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Sign sign) {
-                return new Boolean[]{sign.isEditable()};
-            }
+        if (block != null && block.getState() instanceof Sign sign) {
+            return new Boolean[]{waxed == sign.isWaxed()};
         }
         return new Boolean[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Boolean aBoolean = delta instanceof Boolean[] ? ((Boolean[]) delta)[0] : null;
-        if (aBoolean == null) return;
-        Block block = blockExpression.getSingle(e);
-        if (block.getState() instanceof Sign sign) {
-            sign.setEditable(aBoolean);
+        if (delta[0] instanceof Boolean aBoolean) {
+            Block block = blockExpression.getSingle(e);
+            if (block != null && block.getState() instanceof Sign sign) {
+                sign.setWaxed(waxed == aBoolean);
+            }
         }
     }
 
@@ -77,6 +77,6 @@ public class ExprSignEditableState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the sign editable state of " + (e == null ? "" : blockExpression.getSingle(e));
+        return "the sign is "+ (waxed ? "waxed" : "editable")+" state of " + (e == null ? "" : blockExpression.toString(e,debug));
     }
 }

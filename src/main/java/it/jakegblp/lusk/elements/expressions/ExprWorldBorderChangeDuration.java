@@ -14,6 +14,7 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
+import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             Skript.registerExpression(ExprWorldBorderChangeDuration.class, Timespan.class, ExpressionType.SIMPLE,
-                    "[the] (shift|change) duration");
+                    "[the] world[ ]border (shift|change) duration");
         }
     }
 
@@ -45,18 +46,14 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Timespan[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class[]{Timespan.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Timespan timespan = delta instanceof Timespan[] ? ((Timespan[]) delta)[0] : null;
-        if (timespan == null) return;
-        ((WorldBorderBoundsChangeEvent) e).setDuration(timespan.getMilliSeconds());
+        if (delta[0] instanceof Timespan timespan)
+            ((WorldBorderBoundsChangeEvent) e).setDuration(timespan.getMilliSeconds());
     }
 
     @Override
@@ -71,6 +68,6 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the change duration";
+        return "the worldborder change duration";
     }
 }
