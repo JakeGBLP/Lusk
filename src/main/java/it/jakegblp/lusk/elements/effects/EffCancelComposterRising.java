@@ -23,10 +23,10 @@ import javax.annotation.Nullable;
 @Since("1.0.0")
 public class EffCancelComposterRising extends Effect {
     static {
-        Skript.registerEffect(EffCancelComposterRising.class, "cancel [the] composter [level] rise", "uncancel [the] composter [level] rise");
+        Skript.registerEffect(EffCancelComposterRising.class, "[:un]cancel [the] composter [level] rise");
     }
 
-    private boolean negated;
+    private boolean uncancel;
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
@@ -34,17 +34,17 @@ public class EffCancelComposterRising extends Effect {
             Skript.error("This effect can only be used in the Compost Item Event!");
             return false;
         }
-        negated = matchedPattern == 1;
+        uncancel = parser.hasTag("un");
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (negated ? "un" : "") + "cancel the composter level raise";
+        return (uncancel ? "un" : "") + "cancel the composter level raise";
     }
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((CompostItemEvent) event).setWillRaiseLevel(negated);
+        ((CompostItemEvent) event).setWillRaiseLevel(uncancel);
     }
 }

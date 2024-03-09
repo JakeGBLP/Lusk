@@ -23,10 +23,10 @@ import javax.annotation.Nullable;
 @Since("1.0.4")
 public class EffCancelConsumingBeaconItem extends Effect {
     static {
-        Skript.registerEffect(EffCancelConsumingBeaconItem.class, "cancel beacon item consume", "uncancel beacon item consume");
+        Skript.registerEffect(EffCancelConsumingBeaconItem.class, "[:un]cancel beacon item consume");
     }
 
-    private boolean negated;
+    private boolean uncancel;
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
@@ -34,17 +34,17 @@ public class EffCancelConsumingBeaconItem extends Effect {
             Skript.error("This effect can only be used in the Beacon Effect Change event!");
             return false;
         }
-        negated = matchedPattern == 1;
+        uncancel = parser.hasTag("un");
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (negated ? "un" : "") + "cancel beacon item consume";
+        return (uncancel ? "un" : "") + "cancel beacon item consume";
     }
 
     @Override
     protected void execute(@NotNull Event event) {
-        ((PlayerChangeBeaconEffectEvent) event).setConsumeItem(negated);
+        ((PlayerChangeBeaconEffectEvent) event).setConsumeItem(uncancel);
     }
 }

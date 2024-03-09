@@ -22,10 +22,8 @@ import org.jetbrains.annotations.Nullable;
 public class CondGoatHasHorns extends Condition {
     static {
         Skript.registerCondition(CondGoatHasHorns.class,
-                "%entity% has [its|the] left horn",
-                "%entity% does(n't| not) have [its|the] left horn",
-                "%entity% has [its|the] right horn",
-                "%entity% does(n't| not) have [its|the] right horn");
+                "%entity% has [its|the] (:left|right) horn",
+                "%entity% does(n't| not) have [its|the] (:left|right) horn");
     }
 
     private Expression<Entity> entityExpression;
@@ -35,27 +33,21 @@ public class CondGoatHasHorns extends Condition {
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         entityExpression = (Expression<Entity>) expressions[0];
-        left = matchedPattern == 0 || matchedPattern == 1;
-        setNegated(matchedPattern == 1 || matchedPattern == 3);
+        left = parser.hasTag("left");
+        setNegated(matchedPattern == 1);
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event == null ? "" : entityExpression.getSingle(event)) + (isNegated() ? " does not have" : " has") + " its " + (left ? "left" : "right") + "horn";
+        return (event == null ? "" : entityExpression.toString(event,debug)) + (isNegated() ? " does not have" : " has") + " its " + (left ? "left" : "right") + "horn";
     }
 
     @Override
     public boolean check(@NotNull Event event) {
         Entity entity = entityExpression.getSingle(event);
         if (entity instanceof Goat goat) {
-            boolean bool;
-            if (left) {
-                bool = goat.hasLeftHorn();
-            } else {
-                bool = goat.hasRightHorn();
-            }
-            return isNegated() ^ bool;
+            return isNegated() ^ left ? goat.hasLeftHorn() : goat.hasRightHorn();
         }
         return false;
     }

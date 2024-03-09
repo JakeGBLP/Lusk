@@ -26,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.2")
 public class CondConsumeBrewingFuel extends Condition {
     static {
-        Skript.registerCondition(CondConsumeBrewingFuel.class, "[the] [brewing] fuel will be consumed",
-                "[the] [brewing] fuel w(ill not|on't) be consumed");
+        Skript.registerCondition(CondConsumeBrewingFuel.class, "[the] brewing fuel will be consumed",
+                "[the] brewing fuel w(ill not|on't) be consumed");
     }
 
     @Override

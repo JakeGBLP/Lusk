@@ -6,25 +6,26 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Ocelot - is Trusting")
-@Description("Checks if an ocelot trusts players.")
-@Examples({"on damage of ocelot:\n\tif victim is trusting:\n\t\tcancel event\n\t\tbroadcast \"Don't betray %victim%!\""})
+@Name("Entity - Can Breathe Underwater")
+@Description("Checks if a living entity can breathe underwater.")
+@Examples({"if {_entity} can breathe underwater:"})
 @Since("1.0.2")
-public class CondOcelotTrusting extends PropertyCondition<LivingEntity> {
+public class CondCanBreatheUnderwater extends PropertyCondition<LivingEntity> {
+
     static {
-        register(CondOcelotTrusting.class, "trusting", "livingentities");
+        register(CondCanBreatheUnderwater.class, PropertyType.CAN, "breathe underwater", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        return entity instanceof Ocelot ocelot && ocelot.isTrusting();
+        return entity.canBreatheUnderwater();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "trusting";
+        return "breathe underwater";
     }
+
 }

@@ -18,15 +18,16 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 @Name("Fake Experience")
-@Description("Send an experience change. This fakes an experience change packet for a user. This will not actually change the experience points in any way.\nProgress must be within 0 and 100.")
+@Description("Send an experience change. This fakes an experience change packet for a user. This will not actually change the experience points in any way.\nProgress must be within 0 and 1.")
 @Examples({"""
-        show fake xp level 69 and progress 50% to all players"""})
-@Since("1.0.2")
+        show xp level 12 and progress 0.5 to all players"""})
+@Since("1.0.2, 1.1 (decimal xp)")
 public class EffFakeExperience extends Effect {
     static {
-        Skript.registerEffect(EffFakeExperience.class, "show [fake] [[e]xp[erience]] level %integer% and progress %number%\\% to %players%",
-                "show [fake] [[e]xp[erience]] level %integer% to %players%",
-                "show [fake] [[e]xp[erience]] progress %number%\\% to %players%");
+        Skript.registerEffect(EffFakeExperience.class,
+                "show [fake] [e]xp[erience] level %integer% and progress %number% to %players%",
+                "show [fake] [e]xp[erience] level %integer% to %players%",
+                "show [fake] [e]xp[erience] progress %number% to %players%");
     }
 
     private Expression<Integer> level;
@@ -53,52 +54,49 @@ public class EffFakeExperience extends Effect {
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event event, boolean debug) {
-        if (event != null) {
-            Integer lvl = level.getSingle(event);
-            Number xp = progress.getSingle(event);
-            Player[] playerArray = players.getArray(event);
-            if (pattern == 2) {
-                return "show fake experience progress " + xp + "% to " + Arrays.toString(playerArray);
-            } else if (pattern == 1) {
-                return "show fake experience level " + lvl + " to " + Arrays.toString(playerArray);
-            } else {
-                return "show fake experience level " + lvl + " and progress " + xp + "% to " + Arrays.toString(playerArray);
-            }
-        } else if (pattern == 2) {
-            return "show fake experience progress  % to  ";
-        } else if (pattern == 1) {
-            return "show fake experience level   to  ";
-        } else {
-            return "show fake experience level   and progress  % to  ";
-        }
-    }
-
-    @Override
     protected void execute(@NotNull Event event) {
-        Number xp = null;
+        Float xp = null;
         Integer lvl = null;
+        if (pattern == 0 || pattern == 2) {
+            Number progressNumber = progress.getSingle(event);
+            if (progressNumber == null) return;
+            xp = progressNumber.floatValue();
+            xp = Math.max(Math.min(xp,1),0);
+        }
         if (pattern == 0 || pattern == 1) {
             lvl = level.getSingle(event);
-        }
-        if (pattern == 0 || pattern == 2) {
-            xp = progress.getSingle(event);
+            if (lvl == null) return;
+            lvl = Math.max(lvl,0);
         }
         for (Player player : players.getArray(event)) {
-            if (pattern == 2) {
-                if (xp == null) return;
-                player.sendExperienceChange(xp.floatValue() / 100);
-            } else if (pattern == 1) {
-                if (lvl == null) return;
+            if (pattern == 2 && xp != null) {
+                player.sendExperienceChange(xp);
+            } else if (pattern == 1 && lvl != null) {
                 int calcNext = Utils.getTotalNeededXP(player.getLevel() + 1);
                 int calcCurrent = Utils.getTotalNeededXP(player.getLevel());
                 int calcFull = calcNext - calcCurrent;
-                xp = (player.getTotalExperience() - calcCurrent) / calcFull;
-                player.sendExperienceChange(xp.floatValue() / 100, lvl);
-            } else {
-                if (lvl == null || xp == null) return;
-                player.sendExperienceChange(xp.floatValue() / 100, lvl);
+                xp = (float) ((player.getTotalExperience() - calcCurrent) / calcFull);
+                player.sendExperienceChange(xp, lvl);
+            } else if (lvl != null && xp != null) {
+                player.sendExperienceChange(xp, lvl);
             }
         }
     }
+    @Override
+    public @NotNull String toString(@Nullable Event event, boolean debug) {
+        String xp,lvl,ps;
+        xp = lvl = ps = "";
+        if (event != null) {
+            xp = progress.toString(event,debug);
+            lvl = level.toString(event,debug);
+            ps = players.toString(event,debug);
+        }
+        StringBuilder string = new StringBuilder("show fake experience");
+        if (pattern == 0) string.append("level ").append(lvl).append(" and progress ").append(xp);
+        else if (pattern == 1) string.append("level ").append(lvl);
+        else string.append("progress ").append(xp);
+        string.append(" to ").append(ps);
+        return string.toString();
+    }
+
 }

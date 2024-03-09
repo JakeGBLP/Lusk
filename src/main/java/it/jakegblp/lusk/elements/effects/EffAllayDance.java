@@ -18,31 +18,30 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 @Name("Allay - Start/Stop Dance")
-@Description("Forces an Allay to start/stop dancing.\nIf the jukebox is specified but the provided block is not a jukebox, the Allay will start dancing without one.")
+@Description("Forces an Allay to start/stop dancing.")
 @Examples({"""
         make target start dancing"""})
 @Since("1.0.2")
 public class EffAllayDance extends Effect {
     static {
         Skript.registerEffect(EffAllayDance.class,
-                "make %livingentities% start dancing",
-                "make %livingentities% stop dancing");
+                "make %livingentities% (start|:stop) dancing");
     }
 
     private Expression<LivingEntity> entityExpression;
-    private int pattern;
+    private boolean stop;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
-        pattern = matchedPattern;
+        stop = parser.hasTag("stop");
         entityExpression = (Expression<LivingEntity>) expressions[0];
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + (event == null ? "" : Arrays.toString(entityExpression.getArray(event))) + (pattern == 0 || pattern == 1 ? " start" : " stop") + " dancing";
+        return "make " + (event == null ? "" : entityExpression.toString(event,debug)) + (stop ? " stop" : " start") + " dancing";
     }
 
     @Override
@@ -50,10 +49,10 @@ public class EffAllayDance extends Effect {
         LivingEntity[] entities = entityExpression.getArray(event);
         for (LivingEntity entity : entities) {
             if (entity instanceof Allay allay) {
-                if (pattern == 0) {
-                    allay.startDancing();
-                } else {
+                if (stop) {
                     allay.stopDancing();
+                } else {
+                    allay.startDancing();
                 }
             }
         }

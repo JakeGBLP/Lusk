@@ -5,8 +5,8 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.Location;
 import org.bukkit.block.Bell;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Bell - is Ringing")
@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.3")
 public class CondBellRinging extends PropertyCondition<Object> {
     static {
-        register(CondBellRinging.class, "(ringing|shaking)", "block/location");
+        register(CondBellRinging.class, "(ringing|shaking)", "block");
     }
 
     @Override
     public boolean check(Object o) {
-        if (o instanceof Location location) {
-            if (location.getBlock() instanceof Bell bell) {
+        if (o instanceof Block block) {
+            if (block.getState(false) instanceof Bell bell) {
                 return bell.isShaking();
             }
         } else if (o instanceof Bell bell) {

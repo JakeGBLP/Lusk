@@ -18,13 +18,12 @@ import javax.annotation.Nullable;
 
 @Name("JukeBox - Eject Disc")
 @Description("Forces a jukebox to eject its disc.")
-@Examples({"""
-        eject the record of target block"""})
+@Examples({"eject the record of target block"})
 @Since("1.0.3")
 public class EffJukeBoxEject extends Effect {
     static {
-        Skript.registerEffect(EffJukeBoxEject.class, "eject [the] ([music] disc|record) (of|from) %blocks%",
-                "eject %blocks%'[s] (disc|record)");
+        Skript.registerEffect(EffJukeBoxEject.class, "eject [the] [music] (disc|record) (of|from) %blocks%",
+                "eject %blocks%'[s] [music] (disc|record)");
     }
 
     private Expression<Block> blockExpression;
@@ -38,7 +37,7 @@ public class EffJukeBoxEject extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "eject the record of " + (event == null ? "" : blockExpression.getArray(event));
+        return "eject the record of " + (event == null ? "" : blockExpression.toString(event,debug));
     }
 
     @Override

@@ -19,10 +19,7 @@ public class CondInPowderedSnow extends PropertyCondition<Entity> {
 
     @Override
     public boolean check(Entity entity) {
-        if (entity != null) {
-            return entity.isInPowderedSnow();
-        }
-        return false;
+        return entity != null && entity.isInPowderedSnow();
     }
 
     @Override

@@ -20,10 +20,7 @@ public class CondJukeBoxPlaying extends PropertyCondition<Block> {
 
     @Override
     public boolean check(Block block) {
-        if (block.getState() instanceof Jukebox jukebox) {
-            return jukebox.isPlaying();
-        }
-        return false;
+        return block.getState() instanceof Jukebox jukebox && jukebox.isPlaying();
     }
 
     @Override

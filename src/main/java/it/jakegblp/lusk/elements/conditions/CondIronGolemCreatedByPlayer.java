@@ -17,28 +17,26 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Iron Golem - Created By a Player")
 @Description("Checks if an iron golem was created by a player.")
-@Examples({"if {_j} has a record:"})
+@Examples({"if {_golem} was created by a player:"})
 @Since("1.0.3")
 public class CondIronGolemCreatedByPlayer extends Condition {
     static {
         Skript.registerCondition(CondIronGolemCreatedByPlayer.class,
-                "%entity% was (created|built) by ([a] player|players)",
-                "%entity% was(n't| not) (created|built) by ([a] player|players)");
+                "%entity% was[no:(n't| not)] (created|built) by ([a] player|players)");
     }
 
     private Expression<Entity> entityExpression;
-
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         entityExpression = (Expression<Entity>) expressions[0];
-        setNegated(matchedPattern == 1);
+        setNegated(parser.hasTag("no"));
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event == null ? "" : entityExpression.getSingle(event)) + "was " + (isNegated() ? "not " : "") + "spawned by a player";
+        return (event == null ? "" : entityExpression.toString(event,debug)) + "was " + (isNegated() ? "not " : "") + "created by a player";
     }
 
     @Override

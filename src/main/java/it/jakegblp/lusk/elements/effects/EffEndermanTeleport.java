@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 @Description("Attempts to teleport an enderman to a random nearby location.")
 @Examples({"""
         randomly teleport (entities where [input is an enderman])"""})
-@Since("1.0.2+")
+@Since("1.0.2")
 public class EffEndermanTeleport extends Effect {
     static {
         Skript.registerEffect(EffEndermanTeleport.class, "[attempt to] randomly teleport %livingentities%");
@@ -37,7 +37,7 @@ public class EffEndermanTeleport extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "force duplicate " + (event == null ? "" : entityExpression.getArray(event));
+        return "attempt to randomly teleport " + (event == null ? "" : entityExpression.toString(event,debug));
     }
 
     @Override

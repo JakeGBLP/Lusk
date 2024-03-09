@@ -20,10 +20,7 @@ public class CondHorseEatingGrass extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity livingEntity) {
-        if (livingEntity instanceof AbstractHorse horse) {
-            return horse.isEatingGrass();
-        }
-        return false;
+        return livingEntity instanceof AbstractHorse horse && horse.isEatingGrass();
     }
 
     @Override

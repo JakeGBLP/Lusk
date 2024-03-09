@@ -18,29 +18,28 @@ import javax.annotation.Nullable;
 
 @Name("JukeBox - Start/Stop Playing")
 @Description("Makes a jukebox start/stop playing.")
-@Examples({"""
-        eject target block"""})
+@Examples({"make target block start playing"})
 @Since("1.0.3")
 public class EffJukeBoxPlay extends Effect {
     static {
-        Skript.registerEffect(EffJukeBoxPlay.class, "make %blocks% start playing",
+        Skript.registerEffect(EffJukeBoxPlay.class, "make %blocks% (:stop|start) playing",
                 "make %blocks% stop playing");
     }
 
     private Expression<Block> blockExpression;
-    private boolean start;
+    private boolean stop;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
         blockExpression = (Expression<Block>) expressions[0];
-        start = matchedPattern == 0;
+        stop = parser.hasTag("stop");
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + (event == null ? "" : blockExpression.getArray(event)) + (start ? " start" : " stop") + " playing";
+        return "make " + (event == null ? "" : blockExpression.toString(event,debug)) + (stop ? " stop" : " start") + " playing";
     }
 
     @Override
@@ -48,10 +47,10 @@ public class EffJukeBoxPlay extends Effect {
         Block[] blocks = blockExpression.getArray(event);
         for (Block block : blocks) {
             if (block.getState() instanceof Jukebox jukebox) {
-                if (start) {
-                    jukebox.startPlaying();
-                } else {
+                if (stop) {
                     jukebox.stopPlaying();
+                } else {
+                    jukebox.startPlaying();
                 }
             }
         }

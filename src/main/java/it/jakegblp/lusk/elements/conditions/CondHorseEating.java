@@ -9,22 +9,22 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Horse - is Rearing")
-@Description("Checks if an horse is rearing.")
-@Examples({"if target is rearing:"})
+@Name("Horse - is Eating")
+@Description("Checks if an horse is eating.")
+@Examples({"if target is eating:"})
 @Since("1.0.3")
-public class CondHorseRearing extends PropertyCondition<LivingEntity> {
+public class CondHorseEating extends PropertyCondition<LivingEntity> {
     static {
-        register(CondHorseRearing.class, "rearing", "livingentity");
+        register(CondHorseEating.class, "eating", "livingentity");
     }
 
     @Override
     public boolean check(LivingEntity livingEntity) {
-        return livingEntity instanceof AbstractHorse horse && horse.isRearing();
+        return livingEntity instanceof AbstractHorse horse && horse.isEating();
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "rearing";
+        return "eating";
     }
 }

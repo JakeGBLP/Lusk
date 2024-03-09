@@ -18,8 +18,7 @@ import javax.annotation.Nullable;
 
 @Name("Llama - Join Caravan")
 @Description("Makes a llama join another llama's caravan.")
-@Examples({"""
-        make target join caravan of {llama}"""})
+@Examples("make target join caravan of {llama}")
 @Since("1.0.3")
 public class EffLlamaJoinCaravan extends Effect {
     static {
@@ -41,7 +40,7 @@ public class EffLlamaJoinCaravan extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + (event == null ? "" : entityExpression.getArray(event)) + " join the caravan of " + (event == null ? "" : entityExpression1.getArray(event));
+        return "make " + (event == null ? "" : entityExpression.toString(event,debug)) + " join the caravan of " + (event == null ? "" : entityExpression1.toString(event,debug));
     }
 
     @Override

@@ -25,8 +25,10 @@ import org.jetbrains.annotations.Nullable;
 public class ExprGoatHornsState extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprGoatHornsState.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] left horn [state] of %entity%",
-                "[the] right horn [state] of %entity%");
+                "[the] goat [has] (:left|right) horn state of %entity%",
+                "%entity%'[s] goat [has] (:left|right) horn state",
+                "whether [the] goat %entity% has [its|the[ir]] (:left|right) horn [or not]",
+                "whether [or not] [the] goat %entity% has [its|the[ir]] (:left|right) horn");
     }
 
     private Expression<Entity> entityExpression;
@@ -35,7 +37,7 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         entityExpression = (Expression<Entity>) exprs[0];
-        left = matchedPattern == 0;
+        left = parseResult.hasTag("left");
         return true;
     }
 
@@ -44,22 +46,15 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof Goat goat) {
             boolean bool;
-            if (left) {
-                bool = goat.hasLeftHorn();
-            } else {
-                bool = goat.hasRightHorn();
-            }
+            bool = left ? goat.hasLeftHorn() : goat.hasRightHorn();
             return new Boolean[]{bool};
         }
         return new Boolean[0];
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
-            return CollectionUtils.array(Boolean[].class);
-        }
-        return new Class[0];
+    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? CollectionUtils.array(Boolean[].class) : null;
     }
 
     @Override
@@ -68,11 +63,8 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
         if (aBoolean == null) return;
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof Goat goat) {
-            if (left) {
-                goat.setLeftHorn(aBoolean);
-            } else {
-                goat.setRightHorn(aBoolean);
-            }
+            if (left) goat.setLeftHorn(aBoolean);
+            else goat.setRightHorn(aBoolean);
         }
     }
 
@@ -88,6 +80,6 @@ public class ExprGoatHornsState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the " + (left ? "left" : "right") + " horn state of " + (e == null ? "" : entityExpression.getSingle(e));
+        return "the goat has " + (left ? "left" : "right") + " horn state of " + (e == null ? "" : entityExpression.toString(e,debug));
     }
 }

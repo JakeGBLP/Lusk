@@ -17,9 +17,8 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 @Name("Show Credits")
-@Description("Shows the player the win screen that normally is only displayed after one kills the ender dragon and exits the end for the first time.")
-@Examples({"""
-        show the credits to all players"""})
+@Description("Shows a player the win screen that normally is only displayed after one kills the ender dragon and exits the end for the first time.")
+@Examples("show the credits to all players")
 @Since("1.0.0")
 public class EffShowCredits extends Effect {
     static {
@@ -37,7 +36,7 @@ public class EffShowCredits extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "show the end poem to " + (event == null ? "" : Arrays.toString(players.getArray(event)));
+        return "show the end poem to " + (event == null ? "" : players.toString(event,debug));
     }
 
     @Override

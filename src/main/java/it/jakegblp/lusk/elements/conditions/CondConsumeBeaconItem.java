@@ -25,8 +25,8 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.4")
 public class CondConsumeBeaconItem extends Condition {
     static {
-        Skript.registerCondition(CondConsumeBeaconItem.class, "[the] [beacon] item will be consumed",
-                "[the] [beacon] item w(ill not|on't) be consumed");
+        Skript.registerCondition(CondConsumeBeaconItem.class, "[the] beacon item will be consumed",
+                "[the] beacon item w(ill not|on't) be consumed");
     }
 
     @Override

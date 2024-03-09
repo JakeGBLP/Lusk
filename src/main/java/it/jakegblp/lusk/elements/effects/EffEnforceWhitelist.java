@@ -21,24 +21,24 @@ import javax.annotation.Nullable;
 @Since("1.0.2")
 public class EffEnforceWhitelist extends Effect {
     static {
-        Skript.registerEffect(EffEnforceWhitelist.class, "enforce [the] [server] whitelist", "unenforce [the] [server] whitelist");
+        Skript.registerEffect(EffEnforceWhitelist.class, "[:un]enforce [the] [server] whitelist");
     }
 
-    private boolean negated;
+    private boolean enforce;
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
-        negated = matchedPattern == 1;
+        enforce = !parser.hasTag("un");
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (negated ? "unenforce" : "enforce") + " the server whitelist";
+        return (enforce ? "" : "un") + "enforce the server whitelist";
     }
 
     @Override
     protected void execute(@NotNull Event event) {
-        Bukkit.setWhitelistEnforced(!negated);
+        Bukkit.setWhitelistEnforced(enforce);
     }
 }

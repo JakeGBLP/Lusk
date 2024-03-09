@@ -27,8 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondIsInstantWorldBorderChange extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
-            Skript.registerCondition(CondIsInstantWorldBorderChange.class, "[the] world[ ]border change is instant",
-                    "[the] world[ ]border change is not instant");
+            Skript.registerCondition(CondIsInstantWorldBorderChange.class, "[the] world[ ]border change is[not:n('|o)t] instant");
         }
     }
 
@@ -38,8 +37,7 @@ public class CondIsInstantWorldBorderChange extends Condition {
             Skript.error("This condition can only be used in the WorldBorder Change event!");
             return false;
         }
-        setNegated(matchedPattern == 1);
-
+        setNegated(parser.hasTag("not"));
         return true;
     }
 

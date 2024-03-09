@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 @Name("Warden Disturbance")
-@Description("Makes the warden sense a disturbance at the provided location.")
+@Description("Makes a warden sense a disturbance at the provided location.")
 @Examples({"""
         """})
 @Since("1.0.2")
@@ -41,7 +41,7 @@ public class EffWardenDisturbance extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "disturb " + (event == null ? "" : Arrays.toString(entitiesExpression.getArray(event))) + " from " + (event == null ? "" : locationExpression.getSingle(event));
+        return "disturb " + (event == null ? "" : entitiesExpression.toString(event,debug)) + " from " + (event == null ? "" : locationExpression.toString(event,debug));
     }
 
     @Override
