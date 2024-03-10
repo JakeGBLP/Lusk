@@ -8,7 +8,6 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Pose;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Pose")
 @Description("Returns the entity's current pose. Note that the pose is only updated at the end of a tick, so it may be inconsistent.")

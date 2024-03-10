@@ -9,7 +9,6 @@ import com.vdurmont.semver4j.Semver;
 import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Name("Player - Client Version")
 @Description("Returns the Minecraft Version of a player, only major versions ) are included.")

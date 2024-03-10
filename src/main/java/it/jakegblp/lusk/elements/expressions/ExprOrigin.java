@@ -8,7 +8,6 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Origin")
 @Description("Gets the location where this entity originates from.\n" +

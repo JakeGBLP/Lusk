@@ -16,7 +16,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 
 @Name("Warden Disturbance")
 @Description("Makes a warden sense a disturbance at the provided location.")

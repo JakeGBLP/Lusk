@@ -15,7 +15,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 
 @Name("Allay - Start/Stop Dance")
 @Description("Forces an Allay to start/stop dancing.")

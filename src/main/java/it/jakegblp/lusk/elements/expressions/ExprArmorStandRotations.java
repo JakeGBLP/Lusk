@@ -12,7 +12,6 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.VectorMath;
-import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;

@@ -8,7 +8,6 @@ import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerLecternPageChangeEvent;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
