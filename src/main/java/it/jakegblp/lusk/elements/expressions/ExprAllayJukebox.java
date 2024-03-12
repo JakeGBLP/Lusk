@@ -11,7 +11,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Allay Jukebox")
+@Name("Allay - Jukebox")
 @Description("Gets the jukebox the allay is set to dance to.")
 @Examples({"broadcast jukebox of target"})
 @Since("1.0.2")
