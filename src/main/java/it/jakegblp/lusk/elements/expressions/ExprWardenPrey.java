@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
         Returns the entity at which this warden is most angry.""")
 @Examples({"broadcast prey of target"})
 @Since("1.0.2")
-public class ExprWardenAngryAtEntity extends SimplePropertyExpression<Entity, LivingEntity> {
+public class ExprWardenPrey extends SimplePropertyExpression<Entity, LivingEntity> {
     static {
-        register(ExprWardenAngryAtEntity.class, LivingEntity.class, "prey", "entity");
+        register(ExprWardenPrey.class, LivingEntity.class, "prey", "entity");
     }
 
     @Override
