@@ -25,11 +25,9 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3")
 public class ExprBeaconEffects extends PropertyExpression<Block,PotionEffect> {
     static {
-        Skript.registerExpression(ExprBeaconEffects.class, PotionEffect.class, ExpressionType.SIMPLE,
-                "[the] primary [potion] effect of %block%",
-                "%block%'[s] primary [potion] effect",
-                "[the] secondary [potion] effect of %block%",
-                "%block%'[s] secondary [potion] effect");
+        Skript.registerExpression(ExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED,
+                "[the] (:primary|secondary) [potion] effect of %block%",
+                "%block%'[s] (:primary|secondary) [potion] effect");
     }
 
     private Expression<Block> blockExpression;
@@ -38,7 +36,7 @@ public class ExprBeaconEffects extends PropertyExpression<Block,PotionEffect> {
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
         blockExpression = (Expression<Block>) exprs[0];
-        primary = matchedPattern == 0 || matchedPattern == 1;
+        primary = parseResult.hasTag("primary");
         return true;
     }
 

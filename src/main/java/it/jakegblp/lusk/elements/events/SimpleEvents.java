@@ -28,21 +28,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Pose;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
-import org.bukkit.event.entity.EntityEnterLoveModeEvent;
-import org.bukkit.event.entity.EntityPoseChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -458,5 +450,51 @@ public class SimpleEvents {
                     .examples("")
                     .since("1.0.4");
         }
+        if (Skript.classExists("org.bukkit.event.entity.EntityShootBowEvent")) {
+            Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot")
+                    .description("""
+                            Called when a LivingEntity shoots a bow firing an arrow.""")
+                    .examples("")
+                    .since("1.1.1");
+            EventValues.registerEventValue(EntityShootBowEvent.class, Projectile.class, new Getter<>() {
+                @Override
+                public @Nullable Projectile get(EntityShootBowEvent event) {
+                    return (event.getProjectile() instanceof Projectile projectile) ? projectile : null;
+                }
+            }, EventValues.TIME_NOW);
+        }
+        if (Skript.classExists("org.bukkit.event.entity.EntityPlaceEvent")) {
+            Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity place")
+                    .description("""
+                            Triggered when an entity is created in the world by a player "placing" an item on a block.
+                            Note that this event is currently only fired for four specific placements: armor stands, boats, minecarts, and end crystals.""")
+                    .examples("")
+                    .since("1.1.1");
+            EventValues.registerEventValue(EntityPlaceEvent.class, Block.class, new Getter<>() {
+                @Override
+                public @NotNull Block get(EntityPlaceEvent event) {
+                    return event.getBlock();
+                }
+            }, EventValues.TIME_NOW);
+            EventValues.registerEventValue(EntityPlaceEvent.class, Player.class, new Getter<>() {
+                @Override
+                public @Nullable Player get(EntityPlaceEvent event) {
+                    return event.getPlayer();
+                }
+            }, EventValues.TIME_NOW);
+            EventValues.registerEventValue(EntityPlaceEvent.class, BlockFace.class, new Getter<>() {
+                @Override
+                public @NotNull BlockFace get(EntityPlaceEvent event) {
+                    return event.getBlockFace();
+                }
+            }, EventValues.TIME_NOW);
+            EventValues.registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, new Getter<>() {
+                @Override
+                public @NotNull EquipmentSlot get(EntityPlaceEvent event) {
+                    return event.getHand();
+                }
+            }, EventValues.TIME_NOW);
+        }
+
     }
 }
