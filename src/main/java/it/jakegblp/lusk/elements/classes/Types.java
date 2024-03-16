@@ -7,6 +7,7 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 import com.vdurmont.semver4j.Semver;
+import it.jakegblp.lusk.classes.ArmorStandInteraction;
 import it.jakegblp.lusk.wrappers.EnumWrapper;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.banner.PatternType;
@@ -155,5 +156,11 @@ public class Types {
                     .description("All the Block Faces.") // add example
                     .since("1.1"));
         }
+        EnumWrapper<ArmorStandInteraction> ARMORSTANDINTERACTION_ENUM = new EnumWrapper<>(ArmorStandInteraction.class);
+        Classes.registerClass(ARMORSTANDINTERACTION_ENUM.getClassInfo("armorstandinteraction")
+                .user("armor( |-)?stand interactions?")
+                .name("Armor Stand Interaction")
+                .description("All the Armor Stand Interactions.") // add example
+                .since("1.1.1"));
     }
 }
