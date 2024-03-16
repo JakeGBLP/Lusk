@@ -28,6 +28,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
+          name: Lusk.jar
           path: build/libs/*.jar
   test:
     runs-on: ubuntu-latest
