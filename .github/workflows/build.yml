@@ -15,7 +15,7 @@ jobs:
           java-version: 17
           distribution: 'adopt'
       - name: Install gradle
-        uses: sdkman/sdkman-action@v1
+        uses: sdkman/sdkman-action@main
         with:
           candidate: gradle
           version: 8.6
