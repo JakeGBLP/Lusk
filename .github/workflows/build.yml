@@ -14,12 +14,11 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
-      - name: Install SDKMan
-        run: curl -s "https://get.sdkman.io" | bash
-      - name: Initialize SDKMan
-        run: source "/home/runner/.sdkman/bin/sdkman-init.sh"
-      - name: Install Gradle
-        run: sdk install gradle 8.6
+      - name: Install gradle
+        uses: sdkman/sdkman-action@v1
+        with:
+          candidate: gradle
+          version: 8.6
       - name: Generate Gradle wrapper
         run: gradle wrapper
       - name: Grant execute permission for gradlew
