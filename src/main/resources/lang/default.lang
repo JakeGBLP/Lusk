@@ -10,3 +10,11 @@ types:
     enderdragonphase: ender dragon phase¦s
     blockface: block face¦s
     armorstandinteraction: armor( |-)?stand interaction¦s
+
+equipment slots:
+    chest: chest(plate)? (equipment)? slot
+    feet: feet|boots (equipment)? slot
+    legs: legs|leggings (equipment)? slot
+    head: head (equipment)? slot
+    hand: (main( |-|_))?hand ((equipment)? slot)?
+    off_hand: off( |-|_)?hand ((equipment)? slot)?
