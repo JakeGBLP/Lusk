@@ -27,7 +27,6 @@ public class Utils {
         }
         return false;
     }
-
     public static boolean isInteger(String string) {
         return string.matches("\\d+");
     }
