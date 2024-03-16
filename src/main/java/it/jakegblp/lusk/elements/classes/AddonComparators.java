@@ -1,9 +1,10 @@
 package it.jakegblp.lusk.elements.classes;
 
-import ch.njol.skript.classes.Comparator;
-import ch.njol.skript.registrations.Comparators;
 import com.vdurmont.semver4j.Semver;
 import org.jetbrains.annotations.NotNull;
+import org.skriptlang.skript.lang.comparator.Comparator;
+import org.skriptlang.skript.lang.comparator.Comparators;
+import org.skriptlang.skript.lang.comparator.Relation;
 
 public class AddonComparators {
     static {
