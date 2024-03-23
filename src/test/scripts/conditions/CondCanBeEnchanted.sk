@@ -1,0 +1,3 @@
+test "CondCanBeEnchanted":
+  assert dirt can't be enchanted with sharpness with "dirt can't be enchanted with sharpness"
+  assert diamond sword can be enchanted with sharpness with "a diamond sword can be enchanted with sharpness"
