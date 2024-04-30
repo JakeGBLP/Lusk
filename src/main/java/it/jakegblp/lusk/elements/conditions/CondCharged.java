@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.WitherSkull;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,13 +23,15 @@ public class CondCharged extends PropertyCondition<Object> {
 
     @Override
     public boolean check(Object o) {
-        if (o instanceof CrossbowMeta crossbowMeta) {
+        if (o instanceof ItemStack itemStack)
+            if (itemStack.getItemMeta() instanceof CrossbowMeta crossbowMeta)
+                return crossbowMeta.hasChargedProjectiles();
+        else if (o instanceof CrossbowMeta crossbowMeta)
             return crossbowMeta.hasChargedProjectiles();
-        } else if (o instanceof Wither wither) {
+        else if (o instanceof Wither wither)
             return wither.isCharged();
-        } else if (o instanceof WitherSkull witherSkull) {
+        else if (o instanceof WitherSkull witherSkull)
             return witherSkull.isCharged();
-        }
         return false;
     }
 

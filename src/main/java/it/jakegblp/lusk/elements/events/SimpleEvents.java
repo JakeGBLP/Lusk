@@ -34,6 +34,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
+import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -495,6 +496,26 @@ public class SimpleEvents {
                 }
             }, EventValues.TIME_NOW);
         }
-
+        if (Skript.classExists("org.bukkit.event.player.PlayerHarvestBlockEvent")) {
+            Skript.registerEvent("Player - on Block Harvest", SimpleEvent.class, PlayerHarvestBlockEvent.class, "[block] harvest")
+                    .description("""
+                            This event is called whenever a player harvests a block.
+                            A 'harvest' is when a block drops an item (usually some sort of crop) and changes state, but is not broken in order to drop the item.
+                            This event is not called for when a block is broken.""")
+                    .examples("")
+                    .since("1.1.1");
+            EventValues.registerEventValue(PlayerHarvestBlockEvent.class, Block.class, new Getter<>() {
+                @Override
+                public @NotNull Block get(PlayerHarvestBlockEvent event) {
+                    return event.getHarvestedBlock();
+                }
+            }, EventValues.TIME_NOW);
+            EventValues.registerEventValue(PlayerHarvestBlockEvent.class, ItemStack[].class, new Getter<>() {
+                @Override
+                public @NotNull ItemStack[] get(PlayerHarvestBlockEvent event) {
+                    return event.getItemsHarvested().toArray(new ItemStack[0]);
+                }
+            }, EventValues.TIME_NOW);
+        }
     }
 }

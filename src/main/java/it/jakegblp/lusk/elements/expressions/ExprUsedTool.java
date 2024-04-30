@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+//
 
 @Name("Used Tool")
 @Description("The held item used in events where you might need to distinguish between the main and offhand.")
@@ -118,9 +118,6 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
         } else if (e instanceof PlayerUnleashEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent") && e instanceof PlayerUseUnknownEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
         } else if (Skript.classExists("io.papermc.paper.event.block.PlayerShearBlockEvent") && e instanceof PlayerShearBlockEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
@@ -128,6 +125,9 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
             slot = event.getHand();
             entity = event.getEntity();
         } else if (Skript.classExists("io.papermc.paper.event.player.PlayerArmSwingEvent") && e instanceof PlayerArmSwingEvent event) {
+            player = event.getPlayer();
+            slot = event.getHand();
+        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent") && e instanceof PlayerUseUnknownEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
         }
