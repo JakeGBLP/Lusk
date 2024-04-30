@@ -66,80 +66,6 @@ public class Constants {
         put("RARE", SkriptColor.LIGHT_CYAN);
         put("EPIC", SkriptColor.LIGHT_PURPLE);
     }};
-
-    public static final HashMap<Material,Integer> compostablesWithChances = new HashMap<>() {{
-        put(Material.BEETROOT_SEEDS, 30);
-        put(Material.DRIED_KELP, 30);
-        put(Material.GLOW_BERRIES, 30);
-        put(Material.SHORT_GRASS, 30);
-        put(Material.HANGING_ROOTS, 30);
-        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
-            put(Material.MANGROVE_ROOTS, 30);
-        }
-        put(Material.KELP, 30);
-        put(Material.MELON_SEEDS, 30);
-        put(Material.PUMPKIN_SEEDS, 30);
-        put(Material.MOSS_CARPET, 30);
-        put(Material.SEAGRASS, 30);
-        put(Material.SMALL_DRIPLEAF, 30);
-        put(Material.SWEET_BERRIES, 30);
-        put(Material.WHEAT_SEEDS, 30);
-        for (Material material : saplings) {
-            put(material, 30);
-        }
-        for (Material material : leaves) {
-            put(material, 30);
-        }
-        put(Material.CACTUS, 50);
-        put(Material.DRIED_KELP_BLOCK, 50);
-        put(Material.FLOWERING_AZALEA_LEAVES, 50);
-        put(Material.GLOW_LICHEN, 50);
-        put(Material.MELON_SLICE, 50);
-        put(Material.NETHER_SPROUTS, 50);
-        put(Material.SUGAR_CANE, 50);
-        put(Material.TALL_GRASS, 50);
-        put(Material.TWISTING_VINES, 50);
-        put(Material.VINE, 50);
-        put(Material.WEEPING_VINES, 50);
-        put(Material.APPLE, 65);
-        put(Material.AZALEA, 65);
-        put(Material.BEETROOT, 65);
-        put(Material.BIG_DRIPLEAF, 65);
-        put(Material.CARROT, 65);
-        put(Material.COCOA_BEANS, 65);
-        put(Material.FERN, 65);
-        put(Material.LARGE_FERN, 65);
-        flowers.forEach(m -> put(m,65));
-        put(Material.CRIMSON_FUNGUS, 65);
-        put(Material.WARPED_FUNGUS, 65);
-        put(Material.LILY_PAD, 65);
-        put(Material.MELON, 65);
-        put(Material.MOSS_BLOCK, 65);
-        put(Material.BROWN_MUSHROOM, 65);
-        put(Material.RED_MUSHROOM, 65);
-        put(Material.MUSHROOM_STEM, 65);
-        put(Material.NETHER_WART, 65);
-        put(Material.POTATO, 65);
-        put(Material.PUMPKIN, 65);
-        put(Material.CARVED_PUMPKIN, 65);
-        put(Material.CRIMSON_ROOTS, 65);
-        put(Material.WARPED_ROOTS, 65);
-        put(Material.SEA_PICKLE, 65);
-        put(Material.SHROOMLIGHT, 65);
-        put(Material.SPORE_BLOSSOM, 65);
-        put(Material.WHEAT, 65);
-        put(Material.BAKED_POTATO, 85);
-        put(Material.BREAD, 85);
-        put(Material.COOKIE, 85);
-        put(Material.FLOWERING_AZALEA, 85);
-        put(Material.HAY_BLOCK, 85);
-        put(Material.RED_MUSHROOM_BLOCK, 85);
-        put(Material.BROWN_MUSHROOM_BLOCK, 85);
-        put(Material.NETHER_WART_BLOCK, 85);
-        put(Material.WARPED_WART_BLOCK, 85);
-        put(Material.CAKE, 100);
-        put(Material.PUMPKIN_PIE, 100);
-    }};
     public static final ArrayList<Material> tillables = new ArrayList<>() {{
         add(Material.DIRT);
         add(Material.COARSE_DIRT);
@@ -278,7 +204,83 @@ public class Constants {
         add(Material.LILAC);
         add(Material.ROSE_BUSH);
         add(Material.PEONY);
-    }},compostables = new ArrayList<>(compostablesWithChances.keySet().stream().toList());
+    }};
+
+
+    public static final HashMap<Material,Integer> compostablesWithChances = new HashMap<>() {{
+        put(Material.BEETROOT_SEEDS, 30);
+        put(Material.DRIED_KELP, 30);
+        put(Material.GLOW_BERRIES, 30);
+        put(Material.SHORT_GRASS, 30);
+        put(Material.HANGING_ROOTS, 30);
+        if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
+            put(Material.MANGROVE_ROOTS, 30);
+        }
+        put(Material.KELP, 30);
+        put(Material.MELON_SEEDS, 30);
+        put(Material.PUMPKIN_SEEDS, 30);
+        put(Material.MOSS_CARPET, 30);
+        put(Material.SEAGRASS, 30);
+        put(Material.SMALL_DRIPLEAF, 30);
+        put(Material.SWEET_BERRIES, 30);
+        put(Material.WHEAT_SEEDS, 30);
+        for (Material material : saplings) {
+            put(material, 30);
+        }
+        for (Material material : leaves) {
+            put(material, 30);
+        }
+        put(Material.CACTUS, 50);
+        put(Material.DRIED_KELP_BLOCK, 50);
+        put(Material.FLOWERING_AZALEA_LEAVES, 50);
+        put(Material.GLOW_LICHEN, 50);
+        put(Material.MELON_SLICE, 50);
+        put(Material.NETHER_SPROUTS, 50);
+        put(Material.SUGAR_CANE, 50);
+        put(Material.TALL_GRASS, 50);
+        put(Material.TWISTING_VINES, 50);
+        put(Material.VINE, 50);
+        put(Material.WEEPING_VINES, 50);
+        put(Material.APPLE, 65);
+        put(Material.AZALEA, 65);
+        put(Material.BEETROOT, 65);
+        put(Material.BIG_DRIPLEAF, 65);
+        put(Material.CARROT, 65);
+        put(Material.COCOA_BEANS, 65);
+        put(Material.FERN, 65);
+        put(Material.LARGE_FERN, 65);
+        flowers.forEach(m -> put(m,65));
+        put(Material.CRIMSON_FUNGUS, 65);
+        put(Material.WARPED_FUNGUS, 65);
+        put(Material.LILY_PAD, 65);
+        put(Material.MELON, 65);
+        put(Material.MOSS_BLOCK, 65);
+        put(Material.BROWN_MUSHROOM, 65);
+        put(Material.RED_MUSHROOM, 65);
+        put(Material.MUSHROOM_STEM, 65);
+        put(Material.NETHER_WART, 65);
+        put(Material.POTATO, 65);
+        put(Material.PUMPKIN, 65);
+        put(Material.CARVED_PUMPKIN, 65);
+        put(Material.CRIMSON_ROOTS, 65);
+        put(Material.WARPED_ROOTS, 65);
+        put(Material.SEA_PICKLE, 65);
+        put(Material.SHROOMLIGHT, 65);
+        put(Material.SPORE_BLOSSOM, 65);
+        put(Material.WHEAT, 65);
+        put(Material.BAKED_POTATO, 85);
+        put(Material.BREAD, 85);
+        put(Material.COOKIE, 85);
+        put(Material.FLOWERING_AZALEA, 85);
+        put(Material.HAY_BLOCK, 85);
+        put(Material.RED_MUSHROOM_BLOCK, 85);
+        put(Material.BROWN_MUSHROOM_BLOCK, 85);
+        put(Material.NETHER_WART_BLOCK, 85);
+        put(Material.WARPED_WART_BLOCK, 85);
+        put(Material.CAKE, 100);
+        put(Material.PUMPKIN_PIE, 100);
+    }};
+    public static final ArrayList<Material> compostables = new ArrayList<>(compostablesWithChances.keySet().stream().toList());
 
     public static final ArrayList<EntityData<? extends Entity>> shearables = new ArrayList<>() {{
         add(EntityUtils.toSkriptEntityData(EntityType.MUSHROOM_COW));
