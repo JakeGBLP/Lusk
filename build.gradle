@@ -6,7 +6,7 @@ plugins {
 build.dependsOn(shadowJar)
 jar.enabled = false
 group = "Lusk"
-version = "1.1.1"
+version = "1.2"
 
 compileJava {options.encoding = "UTF-8"}
 
