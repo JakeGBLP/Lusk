@@ -18,7 +18,6 @@ import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
-import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -36,9 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-//
 
 @Name("Used Tool")
 @Description("The held item used in events where you might need to distinguish between the main and offhand.")
@@ -57,7 +54,6 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
                 return true;
             }
         }
-        Lusk.getInstance().getLogger().info(Arrays.toString(getParser().getCurrentEvents()));
         Skript.error("The Hand Expression can only be used in events where Hands are involved.", ErrorQuality.SEMANTIC_ERROR);
         return false;
     }
