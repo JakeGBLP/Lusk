@@ -35,8 +35,9 @@ public class Lusk extends JavaPlugin {
     }
 
     public void registerListener(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener,instance);
+        Bukkit.getPluginManager().registerEvents(listener, instance);
     }
+
     @SuppressWarnings("unused")
     public SkriptAddon getAddonInstance() {
         return addon;

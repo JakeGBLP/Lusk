@@ -32,8 +32,8 @@ public class UpdateChecker implements Listener {
                 Lusk.getInstance().getLogger().info("Lusk is up to date!");
             } else {
                 Lusk.getInstance().getLogger().info("Lusk is NOT up to date!");
-                Lusk.getInstance().getLogger().info("> Current Version: "+pluginVersion);
-                Lusk.getInstance().getLogger().info("> Latest Version: "+version);
+                Lusk.getInstance().getLogger().info("> Current Version: " + pluginVersion);
+                Lusk.getInstance().getLogger().info("> Latest Version: " + version);
                 Lusk.getInstance().getLogger().info("> Download it at: https://github.com/JakeGBLP/Lusk/releases");
                 UPDATE_VERSION = curVer;
             }
@@ -70,7 +70,7 @@ public class UpdateChecker implements Listener {
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> updateVersion.thenApply(version -> {
             player.sendRichMessage("<red>[<white>Lusk<red>] <white>Lusk is <red><bold>OUTDATED<white>!");
-            player.sendRichMessage("<red>[<white>Lusk<red>] <white>New version: "+version);
+            player.sendRichMessage("<red>[<white>Lusk<red>] <white>New version: " + version);
             player.sendRichMessage("<red>[<white>Lusk<red>] <white>Download at: <link>https://github.com/JakeGBLP/Lusk/releases");
             return true;
         }), 30);

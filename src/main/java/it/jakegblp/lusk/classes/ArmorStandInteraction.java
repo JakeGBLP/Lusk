@@ -6,6 +6,7 @@ public enum ArmorStandInteraction {
     RETRIEVE(2),
     PLACE(3);
     public final int index;
+
     ArmorStandInteraction(int index) {
         this.index = index;
     }

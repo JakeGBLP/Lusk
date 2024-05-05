@@ -72,35 +72,35 @@ public class Constants {
         add(Material.DIRT_PATH);
         add(Material.GRASS_BLOCK);
         add(Material.ROOTED_DIRT);
-    }},pathables = new ArrayList<>() {{
+    }}, pathables = new ArrayList<>() {{
         add(Material.DIRT);
         add(Material.COARSE_DIRT);
         add(Material.GRASS_BLOCK);
         add(Material.ROOTED_DIRT);
         add(Material.MYCELIUM);
         add(Material.PODZOL);
-    }},axes = new ArrayList<>() {{
+    }}, axes = new ArrayList<>() {{
         add(Material.WOODEN_AXE);
         add(Material.GOLDEN_AXE);
         add(Material.STONE_AXE);
         add(Material.IRON_AXE);
         add(Material.DIAMOND_AXE);
         add(Material.NETHERITE_AXE);
-    }},hoes = new ArrayList<>() {{
+    }}, hoes = new ArrayList<>() {{
         add(Material.WOODEN_HOE);
         add(Material.GOLDEN_HOE);
         add(Material.STONE_HOE);
         add(Material.IRON_HOE);
         add(Material.DIAMOND_HOE);
         add(Material.NETHERITE_HOE);
-    }},shovels = new ArrayList<>() {{
+    }}, shovels = new ArrayList<>() {{
         add(Material.WOODEN_SHOVEL);
         add(Material.GOLDEN_SHOVEL);
         add(Material.STONE_SHOVEL);
         add(Material.IRON_SHOVEL);
         add(Material.DIAMOND_SHOVEL);
         add(Material.NETHERITE_SHOVEL);
-    }},strippables = new ArrayList<>() {{
+    }}, strippables = new ArrayList<>() {{
         add(Material.OAK_LOG);
         add(Material.OAK_WOOD);
         add(Material.SPRUCE_LOG);
@@ -123,7 +123,7 @@ public class Constants {
             add(Material.WARPED_HYPHAE);
             add(Material.WARPED_STEM);
         }
-    }},waxables = new ArrayList<>() {{
+    }}, waxables = new ArrayList<>() {{
         if (serverVersion.isGreaterThanOrEqualTo(Version("1.17"))) {
             add(Material.OXIDIZED_COPPER);
             add(Material.OXIDIZED_CUT_COPPER);
@@ -151,7 +151,7 @@ public class Constants {
             add(Material.WAXED_EXPOSED_CUT_COPPER_STAIRS);
 
         }
-    }},axeables = new ArrayList<>() {{
+    }}, axeables = new ArrayList<>() {{
         addAll(waxables);
         addAll(strippables);
         if (serverVersion.isGreaterThanOrEqualTo(Version("1.20"))) {
@@ -167,7 +167,7 @@ public class Constants {
             add(Material.BAMBOO_HANGING_SIGN);
             add(Material.CHERRY_HANGING_SIGN);
         }
-    }},saplings = new ArrayList<>() {{
+    }}, saplings = new ArrayList<>() {{
         add(Material.OAK_SAPLING);
         add(Material.BIRCH_SAPLING);
         add(Material.SPRUCE_SAPLING);
@@ -177,7 +177,7 @@ public class Constants {
         if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             add(Material.MANGROVE_PROPAGULE);
         }
-    }},leaves = new ArrayList<>() {{
+    }}, leaves = new ArrayList<>() {{
         add(Material.OAK_LEAVES);
         add(Material.BIRCH_LEAVES);
         add(Material.SPRUCE_LEAVES);
@@ -188,7 +188,7 @@ public class Constants {
         if (serverVersion.isGreaterThanOrEqualTo(Version("1.19"))) {
             add(Material.MANGROVE_LEAVES);
         }
-    }},flowers = new ArrayList<>() {{
+    }}, flowers = new ArrayList<>() {{
         add(Material.DANDELION);
         add(Material.POPPY);
         add(Material.BLUE_ORCHID);
@@ -207,7 +207,7 @@ public class Constants {
     }};
 
 
-    public static final HashMap<Material,Integer> compostablesWithChances = new HashMap<>() {{
+    public static final HashMap<Material, Integer> compostablesWithChances = new HashMap<>() {{
         put(Material.BEETROOT_SEEDS, 30);
         put(Material.DRIED_KELP, 30);
         put(Material.GLOW_BERRIES, 30);
@@ -249,7 +249,7 @@ public class Constants {
         put(Material.COCOA_BEANS, 65);
         put(Material.FERN, 65);
         put(Material.LARGE_FERN, 65);
-        flowers.forEach(m -> put(m,65));
+        flowers.forEach(m -> put(m, 65));
         put(Material.CRIMSON_FUNGUS, 65);
         put(Material.WARPED_FUNGUS, 65);
         put(Material.LILY_PAD, 65);

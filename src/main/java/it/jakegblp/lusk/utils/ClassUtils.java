@@ -1,10 +1,12 @@
 package it.jakegblp.lusk.utils;
+
 import java.util.Arrays;
 
 public class ClassUtils {
     /**
      * Checks whether a class has a specific method without checking for parameters.
-     * @param clazz the class to search for the method name
+     *
+     * @param clazz      the class to search for the method name
      * @param methodName the method name to search for
      * @return whether the method exists in the class
      */

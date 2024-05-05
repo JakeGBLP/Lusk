@@ -4,7 +4,6 @@ import ch.njol.skript.aliases.ItemType;
 import ch.njol.util.VectorMath;
 import com.vdurmont.semver4j.Semver;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,12 +20,14 @@ public class Utils {
     public static Semver Version(String s) {
         return new Semver(s, Semver.SemverType.LOOSE);
     }
+
     public static boolean isCrawling(Player player) {
         if (!player.isSwimming() && !player.isGliding()) {
             return Math.round(player.getHeight() * 10) == 6;
         }
         return false;
     }
+
     public static boolean isInteger(String string) {
         return string.matches("\\d+");
     }
@@ -34,6 +35,7 @@ public class Utils {
     public static boolean isBoolean(String string) {
         return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
+
     public static ItemType[] toItemTypes(List<Material> materials) {
         ItemType[] itemTypes = new ItemType[materials.size() - 1];
         for (int index = 0; index < itemTypes.length; index++) {
@@ -42,29 +44,6 @@ public class Utils {
         return itemTypes;
     }
 
-    // I really need to drop this
-    public static Object getBlockDataTag(BlockData blockData, String tag) {
-        String fullData = blockData.getAsString();
-        if (fullData.contains("[")) {
-            String data = fullData.replaceAll("(minecraft:[a-z0-9_]+\\[|])", "");
-            String splitDelimiter = null;
-            if (data.contains(";" + tag + "=")) {
-                splitDelimiter = ";" + tag + "=";
-            } else if (data.startsWith(tag + "=")) {
-                splitDelimiter = tag + "=";
-            }
-            if (splitDelimiter != null) {
-                String[] split = data.split(splitDelimiter);
-                String value = split[1].split(";")[0];
-                if (isInteger(value)) {
-                    return Integer.valueOf(value);
-                } else if (isBoolean(value)) {
-                    return Boolean.getBoolean(value);
-                }
-            }
-        }
-        return null;
-    }
 
     public static int getCompostChance(Material material) {
         return Constants.compostablesWithChances.get(material) != null ? Constants.compostablesWithChances.get(material) : 0;
@@ -73,6 +52,7 @@ public class Utils {
     public static boolean canCriticalDamage(Entity e) {
         return (e instanceof Player p && p.getFallDistance() < 0 && !e.isOnGround() && !p.hasPotionEffect(PotionEffectType.BLINDNESS) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING) && !p.isClimbing() && p.getAttackCooldown() > 0.9 && !p.isSprinting() && !p.isInWater() && p.getVehicle() == null);
     }
+
     public static int getTotalNeededXP(int level) {
         if (level <= 15)
             return (level * level) + (6 * level);
