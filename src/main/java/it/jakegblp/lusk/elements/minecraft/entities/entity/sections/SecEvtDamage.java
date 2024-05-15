@@ -9,6 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
+import ch.njol.util.Pair;
 import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -42,36 +43,26 @@ import java.util.function.Consumer;
 )
 @Since("1.1")
 public class SecEvtDamage extends Section {
-    private static class DamageEventEntity {
-        public EntityDamageByEntityEvent event;
-        public Entity entity;
-
-        public DamageEventEntity(EntityDamageByEntityEvent event, Entity entity) {
-            this.entity = entity;
-            this.event = event;
-        }
-    }
-
     public static class DamageListener implements Listener {
         static {
             Lusk.getInstance().registerListener(new DamageListener());
         }
 
-        private static final HashMap<Entity, Consumer<DamageEventEntity>> map = new HashMap<>();
+        private static final HashMap<Entity, Consumer<Pair<EntityDamageByEntityEvent, Entity>>> map = new HashMap<>();
 
-        private static void log(Consumer<DamageEventEntity> consumer, Entity entity) {
+        private static void log(Consumer<Pair<EntityDamageByEntityEvent, Entity>> consumer, Entity entity) {
             map.put(entity, consumer);
         }
 
         @EventHandler
         public static void onEntityDamage(EntityDamageByEntityEvent event) {
             Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(new DamageEventEntity(event, entity));
+            if (map.containsKey(entity)) map.get(entity).accept(new Pair<>(event, entity));
         }
     }
 
     static {
-        Skript.registerSection(SecEvtDamage.class, "[on] damage of %entity%", "when %entity% get[s] damaged");
+        Skript.registerSection(SecEvtDamage.class, "[on] damage of %~entity%", "when %~entity% get[s] damaged");
     }
 
     private Expression<Entity> victim;
@@ -88,16 +79,13 @@ public class SecEvtDamage extends Section {
 
     @Override
     protected @Nullable TriggerItem walk(@NotNull Event event) {
-        Consumer<DamageEventEntity> consumer;
-        if (trigger != null) {
-            consumer = o -> {
-                EntityDamageByEntityEvent damageEvent = o.event;
+        Consumer<Pair<EntityDamageByEntityEvent, Entity>> consumer = trigger == null ? null : o -> {
+            EntityDamageByEntityEvent damageEvent = o.getFirst();
+            if (damageEvent != null) {
                 Variables.setLocalVariables(damageEvent, Variables.copyLocalVariables(event));
                 TriggerItem.walk(trigger, damageEvent);
-            };
-        } else {
-            consumer = null;
-        }
+            }
+        };
         DamageListener.log(consumer, victim.getSingle(event));
         return super.walk(event, false);
     }

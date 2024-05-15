@@ -9,6 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
+import ch.njol.util.Pair;
 import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -41,36 +42,26 @@ import java.util.function.Consumer;
         """)
 @Since("1.1")
 public class SecEvtHeal extends Section {
-    private static class HealEventEntity {
-        public EntityRegainHealthEvent event;
-        public Entity entity;
-
-        public HealEventEntity(EntityRegainHealthEvent event, Entity entity) {
-            this.entity = entity;
-            this.event = event;
-        }
-    }
-
     public static class HealListener implements Listener {
         static {
             Lusk.getInstance().registerListener(new HealListener());
         }
 
-        private static final HashMap<Entity, Consumer<HealEventEntity>> map = new HashMap<>();
+        private static final HashMap<Entity, Consumer<Pair<EntityRegainHealthEvent, Object>>> map = new HashMap<>();
 
-        private static void log(Consumer<HealEventEntity> consumer, Entity entity) {
+        private static void log(Consumer<Pair<EntityRegainHealthEvent, Object>> consumer, Entity entity) {
             map.put(entity, consumer);
         }
 
         @EventHandler
         public static void onEntityHeal(EntityRegainHealthEvent event) {
             Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(new HealEventEntity(event, entity));
+            if (map.containsKey(entity)) map.get(entity).accept(new Pair<>(event, entity));
         }
     }
 
     static {
-        Skript.registerSection(SecEvtHeal.class, "[on] heal of %entity%", "when %entity% get[s] healed");
+        Skript.registerSection(SecEvtHeal.class, "[on] heal of %~entity%", "when %~entity% get[s] healed");
     }
 
     private Expression<Entity> entity;
@@ -87,17 +78,13 @@ public class SecEvtHeal extends Section {
 
     @Override
     protected @Nullable TriggerItem walk(@NotNull Event event) {
-        Consumer<HealEventEntity> consumer;
-        if (trigger != null) {
-            consumer = o -> {
-                EntityRegainHealthEvent healthEvent = o.event;
+        Consumer<Pair<EntityRegainHealthEvent, Object>> consumer = trigger == null ? null : o -> {
+            EntityRegainHealthEvent healthEvent = o.getFirst();
+            if (healthEvent != null) {
                 Variables.setLocalVariables(healthEvent, Variables.copyLocalVariables(event));
                 TriggerItem.walk(trigger, healthEvent);
-            };
-        } else {
-            consumer = null;
-        }
-
+            }
+        };
         HealListener.log(consumer, entity.getSingle(event));
         return super.walk(event, false);
     }
