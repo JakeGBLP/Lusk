@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.utils;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.util.VectorMath;
 import com.vdurmont.semver4j.Semver;
@@ -15,8 +16,11 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Utils {
+    public final static Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
+
     public static Semver Version(String s) {
         return new Semver(s, Semver.SemverType.LOOSE);
     }
@@ -36,6 +40,10 @@ public class Utils {
         return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
 
+    public static String toSkriptConfigNumberAccuracy(String s) {
+        return NUMBER_WITH_DECIMAL.matcher(s).replaceAll(n -> Skript.toString(Double.parseDouble(n.group())));
+    }
+
     public static ItemType[] toItemTypes(List<Material> materials) {
         ItemType[] itemTypes = new ItemType[materials.size() - 1];
         for (int index = 0; index < itemTypes.length; index++) {
@@ -43,7 +51,6 @@ public class Utils {
         }
         return itemTypes;
     }
-
 
     public static int getCompostChance(Material material) {
         return Constants.compostablesWithChances.get(material) != null ? Constants.compostablesWithChances.get(material) : 0;
@@ -74,7 +81,6 @@ public class Utils {
     public static boolean isEven(int integer) {
         return (integer % 2 == 0);
     }
-
 
     public static Vector toBukkitVector(EulerAngle angle) {
         double x = angle.getX();
