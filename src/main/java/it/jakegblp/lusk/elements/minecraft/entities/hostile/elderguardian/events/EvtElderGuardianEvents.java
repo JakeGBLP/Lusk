@@ -12,13 +12,12 @@ public class EvtElderGuardianEvents {
     static {
 
         if (Skript.classExists("io.papermc.paper.event.entity.ElderGuardianAppearanceEvent")) {
-            Skript.registerEvent("Elder Guardian - on Appear", SimpleEvent.class, ElderGuardianAppearanceEvent.class, "elder guardian appear")
+            Skript.registerEvent("Elder Guardian - on Appear", SimpleEvent.class, ElderGuardianAppearanceEvent.class, "elder guardian appear[ing]")
                     .description("""
-                            This event requires Paper.
-                                                        
                             Called when an ElderGuardian appears in front of a Player.""")
                     .examples("")
-                    .since("1.0.2");
+                    .since("1.0.2")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(ElderGuardianAppearanceEvent.class, Player.class, new Getter<>() {
                 @Override
                 public @NotNull Player get(final ElderGuardianAppearanceEvent e) {

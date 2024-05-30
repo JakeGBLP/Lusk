@@ -19,13 +19,13 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtWorldBorderChange extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent")) {
+        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
             Skript.registerEvent("WorldBorder - on Change/Center Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
-                            "world[ ]border start chang(e|ing)",
+                            "world[ ]border start[ing|ed] [to] chang(e|ing)",
                             "world[ ]border stop chang(e|ing)",
-                            "world[ ]border center change"
+                            "world[ ]border center chang(e[d]|ing)"
                     )
-                    .description("This Event requires Paper.")
+                    .description("Called when a world border's center is changed or when a world border starts (either over time or instantly) or stops moving.")
                     .examples("""
                             on world border start changing:
                               if the world border change is instant:
@@ -33,7 +33,8 @@ public class EvtWorldBorderChange extends SkriptEvent {
                               else:
                                 broadcast "not instant"
                             """)
-                    .since("1.0.2");
+                    .since("1.0.2")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(WorldBorderEvent.class, World.class, new Getter<>() {
                 @Override
                 public @NotNull World get(final WorldBorderEvent e) {

@@ -18,22 +18,23 @@ public class EvtLecternPageChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
             Skript.registerEvent("Lectern - on Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
-                            "lectern page flip [to the] left",
-                            "lectern page flip [to the] right",
-                            "lectern page [flip]"
+                            "lectern page flip[ping|ped] [to[wards] the] left",
+                            "lectern page flip[ping|ped] [to[wards] the] right",
+                            "lectern page flip[ping|ped] [(in|to[wards]) either direction|on either side]"
                     )
-                    .description("This Event requires Paper.\n\nCalled when a player flips the page in a Lectern.")
+                    .description("Called when a player flips the page in a Lectern.")
                     .examples("""
                             on lectern page flip to the right:
                               broadcast "right"
-                                                        
+                            
                             on lectern page flip to the left:
                               broadcast "left"
-                                                        
-                            on lectern page:
-                              broadcast "both"
-                              """)
-                    .since("1.0.0");
+                            
+                            on lectern page flip:
+                              broadcast "either"
+                            """)
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, new Getter<>() {
                 @Override
                 public @NotNull ItemStack get(final PlayerLecternPageChangeEvent e) {

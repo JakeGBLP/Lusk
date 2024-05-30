@@ -21,12 +21,13 @@ import java.util.Arrays;
 public class EvtEntityRename extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
-            Skript.registerEvent("Entity - on Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]")
-                    .description("This Event requires Paper.\n\nCalled when the player is attempting to rename a mob.")
+            Skript.registerEvent("Entity - on Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]","[entity] %-entitydatas% renam(e[d]|ing)")
+                    .description("Called when the player is attempting to rename a mob.")
                     .examples("""
                             on entity rename of pig:
                               broadcast entity's display name""")
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PlayerNameEntityEvent.class, Entity.class, new Getter<>() {
                 @Override
                 public @NotNull Entity get(final PlayerNameEntityEvent e) {

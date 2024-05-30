@@ -14,12 +14,13 @@ public class EvtWhitelistToggle extends SkriptEvent {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.server.WhitelistToggleEvent")) {
             Skript.registerEvent("Whitelist - on Toggle", EvtWhitelistToggle.class, WhitelistToggleEvent.class,
-                            "whitelist enable",
-                            "whitelist disable",
-                            "whitelist toggle")
-                    .description("Called when the whitelist is toggled\n\nThis event requires Paper.")
+                            "whitelist enable[d]",
+                            "whitelist disable[d]",
+                            "whitelist toggle[d]")
+                    .description("Called when the whitelist is toggled.")
                     .examples("on whitelist enable:\n\tbroadcast \"Whitelist enabled!\"")
-                    .since("1.0.2+");
+                    .since("1.0.2+")
+                    .requiredPlugins("Paper");
         }
     }
 

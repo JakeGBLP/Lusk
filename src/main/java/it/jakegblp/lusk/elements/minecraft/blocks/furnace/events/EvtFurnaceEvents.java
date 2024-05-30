@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class EvtFurnaceEvents {
     static {
         if (Skript.classExists("org.bukkit.event.inventory.FurnaceExtractEvent")) {
-            Skript.registerEvent("Furnace - on Item Extract", SimpleEvent.class, FurnaceExtractEvent.class, "furnace extract")
+            Skript.registerEvent("Furnace - on Item Extract", SimpleEvent.class, FurnaceExtractEvent.class, "furnace [item] extract[ed|ing]")
                     .description("""
                             This event is called when a player takes items out of the furnace.""")
                     .examples("")
@@ -41,9 +41,13 @@ public class EvtFurnaceEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.inventory.FurnaceStartSmeltEvent")) {
-            Skript.registerEvent("Furnace - on Start Smelting", SimpleEvent.class, FurnaceStartSmeltEvent.class, "furnace start smelt[ing]")
-                    .description("Called when a Furnace starts smelting.")
-                    .examples("")
+            Skript.registerEvent("Furnace - on Start Smelting", SimpleEvent.class, FurnaceStartSmeltEvent.class, "furnace start[ed|ing] [to] smelt[ed|ing]", "furnace smelt[ed|ing] start[ed|ing]")
+                    .description("Called when a Furnace starts smelting, or cooking for that matter.")
+                    .examples("""
+on furnace start smelting:
+  uncancel the event
+  broadcast "<bold>let him cook!"
+""")
                     .since("1.0.1");
             EventValues.registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, new Getter<>() {
                 @Override

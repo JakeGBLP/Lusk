@@ -65,12 +65,12 @@ public class Types {
                         }
 
                         @Override
-                        public void deserialize(BoundingBox o, Fields f) {
+                        public void deserialize(BoundingBox o, @NotNull Fields f) {
                             assert false;
                         }
 
                         @Override
-                        protected BoundingBox deserialize(Fields f) throws StreamCorruptedException {
+                        protected BoundingBox deserialize(@NotNull Fields f) throws StreamCorruptedException {
                             return new BoundingBox(
                                 f.getPrimitive("minX", double.class),
                                 f.getPrimitive("minY", double.class),
@@ -92,8 +92,6 @@ public class Types {
                             return false;
                         }
                     }));
-
-        // continue
         if (Classes.getExactClassInfo(VoxelShape.class) == null)
             Classes.registerClass(new ClassInfo<>(VoxelShape.class, "voxelshape")
                     .user("voxel ?shapes?")

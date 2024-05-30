@@ -17,9 +17,9 @@ public class EvtHopperInventorySearch extends SkriptEvent {
     static {
         if (Skript.classExists("org.bukkit.event.inventory.HopperInventorySearchEvent")) {
             Skript.registerEvent("Hopper - on Inventory Search", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
-                            "hopper inventory search",
-                            "hopper source search",
-                            "hopper destination search")
+                            "hopper inventory search[ing]",
+                            "hopper source search[ing]",
+                            "hopper destination search[ing]")
                     .description("Called each time a Hopper attempts to find its source/attached containers.")
                     .examples("on hopper inventory search:\n\tbroadcast event-inventory")
                     .since("1.0.4");

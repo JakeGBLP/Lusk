@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class EvtBellEvents {
     static {
         if (Skript.classExists("org.bukkit.event.block.BellResonateEvent")) {
-            Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonate|raider[s] reveal")
+            Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonat(e[d]|ing)","raider[s] reveal[ed|ing]")
                     .description("""
                             Called when a bell resonates after being rung and highlights nearby raiders.
                             A bell will only resonate if raiders are in the vicinity of the bell.""")
@@ -30,7 +30,7 @@ public class EvtBellEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
-            Skript.registerEvent("Bell - on Ring", SimpleEvent.class, BellRingEvent.class, "bell ring")
+            Skript.registerEvent("Bell - on Ring", SimpleEvent.class, BellRingEvent.class, "bell ring[ing]","bell rung")
                     .description("Called when a bell is being rung.")
                     .examples("")
                     .since("1.0.2");

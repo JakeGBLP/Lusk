@@ -10,7 +10,6 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import ch.njol.util.Pair;
 import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -52,23 +51,23 @@ public class SecEvtClick extends Section {
             Lusk.getInstance().registerListener(new ClickListener());
         }
 
-        private static final HashMap<Entity, Consumer<Pair<? extends PlayerInteractEntityEvent, Object>>> map = new HashMap<>();
+        private static final HashMap<Entity, Consumer<PlayerInteractEntityEvent>> map = new HashMap<>();
 
-        private static void log(Consumer<Pair<? extends PlayerInteractEntityEvent, Object>> consumer, Entity entity) {
+        private static void log(Consumer<PlayerInteractEntityEvent> consumer, Entity entity) {
             map.put(entity, consumer);
         }
 
         @EventHandler
         public static void onEntityClick(PlayerInteractEntityEvent event) {
             Entity entity = event.getRightClicked();
-            if (map.containsKey(entity)) map.get(entity).accept(new Pair<>(event, entity));
+            if (map.containsKey(entity)) map.get(entity).accept(event);
         }
     }
 
     private static final ClickEventTracker entityInteractTracker = new ClickEventTracker(Lusk.getInstance());
 
     static {
-        Skript.registerSection(SecEvtClick.class, "[on] click on %~entity%", "when %~entity% get[s] clicked");
+        Skript.registerSection(SecEvtClick.class, "[execute|run] on click (on|of) %~entity%", "[execute|run] when %~entity% get[s] clicked");
     }
 
     private Expression<Entity> entityExpression;
@@ -92,12 +91,13 @@ public class SecEvtClick extends Section {
                 return super.walk(event, false);
             }
         }
-        Consumer<Pair<? extends PlayerInteractEntityEvent, Object>> consumer = trigger == null ? null : o -> {
-            PlayerInteractEntityEvent clickEvent = o.getFirst();
-            if (clickEvent != null && entityInteractTracker.checkEvent(clickEvent.getPlayer(), clickEvent, clickEvent.getHand())) {
-                Variables.setLocalVariables(clickEvent, Variables.copyLocalVariables(event));
-                TriggerItem.walk(trigger, clickEvent);
-            }
+        Object vars = Variables.copyLocalVariables(event);
+        Consumer<PlayerInteractEntityEvent> consumer = trigger == null ? null : clickEvent -> {
+            if (!entityInteractTracker.checkEvent(clickEvent.getPlayer(), clickEvent, clickEvent.getHand())) return;
+            Variables.setLocalVariables(clickEvent, vars);
+            TriggerItem.walk(trigger, clickEvent);
+            Variables.removeLocals(clickEvent);
+
         };
         ClickListener.log(consumer, entityExpression.getSingle(event));
         return super.walk(event, false);

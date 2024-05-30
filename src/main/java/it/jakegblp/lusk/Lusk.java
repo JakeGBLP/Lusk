@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +15,6 @@ public class Lusk extends JavaPlugin {
     private static Lusk instance;
     private SkriptAddon addon;
 
-    @SuppressWarnings("unused")
     public static Lusk getInstance() {
         return instance;
     }
@@ -37,8 +37,9 @@ public class Lusk extends JavaPlugin {
     public void registerListener(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, instance);
     }
-
-    @SuppressWarnings("unused")
+    public static void callEvent(Event event) {
+        Bukkit.getPluginManager().callEvent(event);
+    }
     public SkriptAddon getAddonInstance() {
         return addon;
     }

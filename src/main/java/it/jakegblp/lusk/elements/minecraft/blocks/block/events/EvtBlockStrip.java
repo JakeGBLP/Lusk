@@ -21,6 +21,7 @@ public class EvtBlockStrip extends SkriptEvent {
                 .since("1.0.0");
     }
 
+    // make the pattern select a different array of blocks
     @Override
     public boolean init(Literal @NotNull [] args, int matchedPattern, @NotNull ParseResult parseResult) {
         return true;

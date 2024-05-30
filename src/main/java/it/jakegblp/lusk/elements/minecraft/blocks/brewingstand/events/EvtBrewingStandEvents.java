@@ -53,7 +53,7 @@ public class EvtBrewingStandEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.inventory.BrewingStandFuelEvent")) {
-            Skript.registerEvent("Brewing Stand - on Fuel", SimpleEvent.class, BrewingStandFuelEvent.class, "brewing [stand] fuel")
+            Skript.registerEvent("Brewing Stand - on Fuel", SimpleEvent.class, BrewingStandFuelEvent.class, "brewing [stand] fuel [consume]")
                     .description("Called when an ItemStack is about to increase the fuel level of a brewing stand.")
                     .examples("")
                     .since("1.0.2");

@@ -25,16 +25,17 @@ import java.util.UUID;
 public class EvtPlayerEvents {
     static {
         if (Skript.classExists("org.bukkit.event.player.PlayerChangedMainHandEvent")) {
-            Skript.registerEvent("Player - on Main Hand Change", SimpleEvent.class, PlayerChangedMainHandEvent.class, "main hand switch")
+            Skript.registerEvent("Player - on Main Hand Change", SimpleEvent.class, PlayerChangedMainHandEvent.class, "main hand switch[ed|ing]")
                     .description("Called when a player changes their main hand in the client settings.")
                     .examples("")
                     .since("1.0.0");
         }
         if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Player - on Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail", "fail[ed] to (sleep|enter [the] bed)")
-                    .description("This Event requires Paper.\n\nCalled when a player attempts to sleep but fails..")
+                    .description("Called when a player attempts to sleep but fails..")
                     .examples("")
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PlayerBedFailEnterEvent.class, Block.class, new Getter<>() {
                 @Override
                 public @NotNull Block get(final PlayerBedFailEnterEvent e) {
@@ -51,12 +52,11 @@ public class EvtPlayerEvents {
         if (Skript.classExists("io.papermc.paper.event.player.PrePlayerAttackEntityEvent")) {
             Skript.registerEvent("Player - on Pre Damage", SimpleEvent.class, PrePlayerAttackEntityEvent.class, "pre[-| ]damage")
                     .description("""
-                            This event requires Paper.
-                                                        
                             Called when the player tries to attack an entity. This occurs before any of the damage logic, so cancelling this event will prevent any sort of sounds from being played when attacking. This event will fire as cancelled for certain entities, use the "will be damaged" condition to check if the entity will not actually be attacked.
                             Note: there may be other factors (invulnerability, etc) that will prevent this entity from being attacked that this event will not cover.""")
                     .examples("")
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PrePlayerAttackEntityEvent.class, Entity.class, new Getter<>() {
                 @Override
                 public @NotNull Entity get(final PrePlayerAttackEntityEvent e) {
@@ -67,11 +67,10 @@ public class EvtPlayerEvents {
         if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
             Skript.registerEvent("Player - on Post-Respawn", SimpleEvent.class, PlayerPostRespawnEvent.class, "post[-| ]respawn")
                     .description("""
-                            This event requires Paper.
-                                                        
                             Fired after a player has respawned.""")
                     .examples("")
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PlayerPostRespawnEvent.class, Location.class, new Getter<>() {
                 @Override
                 public @NotNull Location get(final PlayerPostRespawnEvent e) {
@@ -82,11 +81,10 @@ public class EvtPlayerEvents {
         if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
             Skript.registerEvent("Whitelist - on Player Profile Verify", SimpleEvent.class, ProfileWhitelistVerifyEvent.class, "[player] [profile] whitelist verify")
                     .description("""
-                            This event requires Paper.
-                                                        
                             Fires when the server needs to verify if a player is whitelisted. Plugins may override/control the servers whitelist with this event, and dynamically change the kick message.""")
                     .examples("")
-                    .since("1.0.2");
+                    .since("1.0.2")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(ProfileWhitelistVerifyEvent.class, OfflinePlayer.class, new Getter<>() {
                 @Override
                 public @Nullable OfflinePlayer get(final ProfileWhitelistVerifyEvent e) {

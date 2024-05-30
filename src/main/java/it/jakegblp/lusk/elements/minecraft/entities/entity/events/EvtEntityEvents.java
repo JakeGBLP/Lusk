@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
+import io.papermc.paper.event.entity.EntityInsideBlockEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -24,10 +25,10 @@ import javax.annotation.Nullable;
 public class EvtEntityEvents {
     static {
         if (Skript.classExists("org.bukkit.event.entity.EntityEnterLoveModeEvent")) {
-            Skript.registerEvent("Entity - on Love Mode Enter", SimpleEvent.class, EntityEnterLoveModeEvent.class, "love [mode enter]")
+            Skript.registerEvent("Entity - on Love Mode Enter", SimpleEvent.class, EntityEnterLoveModeEvent.class, "love [mode] (enter|start)[ed|ing]")
                     .description("""
                             Called when an entity enters love mode.
-                            This can be cancelled but the item will still be consumed that was used to make the entity enter into love mode.""")
+                            This can be cancelled but the used item will still be consumed.""")
                     .examples("")
                     .since("1.0.2");
             EventValues.registerEventValue(EntityEnterLoveModeEvent.class, CommandSender.class, new Getter<>() {
@@ -38,7 +39,7 @@ public class EvtEntityEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityPoseChangeEvent")) {
-            Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose change")
+            Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose chang(e[d]|ing)")
                     .description("""
                             Called when an entity changes its pose.""")
                     .examples("")
@@ -55,7 +56,7 @@ public class EvtEntityEvents {
                     .description("""
                             Fired when an entity is pushed by another entity's attack.
                             The acceleration vector can be modified. If this event is cancelled, the entity will not get pushed.
-                                                        
+                            
                             Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
                     .examples("")
                     .since("1.0.2");
@@ -67,7 +68,7 @@ public class EvtEntityEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityShootBowEvent")) {
-            Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot")
+            Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot[ing]")
                     .description("""
                             Called when a LivingEntity shoots a bow firing an arrow.""")
                     .examples("")
@@ -80,7 +81,7 @@ public class EvtEntityEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityPlaceEvent")) {
-            Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity place")
+            Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity [getting] place[d]")
                     .description("""
                             Triggered when an entity is created in the world by a player "placing" an item on a block.
                             Note that this event is currently only fired for four specific placements: armor stands, boats, minecarts, and end crystals.""")
@@ -110,6 +111,38 @@ public class EvtEntityEvents {
                     return event.getHand();
                 }
             }, EventValues.TIME_NOW);
+        }
+        if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
+            Skript.registerEvent("Entity - on Collide With Block", SimpleEvent.class, EntityInsideBlockEvent.class, "entity ((collide with|in[side]) [a] block)")
+                    .description("""
+                            Called when an entity enters the hitbox of a block. Only called for blocks that react when an entity is inside. If cancelled, any action that would have resulted from that entity being in the block will not happen (such as extinguishing an entity in a cauldron).
+                            Blocks this is currently called for:
+
+                            Big dripleaf
+                            Bubble column
+                            Buttons
+                            Cactus
+                            Campfire
+                            Cauldron
+                            Crops
+                            Ender Portal
+                            Fires
+                            Frogspawn
+                            Honey
+                            Hopper
+                            Detector rails
+                            Nether portals
+                            Powdered snow
+                            Pressure plates
+                            Sweet berry bush
+                            Tripwire
+                            Waterlily
+                            Web
+                            Wither rose""")
+                    .examples("")
+                    .since("1.1.1")
+                    .requiredPlugins("Paper")
+                    .documentationID("entity_-_inside_block_event");
         }
     }
 }

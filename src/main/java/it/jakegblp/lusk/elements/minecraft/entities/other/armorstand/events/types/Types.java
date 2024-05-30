@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.other.armorstand.events.types;
 
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.classes.ArmorStandInteraction;
+import it.jakegblp.lusk.classes.enums.ArmorStandInteraction;
 import it.jakegblp.lusk.wrappers.EnumWrapper;
 
 public class Types {

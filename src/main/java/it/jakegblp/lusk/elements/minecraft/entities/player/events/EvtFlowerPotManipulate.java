@@ -20,7 +20,7 @@ public class EvtFlowerPotManipulate extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
             Skript.registerEvent("Flower Pot - on Manipulate", EvtFlowerPotManipulate.class, PlayerFlowerPotManipulateEvent.class,
-                            "[flower] pot[t(ed|ing)] [of %itemtype%]"
+                            "[flower] pot[ting)| manipulat(e|ing)] [of %itemtype%]"
                     )
                     .description("Called when a player places an item in or takes an item out of a flowerpot.")
                     .examples("""
@@ -29,7 +29,7 @@ public class EvtFlowerPotManipulate extends SkriptEvent {
                                 broadcast "placed"
                               else if the plant is being picked up:
                                 broadcast "picked up"
-                                """)
+                            """)
                     .since("1.0.0");
             EventValues.registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, new Getter<>() {
                 @Override
@@ -67,6 +67,6 @@ public class EvtFlowerPotManipulate extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "flower potting" + (flower == null ? "" : " " + flower);
+        return "flower pot" + (flower == null ? "" : " of " + flower);
     }
 }

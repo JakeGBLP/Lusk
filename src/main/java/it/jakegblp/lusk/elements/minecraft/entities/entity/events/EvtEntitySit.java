@@ -17,7 +17,7 @@ public class EvtEntitySit extends SkriptEvent {
                             "[entity] s(at|it[ting]) [down]",
                             "[entity] st(ood|and[ing]) [up]",
                             "[entity] sit toggle[d]")
-                    .description("Called when an entity sits down or stands up.\nThis event requires Paper.")
+                    .description("Called when an entity sits down or stands up.")
                     .examples("""
                             on sitting down:
                             	broadcast "%entity% is taking a seat!"
@@ -26,7 +26,8 @@ public class EvtEntitySit extends SkriptEvent {
                             on sit toggle:
                               broadcast "toggle"
                             """)
-                    .since("1.0.0+, 1.0.2+ (Toggle)");
+                    .since("1.0.0+, 1.0.2+ (Toggle)")
+                    .requiredPlugins("Paper");
         }
     }
 

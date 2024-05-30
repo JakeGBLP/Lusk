@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class EvtBlockEvents {
     static {
         if (Skript.classExists("org.bukkit.event.block.FluidLevelChangeEvent")) {
-            Skript.registerEvent("Block - on Fluid Level Change", SimpleEvent.class, FluidLevelChangeEvent.class, "fluid level change")
+            Skript.registerEvent("Block - on Fluid Level Change", SimpleEvent.class, FluidLevelChangeEvent.class, "fluid level chang(e[d]|ing)")
                     .description("""
                             Called when the fluid level of a block changes due to changes in adjacent blocks.""")
                     .examples("")

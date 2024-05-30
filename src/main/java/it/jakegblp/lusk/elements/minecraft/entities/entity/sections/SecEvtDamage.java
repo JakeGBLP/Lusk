@@ -9,7 +9,6 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import ch.njol.util.Pair;
 import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -48,21 +47,21 @@ public class SecEvtDamage extends Section {
             Lusk.getInstance().registerListener(new DamageListener());
         }
 
-        private static final HashMap<Entity, Consumer<Pair<EntityDamageByEntityEvent, Entity>>> map = new HashMap<>();
+        private static final HashMap<Entity, Consumer<EntityDamageByEntityEvent>> map = new HashMap<>();
 
-        private static void log(Consumer<Pair<EntityDamageByEntityEvent, Entity>> consumer, Entity entity) {
+        private static void log(Consumer<EntityDamageByEntityEvent> consumer, Entity entity) {
             map.put(entity, consumer);
         }
 
         @EventHandler
         public static void onEntityDamage(EntityDamageByEntityEvent event) {
             Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(new Pair<>(event, entity));
+            if (map.containsKey(entity)) map.get(entity).accept(event);
         }
     }
 
     static {
-        Skript.registerSection(SecEvtDamage.class, "[on] damage of %~entity%", "when %~entity% get[s] damaged");
+        Skript.registerSection(SecEvtDamage.class, "[execute|run] on damage of %~entity%", "[execute|run] when %~entity% get[s] damaged");
     }
 
     private Expression<Entity> victim;
@@ -79,12 +78,11 @@ public class SecEvtDamage extends Section {
 
     @Override
     protected @Nullable TriggerItem walk(@NotNull Event event) {
-        Consumer<Pair<EntityDamageByEntityEvent, Entity>> consumer = trigger == null ? null : o -> {
-            EntityDamageByEntityEvent damageEvent = o.getFirst();
-            if (damageEvent != null) {
-                Variables.setLocalVariables(damageEvent, Variables.copyLocalVariables(event));
-                TriggerItem.walk(trigger, damageEvent);
-            }
+        Object vars = Variables.copyLocalVariables(event);
+        Consumer<EntityDamageByEntityEvent> consumer = trigger == null ? null : damageEvent -> {
+            Variables.setLocalVariables(damageEvent, vars);
+            TriggerItem.walk(trigger, damageEvent);
+            Variables.removeLocals(damageEvent);
         };
         DamageListener.log(consumer, victim.getSingle(event));
         return super.walk(event, false);

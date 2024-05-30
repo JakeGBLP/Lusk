@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.passive.cat.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -17,13 +14,14 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Cat - Head Up State")
-@Description("Returns whether or not a cat has its head up.\nCan be set.")
-@Examples({"broadcast head up state of target"})
+@Name("Cat - Looking Up State")
+@Description("Returns whether or not a cat is looking up.\nCan be set.")
+@Examples({"broadcast looking up state of target"})
 @Since("1.0.3")
-public class ExprCatHeadUpState extends SimpleExpression<Boolean> {
+@DocumentationId("ExprCatHeadUpState")
+public class ExprCatLookingUpState extends SimpleExpression<Boolean> {
     static {
-        Skript.registerExpression(ExprCatHeadUpState.class, Boolean.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprCatLookingUpState.class, Boolean.class, ExpressionType.COMBINED,
                 "[the] cat [is] looking up state of %entity%",
                 "%entity%'[s] cat [is] looking up state",
                 "whether [the] cat %entity% is looking up [or not]",
@@ -46,7 +44,7 @@ public class ExprCatHeadUpState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
+    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
         return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 

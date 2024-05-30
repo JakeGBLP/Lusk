@@ -18,9 +18,9 @@ public class EvtItemFrameChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
             Skript.registerEvent("Item Frame - on Change", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
-                            "item[ ]frame [place:(insert|place)|:remove|:rotate|interact|change]"
+                            "item[ ]frame [item] [place:(insert|place)|:remove|:rotate|interact|change]"
                     )
-                    .description("This Event requires Paper.\n\nCalled when an ItemFrame is having an item rotated, added, or removed from it.")
+                    .description("Called when an ItemFrame is having an item rotated, added, or removed from it.")
                     .examples("""
                             on itemframe rotate:
                               broadcast "rotated"
@@ -31,7 +31,8 @@ public class EvtItemFrameChange extends SkriptEvent {
                             on itemframe place:
                               broadcast "place"
                             """)
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
             EventValues.registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, new Getter<>() {
                 @Override
                 public @NotNull Entity get(final PlayerItemFrameChangeEvent e) {

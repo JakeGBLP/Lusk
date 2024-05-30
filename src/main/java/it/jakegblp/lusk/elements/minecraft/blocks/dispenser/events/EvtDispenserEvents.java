@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class EvtDispenserEvents {
     static {
         if (Skript.classExists("org.bukkit.event.block.BlockDispenseArmorEvent")) {
-            Skript.registerEvent("Dispenser - on Armor Dispense", SimpleEvent.class, BlockDispenseArmorEvent.class, "armor dispens(e|ing)")
+            Skript.registerEvent("Dispenser - on Armor Dispense", SimpleEvent.class, BlockDispenseArmorEvent.class, "armor dispens(e[d]|ing)")
                     .description("Called when an equippable item is dispensed from a block and equipped on a nearby entity.")
                     .examples("")
                     .since("1.0.0");
@@ -28,16 +28,16 @@ public class EvtDispenserEvents {
             Skript.registerEvent("Dispenser - on Dispense Fail", SimpleEvent.class, BlockFailedDispenseEvent.class, "dispense fail", "failed [to] dispense")
                     .description("""
                             This event requires Paper.
-                                                        
+                            
                             Called when a block tries to dispense an item, but its inventory is empty.""")
                     .examples("")
                     .since("1.0.2");
         }
         if (Skript.classExists("io.papermc.paper.event.block.BlockPreDispenseEvent")) {
-            Skript.registerEvent("Dispenser - on Pre Dispense", SimpleEvent.class, BlockPreDispenseEvent.class, "pre[-| ]dispense")
+            Skript.registerEvent("Dispenser - on Pre Dispense", SimpleEvent.class, BlockPreDispenseEvent.class, "pre[-| ]dispens(e[d]|ing)")
                     .description("""
                             This event requires Paper.
-                                                        
+                            
                             Called when a block is about to dispense an item.""")
                     .examples("")
                     .since("1.0.2");

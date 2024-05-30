@@ -9,9 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import ch.njol.util.Pair;
 import it.jakegblp.lusk.Lusk;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -43,21 +41,21 @@ public class SecEvtBreak extends Section {
             Lusk.getInstance().registerListener(new BreakListener());
         }
 
-        private static final HashMap<Block, Consumer<Pair<BlockBreakEvent, Location>>> map = new HashMap<>();
+        private static final HashMap<Block, Consumer<BlockBreakEvent>> map = new HashMap<>();
 
-        private static void log(Consumer<Pair<BlockBreakEvent, Location>> consumer, Block block) {
+        private static void log(Consumer<BlockBreakEvent> consumer, Block block) {
             map.put(block, consumer);
         }
 
         @EventHandler
         public static void onBlockBreak(BlockBreakEvent event) {
             Block block = event.getBlock();
-            if (map.containsKey(block)) map.get(block).accept(new Pair<>(event, block.getLocation()));
+            if (map.containsKey(block)) map.get(block).accept(event);
         }
     }
 
     static {
-        Skript.registerSection(SecEvtBreak.class, "[on] (break[ing]|mine:min(e|ing)) of %~block%", "when %~block% get[s] (broken|mine:mined)");
+        Skript.registerSection(SecEvtBreak.class, "[execute|run] on (break[ing]|mine:min(e|ing)) of %~block%", "[execute|run] when %~block% get[s] (broken|mine:mined)");
     }
 
     private Expression<Block> blockExpression;
@@ -77,11 +75,12 @@ public class SecEvtBreak extends Section {
 
     @Override
     protected @Nullable TriggerItem walk(@NotNull Event event) {
-        Consumer<Pair<BlockBreakEvent, Location>> consumer = trigger == null ? null : o -> {
-            BlockBreakEvent breakEvent = o.getFirst();
-            if (breakEvent != null && (!mine || willItemsDrop(breakEvent))) {
-                Variables.setLocalVariables(breakEvent, Variables.copyLocalVariables(event));
+        Object vars = Variables.copyLocalVariables(event);
+        Consumer<BlockBreakEvent> consumer = trigger == null ? null : breakEvent -> {
+            if (!mine || willItemsDrop(breakEvent)) {
+                Variables.setLocalVariables(breakEvent, vars);
                 TriggerItem.walk(trigger, breakEvent);
+                Variables.removeLocals(breakEvent);
             }
         };
         BreakListener.log(consumer, blockExpression.getSingle(event));

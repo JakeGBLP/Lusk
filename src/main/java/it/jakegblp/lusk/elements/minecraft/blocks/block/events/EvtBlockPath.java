@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtBlockPath extends SkriptEvent {
     static {
-        Skript.registerEvent("Block - on Block Path", EvtBlockPath.class, PlayerInteractEvent.class, "[block] path[ing|ed]")
+        Skript.registerEvent("Block - on Block Path", EvtBlockPath.class, PlayerInteractEvent.class, "[block] [shovel] path[ing|ed]", "[block] shovel")
                 .description("Called when a player changes a block by right clicking it with a shovel.")
                 .examples("on path:\n\tbroadcast \"a block has been pathed!\"")
                 .since("1.0.0");

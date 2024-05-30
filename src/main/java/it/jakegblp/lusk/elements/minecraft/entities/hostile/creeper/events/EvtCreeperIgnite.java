@@ -14,12 +14,13 @@ public class EvtCreeperIgnite extends SkriptEvent {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.entity.CreeperIgniteEvent")) {
             Skript.registerEvent("Creeper - on Ignite/Extinguish", EvtCreeperIgnite.class, CreeperIgniteEvent.class,
-                            "creeper ignit(e[d]|ion)",
+                            "creeper ignit(e[d]|ion|ing)",
                             "creeper extinguish[ed|ing]",
                             "creeper ignite toggle[d]")
-                    .description("Called when a Creeper is ignited.\nThis event requires Paper.")
+                    .description("Called when a Creeper is ignited.")
                     .examples("on creeper ignite:\n\tbroadcast \"%entity% is about to explode!\"")
-                    .since("1.0.2+");
+                    .since("1.0.2+")
+                    .requiredPlugins("Paper");
         }
     }
 

@@ -17,9 +17,10 @@ public class EvtEntityDye extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.EntityDyeEvent")) {
             Skript.registerEvent("Entity - on Dye", EvtEntityDye.class, EntityDyeEvent.class, "dye [of %-entitydatas%]")
-                    .description("This Event requires Paper.\n\nCalled when a player dyes an entity (Wolf, Cat or sheep).")
+                    .description("Called when a player dyes an entity (Wolf, Cat or sheep).")
                     .examples("on dye of sheep:\n\tbroadcast the dye color")
-                    .since("1.0.0");
+                    .since("1.0.0")
+                    .requiredPlugins("Paper");
         }
     }
 
