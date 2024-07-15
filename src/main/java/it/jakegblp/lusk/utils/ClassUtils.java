@@ -10,6 +10,7 @@ public class ClassUtils {
      * @param methodName the method name to search for
      * @return whether the method exists in the class
      */
+    // I am well aware this has no usages
     public static boolean hasMethod(Class<?> clazz, String methodName) {
         return Arrays.stream(clazz.getMethods()).anyMatch(method -> method.getName().equals(methodName));
     }

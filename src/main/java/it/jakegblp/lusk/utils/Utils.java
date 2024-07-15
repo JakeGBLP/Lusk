@@ -31,11 +31,11 @@ public class Utils {
         }
         return false;
     }
-
+    // I am well aware this has no usages
     public static boolean isInteger(String string) {
         return string.matches("\\d+");
     }
-
+    // I am well aware this has no usages
     public static boolean isBoolean(String string) {
         return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
@@ -50,10 +50,6 @@ public class Utils {
             itemTypes[index] = new ItemType(materials.get(index));
         }
         return itemTypes;
-    }
-
-    public static int getCompostChance(Material material) {
-        return Constants.compostablesWithChances.get(material) != null ? Constants.compostablesWithChances.get(material) : 0;
     }
 
     public static boolean canCriticalDamage(Entity e) {
@@ -78,6 +74,7 @@ public class Utils {
         return null;
     }
 
+    // I am well aware this has no usages
     public static boolean isEven(int integer) {
         return (integer % 2 == 0);
     }
