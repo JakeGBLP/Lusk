@@ -1,3 +1,5 @@
+version: @version@
+
 types:
     equipmentslot: equipment slot¦s
     patterntype: pattern type¦s
