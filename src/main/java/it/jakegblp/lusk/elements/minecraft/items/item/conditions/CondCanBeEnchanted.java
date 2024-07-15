@@ -21,7 +21,9 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class CondCanBeEnchanted extends Condition {
     static {
-        Skript.registerCondition(CondCanBeEnchanted.class, "%itemstack% can[no:('|no)t] be enchanted with %enchantment%");
+        Skript.registerCondition(CondCanBeEnchanted.class,
+                "%itemstack% can be enchanted with %enchantment%",
+                "%itemstack% can('|no)t be enchanted with %enchantment%");
     }
 
     private Expression<ItemStack> item;
@@ -32,7 +34,7 @@ public class CondCanBeEnchanted extends Condition {
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         item = (Expression<ItemStack>) expressions[0];
         enchantment = (Expression<Enchantment>) expressions[1];
-        setNegated(parser.hasTag("no"));
+        setNegated(matchedPattern == 1);
         return true;
     }
 
