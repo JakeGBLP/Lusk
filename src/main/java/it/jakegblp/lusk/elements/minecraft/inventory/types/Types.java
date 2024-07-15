@@ -1,14 +1,15 @@
 package it.jakegblp.lusk.elements.minecraft.inventory.types;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.classes.EnumClassInfo;
 import ch.njol.skript.registrations.Classes;
+import it.jakegblp.lusk.wrappers.EnumWrapper;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class Types {
     static {
         if (Skript.classExists("org.bukkit.inventory.EquipmentSlot") && Classes.getExactClassInfo(EquipmentSlot.class) == null) {
-            Classes.registerClass(new EnumClassInfo<>(EquipmentSlot.class, "equipmentslot", "equipment slots")
+            EnumWrapper<EquipmentSlot> EQUIPMENTSLOT_ENUM = new EnumWrapper<>(EquipmentSlot.class);
+            Classes.registerClass(EQUIPMENTSLOT_ENUM.getClassInfo("equipmentslot")
                     .user("equipment ?slots?")
                     .name("Equipment Slot")
                     .description("All the Equipment Slots.")
