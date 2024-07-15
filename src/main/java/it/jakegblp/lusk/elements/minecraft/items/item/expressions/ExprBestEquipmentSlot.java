@@ -6,8 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import it.jakegblp.lusk.elements.minecraft.entities.passive.allay.expressions.ExprAllayJukebox;
-import org.bukkit.block.Block;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.0")
 public class ExprBestEquipmentSlot extends SimplePropertyExpression<ItemType, EquipmentSlot> {
     static {
-        register(ExprAllayJukebox.class, Block.class, "best equipment slot", "itemtypes");
+        register(ExprBestEquipmentSlot.class, EquipmentSlot.class, "best equipment slot", "itemtypes");
     }
 
     @Override
