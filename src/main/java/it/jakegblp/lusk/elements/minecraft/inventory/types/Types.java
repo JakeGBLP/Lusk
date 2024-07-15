@@ -8,7 +8,7 @@ import org.bukkit.inventory.EquipmentSlot;
 public class Types {
     static {
         if (Skript.classExists("org.bukkit.inventory.EquipmentSlot") && Classes.getExactClassInfo(EquipmentSlot.class) == null) {
-            EnumWrapper<EquipmentSlot> EQUIPMENTSLOT_ENUM = new EnumWrapper<>(EquipmentSlot.class);
+            EnumWrapper<EquipmentSlot> EQUIPMENTSLOT_ENUM = new EnumWrapper<>(EquipmentSlot.class, null, "slot");
             Classes.registerClass(EQUIPMENTSLOT_ENUM.getClassInfo("equipmentslot")
                     .user("equipment ?slots?")
                     .name("Equipment Slot")
