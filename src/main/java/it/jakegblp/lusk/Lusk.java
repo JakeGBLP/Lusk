@@ -15,10 +15,6 @@ public class Lusk extends JavaPlugin {
     private static Lusk instance;
     private SkriptAddon addon;
 
-    public static Lusk getInstance() {
-        return instance;
-    }
-
     public void onEnable() {
         instance = this;
         addon = Skript.registerAddon(this);
@@ -34,6 +30,9 @@ public class Lusk extends JavaPlugin {
         UpdateChecker.checkForUpdate(getDescription().getVersion());
     }
 
+    public static Lusk getInstance() {
+        return instance;
+    }
     public void registerListener(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, instance);
     }
