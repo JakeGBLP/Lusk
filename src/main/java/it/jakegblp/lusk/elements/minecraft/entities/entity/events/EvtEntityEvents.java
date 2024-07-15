@@ -63,7 +63,7 @@ public class EvtEntityEvents {
             EventValues.registerEventValue(EntityPushedByEntityAttackEvent.class, Vector.class, new Getter<>() {
                 @Override
                 public @NotNull Vector get(final EntityPushedByEntityAttackEvent e) {
-                    return e.getAcceleration();
+                    return e.getKnockback();
                 }
             }, EventValues.TIME_NOW);
         }
