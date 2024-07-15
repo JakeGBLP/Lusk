@@ -9,6 +9,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -24,8 +25,9 @@ import javax.annotation.Nullable;
 @Since("1.1")
 public class EffRingBell extends Effect {
     static {
-        Skript.registerEffect(EffRingBell.class,
-                "[make %-entity%] ring %block% [from %-blockface%]");
+        if (!Utils.SKRIPT_2_9) {
+            Skript.registerEffect(EffRingBell.class, "[make %-entity%] ring %block% [from %-blockface%]");
+        }
     }
 
     private Expression<Entity> entityExpression;

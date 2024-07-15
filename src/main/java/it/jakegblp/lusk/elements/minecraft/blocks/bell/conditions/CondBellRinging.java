@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,9 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.3")
 public class CondBellRinging extends PropertyCondition<Object> {
     static {
-        register(CondBellRinging.class, "(ringing|shaking)", "block");
+        if (!Utils.SKRIPT_2_9) {
+            register(CondBellRinging.class, "(ringing|shaking)", "block");
+        }
     }
 
     @Override

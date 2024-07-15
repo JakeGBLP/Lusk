@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
+import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -15,7 +16,7 @@ import javax.annotation.Nullable;
 
 public class EvtBellEvents {
     static {
-        if (Skript.classExists("org.bukkit.event.block.BellResonateEvent")) {
+        if (Skript.classExists("org.bukkit.event.block.BellResonateEvent") && !Utils.SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonat(e[d]|ing)","raider[s] reveal[ed|ing]")
                     .description("""
                             Called when a bell resonates after being rung and highlights nearby raiders.
@@ -29,7 +30,7 @@ public class EvtBellEvents {
                 }
             }, EventValues.TIME_NOW);
         }
-        if (Skript.classExists("org.bukkit.event.block.BellRingEvent")) {
+        if (Skript.classExists("org.bukkit.event.block.BellRingEvent") && !Utils.SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Ring", SimpleEvent.class, BellRingEvent.class, "bell ring[ing]","bell rung")
                     .description("Called when a bell is being rung.")
                     .examples("")

@@ -6,6 +6,7 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.util.Timespan;
+import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,9 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3")
 public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Timespan> {
     static {
-        register(ExprBellResonatingTime.class, Timespan.class, "resonating time", "blocks");
+        if (!Utils.SKRIPT_2_9) {
+            register(ExprBellResonatingTime.class, Timespan.class, "resonating time", "blocks");
+        }
     }
 
     @Override

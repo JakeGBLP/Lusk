@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public final static boolean SKRIPT_2_9 = Constants.skriptVersion.getMinor() >= 9;
     public final static Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
     public static Semver Version(String s) {
