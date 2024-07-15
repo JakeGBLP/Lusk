@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -42,7 +43,7 @@ public class UpdateChecker implements Listener {
 
     private static void getLatestReleaseVersion(final Consumer<String> consumer) {
         try {
-            URL url = new URL("https://api.github.com/repos/JakeGBLP/Lusk/releases/latest");
+            URL url = URL.of(URI.create("https://api.github.com/repos/JakeGBLP/Lusk/releases/latest"),null);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
             String tag_name = jsonObject.get("tag_name").getAsString();
@@ -94,5 +95,4 @@ public class UpdateChecker implements Listener {
         }
         return future;
     }
-
 }
