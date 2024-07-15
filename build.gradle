@@ -57,3 +57,6 @@ shadowJar {
     relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
 }
 
+test {
+    shadowJar
+}
