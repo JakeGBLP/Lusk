@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Bell - Shaking Time")
-@Description("Returns the time since the bell has been shaking.")
+@Description("`DEPRECATED SINCE SKRIPT 2.9`\nReturns the time since the bell has been shaking.")
 @Examples({"on bell ring:\n\twait 5 seconds\n\tbroadcast shaking time of event-block"})
-@Since("1.0.3")
+@Since("1.0.3, 1.2 (Deprecated)")
 public class ExprBellShakingTime extends SimplePropertyExpression<Block, Timespan> {
     static {
         if (!Utils.SKRIPT_2_9) {

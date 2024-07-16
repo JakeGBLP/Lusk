@@ -9,7 +9,6 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.Utils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,14 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 @Name("Bell - Ring")
-@Description("Rings a bell.\n The blockface must be cartesian.")
+@Description("Rings a bell.\nThe blockface must be cartesian.\n\n**NOTE: Skript has its own version of this effect, difference is in the fact that Skript's uses Directions while Lusk's uses Blockfaces, for that reason I will not deprecate this Effect.**")
 @Examples({"ring target block", "make {_p} ring {_block} from north"})
 @Since("1.1")
 public class EffRingBell extends Effect {
     static {
-        if (!Utils.SKRIPT_2_9) {
-            Skript.registerEffect(EffRingBell.class, "[make %-entity%] ring %block% [from %-blockface%]");
-        }
+        Skript.registerEffect(EffRingBell.class, "[make %-entity%] ring %block% [from %-blockface%]");
     }
 
     private Expression<Entity> entityExpression;

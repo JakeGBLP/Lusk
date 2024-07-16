@@ -19,10 +19,11 @@ public class EvtBellEvents {
         if (Skript.classExists("org.bukkit.event.block.BellResonateEvent") && !Utils.SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonat(e[d]|ing)","raider[s] reveal[ed|ing]")
                     .description("""
+                            `DEPRECATED SINCE SKRIPT 2.9`
                             Called when a bell resonates after being rung and highlights nearby raiders.
                             A bell will only resonate if raiders are in the vicinity of the bell.""")
                     .examples("")
-                    .since("1.0.2");
+                    .since("1.0.2, 1.2 (Deprecated)");
             EventValues.registerEventValue(BellResonateEvent.class, LivingEntity[].class, new Getter<>() {
                 @Override
                 public LivingEntity @NotNull [] get(BellResonateEvent e) {
@@ -32,9 +33,9 @@ public class EvtBellEvents {
         }
         if (Skript.classExists("org.bukkit.event.block.BellRingEvent") && !Utils.SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Ring", SimpleEvent.class, BellRingEvent.class, "bell ring[ing]","bell rung")
-                    .description("Called when a bell is being rung.")
+                    .description("`DEPRECATED SINCE SKRIPT 2.9`\nCalled when a bell is being rung.")
                     .examples("")
-                    .since("1.0.2");
+                    .since("1.0.2, 1.2 (Deprecated)");
             EventValues.registerEventValue(BellRingEvent.class, BlockFace.class, new Getter<>() {
                 @Override
                 public @NotNull BlockFace get(final BellRingEvent e) {

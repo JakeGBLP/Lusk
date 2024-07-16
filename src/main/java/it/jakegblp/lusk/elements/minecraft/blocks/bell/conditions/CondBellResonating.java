@@ -11,9 +11,9 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Bell - is Resonating")
-@Description("Checks if a bell is resonating.")
+@Description("`DEPRECATED SINCE SKRIPT 2.9`\nChecks if a bell is resonating.")
 @Examples({"on bell resonate:\n\tif event-block is resonating:\n\t\tcancel event\n\t\t"})
-@Since("1.0.3")
+@Since("1.0.3, 1.2 (Deprecated)")
 public class CondBellResonating extends PropertyCondition<Object> {
     static {
         if (!Utils.SKRIPT_2_9) {
