@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Small Capital Case")
-@Description("Returns the given string with the small font.")
+@Description("Returns the given string with the small font.\n'Strict' allows uppercase characters to be included.")
 @Examples({"broadcast player's name in small caps"})
 @Since("1.0.0")
 public class ExprCases extends SimpleExpression<String> {
     public static Character[] characters = {'ᴀ', 'ʙ', 'ᴄ', 'ᴅ', 'ᴇ', 'ғ', 'ɢ', 'ʜ', 'ɪ', 'ᴊ', 'ᴋ', 'ʟ', 'ᴍ', 'ɴ', 'ᴏ', 'ᴘ', 'ǫ', 'ʀ', 's', 'ᴛ', 'ᴜ', 'ᴠ', 'ᴡ', 'x', 'ʏ', 'ᴢ'};
 
-    public static String toSmallFont(String string, boolean fully) {
-        String regex = fully ? "[a-zA-Z]" : "[a-z]";
+    public static String toSmallFont(String string, boolean strict) {
+        String regex = strict ? "[a-zA-Z]" : "[a-z]";
         for (String letter : string.split("")) {
             if (letter.matches(regex)) {
                 string = string.replaceAll(letter, String.valueOf(characters[(Character.getNumericValue(letter.charAt(0)) - 10)]));
@@ -33,17 +33,17 @@ public class ExprCases extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprCases.class, String.class, ExpressionType.SIMPLE,
-                "%string% in [:fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
-                "[:fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
+                "%string% in [strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case]))",
+                "[strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
     }
 
     private Expression<String> string;
 
-    private boolean fully;
+    private boolean strict;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        fully = parseResult.hasTag("fully");
+        strict = parseResult.hasTag("strict");
         string = (Expression<String>) exprs[0];
         return true;
     }
@@ -51,7 +51,7 @@ public class ExprCases extends SimpleExpression<String> {
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
         String s = string.getSingle(e);
-        if (s != null) return new String[]{toSmallFont(s, fully)};
+        if (s != null) return new String[]{toSmallFont(s, strict)};
         return new String[0];
     }
 
@@ -67,6 +67,6 @@ public class ExprCases extends SimpleExpression<String> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return (fully ? "fully " : "") + "small caps " + (e != null ? string.toString(e, debug) : "");
+        return (strict ? "strict " : "") + "small caps " + (e != null ? string.toString(e, debug) : "");
     }
 }
