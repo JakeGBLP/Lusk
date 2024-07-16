@@ -56,3 +56,4 @@ shadowJar {
     archiveFileName = project.name + "-" + project.version + ".jar"
     relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
 }
+defaultTasks 'shadowJar'
