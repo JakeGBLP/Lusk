@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-@Name("Pass")
+@Name("Do Nothing...")
 @Description("Does nothing.")
 @Examples({"pass\ndo nothing"})
 @Since("1.0.2")
