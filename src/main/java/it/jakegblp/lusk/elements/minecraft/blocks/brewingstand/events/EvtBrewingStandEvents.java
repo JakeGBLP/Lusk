@@ -42,7 +42,7 @@ public class EvtBrewingStandEvents {
         }
         if (Skript.classExists("org.bukkit.event.inventory.BrewEvent")) {
             Skript.registerEvent("Brewing Stand - on Brew", SimpleEvent.class, BrewEvent.class, "[brewing stand] brew[ing]")
-                    .description("Called when a Brewing Stand brews.")
+                    .description("Called when the brewing of the contents inside a Brewing Stand is complete.")
                     .examples("")
                     .since("1.0.2");
             EventValues.registerEventValue(BrewEvent.class, Inventory.class, new Getter<>() {
