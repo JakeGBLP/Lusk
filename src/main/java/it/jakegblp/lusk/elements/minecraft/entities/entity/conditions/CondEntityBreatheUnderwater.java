@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @Description("Checks if a living entity can breathe underwater.")
 @Examples({"if {_entity} can breathe underwater:"})
 @Since("1.0.2")
-public class CondCanBreatheUnderwater extends PropertyCondition<LivingEntity> {
+public class CondEntityBreatheUnderwater extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondCanBreatheUnderwater.class, PropertyType.CAN, "breathe underwater", "livingentities");
+        register(CondEntityBreatheUnderwater.class, PropertyType.CAN, "breathe underwater", "livingentities");
     }
 
     @Override
