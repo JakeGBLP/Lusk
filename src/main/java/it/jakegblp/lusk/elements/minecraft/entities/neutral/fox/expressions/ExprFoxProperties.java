@@ -18,16 +18,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Fox - Properties")
-@Description("Various fox properties, can be set.")
+@Description("""
+Various fox properties.
+Everything in this expression can be used with `Paper`.
+With `Spigot` you can only:
+ - `Get` and `Set` the Crouching State and Sleeping State
+ - `Get` the Faceplanted State
+""")
 @Examples({"broadcast interested state of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.2 (Sleeping)")
 public class ExprFoxProperties extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprFoxProperties.class, Boolean.class, ExpressionType.COMBINED,
-                "[the] fox [is] (1:leaping|2:crouching|3:defending|face[ ]planted) state of %livingentity%",
-                "%livingentity%'[s] fox [is] (:leaping|:crouching|:defending|face[ ]planted) state",
-                "whether [the] fox %livingentity% is (:leaping|:crouching|:defending|face[ ]planted) [or not]",
-                "whether [or not] [the] fox %livingentity% is (:leaping|:crouching|:defending|face[ ]planted)");
+                "[the] fox [is] (1:leaping|2:crouching|3:defending|4:sleeping|face[ ]planted) state of %livingentity%",
+                "%livingentity%'[s] fox [is] (1:leaping|2:crouching|3:defending|4:sleeping|face[ ]planted) state",
+                "whether [the] fox %livingentity% is (1:leaping|2:crouching|3:defending|4:sleeping|face[ ]planted) [or not]",
+                "whether [or not] [the] fox %livingentity% is (1:leaping|2:crouching|3:defending|4:sleeping|face[ ]planted)");
 
     }
 
@@ -49,6 +55,7 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
                 case 1 -> fox.isLeaping();
                 case 2 -> fox.isCrouching();
                 case 3 -> fox.isDefending();
+                case 4 -> fox.isSleeping();
                 default -> fox.isFaceplanted();
             };
             return new Boolean[]{bool};
@@ -69,6 +76,7 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
                     case 1 -> fox.setLeaping(bool);
                     case 2 -> fox.setCrouching(bool);
                     case 3 -> fox.setDefending(bool);
+                    case 4 -> fox.setSleeping(bool);
                     default -> fox.setFaceplanted(bool);
                 }
             }
@@ -91,6 +99,7 @@ public class ExprFoxProperties extends SimpleExpression<Boolean> {
             case 1 -> "leaping";
             case 2 -> "crouching";
             case 3 -> "defending";
+            case 4 -> "sleeping";
             default -> "face planted";
         };
         return "the fox is " + state + " state of " + (e == null ? "" : livingEntityExpression.toString(e, debug));
