@@ -10,10 +10,10 @@ public class Types {
         if (Skript.classExists("org.bukkit.block.BlockFace") && Classes.getExactClassInfo(BlockFace.class) == null) {
             EnumWrapper<BlockFace> BLOCKFACE_ENUM = new EnumWrapper<>(BlockFace.class, null, "face");
             Classes.registerClass(BLOCKFACE_ENUM.getClassInfo("blockface")
-                    .user("block ?faces?")
+                    .user("(block ?)?faces?")
                     .name("Block Face")
                     .description("All the Block Faces.")
-                    .examples("south blockface","up blockface")
+                    .examples("south face","up face")
                     .since("1.1"));
         }
     }
