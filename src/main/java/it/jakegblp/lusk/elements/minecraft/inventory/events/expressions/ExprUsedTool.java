@@ -14,6 +14,7 @@ import ch.njol.skript.util.slot.EquipmentSlot;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
 import ch.njol.util.Kleenean;
+import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
@@ -37,21 +38,48 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Name("Used Tool")
-@Description("The held item used in events where you might need to distinguish between the main and offhand.")
+@Name("Used Tool/Used Hand/Used Equipment Slot")
+@Description("""
+        Retrieves the used hand or item used in events where either hand is used.
+        The first pattern returns the Slot (Item + Index) of the item in the used hand.
+        - Note: using this is not the same as using `event-slot` or `event-item`, if either is available, use that
+        The second pattern returns an Equipment Slot that's either `hand_slot` or `off_hand_slot`.
+        
+        Supported Events:
+        - on Right Click
+        - on Item Consume
+        - on Arm Swing
+        - on Entity Shoot (different than 'on Shoot'!)
+        - on Crossbow Load
+        - on Place (includes 'on Block Place', 'on Hanging Place', and 'on Entity Place')
+        - on Resurrect
+        - on Player Fish
+        - on Bucket Fill
+        - on Bucket Empty
+        - on Elytra Boost
+        - on Player Harvest
+        - on Can Build Check
+        - on Player Shear Entity
+        - on Player Leash Entity
+        - on Player Unleash Entity
+        - on Player Use Unknown Entity
+        """)
 @Examples("broadcast event-used tool")
-@Since("1.1")
-public class ExprUsedTool extends SimpleExpression<Slot> {
-    private static final ArrayList<Class<? extends Event>> cs = new ArrayList<>(List.of(PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class));
+@Since("1.1, 1.1.1 (Optimized), 1.2 (Hand and Item, +1 Event, Error Prevention)")
+public class ExprUsedTool extends SimpleExpression<Object> {
+    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class, PlayerElytraBoostEvent.class));
 
     static {
-        Skript.registerExpression(ExprUsedTool.class, Slot.class, ExpressionType.SIMPLE, "[the] used (tool|[held ]item)");
+        Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.SIMPLE, "[the] used (tool|[held] item|weapon)","[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
     }
+
+    boolean hand;
 
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parseResult) {
-        for (Class<? extends Event> clazz : cs) {
+        for (Class<? extends Event> clazz : CLASSES) {
             if (getParser().isCurrentEvent(clazz)) {
+                hand = matchedPattern == 1;
                 return true;
             }
         }
@@ -60,7 +88,7 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
     }
 
     @Override
-    protected Slot @NotNull [] get(@NotNull Event e) {
+    protected Object @NotNull [] get(@NotNull Event e) {
         org.bukkit.inventory.EquipmentSlot slot = null;
         Player player = null;
         LivingEntity entity = null;
@@ -115,20 +143,24 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
         } else if (e instanceof PlayerUnleashEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("io.papermc.paper.event.block.PlayerShearBlockEvent") && e instanceof PlayerShearBlockEvent event) {
+        } else if (Skript.classExists("io.papermc.paper.event.block.PlayerShearBlockEvent") && Skript.methodExists(PlayerShearBlockEvent.class,"getHand") && e instanceof PlayerShearBlockEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent") && e instanceof EntityLoadCrossbowEvent event) {
+        } else if (Skript.classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent") && Skript.methodExists(EntityLoadCrossbowEvent.class,"getHand") && e instanceof EntityLoadCrossbowEvent event) {
             slot = event.getHand();
             entity = event.getEntity();
-        } else if (Skript.classExists("io.papermc.paper.event.player.PlayerArmSwingEvent") && e instanceof PlayerArmSwingEvent event) {
+        } else if (Skript.classExists("io.papermc.paper.event.player.PlayerArmSwingEvent") && Skript.methodExists(PlayerArmSwingEvent.class,"getHand") && e instanceof PlayerArmSwingEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent") && e instanceof PlayerUseUnknownEntityEvent event) {
+        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerElytraBoostEvent") && Skript.methodExists(PlayerElytraBoostEvent.class,"getHand") && e instanceof PlayerElytraBoostEvent event) {
+            player = event.getPlayer();
+            slot = event.getHand();
+        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent") && Skript.methodExists(PlayerUseUnknownEntityEvent.class,"getHand") && e instanceof PlayerUseUnknownEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
         }
-        if (slot != null)
+        if (slot != null) {
+            if (hand) return new org.bukkit.inventory.EquipmentSlot[]{slot};
             if (player != null) {
                 PlayerInventory inventory = player.getInventory();
                 return new InventorySlot[]{new InventorySlot(inventory, slot == org.bukkit.inventory.EquipmentSlot.OFF_HAND ? 40 : inventory.getHeldItemSlot())};
@@ -138,7 +170,8 @@ public class ExprUsedTool extends SimpleExpression<Slot> {
                     return new EquipmentSlot[]{new EquipmentSlot(entityEquipment,
                             slot == org.bukkit.inventory.EquipmentSlot.OFF_HAND ? EquipmentSlot.EquipSlot.OFF_HAND : EquipmentSlot.EquipSlot.TOOL)};
             }
-        return new Slot[0];
+        }
+        return new Object[0];
     }
 
     @Override
