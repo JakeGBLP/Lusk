@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Name("Vindicator - Johnny State")
-@Description("Get and Set whether 1 or more vindicators are Johnny.")
+@Description("Get and Set whether 1 or more vindicators are Johnny.\nChanging this does not modify the vindicator's name.")
 @Examples({"if {_vindicator} is johnny:\n\tset whether vindicator {_vindicator} is johnny to false"})
 @Since("1.2")
 public class ExprVindicatorJohnny extends PropertyExpression<LivingEntity, Boolean> {
