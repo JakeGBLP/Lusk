@@ -96,7 +96,7 @@ public class Types {
             Classes.registerClass(new ClassInfo<>(VoxelShape.class, "voxelshape")
                     .user("voxel ?shapes?")
                     .name("Voxel Shape")
-                    .description("A Voxel Shape, usually used for blocks such as Stairs.\n\nCan't be stored in global variables.") // add example
+                    .description("A Voxel Shape, usually used for blocks such as Stairs.\n\nYou can store those but it's not persistent across restarts.") // add example
                     .since("1.2")
                     .parser(new Parser<>() {
                         @Override
