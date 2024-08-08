@@ -4,7 +4,7 @@ Lusk is a Misc Skript Addon that adds a lot of useful features to Skript!
 
 # Support
 
-For anything reach out to me on Discord (@JakeGBLP) or open an Issue about it.
+For anything, reach out to me on Discord (@JakeGBLP) or open an Issue about it.
 
 # Documentation
 
