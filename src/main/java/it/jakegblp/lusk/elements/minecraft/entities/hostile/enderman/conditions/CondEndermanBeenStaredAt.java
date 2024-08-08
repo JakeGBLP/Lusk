@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public class CondEndermanBeenStaredAt extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondDolphinBeenFedFish.class, PropertyType.HAVE, "been stared at", "livingentities");
+        register(CondEndermanBeenStaredAt.class, PropertyType.HAVE, "been stared at", "livingentities");
     }
 
     @Override
