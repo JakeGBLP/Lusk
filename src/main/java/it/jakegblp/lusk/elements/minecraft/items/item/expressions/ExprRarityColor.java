@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Item Rarity - Color")
-@Description("Returns the color of an item's rarity.")
-@Examples({"broadcast rarity color of rarity of tool\nbroadcast rarity color of rarity of heart of the sea"})
+@Description("Returns the color of an item's rarity.\nCan be used with the item itself and it will get its rarity's color without getting the rarity itself if you don't need it.")
+@Examples({"broadcast rarity color of tool","broadcast rarity color of item rarity of heart of the sea"})
 @Since("1.0.0+, 1.2+ (ItemRarity)")
 public class ExprRarityColor extends SimplePropertyExpression<Object,SkriptColor> {
     static {
