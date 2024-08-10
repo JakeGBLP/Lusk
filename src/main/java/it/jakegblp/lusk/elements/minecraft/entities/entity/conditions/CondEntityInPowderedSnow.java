@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.entity.conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 @Description("Checks if an entity is in powdered snow.")
 @Examples({"if player is in powdered snow:"})
 @Since("1.0.2")
+@DocumentationId("9024")
 public class CondEntityInPowderedSnow extends PropertyCondition<Entity> {
     static {
         register(CondEntityInPowderedSnow.class, "in powdered snow", "entity");

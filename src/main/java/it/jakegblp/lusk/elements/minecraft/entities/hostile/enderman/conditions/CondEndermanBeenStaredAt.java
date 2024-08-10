@@ -1,11 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.hostile.enderman.conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.elements.minecraft.entities.neutral.dolphin.conditions.CondDolphinBeenFedFish;
+import ch.njol.skript.doc.*;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @Description("Checks if an enderman has been stared at.")
 @Examples({"if target has been stared at:"})
 @Since("1.0.2")
+@DocumentationId("9021")
 public class CondEndermanBeenStaredAt extends PropertyCondition<LivingEntity> {
 
     static {
@@ -29,5 +26,4 @@ public class CondEndermanBeenStaredAt extends PropertyCondition<LivingEntity> {
     protected @NotNull String getPropertyName() {
         return "been stared at";
     }
-
 }

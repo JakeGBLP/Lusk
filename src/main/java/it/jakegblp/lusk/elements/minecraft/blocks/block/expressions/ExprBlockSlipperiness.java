@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.block.expressions;
 
 import ch.njol.skript.aliases.ItemType;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
         """)
 @Examples({"broadcast slipperiness of packed ice"})
 @Since("1.0.0")
+@DocumentationId("8823")
 public class ExprBlockSlipperiness extends SimplePropertyExpression<ItemType, Float> {
     static {
         register(ExprBlockSlipperiness.class, Float.class, "slipperiness", "itemtype");

@@ -12,7 +12,7 @@ import org.bukkit.entity.Ravager;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Entity - is Roaring")
-@Description("Checks if an entity is roaring.)")
+@Description("Checks if an entity is roaring.")
 @Examples("on damage of ravager:\n\tvictim is roaring\n\tkill victim")
 @Since("1.1.1")
 public class CondEntityRoaring extends PropertyCondition<LivingEntity> {

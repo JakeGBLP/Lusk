@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.entity.conditions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -21,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Checks if an Entity should burn in daylight.\n(Zombie,Phantom,Skeleton)\n\nFor skeletons, this does not take into account the entity's natural fire immunity.")
 @Examples({"if target should burn in daylight:"})
 @Since("1.0.3, 1.1.1 (Skeleton,Phantom)")
+@DocumentationId("11181")
 public class CondEntityBurnInDay extends Condition {
     static {
         Skript.registerCondition(CondEntityBurnInDay.class, "%livingentity% should[not:(n't| not)] burn (in|during) [the] day[light]");

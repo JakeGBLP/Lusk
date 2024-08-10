@@ -26,7 +26,7 @@ import static it.jakegblp.lusk.utils.EventUtils.willItemsDrop;
 
 @Name("Block Break Section")
 @Description("""
-        "Runs the code inside of it when the provided block gets broken.
+        Runs the code inside of it when the provided block gets broken.
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.
