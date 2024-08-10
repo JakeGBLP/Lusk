@@ -12,7 +12,7 @@ import static it.jakegblp.lusk.utils.BlockUtils.isFullBlock;
 
 @Name("Block - is Full Block")
 @Description("Checks if a block is a full block (like dirt, stone, endstone).\nEssentially checks if a block is 1x1x1 and only has one mesh.")
-@Examples({"if event-block is"})
+@Examples({"if event-block is a full block:"})
 @Since("1.2.1-beta1")
 public class CondFullBlock extends PropertyCondition<Block> {
     static {
