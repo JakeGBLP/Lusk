@@ -150,19 +150,19 @@ public class ExprUsedTool extends SimpleExpression<Object> {
         } else if (e instanceof PlayerUnleashEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("io.papermc.paper.event.block.PlayerShearBlockEvent") && Skript.methodExists(PlayerShearBlockEvent.class,"getHand") && e instanceof PlayerShearBlockEvent event) {
+        } else if (PaperUtils.HAS_PLAYER_SHEAR_BLOCK_EVENT_HAND && e instanceof PlayerShearBlockEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent") && Skript.methodExists(EntityLoadCrossbowEvent.class,"getHand") && e instanceof EntityLoadCrossbowEvent event) {
+        } else if (PaperUtils.HAS_ENTITY_LOAD_CROSSBOW_EVENT_HAND && e instanceof EntityLoadCrossbowEvent event) {
             slot = event.getHand();
             entity = event.getEntity();
-        } else if (Skript.classExists("io.papermc.paper.event.player.PlayerArmSwingEvent") && Skript.methodExists(PlayerArmSwingEvent.class,"getHand") && e instanceof PlayerArmSwingEvent event) {
+        } else if (PaperUtils.HAS_PLAYER_ARM_SWING_EVENT_HAND && e instanceof PlayerArmSwingEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerElytraBoostEvent") && Skript.methodExists(PlayerElytraBoostEvent.class,"getHand") && e instanceof PlayerElytraBoostEvent event) {
+        } else if (PaperUtils.HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND && e instanceof PlayerElytraBoostEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
-        } else if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent") && Skript.methodExists(PlayerUseUnknownEntityEvent.class,"getHand") && e instanceof PlayerUseUnknownEntityEvent event) {
+        } else if (PaperUtils.HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND && e instanceof PlayerUseUnknownEntityEvent event) {
             player = event.getPlayer();
             slot = event.getHand();
         }
@@ -193,7 +193,6 @@ public class ExprUsedTool extends SimpleExpression<Object> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the used tool";
+        return "the used "+(hand?"hand":"tool");
     }
-
 }

@@ -9,64 +9,32 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import com.destroystokyo.paper.event.entity.EntityJumpEvent;
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.classes.events.GenericEntityJumpEvent;
+import it.jakegblp.lusk.listeners.JumpListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.HorseJumpEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Name("Jump Section")
 @Description("""
-        Runs the code inside of it when the provided entity jumps.
-        Local Variables that are:
-        - defined BEFORE this section CAN be used inside of it.
-        - defined AFTER this section CANNOT be used inside of it.
-        - defined INSIDE this section CANNOT be used outside of it.
-        """)
+Runs the code inside of it when the provided entity jumps.
+
+Only works for horses on Spigot, Paper is required for players and entities.
+
+Local Variables that are:
+- defined BEFORE this section CAN be used inside of it.
+- defined AFTER this section CANNOT be used inside of it.
+- defined INSIDE this section CANNOT be used outside of it.
+""")
 @Examples("""
         """)
 @Since("1.2")
 public class SecEvtJump extends Section {
-    
-    public static class JumpListener implements Listener {
-        static {
-            Lusk.getInstance().registerListener(new JumpListener());
-        }
 
-        private static final HashMap<Entity, Consumer<GenericEntityJumpEvent>> map = new HashMap<>();
-
-        private static void log(Consumer<GenericEntityJumpEvent> consumer, Entity entity) {
-            map.put(entity, consumer);
-        }
-
-        @EventHandler
-        public void onEntityJump(EntityJumpEvent event) {
-            Lusk.callEvent(new GenericEntityJumpEvent(event.getEntity()));
-        }
-        @EventHandler
-        public static void onHorseJump(HorseJumpEvent event) {
-            Lusk.callEvent(new GenericEntityJumpEvent(event.getEntity()));
-        }
-        @EventHandler
-        public static void onPlayerJump(PlayerJumpEvent event) {
-            Lusk.callEvent(new GenericEntityJumpEvent(event.getPlayer()));
-        }
-        @EventHandler
-        public static void onGenericEntityJump(GenericEntityJumpEvent event) {
-            Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(event);
-        }
-    }
 
     static {
         Skript.registerSection(SecEvtJump.class, "[execute|run] on %~entity% jump[ing]", "[execute|run] when %~entity% jump[s]");

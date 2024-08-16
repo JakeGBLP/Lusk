@@ -9,16 +9,13 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.Lusk;
+import it.jakegblp.lusk.listeners.HealListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -41,23 +38,6 @@ import java.util.function.Consumer;
         """)
 @Since("1.1")
 public class SecEvtHeal extends Section {
-    public static class HealListener implements Listener {
-        static {
-            Lusk.getInstance().registerListener(new HealListener());
-        }
-
-        private static final HashMap<Entity, Consumer<EntityRegainHealthEvent>> map = new HashMap<>();
-
-        private static void log(Consumer<EntityRegainHealthEvent> consumer, Entity entity) {
-            map.put(entity, consumer);
-        }
-
-        @EventHandler
-        public static void onEntityHeal(EntityRegainHealthEvent event) {
-            Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(event);
-        }
-    }
 
     static {
         Skript.registerSection(SecEvtHeal.class, "[execute|run] on heal of %~entity%", "[execute|run] when %~entity% get[s] healed");

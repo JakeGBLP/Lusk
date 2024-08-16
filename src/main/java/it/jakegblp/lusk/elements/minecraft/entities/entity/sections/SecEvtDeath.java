@@ -9,48 +9,29 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.Lusk;
+import it.jakegblp.lusk.listeners.DeathListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Name("Death Section")
 @Description("""
-        Runs the code inside of it when the provided entity dies.
-        Local Variables that are:
-        - defined BEFORE this section CAN be used inside of it.
-        - defined AFTER this section CANNOT be used inside of it.
-        - defined INSIDE this section CANNOT be used outside of it.
-        """)
+Runs the code inside of it when the provided entity dies.
+
+Local Variables that are:
+- defined BEFORE this section CAN be used inside of it.
+- defined AFTER this section CANNOT be used inside of it.
+- defined INSIDE this section CANNOT be used outside of it.
+""")
 @Examples("""
         """)
 @Since("1.2")
 public class SecEvtDeath extends Section {
-    public static class DeathListener implements Listener {
-        static {
-            Lusk.getInstance().registerListener(new DeathListener());
-        }
-
-        private static final HashMap<Entity, Consumer<EntityDeathEvent>> map = new HashMap<>();
-
-        private static void log(Consumer<EntityDeathEvent> consumer, Entity entity) {
-            map.put(entity, consumer);
-        }
-
-        @EventHandler
-        public static void onEntityDeath(EntityDeathEvent event) {
-            Entity entity = event.getEntity();
-            if (map.containsKey(entity)) map.get(entity).accept(event);
-        }
-    }
 
     static {
         Skript.registerSection(SecEvtDeath.class, "[execute|run] on death of %~entity%", "[execute|run] when %~entity% (get[s] killed|die[s])");

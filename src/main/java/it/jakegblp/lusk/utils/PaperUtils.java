@@ -20,7 +20,11 @@ public class PaperUtils {
 			HAS_PLAYER_ELYTRA_BOOST_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerElytraBoostEvent"),
 			HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND = HAS_PLAYER_ELYTRA_BOOST_EVENT && Skript.methodExists(PlayerElytraBoostEvent.class,"getHand"),
 			HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent"),
-			HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND = HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT && Skript.methodExists(PlayerUseUnknownEntityEvent.class,"getHand");
+			HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND = HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT && Skript.methodExists(PlayerUseUnknownEntityEvent.class,"getHand"),
+			HAS_PLAYER_JUMP_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerJumpEvent"),
+			HAS_ENTITY_JUMP_EVENT = Skript.classExists("com.destroystokyo.paper.event.entity.EntityJumpEvent"),
+			HAS_PAPER_REGISTRY_ACCESS = Skript.classExists("io.papermc.paper.registry.RegistryAccess") && Skript.methodExists(RegistryAccess.class, "registryAccess"),
+			HAS_PAPER_REGISTRY_KEY = Skript.classExists("io.papermc.paper.registry.RegistryKey") && Skript.methodExists(RegistryAccess.class, "getRegistry", RegistryKey.class);
 
 	/**
 	 * Check if a PaperMC registry exists
@@ -29,11 +33,7 @@ public class PaperUtils {
 	 * @return True if registry exists else false
 	 */
 	public static boolean registryExists(String registry) {
-		return  Skript.classExists("io.papermc.paper.registry.RegistryAccess") &&
-				Skript.classExists("io.papermc.paper.registry.RegistryKey") &&
-				Skript.methodExists(RegistryAccess.class, "registryAccess") &&
-				Skript.methodExists(RegistryAccess.class, "getRegistry", RegistryKey.class) &&
-				Skript.fieldExists(RegistryKey.class, registry);
+		return HAS_PAPER_REGISTRY_ACCESS && HAS_PAPER_REGISTRY_KEY && Skript.fieldExists(RegistryKey.class, registry);
 	}
 
 }
