@@ -19,6 +19,7 @@ import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
+import it.jakegblp.lusk.utils.PaperUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -65,9 +66,15 @@ import java.util.List;
         - on Player Use Unknown Entity
         """)
 @Examples("broadcast event-used tool")
-@Since("1.1, 1.1.1 (Optimized), 1.2 (Hand and Item, +1 Event, Error Prevention)")
+@Since("1.1, 1.1.1 (Optimized), 1.2 (Hand and Item, +1 Event, Fixes)")
 public class ExprUsedTool extends SimpleExpression<Object> {
-    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class, PlayerElytraBoostEvent.class));
+    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class)) {{
+        if (PaperUtils.HAS_PLAYER_ARM_SWING_EVENT_HAND) add(PlayerArmSwingEvent.class);
+        if (PaperUtils.HAS_ENTITY_LOAD_CROSSBOW_EVENT_HAND) add(EntityLoadCrossbowEvent.class);
+        if (PaperUtils.HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND) add(PlayerElytraBoostEvent.class);
+        if (PaperUtils.HAS_PLAYER_SHEAR_BLOCK_EVENT_HAND) add(PlayerShearBlockEvent.class);
+        if (PaperUtils.HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND) add(PlayerUseUnknownEntityEvent.class);
+    }};
 
     static {
         Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.SIMPLE, "[the] used (tool|[held] item|weapon)","[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
