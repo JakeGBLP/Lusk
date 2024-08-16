@@ -28,6 +28,7 @@ public class Lusk extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
         instance.getLogger().info("Has been enabled!");
         UpdateChecker.checkForUpdate(getDescription().getVersion());
+
     }
 
     public static Lusk getInstance() {
