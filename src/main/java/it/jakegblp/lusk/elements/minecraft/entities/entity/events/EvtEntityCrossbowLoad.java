@@ -21,13 +21,13 @@ public class EvtEntityCrossbowLoad extends SkriptEvent {
                     .examples("")
                     .since("1.0.1")
                     .requiredPlugins("Paper");
+            EventValues.registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, new Getter<>() {
+                @Override
+                public @NotNull ItemStack get(final EntityLoadCrossbowEvent e) {
+                    return e.getCrossbow();
+                }
+            }, 0);
         }
-        EventValues.registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, new Getter<>() {
-            @Override
-            public @NotNull ItemStack get(final EntityLoadCrossbowEvent e) {
-                return e.getCrossbow();
-            }
-        }, 0);
     }
 
     @Override

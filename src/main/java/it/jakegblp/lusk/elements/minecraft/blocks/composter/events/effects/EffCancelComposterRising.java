@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.composter.events.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -21,6 +18,7 @@ import javax.annotation.Nullable;
         on hopper compost:
           cancel composter level rise"""})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class EffCancelComposterRising extends Effect {
     static {
         Skript.registerEffect(EffCancelComposterRising.class, "[:un]cancel [the] composter [level] rise");

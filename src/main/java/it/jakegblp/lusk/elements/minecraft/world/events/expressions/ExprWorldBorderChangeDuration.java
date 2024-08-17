@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.world.events.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -13,6 +10,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the duration of the change in the World Border Start Change event.\nCan be set.\nRequires Paper.")
 @Examples({""})
 @Since("1.0.2")
+@RequiredPlugins("Paper")
 public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
@@ -51,7 +50,7 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Timespan timespan)
-            ((WorldBorderBoundsChangeEvent) e).setDuration(timespan.getMilliSeconds());
+            ((WorldBorderBoundsChangeEvent) e).setDuration(Constants.skriptVersion.getMinor() < 9 ? timespan.getMilliSeconds() : timespan.getAs(Timespan.TimePeriod.MILLISECOND));
     }
 
     @Override

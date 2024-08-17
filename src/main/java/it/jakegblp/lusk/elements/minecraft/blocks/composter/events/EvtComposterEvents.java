@@ -14,6 +14,7 @@ public class EvtComposterEvents {
                             
                             Called when an item is about to be composted by an entity.""")
                     .examples("")
+                    .requiredPlugins("Paper")
                     .since("1.0.1");
         }
         if (Skript.classExists("io.papermc.paper.event.block.CompostItemEvent")) {
@@ -24,6 +25,7 @@ public class EvtComposterEvents {
                             Called when an item is about to be composted by a hopper.
                             To prevent hoppers from moving items into composters, cancel the Inventory move event from SkBee.""")
                     .examples("")
+                    .requiredPlugins("Paper")
                     .since("1.0.1");
         }
     }

@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.world.events.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -21,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the past/future center of the worldborder in the World Border Change events.\nThe future center can be set.")
 @Examples({""})
 @Since("1.0.2")
+@RequiredPlugins("Paper")
 public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location> {
     static {
         if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {

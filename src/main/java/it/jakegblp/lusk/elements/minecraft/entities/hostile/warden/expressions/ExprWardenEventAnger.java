@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.hostile.warden.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -20,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the past/future anger of the warden in the Warden Anger Change event.\nThe future anger level can be set.")
 @Examples({""})
 @Since("1.0.1")
+@RequiredPlugins("Paper")
 public class ExprWardenEventAnger extends SimpleExpression<Integer> {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.WardenAngerChangeEvent")) {

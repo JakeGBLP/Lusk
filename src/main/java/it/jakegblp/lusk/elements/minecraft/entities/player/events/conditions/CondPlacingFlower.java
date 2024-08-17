@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.player.events.conditions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -22,8 +19,9 @@ import org.jetbrains.annotations.Nullable;
             broadcast "placed"
           else if the plant is being picked up:
             broadcast "picked up"
-            """})
+        """})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class CondPlacingFlower extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {

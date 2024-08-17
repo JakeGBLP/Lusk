@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.player.events.conditions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -22,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
             make the event not trigger any advancements
         """})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class CondTriggerAdvancements extends Condition {
 
     static {

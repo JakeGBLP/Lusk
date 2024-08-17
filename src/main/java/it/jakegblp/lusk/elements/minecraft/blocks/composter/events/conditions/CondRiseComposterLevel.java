@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.composter.events.conditions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -23,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
             cancel composter rise
         """})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class CondRiseComposterLevel extends Condition {
     static {
         if (Skript.classExists("io.papermc.paper.event.block.CompostItemEvent")) {

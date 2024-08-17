@@ -59,6 +59,7 @@ public class EvtEntityEvents {
                             
                             Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
                     .examples("")
+                    .requiredPlugins("Paper")
                     .since("1.0.2");
             EventValues.registerEventValue(EntityPushedByEntityAttackEvent.class, Vector.class, new Getter<>() {
                 @Override
@@ -142,7 +143,7 @@ public class EvtEntityEvents {
                     .examples("")
                     .since("1.1.1")
                     .requiredPlugins("Paper")
-                    .documentationID("entity_-_inside_block_event");
+                    .documentationID("entity_-_inside_block_event"); // what is this id
         }
     }
 }

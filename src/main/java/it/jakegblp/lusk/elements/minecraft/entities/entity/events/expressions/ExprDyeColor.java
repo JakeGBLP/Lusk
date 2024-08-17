@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.entity.events.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -21,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
 @Examples({"on dye:\n\tbroadcast the entity dye color"})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     static {
         Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, ExpressionType.SIMPLE,

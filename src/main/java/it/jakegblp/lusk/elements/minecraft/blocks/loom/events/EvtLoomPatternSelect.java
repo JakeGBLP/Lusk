@@ -29,7 +29,8 @@ public class EvtLoomPatternSelect extends SkriptEvent {
 
                             on pattern select of bricks:
                               broadcast the selected pattern
-                              """)
+                            """)
+                    .requiredPlugins("Paper")
                     .since("1.0.0");
             EventValues.registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, new Getter<>() {
                 @Override
@@ -63,6 +64,6 @@ public class EvtLoomPatternSelect extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "loom pattern select" + (types == null ? "" : " " + Arrays.toString(types));
+        return "loom pattern select" + (types == null ? "" : " of " + Arrays.toString(types));
     }
 }

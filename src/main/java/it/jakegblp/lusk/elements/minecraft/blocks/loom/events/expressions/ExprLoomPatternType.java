@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.blocks.loom.events.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -30,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
           broadcast the selected loom pattern
         """)
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 public class ExprLoomPatternType extends SimpleExpression<PatternType> {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {

@@ -30,6 +30,7 @@ public class EvtFlowerPotManipulate extends SkriptEvent {
                               else if the plant is being picked up:
                                 broadcast "picked up"
                             """)
+                    .requiredPlugins("Paper")
                     .since("1.0.0");
             EventValues.registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, new Getter<>() {
                 @Override
