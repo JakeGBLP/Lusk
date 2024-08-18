@@ -64,7 +64,7 @@ public class UpdateChecker implements Listener {
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!player.hasPermission("lusk.update.check")) return;
+        if (!player.hasPermission("lusk.update.check") || !player.isOp()) return;
 
         String currentVersion = this.plugin.getDescription().getVersion();
         CompletableFuture<Version> updateVersion = getUpdateVersion(currentVersion);
