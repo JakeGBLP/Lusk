@@ -24,11 +24,9 @@ public class Types {
             }
             ClassInfo<PatternType> patternTypeClassInfo;
             if (patternTypeRegistry != null) {
-                Skript.info("\nregistry exists\n");
                 patternTypeClassInfo = RegistryClassInfo.create(patternTypeRegistry, PatternType.class, true, "patterntype", null, "pattern");
             } else {
                 patternTypeClassInfo = new EnumWrapper<>((Class)PatternType.class,null,"pattern").getClassInfo("patterntype");
-                Skript.info("\nregistry doesn't exist, using enum\n");
             }
             Classes.registerClass(patternTypeClassInfo
                     .user("pattern ?types?")
