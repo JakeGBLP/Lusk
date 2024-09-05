@@ -39,14 +39,14 @@ public class EvtArmorStandManipulate extends SkriptEvent {
             Skript.registerEvent("Armor Stand - on Manipulate", EvtArmorStandManipulate.class, PlayerArmorStandManipulateEvent.class,
                             "armor[ |-]stand [%-*equipmentslots%] %*armorstandinteractions%")
                     .description("""
-                            Called when a player interacts with an armor stand and will either swap, retrieve, place an droppedItem.
-                                                        
+                            Called when a player interacts with an armor stand and will either swap, retrieve, place an item.
+                            
                             `event-equipmentslot` is the clicked slot of the armor stand, to get the hand use the Used Hand expression
                             `event-entity` is the armor stand
-                                                        
-                            `past event-droppedItem` is the droppedItem the armor stand is holding
-                            `future event-droppedItem` (or `event-droppedItem`) is the droppedItem the player is holding
-                                                        
+                            
+                            `past event-item` is the item the armor stand is holding
+                            `future event-item` (or `event-item`) is the item the player is holding
+                            
                             `event-armorstand interaction` is the type of manipulation that's happening during the event
                             (NOTE: this will only ever return `Place`, `Retrieve` or `Change`)
                             """)

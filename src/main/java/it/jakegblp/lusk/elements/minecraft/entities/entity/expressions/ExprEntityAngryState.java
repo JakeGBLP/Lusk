@@ -32,8 +32,9 @@ public class ExprEntityAngryState extends SimpleExpression<Boolean> {
     private Expression<LivingEntity> livingEntityExpression;
 
     @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        livingEntityExpression = (Expression<LivingEntity>) exprs[0];
+    public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed,
+            @NotNull SkriptParser.ParseResult parseResult) {
+        livingEntityExpression = (Expression<LivingEntity>) expressions[0];
         return true;
     }
 
