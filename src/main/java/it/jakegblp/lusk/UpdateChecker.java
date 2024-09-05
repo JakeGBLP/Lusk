@@ -43,7 +43,7 @@ public class UpdateChecker implements Listener {
 
     private static void getLatestReleaseVersion(final Consumer<String> consumer) {
         try {
-            URL url = URL.of(URI.create("https://api.github.com/repos/JakeGBLP/Lusk/releases/latest"),null);
+            URL url = URL.of(URI.create("https://api.github.com/repos/JakeGBLP/Lusk/releases/latest"), null);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
             String tag_name = jsonObject.get("tag_name").getAsString();
