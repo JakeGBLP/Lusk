@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.io.StreamCorruptedException;
 import java.util.stream.Collectors;
 
-import static it.jakegblp.lusk.utils.Utils.toSkriptConfigNumberAccuracy;
+import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
 public class Types {
     static {
@@ -55,12 +55,12 @@ public class Types {
                         @Override
                         public @NotNull Fields serialize(BoundingBox o) {
                             Fields f = new Fields();
-                            f.putPrimitive("minX",o.getMinX());
-                            f.putPrimitive("minY",o.getMinY());
-                            f.putPrimitive("minZ",o.getMinZ());
-                            f.putPrimitive("maxX",o.getMaxX());
-                            f.putPrimitive("maxY",o.getMaxY());
-                            f.putPrimitive("maxZ",o.getMaxZ());
+                            f.putPrimitive("minX", o.getMinX());
+                            f.putPrimitive("minY", o.getMinY());
+                            f.putPrimitive("minZ", o.getMinZ());
+                            f.putPrimitive("maxX", o.getMaxX());
+                            f.putPrimitive("maxY", o.getMaxY());
+                            f.putPrimitive("maxZ", o.getMaxZ());
                             return f;
                         }
 
@@ -72,12 +72,12 @@ public class Types {
                         @Override
                         protected BoundingBox deserialize(@NotNull Fields f) throws StreamCorruptedException {
                             return new BoundingBox(
-                                f.getPrimitive("minX", double.class),
-                                f.getPrimitive("minY", double.class),
-                                f.getPrimitive("minZ", double.class),
-                                f.getPrimitive("maxX", double.class),
-                                f.getPrimitive("maxY", double.class),
-                                f.getPrimitive("maxZ", double.class)
+                                    f.getPrimitive("minX", double.class),
+                                    f.getPrimitive("minY", double.class),
+                                    f.getPrimitive("minZ", double.class),
+                                    f.getPrimitive("maxX", double.class),
+                                    f.getPrimitive("maxY", double.class),
+                                    f.getPrimitive("maxZ", double.class)
                             );
 
                         }
@@ -112,7 +112,7 @@ public class Types {
 
                         @Override
                         public @NotNull String toString(final VoxelShape s, final int flags) {
-                            return "VoxelShape ["+(s.getBoundingBoxes().stream().map(box -> toSkriptConfigNumberAccuracy(box.toString())).collect(Collectors.joining(", ")));
+                            return "VoxelShape [" + (s.getBoundingBoxes().stream().map(box -> toSkriptConfigNumberAccuracy(box.toString())).collect(Collectors.joining(", ")));
                         }
 
                         @Override

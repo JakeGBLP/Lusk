@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.blocks.cauldron.events.types;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 
 public class Types {

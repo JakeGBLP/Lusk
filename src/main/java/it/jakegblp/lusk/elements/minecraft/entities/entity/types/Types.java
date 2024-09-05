@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.entity.types;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.SpawnCategory;
 

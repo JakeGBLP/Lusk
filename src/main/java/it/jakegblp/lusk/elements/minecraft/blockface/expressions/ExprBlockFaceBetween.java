@@ -20,20 +20,20 @@ import javax.annotation.Nullable;
 
 @Name("BlockFace - Between Blocks")
 @Description("""
-Returns the face relation of a block compared to another block.
+        Returns the face relation of a block compared to another block.
 
-If the blocks are not connected nothing will be returned.
-""")
+        If the blocks are not connected nothing will be returned.
+        """)
 @Examples(
         {
                 """
-                set {_A} to block at location(10,10,10,"world")
-                set {_B} to block at location(10,11,10,"world") # 1 block above
-                
-                set {_blockFace} to blockface from {_A} to {_B}
-                
-                broadcast {_blockFace} # 'up face'
-                """
+                        set {_A} to block at location(10,10,10,"world")
+                        set {_B} to block at location(10,11,10,"world") # 1 block above
+
+                        set {_blockFace} to blockface from {_A} to {_B}
+
+                        broadcast {_blockFace} # 'up face'
+                        """
         })
 @Since("1.2")
 public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
@@ -41,6 +41,7 @@ public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
         Skript.registerExpression(ExprBlockFaceBetween.class, BlockFace.class, ExpressionType.COMBINED,
                 "[the] [block[ ]]face from %block% to %block%");
     }
+
     Expression<Block> fromExpression;
     Expression<Block> toExpression;
 
@@ -50,7 +51,7 @@ public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
         if (from != null) {
             Block to = toExpression.getSingle(event);
             if (to != null) {
-                return new BlockFace[] {from.getFace(to)};
+                return new BlockFace[]{from.getFace(to)};
             }
         }
         return new BlockFace[0];
@@ -68,13 +69,13 @@ public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the blockface from "+(event != null ? fromExpression.toString(event, debug) : "")+" to "+(event != null ? toExpression.toString(event, debug) : "");
+        return "the blockface from " + (event != null ? fromExpression.toString(event, debug) : "") + " to " + (event != null ? toExpression.toString(event, debug) : "");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parseResult) {
-        fromExpression  = (Expression<Block>) expressions[0];
+        fromExpression = (Expression<Block>) expressions[0];
         toExpression = (Expression<Block>) expressions[1];
         return true;
     }

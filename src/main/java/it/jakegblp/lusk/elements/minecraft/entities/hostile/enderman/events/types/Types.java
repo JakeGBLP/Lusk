@@ -3,7 +3,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.hostile.enderman.events.typ
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
-import it.jakegblp.lusk.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 
 public class Types {
     static {

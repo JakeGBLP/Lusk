@@ -10,10 +10,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
-import static it.jakegblp.lusk.utils.Utils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
 public class Types {
     public static final Pattern VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?[-+a-zA-Z0-9.]*$");
+
     static {
         if (Classes.getExactClassInfo(Semver.class) == null)
             Classes.registerClass(new ClassInfo<>(Semver.class, "version")
@@ -22,7 +23,7 @@ public class Types {
                     .description("A Minecraft Version.")
                     .usage("")
                     .examples("") // add example
-                    .after("number","long","integer","double","float","short","byte")
+                    .after("number", "long", "integer", "double", "float", "short", "byte")
                     .since("1.0.0, 1.2 (without strings)")
                     .parser(new Parser<>() {
                         @Override

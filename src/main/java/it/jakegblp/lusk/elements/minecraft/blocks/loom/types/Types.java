@@ -6,9 +6,9 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.registrations.Classes;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import it.jakegblp.lusk.api.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.wrappers.RegistryClassInfo;
 import it.jakegblp.lusk.utils.PaperUtils;
-import it.jakegblp.lusk.wrappers.EnumWrapper;
-import it.jakegblp.lusk.wrappers.RegistryClassInfo;
 import org.bukkit.Registry;
 import org.bukkit.block.banner.PatternType;
 
@@ -26,13 +26,13 @@ public class Types {
             if (patternTypeRegistry != null) {
                 patternTypeClassInfo = RegistryClassInfo.create(patternTypeRegistry, PatternType.class, true, "patterntype", null, "pattern");
             } else {
-                patternTypeClassInfo = new EnumWrapper<>((Class)PatternType.class,null,"pattern").getClassInfo("patterntype");
+                patternTypeClassInfo = new EnumWrapper<>((Class) PatternType.class, null, "pattern").getClassInfo("patterntype");
             }
             Classes.registerClass(patternTypeClassInfo
                     .user("pattern ?types?")
                     .name("Banner - Pattern Type")
                     .description("Represents all the available banner pattern types.")
-                    .since("1.0.0, 1.2.1 (Registries)")
+                    .since("1.0.0, 1.2.1 (Registries), 1.3 (1.20.4 Fix)")
             );
         }
     }

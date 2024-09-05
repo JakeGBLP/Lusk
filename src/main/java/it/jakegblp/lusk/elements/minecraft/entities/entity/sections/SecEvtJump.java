@@ -9,8 +9,8 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.classes.events.GenericEntityJumpEvent;
-import it.jakegblp.lusk.listeners.JumpListener;
+import it.jakegblp.lusk.api.events.GenericEntityJumpEvent;
+import it.jakegblp.lusk.api.listeners.JumpListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -21,20 +21,19 @@ import java.util.function.Consumer;
 
 @Name("Jump Section")
 @Description("""
-Runs the code inside of it when the provided entity jumps.
+        Runs the code inside of it when the provided entity jumps.
 
-Only works for horses on Spigot, Paper is required for players and entities.
+        Only works for horses on Spigot, Paper is required for players and entities.
 
-Local Variables that are:
-- defined BEFORE this section CAN be used inside of it.
-- defined AFTER this section CANNOT be used inside of it.
-- defined INSIDE this section CANNOT be used outside of it.
-""")
+        Local Variables that are:
+        - defined BEFORE this section CAN be used inside of it.
+        - defined AFTER this section CANNOT be used inside of it.
+        - defined INSIDE this section CANNOT be used outside of it.
+        """)
 @Examples("""
         """)
 @Since("1.2")
 public class SecEvtJump extends Section {
-
 
     static {
         Skript.registerSection(SecEvtJump.class, "[execute|run] on %~entity% jump[ing]", "[execute|run] when %~entity% jump[s]");

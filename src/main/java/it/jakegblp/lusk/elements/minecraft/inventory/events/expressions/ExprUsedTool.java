@@ -77,7 +77,7 @@ public class ExprUsedTool extends SimpleExpression<Object> {
     }};
 
     static {
-        Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.SIMPLE, "[the] used (tool|[held] item|weapon)","[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
+        Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.SIMPLE, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
     }
 
     boolean hand;
@@ -193,6 +193,6 @@ public class ExprUsedTool extends SimpleExpression<Object> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the used "+(hand?"hand":"tool");
+        return "the used " + (hand ? "hand" : "tool");
     }
 }

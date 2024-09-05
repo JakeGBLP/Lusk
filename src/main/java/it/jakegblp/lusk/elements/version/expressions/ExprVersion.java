@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-import static it.jakegblp.lusk.utils.Utils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
 @Name("Version")
 @Description("Returns a Version")

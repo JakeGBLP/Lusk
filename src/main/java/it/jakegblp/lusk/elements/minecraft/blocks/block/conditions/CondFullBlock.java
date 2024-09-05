@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.BlockUtils.isFullBlock;
 @Since("1.2.1-beta1")
 public class CondFullBlock extends PropertyCondition<Block> {
     static {
-        register(CondFullBlock.class,"[a] full block[s]","blocks");
+        register(CondFullBlock.class, "[a] full block[s]", "blocks");
     }
 
     @Override

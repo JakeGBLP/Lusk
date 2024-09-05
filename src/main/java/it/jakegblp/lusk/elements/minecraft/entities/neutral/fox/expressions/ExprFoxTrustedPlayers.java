@@ -23,14 +23,14 @@ import java.util.List;
 
 @Name("Fox - Trusted Players")
 @Description("""
-Returns the first, second, or both trusted players of 1 or more foxes.
-First and second can both be set to a single offline player, trusted players can be set to 2 offline players (or 1, which only sets the first one).
+        Returns the first, second, or both trusted players of 1 or more foxes.
+        First and second can both be set to a single offline player, trusted players can be set to 2 offline players (or 1, which only sets the first one).
 
-Note: Before the second trusted player of a fox can be set, the first one must also be set, in the same way, you can't clear the first one if the second one is set, trying to do either of those things won't do anything
+        Note: Before the second trusted player of a fox can be set, the first one must also be set, in the same way, you can't clear the first one if the second one is set, trying to do either of those things won't do anything
 
-If you wish to set/clear both, do so by using the second pattern: `clear trusted players of {_fox}`
-""")
-@Examples({"broadcast first trusted player of {_fox}","set trusted players of {_fox} to {_notch} and {_steve}"})
+        If you wish to set/clear both, do so by using the second pattern: `clear trusted players of {_fox}`
+        """)
+@Examples({"broadcast first trusted player of {_fox}", "set trusted players of {_fox} to {_notch} and {_steve}"})
 @Since("1.2")
 public class ExprFoxTrustedPlayers extends PropertyExpression<LivingEntity, OfflinePlayer> {
 
@@ -82,7 +82,8 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<LivingEntity, Offl
         if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
             if (state == 0) {
                 for (LivingEntity entity : getExpr().getArray(event)) {
-                    if (entity instanceof Fox fox && fox.getSecondTrustedPlayer() == null) fox.setFirstTrustedPlayer(null);
+                    if (entity instanceof Fox fox && fox.getSecondTrustedPlayer() == null)
+                        fox.setFirstTrustedPlayer(null);
                 }
             } else if (state == 1) {
                 for (LivingEntity entity : getExpr().getArray(event)) {
@@ -112,7 +113,8 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<LivingEntity, Offl
                     }
                 } else if (state == 1) {
                     for (LivingEntity entity : getExpr().getArray(event)) {
-                        if (entity instanceof Fox fox && fox.getFirstTrustedPlayer() != null) fox.setSecondTrustedPlayer(offlinePlayer);
+                        if (entity instanceof Fox fox && fox.getFirstTrustedPlayer() != null)
+                            fox.setSecondTrustedPlayer(offlinePlayer);
                     }
                 }
             }
@@ -125,7 +127,7 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<LivingEntity, Offl
         StringBuilder builder = new StringBuilder();
         if (state == 2) builder.append("trusted players");
         else builder.append(state == 0 ? "first" : "second").append(" player");
-        builder.append(" of ").append(event != null ? getExpr().toString(event,debug) : "");
+        builder.append(" of ").append(event != null ? getExpr().toString(event, debug) : "");
         return builder.toString();
     }
 

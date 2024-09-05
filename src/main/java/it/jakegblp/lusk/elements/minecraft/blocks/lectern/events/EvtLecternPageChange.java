@@ -26,10 +26,10 @@ public class EvtLecternPageChange extends SkriptEvent {
                     .examples("""
                             on lectern page flip to the right:
                               broadcast "right"
-                            
+
                             on lectern page flip to the left:
                               broadcast "left"
-                            
+
                             on lectern page flip:
                               broadcast "either"
                             """)
