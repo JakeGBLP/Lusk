@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.wrappers;
+package it.jakegblp.lusk.api.wrappers;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
@@ -25,7 +25,6 @@ import java.util.List;
  * {@link ClassInfo} wrapper class for {@link Registry Bukkit Registries}
  *
  * @param <T> Type of item in the registry
- *
  * @author ShaneBeee
  */
 @SuppressWarnings({"unused"})

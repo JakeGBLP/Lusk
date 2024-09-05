@@ -1,15 +1,20 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.util.coll.BidiHashMap;
+import ch.njol.util.coll.BidiMap;
 import com.vdurmont.semver4j.Semver;
 import org.bukkit.Rotation;
 
 import java.util.HashMap;
 
-import static it.jakegblp.lusk.utils.Utils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
 public class Constants {
-    public static final Semver serverVersion = Version(String.valueOf(Skript.getMinecraftVersion()));
+    public static final Semver
+            serverVersion = Version(String.valueOf(Skript.getMinecraftVersion())),
+            skriptVersion = Version(Skript.getVersion().toString());
+
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
         put(4, Version("1.7.5"));
         put(5, Version("1.7.10"));
@@ -52,18 +57,17 @@ public class Constants {
         put(764, Version("1.20.2"));
         put(765, Version("1.20.4"));
         put(766, Version("1.20.6"));
-        put(767, Version("1.21"));
+        put(767, Version("1.21.1"));
     }};
 
-    public static final Semver skriptVersion = Version(Skript.getVersion().toString());
-    public static final HashMap<Integer, Rotation> itemFrameRotations = new HashMap<>() {{
-        put(0, Rotation.NONE);
-        put(45, Rotation.CLOCKWISE_45);
-        put(90, Rotation.CLOCKWISE);
-        put(135, Rotation.CLOCKWISE_135);
-        put(180, Rotation.FLIPPED);
-        put(225, Rotation.FLIPPED_45);
-        put(270, Rotation.COUNTER_CLOCKWISE);
-        put(315, Rotation.COUNTER_CLOCKWISE_45);
+    public static final BidiMap<Rotation, Integer> itemFrameRotations = new BidiHashMap<>() {{
+        put(Rotation.NONE, 0);
+        put(Rotation.CLOCKWISE_45, 45);
+        put(Rotation.CLOCKWISE, 90);
+        put(Rotation.CLOCKWISE_135, 135);
+        put(Rotation.FLIPPED, 180);
+        put(Rotation.FLIPPED_45, 225);
+        put(Rotation.COUNTER_CLOCKWISE, 270);
+        put(Rotation.COUNTER_CLOCKWISE_45, 315);
     }};
 }

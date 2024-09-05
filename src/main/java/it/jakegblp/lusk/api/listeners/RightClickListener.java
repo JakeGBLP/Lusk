@@ -1,6 +1,5 @@
-package it.jakegblp.lusk.listeners;
+package it.jakegblp.lusk.api.listeners;
 
-import it.jakegblp.lusk.Lusk;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,17 +11,13 @@ import java.util.function.Consumer;
 
 public class RightClickListener implements Listener {
 
-    static {
-        Lusk.getInstance().registerListener(new RightClickListener());
-    }
-
     private static final Map<Entity, Consumer<PlayerInteractEntityEvent>> SECTIONS = new HashMap<>();
 
     /**
      * Logs a Consumer along with its Entity.
      *
      * @param consumer The consumer containing the section's contents and the variable management.
-     * @param entity The entity involved at runtime.
+     * @param entity   The entity involved at runtime.
      */
     public static void log(Consumer<PlayerInteractEntityEvent> consumer, Entity entity) {
         SECTIONS.put(entity, consumer);

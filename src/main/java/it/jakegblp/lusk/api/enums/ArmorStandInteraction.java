@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.classes.enums;
+package it.jakegblp.lusk.api.enums;
 
 public enum ArmorStandInteraction {
     CHANGE(0),

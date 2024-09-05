@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.wrappers;
+package it.jakegblp.lusk.api.wrappers;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;

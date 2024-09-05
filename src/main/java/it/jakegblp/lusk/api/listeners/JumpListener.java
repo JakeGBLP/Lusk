@@ -1,9 +1,9 @@
-package it.jakegblp.lusk.listeners;
+package it.jakegblp.lusk.api.listeners;
 
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import it.jakegblp.lusk.Lusk;
-import it.jakegblp.lusk.classes.events.GenericEntityJumpEvent;
+import it.jakegblp.lusk.api.events.GenericEntityJumpEvent;
 import it.jakegblp.lusk.utils.PaperUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
@@ -16,14 +16,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class JumpListener implements Listener {
-
-    static {
-        Lusk.getInstance().registerListener(new SpigotJumpListener());
-        if (PaperUtils.HAS_PLAYER_JUMP_EVENT && PaperUtils.HAS_ENTITY_JUMP_EVENT) {
-            Lusk.getInstance().registerListener(new PaperJumpListener());
-        }
-        Lusk.getInstance().registerListener(new JumpListener());
-    }
 
     private static final Map<Entity, Consumer<GenericEntityJumpEvent>> SECTIONS = new HashMap<>();
 
@@ -42,7 +34,7 @@ public class JumpListener implements Listener {
      * Logs a Consumer along with its Entity if {@link JumpListener#canLog(Entity)} returns true.
      *
      * @param consumer The consumer containing the section's contents and the variable management.
-     * @param entity The entity involved at runtime.
+     * @param entity   The entity involved at runtime.
      * @see JumpListener#canLog(Entity)
      */
     public static void log(Consumer<GenericEntityJumpEvent> consumer, Entity entity) {
@@ -52,6 +44,7 @@ public class JumpListener implements Listener {
     public static void remove(Entity entity) {
         SECTIONS.remove(entity);
     }
+
     public static class SpigotJumpListener implements Listener {
 
         @EventHandler
@@ -65,6 +58,7 @@ public class JumpListener implements Listener {
         //    }
         //}
     }
+
     public static class PaperJumpListener implements Listener {
         @EventHandler
         public void onEntityJump(EntityJumpEvent event) {
@@ -76,6 +70,7 @@ public class JumpListener implements Listener {
             Lusk.callEvent(new GenericEntityJumpEvent(event.getPlayer()));
         }
     }
+
     @EventHandler
     public static void onGenericEntityJump(GenericEntityJumpEvent event) {
         Entity entity = event.getEntity();

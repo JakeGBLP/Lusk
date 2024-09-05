@@ -21,7 +21,7 @@ public class BorrowedUtils {
         if (!key.contains(":")) key = "minecraft:" + key;
         if (key.length() > 255) {
             if (error)
-                Skript.error("An invalid key was provided, key must be less than 256 characters: "+key);
+                Skript.error("An invalid key was provided, key must be less than 256 characters: " + key);
             return null;
         }
         key = key.toLowerCase();
@@ -31,7 +31,7 @@ public class BorrowedUtils {
 
         NamespacedKey namespacedKey = NamespacedKey.fromString(key);
         if (namespacedKey == null && error)
-            Skript.error("An invalid key was provided, that didn't follow [a-z0-9/._-:]. key: "+key);
+            Skript.error("An invalid key was provided, that didn't follow [a-z0-9/._-:]. key: " + key);
         return namespacedKey;
     }
 }

@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.classes.events;
+package it.jakegblp.lusk.api.events;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;

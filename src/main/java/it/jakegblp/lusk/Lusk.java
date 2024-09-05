@@ -2,6 +2,8 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import it.jakegblp.lusk.api.listeners.*;
+import it.jakegblp.lusk.utils.PaperUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -24,23 +26,42 @@ public class Lusk extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (PaperUtils.HAS_PLAYER_JUMP_EVENT && PaperUtils.HAS_ENTITY_JUMP_EVENT) {
+            Lusk.registerListeners(new JumpListener.PaperJumpListener());
+        }
+        registerListeners(
+                new UpdateChecker(this),
+                new JumpListener.SpigotJumpListener(),
+                new JumpListener.PaperJumpListener(),
+                new JumpListener(),
+                new RightClickListener(),
+                new BlockBreakListener(),
+                new HealListener(),
+                new DeathListener(),
+                new DamageListener(),
+                new PlayerItemDropListener(),
+                new InventoryClickListener()
+        );
+        instance.getLogger().info("Has been enabled!");
         int pluginId = 17730;
         Metrics metrics = new Metrics(this, pluginId);
-        instance.getLogger().info("Has been enabled!");
-        registerListener(new UpdateChecker(this));
         UpdateChecker.checkForUpdate(getDescription().getVersion());
-
     }
 
     public static Lusk getInstance() {
         return instance;
     }
-    public void registerListener(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, instance);
+
+    public static void registerListeners(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getPluginManager().registerEvents(listener, instance);
+        }
     }
+
     public static void callEvent(Event event) {
         Bukkit.getPluginManager().callEvent(event);
     }
+
     public SkriptAddon getAddonInstance() {
         return addon;
     }
