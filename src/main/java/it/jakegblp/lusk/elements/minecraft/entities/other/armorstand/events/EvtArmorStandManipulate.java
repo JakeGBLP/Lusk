@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import it.jakegblp.lusk.classes.enums.ArmorStandInteraction;
+import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -39,14 +39,14 @@ public class EvtArmorStandManipulate extends SkriptEvent {
             Skript.registerEvent("Armor Stand - on Manipulate", EvtArmorStandManipulate.class, PlayerArmorStandManipulateEvent.class,
                             "armor[ |-]stand [%-*equipmentslots%] %*armorstandinteractions%")
                     .description("""
-                            Called when a player interacts with an armor stand and will either swap, retrieve, place an item.
-                            
+                            Called when a player interacts with an armor stand and will either swap, retrieve, place an droppedItem.
+                                                        
                             `event-equipmentslot` is the clicked slot of the armor stand, to get the hand use the Used Hand expression
                             `event-entity` is the armor stand
-                            
-                            `past event-item` is the item the armor stand is holding
-                            `future event-item` (or `event-item`) is the item the player is holding
-                            
+                                                        
+                            `past event-droppedItem` is the droppedItem the armor stand is holding
+                            `future event-droppedItem` (or `event-droppedItem`) is the droppedItem the player is holding
+                                                        
                             `event-armorstand interaction` is the type of manipulation that's happening during the event
                             (NOTE: this will only ever return `Place`, `Retrieve` or `Change`)
                             """)

@@ -9,7 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.listeners.HealListener;
+import it.jakegblp.lusk.api.listeners.HealListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityRegainHealthEvent;

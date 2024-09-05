@@ -17,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Item Rarity - Color")
 @Description("Returns the color of an item's rarity.\nCan be used with the item itself and it will get its rarity's color without getting the rarity itself if you don't need it.")
-@Examples({"broadcast rarity color of tool","broadcast rarity color of item rarity of heart of the sea"})
+@Examples({"broadcast rarity color of tool", "broadcast rarity color of item rarity of heart of the sea"})
 @Since("1.0.0+, 1.2+ (ItemRarity)")
-public class ExprRarityColor extends SimplePropertyExpression<Object,SkriptColor> {
+public class ExprRarityColor extends SimplePropertyExpression<Object, SkriptColor> {
     static {
         if (Skript.classExists("org.bukkit.inventory.ItemRarity")) {
             register(ExprRarityColor.class, SkriptColor.class, "rarity color", "itemrarities/itemtypes");
@@ -38,7 +38,7 @@ public class ExprRarityColor extends SimplePropertyExpression<Object,SkriptColor
         }
         if (from instanceof ItemRarity itemRarity) {
             TextColor textColor = itemRarity.color();
-            return SkriptColor.fromBukkitColor(Color.fromRGB(textColor.red(),textColor.green(),textColor.blue()));
+            return SkriptColor.fromBukkitColor(Color.fromRGB(textColor.red(), textColor.green(), textColor.blue()));
         }
         return null;
     }

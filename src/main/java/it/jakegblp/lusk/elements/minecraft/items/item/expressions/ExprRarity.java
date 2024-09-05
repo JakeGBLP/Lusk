@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Item - Rarity")
 @Description("Returns the rarity of an item.\nCan be set.\n\nBefore Lusk 1.2 (and Minecraft 1.20.5), this expression returned strings and also worked for enchantments, due to some major changes enchantments no longer have a rarity.")
-@Examples({"broadcast item rarity of tool","set item rarity of {_sword} to epic"})
+@Examples({"broadcast item rarity of tool", "set item rarity of {_sword} to epic"})
 @Since("1.0.0+, 1.2+ (ItemRarity)")
 public class ExprRarity extends SimpleExpression<ItemRarity> {
     static {

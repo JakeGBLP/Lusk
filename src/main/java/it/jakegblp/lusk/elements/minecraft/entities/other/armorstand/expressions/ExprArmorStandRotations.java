@@ -12,7 +12,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.VectorMath;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -60,14 +60,17 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
     protected Vector @NotNull [] get(@NotNull Event e) {
         if (livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand) {
             return switch (property) {
-                case "left arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftArmPose())};
-                case "right arm" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightArmPose())};
-                case "left leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getLeftLegPose())};
-                case "right leg" -> new Vector[]{Utils.toBukkitVector(armorStand.getRightLegPose())};
-                case "head" -> new Vector[]{Utils.toBukkitVector(armorStand.getHeadPose())};
-                case "body" -> new Vector[]{Utils.toBukkitVector(armorStand.getBodyPose())};
-                case "" ->
-                        new Vector[]{VectorMath.fromYawAndPitch(armorStand.getLocation().getYaw(), armorStand.getLocation().getPitch())};
+                case "left arm" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getLeftArmPose())};
+                case "right arm" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getRightArmPose())};
+                case "left leg" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getLeftLegPose())};
+                case "right leg" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getRightLegPose())};
+                case "head" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getHeadPose())};
+                case "body" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getBodyPose())};
+                case "" -> new Vector[]{
+                        VectorMath.fromYawAndPitch(
+                                armorStand.getLocation().getYaw(),
+                                armorStand.getLocation().getPitch())
+                };
                 default -> new Vector[0];
             };
         }
@@ -83,13 +86,13 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Vector vector && livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand)
             switch (property) {
-                case "left arm" -> Utils.setLeftArmRotation(armorStand, vector);
-                case "right arm" -> Utils.setRightArmRotation(armorStand, vector);
-                case "left leg" -> Utils.setLeftLegRotation(armorStand, vector);
-                case "right leg" -> Utils.setRightLegRotation(armorStand, vector);
-                case "head" -> Utils.setHeadRotation(armorStand, vector);
-                case "body" -> Utils.setBodyRotation(armorStand, vector);
-                case "" -> Utils.setFullRotation(armorStand, vector);
+                case "left arm" -> LuskUtils.setLeftArmRotation(armorStand, vector);
+                case "right arm" -> LuskUtils.setRightArmRotation(armorStand, vector);
+                case "left leg" -> LuskUtils.setLeftLegRotation(armorStand, vector);
+                case "right leg" -> LuskUtils.setRightLegRotation(armorStand, vector);
+                case "head" -> LuskUtils.setHeadRotation(armorStand, vector);
+                case "body" -> LuskUtils.setBodyRotation(armorStand, vector);
+                case "" -> LuskUtils.setFullRotation(armorStand, vector);
             }
     }
 

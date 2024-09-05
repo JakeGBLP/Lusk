@@ -9,16 +9,13 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.Lusk;
+import it.jakegblp.lusk.api.listeners.BlockBreakListener;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -35,24 +32,6 @@ import static it.jakegblp.lusk.utils.EventUtils.willItemsDrop;
 @Examples("")
 @Since("1.2")
 public class SecEvtBreak extends Section {
-
-    public static class BreakListener implements Listener {
-        static {
-            Lusk.getInstance().registerListener(new BreakListener());
-        }
-
-        private static final HashMap<Block, Consumer<BlockBreakEvent>> map = new HashMap<>();
-
-        private static void log(Consumer<BlockBreakEvent> consumer, Block block) {
-            map.put(block, consumer);
-        }
-
-        @EventHandler
-        public static void onBlockBreak(BlockBreakEvent event) {
-            Block block = event.getBlock();
-            if (map.containsKey(block)) map.get(block).accept(event);
-        }
-    }
 
     static {
         Skript.registerSection(SecEvtBreak.class, "[execute|run] on (break[ing]|mine:min(e|ing)) of %~block%", "[execute|run] when %~block% get[s] (broken|mine:mined)");
@@ -83,12 +62,12 @@ public class SecEvtBreak extends Section {
                 Variables.removeLocals(breakEvent);
             }
         };
-        BreakListener.log(consumer, blockExpression.getSingle(event));
+        BlockBreakListener.log(consumer, blockExpression.getSingle(event));
         return super.walk(event, false);
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? blockExpression.toString(event, b) : "") + " gets "+(mine?"mined":"broken");
+        return "when " + (event != null ? blockExpression.toString(event, b) : "") + " gets " + (mine ? "mined" : "broken");
     }
 }

@@ -21,6 +21,7 @@ public class CondEntitySleeping extends PropertyCondition<LivingEntity> {
     static {
         register(CondEntitySleeping.class, "(:awake|asleep|sleeping)", "livingentities");
     }
+
     boolean awake;
 
     @Override

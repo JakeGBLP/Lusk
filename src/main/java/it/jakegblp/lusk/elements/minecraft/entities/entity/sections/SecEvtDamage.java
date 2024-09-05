@@ -9,7 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.listeners.DamageListener;
+import it.jakegblp.lusk.api.listeners.DamageListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,22 +21,22 @@ import java.util.function.Consumer;
 
 @Name("Damage Section")
 @Description("""
-Runs the code inside of it when the provided entity takes damage.
+        Runs the code inside of it when the provided entity takes damage.
 
-Local Variables that are:
-- defined BEFORE this section CAN be used inside of it.
-- defined AFTER this section CANNOT be used inside of it.
-- defined INSIDE this section CANNOT be used outside of it.
-""")
+        Local Variables that are:
+        - defined BEFORE this section CAN be used inside of it.
+        - defined AFTER this section CANNOT be used inside of it.
+        - defined INSIDE this section CANNOT be used outside of it.
+        """)
 @Examples(
-"""
-command /a:
-  trigger:
-    spawn pig at player:
-      set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
-      on damage of entity:
-        set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
-"""
+        """
+                command /a:
+                  trigger:
+                    spawn pig at player:
+                      set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
+                      on damage of entity:
+                        set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
+                """
 )
 @Since("1.1")
 public class SecEvtDamage extends Section {

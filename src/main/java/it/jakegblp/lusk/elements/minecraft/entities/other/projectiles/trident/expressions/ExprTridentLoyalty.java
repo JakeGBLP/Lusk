@@ -68,10 +68,10 @@ public class ExprTridentLoyalty extends SimpleExpression<Integer> {
                 trident.setLoyaltyLevel(0);
             else if (delta[0] instanceof Integer integer) {
                 if (mode == Changer.ChangeMode.ADD)
-                    integer = trident.getLoyaltyLevel()+integer;
+                    integer = trident.getLoyaltyLevel() + integer;
                 else if (mode == Changer.ChangeMode.REMOVE)
-                    integer = trident.getLoyaltyLevel()-integer;
-                trident.setLoyaltyLevel(Math.clamp(integer,0,127));
+                    integer = trident.getLoyaltyLevel() - integer;
+                trident.setLoyaltyLevel(Math.clamp(integer, 0, 127));
             }
         }
     }

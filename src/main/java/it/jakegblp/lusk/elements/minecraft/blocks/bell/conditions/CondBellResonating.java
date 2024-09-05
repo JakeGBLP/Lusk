@@ -5,7 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Since("1.0.3, 1.2 (Deprecated)")
 public class CondBellResonating extends PropertyCondition<Object> {
     static {
-        if (!Utils.SKRIPT_2_9) {
+        if (!LuskUtils.SKRIPT_2_9) {
             register(CondBellResonating.class, "resonating", "block");
         }
     }

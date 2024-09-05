@@ -9,7 +9,7 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.listeners.DeathListener;
+import it.jakegblp.lusk.api.listeners.DeathListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -21,13 +21,13 @@ import java.util.function.Consumer;
 
 @Name("Death Section")
 @Description("""
-Runs the code inside of it when the provided entity dies.
+        Runs the code inside of it when the provided entity dies.
 
-Local Variables that are:
-- defined BEFORE this section CAN be used inside of it.
-- defined AFTER this section CANNOT be used inside of it.
-- defined INSIDE this section CANNOT be used outside of it.
-""")
+        Local Variables that are:
+        - defined BEFORE this section CAN be used inside of it.
+        - defined AFTER this section CANNOT be used inside of it.
+        - defined INSIDE this section CANNOT be used outside of it.
+        """)
 @Examples("""
         """)
 @Since("1.2")

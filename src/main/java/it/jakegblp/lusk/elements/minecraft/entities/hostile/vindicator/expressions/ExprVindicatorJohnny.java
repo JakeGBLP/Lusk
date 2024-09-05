@@ -59,9 +59,10 @@ public class ExprVindicatorJohnny extends PropertyExpression<LivingEntity, Boole
 
     @Override
     public void change(@NotNull Event event, @Nullable Object[] delta, Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) getExpr().stream(event).forEach(livingEntity -> {
-            if (livingEntity instanceof Vindicator vindicator) vindicator.setJohnny(false);
-        });
+        if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET)
+            getExpr().stream(event).forEach(livingEntity -> {
+                if (livingEntity instanceof Vindicator vindicator) vindicator.setJohnny(false);
+            });
         else if (mode == Changer.ChangeMode.SET) {
             if (delta == null) return;
             if (delta[0] instanceof Boolean b) {
@@ -74,7 +75,7 @@ public class ExprVindicatorJohnny extends PropertyExpression<LivingEntity, Boole
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the vindicator is johnny state of "+(event != null ? getExpr().toString(event,debug) : "");
+        return "the vindicator is johnny state of " + (event != null ? getExpr().toString(event, debug) : "");
     }
 
     @SuppressWarnings("unchecked")

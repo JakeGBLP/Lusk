@@ -5,7 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class CondPlayerCrawling extends PropertyCondition<Player> {
 
     @Override
     public boolean check(Player player) {
-        return Utils.isCrawling(player);
+        return LuskUtils.isCrawling(player);
     }
 
     @Override

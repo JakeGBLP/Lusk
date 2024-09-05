@@ -1,15 +1,12 @@
 package it.jakegblp.lusk.elements.minecraft.entities.player.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +18,7 @@ import javax.annotation.Nullable;
 @Examples({"""
         show xp level 12 and progress 0.5 to all players"""})
 @Since("1.0.2, 1.1 (decimal xp)")
+@DocumentationId("9046")
 public class EffPlayerFakeExperience extends Effect {
     static {
         Skript.registerEffect(EffPlayerFakeExperience.class,
@@ -71,8 +69,8 @@ public class EffPlayerFakeExperience extends Effect {
             if (pattern == 2 && xp != null) {
                 player.sendExperienceChange(xp);
             } else if (pattern == 1 && lvl != null) {
-                int calcNext = Utils.getTotalNeededXP(player.getLevel() + 1);
-                int calcCurrent = Utils.getTotalNeededXP(player.getLevel());
+                int calcNext = LuskUtils.getTotalNeededXP(player.getLevel() + 1);
+                int calcCurrent = LuskUtils.getTotalNeededXP(player.getLevel());
                 int calcFull = calcNext - calcCurrent;
                 xp = (float) ((player.getTotalExperience() - calcCurrent) / calcFull);
                 player.sendExperienceChange(xp, lvl);

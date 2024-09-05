@@ -8,7 +8,7 @@ import ch.njol.skript.doc.Since;
 import com.vdurmont.semver4j.SemverException;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Utils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
 @Name("Version - is Valid")
 @Description("Checks if the string is a valid version")

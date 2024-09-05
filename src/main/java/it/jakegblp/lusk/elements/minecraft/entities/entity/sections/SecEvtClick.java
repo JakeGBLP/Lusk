@@ -11,7 +11,7 @@ import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.Lusk;
-import it.jakegblp.lusk.listeners.RightClickListener;
+import it.jakegblp.lusk.api.listeners.RightClickListener;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -25,23 +25,23 @@ import java.util.function.Consumer;
 
 @Name("Click Section")
 @Description("""
-Runs the code inside of it when the provided entity gets clicked.
+        Runs the code inside of it when the provided entity gets clicked.
 
-Local Variables that are:
-- defined BEFORE this section CAN be used inside of it.
-- defined AFTER this section CANNOT be used inside of it.
-- defined INSIDE this section CANNOT be used outside of it.
-"""
+        Local Variables that are:
+        - defined BEFORE this section CAN be used inside of it.
+        - defined AFTER this section CANNOT be used inside of it.
+        - defined INSIDE this section CANNOT be used outside of it.
+        """
 )
 @Examples(
-"""
-command /a:
-  trigger:
-    spawn pig at player:
-      set display name of entity to "&dPig"
-      on click on entity:
-        broadcast "%entity% has been clicked!"
-"""
+        """
+                command /a:
+                  trigger:
+                    spawn pig at player:
+                      set display name of entity to "&dPig"
+                      on click on entity:
+                        broadcast "%entity% has been clicked!"
+                """
 )
 @Since("1.1")
 public class SecEvtClick extends Section {

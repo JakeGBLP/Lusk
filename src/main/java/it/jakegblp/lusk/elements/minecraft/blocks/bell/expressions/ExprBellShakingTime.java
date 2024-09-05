@@ -6,7 +6,7 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.util.Timespan;
-import it.jakegblp.lusk.utils.Utils;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3, 1.2 (Deprecated)")
 public class ExprBellShakingTime extends SimplePropertyExpression<Block, Timespan> {
     static {
-        if (!Utils.SKRIPT_2_9) {
+        if (!LuskUtils.SKRIPT_2_9) {
             register(ExprBellShakingTime.class, Timespan.class, "shaking time", "blocks");
         }
     }
