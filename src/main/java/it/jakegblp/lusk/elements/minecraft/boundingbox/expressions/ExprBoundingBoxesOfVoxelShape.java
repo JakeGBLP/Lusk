@@ -32,7 +32,7 @@ public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean init(final Expression<?>[] vars, final int matchedPattern, final Kleenean isDelayed, final SkriptParser.ParseResult parser) {
+    public boolean init(final Expression<?>[] vars, final int matchedPattern, final @NotNull Kleenean isDelayed, final SkriptParser.@NotNull ParseResult parser) {
         setExpr((Expression<? extends VoxelShape>) vars[0]);
         return true;
     }

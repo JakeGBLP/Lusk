@@ -28,12 +28,17 @@ public class CondBoundingBoxWithin extends Condition {
                 "%vectors/locations/boundingboxes% (isn't|is not|aren't|are not) (within|in[side [of]]) [bounding box] %boundingbox%"
         );
     }
+
     private Expression<Object> objects;
     private Expression<BoundingBox> boundingBox;
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+    public boolean init(
+            Expression<?>[] expressions,
+            int matchedPattern,
+            @NotNull Kleenean isDelayed,
+            SkriptParser.@NotNull ParseResult parseResult) {
         objects = (Expression<Object>) expressions[0];
         boundingBox = (Expression<BoundingBox>) expressions[1];
         setNegated(matchedPattern == 1);
@@ -43,17 +48,17 @@ public class CondBoundingBoxWithin extends Condition {
     @Override
     public boolean check(@NotNull Event event) {
         return objects.check(event, object ->
-            boundingBox.check(event, b -> {
-                if (object instanceof Vector vector) {
-                    return b.contains(vector);
-                } else if (object instanceof Location location) {
-                    return b.contains(location.toVector());
-                } else if (object instanceof BoundingBox box) {
-                    return b.contains(box);
-                } else {
-                    return false;
-                }
-            }), isNegated());
+                boundingBox.check(event, b -> {
+                    if (object instanceof Vector vector) {
+                        return b.contains(vector);
+                    } else if (object instanceof Location location) {
+                        return b.contains(location.toVector());
+                    } else if (object instanceof BoundingBox box) {
+                        return b.contains(box);
+                    } else {
+                        return false;
+                    }
+                }), isNegated());
     }
 
     @Override
@@ -61,9 +66,9 @@ public class CondBoundingBoxWithin extends Condition {
         String box = "";
         String object = "";
         if (event != null) {
-            box = boundingBox.toString(event,debug);
-            object = objects.toString(event,debug);
+            box = boundingBox.toString(event, debug);
+            object = objects.toString(event, debug);
         }
-        return object+" is "+(isNegated() ? "not" : "")+" within "+box;
+        return object + " is " + (isNegated() ? "not" : "") + " within " + box;
     }
 }
