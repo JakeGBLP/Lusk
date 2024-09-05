@@ -3,4 +3,4 @@ version: @version@
 main: it.jakegblp.lusk.Lusk
 api-version: 1.19
 depend: [Skript]
-authors: [Jake]
+authors: [JakeGBLP]
