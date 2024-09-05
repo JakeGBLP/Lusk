@@ -4,18 +4,25 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
+import ch.njol.skript.util.slot.CursorSlot;
+import ch.njol.skript.util.slot.DroppedItemSlot;
+import ch.njol.skript.util.slot.InventorySlot;
+import ch.njol.skript.util.slot.Slot;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
+import it.jakegblp.lusk.api.events.PlayerInventorySlotDropEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerHarvestBlockEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,5 +131,60 @@ public class EvtPlayerEvents {
                 }
             }, EventValues.TIME_NOW);
         }
+
+        Skript.registerEvent("Player - on Inventory Slot Drop", SimpleEvent.class, PlayerInventorySlotDropEvent.class, "player slot drop")
+                .description("""
+                        Called when a player drops an item from an inventory (or their own).
+                        """)
+                .examples("")
+                .since("1.3");
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, new Getter<>() {
+            @Override
+            public @NotNull Slot get(PlayerInventorySlotDropEvent event) {
+                if (event.getSlot() >= 36) {
+                    return new ch.njol.skript.util.slot.EquipmentSlot(event.getPlayer(), event.getSlot());
+                } else if (event.isDropsFromCursor()) {
+                    return new CursorSlot(event.getPlayer(), event.getItem());
+                } else {
+                    return new InventorySlot(event.getInventory(), event.getSlot());
+                }
+            }
+        }, EventValues.TIME_PAST);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, new Getter<>() {
+            @Override
+            public @NotNull Slot get(PlayerInventorySlotDropEvent event) {
+                return new DroppedItemSlot(event.getItemEntity());
+            }
+        }, EventValues.TIME_NOW);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Item.class, new Getter<>() {
+            @Override
+            public @NotNull Item get(PlayerInventorySlotDropEvent event) {
+                return event.getItemEntity();
+            }
+        }, EventValues.TIME_NOW);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, new Getter<>() {
+            @Override
+            public @NotNull ItemStack get(PlayerInventorySlotDropEvent event) {
+                return event.getOriginalItem();
+            }
+        }, EventValues.TIME_PAST);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, new Getter<>() {
+            @Override
+            public @NotNull ItemStack get(PlayerInventorySlotDropEvent event) {
+                return event.getItem();
+            }
+        }, EventValues.TIME_NOW);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Inventory.class, new Getter<>() {
+            @Override
+            public @NotNull Inventory get(PlayerInventorySlotDropEvent event) {
+                return event.getInventory();
+            }
+        }, EventValues.TIME_NOW);
+        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Integer.class, new Getter<>() {
+            @Override
+            public @NotNull Integer get(PlayerInventorySlotDropEvent event) {
+                return event.getSlot();
+            }
+        }, EventValues.TIME_NOW);
     }
 }
