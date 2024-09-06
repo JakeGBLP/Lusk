@@ -19,15 +19,15 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Name("Vector/Location/Bounding Box - Coordinate List")
-@Description("Returns the Angry State of an entity.\n(Warden, PigZombie, Wolf, Enderman)\nCan be set for all except wardens.")
-@Examples({"broadcast angry state of target"})
+@Name("Vector/Location - Coordinate List")
+@Description("Returns the XYZ coordinates of a location or a vector.")
+@Examples({"broadcast coordinates of {_loc}"})
 @Since("1.3")
 public class ExprCoordinates extends PropertyExpression<Object, Double> {
     static {
         Skript.registerExpression(ExprCoordinates.class, Double.class, ExpressionType.PROPERTY,
                 "[the] coord[inate](s| list) of %vector/location%",
-                "%vector/location/boundingbox%'[s] coord[inate](s| list)");
+                "%vector/location%'[s] coord[inate](s| list)");
     }
 
     @Override
@@ -50,28 +50,25 @@ public class ExprCoordinates extends PropertyExpression<Object, Double> {
     protected Double @NotNull [] get(@NotNull Event e, Object @NotNull [] source) {
         List<Double> list = new ArrayList<>();
         for (Object o : getExpr().getArray(e)) {
-            double x,y,z;
+            double x = 0, y = 0, z = 0;
             if (o instanceof Location location) {
                 x = location.getX();
                 y = location.getY();
                 z = location.getZ();
-                list.add(x);
-                list.add(y);
-                list.add(z);
             } else if (o instanceof Vector vector) {
                 x = vector.getX();
                 y = vector.getY();
                 z = vector.getZ();
-                list.add(x);
-                list.add(y);
-                list.add(z);
             }
+            list.add(x);
+            list.add(y);
+            list.add(z);
         }
         return list.toArray(new Double[0]);
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the coordinate list of " + (event != null ? getExpr().toString(event, debug) : "");
+        return "the coordinates of " + (event != null ? getExpr().toString(event, debug) : "");
     }
 }
