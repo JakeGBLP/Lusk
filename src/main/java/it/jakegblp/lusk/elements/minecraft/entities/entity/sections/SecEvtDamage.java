@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Name("Damage Section")
+@Name("Entity - on Damage Section")
 @Description("""
         Runs the code inside of it when the provided entity takes damage.
 

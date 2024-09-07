@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.elements.plugins.citizens.conditions;
+package it.jakegblp.lusk.elements.citizens.conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;

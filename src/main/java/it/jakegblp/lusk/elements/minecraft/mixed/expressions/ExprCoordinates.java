@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.elements.other.expressions;
+package it.jakegblp.lusk.elements.minecraft.mixed.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;

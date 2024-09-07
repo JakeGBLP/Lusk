@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Name("Jump Section")
+@Name("Entity - on Jump Section")
 @Description("""
         Runs the code inside of it when the provided entity jumps.
 

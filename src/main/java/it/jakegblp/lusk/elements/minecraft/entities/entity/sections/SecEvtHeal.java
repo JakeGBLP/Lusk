@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Name("Heal Section")
+@Name("Entity - on Heal Section")
 @Description("""
         Runs the code inside of it when the provided entity gets healed.
         Local Variables that are:

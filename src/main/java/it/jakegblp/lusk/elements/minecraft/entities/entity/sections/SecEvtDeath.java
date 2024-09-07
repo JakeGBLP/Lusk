@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Name("Death Section")
+@Name("Entity - on Death Section")
 @Description("""
         Runs the code inside of it when the provided entity dies.
 

@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 import static it.jakegblp.lusk.utils.EventUtils.willItemsDrop;
 
-@Name("Block Break Section")
+@Name("Block - on Break Section")
 @Description("""
         Runs the code inside of it when the provided block gets broken.
         Local Variables that are:
