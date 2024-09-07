@@ -26,8 +26,8 @@ import java.util.List;
 public class ExprCoordinates extends PropertyExpression<Object, Double> {
     static {
         Skript.registerExpression(ExprCoordinates.class, Double.class, ExpressionType.PROPERTY,
-                "[the] coord[inate](s| list) of %vector/location%",
-                "%vector/location%'[s] coord[inate](s| list)");
+                "[the] coord[inate](s| list) of %vectors/locations%",
+                "%vectors/locations%'[s] coord[inate](s| list)");
     }
 
     @Override
