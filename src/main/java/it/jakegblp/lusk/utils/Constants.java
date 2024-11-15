@@ -3,17 +3,63 @@ package it.jakegblp.lusk.utils;
 import ch.njol.skript.Skript;
 import ch.njol.util.coll.BidiHashMap;
 import ch.njol.util.coll.BidiMap;
+import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
+import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import com.vdurmont.semver4j.Semver;
+import io.papermc.paper.event.block.PlayerShearBlockEvent;
+import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import io.papermc.paper.event.player.PlayerArmSwingEvent;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Rotation;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
 public class Constants {
+    public static final List<InventoryAction>
+            DROP_ACTION_DATA = new ArrayList<>(List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR)),
+            PICKUP_ACTION_DATA = new ArrayList<>(List.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_SOME)),
+            PLACE_ACTION_DATA = new ArrayList<>(List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME));
+    public static final String
+            ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
+            ARMORS_STAND_PREFIX = "[the] [armor[ |-]stand]";
+
     public static final Semver
             serverVersion = Version(String.valueOf(Skript.getMinecraftVersion())),
             skriptVersion = Version(Skript.getVersion().toString());
+
+    public static final boolean
+            HAS_WARDEN = Skript.classExists("org.bukkit.entity.Warden"),
+            HAS_REMOVE_ENCHANTMENTS_METHOD = Skript.methodExists(ItemStack.class, "removeEnchantments"),
+            HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
+            SKRIPT_2_9 = Constants.skriptVersion.isGreaterThanOrEqualTo(Version("2.9")),
+
+
+            PAPER_HAS_PLAYER_ARM_SWING_EVENT = Skript.classExists("io.papermc.paper.event.player.PlayerArmSwingEvent"),
+            PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND = PAPER_HAS_PLAYER_ARM_SWING_EVENT && Skript.methodExists(PlayerArmSwingEvent.class, "getHand"),
+            PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT = Skript.classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent"),
+            PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT_HAND = PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT && Skript.methodExists(EntityLoadCrossbowEvent.class, "getHand"),
+            PAPER_HAS_PLAYER_SHEAR_BLOCK_EVENT = Skript.classExists("io.papermc.paper.event.block.PlayerShearBlockEvent"),
+            PAPER_HAS_PLAYER_SHEAR_BLOCK_EVENT_HAND = PAPER_HAS_PLAYER_SHEAR_BLOCK_EVENT && Skript.methodExists(PlayerShearBlockEvent.class, "getHand"),
+            PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerElytraBoostEvent"),
+            PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND = PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT && Skript.methodExists(PlayerElytraBoostEvent.class, "getHand"),
+            PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent"),
+            PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND = PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT && Skript.methodExists(PlayerUseUnknownEntityEvent.class, "getHand"),
+            PAPER_HAS_PLAYER_JUMP_EVENT = Skript.classExists("com.destroystokyo.paper.event.player.PlayerJumpEvent"),
+            PAPER_HAS_ENTITY_JUMP_EVENT = Skript.classExists("com.destroystokyo.paper.event.entity.EntityJumpEvent"),
+            PAPER_HAS_PAPER_REGISTRY_ACCESS = Skript.classExists("io.papermc.paper.registry.RegistryAccess") && Skript.methodExists(RegistryAccess.class, "registryAccess"),
+            PAPER_HAS_PAPER_REGISTRY_KEY = PAPER_HAS_PAPER_REGISTRY_ACCESS && Skript.classExists("io.papermc.paper.registry.RegistryKey") && Skript.methodExists(RegistryAccess.class, "getRegistry", RegistryKey.class);
+
+    public final static Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
+
 
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
         put(4, Version("1.7.5"));

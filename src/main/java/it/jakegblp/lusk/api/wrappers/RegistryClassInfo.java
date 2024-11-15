@@ -25,7 +25,7 @@ import java.util.List;
  * {@link ClassInfo} wrapper class for {@link Registry Bukkit Registries}
  *
  * @param <T> Type of item in the registry
- * @author ShaneBeee
+ * @author ShaneBeee, JakeGBLP
  */
 @SuppressWarnings({"unused"})
 public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
@@ -97,12 +97,12 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
     private RegistryClassInfo(Registry<T> registry, Class<T> registryClass, boolean usage, String codename, @Nullable String prefix, @Nullable String suffix) {
         super(registryClass, codename);
         this.registry = registry;
-        this.prefix = prefix;
-        this.suffix = suffix;
+        this.prefix = prefix == null ? null : prefix.replaceAll(" ", "_");
+        this.suffix = suffix == null ? null : suffix.replaceAll(" ", "_");
         Comparators.registerComparator(registryClass, registryClass, (o1, o2) -> Relation.get(o1.equals(o2)));
         if (usage) this.usage(getNames());
+        this.supplier(registry::iterator);
         this.parser(new Parser<>() {
-            @SuppressWarnings("NullableProblems")
             @Override
             public @Nullable T parse(String string, ParseContext context) {
                 return RegistryClassInfo.this.parse(string);
@@ -205,6 +205,8 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
      */
     @Nullable
     private T parse(String string) {
+        // todo: uncomment these to test for registries
+        //Skript.info("before: " + string);
         string = string.replace(" ", "_");
         if (this.prefix != null) {
             if (!string.contains(this.prefix)) return null;
@@ -216,8 +218,10 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
         }
         string = string.trim();
 
+        //Skript.info("after: " + string);
         NamespacedKey key = BorrowedUtils.getNamespacedKey(string, false);
         if (key == null) return null;
+        //Skript.info("success?: " + key);
         return this.registry.get(key);
     }
 
