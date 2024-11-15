@@ -5,7 +5,8 @@ import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 import org.bukkit.block.BlockFace;
 
-public class Types {
+@SuppressWarnings("unused")
+public class BlockFaceClassInfos {
     static {
         if (Skript.classExists("org.bukkit.block.BlockFace") && Classes.getExactClassInfo(BlockFace.class) == null) {
             EnumWrapper<BlockFace> BLOCKFACE_ENUM = new EnumWrapper<>(BlockFace.class, null, "face");
@@ -14,6 +15,7 @@ public class Types {
                     .name("Block Face")
                     .description("All the Block Faces.")
                     .examples("south face", "up face")
+                    .documentationId("11206")
                     .since("1.1"));
         }
     }

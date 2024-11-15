@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 
 import static it.jakegblp.lusk.utils.LuskUtils.Version;
 
-public class Types {
+@SuppressWarnings("unused")
+public class VersionClassInfos {
+    // todo: move this to constants class
     public static final Pattern VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?[-+a-zA-Z0-9.]*$");
 
     static {
@@ -25,6 +27,7 @@ public class Types {
                     .examples("") // add example
                     .after("number", "long", "integer", "double", "float", "short", "byte")
                     .since("1.0.0, 1.2 (without strings)")
+                    .documentationId("8851")
                     .parser(new Parser<>() {
                         @Override
                         @Nullable

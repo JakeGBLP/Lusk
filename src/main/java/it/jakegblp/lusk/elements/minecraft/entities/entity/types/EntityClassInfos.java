@@ -6,7 +6,8 @@ import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.SpawnCategory;
 
-public class Types {
+@SuppressWarnings("unused")
+public class EntityClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Pose") && Classes.getExactClassInfo(Pose.class) == null) {
             EnumWrapper<Pose> POSE_ENUM = new EnumWrapper<>(Pose.class);
@@ -14,6 +15,7 @@ public class Types {
                     .user("poses?")
                     .name("Pose")
                     .description("All the Poses.") // add example
+                    .documentationId("9099")
                     .since("1.0.2"));
         }
         if (Skript.classExists("org.bukkit.entity.SpawnCategory") && Classes.getExactClassInfo(SpawnCategory.class) == null) {
@@ -22,6 +24,7 @@ public class Types {
                     .user("spawn ?categor(y|ies)")
                     .name("Spawn Category")
                     .description("All the Spawn Categories.") // add example
+                    .documentationId("9100")
                     .since("1.0.2"));
         }
     }

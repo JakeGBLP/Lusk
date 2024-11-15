@@ -6,9 +6,14 @@ import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.generator.structure.GeneratedStructure;
+import org.bukkit.generator.structure.StructurePiece;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.skriptlang.skript.lang.converter.Converters;
 
 import javax.annotation.Nullable;
 import java.io.StreamCorruptedException;
@@ -16,14 +21,16 @@ import java.util.stream.Collectors;
 
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
-public class Types {
+@SuppressWarnings("unused")
+public class BoundingBoxClassInfos {
     static {
-        if (Classes.getExactClassInfo(BoundingBox.class) == null)
+        if (Classes.getExactClassInfo(BoundingBox.class) == null) {
             Classes.registerClass(new ClassInfo<>(BoundingBox.class, "boundingbox")
                     .user("bounding ?box(es)?")
                     .name("Bounding Box")
-                    .description("A Bounding Box.\n\nCan be saved in global variables since 1.2") // add example
+                    .description("A Bounding Box.\n\nPersistent in global variables since 1.2.") // add example
                     .since("1.0.2, 1.2 (Savable)")
+                    .documentationId("9096")
                     .parser(new Parser<>() {
                         @Override
                         @Nullable
@@ -79,7 +86,6 @@ public class Types {
                                     f.getPrimitive("maxY", double.class),
                                     f.getPrimitive("maxZ", double.class)
                             );
-
                         }
 
                         @Override
@@ -92,6 +98,11 @@ public class Types {
                             return false;
                         }
                     }));
+            Converters.registerConverter(Block.class, BoundingBox.class, Block::getBoundingBox);
+            Converters.registerConverter(Entity.class, BoundingBox.class, Entity::getBoundingBox);
+            Converters.registerConverter(StructurePiece.class, BoundingBox.class, StructurePiece::getBoundingBox);
+            Converters.registerConverter(GeneratedStructure.class, BoundingBox.class, GeneratedStructure::getBoundingBox);
+        }
         if (Classes.getExactClassInfo(VoxelShape.class) == null)
             Classes.registerClass(new ClassInfo<>(VoxelShape.class, "voxelshape")
                     .user("voxel ?shapes?")
@@ -126,4 +137,6 @@ public class Types {
                         }
                     }));
     }
+
+    public BoundingBoxClassInfos() {}
 }
