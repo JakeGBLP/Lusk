@@ -1,16 +1,19 @@
 version: @version@
 
 types:
-    equipmentslot: equipment slot¦s
-    patterntype: pattern type¦s
-    endermanescapereason: enderman escape reason¦s
-    version: version¦s
-    pose: pose¦s
-    spawncategory: spawn category¦s
-    boundingbox: bounding box¦s
+    equipmentslot: equipment slot¦s @an
+    patterntype: pattern type¦s @a
+    endermanescapereason: enderman escape reason¦s @an
+    version: version¦s @a
+    pose: pose¦s @a
+    spawncategory: spawn categor¦y¦ies @a
+    boundingbox: bounding box¦es @a
     cauldronchangereason: cauldron change reason¦s
-    enderdragonphase: ender dragon phase¦s
-    blockface: block face¦s
-    armorstandinteraction: armor( |-)?stand interaction¦s
-    itemrarity: item rarity¦s
-    voxelshape: voxel shape¦s
+    enderdragonphase: ender dragon phase¦s @a
+    blockface: block face¦s @a
+    armorstandinteraction: armor stand interaction¦s @an
+    itemrarity: item rarit¦y¦ies @an
+    voxelshape: voxel shape¦s @a
+    wolfvariant: wolf variant¦s @a
+    frogvariant: frog variant¦s @a
+    anvilguiinventory: anvil gui inventor¦y¦ies @an

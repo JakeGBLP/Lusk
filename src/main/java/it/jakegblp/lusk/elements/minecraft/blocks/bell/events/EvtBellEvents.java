@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -14,9 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
+
+@SuppressWarnings("unused")
 public class EvtBellEvents {
     static {
-        if (Skript.classExists("org.bukkit.event.block.BellResonateEvent") && !LuskUtils.SKRIPT_2_9) {
+        if (Skript.classExists("org.bukkit.event.block.BellResonateEvent") && !SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Resonate", SimpleEvent.class, BellResonateEvent.class, "bell resonat(e[d]|ing)", "raider[s] reveal[ed|ing]")
                     .description("""
                             `DEPRECATED SINCE SKRIPT 2.9`
@@ -31,7 +33,7 @@ public class EvtBellEvents {
                 }
             }, EventValues.TIME_NOW);
         }
-        if (Skript.classExists("org.bukkit.event.block.BellRingEvent") && !LuskUtils.SKRIPT_2_9) {
+        if (Skript.classExists("org.bukkit.event.block.BellRingEvent") && !SKRIPT_2_9) {
             Skript.registerEvent("Bell - on Ring", SimpleEvent.class, BellRingEvent.class, "bell ring[ing]", "bell rung")
                     .description("`DEPRECATED SINCE SKRIPT 2.9`\nCalled when a bell is being rung.")
                     .examples("")

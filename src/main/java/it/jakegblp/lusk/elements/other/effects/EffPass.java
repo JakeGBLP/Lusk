@@ -15,9 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 @Name("Do Nothing...")
-@Description("Does nothing.")
+@Description("Does nothing.\nUseful as a placeholder.")
 @Examples({"pass\ndo nothing"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class EffPass extends Effect {
     static {
         Skript.registerEffect(EffPass.class, "pass", "do nothing");

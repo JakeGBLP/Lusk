@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.api.events.GenericEntityJumpEvent;
-import it.jakegblp.lusk.utils.PaperUtils;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ public class JumpListener implements Listener {
      * @return True, if both paper jump events are present or if the entity is a horse, else false.
      */
     public static boolean canLog(Entity entity) {
-        if (PaperUtils.HAS_PLAYER_JUMP_EVENT && PaperUtils.HAS_ENTITY_JUMP_EVENT) return true;
+        if (Constants.PAPER_HAS_PLAYER_JUMP_EVENT && Constants.PAPER_HAS_ENTITY_JUMP_EVENT) return true;
         return entity instanceof Horse;
     }
 

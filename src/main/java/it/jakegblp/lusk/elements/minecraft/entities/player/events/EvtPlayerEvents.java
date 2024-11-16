@@ -29,8 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class EvtPlayerEvents {
     static {
+        // todo: cache all Skript.classExists calls for multiple usages
         if (Skript.classExists("org.bukkit.event.player.PlayerChangedMainHandEvent")) {
             Skript.registerEvent("Player - on Main Hand Change", SimpleEvent.class, PlayerChangedMainHandEvent.class, "main hand switch[ed|ing]")
                     .description("Called when a player changes their main hand in the client settings.")

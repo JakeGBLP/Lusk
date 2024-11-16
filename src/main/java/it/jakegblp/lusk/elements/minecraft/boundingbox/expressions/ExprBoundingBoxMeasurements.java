@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 @Description("Gets the height, X width and Z width of 1 or more bounding boxes.")
 @Examples({"broadcast box height of bounding box of target"})
 @Since("1.2.1")
+@SuppressWarnings("unused")
 public class ExprBoundingBoxMeasurements extends PropertyExpression<BoundingBox, Double> {
     static {
         Skript.registerExpression(ExprBoundingBoxMeasurements.class, Double.class, ExpressionType.PROPERTY,
@@ -43,11 +44,6 @@ public class ExprBoundingBoxMeasurements extends PropertyExpression<BoundingBox,
     @NotNull
     public Class<Double> getReturnType() {
         return Double.class;
-    }
-
-    @Override
-    public boolean isSingle() {
-        return getExpr().isSingle();
     }
 
     @Override

@@ -21,9 +21,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the brewing fuel level of a Brewing Stand.\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing fuel of event-block"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
     static {
-        Skript.registerExpression(ExprBrewingFuelLevel.class, Integer.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprBrewingFuelLevel.class, Integer.class, ExpressionType.PROPERTY,
                 "[the] brewing fuel level of %block%",
                 "%block%'[s] brewing fuel level");
     }

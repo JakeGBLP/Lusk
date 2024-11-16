@@ -23,9 +23,11 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the love duration of an animal.\n Can be set.")
 @Examples({"on love:\n\tbroadcast the love duration", "broadcast love duration of target"})
 @Since("1.0.2, 1.0.3 (per Entity)")
+@SuppressWarnings("unused")
 public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
     static {
-        Skript.registerExpression(ExprEntityLoveDuration.class, Timespan.class, ExpressionType.COMBINED,
+        // todo: work around timespan deprecation, make plural
+        Skript.registerExpression(ExprEntityLoveDuration.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] love duration [of %entity%]",
                 "%entity%'[s] love duration");
     }

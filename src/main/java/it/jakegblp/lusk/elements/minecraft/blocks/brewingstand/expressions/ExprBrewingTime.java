@@ -23,9 +23,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the brewing time of a Brewing Stand (the time before the brewing is over, 0 seconds = finished, 20 seconds = just started. Can be set to a longer time, progress won't be displayed until it reaches 20 seconds).\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprBrewingTime extends SimpleExpression<Timespan> {
     static {
-        Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] brewing time of %block%",
                 "%block%'[s] brewing time");
     }

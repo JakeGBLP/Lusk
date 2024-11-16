@@ -22,9 +22,11 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the command within a command block.\nCan be set.\nWorks with minecart with command block.")
 @Examples({"broadcast the command of {_cmd}"})
 @Since("1.0.3")
+@SuppressWarnings("unused")
 public class ExprCommandBlockCommand extends SimpleExpression<String> {
     static {
-        Skript.registerExpression(ExprCommandBlockCommand.class, String.class, ExpressionType.SIMPLE,
+        // TODO: PROPERTY EXPR
+        Skript.registerExpression(ExprCommandBlockCommand.class, String.class, ExpressionType.PROPERTY,
                 "[the] [command block] command of %object%",
                 "%object%'[s] [command block] command");
     }
@@ -50,10 +52,11 @@ public class ExprCommandBlockCommand extends SimpleExpression<String> {
 
     @Override
     public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-            return new Class[]{String.class};
-        }
-        return null;
+        return switch (mode) {
+            case SET -> new Class[]{String.class};
+            case DELETE, RESET -> new Class[0];
+            case REMOVE, REMOVE_ALL, ADD -> null;
+        };
     }
 
     @Override

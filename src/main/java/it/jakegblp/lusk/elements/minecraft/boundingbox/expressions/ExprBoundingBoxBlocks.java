@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 @Description("Gets all the blocks within a bounding box in a specific world.")
 @Examples({"broadcast blocks within {_box} in {_world}"})
 @Since("1.3")
+@SuppressWarnings("unused")
 public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
     static {
         Skript.registerExpression(ExprBoundingBoxBlocks.class, Block.class, ExpressionType.COMBINED,
@@ -41,6 +42,7 @@ public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
         worldExpression = (Expression<World>) vars[1];
         return true;
     }
+
     @Override
     protected Block @NotNull [] get(@NotNull Event event) {
         World world = worldExpression.getSingle(event);
@@ -49,7 +51,7 @@ public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
         if (boundingBox == null) return new Block[0];
         Location location1 = boundingBox.getMin().toLocation(world);
         Location location2 = boundingBox.getMax().toLocation(world);
-        return Lists.newArrayList(new AABB(location1,location2).iterator()).toArray(new Block[0]);
+        return Lists.newArrayList(new AABB(location1, location2).iterator()).toArray(new Block[0]);
     }
 
     @Override

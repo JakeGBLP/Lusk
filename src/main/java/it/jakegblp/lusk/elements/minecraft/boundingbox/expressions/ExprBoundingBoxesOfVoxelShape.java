@@ -23,6 +23,7 @@ import java.util.List;
 @Description("Converts shapes into a collection of Bounding Boxes equivalent to the shape they come from.")
 @Examples({"broadcast bounding boxes of {_voxelShape}}"})
 @Since("1.2")
+@SuppressWarnings("unused")
 public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape, BoundingBox> {
     static {
         Skript.registerExpression(ExprBoundingBoxesOfVoxelShape.class, BoundingBox.class, ExpressionType.PROPERTY,
@@ -42,10 +43,6 @@ public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape
         return BoundingBox.class;
     }
 
-    @Override
-    public boolean isSingle() {
-        return getExpr().isSingle();
-    }
 
     @Override
     protected BoundingBox[] get(Event e, VoxelShape[] source) {

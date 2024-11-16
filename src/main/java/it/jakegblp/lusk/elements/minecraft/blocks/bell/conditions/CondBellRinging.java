@@ -5,18 +5,20 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
 
 @Name("Bell - is Ringing")
 @Description("`DEPRECATED SINCE SKRIPT 2.9`\nChecks if a bell is ringing.")
 @Examples({"on bell ring:\n\tif event-block is ringing:\n\t\tcancel event\n\t\t"})
 @Since("1.0.3, 1.2 (Deprecated)")
+@SuppressWarnings("unused")
 public class CondBellRinging extends PropertyCondition<Object> {
     static {
-        if (!LuskUtils.SKRIPT_2_9) {
+        if (!SKRIPT_2_9) {
             register(CondBellRinging.class, "(ringing|shaking)", "block");
         }
     }

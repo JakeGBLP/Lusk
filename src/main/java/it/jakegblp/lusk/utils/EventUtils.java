@@ -2,15 +2,14 @@ package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import static it.jakegblp.lusk.utils.Constants.*;
 
+
+@SuppressWarnings("unused")
 public class EventUtils {
-    private static final List<InventoryAction> DROP = new ArrayList<>(List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR));
 
     public static boolean willItemsDrop(BlockBreakEvent event) {
         if (Skript.methodExists(BlockBreakEvent.class, "isDropsItems")) {
@@ -28,14 +27,21 @@ public class EventUtils {
     public static boolean dropsAtAll(InventoryClickEvent event) {
         if (!dropsFromCursor(event) && event.getCurrentItem() == null)
             return false;
-        return DROP.contains(event.getAction());
+        return DROP_ACTION_DATA.contains(event.getAction());
     }
 
     public static boolean dropsFromCursor(InventoryClickEvent event) {
-        return DROP.indexOf(event.getAction()) > 1;
+        return DROP_ACTION_DATA.indexOf(event.getAction()) > 1;
     }
 
     public static boolean dropsAllItems(InventoryClickEvent event) {
-        return DROP.indexOf(event.getAction()) > 0 && DROP.indexOf(event.getAction()) < 3;
+        return DROP_ACTION_DATA.indexOf(event.getAction()) > 0 && DROP_ACTION_DATA.indexOf(event.getAction()) < 3;
+    }
+
+    public static boolean picksUp(InventoryClickEvent event) {
+        return PICKUP_ACTION_DATA.contains(event.getAction());
+    }
+    public static boolean placesDown(InventoryClickEvent event) {
+        return PLACE_ACTION_DATA.contains(event.getAction());
     }
 }

@@ -1,30 +1,56 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.aliases.ItemType;
+import ch.njol.util.Kleenean;
 import ch.njol.util.VectorMath;
 import com.vdurmont.semver4j.Semver;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
+import java.text.MessageFormat;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+
+import static it.jakegblp.lusk.utils.Constants.HAS_GENERIC_SCALE_ATTRIBUTE;
+import static it.jakegblp.lusk.utils.Constants.NUMBER_WITH_DECIMAL;
 
 public class LuskUtils {
-    public final static boolean HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE");
 
-    public final static boolean SKRIPT_2_9 = Constants.skriptVersion.isGreaterThanOrEqualTo(Version("2.9"));
-    public final static Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
+    public static final String[] COLORS = new String[]{"gray", "blue"};
+    /**
+     * Uses Minimessage!
+     */
+    public static final String PREFIX = MessageFormat.format("<{0}>[<{1}>Lusk</{1}>]</{0}> ", COLORS[0], COLORS[1]);
 
     public static Semver Version(String s) {
         return new Semver(s, Semver.SemverType.LOOSE);
+    }
+
+    /**
+     * Uses MiniMessage and MessageFormat.
+     * @param format Minimessage format.
+     * @param args MessageFormat arguments.
+     */
+    public static void consoleLog(String format, Object... args) {
+        send(Bukkit.getConsoleSender(), format, args);
+    }
+
+    /**
+     * Uses MiniMessage and MessageFormat.
+     * For console logging use {@link #consoleLog(String, Object...) the console log method}
+     * @param sender A CommandSender
+     * @param format Minimessage format.
+     * @param args MessageFormat arguments.
+     */
+    public static void send(CommandSender sender, String format, Object... args) {
+        sender.sendRichMessage(PREFIX+MessageFormat.format(format, args));
     }
 
     public static boolean isCrawling(Player player) {
@@ -34,12 +60,12 @@ public class LuskUtils {
             if (instance != null) height /= instance.getValue();
         }
         if (!player.isSwimming() && !player.isGliding() && !player.isSleeping() && !player.isSneaking() && !player.isRiptiding()) {
-            return areDoublesEqual(height, 0.6);
+            return areDoublesRoughlyEqual(height, 0.6);
         }
         return false;
     }
 
-    public static boolean areDoublesEqual(double a, double b) {
+    public static boolean areDoublesRoughlyEqual(double a, double b) {
         return Math.abs(a - b) < Math.min(a, b) * 1e-6;
     }
 
@@ -54,43 +80,38 @@ public class LuskUtils {
         return NUMBER_WITH_DECIMAL.matcher(string).replaceAll(n -> Skript.toString(Double.parseDouble(n.group())));
     }
 
-    public static ItemType[] toItemTypes(List<Material> materials) {
-        ItemType[] itemTypes = new ItemType[materials.size() - 1];
-        for (int index = 0; index < itemTypes.length; index++) {
-            itemTypes[index] = new ItemType(materials.get(index));
+    public static long getTotalNeededXP(int level) {
+        long xp;
+        if (level <= 0) {
+            xp = 0;
+        } else if (level <= 15) {
+            xp = level * level + 6 * level;
+        } else if (level <= 30) {
+            xp = (long) (2.5 * level * level - 40.5 * level + 360);
+        } else {
+            xp = (long) (4.5 * level * level - 162.5 * level + 2220);
         }
-        return itemTypes;
+        return xp;
+    }
+
+    public static int[] getNotNullIndices(List<?> list) {
+        return IntStream.range(0, list.size())
+                .filter(i -> list.get(i) != null)
+                .toArray();
     }
 
     /**
-     * Checks if an entity is in the position to inflict critical damage to another entity
-     * (doesn't take into account if there is an entity to inflict the critical damage to).
-     *
-     * @param entity The entity to check this against.
-     * @return Whether the given entity can inflict critical damage.
+     * Useful for when a and b can't both be true, and a fallback value is required.
+     * @return a ? TRUE : b ? FALSE : UNKNOWN
      */
-    public static boolean canCriticalDamage(Entity entity) {
-        return (
-                entity instanceof Player p
-                        && p.getFallDistance() > 0
-                        && !entity.isOnGround()
-                        && !p.isClimbing()
-                        && !p.isInWater()
-                        && !p.hasPotionEffect(PotionEffectType.BLINDNESS)
-                        && !p.hasPotionEffect(PotionEffectType.SLOW_FALLING)
-                        && p.getVehicle() == null
-                        && p.getAttackCooldown() > 0.9
-                        && !p.isSprinting());
+    @NotNull
+    public static Kleenean getKleenean(boolean a, boolean b) {
+        if (a) return Kleenean.TRUE;
+        else if (b) return Kleenean.FALSE;
+        else return Kleenean.UNKNOWN;
     }
 
-    public static int getTotalNeededXP(int level) {
-        if (level <= 15)
-            return (level * level) + (6 * level);
-        if (level <= 30)
-            return (int) (2.5 * (level * level) - (40.5 * level) + 360);
-        return (int) (4.5 * (level * level) - (162.5 * level) + 2220);
-    }
-
+    //todo: remake these
     public static Vector toBukkitVector(EulerAngle angle) {
         double x = angle.getX();
         double y = angle.getY();
@@ -105,6 +126,7 @@ public class LuskUtils {
         return new EulerAngle(x, y, z);
     }
 
+    //todo: remake these
     public static void setLeftArmRotation(ArmorStand armorStand, Vector vector) {
         armorStand.setLeftArmPose(LuskUtils.toEulerAngle(vector));
     }

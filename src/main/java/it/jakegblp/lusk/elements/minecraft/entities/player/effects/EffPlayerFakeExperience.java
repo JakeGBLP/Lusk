@@ -19,8 +19,10 @@ import javax.annotation.Nullable;
         show xp level 12 and progress 0.5 to all players"""})
 @Since("1.0.2, 1.1 (decimal xp)")
 @DocumentationId("9046")
+@SuppressWarnings("unused")
 public class EffPlayerFakeExperience extends Effect {
     static {
+        // todo: figure out if and why this element takes a bit to parse
         Skript.registerEffect(EffPlayerFakeExperience.class,
                 "show [fake] [e]xp[erience] level %integer% and progress %number% to %players%",
                 "show [fake] [e]xp[erience] level %integer% to %players%",
@@ -69,9 +71,9 @@ public class EffPlayerFakeExperience extends Effect {
             if (pattern == 2 && xp != null) {
                 player.sendExperienceChange(xp);
             } else if (pattern == 1 && lvl != null) {
-                int calcNext = LuskUtils.getTotalNeededXP(player.getLevel() + 1);
-                int calcCurrent = LuskUtils.getTotalNeededXP(player.getLevel());
-                int calcFull = calcNext - calcCurrent;
+                long calcNext = LuskUtils.getTotalNeededXP(player.getLevel() + 1);
+                long calcCurrent = LuskUtils.getTotalNeededXP(player.getLevel());
+                long calcFull = calcNext - calcCurrent;
                 xp = (float) ((player.getTotalExperience() - calcCurrent) / calcFull);
                 player.sendExperienceChange(xp, lvl);
             } else if (lvl != null && xp != null) {

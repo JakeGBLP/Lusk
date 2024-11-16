@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 @Description("Gets the x,y or z coordinate for the lesser corner, the greater corner or the center of one or more bounding boxes.")
 @Examples({"broadcast box lesser x-loc of target"})
 @Since("1.3")
+@SuppressWarnings("unused")
 public class ExprBoundingBoxCoordinates extends PropertyExpression<BoundingBox, Double> {
     static {
         Skript.registerExpression(ExprBoundingBoxCoordinates.class, Double.class, ExpressionType.PROPERTY,
@@ -47,11 +48,6 @@ public class ExprBoundingBoxCoordinates extends PropertyExpression<BoundingBox, 
     @NotNull
     public Class<Double> getReturnType() {
         return Double.class;
-    }
-
-    @Override
-    public boolean isSingle() {
-        return getExpr().isSingle();
     }
 
     @Override

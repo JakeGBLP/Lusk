@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the given string with the small font.\n'Strict' allows uppercase characters to be included.")
 @Examples({"broadcast player's name in small caps"})
 @Since("1.0.0")
+@SuppressWarnings("unused")
 public class ExprCases extends SimpleExpression<String> {
     public static Character[] characters = {'ᴀ', 'ʙ', 'ᴄ', 'ᴅ', 'ᴇ', 'ғ', 'ɢ', 'ʜ', 'ɪ', 'ᴊ', 'ᴋ', 'ʟ', 'ᴍ', 'ɴ', 'ᴏ', 'ᴘ', 'ǫ', 'ʀ', 's', 'ᴛ', 'ᴜ', 'ᴠ', 'ᴡ', 'x', 'ʏ', 'ᴢ'};
 
@@ -32,7 +33,7 @@ public class ExprCases extends SimpleExpression<String> {
     }
 
     static {
-        Skript.registerExpression(ExprCases.class, String.class, ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprCases.class, String.class, ExpressionType.COMBINED,
                 "%string% in [strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case]))",
                 "[strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
     }

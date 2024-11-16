@@ -7,12 +7,12 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Width")
 @Description("Returns the Width of an Entity.")
 @Examples({"broadcast width of target"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
     static {
         register(ExprEntityWidth.class, Double.class, "entity width", "entity");
@@ -24,7 +24,7 @@ public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
     }
 
     @Override
-    @Nullable
+    @NotNull
     public Double convert(Entity e) {
         return e.getWidth();
     }

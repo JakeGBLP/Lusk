@@ -32,9 +32,13 @@ import org.jetbrains.annotations.Nullable;
         """)
 @Examples({"broadcast variant of event-entity\nset variant of target to \"red\""})
 @Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More)")
+@SuppressWarnings("unused")
 public class ExprEntityVariant extends SimpleExpression<Object> {
     static {
-        Skript.registerExpression(ExprEntityVariant.class, Object.class, ExpressionType.COMBINED,
+// TODO: PROPERTY EXPR
+        // todo: make plural, find better way to make this work,
+        //  return not as string, work around deprecation (registries!)
+        Skript.registerExpression(ExprEntityVariant.class, Object.class, ExpressionType.PROPERTY,
                 "[the] entity variant of %livingentity%",
                 "%livingentity%'[s] entity variant");
     }

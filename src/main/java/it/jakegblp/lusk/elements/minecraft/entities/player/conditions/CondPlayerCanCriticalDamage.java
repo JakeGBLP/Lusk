@@ -5,14 +5,16 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.EntityUtils.canCriticalDamage;
 
 @Name("Player - Can Critical Damage")
 @Description("Checks if a player is in position to inflict a critical hit.\n\nRead https://minecraft.fandom.com/wiki/Damage#Critical_hit for more info.")
 @Examples({"if player can critical damage:"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class CondPlayerCanCriticalDamage extends PropertyCondition<Player> {
 
     static {
@@ -21,7 +23,7 @@ public class CondPlayerCanCriticalDamage extends PropertyCondition<Player> {
 
     @Override
     public boolean check(Player player) {
-        return LuskUtils.canCriticalDamage(player);
+        return canCriticalDamage(player);
     }
 
     @Override

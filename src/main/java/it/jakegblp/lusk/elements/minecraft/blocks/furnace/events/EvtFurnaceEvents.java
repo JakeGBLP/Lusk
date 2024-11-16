@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class EvtFurnaceEvents {
     static {
         if (Skript.classExists("org.bukkit.event.inventory.FurnaceExtractEvent")) {
@@ -44,10 +45,10 @@ public class EvtFurnaceEvents {
             Skript.registerEvent("Furnace - on Start Smelting", SimpleEvent.class, FurnaceStartSmeltEvent.class, "furnace start[ed|ing] [to] smelt[ed|ing]", "furnace smelt[ed|ing] start[ed|ing]")
                     .description("Called when a Furnace starts smelting, or cooking for that matter.")
                     .examples("""
-on furnace start smelting:
-  uncancel the event
-  broadcast "<bold>let him cook!"
-""")
+                            on furnace start smelting:
+                              uncancel the event
+                              broadcast "<bold>let him cook!"
+                            """)
                     .since("1.0.1");
             EventValues.registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, new Getter<>() {
                 @Override

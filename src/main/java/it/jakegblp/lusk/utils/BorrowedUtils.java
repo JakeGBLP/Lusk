@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BorrowedUtils {
     /**
@@ -33,5 +34,28 @@ public class BorrowedUtils {
         if (namespacedKey == null && error)
             Skript.error("An invalid key was provided, that didn't follow [a-z0-9/._-:]. key: " + key);
         return namespacedKey;
+    }
+
+    /**
+     * Get counts of loaded Skript elements
+     * <br>
+     * In order events, effects, expressions, conditions, sections
+     *
+     * @return Counts of loaded Skript elements
+     *
+     * @author ShaneBeee
+     */
+    public static int[] getElementCount() {
+        int[] i = new int[5];
+
+        i[0] = Skript.getEvents().size();
+        i[1] = Skript.getEffects().size();
+        AtomicInteger exprs = new AtomicInteger();
+        Skript.getExpressions().forEachRemaining(e -> exprs.getAndIncrement());
+        i[2] = exprs.get();
+        i[3] = Skript.getConditions().size();
+        i[4] = Skript.getSections().size();
+
+        return i;
     }
 }

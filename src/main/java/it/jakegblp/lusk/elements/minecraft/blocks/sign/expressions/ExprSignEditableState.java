@@ -21,9 +21,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns whether or not a sign is editable.\nCan be set.")
 @Examples({"broadcast editable state of target"})
 @Since("1.0.3")
+@SuppressWarnings("unused")
 public class ExprSignEditableState extends SimpleExpression<Boolean> {
     static {
-        Skript.registerExpression(ExprSignEditableState.class, Boolean.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSignEditableState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] sign [is] (editable|:waxed) state of %block%",
                 "%block%'[s] sign [is] (editable|:waxed) state",
                 "whether [the] sign %block% is (editable|:waxed) [or not]",

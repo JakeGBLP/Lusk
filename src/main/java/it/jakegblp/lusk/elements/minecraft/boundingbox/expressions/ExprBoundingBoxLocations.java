@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 @Description("Gets either the lesser or the greater corner or the lesser of one or more bounding boxes.\n\nReturns vectors.")
 @Examples({"broadcast box lesser of target"})
 @Since("1.3")
+@SuppressWarnings("unused")
 public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Vector> {
     static {
         Skript.registerExpression(ExprBoundingBoxLocations.class, Vector.class, ExpressionType.PROPERTY,
@@ -46,11 +47,6 @@ public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Ve
     }
 
     @Override
-    public boolean isSingle() {
-        return getExpr().isSingle();
-    }
-
-    @Override
     protected Vector @NotNull [] get(@NotNull Event e, BoundingBox @NotNull [] source) {
         return get(source, box -> {
             if (state == null) return box.getCenter();
@@ -69,7 +65,7 @@ public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Ve
             else builder.append("lesser");
             builder.append(" corner");
         }
-        builder.append(" of ").append(event != null ? getExpr().toString(event, debug) : "");
+        builder.append(" of ").append(getExpr().toString(event, debug));
         return builder.toString();
     }
 }

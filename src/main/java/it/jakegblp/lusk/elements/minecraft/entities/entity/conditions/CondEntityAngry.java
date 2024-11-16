@@ -8,10 +8,13 @@ import ch.njol.skript.doc.Since;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.EntityUtils.isAngry;
+
 @Name("Entity - is Angry")
 @Description("Checks if an entity is angry.\n(Warden, PigZombie, Wolf, Enderman)")
 @Examples({"on damage of wolf:\n\tif victim is angry:\n\t\tcancel event"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class CondEntityAngry extends PropertyCondition<LivingEntity> {
     static {
         register(CondEntityAngry.class, "angry", "livingentities");
@@ -19,16 +22,7 @@ public class CondEntityAngry extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof PigZombie pigZombie) {
-            return pigZombie.isAngry();
-        } else if (entity instanceof Wolf wolf) {
-            return wolf.isAngry();
-        } else if (entity instanceof Warden warden) {
-            return warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
-        } else if (entity instanceof Enderman enderman) {
-            return enderman.isScreaming();
-        }
-        return false;
+        return isAngry(entity);
     }
 
     @Override

@@ -23,8 +23,10 @@ import java.util.List;
 @Description("Returns the XYZ coordinates of a location or a vector.")
 @Examples({"broadcast coordinates of {_loc}"})
 @Since("1.3")
+@SuppressWarnings("unused")
 public class ExprCoordinates extends PropertyExpression<Object, Double> {
     static {
+        // TODO: PROPERTY EXPR
         Skript.registerExpression(ExprCoordinates.class, Double.class, ExpressionType.PROPERTY,
                 "[the] coord[inate](s| list) of %vectors/locations%",
                 "%vectors/locations%'[s] coord[inate](s| list)");

@@ -24,9 +24,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the brewing ingredient of a Brewing Stand.\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing ingredient of event-block"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
     static {
-        Skript.registerExpression(ExprBrewingIngredient.class, ItemType.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprBrewingIngredient.class, ItemType.class, ExpressionType.PROPERTY,
                 "[the] brewing ingredient of %block%",
                 "%block%'[s] brewing ingredient");
     }

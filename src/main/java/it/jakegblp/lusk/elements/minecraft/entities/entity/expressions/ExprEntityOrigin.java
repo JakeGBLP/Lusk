@@ -8,12 +8,14 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Origin")
 @Description("Gets the location where this entity originates from.\n" +
         "This value can be null if the entity hasn't yet been added to the world.")
 @Examples({"broadcast origin of target"})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprEntityOrigin extends SimplePropertyExpression<Entity, Location> {
     static {
         register(ExprEntityOrigin.class, Location.class, "origin", "entity");
@@ -25,6 +27,7 @@ public class ExprEntityOrigin extends SimplePropertyExpression<Entity, Location>
     }
 
     @Override
+    @Nullable
     public Location convert(Entity e) {
         return e.getOrigin();
     }
