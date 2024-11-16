@@ -37,7 +37,7 @@ repositories {
 dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    compileOnly 'com.github.SkriptLang:Skript:2.9.3'
+    compileOnly 'com.github.SkriptLang:Skript:2.9.4'
     implementation 'org.bstats:bstats-bukkit:3.1.0'
     implementation 'com.vdurmont:semver4j:3.1.0'
     implementation 'net.wesjd:anvilgui:1.10.1-SNAPSHOT'
