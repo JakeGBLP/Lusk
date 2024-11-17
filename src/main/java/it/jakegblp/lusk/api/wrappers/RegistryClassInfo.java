@@ -94,7 +94,7 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
     @Nullable
     private final String prefix, suffix;
 
-    private RegistryClassInfo(Registry<T> registry, Class<T> registryClass, boolean usage, String codename, @Nullable String prefix, @Nullable String suffix) {
+    public RegistryClassInfo(Registry<T> registry, Class<T> registryClass, boolean usage, String codename, @Nullable String prefix, @Nullable String suffix) {
         super(registryClass, codename);
         this.registry = registry;
         this.prefix = prefix == null ? null : prefix.replaceAll(" ", "_");
