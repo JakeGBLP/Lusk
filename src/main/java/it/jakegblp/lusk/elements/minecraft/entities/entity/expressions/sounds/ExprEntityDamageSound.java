@@ -10,26 +10,25 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity - Damage Sound")
+@Name("Entity - Damage/Hurt Sound")
 @Description("Returns the Sound this entity will make on damage.")
 @Examples({"broadcast damage sound of target"})
 @Since("1.0.4")
-public class ExprEntityDamageSound extends SimplePropertyExpression<LivingEntity, String> {
+@SuppressWarnings("unused")
+public class ExprEntityDamageSound extends SimplePropertyExpression<LivingEntity, Sound> {
     static {
-        register(ExprEntityDamageSound.class, String.class, "damage sound", "livingentities");
+        register(ExprEntityDamageSound.class, Sound.class, "(damage|hurt) sound", "livingentities");
     }
 
     @Override
-    public @NotNull Class<? extends String> getReturnType() {
-        return String.class;
+    public @NotNull Class<? extends Sound> getReturnType() {
+        return Sound.class;
     }
 
     @Override
     @Nullable
-    public String convert(LivingEntity e) {
-        Sound sound = e.getHurtSound();
-        if (sound != null) return sound.name();
-        return null;
+    public Sound convert(LivingEntity e) {
+        return e.getHurtSound();
     }
 
     @Override

@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,20 +14,21 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Sound this entity makes while swimming.")
 @Examples({"broadcast swimming sound of target"})
 @Since("1.0.2")
-public class ExprEntitySwimSound extends SimplePropertyExpression<Entity, String> {
+@SuppressWarnings("unused")
+public class ExprEntitySwimSound extends SimplePropertyExpression<Entity, Sound> {
     static {
-        register(ExprEntitySwimSound.class, String.class, "swim[ming] sound", "entity");
+        register(ExprEntitySwimSound.class, Sound.class, "swim[ming] sound", "entity");
     }
 
     @Override
-    public @NotNull Class<? extends String> getReturnType() {
-        return String.class;
+    public @NotNull Class<? extends Sound> getReturnType() {
+        return Sound.class;
     }
 
     @Override
     @Nullable
-    public String convert(Entity e) {
-        return e.getSwimSound().name();
+    public Sound convert(Entity e) {
+        return e.getSwimSound();
     }
 
     @Override
