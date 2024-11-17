@@ -18,6 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
+
 @Name("Item - Rarity")
 @Description("Returns the rarity of an item.\nCan be set.\n\nBefore Lusk 1.2 (and Minecraft 1.20.5), this expression returned strings and also worked for enchantments, due to some major changes enchantments no longer have a rarity.")
 @Examples({"broadcast item rarity of tool", "set item rarity of {_sword} to epic"})
@@ -26,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprRarity extends SimpleExpression<ItemRarity> {
     static {
         // TODO: PROPERTY EXPR
-        if (Skript.classExists("org.bukkit.inventory.ItemRarity")) {
+        if (HAS_SPIGOT_ITEM_RARITY) {
             Skript.registerExpression(ExprRarity.class, ItemRarity.class, ExpressionType.PROPERTY,
                     "item rarity of %itemtype%",
                     "%itemtype%'[s] item rarity");
@@ -70,9 +72,9 @@ public class ExprRarity extends SimpleExpression<ItemRarity> {
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof ItemRarity itemRarity) {
-            ItemType itemType = item.getSingle(e);
-            if (itemType != null) {
+        ItemType itemType = item.getSingle(e);
+        if (itemType != null) {
+            if (delta[0] instanceof ItemRarity itemRarity) {
                 ItemMeta meta = itemType.getItemMeta();
                 meta.setRarity(itemRarity);
             }

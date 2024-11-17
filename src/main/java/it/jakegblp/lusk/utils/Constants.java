@@ -48,6 +48,8 @@ public class Constants {
             skriptVersion = parseVersion(Skript.getVersion().toString());
 
     public static final boolean
+            //todo: see how things play out with old, papermc item rarity
+            HAS_SPIGOT_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
             HAS_WARDEN = classExists("org.bukkit.entity.Warden"),
             HAS_SALMON_VARIANT = classExists("org.bukkit.entity.Salmon$Variant"),
             HAS_WOLF_VARIANT = classExists("org.bukkit.entity.Wolf$Variant"),
@@ -77,6 +79,7 @@ public class Constants {
 
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
 
+    //todo: 1. Make file-reading system to allow users to update this. 2.
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
         put(4, parseVersion("1.7.5"));
         put(5, parseVersion("1.7.10"));
