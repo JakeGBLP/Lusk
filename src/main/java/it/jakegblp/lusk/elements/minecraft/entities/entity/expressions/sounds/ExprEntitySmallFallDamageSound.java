@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,20 +14,21 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the Sound this entity will make when falling from a small height.")
 @Examples({"broadcast small fall damage sound of target"})
 @Since("1.0.4")
-public class ExprEntitySmallFallDamageSound extends SimplePropertyExpression<LivingEntity, String> {
+@SuppressWarnings("unused")
+public class ExprEntitySmallFallDamageSound extends SimplePropertyExpression<LivingEntity, Sound> {
     static {
-        register(ExprEntitySmallFallDamageSound.class, String.class, "small fall damage sound", "livingentities");
+        register(ExprEntitySmallFallDamageSound.class, Sound.class, "small fall damage sound", "livingentities");
     }
 
     @Override
-    public @NotNull Class<? extends String> getReturnType() {
-        return String.class;
+    public @NotNull Class<? extends Sound> getReturnType() {
+        return Sound.class;
     }
 
     @Override
     @Nullable
-    public String convert(LivingEntity e) {
-        return e.getFallDamageSoundSmall().name();
+    public Sound convert(LivingEntity e) {
+        return e.getFallDamageSoundSmall();
     }
 
     @Override
