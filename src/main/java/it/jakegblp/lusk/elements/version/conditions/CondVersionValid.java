@@ -8,12 +8,13 @@ import ch.njol.skript.doc.Since;
 import com.vdurmont.semver4j.SemverException;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.LuskUtils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 
 @Name("Version - is Valid")
 @Description("Checks if the string is a valid version")
 @Examples({"if \"1.19.2\" is a valid version:\n\tbroadcast version \"1.19.2\""})
 @Since("1.0.0")
+@SuppressWarnings("unused")
 public class CondVersionValid extends PropertyCondition<String> {
 
     static {
@@ -23,7 +24,7 @@ public class CondVersionValid extends PropertyCondition<String> {
     @Override
     public boolean check(String version) {
         try {
-            Version(version);
+            parseVersion(version);
         } catch (SemverException e) {
             return false;
         }

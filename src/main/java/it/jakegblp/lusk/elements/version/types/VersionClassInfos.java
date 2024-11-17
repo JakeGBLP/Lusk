@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
-import static it.jakegblp.lusk.utils.LuskUtils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 
 @SuppressWarnings("unused")
 public class VersionClassInfos {
@@ -33,7 +33,7 @@ public class VersionClassInfos {
                         @Nullable
                         public Semver parse(final @NotNull String s, final @NotNull ParseContext context) {
                             if (s.isEmpty()) return null;
-                            if (VERSION_PATTERN.matcher(s).matches()) return Version(s);
+                            if (VERSION_PATTERN.matcher(s).matches()) return parseVersion(s);
                             return null;
                         }
 
@@ -57,5 +57,6 @@ public class VersionClassInfos {
                             return toString(v, 0) + " version (" + v + ")";
                         }
                     }));
+        //todo: add number to version converter?
     }
 }

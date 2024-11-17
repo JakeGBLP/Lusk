@@ -11,9 +11,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Player - Client Version")
-@Description("Returns the Minecraft Version of a player, only major versions ) are included.")
-@Examples({"broadcast version of player\n\nkick player due to \"stop using 1.8!\" if version of player = \"1.8.9\""})
+@Description("Returns the Minecraft version of a player, snapshots are not included.")
+@Examples({"broadcast version of player\n\nkick player due to \"stop using 1.8!\" if version of player = 1.8.9"})
 @Since("1.0.0")
+@SuppressWarnings("unused")
 public class ExprPlayerVersion extends SimplePropertyExpression<Player, Semver> {
     static {
         register(ExprPlayerVersion.class, Semver.class, "[minecraft|client|player] version", "player");

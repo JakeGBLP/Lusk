@@ -11,6 +11,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.EntityUtils;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -32,10 +33,11 @@ import org.jetbrains.annotations.Nullable;
         """)
 @Examples({"broadcast variant of event-entity\nset variant of target to \"red\""})
 @Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More)")
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ConstantConditions"})
 public class ExprEntityVariant extends SimpleExpression<Object> {
+
     static {
-// TODO: PROPERTY EXPR
+        // TODO: PROPERTY EXPR?
         // todo: make plural, find better way to make this work,
         //  return not as string, work around deprecation (registries!)
         Skript.registerExpression(ExprEntityVariant.class, Object.class, ExpressionType.PROPERTY,
@@ -43,126 +45,27 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
                 "%livingentity%'[s] entity variant");
     }
 
-    private Expression<LivingEntity> livingEntityExpression;
+    private Expression<LivingEntity> livingEntitiesExpression;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        livingEntityExpression = (Expression<LivingEntity>) exprs[0];
+        livingEntitiesExpression = (Expression<LivingEntity>) exprs[0];
         return true;
     }
 
     @Override
     protected Object @NotNull [] get(@NotNull Event e) {
-        LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-        String variant = null;
-        if (livingEntity instanceof Axolotl axolotl) {
-            variant = axolotl.getVariant().name();
-        } else if (livingEntity instanceof Frog frog) {
-            variant = frog.getVariant().name();
-        } else if (livingEntity instanceof MushroomCow mushroomCow) {
-            variant = mushroomCow.getVariant().name();
-        } else if (livingEntity instanceof Parrot parrot) {
-            variant = parrot.getVariant().name();
-        } else if (livingEntity instanceof Llama llama) {
-            variant = llama.getColor().name();
-        } else if (livingEntity instanceof Fox fox) {
-            variant = fox.getFoxType().name();
-        } else if (livingEntity instanceof Cat cat) {
-            variant = cat.getCatType().name();
-        } else if (livingEntity instanceof Rabbit rabbit) {
-            variant = rabbit.getRabbitType().name();
-        } else if (livingEntity instanceof Panda panda) {
-            variant = panda.getMainGene().name();
-        } else if (livingEntity instanceof TropicalFish tropicalFish) {
-            variant = tropicalFish.getPattern().name();
-        }
-        if (variant != null) {
-            return new String[]{variant};
-        }
-        return new String[0];
+        return livingEntitiesExpression.stream(e).map(EntityUtils::getVariant).toArray();
     }
 
     @Override
     public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{String.class} : null;
+        return mode == Changer.ChangeMode.SET ? new Class[]{Object.class} : null;
     }
 
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof String variant) {
-            LivingEntity livingEntity = livingEntityExpression.getSingle(e);
-            if (livingEntity instanceof Axolotl axolotl) {
-                for (Axolotl.Variant variantObject : Axolotl.Variant.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        axolotl.setVariant(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Frog frog) {
-                for (Frog.Variant variantObject : Frog.Variant.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        frog.setVariant(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof MushroomCow mushroomCow) {
-                for (MushroomCow.Variant variantObject : MushroomCow.Variant.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        mushroomCow.setVariant(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Parrot parrot) {
-                for (Parrot.Variant variantObject : Parrot.Variant.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        parrot.setVariant(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Llama llama) {
-                for (Llama.Color variantObject : Llama.Color.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        llama.setColor(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Fox fox) {
-                for (Fox.Type variantObject : Fox.Type.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        fox.setFoxType(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Cat cat) {
-                for (Cat.Type variantObject : Cat.Type.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        cat.setCatType(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Rabbit rabbit) {
-                for (Rabbit.Type variantObject : Rabbit.Type.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        rabbit.setRabbitType(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof Panda panda) {
-                for (Panda.Gene variantObject : Panda.Gene.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        panda.setMainGene(variantObject);
-                        return;
-                    }
-                }
-            } else if (livingEntity instanceof TropicalFish tropicalFish) {
-                for (TropicalFish.Pattern variantObject : TropicalFish.Pattern.values()) {
-                    if (variant.toUpperCase().equals(variantObject.name())) {
-                        tropicalFish.setPattern(variantObject);
-                        return;
-                    }
-                }
-            }
-        }
+        livingEntitiesExpression.stream(e).forEach(livingEntity -> EntityUtils.setVariant(livingEntity,delta[0]));
     }
 
     @Override
@@ -177,6 +80,6 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the entity variant of " + (e == null ? "" : livingEntityExpression.toString(e, debug));
+        return "the entity variant of " + livingEntitiesExpression.toString(e, debug);
     }
 }

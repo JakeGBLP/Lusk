@@ -18,12 +18,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-import static it.jakegblp.lusk.utils.LuskUtils.Version;
+import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 
-@Name("Version")
-@Description("Returns a Version")
+@Name("Version - from String")
+@Description("Gets a version from a string.")
 @Examples({"if player's version < version \"1.19.2\":\n\tbroadcast \"%player% can't play on this server\"\nelse:\n\tkick player"})
 @Since("1.0.0")
+@SuppressWarnings("unused")
 public class ExprVersion extends SimpleExpression<Semver> {
     static {
         Skript.registerExpression(ExprVersion.class, Semver.class, ExpressionType.COMBINED,
@@ -45,7 +46,7 @@ public class ExprVersion extends SimpleExpression<Semver> {
             ArrayList<Semver> v = new ArrayList<>();
             for (String value : s) {
                 try {
-                    v.add(Version(value));
+                    v.add(parseVersion(value));
                 } catch (SemverException ignored) {
                 }
             }

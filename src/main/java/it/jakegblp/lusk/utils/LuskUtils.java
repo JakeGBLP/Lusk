@@ -13,23 +13,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_GENERIC_SCALE_ATTRIBUTE;
-import static it.jakegblp.lusk.utils.Constants.NUMBER_WITH_DECIMAL;
+import static it.jakegblp.lusk.utils.Constants.*;
 
 public class LuskUtils {
 
-    public static final String[] COLORS = new String[]{"gray", "blue"};
-    /**
-     * Uses Minimessage!
-     */
-    public static final String PREFIX = MessageFormat.format("<{0}>[<{1}>Lusk</{1}>]</{0}> ", COLORS[0], COLORS[1]);
-
-    public static Semver Version(String s) {
+    public static Semver parseVersion(String s) {
         return new Semver(s, Semver.SemverType.LOOSE);
     }
 
@@ -50,16 +44,28 @@ public class LuskUtils {
      * @param args MessageFormat arguments.
      */
     public static void send(CommandSender sender, String format, Object... args) {
-        sender.sendRichMessage(PREFIX+MessageFormat.format(format, args));
+        sender.sendRichMessage(LUSK_PREFIX + MessageFormat.format(format, args));
+    }
+
+    @Nullable
+    public static Attribute getScaleAttribute() {
+        try {
+            return (Attribute) Attribute.class.getDeclaredField("GENERIC_SCALE").get(null);
+        } catch (final NoSuchFieldException | SecurityException | IllegalAccessException ignored) {}
+        if (HAS_SCALE_ATTRIBUTE) {
+            return Attribute.SCALE;
+        }
+        return null;
     }
 
     public static boolean isCrawling(Player player) {
         double height = player.getHeight();
-        if (HAS_GENERIC_SCALE_ATTRIBUTE) {
-            AttributeInstance instance = player.getAttribute(Attribute.GENERIC_SCALE);
+        Attribute scaleAttribute = getScaleAttribute();
+        if (scaleAttribute != null) {
+            AttributeInstance instance = player.getAttribute(scaleAttribute);
             if (instance != null) height /= instance.getValue();
         }
-        if (!player.isSwimming() && !player.isGliding() && !player.isSleeping() && !player.isSneaking() && !player.isRiptiding()) {
+        if (!player.isInsideVehicle() && !player.isSwimming() && !player.isGliding() && !player.isSleeping() && !player.isSneaking() && !player.isRiptiding()) {
             return areDoublesRoughlyEqual(height, 0.6);
         }
         return false;
