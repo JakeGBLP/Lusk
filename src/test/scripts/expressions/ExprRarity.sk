@@ -1,0 +1,5 @@
+test "ExprRarity":
+  set {_item} to iron sword
+  set rarity of {_item} to epic
+  assert rarity of {_item} is epic with "iron sword is now epic"
+  assert {_item} is epic with "iron sword is directly compared to epic"
