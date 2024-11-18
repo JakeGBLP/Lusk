@@ -1,8 +1,7 @@
 name: Build and test
 
 on:
-  push:
-  pull_request:
+  - push
 
 jobs:
   build:
@@ -27,8 +26,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew shadowjar
       - name: Upload artifacts
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
+          name: Lusk.jar
           path: build/libs/*.jar
   test:
     runs-on: ubuntu-latest
@@ -45,4 +45,5 @@ jobs:
         uses: SkriptLang/skript-test-action@v1.1
         with:
           test_script_directory: src/test/scripts
+          skript_repo_ref: dev/patch
           extra_plugins_directory: extra-plugins/
