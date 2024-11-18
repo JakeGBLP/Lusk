@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.elements.minecraft.item.expressions;
 
+import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -8,7 +9,6 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemRarity;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,20 +17,21 @@ import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
 @Name("Item - Rarity")
 @Description("Returns the rarity of an item.\nCan be set.\n\nBefore Lusk 1.2 (and Minecraft 1.20.5), this expression returned strings and also worked for enchantments, due to some major changes enchantments no longer have a rarity.")
 @Examples({"broadcast item rarity of tool", "set item rarity of {_sword} to epic"})
-@Since("1.0.0+, 1.2+ (ItemRarity)")
+@Since("1.0.0, 1.2 (ItemRarity)")
 @SuppressWarnings("unused")
-public class ExprRarity extends SimplePropertyExpression<ItemStack,ItemRarity> {
-
+public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
+    //todo: test
     static {
         if (HAS_SPIGOT_ITEM_RARITY) {
-            register(ExprRarity.class, ItemRarity.class, "item rarity", "itemstacks");
+            register(ExprRarity.class, ItemRarity.class, "item rarity", "itemtypes");
         }
     }
 
     @Override
-    public @Nullable ItemRarity convert(ItemStack from) {
-        ItemMeta meta = from.getItemMeta();
-        return meta.hasRarity() ? meta.getRarity() : null;
+    public @Nullable ItemRarity convert(ItemType from) {
+        ItemMeta itemMeta = from.getItemMeta();
+        if (itemMeta.hasRarity()) return itemMeta.getRarity();
+        return null;
     }
 
     @Override
@@ -51,7 +52,11 @@ public class ExprRarity extends SimplePropertyExpression<ItemStack,ItemRarity> {
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof ItemRarity itemRarity) {
-            getExpr().stream(event).forEach(itemStack -> itemStack.getItemMeta().setRarity(itemRarity));
+            for (ItemType itemType : getExpr().getArray(event)) {
+                ItemMeta itemMeta = itemType.getItemMeta();
+                itemMeta.setRarity(itemRarity);
+                itemType.setItemMeta(itemMeta);
+            }
         }
     }
 }
