@@ -1,6 +1,8 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -57,5 +59,10 @@ public class ItemUtils {
 
     public static ItemType[] toItemTypes(@NotNull Material... materials) {
         return validMaterials(materials).map(ItemType::new).toArray(ItemType[]::new);
+    }
+
+    public static Enchantment[] getPreferredEnchantments(@NotNull ItemStack itemStack) {
+        return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).stream()
+                .filter(enchantment -> enchantment.canEnchantItem(itemStack)).toArray(Enchantment[]::new);
     }
 }
