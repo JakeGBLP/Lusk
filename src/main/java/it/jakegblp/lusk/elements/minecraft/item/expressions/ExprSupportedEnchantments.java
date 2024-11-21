@@ -17,15 +17,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-@Name("Item - Preferred Enchantments")
+@Name("Item - Supported/Preferred Enchantments")
 @Description("Returns the Enchantments this item can normally have.")
-@Examples({"broadcast preferred enchantments of tool"})
+@Examples({"broadcast supported enchantments of tool"})
 @Since("1.3")
 @SuppressWarnings("unused")
-public class ExprPreferredEnchantments extends PropertyExpression<ItemStack, Enchantment> {
+public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enchantment> {
 
     static {
-        register(ExprPreferredEnchantments.class,Enchantment.class, "(preferred|supported) enchantments", "itemstacks");
+        register(ExprSupportedEnchantments.class,Enchantment.class, "(preferred|supported) enchantments", "itemstacks");
     }
 
     @Override
