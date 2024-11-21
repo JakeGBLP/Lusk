@@ -41,7 +41,8 @@ public class Constants {
             PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
     public static final String
             ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMORS_STAND_PREFIX = "[the] [armor[ |-]stand]";
+            ARMORS_STAND_PREFIX = "[the] [armor[ |-]stand]",
+            STATE_OR_PROPERTY = "(state|property)";
 
     public static final Semver
             serverVersion = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
