@@ -11,10 +11,12 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.BlockUtils;
+import it.jakegblp.lusk.api.wrappers.BlockDataWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import static it.jakegblp.lusk.utils.Constants.STATE_OR_PROPERTY;
 
@@ -26,10 +28,10 @@ import static it.jakegblp.lusk.utils.Constants.STATE_OR_PROPERTY;
 public class ExprBlockWaterLogged extends SimpleExpression<Boolean> {
     static {
         Skript.registerExpression(ExprBlockWaterLogged.class, Boolean.class, ExpressionType.PROPERTY,
-                "[the] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY+" of %blocks/blockdatas%",
-                "%blocks/blockdatas%'[s] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY,
-                "whether %blocks/blockdatas% is water[ |-]logged [or not]",
-                "whether [or not] %blocks/blockdatas% is water[ |-]logged");
+                "[the] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY+" of %blocks/blockstates%",
+                "%blocks/blockstates%'[s] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY,
+                "whether %blocks/blockstates% is water[ |-]logged [or not]",
+                "whether [or not] %blocks/blockstates% is water[ |-]logged");
     }
 
     private Expression<Object> blockExpression;
@@ -42,7 +44,11 @@ public class ExprBlockWaterLogged extends SimpleExpression<Boolean> {
 
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
-        return blockExpression.stream(e).map(BlockUtils::isWaterLogged).toArray(Boolean[]::new);
+        return blockExpression.stream(e)
+                .map(BlockDataWrapper::create)
+                .filter(Objects::nonNull)
+                .map(BlockDataWrapper::isWaterLogged)
+                .toArray(Boolean[]::new);
     }
     //todo: reset? delete?
     @Override
@@ -53,7 +59,10 @@ public class ExprBlockWaterLogged extends SimpleExpression<Boolean> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Boolean aBoolean) {
-            blockExpression.stream(e).forEach(object -> BlockUtils.setWaterlogged(object, aBoolean));
+            blockExpression.stream(e)
+                    .map(BlockDataWrapper::create)
+                    .filter(Objects::nonNull)
+                    .forEach(blockDataWrapper -> blockDataWrapper.setWaterLogged(aBoolean));
         }
     }
 
