@@ -9,22 +9,22 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.BlockUtils;
+import it.jakegblp.lusk.api.wrappers.BlockDataWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 @Name("Block - Water Log")
-@Description("Rings a bell.\nThe blockface must be cartesian.\n\n**NOTE: Skript has its own version of this effect, difference is in the fact that Skript's uses Directions while Lusk's uses Blockfaces, for that reason I will not deprecate this Effect.**")
-@Examples({"ring target block", "make {_p} ring {_block} from north"})
+@Description("")
+@Examples({""})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class EffBlockWaterLog extends Effect {
     static {
         Skript.registerEffect(EffBlockWaterLog.class,
-                "[not:un]water[ |-]log %blocks/blockdatas%",
-                "make %blocks/blockdatas% [:not] water[ |-]logged");
+                "[not:un]water[ |-]log %blocks/blockstates%",
+                "make %blocks/blockstates% [:not] water[ |-]logged");
     }
 
     private Expression<Object> blockExpression;
@@ -45,7 +45,9 @@ public class EffBlockWaterLog extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        Object object = blockExpression.getSingle(event);
-        BlockUtils.setWaterlogged(object, waterlog);
+        BlockDataWrapper blockDataWrapper = BlockDataWrapper.create(blockExpression.getSingle(event));
+        if (blockDataWrapper != null) {
+            blockDataWrapper.setWaterLogged(waterlog);
+        }
     }
 }

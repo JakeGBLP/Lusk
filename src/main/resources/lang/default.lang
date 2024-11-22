@@ -28,4 +28,5 @@ types:
     salmonvariant: salmon variant¦s @a
     tropicalfishpattern: tropical fish pattern¦s @a
     sound: sound¦s @a
+    blockstate: blokck state¦s @a
     timespanperiod: time span period¦s @a
