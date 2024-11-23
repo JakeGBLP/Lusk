@@ -10,7 +10,7 @@ public class FoxClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Fox$Type") && Classes.getExactClassInfo(Fox.Type.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(Fox.Type.class, null, "fox type")
+                    new EnumRegistryWrapper(Fox.Type.class, null, "fox_type")
                             .getClassInfo("foxtype")
                             .user("fox ?(variant|colou?r|type)s?")
                             .description("All the Fox Types.")

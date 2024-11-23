@@ -10,7 +10,7 @@ public class MushroomCowClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.MushroomCow$Variant") && Classes.getExactClassInfo(MushroomCow.Variant.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(MushroomCow.Variant.class, null, "mushroom cow variant")
+                    new EnumRegistryWrapper(MushroomCow.Variant.class, null, "mushroom_cow_variant")
                             .getClassInfo("mushroomcowvariant")
                             .user("mushroom ?cow ?(variant|colou?r|type)s?")
                             .description("All the Mushroom Cow Variants.")

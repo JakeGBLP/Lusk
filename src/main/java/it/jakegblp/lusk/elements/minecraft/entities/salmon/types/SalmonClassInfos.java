@@ -10,7 +10,7 @@ public class SalmonClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Salmon$Variant") && Classes.getExactClassInfo(Salmon.Variant.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(Salmon.Variant.class, null, "salmon variant")
+                    new EnumRegistryWrapper(Salmon.Variant.class, null, "salmon_variant")
                             .getClassInfo("salmonvariant")
                             .user("salmon ?(variant|type)s?")
                             .description("All the Salmon Variants.")

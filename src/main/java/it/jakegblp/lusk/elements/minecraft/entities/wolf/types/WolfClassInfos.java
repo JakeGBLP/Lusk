@@ -10,7 +10,7 @@ public class WolfClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Wolf$Variant") && Classes.getExactClassInfo(Wolf.Variant.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(Wolf.Variant.class, null, "wolf variant")
+                    new EnumRegistryWrapper(Wolf.Variant.class, null, "wolf_variant")
                             .getClassInfo("wolfvariant")
                             .user("wolf ?(variant|type)s?")
                             .description("All the Wolf Variants.")
