@@ -52,13 +52,13 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
 
     private Expression<Object> objectExpression;
     private int property;
-    private boolean invisible;
+    private boolean not;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         objectExpression = (Expression<Object>) exprs[0];
         property = matchedPattern;
-        invisible = parseResult.hasTag("in");
+        not = parseResult.hasTag("in");
         return true;
     }
 
@@ -66,10 +66,10 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
     protected Boolean @NotNull [] get(@NotNull Event e) {
         return objectExpression.stream(e).map(object -> switch (property) {
             case 0 -> ArmorStandUtils.isSmall(object);
-            case 1 -> ArmorStandUtils.hasArms(object) ^ !invisible;
-            case 2 -> ArmorStandUtils.hasBasePlate(object) ^ !invisible;
+            case 1 -> ArmorStandUtils.hasArms(object) ^ !not;
+            case 2 -> ArmorStandUtils.hasBasePlate(object) ^ !not;
             case 3 -> ArmorStandUtils.isMarker(object);
-            case 4 -> ArmorStandUtils.isInvisible(object) ^ !invisible;
+            case 4 -> ArmorStandUtils.isInvisible(object) ^ !not;
             case 5 -> ArmorStandUtils.canTick(object);
             case 6 -> ArmorStandUtils.canMove(object);
             default -> null;
@@ -87,10 +87,10 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
             for (Object object : objectExpression.getAll(e)) {
                 switch (property) {
                     case 0 -> ArmorStandUtils.setIsSmall(object, bool);
-                    case 1 -> ArmorStandUtils.setHasArms(object, bool ^ !invisible);
-                    case 2 -> ArmorStandUtils.setHasBasePlate(object, bool ^ !invisible);
+                    case 1 -> ArmorStandUtils.setHasArms(object, bool ^ !not);
+                    case 2 -> ArmorStandUtils.setHasBasePlate(object, bool ^ not); // no idea why this one work without the negation operator.
                     case 3 -> ArmorStandUtils.setIsMarker(object, bool);
-                    case 4 -> ArmorStandUtils.setIsInvisible(object, bool ^ !invisible);
+                    case 4 -> ArmorStandUtils.setIsInvisible(object, bool ^ !not);
                     case 5 -> ArmorStandUtils.setCanTick(object, bool);
                     case 6 -> ArmorStandUtils.setCanMove(object, bool);
                 }
@@ -112,10 +112,10 @@ public class ExprArmorStandProperties extends SimpleExpression<Boolean> {
     public @NotNull String toString(@Nullable Event e, boolean debug) {
         return "the armorstand " + switch (property) {
             case 0 -> "is small";
-            case 1 -> "has arms";
-            case 2 -> "has base plate";
+            case 1 -> "has arms "+(not ? "in" : "")+"visibility";
+            case 2 -> "has base plate "+(not ? "in" : "")+"visibility";
             case 3 -> "is marker";
-            case 4 -> (invisible ? "in" : "") + "visible";
+            case 4 -> (not ? "in" : "") + "visible";
             case 5 -> "can tick";
             case 6 -> "can move";
             default -> null;
