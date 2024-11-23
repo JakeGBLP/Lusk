@@ -1,6 +1,9 @@
 package it.jakegblp.lusk.utils;
 
 import org.bukkit.entity.*;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,6 +122,30 @@ public class EntityUtils {
             salmon.setVariant(variant);
         } else if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl && unknownVariant instanceof Axolotl.Variant variant) {
             axolotl.setVariant(variant);
+        }
+    }
+
+    @Nullable
+    public static ItemStack getEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot) {
+        if (livingEntity instanceof Player player) {
+            return player.getInventory().getItem(equipmentSlot);
+        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+            EntityEquipment entityEquipment = livingEntity.getEquipment();
+            if (entityEquipment != null) {
+                return entityEquipment.getItem(equipmentSlot);
+            }
+        }
+        return null;
+    }
+
+    public static void setEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
+        if (livingEntity instanceof Player player) {
+            player.getInventory().setItem(equipmentSlot, itemStack);
+        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+            EntityEquipment entityEquipment = livingEntity.getEquipment();
+            if (entityEquipment != null) {
+                entityEquipment.setItem(equipmentSlot, itemStack);
+            }
         }
     }
 }
