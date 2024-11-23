@@ -10,7 +10,7 @@ public class HorseClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Horse$Color") && Classes.getExactClassInfo(Horse.Color.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(Horse.Color.class, null, "horse color")
+                    new EnumRegistryWrapper(Horse.Color.class, null, "horse_color")
                             .getClassInfo("horsecolor")
                             .user("horse ?colou?rs?")
                             .description("All the Horse Colors.")
@@ -18,7 +18,7 @@ public class HorseClassInfos {
         }
         if (Skript.classExists("org.bukkit.entity.Horse$Style") && Classes.getExactClassInfo(Horse.Style.class) == null) {
             Classes.registerClass(
-                    new EnumRegistryWrapper(Horse.Style.class, null, "horse style")
+                    new EnumRegistryWrapper(Horse.Style.class, null, "horse_style")
                             .getClassInfo("horsestyle")
                             .user("horse ?styles?")
                             .description("All the Horse Styles.")

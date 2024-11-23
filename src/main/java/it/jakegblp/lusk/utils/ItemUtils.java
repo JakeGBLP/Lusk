@@ -6,7 +6,9 @@ import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -15,6 +17,19 @@ import java.util.stream.Stream;
 import static it.jakegblp.lusk.utils.Constants.HAS_REMOVE_ENCHANTMENTS_METHOD;
 
 public class ItemUtils {
+
+    @Nullable
+    public static ItemMeta getItemMetaFromUnknown(Object object) {
+        if (object instanceof ItemStack itemStack) {
+            return itemStack.getItemMeta();
+        } else if (object instanceof ItemType itemType) {
+            return itemType.getItemMeta();
+        } else if (object instanceof ItemMeta itemMeta) {
+            return itemMeta;
+        }
+        return null;
+    }
+
     public static final Function<ItemStack, ItemStack> UNENCHANT = HAS_REMOVE_ENCHANTMENTS_METHOD ? itemStack -> {
         itemStack.removeEnchantments();
         return itemStack;

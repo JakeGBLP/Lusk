@@ -64,6 +64,4 @@ public class ExprCustomNameVisibility extends PropertyExpression<Entity, Boolean
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         return "client sided custom name visibility";
     }
-
-
 }

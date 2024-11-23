@@ -41,7 +41,7 @@ public class Constants {
             PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
     public static final String
             ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMORS_STAND_PREFIX = "[the] [armor[ |-]stand]",
+            ARMORS_STAND_PREFIX = "[armor[ |-]stand]",
             STATE_OR_PROPERTY = "(state|property)";
 
     public static final Semver
@@ -60,6 +60,9 @@ public class Constants {
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             SKRIPT_2_9 = skriptVersion.isGreaterThanOrEqualTo(parseVersion("2.9")),
+
+            PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
+
 
             PAPER_HAS_PLAYER_ARM_SWING_EVENT = classExists("io.papermc.paper.event.player.PlayerArmSwingEvent"),
             PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND = PAPER_HAS_PLAYER_ARM_SWING_EVENT && methodExists(PlayerArmSwingEvent.class, "getHand"),
