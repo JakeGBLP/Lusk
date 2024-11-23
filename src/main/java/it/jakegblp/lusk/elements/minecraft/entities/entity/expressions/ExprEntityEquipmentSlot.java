@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
+
 @Name("Entity - Item from Equipment Slot")
 @Description("Gets the item in one or more equipment slots of one or more entities, if the entity cannot use a provided slot it will fail silently.\n\nCan be set.")
 @Examples({"broadcast equipment slot chest slot"})
@@ -37,6 +39,8 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parseResult) {
+        consoleLog(expressions[0].getClass().getPackageName());
+        consoleLog(expressions[1].getClass().getPackageName());
         setExpr((Expression<? extends LivingEntity>) expressions[0]);
         equipmentSlotExpression = (Expression<EquipmentSlot>) expressions[1];
         return true;
