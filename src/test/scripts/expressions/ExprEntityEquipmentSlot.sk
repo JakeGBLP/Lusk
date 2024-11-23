@@ -1,5 +1,5 @@
 test "ExprEntityEquipmentSlot":
   spawn zombie at location(10,100,10):
     set equipment chest slot of entity to iron chestplate
-    assert equipment chest slot of entity is iron chestplate
+    assert equipment chest slot of entity is iron chestplate with "equipment slot was set correctly"
     delete entity
