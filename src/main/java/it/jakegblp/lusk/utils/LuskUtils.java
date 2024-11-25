@@ -1,6 +1,8 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
 import ch.njol.util.VectorMath;
 import com.vdurmont.semver4j.Semver;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.DeprecationUtils.getScaleAttribute;
 
 public class LuskUtils {
 
@@ -45,17 +48,6 @@ public class LuskUtils {
      */
     public static void send(CommandSender sender, String format, Object... args) {
         sender.sendRichMessage(LUSK_PREFIX + MessageFormat.format(format, args));
-    }
-
-    @Nullable
-    public static Attribute getScaleAttribute() {
-        try {
-            return (Attribute) Attribute.class.getDeclaredField("GENERIC_SCALE").get(null);
-        } catch (final NoSuchFieldException | SecurityException | IllegalAccessException ignored) {}
-        if (HAS_SCALE_ATTRIBUTE) {
-            return Attribute.SCALE;
-        }
-        return null;
     }
 
     public static boolean isCrawling(Player player) {
