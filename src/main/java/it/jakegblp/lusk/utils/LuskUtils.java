@@ -117,6 +117,23 @@ public class LuskUtils {
         else return Kleenean.UNKNOWN;
     }
 
+    public static <T> void registerVerbosePropertyExpression(
+            Class<? extends Expression<T>> expressionClass,
+            Class<T> type,
+            @Nullable String prefix,
+            String property,
+            String fromType) {
+        prefix = prefix != null ? prefix + " " : "";
+        String[] patterns = {
+                "[the] " + prefix + property + " [state|property] of %" + fromType + "%",
+                "%" + fromType + "%'[s] " + prefix + property + " [state|property]",
+                "whether or not [the] " + prefix + "%" + fromType + "% " + property,
+                "whether [the] " + prefix + "%" + fromType + "% " + property + " [or not]"
+        };
+        Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
+    }
+
+
     //todo: remake these
     public static Vector toBukkitVector(EulerAngle angle) {
         double x = angle.getX();
