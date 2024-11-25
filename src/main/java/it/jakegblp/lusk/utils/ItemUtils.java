@@ -1,16 +1,22 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.util.EnchantmentType;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -50,10 +56,6 @@ public class ItemUtils {
         return Arrays.stream(materials).filter(Material::isItem);
     }
 
-    public static ItemStack[] unenchant(@NotNull ItemStack... itemStacks) {
-        return Arrays.stream(itemStacks).map(UNENCHANT).toArray(ItemStack[]::new);
-    }
-
     public static ItemType[] unenchant(@NotNull ItemType... itemTypes) {
         return Arrays.stream(itemTypes)
                 .map(itemType -> {
@@ -76,7 +78,7 @@ public class ItemUtils {
         return validMaterials(materials).map(ItemType::new).toArray(ItemType[]::new);
     }
 
-    public static Enchantment[] getPreferredEnchantments(@NotNull ItemStack itemStack) {
+    public static Enchantment[] getSupportedEnchantments(@NotNull ItemStack itemStack) {
         return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).stream()
                 .filter(enchantment -> enchantment.canEnchantItem(itemStack)).toArray(Enchantment[]::new);
     }

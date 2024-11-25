@@ -30,7 +30,7 @@ public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enc
 
     @Override
     protected Enchantment[] get(Event event, ItemStack[] source) {
-        return Arrays.stream(source).flatMap(itemStack -> Stream.of(ItemUtils.getPreferredEnchantments(itemStack))).toArray(Enchantment[]::new);
+        return Arrays.stream(source).flatMap(itemStack -> Stream.of(ItemUtils.getSupportedEnchantments(itemStack))).toArray(Enchantment[]::new);
     }
 
     @Override
@@ -50,23 +50,3 @@ public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enc
         return true;
     }
 }
-//public class ExprPreferredEnchantments extends SimplePropertyExpression<Enchantment, Enchantment> {
-//    static {
-//        register(ExprPreferredEnchantments.class, Integer.class, "[vanilla] max[imum] enchant[ment] level", "enchantments");
-//    }
-//
-//    @Override
-//    public @NotNull Class<? extends Integer> getReturnType() {
-//        return Integer.class;
-//    }
-//
-//    @Nullable
-//    public Integer convert(Enchantment enchantment) {
-//        return enchantment.getMaxLevel();
-//    }
-//
-//    @Override
-//    protected @NotNull String getPropertyName() {
-//        return "vanilla maximum enchantment level";
-//    }
-//}
