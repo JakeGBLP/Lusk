@@ -39,11 +39,20 @@ public class EvtEntityEvents {
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityPoseChangeEvent")) {
-            Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "pose chang(e[d]|ing)")
+            Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "[entity] pose change[d]")
                     .description("""
-                            Called when an entity changes its pose.""")
+                            Called when an entity changes its pose.
+                            
+                            Note: **`past event-pose` is the same as `pose of event-entity`, due to this it's not guaranteed that it will always work correctly.**
+                            """)
                     .examples("")
-                    .since("1.0.2");
+                    .since("1.0.2, 1.3 (past event-pose)");
+            EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<>() {
+                @Override
+                public @NotNull Pose get(final EntityPoseChangeEvent e) {
+                    return e.getEntity().getPose();
+                }
+            }, EventValues.TIME_PAST);
             EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<>() {
                 @Override
                 public @NotNull Pose get(final EntityPoseChangeEvent e) {
@@ -143,7 +152,7 @@ public class EvtEntityEvents {
                     .examples("")
                     .since("1.1.1")
                     .requiredPlugins("Paper")
-                    .documentationID("entity_-_inside_block_event"); // what is this id
+                    .documentationID("11161");
         }
     }
 }
