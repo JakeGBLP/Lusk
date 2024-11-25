@@ -82,4 +82,64 @@ public class ItemUtils {
         return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).stream()
                 .filter(enchantment -> enchantment.canEnchantItem(itemStack)).toArray(Enchantment[]::new);
     }
+
+    @NullMarked
+    public static void addStoredEnchantments(ItemType itemType, EnchantmentType... enchantmentTypes) {
+        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
+        for (EnchantmentType enchantmentType : enchantmentTypes) {
+            if (enchantmentType.getType() != null) {
+                itemType.clearEnchantments();
+                enchantmentStorageMeta.addStoredEnchant(enchantmentType.getType(), enchantmentType.getLevel(), true);
+            }
+        }
+        itemType.setItemMeta(enchantmentStorageMeta);
+    }
+
+    @NullMarked
+    public static void removeStoredEnchantments(ItemType itemType, EnchantmentType... enchantmentTypes) {
+        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
+        for (EnchantmentType enchantmentType : enchantmentTypes) {
+            if (enchantmentType.getType() != null) {
+                enchantmentStorageMeta.removeStoredEnchant(enchantmentType.getType());
+            }
+        }
+        itemType.setItemMeta(enchantmentStorageMeta);
+    }
+
+    @NotNull
+    public static EnchantmentType[] getStoredEnchantments(@NotNull ItemType itemType) {
+        return ((EnchantmentStorageMeta) itemType.getItemMeta())
+                .getStoredEnchants()
+                .entrySet()
+                .stream()
+                .map(entry -> new EnchantmentType(entry.getKey(), entry.getValue()))
+                .toArray(EnchantmentType[]::new);
+    }
+
+    @NullMarked
+    public static void setStoredEnchantments(ItemType itemType,  EnchantmentType @Nullable ... enchantmentTypes) {
+        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
+        if (enchantmentStorageMeta.hasStoredEnchants()) {
+            enchantmentStorageMeta.getStoredEnchants().keySet().forEach(enchantmentStorageMeta::removeStoredEnchant);
+        }
+        if (enchantmentTypes != null) {
+            for (EnchantmentType enchantmentType : enchantmentTypes) {
+                if (enchantmentType.getType() != null) {
+                    enchantmentStorageMeta.addStoredEnchant(enchantmentType.getType(), enchantmentType.getLevel(), true);
+                }
+            }
+        }
+    }
+
+    public static EnchantmentType[] asEnchantmentTypes(Object[] objects) {
+        return Arrays.stream(objects).map(object -> {
+            if (object instanceof EnchantmentType enchantmentType) {
+                return enchantmentType;
+            } else if (object instanceof Enchantment enchantment) {
+                return new EnchantmentType(enchantment);
+            } else {
+                return null;
+            }
+        }).filter(Objects::nonNull).toArray(EnchantmentType[]::new);
+    }
 }
