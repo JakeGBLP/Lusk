@@ -83,6 +83,14 @@ public class ItemUtils {
                 .filter(enchantment -> enchantment.canEnchantItem(itemStack)).toArray(Enchantment[]::new);
     }
 
+    @Nullable
+    public static ItemStack getSingleItemTypeToItemStack(@Nullable Expression<ItemType> expression, @NotNull Event event) {
+        if (expression == null) return null;
+        ItemType itemType = expression.getSingle(event);
+        if (itemType == null) return null;
+        return itemType.getRandom();
+    }
+
     @NullMarked
     public static void addStoredEnchantments(ItemType itemType, EnchantmentType... enchantmentTypes) {
         EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();

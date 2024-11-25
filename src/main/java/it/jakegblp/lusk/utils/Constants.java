@@ -15,6 +15,7 @@ import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Registry;
 import org.bukkit.Rotation;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,6 +61,7 @@ public class Constants {
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             SKRIPT_2_9 = skriptVersion.isGreaterThanOrEqualTo(parseVersion("2.9")),
+            HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
 
