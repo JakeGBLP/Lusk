@@ -1,0 +1,6 @@
+test "ExprArmorStandIsMarker":
+  spawn armor stand at location(0,0,0):
+    assert marker state of entity is false with "armor stand is not marker"
+    set marker state of entity to true
+    assert marker state of entity is true with "armor stand is marker"
+    delete entity

@@ -1,0 +1,6 @@
+test "ExprArmorStandCanMove":
+  spawn armor stand at location(0,0,0):
+    assert move state of entity is false with "armor stand can't move"
+    set move state of entity to true
+    assert move state of entity is true with "armor stand can move"
+    delete entity

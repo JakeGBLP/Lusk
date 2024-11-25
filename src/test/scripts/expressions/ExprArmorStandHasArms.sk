@@ -1,0 +1,15 @@
+test "ExprArmorStandHasArms":
+  spawn armor stand at location(0,0,0):
+
+    assert arms visibility state of entity is true with "armor stand has visible arms"
+    assert arms invisibility state of entity is false with "armor stand doesn't have invisible arms"
+
+    set arms visibility state of entity to false
+    assert arms visibility state of entity is false with "armor stand doesn't have invisible arms"
+    assert arms invisibility state of entity is true with "armor stand has invisible arms"
+
+    set arms invisibility state of entity to false
+    assert arms visibility state of entity is true with "armor stand has visible arms again"
+    assert arms invisibility state of entity is false with "armor stand doesn't have invisible arms again"
+
+    delete entity

@@ -1,0 +1,6 @@
+test "ExprArmorStandCanTick":
+  spawn armor stand at location(0,0,0):
+    assert tick state of entity is false with "armor stand can't tick"
+    set tick state of entity to true
+    assert tick state of entity is true with "armor stand can tick"
+    delete entity
