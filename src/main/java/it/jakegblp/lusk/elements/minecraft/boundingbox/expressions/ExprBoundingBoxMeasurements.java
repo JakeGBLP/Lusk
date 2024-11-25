@@ -10,7 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.api.enums.XYZ;
+import org.bukkit.Axis;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -29,13 +29,13 @@ public class ExprBoundingBoxMeasurements extends PropertyExpression<BoundingBox,
                 "%boundingboxes%'[s] [bounding[ ]]box ((:x|:z) width|height)");
     }
 
-    XYZ coordinate;
+    Axis coordinate;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(final Expression<?>[] vars, final int matchedPattern, final @NotNull Kleenean isDelayed, final SkriptParser.ParseResult parser) {
         setExpr((Expression<? extends BoundingBox>) vars[0]);
-        coordinate = parser.hasTag("x") ? XYZ.X : parser.hasTag("z") ? XYZ.Z : XYZ.Y;
+        coordinate = parser.hasTag("x") ? Axis.X : parser.hasTag("z") ? Axis.Z : Axis.Y;
         return true;
     }
 
@@ -59,7 +59,7 @@ public class ExprBoundingBoxMeasurements extends PropertyExpression<BoundingBox,
     @NotNull
     public String toString(@Nullable Event event, boolean debug) {
         return "the bounding box " +
-                (coordinate.isY() ? "height " : ((coordinate.isX() ? "x" : "z") + " width ")) +
+                (coordinate == Axis.Y ? "height " : ((coordinate == Axis.X ? "x" : "z") + " width ")) +
                 (event != null ? getExpr().toString(event, debug) : "");
     }
 }

@@ -10,7 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.api.enums.XYZ;
+import org.bukkit.Axis;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -31,16 +31,16 @@ public class ExprBoundingBoxCoordinates extends PropertyExpression<BoundingBox, 
 
     @Nullable
     Boolean state;
-    XYZ coordinate;
+    Axis coordinate;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(final Expression<?>[] vars, final int matchedPattern, final @NotNull Kleenean isDelayed, final SkriptParser.ParseResult parser) {
         setExpr((Expression<? extends BoundingBox>) vars[0]);
         state = parser.hasTag("lesser") ? Boolean.FALSE : parser.hasTag("greater") ? true : null;
-        if (parser.hasTag("x")) coordinate = XYZ.X;
-        else if (parser.hasTag("y")) coordinate = XYZ.Y;
-        else coordinate = XYZ.Z;
+        if (parser.hasTag("x")) coordinate = Axis.X;
+        else if (parser.hasTag("y")) coordinate = Axis.Y;
+        else coordinate = Axis.Z;
         return true;
     }
 
