@@ -14,29 +14,26 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
-
-@Name("Bell - Resonating Time")
+@Name("Bell - Resonating Time/Ticks")
 @Description("""
-        `DEPRECATED SINCE SKRIPT 2.9`
-        Returns the time since the bell has been resonating, or 0 seconds if the bell is not currently resonating.
-        A bell will typically resonate for 40 ticks (2 seconds)""")
+        Returns the time or ticks since one or more bells have been resonating, or 0 seconds for each bell that's not currently resonating.
+        A bell will typically resonate for 40 ticks (2 seconds)
+        
+        Note: if you wish to use this expression on Skript 2.9+ you will need to use Lusk 1.3+.
+        """)
 @Examples({"on bell ring:\n\twait 5 seconds\n\tbroadcast resonating time of event-block"})
-@Since("1.0.3, 1.2 (Deprecated)")
+@Since("1.0.3, 1.3 (ticks)")
 @SuppressWarnings("unused")
 public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Object> {
     static {
-        // todo: undeprecate?
-        if (!SKRIPT_2_9) {
-            register(ExprBellResonatingTime.class, Object.class, "resonating (time|ticks)", "blocks");
-        }
+        register(ExprBellResonatingTime.class, Object.class, "resonating (time|ticks)", "blocks");
     }
 
-    boolean ticks;
+    boolean useTicks;
 
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        ticks = parseResult.hasTag("ticks");
+        useTicks = parseResult.hasTag("ticks");
         return true;
     }
 
@@ -48,11 +45,16 @@ public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Obje
     @Override
     @Nullable
     public Object convert(Block block) {
-        return block.getState() instanceof Bell bell ? (ticks ? bell.getResonatingTicks() : Timespan.fromTicks(bell.getResonatingTicks())) : null;
+        if (block.getState() instanceof Bell bell) {
+            int ticks = bell.getResonatingTicks();
+            if (useTicks) return ticks;
+            else return Timespan.fromTicks(ticks);
+        }
+        return null;
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "resonating time";
+        return "resonating "+(useTicks?"ticks":"time");
     }
 }

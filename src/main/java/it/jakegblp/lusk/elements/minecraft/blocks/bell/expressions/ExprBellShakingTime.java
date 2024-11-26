@@ -14,26 +14,26 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
-
-@Name("Bell - Shaking Time")
-@Description("`DEPRECATED SINCE SKRIPT 2.9`\nReturns the time since the bell has been shaking.")
+@Name("Bell - Shaking Time/Ticks")
+@Description("""
+        Returns the time or ticks since one or more bells have been shaking, or 0 seconds for each bell that's not currently resonating.
+        A bell will typically resonate for 50 ticks (2.5 seconds)
+        
+        Note: if you wish to use this expression on Skript 2.9+ you will need to use Lusk 1.3+.
+        """)
 @Examples({"on bell ring:\n\twait 5 seconds\n\tbroadcast shaking time of event-block"})
-@Since("1.0.3, 1.2 (Deprecated), 1.3 (ticks)")
+@Since("1.0.3, 1.3 (ticks)")
 @SuppressWarnings("unused")
 public class ExprBellShakingTime extends SimplePropertyExpression<Block, Object> {
     static {
-        // todo: undeprecate?
-        if (!SKRIPT_2_9) {
-            register(ExprBellShakingTime.class, Object.class, "shaking (time|ticks)", "blocks");
-        }
+        register(ExprBellShakingTime.class, Object.class, "shaking (time|ticks)", "blocks");
     }
 
-    boolean ticks;
+    boolean useTicks;
 
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        ticks = parseResult.hasTag("ticks");
+        useTicks = parseResult.hasTag("ticks");
         return true;
     }
 
@@ -46,11 +46,16 @@ public class ExprBellShakingTime extends SimplePropertyExpression<Block, Object>
     @Nullable
     public Object convert(Block block) {
         // todo: make all deprecated timespan method calls safe
-        return block.getState() instanceof Bell bell ? (ticks ? bell.getShakingTicks() : Timespan.fromTicks(bell.getShakingTicks())) : null;
+        if (block.getState() instanceof Bell bell) {
+            int ticks = bell.getShakingTicks();
+            if (useTicks) return ticks;
+            else return Timespan.fromTicks(ticks);
+        }
+        return null;
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "shaking " + (ticks ? "ticks" : "time");
+        return "shaking " + (useTicks ? "ticks" : "time");
     }
 }
