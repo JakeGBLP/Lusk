@@ -30,6 +30,7 @@ public class Lusk extends JavaPlugin {
         instance = this;
         addon = Skript.registerAddon(this);
         addon.setLanguageFileDirectory("lang");
+
         int[] elementCountBefore = BorrowedUtils.getElementCount();
 
         try {
@@ -52,7 +53,10 @@ public class Lusk extends JavaPlugin {
                 new DeathListener(),
                 new DamageListener(),
                 new PlayerItemDropListener(),
-                new InventoryClickListener()
+                new InventoryClickListener(),
+                new AnvilGuiOpenListener(),
+                new AnvilGuiClickListener(),
+                new AnvilGuiCloseListener()
         );
 
         int pluginId = 17730;
