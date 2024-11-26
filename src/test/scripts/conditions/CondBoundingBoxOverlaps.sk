@@ -1,3 +1,9 @@
 test "CondBoundingBoxOverlaps":
-  assert new bounding box from vector(0,0,0) and vector(2,2,2) overlaps new bounding box from vector(1,1,1) and vector(3,3,3) with "bounding boxes overlap"
-  assert new bounding box from vector(0,0,0) and vector(1,1,1) doesn't overlaps new bounding box from vector(2,2,2) and vector(3,3,3) with "bounding boxes don't overlap"
+  set {_v::1} to vector(1,1,1)
+  set {_v::2} to vector(2,2,2)
+  set {_v::3} to vector(3,3,3)
+  set {_b::1} to new bounding box from {_v::1} and {_v::2}
+  set {_b::2} to new bounding box from {_v::1} and {_v::3}
+  set {_b::3} to new bounding box from {_v::2} and {_v::3}
+  assert {_b::1} overlaps {_b::2} with "bounding boxes overlap"
+  assert {_b::1} doesn't overlap {_b::3} with "bounding boxes don't overlap"
