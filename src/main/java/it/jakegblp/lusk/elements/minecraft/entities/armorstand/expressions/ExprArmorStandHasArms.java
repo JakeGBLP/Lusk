@@ -16,8 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
 
 @Name("Armor Stand - has Arms (Property)")
-@Description(
-"""
+@Description("""
 Gets and sets the `hasHarms` property of an armorstand entity or item, to do so with an armorstand item you must have Paper.
 """)
 @Examples({"set has arms property of target to true", "set whether armor stand target has arms to true"})

@@ -33,6 +33,7 @@ public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object,
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         super.init(expressions, matchedPattern, isDelayed, parseResult);
+        invisible = parseResult.hasTag("in");
         return true;
     }
 
