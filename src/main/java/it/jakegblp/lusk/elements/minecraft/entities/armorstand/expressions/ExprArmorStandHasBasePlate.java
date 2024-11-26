@@ -44,7 +44,8 @@ public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object,
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasBasePlate(object, invisible ^ bool));
+            boolean finalBoolean = invisible ^ bool;
+            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasBasePlate(object, finalBoolean));
         }
     }
 

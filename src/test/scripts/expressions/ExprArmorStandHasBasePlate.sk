@@ -1,12 +1,12 @@
 test "ExprArmorStandHasBasePlate":
   spawn armor stand at location(0,0,0):
 
-    assert base plate visibility state of entity is false with "armor stand doesn't have a visible base plate"
-    assert base plate invisibility state of entity is true with "armor stand has an invisible base plate"
-
-    set base plate visibility state of entity to true
     assert base plate visibility state of entity is true with "armor stand has a visible base plate"
     assert base plate invisibility state of entity is false with "armor stand doesn't have an invisible base plate"
+
+    set base plate visibility state of entity to false
+    assert base plate visibility state of entity is false with "armor stand doesn't have a visible base plate"
+    assert base plate invisibility state of entity is true with "armor stand has an invisible base plate"
 
     set base plate invisibility state of entity to true
     assert base plate visibility state of entity is false with "armor stand doesn't have a visible base plate"
