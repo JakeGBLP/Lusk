@@ -45,14 +45,14 @@ public class ExprArmorStandIsInvisible extends SimplePropertyExpression<Object, 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            boolean finalBoolean = invisible ^ bool;
+            boolean finalBoolean = !invisible ^ bool;
             getExpr().stream(event).forEach(object -> ArmorStandUtils.setIsInvisible(object, finalBoolean));
         }
     }
 
     @Override
     public @Nullable Boolean convert(Object from) {
-        return invisible ^ ArmorStandUtils.isInvisible(from);
+        return !invisible ^ ArmorStandUtils.isInvisible(from);
     }
 
     @Override
