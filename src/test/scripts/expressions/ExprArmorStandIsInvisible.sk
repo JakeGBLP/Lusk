@@ -1,19 +1,19 @@
 test "ExprArmorStandIsInvisible":
   spawn armor stand at location(0,0,0):
 
-    assert visibility state of entity is false with "armor stand isn't visible"
+    assert visibility state of entity is true with "armor stand is visible"
+    assert invisibility state of entity is false with "armor stand isn't invisible"
+
+    set invisibility state of entity to true
+    assert visibility state of entity is false with "armor stand is invisible"
     assert invisibility state of entity is true with "armor stand is invisible"
 
     set visibility state of entity to true
     assert visibility state of entity is true with "armor stand is visible"
     assert invisibility state of entity is false with "armor stand isn't invisible"
 
-    set invisibility state of entity to true
-    assert visibility state of entity is false with "armor stand isn't visible again"
+    set visibility state of entity to false
+    assert visibility state of entity is false with "armor stand is invisible again"
     assert invisibility state of entity is true with "armor stand is invisible again"
-
-    set invisibility state of entity to false
-    assert visibility state of entity is true with "armor stand is visible again"
-    assert invisibility state of entity is false with "armor stand isn't invisible again"
 
     delete entity

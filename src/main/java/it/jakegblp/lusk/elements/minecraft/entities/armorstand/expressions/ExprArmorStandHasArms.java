@@ -45,7 +45,7 @@ public class ExprArmorStandHasArms extends SimplePropertyExpression<Object, Bool
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasArms(object, bool));
+            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasArms(object, invisible ^ bool));
         }
     }
 
@@ -56,7 +56,7 @@ public class ExprArmorStandHasArms extends SimplePropertyExpression<Object, Bool
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand has arms property";
+        return "the armor stand arms "+(invisible ? "invisibility" : "visibility")+" property";
     }
 
     @Override

@@ -33,7 +33,6 @@ public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object,
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         super.init(expressions, matchedPattern, isDelayed, parseResult);
-        invisible = parseResult.hasTag("in");
         return true;
     }
 
@@ -45,7 +44,7 @@ public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object,
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasBasePlate(object, bool));
+            getExpr().stream(event).forEach(object -> ArmorStandUtils.setHasBasePlate(object, invisible ^ bool));
         }
     }
 
@@ -56,7 +55,7 @@ public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object,
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand has base plate property";
+        return "the armor stand base plate "+(invisible ? "invisibility" : "visibility")+" property";
     }
 
     @Override
