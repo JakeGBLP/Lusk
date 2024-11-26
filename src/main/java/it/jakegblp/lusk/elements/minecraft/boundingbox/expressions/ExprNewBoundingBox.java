@@ -26,8 +26,8 @@ public class ExprNewBoundingBox extends SimpleExpression<BoundingBox> {
     static {
         Skript.registerExpression(ExprNewBoundingBox.class, BoundingBox.class, ExpressionType.COMBINED,
                 "[a[n]] (new|[new] empty) bounding box",
-                "[a] [new] bounding box (between|from|using|with) %vector/location% (,|and|to) %vector/location%",
-                "[a] [new] bounding box from %boundingbox%");
+                "[a] [new] bounding box (between|from|using|with) %vector/location% (,|[,] and|to) %vector/location%",
+                "[a] [new [cloned|copied]|cloned|copied] bounding box from %boundingbox%");
     }
 
     private boolean empty;
