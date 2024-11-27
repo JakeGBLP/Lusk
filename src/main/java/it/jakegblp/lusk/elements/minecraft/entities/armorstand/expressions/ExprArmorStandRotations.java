@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.elements.minecraft.entities.other.armorstand.expressions;
+package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
@@ -20,22 +20,25 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
+import static it.jakegblp.lusk.utils.Constants.ARMORS_STAND_PREFIX;
+
 
 @Name("Armor Stand - Rotations")
 @Description("Gets and sets a specific armor stand property.")
 @Examples({"broadcast rotation of target", "set head rotation of target to vector(1,0,0)\n# sad armor stand :("})
 @Since("1.0.2")
+@SuppressWarnings("unused")
 public class ExprArmorStandRotations extends SimpleExpression<Vector> {
+    // todo: turn into property expression and use verbose property expression, use different angles, plural
     static {
-        Skript.registerExpression(ExprArmorStandRotations.class, Vector.class, ExpressionType.COMBINED,
-                "[the] (body|torso) rotation of %livingentity%",
-                "[the] left arm rotation of %livingentity%",
-                "[the] right arm rotation of %livingentity%",
-                "[the] left leg rotation of %livingentity%",
-                "[the] right leg rotation of %livingentity%",
-                "[the] head rotation of %livingentity%",
-                "[the] rotation of %livingentity%");
+        Skript.registerExpression(ExprArmorStandRotations.class, Vector.class, ExpressionType.PROPERTY,
+                "[the] " + ARMORS_STAND_PREFIX + " (body|torso) rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " left arm rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " right arm rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " left leg rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " right leg rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " head rotation of %livingentity%",
+                "[the] " + ARMORS_STAND_PREFIX + " rotation of %livingentity%");
     }
 
     private Expression<LivingEntity> livingEntityExpression;
@@ -108,6 +111,6 @@ public class ExprArmorStandRotations extends SimpleExpression<Vector> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (Objects.equals(property, "") ? "" : " ") + property + " rotation of " + (e == null ? "" : livingEntityExpression.toString(e, debug));
+        return "the" + (property.isEmpty() ? "" : " ") + property + " rotation of " + livingEntityExpression.toString(e, debug);
     }
 }
