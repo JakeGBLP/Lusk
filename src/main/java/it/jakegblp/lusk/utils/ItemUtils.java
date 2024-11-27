@@ -42,6 +42,12 @@ public class ItemUtils {
         return new ItemType(itemStack);
     }
 
+    @Nullable
+    public static ItemStack getNullableItemStack(ItemType itemType) {
+        if (itemType == null) return null;
+        return itemType.getRandom();
+    }
+
 
     public static final Function<ItemStack, ItemStack> UNENCHANT = HAS_REMOVE_ENCHANTMENTS_METHOD ? itemStack -> {
         itemStack.removeEnchantments();

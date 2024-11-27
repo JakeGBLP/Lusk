@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemType;
 
 public class BlockUtils {
@@ -37,7 +38,7 @@ public class BlockUtils {
     public static void setBrewingIngredient(Block block, ItemType ingredient) {
         BlockState state = block.getState();
         if (state instanceof BrewingStand brewingStand) {
-            brewingStand.getInventory().setIngredient(ingredient.getRandom());
+            brewingStand.getInventory().setIngredient(getNullableItemStack(ingredient));
         }
     }
 
@@ -53,7 +54,7 @@ public class BlockUtils {
     public static void setBrewingFuel(Block block, ItemType ingredient) {
         BlockState state = block.getState();
         if (state instanceof BrewingStand brewingStand) {
-            brewingStand.getInventory().setFuel(ingredient.getRandom());
+            brewingStand.getInventory().setFuel(getNullableItemStack(ingredient));
         }
     }
 }
