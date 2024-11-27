@@ -10,7 +10,6 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.log.ErrorQuality;
-import ch.njol.skript.util.slot.EquipmentSlot;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
 import ch.njol.util.Kleenean;
@@ -32,12 +31,16 @@ import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.OFF_HAND;
+import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.TOOL;
 
 @Name("Used Tool/Used Hand/Used Equipment Slot")
 @Description("""
@@ -77,6 +80,9 @@ public class ExprUsedTool extends SimpleExpression<Object> {
         if (Constants.PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND) add(PlayerUseUnknownEntityEvent.class);
     }};
 
+    //todo: should this return a skript slot?
+    // an equipment slot?
+    // i should make multiple patterns and an extensive description about this.
     static {
         Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.EVENT, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
     }
@@ -97,6 +103,7 @@ public class ExprUsedTool extends SimpleExpression<Object> {
 
     @Override
     protected Object @NotNull [] get(@NotNull Event e) {
+        // todo: add to utils?
         org.bukkit.inventory.EquipmentSlot slot = null;
         Player player = null;
         LivingEntity entity = null;
@@ -168,15 +175,15 @@ public class ExprUsedTool extends SimpleExpression<Object> {
             slot = event.getHand();
         }
         if (slot != null) {
-            if (hand) return new org.bukkit.inventory.EquipmentSlot[]{slot};
+            if (hand) return new EquipmentSlot[]{slot};
             if (player != null) {
                 PlayerInventory inventory = player.getInventory();
-                return new InventorySlot[]{new InventorySlot(inventory, slot == org.bukkit.inventory.EquipmentSlot.OFF_HAND ? 40 : inventory.getHeldItemSlot())};
+                return new InventorySlot[]{new InventorySlot(inventory, slot == EquipmentSlot.OFF_HAND ? 40 : inventory.getHeldItemSlot())};
             } else if (entity != null) {
                 EntityEquipment entityEquipment = entity.getEquipment();
                 if (entityEquipment != null)
-                    return new EquipmentSlot[]{new EquipmentSlot(entityEquipment,
-                            slot == org.bukkit.inventory.EquipmentSlot.OFF_HAND ? EquipmentSlot.EquipSlot.OFF_HAND : EquipmentSlot.EquipSlot.TOOL)};
+                    return new ch.njol.skript.util.slot.EquipmentSlot[]{new ch.njol.skript.util.slot.EquipmentSlot(entityEquipment,
+                            slot == EquipmentSlot.OFF_HAND ? OFF_HAND : TOOL)};
             }
         }
         return new Object[0];
