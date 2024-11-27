@@ -16,7 +16,7 @@ public class AnvilGuiSnapshotEvent extends AnvilGuiEvent {
         this.snapshot = snapshot;
     }
 
-    // todo: add snapshot getter
+    // todo: add snapshot getter, this is not too relevant
     public AnvilGUI.StateSnapshot getSnapshot() {
         return snapshot;
     }
