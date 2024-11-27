@@ -109,6 +109,20 @@ public class LuskUtils {
         else return Kleenean.UNKNOWN;
     }
 
+    /**
+     * Registers a property expression that includes the following patterns:<br>
+     * 1. <code>[the] %prefix% %property% [state|property] of %fromType%</code><br>
+     * 2. <code>%fromType%'[s] %prefix% %property% [state|property]</code><br>
+     * 3. <code>whether or not [the] %prefix% %fromType% %property%</code><br>
+     * 4. <code>whether [the] %prefix% %fromType% %property% [or not]</code>
+     *
+     * @param expressionClass the class of the expression to register
+     * @param type the class of the return type
+     * @param prefix a (usually optional) string that comes before the property to indicate what kind of object it can be used for
+     * @param property a string indicates what this expression will return based on the given object
+     * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
+     * @param <T> a generic of the returned object
+     */
     public static <T> void registerVerbosePropertyExpression(
             Class<? extends Expression<T>> expressionClass,
             Class<T> type,
