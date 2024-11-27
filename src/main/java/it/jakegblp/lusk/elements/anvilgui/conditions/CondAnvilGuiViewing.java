@@ -22,9 +22,8 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.3")
 public class CondAnvilGuiViewing extends Condition {
     static {
-        // todo: fix issues here 
         Skript.registerCondition(CondAnvilGuiViewing.class,
-                "%players% (is[not:(n't| not)]|are[not:(n't| not)]) viewing (any:an[y] anvil gui[s]|" + Constants.ANVIL_GUI_PREFIX + " %anvilguiinventory%)");
+                "%players% (is[not:(n't| not)]|are[not:(n't| not)]) viewing (any:an[y] anvil gui[s]|" + Constants.ANVIL_GUI_PREFIX + " %-anvilguiinventory%)");
     }
 
     private boolean any;
