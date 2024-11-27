@@ -51,7 +51,7 @@ public class CondAnvilGuiViewing extends Condition {
     public boolean check(@NotNull Event event) {
         Player[] players = playerExpression.getAll(event);
         if (any) {
-            return AnvilGuiWrapper.isAnyOpenTo(players);
+            return AnvilGuiWrapper.isViewingAnyAnvilGui(players);
         }
         AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(event);
         if (anvilGuiWrapper == null) {

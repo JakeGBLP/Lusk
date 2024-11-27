@@ -98,7 +98,7 @@ public class AnvilGuiWrapper {
         return false;
     }
 
-    public static boolean isAnyOpenTo(Player... players) {
+    public static boolean isViewingAnyAnvilGui(Player... players) {
         return Arrays.stream(players)
                 .allMatch(player -> OPEN_GUIS
                         .values()
@@ -114,7 +114,7 @@ public class AnvilGuiWrapper {
                 .orElse(null);
     }
 
-    // todo: figure out per-player mechanics
+    // todo: figure out per-player mechanics, not too relevant for now
     //public void closeAndOpen(Player player) {
     //    OPEN_GUIS.forEach((k, v) -> {
     //        v.remove(player.getUniqueId());
