@@ -1,0 +1,5 @@
+test "ExprBrewingFuel":
+  set block at location(1,1,1) to brewing stand
+  assert brewing fuel of block at location(1,1,1) is not set with "empty brewing stand has no fuel"
+  set brewing fuel of block at location(1,1,1) to 5 blaze powder
+  assert brewing fuel of block at location(1,1,1) is set with "brewing stand has fuel"

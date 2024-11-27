@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprBrewingFuel extends SimplePropertyExpression<Block, ItemStack> {
 
-    //todo: add tests
     static {
         register(ExprBrewingFuel.class, ItemStack.class, "brewing fuel", "blocks");
     }
