@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
     static {
-        // todo: work around timespan deprecation, make plural
+        // todo: work around timespan deprecation, make plural, property expression?, utils
         Skript.registerExpression(ExprEntityLoveDuration.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] love duration [of %entity%]",
                 "%entity%'[s] love duration");
