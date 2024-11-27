@@ -1,89 +1,58 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.brewingstand.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.BrewingStand;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.BrewerInventory;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Brewing - Ingredient")
+import static it.jakegblp.lusk.utils.BlockUtils.getBrewingIngredient;
+import static it.jakegblp.lusk.utils.BlockUtils.setBrewingIngredient;
+
+@Name("BrewingStand - Ingredient")
 @Description("Returns the brewing ingredient of a Brewing Stand.\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing ingredient of event-block"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (plural)")
 @SuppressWarnings("unused")
-public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
+public class ExprBrewingIngredient extends SimplePropertyExpression<Block, ItemType> {
+
     static {
-        Skript.registerExpression(ExprBrewingIngredient.class, ItemType.class, ExpressionType.PROPERTY,
-                "[the] brewing ingredient of %block%",
-                "%block%'[s] brewing ingredient");
-    }
-
-    private Expression<Block> blockExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        blockExpression = (Expression<Block>) exprs[0];
-        return true;
+        register(ExprBrewingIngredient.class, ItemType.class, "brewing ingredient [item]", "blocks");
     }
 
     @Override
-    protected ItemType @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
-                BrewerInventory brewerInventory = brewingStand.getInventory();
-                if (brewerInventory.getIngredient() != null) {
-                    return new ItemType[]{new ItemType(brewerInventory.getIngredient())};
-                }
-            }
-        }
-        return new ItemType[0];
+    public @Nullable ItemType convert(Block from) {
+        return getBrewingIngredient(from);
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{ItemType.class} : null;
+    protected String getPropertyName() {
+        return "brewing ingredient item";
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof ItemType itemType) {
-            Block block = blockExpression.getSingle(e);
-            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
-                BrewerInventory brewerInventory = brewingStand.getInventory();
-                brewerInventory.setIngredient(itemType.getRandom());
-                brewingStand.update(true);
-            }
-        }
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public @NotNull Class<? extends ItemType> getReturnType() {
+    public Class<? extends ItemType> getReturnType() {
         return ItemType.class;
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing ingredient of " + blockExpression.toString(e, debug);
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case SET -> new Class[] { ItemStack.class };
+            case DELETE, RESET -> new Class[0];
+            default -> null;
+        };
+    }
+
+    @Override
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        ItemType fuel = (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof ItemType item) ? item : null;
+        getExpr().stream(event).forEach(block -> setBrewingIngredient(block,fuel));
     }
 }
