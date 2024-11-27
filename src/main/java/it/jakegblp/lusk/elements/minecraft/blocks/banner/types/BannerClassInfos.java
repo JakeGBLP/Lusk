@@ -42,7 +42,7 @@ public class BannerClassInfos {
 
                         @Override
                         public @Nullable Pattern parse(String s, ParseContext context) {
-                            return null; // todo: might add at some point
+                            return null; // todo: might add at some point, not too relevant
                         }
 
                         @Override

@@ -50,7 +50,7 @@ public class ExprBlockWaterLogged extends SimpleExpression<Boolean> {
                 .map(BlockDataWrapper::isWaterLogged)
                 .toArray(Boolean[]::new);
     }
-    //todo: reset? delete?
+    //todo: reset? delete? not too relevant
     @Override
     public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
         return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
