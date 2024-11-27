@@ -57,7 +57,7 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
             Block block = blockExpression.getSingle(e);
             if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 brewingStand.setFuelLevel(integer);
-                brewingStand.update();
+                brewingStand.update(true);
             }
         }
     }

@@ -52,7 +52,7 @@ public class ExprBrewingFuel extends SimplePropertyExpression<Block, ItemStack> 
             if (block.getState() instanceof BrewingStand brewingStand) {
                 BrewerInventory brewerInventory = brewingStand.getInventory();
                 brewerInventory.setFuel(fuel);
-                brewingStand.update();
+                brewingStand.update(true);
             }
         });
 

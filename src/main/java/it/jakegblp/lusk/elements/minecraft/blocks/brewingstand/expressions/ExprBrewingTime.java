@@ -62,7 +62,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
             Block block = blockExpression.getSingle(e);
             if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 brewingStand.setBrewingTime(((int) timespan.getTicks()));
-                brewingStand.update();
+                brewingStand.update(true);
             }
         }
     }

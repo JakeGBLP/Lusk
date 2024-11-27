@@ -67,6 +67,7 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
             if (block != null && block.getState() instanceof BrewingStand brewingStand) {
                 BrewerInventory brewerInventory = brewingStand.getInventory();
                 brewerInventory.setIngredient(itemType.getRandom());
+                brewingStand.update(true);
             }
         }
     }
