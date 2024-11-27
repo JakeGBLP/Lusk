@@ -14,7 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Cat - Looking Up State")
+@Name("Cat - Looking Up")
 @Description("Returns whether or not a cat is looking up.\nCan be set.")
 @Examples({"broadcast looking up state of target"})
 @Since("1.0.3")
@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprCatLookingUpState extends SimpleExpression<Boolean> {
     static {
+        // todo: propertyexpression, utils?, plural
         Skript.registerExpression(ExprCatLookingUpState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] cat [is] looking up state of %entity%",
                 "%entity%'[s] cat [is] looking up state",
