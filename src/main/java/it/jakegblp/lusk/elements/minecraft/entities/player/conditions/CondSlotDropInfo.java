@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.elements.minecraft.entities.player.events.conditions;
+package it.jakegblp.lusk.elements.minecraft.entities.player.conditions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
