@@ -205,8 +205,6 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
      */
     @Nullable
     private T parse(String string) {
-        // todo: uncomment these to test for registries
-        //Skript.info("before: " + string);
         string = string.replace(" ", "_");
         if (this.prefix != null) {
             if (!string.contains(this.prefix)) return null;
@@ -217,11 +215,8 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
             string = string.replace("_" + suffix, "").replace(suffix, "");
         }
         string = string.trim();
-
-        //Skript.info("after: " + string);
         NamespacedKey key = BorrowedUtils.getNamespacedKey(string, false);
         if (key == null) return null;
-        //Skript.info("success?: " + key);
         return this.registry.get(key);
     }
 
