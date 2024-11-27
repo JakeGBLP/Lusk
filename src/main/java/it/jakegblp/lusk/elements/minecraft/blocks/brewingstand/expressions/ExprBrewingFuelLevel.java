@@ -74,6 +74,6 @@ public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing fuel level of " + (e == null ? "" : blockExpression.toString(e, debug));
+        return "the brewing fuel level of " + blockExpression.toString(e, debug);
     }
 }

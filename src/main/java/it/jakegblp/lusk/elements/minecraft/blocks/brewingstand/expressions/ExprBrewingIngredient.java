@@ -83,6 +83,6 @@ public class ExprBrewingIngredient extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing ingredient of " + (e == null ? "" : blockExpression.toString(e, debug));
+        return "the brewing ingredient of " + blockExpression.toString(e, debug);
     }
 }

@@ -77,6 +77,6 @@ public class ExprSignEditableState extends SimpleExpression<Boolean> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the sign is " + (waxed ? "waxed" : "editable") + " state of " + (e == null ? "" : blockExpression.toString(e, debug));
+        return "the sign is " + (waxed ? "waxed" : "editable") + " state of " + blockExpression.toString(e, debug);
     }
 }

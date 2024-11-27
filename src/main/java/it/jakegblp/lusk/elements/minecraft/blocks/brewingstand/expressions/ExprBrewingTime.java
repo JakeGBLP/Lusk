@@ -79,6 +79,6 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing time of " + (e == null ? "" : blockExpression.toString(e, debug));
+        return "the brewing time of " + blockExpression.toString(e, debug);
     }
 }

@@ -81,6 +81,6 @@ public class ExprJukeboxRecord extends SimpleExpression<ItemType> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the music disc of " + (e == null ? "" : blockExpression.toString(e, debug));
+        return "the music disc of " + blockExpression.toString(e, debug);
     }
 }
