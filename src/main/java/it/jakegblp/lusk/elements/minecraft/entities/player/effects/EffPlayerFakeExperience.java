@@ -10,8 +10,7 @@ import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Player - Fake Experience")
 @Description("Send an experience change. This fakes an experience change packet for a user. This will not actually change the experience points in any way.\nProgress must be within 0 and 1.")

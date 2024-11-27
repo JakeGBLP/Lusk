@@ -14,8 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Corners/Center")
 @Description("Gets either the lesser or the greater corner or the lesser of one or more bounding boxes.\n\nReturns vectors.")

@@ -14,8 +14,7 @@ import org.bukkit.Axis;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Corners/Center")
 @Description("Gets the x,y or z coordinate for the lesser corner, the greater corner or the center of one or more bounding boxes.")

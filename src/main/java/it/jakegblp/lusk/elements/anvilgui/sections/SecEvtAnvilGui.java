@@ -18,8 +18,7 @@ import it.jakegblp.lusk.api.listeners.AnvilGuiOpenListener;
 import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 

@@ -12,8 +12,7 @@ import ch.njol.util.Kleenean;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Player - Show Credits")
 @Description("Shows a player the win screen that normally is only displayed after one kills the ender dragon and exits the end for the first time.")

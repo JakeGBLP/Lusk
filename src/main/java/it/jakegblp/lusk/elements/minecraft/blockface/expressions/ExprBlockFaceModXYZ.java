@@ -10,8 +10,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("BlockFace - Mod XYZ")
 @Description("Returns the amount of x/y/z to modify to get the represented block(s).")

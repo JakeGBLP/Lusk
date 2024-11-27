@@ -25,8 +25,7 @@ import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 @SuppressWarnings("unused")

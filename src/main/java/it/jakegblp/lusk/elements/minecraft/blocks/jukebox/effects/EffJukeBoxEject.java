@@ -13,8 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("JukeBox - Eject Disc")
 @Description("Forces a jukebox to eject its disc.")

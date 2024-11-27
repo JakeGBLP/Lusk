@@ -8,8 +8,7 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.block.Block;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 
 @Name("Voxel Shape - of Block")

@@ -12,8 +12,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 

@@ -18,8 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Blocks Within")
 @Description("Gets all the blocks within a bounding box in a specific world.")

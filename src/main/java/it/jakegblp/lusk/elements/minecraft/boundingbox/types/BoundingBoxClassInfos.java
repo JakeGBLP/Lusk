@@ -14,8 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.skriptlang.skript.lang.converter.Converters;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.StreamCorruptedException;
 import java.util.stream.Collectors;
 

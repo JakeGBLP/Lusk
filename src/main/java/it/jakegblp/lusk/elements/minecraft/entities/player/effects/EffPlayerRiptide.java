@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.HAS_START_RIPTIDE_ATTACK;
 import static it.jakegblp.lusk.utils.ItemUtils.getSingleItemTypeToItemStack;

@@ -12,8 +12,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.wrappers.BlockDataWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Block - Water Log")
 @Description("")

@@ -14,8 +14,7 @@ import org.bukkit.Axis;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Height and Width x/z")
 @Description("Gets the height, X width and Z width of 1 or more bounding boxes.")

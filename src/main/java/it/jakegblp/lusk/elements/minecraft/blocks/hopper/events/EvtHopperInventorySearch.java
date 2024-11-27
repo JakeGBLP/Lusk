@@ -25,7 +25,7 @@ public class EvtHopperInventorySearch extends SkriptEvent {
                     .since("1.0.4");
             EventValues.registerEventValue(HopperInventorySearchEvent.class, Inventory.class, new Getter<>() {
                 @Override
-                public @javax.annotation.Nullable Inventory get(final HopperInventorySearchEvent e) {
+                public @Nullable Inventory get(final HopperInventorySearchEvent e) {
                     return e.getInventory();
                 }
             }, 0);

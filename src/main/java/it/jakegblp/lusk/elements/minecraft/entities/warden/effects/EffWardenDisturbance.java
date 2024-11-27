@@ -14,8 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Warden;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Warden Disturbance")
 @Description("Makes a warden sense a disturbance at the provided location.")

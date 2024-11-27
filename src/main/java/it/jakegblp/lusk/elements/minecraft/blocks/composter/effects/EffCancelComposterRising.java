@@ -9,8 +9,7 @@ import ch.njol.util.Kleenean;
 import io.papermc.paper.event.block.CompostItemEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Cancel Composter Level Rise")
 @Description("This Effect requires Paper.\n\nCan only be used in a Compost Item Event.\nSets whether or not the composter's level should rise.")

@@ -15,8 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - New Bounding Box")
 @Description("Creates a new empty Bounding Box, one from two corners or a copy of a given bounding box")

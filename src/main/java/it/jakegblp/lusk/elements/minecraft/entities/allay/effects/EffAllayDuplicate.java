@@ -13,8 +13,7 @@ import org.bukkit.entity.Allay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Allay - Duplicate")
 @Description("Forces an allay to duplicate itself without dance or item necessary.")

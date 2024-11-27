@@ -10,8 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.block.BellResonateEvent;
 import org.bukkit.event.block.BellRingEvent;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
 

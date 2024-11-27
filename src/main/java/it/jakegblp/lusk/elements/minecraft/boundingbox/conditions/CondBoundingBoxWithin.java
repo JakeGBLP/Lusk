@@ -14,8 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - X is Within")
 @Description("Whether or not a Vector, Location, or Bounding Box is within a Bounding Box.\n\nVector and Location = Checks if the Bounding Box contains a specified position.\nBounding Box = Checks if the Bounding Box fully contains a Bounding Box.")
