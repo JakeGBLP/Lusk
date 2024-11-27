@@ -59,8 +59,6 @@ public class ExprAnvilGuiInteractableSlots extends PropertyExpression<AnvilGuiWr
         };
     }
 
-
-    //todo: test this
     @Override
     public void change(@NotNull Event event, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         Stream<? extends AnvilGuiWrapper> anvilGuiStream = getExpr().stream(event);
