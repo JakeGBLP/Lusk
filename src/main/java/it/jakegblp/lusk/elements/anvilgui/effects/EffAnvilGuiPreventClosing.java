@@ -37,7 +37,7 @@ public class EffAnvilGuiPreventClosing extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "prevent " + (event != null ? anvilGuiWrapperExpression.toString(event, debug) : "") + " from closing"; //
+        return "prevent " + anvilGuiWrapperExpression.toString(event, debug) + " from closing"; //
     }
 
     @Override

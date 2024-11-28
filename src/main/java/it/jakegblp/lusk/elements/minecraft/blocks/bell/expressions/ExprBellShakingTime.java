@@ -7,12 +7,13 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
 
 @Name("Bell - Shaking Time/Ticks")
 @Description("""
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprBellShakingTime extends SimplePropertyExpression<Block, Object> {
     static {
-        register(ExprBellShakingTime.class, Object.class, "shaking (time|ticks)", "blocks");
+        register(ExprBellShakingTime.class, Object.class, "shaking (time|:ticks)", "blocks");
     }
 
     boolean useTicks;
@@ -45,11 +46,10 @@ public class ExprBellShakingTime extends SimplePropertyExpression<Block, Object>
     @Override
     @Nullable
     public Object convert(Block block) {
-        // todo: make all deprecated timespan method calls safe
         if (block.getState() instanceof Bell bell) {
             int ticks = bell.getShakingTicks();
             if (useTicks) return ticks;
-            else return Timespan.fromTicks(ticks);
+            else return fromTicks(ticks);
         }
         return null;
     }

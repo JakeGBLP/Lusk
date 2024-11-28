@@ -68,7 +68,7 @@ public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the blockface from " + (event != null ? fromExpression.toString(event, debug) : "") + " to " + (event != null ? toExpression.toString(event, debug) : "");
+        return "the blockface from " + fromExpression.toString(event, debug) + " to " + toExpression.toString(event, debug);
     }
 
     @SuppressWarnings("unchecked")

@@ -7,12 +7,13 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import org.bukkit.block.Bell;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
 
 @Name("Bell - Resonating Time/Ticks")
 @Description("""
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Object> {
     static {
-        register(ExprBellResonatingTime.class, Object.class, "resonating (time|ticks)", "blocks");
+        register(ExprBellResonatingTime.class, Object.class, "resonating (time|:ticks)", "blocks");
     }
 
     boolean useTicks;
@@ -48,13 +49,13 @@ public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Obje
         if (block.getState() instanceof Bell bell) {
             int ticks = bell.getResonatingTicks();
             if (useTicks) return ticks;
-            else return Timespan.fromTicks(ticks);
+            else return fromTicks(ticks);
         }
         return null;
     }
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "resonating "+(useTicks?"ticks":"time");
+        return "resonating " + (useTicks ? "ticks" : "time");
     }
 }

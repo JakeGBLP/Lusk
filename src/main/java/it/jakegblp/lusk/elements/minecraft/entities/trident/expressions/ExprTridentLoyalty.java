@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprTridentLoyalty extends SimpleExpression<Integer> {
     static {
-        // TODO: PROPERTY EXPR
+        // TODO: simple PROPERTY EXPR, plural
         Skript.registerExpression(ExprTridentLoyalty.class, Integer.class, ExpressionType.PROPERTY,
                 "[the] [trident] loyalty [level] of %projectile%",
                 "%projectile%'[s] [trident] loyalty [level]");

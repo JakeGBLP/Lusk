@@ -41,8 +41,7 @@ public class EffRingBell extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        boolean e = event != null;
-        return "make " + (e ? entityExpression.toString(event, debug) : "") + " ring " + (e ? blockExpression.toString(event, debug) : "") + " from " + (e ? blockFaceExpression.toString(event, debug) : "");
+        return "make " + entityExpression.toString(event, debug) + " ring " + blockExpression.toString(event, debug) + " from " + blockFaceExpression.toString(event, debug);
     }
 
     @Override

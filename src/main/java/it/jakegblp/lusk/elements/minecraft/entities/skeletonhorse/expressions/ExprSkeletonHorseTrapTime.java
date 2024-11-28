@@ -18,6 +18,9 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
+import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
+
 @Name("Skeleton Horse - Trap Time")
 @Description("Returns the trap time of the skeleton horse.")
 @Examples({"on damage of skeleton horse:\n\tbroadcast skeleton horse trap time of victim"})
@@ -25,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
     static {
-        // TODO: PROPERTY EXPR
+        // TODO: simple PROPERTY EXPR, plural, time and ticks
         Skript.registerExpression(ExprSkeletonHorseTrapTime.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] skeleton horse trap[ped] time of %livingentity%",
                 "%livingentity%'[s] skeleton horse trap[ped] time");
@@ -43,7 +46,7 @@ public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
     protected Timespan @NotNull [] get(@NotNull Event e) {
         LivingEntity entity = entityExpression.getSingle(e);
         if (entity instanceof SkeletonHorse skeletonHorse) {
-            return new Timespan[]{Timespan.fromTicks(skeletonHorse.getTrapTime())};
+            return new Timespan[]{fromTicks(skeletonHorse.getTrapTime())};
         }
         return new Timespan[0];
     }
@@ -57,7 +60,7 @@ public class ExprSkeletonHorseTrapTime extends SimpleExpression<Timespan> {
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Timespan timespan)
             if (entityExpression.getSingle(e) instanceof SkeletonHorse skeletonHorse)
-                skeletonHorse.setTrapTime((int) timespan.getTicks());
+                skeletonHorse.setTrapTime((int) getTicks(timespan));
     }
 
 

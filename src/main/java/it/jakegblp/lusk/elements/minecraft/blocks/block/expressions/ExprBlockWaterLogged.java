@@ -1,13 +1,11 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.block.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -19,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 import static it.jakegblp.lusk.utils.Constants.STATE_OR_PROPERTY;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
 
 @Name("Entity - Waterlogged Property")
 @Description("Returns whether or not a block is waterlogged.\nCan be set.")
@@ -27,11 +26,7 @@ import static it.jakegblp.lusk.utils.Constants.STATE_OR_PROPERTY;
 @SuppressWarnings("unused")
 public class ExprBlockWaterLogged extends SimpleExpression<Boolean> {
     static {
-        Skript.registerExpression(ExprBlockWaterLogged.class, Boolean.class, ExpressionType.PROPERTY,
-                "[the] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY+" of %blocks/blockstates%",
-                "%blocks/blockstates%'[s] [is] water[ |-]log[ged] "+STATE_OR_PROPERTY,
-                "whether %blocks/blockstates% is water[ |-]logged [or not]",
-                "whether [or not] %blocks/blockstates% is water[ |-]logged");
+        registerVerbosePropertyExpression(ExprBlockWaterLogged.class, Boolean.class, "[block]","[is] water[ |-]log[ged]","blocks/blockstates");
     }
 
     private Expression<Object> blockExpression;

@@ -19,6 +19,9 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
+import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
+
 @Name("Brewing - Time")
 @Description("Returns the brewing time of a Brewing Stand (the time before the brewing is over, 0 seconds = finished, 20 seconds = just started. Can be set to a longer time, progress won't be displayed until it reaches 20 seconds).\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
@@ -26,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprBrewingTime extends SimpleExpression<Timespan> {
     static {
+        // todo: simple property expression, plural, utils
         Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] brewing time of %block%",
                 "%block%'[s] brewing time");
@@ -45,7 +49,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
         if (block != null) {
             BlockState blockState = block.getState();
             if (blockState instanceof BrewingStand brewingStand) {
-                return new Timespan[]{Timespan.fromTicks(brewingStand.getBrewingTime())};
+                return new Timespan[]{fromTicks(brewingStand.getBrewingTime())};
             }
         }
         return new Timespan[0];
@@ -61,7 +65,7 @@ public class ExprBrewingTime extends SimpleExpression<Timespan> {
         if (delta[0] instanceof Timespan timespan) {
             Block block = blockExpression.getSingle(e);
             if (block != null && block.getState() instanceof BrewingStand brewingStand) {
-                brewingStand.setBrewingTime(((int) timespan.getTicks()));
+                brewingStand.setBrewingTime(((int) getTicks(timespan)));
                 brewingStand.update(true);
             }
         }

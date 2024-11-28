@@ -19,6 +19,9 @@ import org.bukkit.event.entity.EntityEnterLoveModeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
+import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
+
 @Name("Entity - Love Duration")
 @Description("Returns the love duration of an animal.\n Can be set.")
 @Examples({"on love:\n\tbroadcast the love duration", "broadcast love duration of target"})
@@ -26,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
     static {
-        // todo: work around timespan deprecation, make plural, property expression?, utils
+        // todo: make plural, property expression?, utils
         Skript.registerExpression(ExprEntityLoveDuration.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] love duration [of %entity%]",
                 "%entity%'[s] love duration");
@@ -51,11 +54,11 @@ public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
     @Override
     protected Timespan @NotNull [] get(@NotNull Event e) {
         if (event && entityExpression == null) {
-            return new Timespan[]{Timespan.fromTicks(((EntityEnterLoveModeEvent) e).getTicksInLove())};
+            return new Timespan[]{fromTicks(((EntityEnterLoveModeEvent) e).getTicksInLove())};
         } else {
             Entity entity = entityExpression.getSingle(e);
             if (entity instanceof Animals animal) {
-                return new Timespan[]{Timespan.fromTicks(animal.getLoveModeTicks())};
+                return new Timespan[]{fromTicks(animal.getLoveModeTicks())};
             }
         }
         return new Timespan[0];
@@ -71,10 +74,9 @@ public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
         if (delta[0] instanceof Timespan timespan)
             if (entityExpression != null)
                 if (entityExpression.getSingle(e) instanceof Animals animal)
-                    animal.setLoveModeTicks((int) timespan.getTicks());
-
+                    animal.setLoveModeTicks((int) getTicks(timespan));
                 else if (e instanceof EntityEnterLoveModeEvent entityEnterLoveModeEvent)
-                    entityEnterLoveModeEvent.setTicksInLove((int) timespan.getTicks());
+                    entityEnterLoveModeEvent.setTicksInLove((int) getTicks(timespan));
     }
 
     @Override

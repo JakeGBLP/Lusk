@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprBrewingFuelLevel extends SimpleExpression<Integer> {
     static {
+        // todo: simple property expression, plural, utils
         Skript.registerExpression(ExprBrewingFuelLevel.class, Integer.class, ExpressionType.PROPERTY,
                 "[the] brewing fuel level of %block%",
                 "%block%'[s] brewing fuel level");

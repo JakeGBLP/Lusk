@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprDolphinHasFishState extends SimpleExpression<Boolean> {
     static {
+        // todo: simple property expression, verbose util method, util, plural
         Skript.registerExpression(ExprDolphinHasFishState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] dolphin [has] been fed fish state of %entity%",
                 "%entity%'[s] dolphin [has] been fed fish state",

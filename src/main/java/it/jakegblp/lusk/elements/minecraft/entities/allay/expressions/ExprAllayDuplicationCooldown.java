@@ -18,6 +18,9 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
+import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
+
 @Name("Allay - Duplication Cooldown")
 @Description("Returns the duplication cooldown of an Allay.\nCan be set.")
 @Examples({"broadcast duplication cooldown of target"})
@@ -43,7 +46,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
     protected Timespan @NotNull [] get(@NotNull Event e) {
         Entity entity = entityExpression.getSingle(e);
         if (entity instanceof Allay allay) {
-            return new Timespan[]{Timespan.fromTicks(allay.getDuplicationCooldown())};
+            return new Timespan[]{fromTicks(allay.getDuplicationCooldown())};
         }
         return new Timespan[0];
     }
@@ -57,7 +60,7 @@ public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (entityExpression.getSingle(e) instanceof Allay allay) {
             if (mode == Changer.ChangeMode.SET && delta[0] instanceof Timespan timespan) {
-                allay.setDuplicationCooldown(timespan.getTicks());
+                allay.setDuplicationCooldown(getTicks(timespan));
             } else allay.resetDuplicationCooldown();
         }
 

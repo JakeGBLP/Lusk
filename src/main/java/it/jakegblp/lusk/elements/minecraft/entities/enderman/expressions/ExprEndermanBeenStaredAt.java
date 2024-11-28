@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprEndermanBeenStaredAt extends SimpleExpression<Boolean> {
     static {
+        // todo: simple property expression, verbose util method, util, plural, livingentity
         Skript.registerExpression(ExprEndermanBeenStaredAt.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] enderman [has] been stared at state of %entity%",
                 "%entity%'[s] enderman [has] been stared at state",

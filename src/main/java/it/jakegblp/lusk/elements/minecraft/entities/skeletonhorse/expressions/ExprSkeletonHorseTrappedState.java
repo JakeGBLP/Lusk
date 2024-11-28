@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprSkeletonHorseTrappedState extends SimpleExpression<Boolean> {
     static {
+        // todo: simple property expression, verbose util method, util, plural, livingentity
         Skript.registerExpression(ExprSkeletonHorseTrappedState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] skeleton horse [is] trapped state of %entity%",
                 "%entity%'[s] skeleton horse [is] trapped state",

@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprEndermanHeldBlock extends SimpleExpression<BlockData> {
     static {
+        // todo: simple property expression, util, plural, livingentity, fix whatever is the acceptChange method here
         Skript.registerExpression(ExprEndermanHeldBlock.class, BlockData.class, ExpressionType.PROPERTY,
                 "[the] [enderman] (held|carried) block[[ |-]data] of %livingentity%",
                 "%livingentity%'[s] [enderman] (held|carried) block[[ |-]data]");

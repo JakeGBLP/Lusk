@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprDolphinMoisture extends SimpleExpression<Integer> {
     static {
+        // todo: simple property expression, util, plural, livingentity
         Skript.registerExpression(ExprDolphinMoisture.class, Integer.class, ExpressionType.PROPERTY,
                 "[the] dolphin moist(ure|ness) of %entity%",
                 "%entity%'[s] dolphin moist(ure|ness)");
