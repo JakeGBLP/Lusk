@@ -22,21 +22,23 @@ import org.jetbrains.annotations.Nullable;
 public class ExprNewAnvilGui extends SimpleExpression<AnvilGuiWrapper> {
     static {
         Skript.registerExpression(ExprNewAnvilGui.class, AnvilGuiWrapper.class, ExpressionType.COMBINED,
-                "[a] new anvil gui [copying %-anvilguiinventory%]");
+                "[a] new anvil gui [clone:(copying|cloning|from) %-anvilguiinventory%]");
     }
 
     private Expression<AnvilGuiWrapper> anvilGuiWrapperExpression;
+    private boolean clone;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
         anvilGuiWrapperExpression = (Expression<AnvilGuiWrapper>) expressions[0];
+        clone = parseResult.hasTag("clone");
         return true;
     }
 
     @Override
     protected AnvilGuiWrapper @NotNull [] get(@NotNull Event e) {
-        if (anvilGuiWrapperExpression != null) {
+        if (clone && anvilGuiWrapperExpression != null) {
             AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(e);
             if (anvilGuiWrapper != null)
                 return new AnvilGuiWrapper[]{new AnvilGuiWrapper(anvilGuiWrapper)};
@@ -56,6 +58,6 @@ public class ExprNewAnvilGui extends SimpleExpression<AnvilGuiWrapper> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "a new anvil gui" + (anvilGuiWrapperExpression == null ? "" : " copying " + anvilGuiWrapperExpression.toString(e, debug));
+        return "a new anvil gui" + (clone ? " copying " + anvilGuiWrapperExpression.toString(e, debug) : "");
     }
 }
