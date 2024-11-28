@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprCommandBlockCommand extends SimpleExpression<String> {
     static {
-        // TODO: PROPERTY EXPR
+        // TODO: simple PROPERTY EXPR
         Skript.registerExpression(ExprCommandBlockCommand.class, String.class, ExpressionType.PROPERTY,
                 "[the] [command block] command of %object%",
                 "%object%'[s] [command block] command");

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprCatLookingUpState extends SimpleExpression<Boolean> {
     static {
-        // todo: propertyexpression, utils?, plural
+        // todo: verbose propertyexpression, utils?, plural
         Skript.registerExpression(ExprCatLookingUpState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] cat [is] looking up state of %entity%",
                 "%entity%'[s] cat [is] looking up state",
@@ -46,7 +46,7 @@ public class ExprCatLookingUpState extends SimpleExpression<Boolean> {
     }
 
     @Override
-    public Class<?> @NotNull [] acceptChange(Changer.@NotNull ChangeMode mode) {
+    public Class<?> @Nullable [] acceptChange(Changer.@NotNull ChangeMode mode) {
         return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
     }
 

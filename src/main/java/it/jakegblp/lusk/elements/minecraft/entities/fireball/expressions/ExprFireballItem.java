@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprFireballItem extends SimpleExpression<ItemStack> {
     static {
-        // TODO: PROPERTY EXPR
+        // TODO: simple PROPERTY EXPR, plural
         Skript.registerExpression(ExprFireballItem.class, ItemStack.class, ExpressionType.PROPERTY,
                 "[the] [displayed] fireball item of %entity%",
                 "%entity%'[s] [displayed] fireball item");

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3")
 @SuppressWarnings("unused")
 public class ExprHorseDomesticationLevel extends SimpleExpression<Integer> {
-    static {// TODO: PROPERTY EXPR
+    static {// TODO: simple PROPERTY EXPR, livingentity, plural
         Skript.registerExpression(ExprHorseDomesticationLevel.class, Integer.class, ExpressionType.PROPERTY,
                 "[the] [max:max[imum]] horse domestication level of %entity%",
                 "%entity%'[s] [max:max[imum]] horse domestication level");

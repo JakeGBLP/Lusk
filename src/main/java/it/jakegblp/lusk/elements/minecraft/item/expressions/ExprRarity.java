@@ -20,7 +20,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
 @Since("1.0.0, 1.2 (ItemRarity)")
 @SuppressWarnings("unused")
 public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
-    //todo: test
+    //todo: add tests
     static {
         if (HAS_SPIGOT_ITEM_RARITY) {
             register(ExprRarity.class, ItemRarity.class, "item rarity", "itemtypes");

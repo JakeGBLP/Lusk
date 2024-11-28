@@ -58,4 +58,8 @@ public class DeprecationUtils {
     public static long getTicks(Timespan timespan) {
         return GET_TICKS.apply(timespan);
     }
+
+    public static long getMilliseconds(Timespan timespan) {
+        return getTicks(timespan) * 50;
+    }
 }

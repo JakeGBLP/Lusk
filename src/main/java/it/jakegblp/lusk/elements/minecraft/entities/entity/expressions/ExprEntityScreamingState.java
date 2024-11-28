@@ -28,7 +28,7 @@ public class ExprEntityScreamingState extends SimpleExpression<Boolean> {
         // todo: make plural, make util method?
         Skript.registerExpression(ExprEntityScreamingState.class, Boolean.class, ExpressionType.PROPERTY,
                 "[the] [is] screaming state of %livingentities%",
-                "%entity%'[s] [is] screaming state",
+                "%livingentities%'[s] [is] screaming state",
                 "whether %livingentities% is screaming [or not]",
                 "whether [or not] %livingentities% is screaming");
     }
@@ -43,14 +43,14 @@ public class ExprEntityScreamingState extends SimpleExpression<Boolean> {
 
     @Override
     protected Boolean @NotNull [] get(@NotNull Event e) {
-        return (Boolean[]) livingEntityExpression.stream(e).map(entity -> {
+        return livingEntityExpression.stream(e).map(entity -> {
             if (entity instanceof Goat goat) {
                 return goat.isScreaming();
             } else if (entity instanceof Enderman enderman) {
                 return enderman.isScreaming();
             }
             return false;
-        }).toArray();
+        }).toArray(Boolean[]::new);
     }
 
     @Override

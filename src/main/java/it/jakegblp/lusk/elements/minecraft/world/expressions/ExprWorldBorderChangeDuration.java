@@ -10,10 +10,11 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
-import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.getMilliseconds;
 
 @Name("WorldBorder - Change Duration")
 @Description("Returns the duration of the change in the World Border Start Change event.\nCan be set.\nRequires Paper.")
@@ -51,8 +52,7 @@ public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Timespan timespan)
-            // todo: same old timespan debate
-            ((WorldBorderBoundsChangeEvent) e).setDuration(Constants.skriptVersion.getMinor() < 9 ? timespan.getMilliSeconds() : timespan.getAs(Timespan.TimePeriod.MILLISECOND));
+            ((WorldBorderBoundsChangeEvent) e).setDuration(getMilliseconds(timespan));
     }
 
     @Override

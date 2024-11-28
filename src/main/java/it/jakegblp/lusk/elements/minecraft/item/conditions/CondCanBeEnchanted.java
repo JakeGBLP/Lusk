@@ -12,8 +12,11 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 
 @Name("Item - Can Be Enchanted with")
 @Description("Checks if an item can be enchanted with an Enchantment.\nThis does not check if the enchantment conflicts with any enchantments already applied on the item.")
@@ -22,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class CondCanBeEnchanted extends Condition {
     static {
+        // todo: plural, property condition?
         Skript.registerCondition(CondCanBeEnchanted.class,
                 "%itemtype% can be enchanted with %enchantment%",
                 "%itemtype% can('|no)t be enchanted with %enchantment%");
@@ -41,17 +45,15 @@ public class CondCanBeEnchanted extends Condition {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        boolean e = event != null;
-        return (e ? item.toString(event, debug) : "") + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + (e ? enchantment.toString(event, debug) : "");
+        return item.toString(event, debug) + " can" + (isNegated() ? "'t" : "") + " be enchanted with " + enchantment.toString(event, debug);
     }
 
     @Override
     public boolean check(@NotNull Event event) {
         Enchantment e = enchantment.getSingle(event);
         if (e == null) return false;
-        ItemType i = item.getSingle(event);
-        if (i == null) return false;
-        // todo: null check
-        return isNegated() ^ e.canEnchantItem(i.getRandom());
+        ItemStack itemStack = getNullableItemStack(item.getSingle(event));
+        if (itemStack == null) return false;
+        return isNegated() ^ e.canEnchantItem(itemStack);
     }
 }

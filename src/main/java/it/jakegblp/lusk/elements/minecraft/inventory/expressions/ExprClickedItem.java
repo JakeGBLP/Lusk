@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"set clicked itemtype to stone"})
 @Since("1.3")
 public class ExprClickedItem extends EventValueExpression<ItemStack> {
-	// todo: implement this for future events!
+	// todo: implement this for future events
 	static {
 		register(ExprClickedItem.class, ItemStack.class, "[event-|the ][clicked ]item[stack|type]");
 	}

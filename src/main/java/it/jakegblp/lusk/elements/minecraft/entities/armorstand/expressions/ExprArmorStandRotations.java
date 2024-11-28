@@ -29,7 +29,7 @@ import static it.jakegblp.lusk.utils.Constants.ARMORS_STAND_PREFIX;
 @Since("1.0.2")
 @SuppressWarnings("unused")
 public class ExprArmorStandRotations extends SimpleExpression<Vector> {
-    // todo: turn into property expression and use verbose property expression, use different angles, plural
+    // todo: turn into property expression, use different angles, plural
     static {
         Skript.registerExpression(ExprArmorStandRotations.class, Vector.class, ExpressionType.PROPERTY,
                 "[the] " + ARMORS_STAND_PREFIX + " (body|torso) rotation of %livingentity%",

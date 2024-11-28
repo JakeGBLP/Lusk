@@ -29,7 +29,7 @@ import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
 @SuppressWarnings("unused")
 public class ExprEntityLoveDuration extends SimpleExpression<Timespan> {
     static {
-        // todo: make plural, property expression?, utils
+        // todo: make plural, property expression?, utils, livingentity
         Skript.registerExpression(ExprEntityLoveDuration.class, Timespan.class, ExpressionType.PROPERTY,
                 "[the] love duration [of %entity%]",
                 "%entity%'[s] love duration");

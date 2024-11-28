@@ -38,8 +38,7 @@ public class ExprEntityVariant extends SimpleExpression<Object> {
 
     static {
         // TODO: PROPERTY EXPR?
-        // todo: make plural, find better way to make this work,
-        //  return not as string, work around deprecation (registries!)
+        // todo: make plural
         Skript.registerExpression(ExprEntityVariant.class, Object.class, ExpressionType.PROPERTY,
                 "[the] entity variant of %livingentity%",
                 "%livingentity%'[s] entity variant");

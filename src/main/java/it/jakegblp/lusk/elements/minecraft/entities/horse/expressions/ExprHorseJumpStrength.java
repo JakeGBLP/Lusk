@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprHorseJumpStrength extends SimpleExpression<Double> {
     static {
-        // TODO: PROPERTY EXPR
+        // TODO: simple PROPERTY EXPR, livingentity, plural
         Skript.registerExpression(ExprHorseJumpStrength.class, Double.class, ExpressionType.PROPERTY,
                 "[the] horse jump[ing] (strength|force) of %entity%",
                 "%entity%'[s] horse jump[ing] (strength|force)");

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 @RequiredPlugins("Paper")
 @SuppressWarnings("unused")
 public class EffCancelComposterRising extends Effect {
-    // todo: fuse all cancel effects?
+    // todo: merge all cancel effects?
     static {
         Skript.registerEffect(EffCancelComposterRising.class, "[:un]cancel [the] composter [level] rise");
     }
