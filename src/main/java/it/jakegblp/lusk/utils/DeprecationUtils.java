@@ -4,9 +4,39 @@ import ch.njol.skript.util.Timespan;
 import org.bukkit.attribute.Attribute;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_SCALE_ATTRIBUTE;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.function.Function;
+
+import static it.jakegblp.lusk.utils.Constants.*;
 
 public class DeprecationUtils {
+
+    static {
+        Function<Timespan, Long> GET_TICKS_LOCAL;
+        if (HAS_TIMESPAN_GET_AS) {
+            GET_TICKS_LOCAL = timespan -> timespan.getAs(Timespan.TimePeriod.TICK);
+        } else {
+            try {
+                Method method = Timespan.class.getMethod("getTicks");
+                GET_TICKS_LOCAL = timespan -> {
+                    try {
+                        return (Long) method.invoke(timespan);
+                    } catch (IllegalAccessException | InvocationTargetException ignored) {
+
+                    }
+                    return null;
+                };
+            } catch (NoSuchMethodException ignored) {
+                GET_TICKS_LOCAL = null;
+            }
+        }
+        GET_TICKS = GET_TICKS_LOCAL;
+    }
+
+    public static final Function<Timespan, Long> GET_TICKS;
+
+
     @Nullable
     public static Attribute getScaleAttribute() {
         try {
@@ -18,8 +48,14 @@ public class DeprecationUtils {
         return null;
     }
 
-    //todo: implement to allow pre 2.7/8 to use timespans when lusk has 2.10 dependency
+    /**
+     * Replaces deprecated methods and avoid reflection for pre-TimePeriod implementation.
+     */
     public static Timespan fromTicks(long ticks) {
-        return null;
+        return new Timespan(ticks * 50L);
+    }
+
+    public static long getTicks(Timespan timespan) {
+        return GET_TICKS.apply(timespan);
     }
 }

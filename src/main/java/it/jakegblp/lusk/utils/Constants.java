@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static ch.njol.skript.Skript.*;
+import static ch.njol.skript.Skript.methodExists;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
 
@@ -61,6 +62,7 @@ public class Constants {
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             SKRIPT_2_9 = skriptVersion.isGreaterThanOrEqualTo(parseVersion("2.9")),
+            HAS_TIMESPAN_GET_AS = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
