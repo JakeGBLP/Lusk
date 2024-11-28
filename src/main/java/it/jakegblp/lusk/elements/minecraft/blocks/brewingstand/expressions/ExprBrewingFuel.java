@@ -44,7 +44,7 @@ public class ExprBrewingFuel extends SimplePropertyExpression<Block, ItemType> {
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET -> new Class[] { ItemStack.class };
+            case SET -> new Class[] { ItemType.class };
             case DELETE, RESET -> new Class[0];
             default -> null;
         };

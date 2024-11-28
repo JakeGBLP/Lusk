@@ -9,7 +9,6 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.BlockUtils.getBrewingIngredient;
@@ -44,7 +43,7 @@ public class ExprBrewingIngredient extends SimplePropertyExpression<Block, ItemT
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET -> new Class[] { ItemStack.class };
+            case SET -> new Class[] { ItemType.class };
             case DELETE, RESET -> new Class[0];
             default -> null;
         };
@@ -52,7 +51,7 @@ public class ExprBrewingIngredient extends SimplePropertyExpression<Block, ItemT
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        ItemType fuel = (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof ItemType item) ? item : null;
-        getExpr().stream(event).forEach(block -> setBrewingIngredient(block,fuel));
+        ItemType ingredient = (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof ItemType item) ? item : null;
+        getExpr().stream(event).forEach(block -> setBrewingIngredient(block,ingredient));
     }
 }
