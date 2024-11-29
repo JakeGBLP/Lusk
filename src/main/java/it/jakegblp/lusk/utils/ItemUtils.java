@@ -99,9 +99,7 @@ public class ItemUtils {
     @Nullable
     public static ItemStack getSingleItemTypeToItemStack(@Nullable Expression<ItemType> expression, @NotNull Event event) {
         if (expression == null) return null;
-        ItemType itemType = expression.getSingle(event);
-        if (itemType == null) return null;
-        return itemType.getRandom();
+        return getNullableItemStack(expression.getSingle(event));
     }
 
     @NullMarked
@@ -109,7 +107,6 @@ public class ItemUtils {
         EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
         for (EnchantmentType enchantmentType : enchantmentTypes) {
             if (enchantmentType.getType() != null) {
-                itemType.clearEnchantments();
                 enchantmentStorageMeta.addStoredEnchant(enchantmentType.getType(), enchantmentType.getLevel(), true);
             }
         }
@@ -119,6 +116,7 @@ public class ItemUtils {
     @NullMarked
     public static void removeStoredEnchantments(ItemType itemType, EnchantmentType... enchantmentTypes) {
         EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
+        if (!enchantmentStorageMeta.hasStoredEnchants()) return;
         for (EnchantmentType enchantmentType : enchantmentTypes) {
             if (enchantmentType.getType() != null) {
                 enchantmentStorageMeta.removeStoredEnchant(enchantmentType.getType());
@@ -129,12 +127,16 @@ public class ItemUtils {
 
     @NotNull
     public static EnchantmentType[] getStoredEnchantments(@NotNull ItemType itemType) {
-        return ((EnchantmentStorageMeta) itemType.getItemMeta())
-                .getStoredEnchants()
-                .entrySet()
-                .stream()
-                .map(entry -> new EnchantmentType(entry.getKey(), entry.getValue()))
-                .toArray(EnchantmentType[]::new);
+        if (itemType.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta
+                && enchantmentStorageMeta.hasStoredEnchants()) {
+            return enchantmentStorageMeta
+                    .getStoredEnchants()
+                    .entrySet()
+                    .stream()
+                    .map(entry -> new EnchantmentType(entry.getKey(), entry.getValue()))
+                    .toArray(EnchantmentType[]::new);
+        }
+        return new EnchantmentType[0];
     }
 
     @NullMarked
