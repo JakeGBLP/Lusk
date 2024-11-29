@@ -4,52 +4,64 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
-import org.jetbrains.annotations.Nullable;
 
-public class BlockDataWrapper {
+public class BlockWrapper {
     private final Block block;
+    private final BlockData blockData;
 
-    public BlockDataWrapper(Block block) {
+    public BlockWrapper(Block block) {
         this.block = block;
+        this.blockData = null;
     }
 
-    public BlockDataWrapper(BlockState blockState) {
+    public BlockWrapper(BlockState blockState) {
         this.block = blockState.getBlock();
+        this.blockData = null;
     }
 
-    @Nullable
-    public static BlockDataWrapper create(Object object) {
-        if (object instanceof Block) {
-            return new BlockDataWrapper((Block) object);
-        } else if (object instanceof BlockState) {
-            return new BlockDataWrapper((BlockState) object);
+    public BlockWrapper(Object object) {
+        if (object instanceof Block aBlock) {
+            this.block = aBlock;
+            this.blockData = null;
+        } else if (object instanceof BlockState aBlockState) {
+            this.block = aBlockState.getBlock();
+            this.blockData = null;
+        } else if (object instanceof BlockData aBlockData) {
+            this.block = null;
+            this.blockData = aBlockData;
+        } else {
+            this.block = null;
+            this.blockData = null;
         }
-        return null;
     }
 
     public Block getBlock() {
         return block;
     }
 
+    public boolean hasOnlyBlockData() {
+        return block == null && blockData != null;
+    }
+
     public BlockData getBlockData() {
-        return block.getBlockData();
+        return hasOnlyBlockData() ? blockData : block.getBlockData();
     }
 
     public void setBlockData(BlockData blockData) {
-        block.setBlockData(blockData);
+        if (block != null) {
+            block.setBlockData(blockData);
+        }
     }
 
     /**
      * Sets whether this block is waterlogged.
      * @param waterLog whether to make this block waterlogged or not
      */
-    public boolean setWaterLogged(boolean waterLog) {
+    public void setWaterLogged(boolean waterLog) {
         if (getBlockData() instanceof Waterlogged waterlogged) {
             waterlogged.setWaterlogged(waterLog);
             setBlockData(waterlogged);
-            return true;
         }
-        return false;
     }
 
     /**

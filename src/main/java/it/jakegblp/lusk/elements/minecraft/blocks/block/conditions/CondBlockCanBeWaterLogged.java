@@ -5,26 +5,22 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.api.wrappers.BlockDataWrapper;
+import it.jakegblp.lusk.api.wrappers.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Block - can Be Waterlogged")
-@Description("Checks if a block can be waterlogged.")
-@Examples({"if event-block can be waterlogged:\n\twaterlog event-block"})
+@Description("Checks whether or not one or more blocks, blockstates or blockdatas can be waterlogged.")
+@Examples({"if event-block can be waterlogged:\n\tbroadcast \"%event-block% can be waterlogged!\""})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class CondBlockCanBeWaterLogged extends PropertyCondition<Object> {
     static {
-        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN,"be water[ |-]logged", "blocks/blockstates");
+        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN,"be water[ |-]logged", "blocks/blockstates/blockdatas");
     }
 
     @Override
     public boolean check(Object o) {
-        BlockDataWrapper blockDataWrapper = BlockDataWrapper.create(o);
-        if (blockDataWrapper != null) {
-            return blockDataWrapper.canBeWaterlogged();
-        }
-        return false;
+        return new BlockWrapper(o).canBeWaterlogged();
     }
 
     @Override

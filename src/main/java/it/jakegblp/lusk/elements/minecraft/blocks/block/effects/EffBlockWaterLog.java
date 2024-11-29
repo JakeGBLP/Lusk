@@ -9,14 +9,14 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.api.wrappers.BlockDataWrapper;
+import it.jakegblp.lusk.api.wrappers.BlockWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Block - Water Log")
-@Description("")
-@Examples({""})
+@Description("Changes whether one or more blocks or blockstates are waterlogged.")
+@Examples({"waterlog target block"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class EffBlockWaterLog extends Effect {
@@ -44,9 +44,6 @@ public class EffBlockWaterLog extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        BlockDataWrapper blockDataWrapper = BlockDataWrapper.create(blockExpression.getSingle(event));
-        if (blockDataWrapper != null) {
-            blockDataWrapper.setWaterLogged(waterlog);
-        }
+        new BlockWrapper(blockExpression.getSingle(event)).setWaterLogged(waterlog);
     }
 }
