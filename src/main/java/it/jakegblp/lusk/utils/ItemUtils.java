@@ -141,17 +141,24 @@ public class ItemUtils {
 
     @NullMarked
     public static void setStoredEnchantments(ItemType itemType,  EnchantmentType @Nullable ... enchantmentTypes) {
-        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemType.getItemMeta();
-        if (enchantmentStorageMeta.hasStoredEnchants()) {
-            enchantmentStorageMeta.getStoredEnchants().keySet().forEach(enchantmentStorageMeta::removeStoredEnchant);
-        }
-        if (enchantmentTypes != null) {
-            for (EnchantmentType enchantmentType : enchantmentTypes) {
-                if (enchantmentType.getType() != null) {
-                    enchantmentStorageMeta.addStoredEnchant(enchantmentType.getType(), enchantmentType.getLevel(), true);
+        if (itemType.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta
+                && enchantmentStorageMeta.hasStoredEnchants()) {
+            if (enchantmentStorageMeta.hasStoredEnchants()) {
+                enchantmentStorageMeta.getStoredEnchants().keySet().forEach(enchantmentStorageMeta::removeStoredEnchant);
+            }
+            if (enchantmentTypes != null) {
+                for (EnchantmentType enchantmentType : enchantmentTypes) {
+                    if (enchantmentType.getType() != null) {
+                        enchantmentStorageMeta.addStoredEnchant(enchantmentType.getType(), enchantmentType.getLevel(), true);
+                    }
                 }
             }
         }
+    }
+
+    public static boolean hasStoredEnchantments(@NotNull ItemType itemType) {
+        return itemType.getItemMeta() instanceof EnchantmentStorageMeta enchantmentStorageMeta
+                && enchantmentStorageMeta.hasStoredEnchants();
     }
 
     public static EnchantmentType[] asEnchantmentTypes(Object[] objects) {
