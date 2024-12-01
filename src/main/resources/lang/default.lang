@@ -8,6 +8,7 @@ types:
     pose: pose¦s @a
     spawncategory: spawn categor¦y¦ies @a
     boundingbox: bounding box¦es @a
+    eulerangle: euler angle¦s @a
     cauldronchangereason: cauldron change reason¦s
     enderdragonphase: ender dragon phase¦s @a
     blockface: block face¦s @a
