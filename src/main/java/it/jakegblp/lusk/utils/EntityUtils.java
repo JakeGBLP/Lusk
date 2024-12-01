@@ -1,13 +1,18 @@
 package it.jakegblp.lusk.utils;
 
+import it.jakegblp.lusk.api.enums.BodyPart;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.VectorUtils.*;
 
 public class EntityUtils {
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
@@ -148,4 +153,33 @@ public class EntityUtils {
             }
         }
     }
+
+    @NotNull
+    public static Vector getArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart) {
+        return toDegreesVector(switch (bodyPart) {
+            case HEAD -> armorStand.getHeadPose();
+            case BODY -> armorStand.getBodyPose();
+            case LEFT_ARM -> armorStand.getLeftArmPose();
+            case RIGHT_ARM -> armorStand.getRightArmPose();
+            case LEFT_LEG -> armorStand.getLeftLegPose();
+            case RIGHT_LEG -> armorStand.getRightLegPose();
+        });
+    }
+
+    public static void setArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart, Vector vector) {
+        setArmorStandRotation(armorStand,bodyPart,toRadiansEulerAngle(vector));
+    }
+
+    public static void setArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart, EulerAngle rotation) {
+        switch (bodyPart) {
+            case HEAD -> armorStand.setHeadPose(rotation);
+            case BODY -> armorStand.setBodyPose(rotation);
+            case LEFT_ARM -> armorStand.setLeftArmPose(rotation);
+            case RIGHT_ARM -> armorStand.setRightArmPose(rotation);
+            case LEFT_LEG -> armorStand.setLeftLegPose(rotation);
+            case RIGHT_LEG -> armorStand.setRightLegPose(rotation);
+        }
+    }
+    //todo: add can pickup items for pre 2.8
+    //todo: add isImmuneToZombification for hoglins and piglins
 }

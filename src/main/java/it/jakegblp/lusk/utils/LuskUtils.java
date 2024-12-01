@@ -4,16 +4,12 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
-import ch.njol.util.VectorMath;
 import com.vdurmont.semver4j.Semver;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,8 +28,8 @@ public class LuskUtils {
 
     /**
      * Uses MiniMessage and MessageFormat.
-     * @param format Minimessage format.
-     * @param args MessageFormat arguments.
+     * @param format Minimessage format
+     * @param args MessageFormat arguments
      */
     public static void consoleLog(String format, Object... args) {
         send(Bukkit.getConsoleSender(), format, args);
@@ -43,13 +39,19 @@ public class LuskUtils {
      * Uses MiniMessage and MessageFormat.
      * For console logging use {@link #consoleLog(String, Object...) the console log method}
      * @param sender A CommandSender
-     * @param format Minimessage format.
-     * @param args MessageFormat arguments.
+     * @param format Minimessage format
+     * @param args MessageFormat arguments
      */
     public static void send(CommandSender sender, String format, Object... args) {
         sender.sendRichMessage(LUSK_PREFIX + MessageFormat.format(format, args));
     }
 
+    /**
+     * Checks whether a player is crawling; this takes into account the scale attribute since it modifies the
+     * size of the player and makes the calculations done in this method incorrect.
+     * @param player the player to check for
+     * @return whether the player is crawling
+     */
     public static boolean isCrawling(Player player) {
         double height = player.getHeight();
         Attribute scaleAttribute = getScaleAttribute();
@@ -92,6 +94,9 @@ public class LuskUtils {
         return xp;
     }
 
+    /**
+     * @return the indices of the non-null values in the given list.
+     */
     public static int[] getNotNullIndices(List<?> list) {
         return IntStream.range(0, list.size())
                 .filter(i -> list.get(i) != null)
@@ -137,50 +142,5 @@ public class LuskUtils {
                 "whether [the] " + prefix + "%" + fromType + "% " + property + " [or not]"
         };
         Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
-    }
-
-
-    //todo: remake these
-    public static Vector toBukkitVector(EulerAngle angle) {
-        double x = angle.getX();
-        double y = angle.getY();
-        double z = angle.getZ();
-        return new Vector(x, y, z);
-    }
-
-    public static EulerAngle toEulerAngle(Vector vector) {
-        double x = vector.getX();
-        double y = vector.getY();
-        double z = vector.getZ();
-        return new EulerAngle(x, y, z);
-    }
-
-    //todo: remake these
-    public static void setLeftArmRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setLeftArmPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setRightArmRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setRightArmPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setLeftLegRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setLeftLegPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setRightLegRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setRightLegPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setBodyRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setBodyPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setHeadRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setHeadPose(LuskUtils.toEulerAngle(vector));
-    }
-
-    public static void setFullRotation(ArmorStand armorStand, Vector vector) {
-        armorStand.setRotation(VectorMath.notchYaw(VectorMath.getYaw(vector)), VectorMath.notchPitch(VectorMath.getPitch(vector)));
     }
 }
