@@ -43,14 +43,16 @@ public class EvtArmorStandManipulate extends SkriptEvent {
                             
                             `event-equipmentslot` is the clicked slot of the armor stand, to get the hand use the Used Hand expression
                             `event-entity` is the armor stand
-                                                        
+                            
                             `past event-item` is the item the armor stand is holding
                             `future event-item` (or `event-item`) is the item the player is holding
-                                                        
+                            
                             `event-armorstand interaction` is the type of manipulation that's happening during the event
                             (NOTE: this will only ever return `Place`, `Retrieve` or `Change`)
                             """)
                     .examples("""
+                            on armor stand chest slot retrieve;
+                                broadcast event-item and event-equipmentslot
                             """)
                     .since("1.1.1");
             EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, EquipmentSlot.class, new Getter<>() {
@@ -77,12 +79,6 @@ public class EvtArmorStandManipulate extends SkriptEvent {
                     return new ItemType(e.getArmorStandItem());
                 }
             }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, new Getter<>() {
-                @Override
-                public ItemType get(final PlayerArmorStandManipulateEvent e) {
-                    return new ItemType(e.getArmorStandItem());
-                }
-            }, EventValues.TIME_PAST);
             EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStandInteraction.class, new Getter<>() {
                 @Override
                 public ArmorStandInteraction get(final PlayerArmorStandManipulateEvent e) {
