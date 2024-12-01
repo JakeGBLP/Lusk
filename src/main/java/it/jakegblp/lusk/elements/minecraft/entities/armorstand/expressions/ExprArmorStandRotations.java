@@ -1,116 +1,121 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import ch.njol.util.VectorMath;
-import it.jakegblp.lusk.utils.LuskUtils;
+import it.jakegblp.lusk.api.enums.BodyPart;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.ARMORS_STAND_PREFIX;
+import java.util.Arrays;
 
+import static it.jakegblp.lusk.utils.Constants.ARMORS_STAND_PREFIX;
+import static it.jakegblp.lusk.utils.EntityUtils.getArmorStandRotation;
+import static it.jakegblp.lusk.utils.EntityUtils.setArmorStandRotation;
+import static it.jakegblp.lusk.utils.VectorUtils.toVector;
 
 @Name("Armor Stand - Rotations")
-@Description("Gets and sets a specific armor stand property.")
-@Examples({"broadcast rotation of target", "set head rotation of target to vector(1,0,0)\n# sad armor stand :("})
-@Since("1.0.2")
+@Description("Gets and sets a specific armor stand rotation.")
+@Examples({"broadcast rotation of target", "set head rotation of target to vector(45,0,0)\n# looks down a a 45 degrees - sad armor stand :("})
+@Since("1.0.2, 1.3 (Degrees)")
 @SuppressWarnings("unused")
-public class ExprArmorStandRotations extends SimpleExpression<Vector> {
-    // todo: turn into property expression, use different angles, plural
+public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vector> {
+    // todo: allow radians too, perhaps make a reusable system that supports either
     static {
-        Skript.registerExpression(ExprArmorStandRotations.class, Vector.class, ExpressionType.PROPERTY,
-                "[the] " + ARMORS_STAND_PREFIX + " (body|torso) rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " left arm rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " right arm rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " left leg rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " right leg rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " head rotation of %livingentity%",
-                "[the] " + ARMORS_STAND_PREFIX + " rotation of %livingentity%");
+        register(ExprArmorStandRotations.class, Vector.class,
+                ARMORS_STAND_PREFIX+" %bodyparts% (rotation|pose)[s]",
+                "livingentities");
     }
 
-    private Expression<LivingEntity> livingEntityExpression;
-    private String property;
+    private Expression<BodyPart> bodyPartExpression;
 
+    @Override
     @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        livingEntityExpression = (Expression<LivingEntity>) exprs[0];
-        property = switch (matchedPattern) {
-            case 0 -> "body";
-            case 1 -> "left arm";
-            case 2 -> "right arm";
-            case 3 -> "left leg";
-            case 4 -> "right leg";
-            case 5 -> "head";
-            default -> "";
-        };
-        return true;
-    }
-
-    @Override
-    protected Vector @NotNull [] get(@NotNull Event e) {
-        if (livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand) {
-            return switch (property) {
-                case "left arm" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getLeftArmPose())};
-                case "right arm" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getRightArmPose())};
-                case "left leg" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getLeftLegPose())};
-                case "right leg" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getRightLegPose())};
-                case "head" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getHeadPose())};
-                case "body" -> new Vector[]{LuskUtils.toBukkitVector(armorStand.getBodyPose())};
-                case "" -> new Vector[]{
-                        VectorMath.fromYawAndPitch(
-                                armorStand.getLocation().getYaw(),
-                                armorStand.getLocation().getPitch())
-                };
-                default -> new Vector[0];
-            };
+    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+        if (matchedPattern == 0) {
+            bodyPartExpression = (Expression<BodyPart>) expressions[0];
+            setExpr((Expression<? extends LivingEntity>) expressions[1]);
+        } else {
+            setExpr((Expression<? extends LivingEntity>) expressions[0]);
+            bodyPartExpression = (Expression<BodyPart>) expressions[1];
         }
-        return new Vector[0];
-    }
-
-    @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{Vector.class} : null;
-    }
-
-    @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Vector vector && livingEntityExpression.getSingle(e) instanceof ArmorStand armorStand)
-            switch (property) {
-                case "left arm" -> LuskUtils.setLeftArmRotation(armorStand, vector);
-                case "right arm" -> LuskUtils.setRightArmRotation(armorStand, vector);
-                case "left leg" -> LuskUtils.setLeftLegRotation(armorStand, vector);
-                case "right leg" -> LuskUtils.setRightLegRotation(armorStand, vector);
-                case "head" -> LuskUtils.setHeadRotation(armorStand, vector);
-                case "body" -> LuskUtils.setBodyRotation(armorStand, vector);
-                case "" -> LuskUtils.setFullRotation(armorStand, vector);
-            }
+        return true;
     }
 
     @Override
     public boolean isSingle() {
-        return true;
+        return super.isSingle() && bodyPartExpression.isSingle();
     }
 
     @Override
-    public @NotNull Class<? extends Vector> getReturnType() {
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case SET, ADD, REMOVE -> new Class[]{Vector.class, EulerAngle.class};
+            case RESET -> new Class[0];
+            default -> null;
+        };
+    }
+
+    @Override
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        if (mode == Changer.ChangeMode.RESET && delta == null) {
+            getExpr().stream(event).forEach(livingEntity -> {
+                if (livingEntity instanceof ArmorStand armorStand) {
+                    bodyPartExpression.stream(event).forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, EulerAngle.ZERO));
+                }
+            });
+        }
+        else {
+            Vector vector, current;
+            if (delta[0] instanceof Vector v) {
+                vector = v;
+            } else if (delta[0] instanceof EulerAngle eulerAngle) {
+                vector = toVector(eulerAngle);
+            } else {
+                vector = null;
+            }
+            if (vector != null) {
+                getExpr().stream(event)
+                        .forEach(livingEntity -> {
+                            if (livingEntity instanceof ArmorStand armorStand) {
+                                bodyPartExpression.stream(event).forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, switch (mode) {
+                                    case SET -> vector;
+                                    case ADD -> getArmorStandRotation(armorStand, bodyPart).add(vector);
+                                    case REMOVE -> getArmorStandRotation(armorStand, bodyPart).subtract(vector);
+                                    default -> new Vector();
+                                }));
+                            }
+                        });
+            }
+        }
+    }
+
+    @Override
+    public Class<? extends Vector> getReturnType() {
         return Vector.class;
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the" + (property.isEmpty() ? "" : " ") + property + " rotation of " + livingEntityExpression.toString(e, debug);
+    protected Vector[] get(Event event, LivingEntity[] source) {
+        return Arrays.stream(source).filter(livingEntity -> livingEntity instanceof ArmorStand armorStand)
+                .flatMap(livingEntity -> {
+                    ArmorStand armorStand = (ArmorStand) livingEntity;
+                    return bodyPartExpression.stream(event).map(bodyPart -> getArmorStandRotation(armorStand, bodyPart));
+                }).toArray(Vector[]::new);
+    }
+
+    @Override
+    public String toString(@Nullable Event event, boolean debug) {
+        return "the armor stand "+bodyPartExpression.toString(event, debug)+" rotations of "+getExpr().toString(event, debug);
     }
 }
