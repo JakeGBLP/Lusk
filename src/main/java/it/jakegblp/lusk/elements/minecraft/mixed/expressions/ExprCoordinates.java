@@ -1,75 +1,85 @@
 package it.jakegblp.lusk.elements.minecraft.mixed.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import org.bukkit.Location;
+import it.jakegblp.lusk.api.enums.Axis4D;
 import org.bukkit.event.Event;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
-@Name("Vector/Location - Coordinate List")
-@Description("Returns the XYZ coordinates of a location or a vector.")
+import java.util.Arrays;
+import java.util.Objects;
+
+import static it.jakegblp.lusk.utils.VectorUtils.getCoordinate;
+
+@Name("AxisAngle/Quaternion/Vector(2D/3D/4D)/Location/EulerAngle/Chunk - XYZ(W) Coordinate/Coordinate List")
+@Description("""
+        Gets a list or one of the coordinates of:
+        - Locations
+        - Vectors
+        - Chunks (only X and Z)
+        - EulerAngles
+        - 2D Vectors (only X and Z)
+        - 3D Vectors
+        - 4D Vectors (XYZW)
+        - Quaternions (XYZW)
+        - AxisAngles (XYZW)
+        
+        Note: Out of all of these Lusk only implements EulerAngles.
+        """)
 @Examples({"broadcast coordinates of {_loc}"})
 @Since("1.3")
 @SuppressWarnings("unused")
-public class ExprCoordinates extends PropertyExpression<Object, Double> {
+public class ExprCoordinates extends PropertyExpression<Object, Number> {
     static {
-        // TODO: simple PROPERTY EXPR
-        Skript.registerExpression(ExprCoordinates.class, Double.class, ExpressionType.PROPERTY,
-                "[the] coord[inate](s| list) of %vectors/locations%",
-                "%vectors/locations%'[s] coord[inate](s| list)");
+        register(ExprCoordinates.class, Number.class,
+                "(list:coord[inate](s| list)|(:x|:y|:z|w)[( |-)(coord[inate]|pos[ition]|loc[ation])] component)",
+                "objects");
     }
+
+    private Axis4D selectedAxis = null;
+    private boolean list;
 
     @Override
     public boolean init(final Expression<?>[] vars, final int matchedPattern, final @NotNull Kleenean isDelayed, final SkriptParser.@NotNull ParseResult parser) {
+        list = parser.hasTag("list");
+        if (!list)
+            selectedAxis = parser.tags.isEmpty() ? null : Axis4D.valueOf(parser.tags.getFirst().toUpperCase());
         setExpr(vars[0]);
         return true;
     }
 
     @Override
-    public @NotNull Class<Double> getReturnType() {
-        return Double.class;
+    public @NotNull Class<Number> getReturnType() {
+        return Number.class;
     }
 
     @Override
     public boolean isSingle() {
-        return false;
+        return !list && getExpr().isSingle();
     }
 
     @Override
-    protected Double @NotNull [] get(@NotNull Event e, Object @NotNull [] source) {
-        List<Double> list = new ArrayList<>();
-        for (Object o : getExpr().getArray(e)) {
-            double x = 0, y = 0, z = 0;
-            if (o instanceof Location location) {
-                x = location.getX();
-                y = location.getY();
-                z = location.getZ();
-            } else if (o instanceof Vector vector) {
-                x = vector.getX();
-                y = vector.getY();
-                z = vector.getZ();
-            }
-            list.add(x);
-            list.add(y);
-            list.add(z);
+    protected Number @NotNull [] get(@NotNull Event e, Object @NotNull [] source) {
+        if (list) {
+            return Arrays.stream(Axis4D.values())
+                    .flatMap(axis -> getExpr().stream(e)
+                            .map(o -> getCoordinate(o, axis))
+                            .filter(Objects::nonNull))
+                    .toArray(Number[]::new);
+        } else {
+            return getExpr().stream(e).map(o -> getCoordinate(o, selectedAxis)).toArray(Number[]::new);
         }
-        return list.toArray(new Double[0]);
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the coordinates of " + (event != null ? getExpr().toString(event, debug) : "");
+        return (list ? "the coordinates of " : "the "+ selectedAxis.name().toLowerCase()+" coordinate component of ") + getExpr().toString(event, debug);
     }
 }
