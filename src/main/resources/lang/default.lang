@@ -1,34 +1,46 @@
 version: @version@
 
 types:
-    equipmentslot: equipment slot¦s @an
-    patterntype: pattern type¦s @a
-    endermanescapereason: enderman escape reason¦s @an
-    version: version¦s @a
-    pose: pose¦s @a
-    spawncategory: spawn categor¦y¦ies @a
-    boundingbox: bounding box¦es @a
-    eulerangle: euler angle¦s @a
-    cauldronchangereason: cauldron change reason¦s
-    enderdragonphase: ender dragon phase¦s @a
-    blockface: block face¦s @a
-    armorstandinteraction: armor stand interaction¦s @an
-    bodypart: body part¦s @a
-    itemrarity: item rarit¦y¦ies @an
-    voxelshape: voxel shape¦s @a
-    wolfvariant: wolf variant¦s @a
-    frogvariant: frog variant¦s @a
-    anvilguiinventory: anvil gui inventor¦y¦ies @an
-    axolotlvariant: axolotl variant¦s @an
-    foxtype: fox types¦s @a
-    horsecolor: horse color¦s @a
-    horsestyle: horse style¦s @a
-    llamacolor: llama color¦s @a
-    mushroomcowvariant: mushroom cow variant¦s @a
-    parrotvariant: parrot variant¦s @a
-    rabbittype: rabbit type¦s @a
-    salmonvariant: salmon variant¦s @a
-    tropicalfishpattern: tropical fish pattern¦s @a
-    sound: sound¦s @a
-    blockstate: blokck state¦s @a
-    timespanperiod: time span period¦s @a
+  equipmentslot: equipment slot¦s @an
+  patterntype: pattern type¦s @a
+  endermanescapereason: enderman escape reason¦s @an
+  version: version¦s @a
+  pose: pose¦s @a
+  spawncategory: spawn categor¦y¦ies @a
+  boundingbox: bounding box¦es @a
+  eulerangle: euler angle¦s @a
+  cauldronchangereason: cauldron change reason¦s
+  enderdragonphase: ender dragon phase¦s @a
+  blockface: block face¦s @a
+  armorstandinteraction: armor stand interaction¦s @an
+  bodypart: body part¦s @a
+  rotation: rotation¦s @a
+  itemrarity: item rarit¦y¦ies @an
+  voxelshape: voxel shape¦s @a
+  wolfvariant: wolf variant¦s @a
+  frogvariant: frog variant¦s @a
+  anvilguiinventory: anvil gui inventor¦y¦ies @an
+  axolotlvariant: axolotl variant¦s @an
+  foxtype: fox types¦s @a
+  horsecolor: horse color¦s @a
+  horsestyle: horse style¦s @a
+  llamacolor: llama color¦s @a
+  mushroomcowvariant: mushroom cow variant¦s @a
+  parrotvariant: parrot variant¦s @a
+  rabbittype: rabbit type¦s @a
+  salmonvariant: salmon variant¦s @a
+  tropicalfishpattern: tropical fish pattern¦s @a
+  sound: sound¦s @a
+  blockstate: blokck state¦s @a
+  timespanperiod: time span period¦s @a
+
+# -- Rotations --
+rotations:
+  none: 0 degrees, 0 degree rotation, no rotation, 360 degrees, 360 degree rotation, 360 degrees clockwise, clockwise 360, counter clockwise 360
+  clockwise_45: 45 degrees, 45 degree rotation, 45 degrees clockwise, clockwise 45, counter clockwise 315
+  clockwise: 90 degrees, 90 degree rotation, 90 degrees clockwise, clockwise 90, counter clockwise 270
+  clockwise_135: 135 degrees, 135 degree rotation, 135 degrees clockwise, clockwise 135, counter clockwise 225
+  flipped: 180 degrees, 180 degree rotation, 180 degrees clockwise, clockwise 180, counter clockwise 180
+  flipped_45: 225 degrees, 225 degree rotation, 225 degrees clockwise, clockwise 225, counter clockwise 135
+  counter_clockwise: 270 degrees, 270 degree rotation, 270 degrees clockwise, clockwise 270, counter clockwise 90
+  counter_clockwise_45: 315 degrees, 315 degree rotation, 315 degrees clockwise, clockwise 315, counter clockwise 45
