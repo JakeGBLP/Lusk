@@ -1,8 +1,6 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
-import ch.njol.util.coll.BidiHashMap;
-import ch.njol.util.coll.BidiMap;
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import com.google.common.collect.ImmutableMap;
@@ -13,7 +11,6 @@ import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Registry;
-import org.bukkit.Rotation;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryAction;
@@ -43,8 +40,7 @@ public class Constants {
             PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
     public static final String
             ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMORS_STAND_PREFIX = "[armor[ |-]stand]",
-            STATE_OR_PROPERTY = "(state|property)";
+            ARMORS_STAND_PREFIX = "[armor[ |-]stand]";
 
     public static final Semver
             serverVersion = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
@@ -132,16 +128,5 @@ public class Constants {
         put(766, parseVersion("1.20.6"));
         put(767, parseVersion("1.21.1"));
         put(768, parseVersion("1.21.3"));
-    }};
-
-    public static final BidiMap<Rotation, Integer> itemFrameRotations = new BidiHashMap<>() {{
-        put(Rotation.NONE, 0);
-        put(Rotation.CLOCKWISE_45, 45);
-        put(Rotation.CLOCKWISE, 90);
-        put(Rotation.CLOCKWISE_135, 135);
-        put(Rotation.FLIPPED, 180);
-        put(Rotation.FLIPPED_45, 225);
-        put(Rotation.COUNTER_CLOCKWISE, 270);
-        put(Rotation.COUNTER_CLOCKWISE_45, 315);
     }};
 }
