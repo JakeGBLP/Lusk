@@ -15,8 +15,8 @@ public class ArmorStandClassInfos {
                 .description("All the Armor Stand Interactions.") // add example
                 .documentationId("11913")
                 .since("1.1.1"));
-        EnumWrapper<BodyPart> BODY_PARTS_INTERACTION_ENUM = new EnumWrapper<>(BodyPart.class);
-        Classes.registerClass(BODY_PARTS_INTERACTION_ENUM.getClassInfo("bodypart")
+        EnumWrapper<BodyPart> BODY_PARTS_ENUM = new EnumWrapper<>(BodyPart.class);
+        Classes.registerClass(BODY_PARTS_ENUM.getClassInfo("bodypart")
                 .user("body ?parts?")
                 .name("Body Parts")
                 .description("All the Body Parts.") // add example
