@@ -1,81 +1,67 @@
 package it.jakegblp.lusk.elements.minecraft.entities.itemframe.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.Constants;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import org.bukkit.Rotation;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 @Name("Item Frame - Rotation")
-@Description("Returns the rotation of an Item Frame in Degrees.\nCan be set to the following values:\n0, 45, 90, 135, 180, 225, 270, 315")
+@Description("Returns the rotation of an Item Frame.")
 @Examples({"broadcast item frame rotation of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Reworked)")
 @SuppressWarnings("unused")
-public class ExprItemFrameRotation extends SimpleExpression<Integer> {
+public class ExprItemFrameRotation extends SimplePropertyExpression<Entity, Rotation> {
+    //todo: add radians support
     static {
-        // TODO: PROPERTY EXPR
-        // todo: itemframe api
-        Skript.registerExpression(ExprItemFrameRotation.class, Integer.class, ExpressionType.COMBINED,
-                "[the] item[ ]frame rotation of %entity%",
-                "%entity%'[s] item[ ]frame rotation");
-    }
-
-    private Expression<Entity> entityExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
-        return true;
+        register(ExprItemFrameRotation.class, Rotation.class, "item[ |-]frame rotation", "entities");
     }
 
     @Override
-    protected Integer @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof ItemFrame itemFrame) {
-            Object rawRotationNumber = Constants.itemFrameRotations.get(itemFrame.getRotation());
-            if (rawRotationNumber != null) {
-                return new Integer[]{(int) rawRotationNumber};
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case SET -> new Class[]{Rotation.class};
+            case RESET, DELETE -> new Class[0];
+            default -> null;
+        };
+    }
+
+    @Override
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        List<ItemFrame> itemFrameList = getExpr().stream(event).filter(entity -> entity instanceof ItemFrame)
+                .map(entity -> (ItemFrame) entity).toList();
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
+            itemFrameList.forEach(itemFrame -> itemFrame.setRotation(Rotation.NONE));
+        } else if (delta != null) {
+            if (mode == Changer.ChangeMode.SET && delta[0] instanceof Rotation rotation) {
+                itemFrameList.forEach(itemFrame -> itemFrame.setRotation(rotation));
             }
         }
-        return new Integer[0];
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{Integer.class} : null;
+    public @Nullable Rotation convert(Entity from) {
+        if (from instanceof ItemFrame itemFrame) {
+            return itemFrame.getRotation();
+        }
+        return null;
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Integer integer && Constants.itemFrameRotations.containsValue(integer))
-            if (entityExpression.getSingle(e) instanceof ItemFrame itemFrame)
-                itemFrame.setRotation(Constants.itemFrameRotations.getKey(integer));
+    protected String getPropertyName() {
+        return "itemframe rotation";
     }
 
     @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public @NotNull Class<? extends Integer> getReturnType() {
-        return Integer.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the itemframe rotation of " + (e == null ? "" : entityExpression.toString(e, debug));
+    public Class<? extends Rotation> getReturnType() {
+        return Rotation.class;
     }
 }
