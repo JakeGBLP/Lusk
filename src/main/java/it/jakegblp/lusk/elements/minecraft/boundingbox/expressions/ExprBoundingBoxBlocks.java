@@ -12,7 +12,6 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.AABB;
 import ch.njol.util.Kleenean;
 import com.google.common.collect.Lists;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -28,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
     static {
         Skript.registerExpression(ExprBoundingBoxBlocks.class, Block.class, ExpressionType.COMBINED,
-                "[all [[of] the]|the] blocks within [[bounding] box] %boundingbox% in [world] %world%");
+                "[all [[of] the]|the] blocks within [bounding] box[es] %boundingboxes% in [world[s]] %worlds%");
     }
 
     private Expression<BoundingBox> boundingBoxExpression;
@@ -44,13 +43,10 @@ public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
 
     @Override
     protected Block @NotNull [] get(@NotNull Event event) {
-        World world = worldExpression.getSingle(event);
-        if (world == null) return new Block[0];
-        BoundingBox boundingBox = boundingBoxExpression.getSingle(event);
-        if (boundingBox == null) return new Block[0];
-        Location location1 = boundingBox.getMin().toLocation(world);
-        Location location2 = boundingBox.getMax().toLocation(world);
-        return Lists.newArrayList(new AABB(location1, location2).iterator()).toArray(new Block[0]);
+        return worldExpression.stream(event).flatMap(world -> boundingBoxExpression.stream(event).flatMap(boundingBox ->
+                        Lists.newArrayList(
+                                new AABB(boundingBox.getMin().toLocation(world), boundingBox.getMax().toLocation(world))
+                                        .iterator()).stream())).toArray(Block[]::new);
     }
 
     @Override
@@ -60,17 +56,14 @@ public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
 
     @Override
     public boolean isSingle() {
-        return true;
+        return false;
     }
 
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        boolean eventNotNull = event != null;
-        return "all of the blocks within box " +
-                (eventNotNull ? boundingBoxExpression.toString(event, debug) : "") +
-                " in world " + (eventNotNull ? worldExpression.toString(event, debug) : "");
+        return "all of the blocks within bounding boxes " +
+                boundingBoxExpression.toString(event, debug) +
+                " in worlds " + worldExpression.toString(event, debug);
     }
-
-
 }
