@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Wrapper class for wrapping Enums to be used in Skript
  * <p>
- * This class is copied from SkBee
+ * Original:
  * <a href="https://github.com/ShaneBeee/SkBee/blob/master/src/main/java/com/shanebeestudios/skbee/api/wrapper/EnumWrapper.java">EnumWrapper</a>
  * </p>
  *
