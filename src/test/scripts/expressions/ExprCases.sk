@@ -1,0 +1,7 @@
+test "ExprCases":
+  set {_alphabet} to "abcdefghijklmnopqrstuvwxyz"
+  set {_smallAlphabet} to small case {_alphabet}
+  assert {_smallAlphabet} = 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ' with "small case alphabet = %{_smallAlphabet}% instead of ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"
+  set {_halfBigAlphabet} to "ABCDEFGHIjklmnopqrstuvwxyz"
+  set {_halfSmallAlphabet} to lenient small case {_halfBigAlphabet}
+  assert {_halfSmallAlphabet} = 'ABCDEFGHIjklᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ' with "small case alphabet = %{_halfSmallAlphabet}% instead of ABCDEFGHIjklᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"

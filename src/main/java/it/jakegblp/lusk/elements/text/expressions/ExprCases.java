@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Small Capital Case")
-@Description("Returns the given string with the small font.\n'Strict' allows uppercase characters to be included.")
-@Examples({"broadcast player's name in small caps"})
-@Since("1.0.0")
+@Description("Returns the given string with the small font.\n'Lenient' allows uppercase characters to not be included.")
+@Examples({"broadcast player's name in small caps","set chat format to small caps \"%player%: %message%\""})
+@Since("1.0.0, 1.3 (Lenient)")
 @SuppressWarnings("unused")
 public class ExprCases extends SimpleExpression<String> {
     public static Character[] characters = {'ᴀ', 'ʙ', 'ᴄ', 'ᴅ', 'ᴇ', 'ғ', 'ɢ', 'ʜ', 'ɪ', 'ᴊ', 'ᴋ', 'ʟ', 'ᴍ', 'ɴ', 'ᴏ', 'ᴘ', 'ǫ', 'ʀ', 's', 'ᴛ', 'ᴜ', 'ᴠ', 'ᴡ', 'x', 'ʏ', 'ᴢ'};
@@ -34,17 +34,17 @@ public class ExprCases extends SimpleExpression<String> {
 
     static {
         Skript.registerExpression(ExprCases.class, String.class, ExpressionType.COMBINED,
-                "%string% in [strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case]))",
-                "[strict:(strict|fully)] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
+                "%string% in [:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
+                "[:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
     }
 
     private Expression<String> string;
 
-    private boolean strict;
+    private boolean lenient;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        strict = parseResult.hasTag("strict");
+        lenient = parseResult.hasTag("lenient");
         string = (Expression<String>) exprs[0];
         return true;
     }
@@ -52,7 +52,7 @@ public class ExprCases extends SimpleExpression<String> {
     @Override
     protected String @NotNull [] get(@NotNull Event e) {
         String s = string.getSingle(e);
-        if (s != null) return new String[]{toSmallFont(s, strict)};
+        if (s != null) return new String[]{toSmallFont(s, !lenient)};
         return new String[0];
     }
 
@@ -68,6 +68,6 @@ public class ExprCases extends SimpleExpression<String> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return (strict ? "strict " : "") + "small caps " + (e != null ? string.toString(e, debug) : "");
+        return (lenient ? "lenient " : "") + "small caps " + string.toString(e, debug);
     }
 }
