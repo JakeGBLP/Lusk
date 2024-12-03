@@ -1,2 +1,2 @@
 test "ExprSupportedEnchantments":
-  assert (enchantments where [iron sword can be enchanted with input]) = supported enchantments of iron sword with "iron sword supported enchantments match"
+  assert (enchantments where [iron sword can be enchanted with input]) = supported enchantments of iron sword with "supported enchantments of iron sword %{_item}% do not match"

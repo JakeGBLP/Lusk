@@ -1,6 +1,6 @@
 test "ExprArmorStandIsSmall":
   spawn armor stand at location(0,0,0):
-    assert small state of entity is false with "armor stand is not small"
+    assert small state of entity is false with "small state of armor stand %entity% is true instead of false"
     set small state of entity to true
-    assert small state of entity is true with "armor stand is small"
+    assert small state of entity is true with "small state of armor stand %entity% is false instead of true"
     delete entity
