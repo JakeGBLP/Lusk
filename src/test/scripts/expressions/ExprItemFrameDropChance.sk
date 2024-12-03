@@ -1,0 +1,12 @@
+test "ExprItemFrameDropChance":
+  spawn item frame at location(1,2,3):
+    assert item frame drop chance of entity = 1 with "item frame drop chance of %entity% is equal to %item frame drop chance of entity% instead of 1"
+    set item frame drop chance of entity to 0
+    assert item frame drop chance of entity = 0 with "item frame drop chance of %entity% is equal to %item frame drop chance of entity% instead of 0"
+    add 0.5 to item frame drop chance of entity
+    assert item frame drop chance of entity = 0.5 with "item frame drop chance of %entity% is equal to %item frame drop chance of entity% instead of 0.5"
+    remove 0.4 from item frame drop chance of entity
+    assert item frame drop chance of entity = 0.1 with "item frame drop chance of %entity% is equal to %item frame drop chance of entity% instead of 0.1"
+    reset item frame drop chance of entity
+    assert item frame drop chance of entity = 1 with "item frame drop chance of %entity% is equal to %item frame drop chance of entity% instead of 1"
+    delete entity
