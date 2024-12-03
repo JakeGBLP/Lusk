@@ -1,19 +1,18 @@
 test "ExprArmorStandHasArms":
   spawn armor stand at location(0,0,0):
-
-    assert arms visibility state of entity is false with "armor stand doesn't have visible arms"
-    assert arms invisibility state of entity is true with "armor stand has invisible arms"
+    assert arms visibility state of entity is false with "arms visibility state of armor stand %entity% is true instead of false"
+    assert arms invisibility state of entity is true with "arms invisibility state of armor stand %entity% is false instead of true"
 
     set arms visibility state of entity to true
-    assert arms visibility state of entity is true with "armor stand has visible arms"
-    assert arms invisibility state of entity is false with "armor stand doesn't have invisible arms"
+    assert arms visibility state of entity is true with "arms visibility state of armor stand %entity% is false instead of true"
+    assert arms invisibility state of entity is false with "arms invisibility state of armor stand %entity% is true instead of false"
 
     set arms invisibility state of entity to true
-    assert arms visibility state of entity is false with "armor stand doesn't have visible arms again"
-    assert arms invisibility state of entity is true with "armor stand has invisible arms again"
+    assert arms visibility state of entity is false with "arms visibility state of armor stand %entity% is true instead of false"
+    assert arms invisibility state of entity is true with "arms invisibility state of armor stand %entity% is false instead of true"
 
     set arms invisibility state of entity to false
-    assert arms visibility state of entity is true with "armor stand has visible arms again"
-    assert arms invisibility state of entity is false with "armor stand doesn't have invisible arms again"
+    assert arms visibility state of entity is true with "arms visibility state of armor stand %entity% is false instead of true"
+    assert arms invisibility state of entity is false with "arms invisibility state of armor stand %entity% is true instead of false"
 
     delete entity

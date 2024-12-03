@@ -1,5 +1,5 @@
 test "ExprRarity":
   set {_item} to iron sword
   set item rarity of {_item} to epic
-  assert item rarity of {_item} is epic with "iron sword has epic item rarity"
-  assert {_item} is epic with "iron sword is epic item rarity"
+  assert item rarity of {_item} is epic with "item rarity of iron sword %{_item}% is not epic"
+  assert {_item} is epic with "item rarity state of iron sword %{_item}% is not epic"

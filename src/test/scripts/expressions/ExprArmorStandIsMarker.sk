@@ -1,6 +1,6 @@
 test "ExprArmorStandIsMarker":
   spawn armor stand at location(0,0,0):
-    assert marker state of entity is false with "armor stand is not marker"
+    assert marker state of entity is false with "marker state of armor stand %entity% is true instead of false"
     set marker state of entity to true
-    assert marker state of entity is true with "armor stand is marker"
+    assert marker state of entity is true with "marker state of armor stand %entity% is false instead of true"
     delete entity

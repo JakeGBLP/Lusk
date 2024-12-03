@@ -1,8 +1,8 @@
 test "ExprArmorStandRotations":
   spawn armor stand at location(0,0,0):
     set left arm pose of entity to vector(90,0,0)
-    assert left arm pose of entity is vector(90,0,0) with "left arm pose rotated by 90 degrees"
+    assert left arm pose of entity is vector(90,0,0) with "left arm pose of armor stand %entity% is not vector(90,0,0)"
     set left arm and right arm poses of entity to vector(-90,0,0)
-    assert left arm pose of entity is vector(-90,0,0) with "left arm pose rotated by -90 degrees"
-    assert right arm pose of entity is vector(-90,0,0) with "right arm pose rotated by -90 degrees"
+    assert left arm pose of entity is vector(-90,0,0) with "left arm pose of armor stand %entity% is not vector(-90,0,0)"
+    assert right arm pose of entity is vector(-90,0,0) with "right arm pose of armor stand %entity% is not vector(-90,0,0)"
     delete entity

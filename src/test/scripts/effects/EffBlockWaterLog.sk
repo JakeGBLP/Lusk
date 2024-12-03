@@ -1,10 +1,10 @@
-test "ExprBlockWaterLogged":
+test "EffBlockWaterLogged":
   set {_block} to block at location(0,0,0)
   set block at {_block} to oak planks
-  assert {_block} is not waterlogged with "oak planks isn't waterlogged"
+  assert {_block} is not waterlogged with "%{_block}% isn't waterlogged"
   waterlog {_block}
-  assert {_block} is not waterlogged with "oak planks can't be waterlogged"
+  assert {_block} is not waterlogged with "%{_block}% can't be waterlogged"
   set block at {_block} to oak trapdoor
-  assert {_block} is not waterlogged with "oak trapdoor isn't waterlogged"
+  assert {_block} is not waterlogged with "%{_block}% isn't waterlogged"
   set waterlogged state of {_block} to true
-  assert {_block} is waterlogged with "oak trapdoor is waterlogged"
+  assert {_block} is waterlogged with "%{_block}% is waterlogged"

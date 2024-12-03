@@ -1,5 +1,5 @@
 test "ExprBrewingFuel":
   set block at location(1,1,1) to brewing stand
-  assert brewing fuel of block at location(1,1,1) is not set with "empty brewing stand has no fuel"
+  assert brewing fuel of block at location(1,1,1) is not set with "brewing fuel of brewing stand at location %location(1,1,1)% is set instead of not set"
   set brewing fuel of block at location(1,1,1) to stone
-  assert brewing fuel of block at location(1,1,1) is stone with "brewing stand has stone fuel"
+  assert brewing fuel of block at location(1,1,1) is stone with "brewing fuel of brewing stand at location %location(1,1,1)% is not stone"
