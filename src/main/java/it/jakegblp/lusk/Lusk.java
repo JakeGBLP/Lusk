@@ -3,17 +3,19 @@ package it.jakegblp.lusk;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.util.Timespan;
+import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
+import it.jakegblp.lusk.libs.bstats.Metrics;
 import it.jakegblp.lusk.utils.BorrowedUtils;
 import it.jakegblp.lusk.utils.Constants;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
 
@@ -61,10 +63,39 @@ public class Lusk extends JavaPlugin {
 
         int pluginId = 17730;
         Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new SimplePie("skript_version",() -> Skript.getVersion().toString()));
+        metrics.addCustomChart(new Metrics.SimplePie("skript_version",() -> Skript.getVersion().toString()));
         String version = getDescription().getVersion().toLowerCase();
-        String versionType = version.contains("beta") ? "beta" : (version.contains("pre") ? "prerelease" : (version.contains("alpha") ? "alpha" : "release"));
-        metrics.addCustomChart(new SimplePie("lusk_version_type",() -> versionType));
+        String buildType = getBuildType();
+
+        metrics.addCustomChart(new Metrics.DrilldownPie("version_type", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+
+            String localBuildType = getBuildType();
+            Map<String, Integer> entry = new HashMap<>();
+            entry.put(localBuildType, 1);
+
+            map.put(switch (localBuildType) {
+                case "beta" -> "Beta";
+                case "prerelease" -> "Prerelease";
+                case "alpha" -> "Alpha";
+                case "release" -> "Release";
+                default -> "Other";
+            }, entry);
+
+            return map;
+        }));
+
+        metrics.addCustomChart(new Metrics.DrilldownPie("skript_version", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+
+            Version skriptVersion = Skript.getVersion();
+            Map<String, Integer> entry = new HashMap<>();
+            entry.put(skriptVersion.toString(), 1);
+
+            map.put(skriptVersion.getMajor()+"."+skriptVersion.getMinor()+"."+skriptVersion.getRevision(), entry);
+
+            return map;
+        }));
 
         int[] elementCountAfter = BorrowedUtils.getElementCount();
         int[] finish = new int[elementCountBefore.length];
@@ -79,9 +110,9 @@ public class Lusk extends JavaPlugin {
         for (int i = 0; i < finish.length; i++) {
             consoleLog(" {0} {1}{2}", finish[i], elementNames[i], finish[i] == 1 ? "" : "s");
         }
-        if (!versionType.equals("release")) {
-            consoleLog("<yellow>This is a {0} build, which may not be stable unless stated otherwise on the release page. Proceed with caution.", versionType);
-            consoleLog("<yellow>https://github.com/JakeGBLP/Lusk/issues");
+        if (!buildType.equals("release")) {
+            consoleLog("<yellow>This is a {0} build and should not be used in production unless stated otherwise.", buildType);
+            consoleLog("<yellow>Report bugs at https://github.com/JakeGBLP/Lusk/issues");
         }
         new UpdateChecker(this);
         long end = System.currentTimeMillis();
@@ -104,5 +135,17 @@ public class Lusk extends JavaPlugin {
 
     public SkriptAddon getAddonInstance() {
         return addon;
+    }
+
+    public String getBuildType() {
+        String version = getDescription().getVersion().toLowerCase();
+        if (version.contains("beta")) {
+            return "beta";
+        } else if (version.contains("pre")) {
+            return "prerelease";
+        } else if (version.contains("alpha")) {
+            return "alpha";
+        }
+        return "release";
     }
 }
