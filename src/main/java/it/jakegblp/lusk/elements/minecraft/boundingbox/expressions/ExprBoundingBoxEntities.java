@@ -18,6 +18,8 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 @Name("Bounding Box - Entities Within")
 @Description("Gets all the entities within a bounding box in a specific world.")
 @Examples({"broadcast entities within {_box} in {_world}"})
@@ -45,7 +47,8 @@ public class ExprBoundingBoxEntities extends SimpleExpression<Entity> {
     protected Entity @NotNull [] get(@NotNull Event event) {
         return boundingBoxExpression.stream(event).flatMap(boundingBox -> entityDataExpression.stream(event).flatMap(entityData -> {
             Class<? extends Entity> entityClass = entityData.getType();
-            return worldExpression.stream(event).flatMap(world -> world.getNearbyEntities(boundingBox, entity -> entityClass.isAssignableFrom(entity.getClass())).stream());
+            Predicate<Entity> filter = entity -> entityClass.isAssignableFrom(entity.getClass());
+            return worldExpression.stream(event).flatMap(world -> world.getNearbyEntities(boundingBox, filter).stream());
         })).toArray(Entity[]::new);
     }
 
