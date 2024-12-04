@@ -24,7 +24,7 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case ADD, REMOVE, SET -> new Class[] { Float.class };
+            case ADD, REMOVE, SET -> new Class[] { Number.class };
             case RESET -> new Class[0];
             default -> null;
         };
@@ -33,8 +33,8 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         float chance;
-        if (delta != null && delta[0] instanceof Float f) {
-            chance = f;
+        if (delta != null && delta[0] instanceof Number number) {
+            chance = number.floatValue();
         } else if (mode == Changer.ChangeMode.RESET) {
             chance = 1f;
         } else {
