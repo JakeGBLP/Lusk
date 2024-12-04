@@ -1,6 +1,9 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAPIException;
+import ch.njol.skript.conditions.base.PropertyCondition;
+import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
@@ -139,5 +142,46 @@ public class LuskUtils {
                 "whether [the] " + prefix + "%" + fromType + "% " + property + " [or not]"
         };
         Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
+    }
+    public static void registerPrefixedPropertyCondition(
+            Class<? extends Condition> condition,
+            String prefix,
+            String property,
+            String type) {
+        registerPrefixedPropertyCondition(condition, PropertyCondition.PropertyType.BE, prefix, property, type);
+    }
+    public static void registerPrefixedPropertyCondition(
+            Class<? extends Condition> condition,
+            PropertyCondition.PropertyType propertyType,
+            String prefix,
+            String property,
+            String type) {
+        if (type.contains("%"))
+            throw new SkriptAPIException("The type argument must not contain any '%'s");
+        switch (propertyType) {
+            case BE:
+                Skript.registerCondition(condition,
+                        prefix + " %" + type + "% (is|are) " + property,
+                        prefix + " %" + type + "% (isn't|is not|aren't|are not) " + property);
+                break;
+            case CAN:
+                Skript.registerCondition(condition,
+                        prefix + " %" + type + "% can " + property,
+                        prefix + " %" + type + "% (can't|cannot|can not) " + property);
+                break;
+            case HAVE:
+                Skript.registerCondition(condition,
+                        prefix + " %" + type + "% (has|have) " + property,
+                        prefix + " %" + type + "% (doesn't|does not|do not|don't) have " + property);
+                break;
+            case WILL:
+                Skript.registerCondition(condition,
+                        prefix + " %" + type + "% will " + property,
+                        prefix + " %" + type + "% (will (not|neither)|won't) " + property);
+                break;
+            default:
+                assert false;
+        }
+
     }
 }

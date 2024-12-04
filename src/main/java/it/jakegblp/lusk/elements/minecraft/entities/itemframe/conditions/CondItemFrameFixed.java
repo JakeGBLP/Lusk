@@ -8,14 +8,16 @@ import ch.njol.skript.doc.Since;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 
+import static it.jakegblp.lusk.utils.LuskUtils.registerPrefixedPropertyCondition;
+
 @Name("Item Frame - is Fixed")
 @Description("Returns whether the item frame is \"fixed\" or not.\nWhen true it's not possible to destroy/move the frame (e. g. by damage, interaction, pistons, or missing supporting blocks), rotate the item or place/remove items.")
-@Examples("if {_itemFrame} is fixed:")
+@Examples("if item frame {_itemFrame} is fixed:")
 @Since("1.3")
 public class CondItemFrameFixed extends PropertyCondition<Entity> {
 
     static {
-        register(CondItemFrameFixed.class, "fixed", "entities");
+        registerPrefixedPropertyCondition(CondItemFrameFixed.class, "item[ |-]frame", "fixed", "entities");
     }
 
     @Override
