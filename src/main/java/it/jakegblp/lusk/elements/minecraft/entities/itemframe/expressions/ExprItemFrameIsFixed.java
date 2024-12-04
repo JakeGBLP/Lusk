@@ -21,7 +21,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression
 public class ExprItemFrameIsFixed extends SimplePropertyExpression<Entity, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprItemFrameIsFixed.class, Boolean.class, "[item[ |-]frame]", "[is] fixed", "livingentities");
+        registerVerbosePropertyExpression(ExprItemFrameIsFixed.class, Boolean.class, "[item[ |-]frame]", "[is] fixed", "entities");
     }
 
     @Override
