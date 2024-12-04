@@ -44,12 +44,12 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
         }
         getExpr().stream(event).forEach(entity -> {
             if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItemDropChance(Math.clamp(switch (mode) {
+                itemFrame.setItemDropChance(floorFloatPrecision(Math.clamp(switch (mode) {
                     case ADD -> itemFrame.getItemDropChance() + chance;
                     case REMOVE -> itemFrame.getItemDropChance() - chance;
                     case SET -> chance;
                     default -> 0;
-                },0,1));
+                },0,1)));
             }
         });
     }
