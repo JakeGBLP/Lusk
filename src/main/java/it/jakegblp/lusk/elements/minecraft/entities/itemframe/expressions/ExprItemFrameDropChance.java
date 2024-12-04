@@ -15,16 +15,16 @@ import org.jetbrains.annotations.Nullable;
 @Description("The chance of the item being dropped upon this item frame's destruction.\nCan be set, must be within 0 and 1.\n1 = always drops; 0 = never drops.")
 @Examples("set item frame drop chance of {_itemFrame} to 1 # always drops")
 @Since("1.3")
-public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Float> {
+public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Double> {
 
     static {
-        register(ExprItemFrameDropChance.class, Float.class, "item[ |-]frame [item] drop chance", "entities");
+        register(ExprItemFrameDropChance.class, Double.class, "item[ |-]frame [item] drop chance", "entities");
     }
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case ADD, REMOVE, SET -> new Class[] { Float.class };
+            case ADD, REMOVE, SET -> new Class[] { Double.class };
             case RESET -> new Class[0];
             default -> null;
         };
@@ -32,17 +32,17 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        float chance;
-        if (delta != null && delta[0] instanceof Float f) {
-            chance = f;
+        double chance;
+        if (delta != null && delta[0] instanceof Double d) {
+            chance = d;
         } else if (mode == Changer.ChangeMode.RESET) {
-            chance = 1f;
+            chance = 1d;
         } else {
-            chance = 0;
+            chance = 0d;
         }
         getExpr().stream(event).forEach(entity -> {
             if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItemDropChance(Math.clamp(switch (mode) {
+                itemFrame.setItemDropChance((float) Math.clamp(switch (mode) {
                     case ADD -> itemFrame.getItemDropChance() + chance;
                     case REMOVE -> itemFrame.getItemDropChance() - chance;
                     case SET -> chance;
@@ -53,8 +53,8 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     }
 
     @Override
-    public @Nullable Float convert(Entity from) {
-        return from instanceof ItemFrame itemFrame ? itemFrame.getItemDropChance() : null;
+    public @Nullable Double convert(Entity from) {
+        return from instanceof ItemFrame itemFrame ? (double) itemFrame.getItemDropChance() : null;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     }
 
     @Override
-    public Class<? extends Float> getReturnType() {
-        return Float.class;
+    public Class<? extends Double> getReturnType() {
+        return Double.class;
     }
 }
