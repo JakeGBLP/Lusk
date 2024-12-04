@@ -34,8 +34,8 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Dou
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        double chance;
-        if (delta != null && delta[0] instanceof Double f) {
+        float chance;
+        if (delta != null && delta[0] instanceof Float f) {
             chance = f;
         } else if (mode == Changer.ChangeMode.RESET) {
             chance = 1f;
@@ -44,11 +44,10 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Dou
         }
         getExpr().stream(event).forEach(entity -> {
             if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItemDropChance((float) Math.clamp(switch (mode) {
+                itemFrame.setItemDropChance(Math.clamp(switch (mode) {
                     case ADD -> itemFrame.getItemDropChance() + chance;
                     case REMOVE -> itemFrame.getItemDropChance() - chance;
-                    case SET -> chance;
-                    default -> 0;
+                    default -> chance;
                 },0,1));
             }
         });
