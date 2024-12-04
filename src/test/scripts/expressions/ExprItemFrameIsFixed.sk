@@ -1,5 +1,6 @@
-test "ExprRarity":
-  set {_item} to iron sword
-  set item rarity of {_item} to epic
-  assert item rarity of {_item} is epic with "item rarity of iron sword %{_item}% is not epic"
-  assert {_item} is epic with "item rarity state of iron sword %{_item}% is not epic"
+test "ExprItemFrameIsFixed":
+  spawn item frame at location(2,3,3):
+    assert is fixed property of entity is false with "item frame is fixed property is true instead of false"
+    set is fixed property of entity to true
+    assert is fixed property of entity is true with "item frame is fixed property is false instead of true"
+    delete entity
