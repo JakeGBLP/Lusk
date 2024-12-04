@@ -4,4 +4,4 @@ test "ExprCases":
   assert {_smallAlphabet} = "ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ" with "small case alphabet = %{_smallAlphabet}% instead of ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"
   set {_halfBigAlphabet} to "ABCDEFGHIjklmnopqrstuvwxyz"
   set {_halfSmallAlphabet} to lenient small case {_halfBigAlphabet}
-  assert {_halfSmallAlphabet} = "ABCDEFGHIjklᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ" with "small case alphabet = %{_halfSmallAlphabet}% instead of ABCDEFGHIjklᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"
+  assert {_halfSmallAlphabet} = "ABCDEFGHIᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ" with "small case alphabet = %{_halfSmallAlphabet}% instead of ABCDEFGHIᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ"
