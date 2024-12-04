@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 
 import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.DeprecationUtils.getScaleAttribute;
+import static it.jakegblp.lusk.utils.NumberUtils.areDoublesRoughlyEqual;
 
 public class LuskUtils {
 
@@ -63,10 +64,6 @@ public class LuskUtils {
             return areDoublesRoughlyEqual(height, 0.6);
         }
         return false;
-    }
-
-    public static boolean areDoublesRoughlyEqual(double a, double b) {
-        return Math.abs(a - b) < Math.min(a, b) * 1e-6;
     }
 
     /**
