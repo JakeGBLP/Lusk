@@ -15,10 +15,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("The chance of the item being dropped upon this item frame's destruction.\nCan be set, must be within 0 and 1.\n1 = always drops; 0 = never drops.")
 @Examples("set item frame drop chance of {_itemFrame} to 1 # always drops")
 @Since("1.3")
-public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Float> {
+public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Number> {
 
     static {
-        register(ExprItemFrameDropChance.class, Float.class, "item[ |-]frame [item] drop chance", "entities");
+        register(ExprItemFrameDropChance.class, Number.class, "item[ |-]frame [item] drop chance", "entities");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     }
 
     @Override
-    public @Nullable Float convert(Entity from) {
+    public @Nullable Number convert(Entity from) {
         return from instanceof ItemFrame itemFrame ? itemFrame.getItemDropChance() : null;
     }
 
@@ -62,7 +62,7 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Flo
     }
 
     @Override
-    public Class<? extends Float> getReturnType() {
-        return Float.class;
+    public Class<? extends Number> getReturnType() {
+        return Number.class;
     }
 }
