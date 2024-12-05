@@ -7,7 +7,7 @@ public class NumberUtils {
         return Math.abs(a - b) < Math.min(a, b) * EPSILON;
     }
 
-    public static double floorFloatPrecision(float f) {
-        return Math.floor(f/EPSILON)*EPSILON;
+    public static double roundFloatPrecision(float f) {
+        return Math.round(f/EPSILON)*EPSILON;
     }
 }

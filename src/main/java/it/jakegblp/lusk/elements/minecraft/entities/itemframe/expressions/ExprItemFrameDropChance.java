@@ -11,6 +11,8 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.NumberUtils.roundFloatPrecision;
+
 @Name("Item Frame - Item Drop Chance")
 @Description("The chance of the item being dropped upon this item frame's destruction.\nCan be set, must be within 0 and 1.\n1 = always drops; 0 = never drops.")
 @Examples("set item frame drop chance of {_itemFrame} to 1 # always drops")
@@ -42,11 +44,11 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Num
         }
         getExpr().stream(event).forEach(entity -> {
             if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItemDropChance(Math.clamp(switch (mode) {
+                itemFrame.setItemDropChance((float) roundFloatPrecision(Math.clamp(switch (mode) {
                     case ADD -> itemFrame.getItemDropChance() + chance;
                     case REMOVE -> itemFrame.getItemDropChance() - chance;
                     default -> chance;
-                },0,1));
+                },0,1)));
             }
         });
     }
