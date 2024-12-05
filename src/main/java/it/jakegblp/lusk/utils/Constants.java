@@ -45,8 +45,8 @@ public class Constants {
             ARMORS_STAND_PREFIX = "[armor[ |-]stand]";
 
     public static final Semver
-            serverVersion = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            skriptVersion = parseVersion(Skript.getVersion().toString());
+            VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
+            VERSION_SKRIPT = parseVersion(Skript.getVersion().toString());
 
     public static final boolean
             //todo: see how things play out with old, papermc item rarity
@@ -59,12 +59,12 @@ public class Constants {
             HAS_REMOVE_ENCHANTMENTS_METHOD = methodExists(ItemStack.class, "removeEnchantments"),
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
-            SKRIPT_2_9 = skriptVersion.isGreaterThanOrEqualTo(parseVersion("2.9")),
+            SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
+            SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
             HAS_TIMESPAN_GET_AS = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
-
 
             PAPER_HAS_PLAYER_ARM_SWING_EVENT = classExists("io.papermc.paper.event.player.PlayerArmSwingEvent"),
             PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND = PAPER_HAS_PLAYER_ARM_SWING_EVENT && methodExists(PlayerArmSwingEvent.class, "getHand"),
