@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
 
-@Name("Armor Stand - is Fixed (Property)")
+@Name("Item Frame - is Fixed (Property)")
 @Description("Gets whether the item frame is \"fixed\" or not.\nCan be set.\nWhen true it's not possible to destroy/move the frame (e. g. by damage, interaction, pistons, or missing supporting blocks), rotate the item or place/remove items.")
 @Examples({"set whether item frame {_itemFrame} is fixed to true", "broadcast whether item frame target is fixed"})
 @Since("1.3")
