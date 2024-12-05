@@ -29,13 +29,13 @@ import java.util.function.Consumer;
         """)
 @Examples(
         """
-                command /a:
-                  trigger:
-                    spawn pig at player:
-                      set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
-                      on damage of entity:
-                        set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
-                """
+        command /a:
+          trigger:
+            spawn pig at player:
+              set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
+              on damage of entity:
+                set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
+        """
 )
 @Since("1.1")
 public class SecEvtDamage extends Section {

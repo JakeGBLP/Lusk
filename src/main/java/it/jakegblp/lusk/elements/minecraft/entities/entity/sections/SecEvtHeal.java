@@ -57,10 +57,10 @@ public class SecEvtHeal extends Section {
     @Override
     protected @Nullable TriggerItem walk(@NotNull Event event) {
         Object vars = Variables.copyLocalVariables(event);
-        Consumer<EntityRegainHealthEvent> consumer = trigger == null ? null : healthEvent -> {
-            Variables.setLocalVariables(healthEvent, vars);
-            TriggerItem.walk(trigger, healthEvent);
-            Variables.removeLocals(healthEvent);
+        Consumer<EntityRegainHealthEvent> consumer = trigger == null ? null : healEvent -> {
+            Variables.setLocalVariables(healEvent, vars);
+            TriggerItem.walk(trigger, healEvent);
+            Variables.removeLocals(healEvent);
 
         };
         HealListener.log(consumer, entity.getSingle(event));

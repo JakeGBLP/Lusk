@@ -28,6 +28,9 @@ import java.util.function.Consumer;
         - defined INSIDE this section CANNOT be used outside of it.
         """)
 @Examples("""
+        spawn skeleton at {_loc}:
+            on death of entity:
+                broadcast "%entity% has died!"
         """)
 @Since("1.2")
 public class SecEvtDeath extends Section {

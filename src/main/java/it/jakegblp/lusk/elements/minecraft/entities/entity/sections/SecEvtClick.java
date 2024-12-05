@@ -34,13 +34,13 @@ import java.util.function.Consumer;
 )
 @Examples(
         """
-                command /a:
-                  trigger:
-                    spawn pig at player:
-                      set display name of entity to "&dPig"
-                      on click on entity:
-                        broadcast "%entity% has been clicked!"
-                """
+         command /a:
+           trigger:
+             spawn pig at player:
+               set display name of entity to "&dPig"
+               on click on entity:
+                 broadcast "%entity% has been clicked!"
+         """
 )
 @Since("1.1")
 public class SecEvtClick extends Section {
@@ -48,7 +48,7 @@ public class SecEvtClick extends Section {
     private static final ClickEventTracker entityInteractTracker = new ClickEventTracker(Lusk.getInstance());
 
     static {
-        Skript.registerSection(SecEvtClick.class, "[execute|run] on [right[-| ]]click (on|of) %~entity%", "[execute|run] when %~entity% get[s] [right[-| ]]clicked");
+        Skript.registerSection(SecEvtClick.class, "[execute|run] on [right[ |-]]click (on|of) %~entity%", "[execute|run] when %~entity% get[s] [right[-| ]]clicked");
     }
 
     private Expression<Entity> entityExpression;

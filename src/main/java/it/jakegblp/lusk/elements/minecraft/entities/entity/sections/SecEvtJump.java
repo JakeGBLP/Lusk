@@ -30,6 +30,9 @@ import java.util.function.Consumer;
         - defined INSIDE this section CANNOT be used outside of it.
         """)
 @Examples("""
+        spawn villager at {_loc}:
+            on jump of entity:
+                broadcast "%entity% has jumped!"
         """)
 @Since("1.2")
 public class SecEvtJump extends Section {

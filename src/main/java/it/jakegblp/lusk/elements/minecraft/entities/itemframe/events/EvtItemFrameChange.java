@@ -18,7 +18,7 @@ public class EvtItemFrameChange extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
             Skript.registerEvent("Item Frame - on Change", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
-                            "item[ ]frame [item] [place:(insert|place)|:remove|:rotate|interact|change]"
+                            "item[ |-]frame [item] [place:(insert|place)|:remove|:rotate|interact|change]"
                     )
                     .description("Called when an ItemFrame is having an item rotated, added, or removed from it.")
                     .examples("""
