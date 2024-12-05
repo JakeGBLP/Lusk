@@ -24,7 +24,7 @@ Unlike other Armorstand properties, this one cannot be used on the armorstand it
 public class ExprArmorStandCanMove extends SimplePropertyExpression<ArmorStand, Boolean> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandCanMove.class, Boolean.class, "[armor[ |-]stand]", "[can] move", "livingentities");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandCanMove.class, Boolean.class, "[armor[ |-]stand]", "[can] move", "armorstands");
     }
 
     @Override
