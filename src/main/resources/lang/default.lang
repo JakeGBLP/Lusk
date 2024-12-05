@@ -3,6 +3,7 @@ version: @version@
 types:
   equipmentslot: equipment slot¦s @an
   patterntype: pattern type¦s @a
+  bannerpattern: banner pattern¦s @a
   endermanescapereason: enderman escape reason¦s @an
   version: version¦s @a
   pose: pose¦s @a
