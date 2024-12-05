@@ -13,7 +13,7 @@ import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - is Invisible (Property)")
 @Description("""
@@ -25,7 +25,7 @@ Gets and sets the `Invisible` property of an armorstand entity or item, to do so
 public class ExprArmorStandIsInvisible extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandIsInvisible.class, Boolean.class, "[armor[ |-]stand]", "([is] [:in]visible|[:in]visibility)", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsInvisible.class, Boolean.class, "[armor[ |-]stand]", "([is] [:in]visible|[:in]visibility)", "livingentities/itemtypes");
     }
 
     private boolean invisible;

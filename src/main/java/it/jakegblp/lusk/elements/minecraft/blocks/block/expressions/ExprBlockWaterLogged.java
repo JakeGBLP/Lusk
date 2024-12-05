@@ -10,7 +10,7 @@ import it.jakegblp.lusk.api.wrappers.BlockWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Entity - Waterlogged Property")
 @Description("Returns whether or not one or more blocks, blockstates or blockdatas are waterlogged.\nCan be set.")
@@ -20,7 +20,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression
 public class ExprBlockWaterLogged extends SimplePropertyExpression<Object,Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprBlockWaterLogged.class, Boolean.class, "[block]","[is] water[ |-]log[ged]","blocks/blockstates/blockdatas");
+        registerVerboseBooleanPropertyExpression(ExprBlockWaterLogged.class, Boolean.class, "[block]","[is] water[ |-]log[ged]","blocks/blockstates/blockdatas");
     }
 
     @Override

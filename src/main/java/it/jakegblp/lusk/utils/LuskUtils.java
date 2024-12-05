@@ -115,7 +115,7 @@ public class LuskUtils {
     }
 
     /**
-     * Registers a property expression that includes the following patterns:<br>
+     * Registers a property expression that gets or is set to a boolean; includes the following patterns:<br>
      * 1. <code>[the] %prefix% %property% [state|property] of %fromType%</code><br>
      * 2. <code>%fromType%'[s] %prefix% %property% [state|property]</code><br>
      * 3. <code>whether or not [the] %prefix% %fromType% %property%</code><br>
@@ -128,7 +128,7 @@ public class LuskUtils {
      * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
      * @param <T> a generic of the returned object
      */
-    public static <T> void registerVerbosePropertyExpression(
+    public static <T> void registerVerboseBooleanPropertyExpression(
             Class<? extends Expression<T>> expressionClass,
             Class<T> type,
             @Nullable String prefix,

@@ -13,7 +13,7 @@ import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - has Base Plate (Property)")
 @Description("""
@@ -25,7 +25,7 @@ Gets and sets the `hasBasePlate` property of an armorstand entity or item, to do
 public class ExprArmorStandHasBasePlate extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandHasBasePlate.class, Boolean.class, "[armor[ |-]stand]", "([have|has|show[s]|should show] [its|their] base plate|base plate [:in]visibility)", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandHasBasePlate.class, Boolean.class, "[armor[ |-]stand]", "([have|has|show[s]|should show] [its|their] base plate|base plate [:in]visibility)", "livingentities/itemtypes");
     }
 
     private boolean invisible;

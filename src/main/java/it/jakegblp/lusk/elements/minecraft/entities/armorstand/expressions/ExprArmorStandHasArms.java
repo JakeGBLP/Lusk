@@ -13,7 +13,7 @@ import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - has Arms (Property)")
 @Description("""
@@ -25,7 +25,7 @@ Gets and sets the `hasHarms` property of an armorstand entity or item, to do so 
 public class ExprArmorStandHasArms extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandHasArms.class, Boolean.class, "[armor[ |-]stand]", "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandHasArms.class, Boolean.class, "[armor[ |-]stand]", "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", "livingentities/itemtypes");
     }
 
     private boolean invisible;

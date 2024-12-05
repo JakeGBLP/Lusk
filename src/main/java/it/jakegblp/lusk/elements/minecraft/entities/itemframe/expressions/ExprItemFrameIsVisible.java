@@ -14,7 +14,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Item Frame - is Visible / is Invisible (Property)")
 @Description("Gets whether the item frame is visible or not.\nCan be set.")
@@ -24,7 +24,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression
 public class ExprItemFrameIsVisible extends SimplePropertyExpression<Entity, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprItemFrameIsVisible.class, Boolean.class, "item[ |-]frame", "[is] [:in]visible", "entities");
+        registerVerboseBooleanPropertyExpression(ExprItemFrameIsVisible.class, Boolean.class, "item[ |-]frame", "[is] [:in]visible", "entities");
     }
 
     private boolean invisible;

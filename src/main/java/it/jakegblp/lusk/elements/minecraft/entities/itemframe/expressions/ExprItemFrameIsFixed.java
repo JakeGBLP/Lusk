@@ -11,7 +11,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Item Frame - is Fixed (Property)")
 @Description("Gets whether the item frame is \"fixed\" or not.\nCan be set.\nWhen true it's not possible to destroy/move the frame (e. g. by damage, interaction, pistons, or missing supporting blocks), rotate the item or place/remove items.")
@@ -21,7 +21,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression
 public class ExprItemFrameIsFixed extends SimplePropertyExpression<Entity, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprItemFrameIsFixed.class, Boolean.class, "[item[ |-]frame]", "[is] fixed", "entities");
+        registerVerboseBooleanPropertyExpression(ExprItemFrameIsFixed.class, Boolean.class, "[item[ |-]frame]", "[is] fixed", "entities");
     }
 
     @Override

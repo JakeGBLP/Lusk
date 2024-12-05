@@ -7,7 +7,7 @@ import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - is Small (Property)")
 @Description("""
@@ -20,7 +20,7 @@ Gets and sets the `small` property of an armorstand entity or item, to do so wit
 public class ExprArmorStandIsSmall extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandIsSmall.class, Boolean.class, "[armor[ |-]stand]", "[is] small", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsSmall.class, Boolean.class, "[armor[ |-]stand]", "[is] small", "livingentities/itemtypes");
     }
 
     @Override

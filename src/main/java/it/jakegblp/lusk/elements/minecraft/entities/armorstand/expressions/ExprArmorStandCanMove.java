@@ -11,7 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - can Move (Property)")
 @Description("""
@@ -25,7 +25,7 @@ Unlike other Armorstand properties, this one cannot be used on the armorstand it
 public class ExprArmorStandCanMove extends SimplePropertyExpression<Entity, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandCanMove.class, Boolean.class, "[armor[ |-]stand]", "[can] move", "livingentities");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandCanMove.class, Boolean.class, "[armor[ |-]stand]", "[can] move", "livingentities");
     }
 
     @Override

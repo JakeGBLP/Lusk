@@ -10,7 +10,7 @@ import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
 
 @Name("Armor Stand - is Marker (Property)")
 @Description("""
@@ -22,7 +22,7 @@ Gets and sets the `marker` property of an armorstand entity or item, to do so wi
 public class ExprArmorStandIsMarker extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandIsMarker.class, Boolean.class, "[armor[ |-]stand]", "[is] marker", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsMarker.class, Boolean.class, "[armor[ |-]stand]", "[is] marker", "livingentities/itemtypes");
     }
 
     @Override
