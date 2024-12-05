@@ -14,7 +14,7 @@ public class DeprecationUtils {
 
     static {
         Function<Timespan, Long> GET_TICKS_LOCAL;
-        if (HAS_TIMESPAN_GET_AS) {
+        if (SKRIPT_HAS_TIMESPAN_TIMEPERIOD) {
             GET_TICKS_LOCAL = timespan -> timespan.getAs(Timespan.TimePeriod.TICK);
         } else {
             try {

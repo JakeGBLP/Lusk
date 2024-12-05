@@ -8,6 +8,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -18,21 +19,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+import static it.jakegblp.lusk.utils.EventUtils.getInteraction;
+
 @SuppressWarnings("unused")
 public class EvtArmorStandManipulate extends SkriptEvent {
-
-    private static ArmorStandInteraction getInteraction(PlayerArmorStandManipulateEvent event) {
-        boolean toolIsAir = event.getPlayerItem().getType().isAir();
-        boolean equippedIsAir = event.getArmorStandItem().getType().isAir();
-        if (toolIsAir) {
-            if (!equippedIsAir) {
-                return ArmorStandInteraction.RETRIEVE;
-            }
-        } else if (equippedIsAir) {
-            return ArmorStandInteraction.PLACE;
-        }
-        return ArmorStandInteraction.SWAP;
-    }
 
     static {
         if (Skript.classExists("org.bukkit.event.player.PlayerArmorStandManipulateEvent")) {
@@ -64,6 +54,12 @@ public class EvtArmorStandManipulate extends SkriptEvent {
             EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, Entity.class, new Getter<>() {
                 @Override
                 public Entity get(final PlayerArmorStandManipulateEvent e) {
+                    return e.getRightClicked();
+                }
+            }, EventValues.TIME_NOW);
+            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStand.class, new Getter<>() {
+                @Override
+                public ArmorStand get(final PlayerArmorStandManipulateEvent e) {
                     return e.getRightClicked();
                 }
             }, EventValues.TIME_NOW);
