@@ -26,7 +26,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression
 public class ExprArmorStandDisabledSlots extends PropertyExpression<ArmorStand, EquipmentSlot> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandDisabledSlots.class,EquipmentSlot.class,"[armor[ |-]stand] disabled [equipment] slots", "livingentities");
+        registerVerbosePropertyExpression(ExprArmorStandDisabledSlots.class,EquipmentSlot.class,"[armor[ |-]stand] disabled [equipment] slots", "armorstands");
     }
 
     @Override
@@ -73,7 +73,6 @@ public class ExprArmorStandDisabledSlots extends PropertyExpression<ArmorStand, 
                 }
             }
             case RESET, DELETE -> getExpr().stream(event).forEach(ArmorStand::setDisabledSlots);
-
         }
     }
 

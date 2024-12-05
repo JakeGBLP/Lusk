@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExp
 
 @Name("Armor Stand - is Invisible (Property)")
 @Description("""
-Gets and sets the `Invisible` property of an armorstand entity or item, to do so with an armorstand item you must have Paper.
+Gets and sets the `Invisible` property of an armorstand entity or item, to do so with an armorstand item you must be using Paper.
 """)
 @Examples({"set invisibility property of target to true", "set whether armor stand target is visible to true"})
 @Since("1.3")
@@ -25,7 +25,7 @@ Gets and sets the `Invisible` property of an armorstand entity or item, to do so
 public class ExprArmorStandIsInvisible extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandIsInvisible.class, Boolean.class, "[armor[ |-]stand]", "([is] [:in]visible|[:in]visibility)", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsInvisible.class, Boolean.class, "[armor[ |-]stand]", "([is] [:in]visible|[:in]visibility)", "armorstands/itemtypes");
     }
 
     private boolean invisible;
@@ -39,14 +39,21 @@ public class ExprArmorStandIsInvisible extends SimplePropertyExpression<Object, 
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[] {Boolean.class} : null;
+        return switch (mode) {
+            case SET -> new Class[]{Boolean.class};
+            case RESET, DELETE -> new Class[0];
+            default -> null;
+        };
     }
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        boolean isInvisible = false;
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            boolean finalBoolean = !invisible ^ bool;
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setIsInvisible(object, finalBoolean));
+            isInvisible = bool ^ invisible;
+        }
+        for (Object armorStand : getExpr().getAll(event)) {
+            ArmorStandUtils.setIsInvisible(armorStand, isInvisible);
         }
     }
 

@@ -7,6 +7,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ARMOR_STAND_META;
 import static it.jakegblp.lusk.utils.ItemUtils.getItemMetaFromUnknown;
 
 public class ArmorStandUtils {
+
     public static void setIsMarker(Object object, boolean marker) {
         if (object instanceof ArmorStand armorStand) {
             armorStand.setMarker(marker);
@@ -43,18 +44,6 @@ public class ArmorStandUtils {
             meta.setInvisible(invisible);
         }
     }
-    public static void setCanTick(Object object, boolean canTick) {
-        if (object instanceof ArmorStand armorStand) {
-            armorStand.setCanTick(canTick);
-        }
-    }
-
-    public static void setCanMove(Object object, boolean canMove) {
-        if (object instanceof ArmorStand armorStand) {
-            armorStand.setCanMove(canMove);
-        }
-    }
-
 
     public static boolean isMarker(Object object) {
         if (object instanceof ArmorStand armorStand) {
@@ -96,19 +85,4 @@ public class ArmorStandUtils {
         }
         return false;
     }
-    public static boolean canTick(Object object) {
-        if (object instanceof ArmorStand armorStand) {
-            return armorStand.canTick();
-        }
-        return false;
-    }
-    public static boolean canMove(Object object) {
-        if (object instanceof ArmorStand armorStand) {
-            return armorStand.canMove();
-        }
-        return false;
-    }
-
-
-
 }

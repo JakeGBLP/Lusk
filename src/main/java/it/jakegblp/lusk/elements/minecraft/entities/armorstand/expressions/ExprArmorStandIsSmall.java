@@ -20,18 +20,26 @@ Gets and sets the `small` property of an armorstand entity or item, to do so wit
 public class ExprArmorStandIsSmall extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandIsSmall.class, Boolean.class, "[armor[ |-]stand]", "[is] small", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsSmall.class, Boolean.class, "[armor[ |-]stand]", "[is] small", "armorstands/itemtypes");
     }
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[] {Boolean.class} : null;
+        return switch (mode) {
+            case SET -> new Class[]{Boolean.class};
+            case RESET, DELETE -> new Class[0];
+            default -> null;
+        };
     }
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        boolean hasArms = false;
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setIsSmall(object, bool));
+            hasArms = bool;
+        }
+        for (Object armorStand : getExpr().getAll(event)) {
+            ArmorStandUtils.setIsSmall(armorStand, hasArms);
         }
     }
 

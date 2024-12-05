@@ -22,18 +22,26 @@ Gets and sets the `marker` property of an armorstand entity or item, to do so wi
 public class ExprArmorStandIsMarker extends SimplePropertyExpression<Object, Boolean> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandIsMarker.class, Boolean.class, "[armor[ |-]stand]", "[is] marker", "livingentities/itemtypes");
+        registerVerboseBooleanPropertyExpression(ExprArmorStandIsMarker.class, Boolean.class, "[armor[ |-]stand]", "[is] marker", "armorstands/itemtypes");
     }
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[] {Boolean.class} : null;
+        return switch (mode) {
+            case SET -> new Class[]{Boolean.class};
+            case RESET, DELETE -> new Class[0];
+            default -> null;
+        };
     }
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        boolean hasArms = false;
         if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            getExpr().stream(event).forEach(object -> ArmorStandUtils.setIsMarker(object, bool));
+            hasArms = bool;
+        }
+        for (Object armorStand : getExpr().getAll(event)) {
+            ArmorStandUtils.setIsMarker(armorStand, hasArms);
         }
     }
 
