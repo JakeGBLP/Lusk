@@ -53,7 +53,7 @@ public class ExprArmorStandIsInvisible extends SimplePropertyExpression<Object, 
             isInvisible = bool ^ invisible;
         }
         for (Object armorStand : getExpr().getAll(event)) {
-            ArmorStandUtils.setIsInvisible(armorStand, isInvisible);
+            ArmorStandUtils.setIsInvisible(armorStand, !isInvisible);
         }
     }
 
