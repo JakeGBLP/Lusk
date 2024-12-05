@@ -3,6 +3,7 @@ package it.jakegblp.lusk.utils;
 import it.jakegblp.lusk.api.enums.Axis4D;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.map.MapCursor;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,7 @@ public class VectorUtils {
         return new EulerAngle(Math.toRadians(vector.getX()), Math.toRadians(vector.getY()), Math.toRadians(vector.getZ()));
     }
 
+    //todo: check if this and its usages work in older server versions
     @Nullable
     public static Number getCoordinate(Object object, Axis4D axis) {
         if (object instanceof Location location) {
@@ -146,6 +148,12 @@ public class VectorUtils {
                 case Y -> vector4i.y;
                 case Z -> vector4i.z;
                 case W -> vector4i.w;
+            };
+        } else if (object instanceof MapCursor mapCursor) {
+            return switch (axis) {
+                case X -> mapCursor.getX();
+                case Y -> mapCursor.getY();
+                default -> null;
             };
         }
         return null;

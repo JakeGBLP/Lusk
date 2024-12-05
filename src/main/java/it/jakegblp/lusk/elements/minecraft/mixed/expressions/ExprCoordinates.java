@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 import static it.jakegblp.lusk.utils.VectorUtils.getCoordinate;
@@ -30,6 +31,7 @@ import static it.jakegblp.lusk.utils.VectorUtils.getCoordinate;
         - 4D Vectors (XYZW)
         - Quaternions (XYZW)
         - AxisAngles (XYZW)
+        - MapCursor
         
         Note: Out of all of these Lusk only implements EulerAngles.
         """)
@@ -50,7 +52,7 @@ public class ExprCoordinates extends PropertyExpression<Object, Number> {
     public boolean init(final Expression<?>[] vars, final int matchedPattern, final @NotNull Kleenean isDelayed, final SkriptParser.@NotNull ParseResult parser) {
         list = parser.hasTag("list");
         if (!list)
-            selectedAxis = parser.tags.isEmpty() ? null : Axis4D.valueOf(parser.tags.getFirst().toUpperCase());
+            selectedAxis = Axis4D.valueOf(parser.tags.getFirst().toUpperCase(Locale.ENGLISH));
         setExpr(vars[0]);
         return true;
     }
@@ -80,6 +82,6 @@ public class ExprCoordinates extends PropertyExpression<Object, Number> {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (list ? "the coordinates of " : "the "+ selectedAxis.name().toLowerCase()+" coordinate component of ") + getExpr().toString(event, debug);
+        return (list ? "the coordinates of " : "the "+ selectedAxis.name().toLowerCase(Locale.ENGLISH)+" coordinate component of ") + getExpr().toString(event, debug);
     }
 }
