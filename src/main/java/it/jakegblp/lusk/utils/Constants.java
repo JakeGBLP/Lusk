@@ -28,7 +28,7 @@ import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
 
 public class Constants {
 
-    public static final double EPSILON = 1e-6;
+    public static final double EPSILON = 1e-7;
 
     public static final String[] LUSK_COLORS = new String[]{"gray", "blue"};
     /**

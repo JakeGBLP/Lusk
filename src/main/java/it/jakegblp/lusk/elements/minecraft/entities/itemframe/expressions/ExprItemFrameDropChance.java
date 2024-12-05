@@ -10,8 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
-import org.skriptlang.skript.lang.arithmetic.Arithmetics;
-import org.skriptlang.skript.lang.arithmetic.Operator;
+
+import static it.jakegblp.lusk.utils.NumberUtils.roundFloatPrecision;
 
 @Name("Item Frame - Item Drop Chance")
 @Description("The chance of the item being dropped upon this item frame's destruction.\nCan be set, must be within 0 and 1.\n1 = always drops; 0 = never drops.")
@@ -45,8 +45,8 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Num
         getExpr().stream(event).forEach(entity -> {
             if (entity instanceof ItemFrame itemFrame) {
                 itemFrame.setItemDropChance(Math.clamp(switch (mode) {
-                    case ADD -> Arithmetics.calculate(Operator.ADDITION,itemFrame.getItemDropChance(), chance,Number.class).floatValue();
-                    case REMOVE -> Arithmetics.calculate(Operator.SUBTRACTION,itemFrame.getItemDropChance(), chance,Number.class).floatValue();
+                    case ADD -> itemFrame.getItemDropChance() + chance;
+                    case REMOVE -> itemFrame.getItemDropChance() - chance;
                     default -> chance;
                 },0,1));
             }
@@ -55,7 +55,7 @@ public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Num
 
     @Override
     public @Nullable Number convert(Entity from) {
-        return from instanceof ItemFrame itemFrame ? itemFrame.getItemDropChance() : null;
+        return from instanceof ItemFrame itemFrame ? roundFloatPrecision(itemFrame.getItemDropChance()) : null;
     }
 
     @Override
