@@ -2,7 +2,6 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
-import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
