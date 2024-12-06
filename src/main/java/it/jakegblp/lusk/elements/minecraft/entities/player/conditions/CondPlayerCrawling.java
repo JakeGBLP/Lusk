@@ -5,12 +5,13 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Name("is Crawling")
 @Description("Checks if a player is crawling")
+import static it.jakegblp.lusk.utils.PlayerUtils.isCrawling;
+
 @Examples({"on damage of player:\n\tif victim is crawling:\n\t\tif chance of 0.5:\n\t\t\tcancel event\n\t\t\tsend \"Your attack has failed!\" to attacker"})
 @Since("1.0.0")
 public class CondPlayerCrawling extends PropertyCondition<Player> {
@@ -20,7 +21,7 @@ public class CondPlayerCrawling extends PropertyCondition<Player> {
 
     @Override
     public boolean check(Player player) {
-        return LuskUtils.isCrawling(player);
+        return isCrawling(player);
     }
 
     @Override
