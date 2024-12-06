@@ -8,8 +8,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -60,12 +58,7 @@ public class LuskUtils {
      */
     @SuppressWarnings("deprecation")
     public static void sendMessage(@NotNull CommandSender sender, String message) {
-        if (HAS_ADVENTURE_API) {
-            Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
-            sender.sendMessage(component);
-        } else {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     /**
