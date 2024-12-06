@@ -32,18 +32,11 @@ public class Constants {
     public static final double EPSILON = 1e-7;
 
     public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
-    /**
-     * Uses Minimessage!
-     */
-    public static final String LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
-    public static final List<InventoryAction>
-            DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
-            PICKUP_ACTION_DATA = List.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_SOME),
-            PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
     public static final String
             ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMORS_STAND_PREFIX = "[armor[ |-]stand]";
+            ARMORS_STAND_PREFIX = "[armor[ |-]stand]",
+            LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
@@ -51,11 +44,15 @@ public class Constants {
             OLDEST_SUPPORTED = parseVersion("1.16"),
             NEWEST_SUPPORTED = parseVersion("1.21.4");
 
+    public static final List<InventoryAction>
+            DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
+            PICKUP_ACTION_DATA = List.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_SOME),
+            PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
+
     public static final boolean
             //todo: see how things play out with old, papermc item rarity
             HAS_VOXEL_SHAPE= classExists("org.bukkit.util.VoxelShape"),
             HAS_SPAWN_CATEGORY = classExists("org.bukkit.entity.SpawnCategory"),
-            HAS_ADVENTURE_API = classExists("net.kyori.adventure.text.Component"),
             HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
             HAS_GENERATED_STRUCTURE = classExists(" org.bukkit.generator.structure.GeneratedStructure"),
             HAS_SPIGOT_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
@@ -94,7 +91,7 @@ public class Constants {
 
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
 
-    //todo: 1. Make file-reading system to allow users to update this. 2.
+    //todo: 1. Make file-reading system to allow users to update this. 2. idk i never ended up typing this one out
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
         put(4, parseVersion("1.7.5"));
         put(5, parseVersion("1.7.10"));
