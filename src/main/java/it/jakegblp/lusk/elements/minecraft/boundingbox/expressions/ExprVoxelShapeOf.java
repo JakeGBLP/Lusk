@@ -10,6 +10,7 @@ import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_VOXEL_SHAPE;
 
 @Name("Voxel Shape - of Block")
 @Description("Returns the detailed collision shape of a block.")
@@ -18,7 +19,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprVoxelShapeOf extends SimplePropertyExpression<Block, VoxelShape> {
 
     static {
-        register(ExprVoxelShapeOf.class, VoxelShape.class, "(voxel|collision) shape", "blocks");
+        if (HAS_VOXEL_SHAPE)
+            register(ExprVoxelShapeOf.class, VoxelShape.class, "(voxel|collision) shape", "blocks");
     }
 
     @Override

@@ -6,6 +6,8 @@ import it.jakegblp.lusk.api.wrappers.EnumWrapper;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.SpawnCategory;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_SPAWN_CATEGORY;
+
 @SuppressWarnings("unused")
 public class EntityClassInfos {
     static {
@@ -18,7 +20,7 @@ public class EntityClassInfos {
                     .documentationId("9099")
                     .since("1.0.2"));
         }
-        if (Skript.classExists("org.bukkit.entity.SpawnCategory") && Classes.getExactClassInfo(SpawnCategory.class) == null) {
+        if (HAS_SPAWN_CATEGORY && Classes.getExactClassInfo(SpawnCategory.class) == null) {
             EnumWrapper<SpawnCategory> SPAWNCATEGORY_ENUM = new EnumWrapper<>(SpawnCategory.class);
             Classes.registerClass(SPAWNCATEGORY_ENUM.getClassInfo("spawncategory")
                     .user("spawn ?categor(y|ies)")
