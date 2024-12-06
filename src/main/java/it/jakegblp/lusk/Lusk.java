@@ -2,6 +2,7 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
@@ -45,7 +46,6 @@ public class Lusk extends JavaPlugin {
             Lusk.registerListeners(new JumpListener.PaperJumpListener());
         }
         registerListeners(
-                new UpdateChecker(this),
                 new JumpListener.SpigotJumpListener(),
                 new JumpListener.PaperJumpListener(),
                 new JumpListener(),
@@ -107,15 +107,15 @@ public class Lusk extends JavaPlugin {
 
         consoleLog("Loaded {0} elements:", total);
         for (int i = 0; i < finish.length; i++) {
-            consoleLog(" {0} {1}{2}", finish[i], elementNames[i], finish[i] == 1 ? "" : "s");
+            consoleLog(" - {0} {1}{2}", finish[i], elementNames[i], finish[i] == 1 ? "" : "s");
         }
         if (!buildType.equals("release")) {
-            consoleLog("<yellow>This is a {0} build and should not be used in production unless stated otherwise.", buildType);
-            consoleLog("<yellow>Report bugs at https://github.com/JakeGBLP/Lusk/issues");
+            consoleLog("&eThis is a {0} build and should not be used in production unless stated otherwise.", buildType);
+            consoleLog("&eReport bugs at https://github.com/JakeGBLP/Lusk/issues");
         }
         new UpdateChecker(this);
         long end = System.currentTimeMillis();
-        consoleLog("<green>Lusk {0} has been enabled! <dark_gray>[<gray>{1}</gray>]", version, new Timespan(end - start));
+        consoleLog("&aLusk {0} has been enabled! &8[&7{1}&8]", version, new Timespan(end - start));
     }
 
     public static Lusk getInstance() {

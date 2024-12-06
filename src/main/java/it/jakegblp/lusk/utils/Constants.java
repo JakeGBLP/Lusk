@@ -31,11 +31,11 @@ public class Constants {
 
     public static final double EPSILON = 1e-7;
 
-    public static final String[] LUSK_COLORS = new String[]{"gray", "blue"};
+    public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
     /**
      * Uses Minimessage!
      */
-    public static final String LUSK_PREFIX = MessageFormat.format("<{0}>[<{1}>Lusk</{1}>]</{0}> ", LUSK_COLORS[0], LUSK_COLORS[1]);
+    public static final String LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
     public static final List<InventoryAction>
             DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
@@ -47,10 +47,17 @@ public class Constants {
 
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            VERSION_SKRIPT = parseVersion(Skript.getVersion().toString());
+            VERSION_SKRIPT = parseVersion(Skript.getVersion().toString()),
+            OLDEST_SUPPORTED = parseVersion("1.16"),
+            NEWEST_SUPPORTED = parseVersion("1.21.4");
 
     public static final boolean
             //todo: see how things play out with old, papermc item rarity
+            HAS_VOXEL_SHAPE= classExists("org.bukkit.util.VoxelShape"),
+            HAS_SPAWN_CATEGORY = classExists("org.bukkit.entity.SpawnCategory"),
+            HAS_ADVENTURE_API = classExists("net.kyori.adventure.text.Component"),
+            HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
+            HAS_GENERATED_STRUCTURE = classExists(" org.bukkit.generator.structure.GeneratedStructure"),
             HAS_SPIGOT_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
             HAS_WARDEN = classExists("org.bukkit.entity.Warden"),
             HAS_SALMON_VARIANT = classExists("org.bukkit.entity.Salmon$Variant"),

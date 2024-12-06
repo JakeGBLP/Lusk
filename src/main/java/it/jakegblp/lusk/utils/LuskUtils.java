@@ -8,6 +8,9 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -31,7 +34,7 @@ public class LuskUtils {
     }
 
     /**
-     * Uses MiniMessage and MessageFormat.
+     * Uses MessageFormat.
      * @param format Minimessage format
      * @param args MessageFormat arguments
      */
@@ -40,14 +43,29 @@ public class LuskUtils {
     }
 
     /**
-     * Uses MiniMessage and MessageFormat.
+     * Uses MessageFormat.
      * For console logging use {@link #consoleLog(String, Object...) the console log method}
      * @param sender A CommandSender
      * @param format Minimessage format
      * @param args MessageFormat arguments
      */
-    public static void send(CommandSender sender, String format, Object... args) {
-        sender.sendRichMessage(LUSK_PREFIX + MessageFormat.format(format, args));
+    public static void send(@NotNull CommandSender sender, String format, Object... args) {
+        sendMessage(sender,LUSK_PREFIX + "&7" + MessageFormat.format(format, args));
+    }
+    /**
+     * Sends a message with `&` color codes to a CommandSender.
+     *
+     * @param sender  The CommandSender to send the message to.
+     * @param message The message with `&` color codes.
+     */
+    @SuppressWarnings("deprecation")
+    public static void sendMessage(@NotNull CommandSender sender, String message) {
+        if (HAS_ADVENTURE_API) {
+            Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+            sender.sendMessage(component);
+        } else {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
     }
 
     /**

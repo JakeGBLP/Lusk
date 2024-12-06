@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.util.Version;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +22,7 @@ import java.net.URLStreamHandler;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
-import static it.jakegblp.lusk.utils.LuskUtils.send;
+import static it.jakegblp.lusk.utils.LuskUtils.*;
 
 /*
  * @author ShaneBeee, JakeGBLP
@@ -50,7 +50,7 @@ public class UpdateChecker implements Listener {
     public UpdateChecker(Lusk plugin) {
         this.plugin = plugin;
         this.pluginVersion = new Version(plugin.getDescription().getVersion());
-
+        checkUpdate();
         setupJoinListener();
     }
 
@@ -62,26 +62,33 @@ public class UpdateChecker implements Listener {
                 if (!player.hasPermission("lusk.update.check")) return;
 
                 Bukkit.getScheduler().runTaskLater(UpdateChecker.this.plugin, () -> getUpdateVersion(true).thenApply(version -> {
-                    send(player,"Lusk is <red><bold>OUTDATED<white>!");
+                    send(player,"Lusk is &c&lOUTDATED&f!");
                     send(player,"New version: {0}", version);
-                    send(player,"Download at: <link>https://github.com/JakeGBLP/Lusk/releases");
+                    send(player,"Download at: https://github.com/JakeGBLP/Lusk/releases");
                     return true;
                 }), 30);
             }
         }, this.plugin);
     }
 
-    // what was this for?
-    private void checkUpdate(boolean async) {
-        consoleLog("Checking for update...");
-        getUpdateVersion(async).thenApply(version -> {
-            consoleLog("<red>Lusk is not up to date!");
-            consoleLog(" - Current version: {0}",this.pluginVersion);
-            consoleLog(" - Available update: {0}",version);
-            consoleLog(" - Download available at: https://github.com/JakeGBLP/Lusk/releases");
+    private void checkUpdate() {
+        consoleLog("&oChecking for update...");
+        getUpdateVersion(false).thenApply(version -> {
+            consoleLog("&cLusk is not up to date!");
+            if (Constants.VERSION_SERVER.isGreaterThan(Constants.NEWEST_SUPPORTED)) {
+                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, please update.",Constants.VERSION_SERVER,this.pluginVersion);
+            }
+            consoleLog("&a&lUpdate Available:");
+            consoleLog(" &l»&c   {0} &7→&a {1}",this.pluginVersion,version);
+            consoleLog(" &l»&7 Download at: https://github.com/JakeGBLP/Lusk/releases");
             return true;
         }).exceptionally(throwable -> {
-            consoleLog("<green>Lusk is up to date!");
+            consoleLog("&aLusk is up to date!");
+            if (Constants.VERSION_SERVER.isLowerThan(Constants.OLDEST_SUPPORTED)) {
+                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, stability is not guaranteed.",Constants.VERSION_SERVER,this.pluginVersion);
+            } else if (Constants.VERSION_SERVER.isGreaterThan(Constants.NEWEST_SUPPORTED)) {
+                consoleLog("&eYou're running Minecraft {0} which doesn't support yet, please report any issue at https://github.com/JakeGBLP/Lusk/issues",Constants.VERSION_SERVER);
+            }
             return true;
         });
     }
@@ -128,7 +135,7 @@ public class UpdateChecker implements Listener {
             String tag_name = jsonObject.get("tag_name").getAsString();
             return new Version(tag_name);
         } catch (IOException e) {
-            consoleLog("<red>Checking for update failed!");
+            consoleLog("&cChecking for update failed!");
         }
         return null;
     }
