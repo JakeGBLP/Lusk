@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Entity - Height")
 @Description("Returns the Height of an Entity.")
-@Examples({"broadcast height of target"})
+@Examples({"broadcast entity height of target"})
 @Since("1.0.0")
 @SuppressWarnings("unused")
 public class ExprEntityHeight extends SimplePropertyExpression<Entity, Double> {
     static {
-        register(ExprEntityHeight.class, Double.class, "height", "entity");
+        register(ExprEntityHeight.class, Double.class, "entity height", "entities");
     }
 
     @Override
@@ -31,6 +31,6 @@ public class ExprEntityHeight extends SimplePropertyExpression<Entity, Double> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "height";
+        return "entity height";
     }
 }
