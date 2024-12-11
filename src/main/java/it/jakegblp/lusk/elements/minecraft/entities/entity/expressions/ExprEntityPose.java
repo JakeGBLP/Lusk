@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @Name("Entity - Pose")
 @Description("Returns the entity's current pose. Note that the pose is only updated at the end of a tick, so it may be inconsistent.")
 @Examples({"broadcast pose of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Plural)")
 public class ExprEntityPose extends SimplePropertyExpression<Entity, Pose> {
     static {
-        register(ExprEntityPose.class, Pose.class, "pose", "entity");
+        register(ExprEntityPose.class, Pose.class, "[entity] pose", "entities");
     }
 
     @Override
@@ -30,6 +30,6 @@ public class ExprEntityPose extends SimplePropertyExpression<Entity, Pose> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "pose";
+        return "entity pose";
     }
 }
