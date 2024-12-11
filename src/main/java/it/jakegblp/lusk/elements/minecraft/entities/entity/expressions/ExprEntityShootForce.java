@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Entity Shoot - Force")
-@Description("The force the arrow was launched with in the Entity Shoot Event.\nThis number ranges from 0 to 0.")
+@Description("The force the arrow was launched with in the Entity Shoot Event.\nThis number ranges from 0 to 1.")
 @Examples("on entity shoot:\n\tbroadcast the bow force")
 @Since("1.1.1")
 @SuppressWarnings("unused")
