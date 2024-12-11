@@ -41,7 +41,8 @@ public class ExprEntityShootItem extends SimpleExpression<ItemStack> {
 
     @Override
     protected ItemStack @NotNull [] get(@NotNull Event e) {
-        return new ItemStack[]{bow ? ((EntityShootBowEvent) e).getBow() : ((EntityShootBowEvent) e).getConsumable()};
+        EntityShootBowEvent shootBowEvent = (EntityShootBowEvent) e;
+        return new ItemStack[]{bow ? shootBowEvent.getBow() : shootBowEvent.getConsumable()};
     }
 
 
@@ -57,6 +58,6 @@ public class ExprEntityShootItem extends SimpleExpression<ItemStack> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the used bow";
+        return bow ? "the used bow" : "the shot item";
     }
 }
