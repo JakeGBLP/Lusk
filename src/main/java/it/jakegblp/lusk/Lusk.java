@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.patchPlurals;
 import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
 
 /**
@@ -29,6 +30,10 @@ public class Lusk extends JavaPlugin {
 
     public void onEnable() {
         long start = System.currentTimeMillis();
+        patchPlurals(new String[][] {
+                {"wolf", "wolves"}//,
+                //{"anvilgui", "anvilguis"}
+        });
         instance = this;
         addon = Skript.registerAddon(this);
         addon.setLanguageFileDirectory("lang");
