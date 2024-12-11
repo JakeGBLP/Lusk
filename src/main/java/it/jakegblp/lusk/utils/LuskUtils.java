@@ -10,10 +10,7 @@ import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +19,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static it.jakegblp.lusk.utils.Constants.*;
-import static it.jakegblp.lusk.utils.DeprecationUtils.getScaleAttribute;
-import static it.jakegblp.lusk.utils.NumberUtils.areDoublesRoughlyEqual;
 
 public class LuskUtils {
 
@@ -142,10 +137,10 @@ public class LuskUtils {
      * @param prefix a (usually optional) string that comes before the property to indicate what kind of object it can be used for
      * @param property a string indicates what this expression will return based on the given object
      * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
-     * @param <T> a generic of the returned object
+     * @param <T> the returned type of the expression
      * @see LuskUtils#registerVerbosePropertyExpression(Class, Class, String, String)
      */
-    public static <T> void registerVerboseBooleanPropertyExpression(
+    public static <T extends Boolean> void registerVerboseBooleanPropertyExpression(
             Class<? extends Expression<T>> expressionClass,
             Class<T> type,
             @Nullable String prefix,
