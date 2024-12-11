@@ -12,6 +12,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -51,11 +52,13 @@ public class Constants {
 
     public static final boolean
             //todo: see how things play out with old, papermc item rarity
-            HAS_VOXEL_SHAPE= classExists("org.bukkit.util.VoxelShape"),
+            HAS_BELL_RESONATE_EVENT = classExists("org.bukkit.event.block.BellResonateEvent"),
+            SPIGOT_HAS_BELL_RING_EVENT = classExists("org.bukkit.event.block.BellRingEvent"),
+            HAS_VOXEL_SHAPE = classExists("org.bukkit.util.VoxelShape"),
             HAS_SPAWN_CATEGORY = classExists("org.bukkit.entity.SpawnCategory"),
             HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
             HAS_GENERATED_STRUCTURE = classExists(" org.bukkit.generator.structure.GeneratedStructure"),
-            HAS_SPIGOT_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
+            SPIGOT_HAS_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
             HAS_WARDEN = classExists("org.bukkit.entity.Warden"),
             HAS_SALMON_VARIANT = classExists("org.bukkit.entity.Salmon$Variant"),
             HAS_WOLF_VARIANT = classExists("org.bukkit.entity.Wolf$Variant"),
@@ -65,13 +68,19 @@ public class Constants {
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS = methodExists(BlockBreakEvent.class, "isDropsItems"),
+            /**
+             * Whether the current skript version is greater than or equal to 2.9
+             */
             SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
             SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.10")), //I forgot why I added this
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
+            HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
+            PAPER_HAS_FOX_API = methodExists(Fox.class,"isInterested"),
 
+            PAPER_HAS_WORLD_BORDER_EVENT = classExists("io.papermc.paper.event.world.border.WorldBorderEvent"),
             PAPER_HAS_PLAYER_ARM_SWING_EVENT = classExists("io.papermc.paper.event.player.PlayerArmSwingEvent"),
             PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND = PAPER_HAS_PLAYER_ARM_SWING_EVENT && methodExists(PlayerArmSwingEvent.class, "getHand"),
             PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT = classExists("io.papermc.paper.event.entity.EntityLoadCrossbowEvent"),
