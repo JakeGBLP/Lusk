@@ -15,11 +15,11 @@ import static it.jakegblp.lusk.utils.Constants.HAS_SPAWN_CATEGORY;
 @Name("Entity - Spawn Category")
 @Description("Returns the category of spawn to which this entity belongs.")
 @Examples({"broadcast spawn category of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Plural)")
 public class ExprEntitySpawnCategory extends SimplePropertyExpression<Entity, SpawnCategory> {
     static {
         if (HAS_SPAWN_CATEGORY)
-            register(ExprEntitySpawnCategory.class, SpawnCategory.class, "spawn category", "entity");
+            register(ExprEntitySpawnCategory.class, SpawnCategory.class, "spawn category", "entities");
     }
 
     @Override
