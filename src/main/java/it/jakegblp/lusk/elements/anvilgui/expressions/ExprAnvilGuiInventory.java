@@ -18,7 +18,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 @Since("1.3")
 public class ExprAnvilGuiInventory extends SimplePropertyExpression<AnvilGuiWrapper, Inventory> {
     static {
-        register(ExprAnvilGuiInventory.class, Inventory.class, ANVIL_GUI_PREFIX + " inventory", "anvilguiinventory");
+        register(ExprAnvilGuiInventory.class, Inventory.class, ANVIL_GUI_PREFIX + " inventory", "anvilguiinventories");
     }
 
     @Override
