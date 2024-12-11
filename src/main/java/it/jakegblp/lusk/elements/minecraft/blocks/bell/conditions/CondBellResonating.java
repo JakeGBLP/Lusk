@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import static it.jakegblp.lusk.utils.Constants.SKRIPT_2_9;
 
 @Name("Bell - is Resonating")
-@Description("`DEPRECATED SINCE SKRIPT 2.9`\nChecks if a bell is resonating.")
+@Description("Checks if a bell is resonating.")
 @Examples({"on bell resonate:\n\tif event-block is resonating:\n\t\tcancel event\n\t\t"})
-@Since("1.0.3, 1.2 (Deprecated)")
+@Since("1.0.3, 1.3 (Plural)")
 @SuppressWarnings("unused")
 public class CondBellResonating extends PropertyCondition<Object> {
     static {
         if (!SKRIPT_2_9) {
-            register(CondBellResonating.class, "resonating", "block");
+            register(CondBellResonating.class, "resonating", "blocks/blockstates");
         }
     }
 
