@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.banner.types;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class BannerClassInfos {
     static {
-        if (Skript.classExists("org.bukkit.block.banner.PatternType") && Classes.getExactClassInfo(PatternType.class) == null) {
+        if (Classes.getExactClassInfo(PatternType.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(PatternType.class, null, "pattern_type")
                             .getClassInfo("patterntype")
@@ -23,7 +22,7 @@ public class BannerClassInfos {
                             .documentationId("8850")
                             .since("1.0.0, 1.2.1 (Registries), 1.3 (1.20.4 Fix)"));
         }
-        if (Skript.classExists("org.bukkit.block.banner.Pattern") && Classes.getExactClassInfo(Pattern.class) == null) {
+        if (Classes.getExactClassInfo(Pattern.class) == null) {
             Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerpattern")
                         .user("banner ?patterns?")
                         .name("Banner Pattern")
