@@ -37,6 +37,7 @@ types:
   sound: sound¦s @a
   blockstate: block state¦s @a
   timespanperiod: time span period¦s @a
+  abstractarrow: abstract arrowd¦s @an
 
 # -- Rotations --
 rotations:
