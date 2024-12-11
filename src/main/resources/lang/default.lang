@@ -20,10 +20,12 @@ types:
   itemrarity: item rarit¦y¦ies @an
   voxelshape: voxel shape¦s @a
   wolfvariant: wolf variant¦s @a
+  wolf: wol¦f¦ves @a
   frogvariant: frog variant¦s @a
   anvilguiinventory: anvil gui inventor¦y¦ies @an
   axolotlvariant: axolotl variant¦s @an
   foxtype: fox types¦s @a
+  fox: fox¦es @a
   horsecolor: horse color¦s @a
   horsestyle: horse style¦s @a
   llamacolor: llama color¦s @a
