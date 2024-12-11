@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Entity - Width")
 @Description("Returns the Width of an Entity.")
-@Examples({"broadcast width of target"})
-@Since("1.0.2")
+@Examples({"broadcast entity width of target"})
+@Since("1.0.2, 1.3 (Plural)")
 @SuppressWarnings("unused")
 public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
     static {
-        register(ExprEntityWidth.class, Double.class, "entity width", "entity");
+        register(ExprEntityWidth.class, Double.class, "entity width", "entities");
     }
 
     @Override
@@ -31,6 +31,6 @@ public class ExprEntityWidth extends SimplePropertyExpression<Entity, Double> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "width";
+        return "entity width";
     }
 }
