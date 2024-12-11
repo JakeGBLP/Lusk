@@ -1,21 +1,19 @@
 package it.jakegblp.lusk.elements.minecraft.entities.player.expressions;
 
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@Name("Player - Previous Gamemode")
+@Name("Player - Previous Game Mode")
 @Description("Returns the previous gamemode of a player.")
 @Examples({"broadcast previous gamemode of player"})
 @Since("1.0.2")
-public class ExprPlayerPreviousGamemode extends SimplePropertyExpression<Player, GameMode> {
+@DocumentationId("9082")
+public class ExprPlayerPreviousGameMode extends SimplePropertyExpression<Player, GameMode> {
     static {
-        register(ExprPlayerPreviousGamemode.class, GameMode.class, "previous game[ ]mode", "player");
+        register(ExprPlayerPreviousGameMode.class, GameMode.class, "previous game[ ]mode", "player");
     }
 
     @Override
@@ -30,6 +28,6 @@ public class ExprPlayerPreviousGamemode extends SimplePropertyExpression<Player,
 
     @Override
     protected @NotNull String getPropertyName() {
-        return "previous gamemode";
+        return "previous game mode";
     }
 }
