@@ -17,31 +17,31 @@ public class ItemFrameClassInfos {
                 One of the values of this enum is "NONE" which can conflict with other things.
                 Implementing Rotation without taking notice of this is an oversight and must not be done.
                 For this reason, I've decided to register this enum the "original" way and add lang entries
-                 to make each element make more sense and be more versatile
+                 to make each element make more sense and be more versatile.
              */
-            EnumUtils<Rotation> difficulties = new EnumUtils<>(Rotation.class, "rotations");
+            EnumUtils<Rotation> ROTATION_ENUM = new EnumUtils<>(Rotation.class, "rotations");
             Classes.registerClass(new ClassInfo<>(Rotation.class, "rotation")
                     .user("rotations?")
                     .name("Rotations")
                     .description("All the regular Rotations.\nRotations are used in item frames.") // add example
-                    .usage(difficulties.getAllNames())
+                    .usage(ROTATION_ENUM.getAllNames())
                     .since("1.3")
                     .parser(new Parser<>() {
                         @Override
                         @Nullable
                         public Rotation parse(final String input, final ParseContext context) {
-                            return difficulties.parse(input);
+                            return ROTATION_ENUM.parse(input);
                         }
 
                         @Override
-                        public String toString(Rotation difficulty, int flags) {
-                            return difficulties.toString(difficulty, flags);
+                        public String toString(Rotation rotation, int flags) {
+                            return ROTATION_ENUM.toString(rotation, flags);
                         }
 
                         @SuppressWarnings("null")
                         @Override
-                        public String toVariableNameString(Rotation difficulty) {
-                            return difficulty.name();
+                        public String toVariableNameString(Rotation rotation) {
+                            return rotation.name();
                         }
 
                     })
