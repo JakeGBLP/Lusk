@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 @Name("Entity - Spawn Reason")
 @Description("Gets the spawn reason that initially spawned this entity.")
 @Examples({"broadcast spawn reason of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Plural)")
 public class ExprEntitySpawnReason extends SimplePropertyExpression<Entity, CreatureSpawnEvent.SpawnReason> {
     static {
-        register(ExprEntitySpawnReason.class, CreatureSpawnEvent.SpawnReason.class, "spawn reason", "entity");
+        register(ExprEntitySpawnReason.class, CreatureSpawnEvent.SpawnReason.class, "spawn reason", "entities");
     }
 
     @Override
