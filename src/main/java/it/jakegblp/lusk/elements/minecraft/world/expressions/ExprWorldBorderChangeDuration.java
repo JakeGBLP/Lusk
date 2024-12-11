@@ -14,6 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 import static it.jakegblp.lusk.utils.DeprecationUtils.getMilliseconds;
 
 @Name("WorldBorder - Change Duration")
@@ -24,7 +25,7 @@ import static it.jakegblp.lusk.utils.DeprecationUtils.getMilliseconds;
 @SuppressWarnings("unused")
 public class ExprWorldBorderChangeDuration extends SimpleExpression<Timespan> {
     static {
-        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
+        if (PAPER_HAS_WORLD_BORDER_EVENT) {
             Skript.registerExpression(ExprWorldBorderChangeDuration.class, Timespan.class, ExpressionType.EVENT,
                     "[the] world[ ]border (shift|change) duration");
         }

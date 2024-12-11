@@ -16,6 +16,8 @@ import org.bukkit.event.inventory.HopperInventorySearchEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
+
 @Name("Hopper - Searched Block")
 @Description("Searched Block expression for the Hopper Inventory Search Event.")
 @Examples({"on inventory search:\n\tbroadcast the searched block"})
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprHopperSearchedBlock extends SimpleExpression<Block> {
     static {
-        if (Skript.classExists("org.bukkit.event.inventory.HopperInventorySearchEvent")) {
+        if (HAS_HOPPER_INVENTORY_SEARCH_EVENT) {
             Skript.registerExpression(ExprHopperSearchedBlock.class, Block.class, ExpressionType.EVENT,
                     "[the] searched block");
         }

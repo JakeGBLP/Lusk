@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
+import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
 
 @Name("Item - Rarity")
 @Description("Returns the rarity of an item.\nCan be set.\n\nBefore Lusk 1.2 (and Minecraft 1.20.5), this expression returned strings and also worked for enchantments, due to some major changes enchantments no longer have a rarity.")
@@ -22,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
 public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
     //todo: add tests
     static {
-        if (HAS_SPIGOT_ITEM_RARITY) {
+        if (SPIGOT_HAS_ITEM_RARITY) {
             register(ExprRarity.class, ItemRarity.class, "item rarity", "itemtypes");
         }
     }

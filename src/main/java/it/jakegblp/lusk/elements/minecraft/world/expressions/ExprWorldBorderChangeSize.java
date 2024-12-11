@@ -14,6 +14,8 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
+
 @Name("WorldBorder - New/Old Size")
 @Description("Returns the new/old anger of the warden in the World Border Change events.\nCan be set only within the Start variant of the event.")
 @Examples({""})
@@ -22,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprWorldBorderChangeSize extends SimpleExpression<Double> {
     static {
-        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
+        if (PAPER_HAS_WORLD_BORDER_EVENT) {
             Skript.registerExpression(ExprWorldBorderChangeSize.class, Double.class, ExpressionType.EVENT,
                     "[the] [future|:past] world[ ]border size");
         }

@@ -7,12 +7,12 @@ import org.skriptlang.skript.lang.comparator.Comparator;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_SPIGOT_ITEM_RARITY;
+import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
 
 @SuppressWarnings("unused")
 public class ItemComparators {
     static {
-        if (HAS_SPIGOT_ITEM_RARITY) {
+        if (SPIGOT_HAS_ITEM_RARITY) {
             Comparators.registerComparator(ItemStack.class, ItemRarity.class, new Comparator<>() {
                 @Override
                 public @NotNull Relation compare(ItemStack itemStack, ItemRarity itemRarity) {

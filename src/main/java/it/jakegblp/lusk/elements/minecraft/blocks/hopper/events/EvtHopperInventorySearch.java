@@ -12,10 +12,12 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
+
 @SuppressWarnings("unused")
 public class EvtHopperInventorySearch extends SkriptEvent {
     static {
-        if (Skript.classExists("org.bukkit.event.inventory.HopperInventorySearchEvent")) {
+        if (HAS_HOPPER_INVENTORY_SEARCH_EVENT) {
             Skript.registerEvent("Hopper - on Inventory Search", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
                             "hopper inventory search[ing]",
                             "hopper source search[ing]",

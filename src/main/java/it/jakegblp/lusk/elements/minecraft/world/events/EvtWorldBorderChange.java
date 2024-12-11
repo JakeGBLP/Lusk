@@ -16,10 +16,12 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
+
 @SuppressWarnings("unused")
 public class EvtWorldBorderChange extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.world.border.WorldBorderEvent")) {
+        if (PAPER_HAS_WORLD_BORDER_EVENT) {
             Skript.registerEvent("WorldBorder - on Change/Center Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
                             "world[ ]border start[ing|ed] [to] chang(e|ing)",
                             "world[ ]border stop chang(e|ing)",
