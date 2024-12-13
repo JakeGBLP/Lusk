@@ -32,12 +32,12 @@ public class ExprArmorStandIsInvisible extends SimpleBooleanPropertyExpression<O
 
     @Override
     public void set(Object from, Boolean to) {
-        ArmorStandUtils.setIsInvisible(from, to);
+        ArmorStandUtils.setIsInvisible(from, !to);
     }
 
     @Override
     public void reset(Object from) {
-        set(from, false);
+        ArmorStandUtils.setIsInvisible(from, false);
     }
 
     @Override
