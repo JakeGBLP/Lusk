@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -16,6 +15,7 @@ import org.bukkit.event.inventory.HopperInventorySearchEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
 
 @Name("Hopper - Searched Block")
@@ -26,7 +26,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT
 public class ExprHopperSearchedBlock extends SimpleExpression<Block> {
     static {
         if (HAS_HOPPER_INVENTORY_SEARCH_EVENT) {
-            Skript.registerExpression(ExprHopperSearchedBlock.class, Block.class, ExpressionType.EVENT,
+            Skript.registerExpression(ExprHopperSearchedBlock.class, Block.class, EVENT_OR_SIMPLE,
                     "[the] searched block");
         }
     }

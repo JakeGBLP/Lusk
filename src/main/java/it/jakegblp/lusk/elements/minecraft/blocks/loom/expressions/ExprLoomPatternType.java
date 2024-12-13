@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -13,6 +12,8 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Loom Pattern Type")
 @Description("Gets the pattern type selected in a Loom Pattern Select event")
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprLoomPatternType extends SimpleExpression<PatternType> {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
-            Skript.registerExpression(ExprLoomPatternType.class, PatternType.class, ExpressionType.EVENT,
+            Skript.registerExpression(ExprLoomPatternType.class, PatternType.class, EVENT_OR_SIMPLE,
                     "[the] [selected] loom [banner] pattern [type]");
         }
     }

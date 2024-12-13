@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.log.ErrorQuality;
@@ -40,6 +39,7 @@ import java.util.List;
 
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.OFF_HAND;
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.TOOL;
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Used Tool/Used Hand/Used Equipment Slot")
 @Description("""
@@ -83,7 +83,7 @@ public class ExprUsedTool extends SimpleExpression<Object> {
     // an equipment slot?
     // i should make multiple patterns and an extensive description about this.
     static {
-        Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.EVENT, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
+        Skript.registerExpression(ExprUsedTool.class, Object.class, EVENT_OR_SIMPLE, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
     }
 
     boolean hand;

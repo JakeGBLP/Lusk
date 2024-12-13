@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -16,13 +15,15 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
+
 @Name("Anvil GUI - The Anvil Gui")
 @Description("Gets the anvil gui involved in an event.")
 @Examples({"set anvil title of anvil gui to \"hello\"\nopen anvil anvil gui to player"})
 @Since("1.3")
 public class ExprAnvilGui extends SimpleExpression<AnvilGuiWrapper> {
     static {
-        Skript.registerExpression(ExprAnvilGui.class, AnvilGuiWrapper.class, ExpressionType.EVENT,
+        Skript.registerExpression(ExprAnvilGui.class, AnvilGuiWrapper.class, EVENT_OR_SIMPLE,
                 "[the] anvil gui");
     }
 

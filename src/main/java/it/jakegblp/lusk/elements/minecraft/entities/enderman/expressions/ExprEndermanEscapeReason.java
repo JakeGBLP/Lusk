@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -14,6 +13,8 @@ import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Enderman - Escape Reason")
 @Description("Returns the Escape Reason in an Enderman Escape Event.\nThis Expression requires Paper.")
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEndermanEscapeReason extends SimpleExpression<EndermanEscapeEvent.Reason> {
     static {
         if (Skript.classExists("com.destroystokyo.paper.event.entity.EndermanEscapeEvent")) {
-            Skript.registerExpression(ExprEndermanEscapeReason.class, EndermanEscapeEvent.Reason.class, ExpressionType.EVENT,
+            Skript.registerExpression(ExprEndermanEscapeReason.class, EndermanEscapeEvent.Reason.class, EVENT_OR_SIMPLE,
                     "[the] enderman escape reason");
         }
     }

@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -14,6 +13,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 
 @Name("Past/Future World Border Center")
@@ -25,7 +25,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location> {
     static {
         if (PAPER_HAS_WORLD_BORDER_EVENT) {
-            Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, ExpressionType.EVENT,
+            Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, EVENT_OR_SIMPLE,
                     "[the] [future|:past] world[ ]border center");
         }
     }

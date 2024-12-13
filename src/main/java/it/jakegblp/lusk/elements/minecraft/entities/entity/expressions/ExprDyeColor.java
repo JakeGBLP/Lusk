@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.SkriptColor;
@@ -14,6 +13,8 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
+
 @Name("Dye Event - Dye Color")
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
 @Examples({"on dye:\n\tbroadcast the entity dye color"})
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprDyeColor extends SimpleExpression<SkriptColor> {
     static {
-        Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, ExpressionType.EVENT,
+        Skript.registerExpression(ExprDyeColor.class, SkriptColor.class, EVENT_OR_SIMPLE,
                 "[the |event-]entity dye color");
     }
 

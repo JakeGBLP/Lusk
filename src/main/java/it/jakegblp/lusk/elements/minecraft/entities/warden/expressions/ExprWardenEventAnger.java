@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -12,6 +11,8 @@ import io.papermc.paper.event.entity.WardenAngerChangeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Warden Anger (Event)")
 @Description("Returns the past/future anger of the warden in the Warden Anger Change event.\nThe future anger level can be set.")
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprWardenEventAnger extends SimpleExpression<Integer> {
     static {
         if (Skript.classExists("io.papermc.paper.event.entity.WardenAngerChangeEvent")) {
-            Skript.registerExpression(ExprWardenEventAnger.class, Integer.class, ExpressionType.EVENT,
+            Skript.registerExpression(ExprWardenEventAnger.class, Integer.class, EVENT_OR_SIMPLE,
                     "[the] [future|:past] anger [level] [of [the] warden]");
         }
     }

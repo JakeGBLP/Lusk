@@ -6,7 +6,6 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -15,6 +14,8 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
+
 @Name("Entity Shoot - Force")
 @Description("The force the arrow was launched with in the Entity Shoot Event.\nThis number ranges from 0 to 1.")
 @Examples("on entity shoot:\n\tbroadcast the bow force")
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class ExprEntityShootForce extends SimpleExpression<Number> {
     static {
-        Skript.registerExpression(ExprEntityShootForce.class, Number.class, ExpressionType.EVENT,
+        Skript.registerExpression(ExprEntityShootForce.class, Number.class, EVENT_OR_SIMPLE,
                 "[the |event-](bow [shoot]|arrow [launch|shot]|sho[o]t) force");
     }
 
