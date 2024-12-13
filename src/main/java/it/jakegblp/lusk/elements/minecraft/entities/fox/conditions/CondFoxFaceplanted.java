@@ -9,6 +9,8 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.LuskUtils.registerPrefixedPropertyCondition;
+
 @Name("Fox - is Faceplanted")
 @Description("Checks if the fox is faceplanted.")
 @Examples({"on damage of fox:\n\tif victim is faceplanted:\n\t\tcancel event"})
@@ -16,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CondFoxFaceplanted extends PropertyCondition<LivingEntity> {
     static {
-        register(CondFoxFaceplanted.class, "face[ ]planted", "livingentities");
+        registerPrefixedPropertyCondition(CondFoxFaceplanted.class, "[fox[es]]", "face[ |-]planted", "livingentities");
     }
 
     @Override

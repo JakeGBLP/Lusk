@@ -9,6 +9,8 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.LuskUtils.registerPrefixedPropertyCondition;
+
 @Name("Fox - is Crouching")
 @Description("Checks if a fox is crouching.")
 @Examples({"on damage of fox:\n\tif victim is crouching:\n\t\tcancel event"})
@@ -16,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CondFoxCrouching extends PropertyCondition<LivingEntity> {
     static {
-        register(CondFoxCrouching.class, "crouching", "livingentities");
+        registerPrefixedPropertyCondition(CondFoxCrouching.class, "[fox[es]]", "crouching", "livingentities");
     }
 
     @Override
