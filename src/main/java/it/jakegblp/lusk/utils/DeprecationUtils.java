@@ -39,17 +39,17 @@ public class DeprecationUtils {
 
     @Nullable
     public static Attribute getScaleAttribute() {
-        try {
-            return (Attribute) Attribute.class.getDeclaredField("GENERIC_SCALE").get(null);
-        } catch (final NoSuchFieldException | SecurityException | IllegalAccessException ignored) {}
         if (HAS_SCALE_ATTRIBUTE) {
             return Attribute.SCALE;
         }
+        try {
+            return (Attribute) Attribute.class.getDeclaredField("GENERIC_SCALE").get(null);
+        } catch (final NoSuchFieldException | SecurityException | IllegalAccessException ignored) {}
         return null;
     }
 
     /**
-     * Replaces deprecated methods and avoid reflection for pre-TimePeriod implementation.
+     * Replaces deprecated methods and avoids reflection for pre-TimePeriod implementation.
      */
     public static Timespan fromTicks(long ticks) {
         return new Timespan(ticks * 50L);
