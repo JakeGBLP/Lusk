@@ -1,26 +1,13 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.types;
 
-import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.data.DefaultChangers;
-import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
 import it.jakegblp.lusk.api.enums.BodyPart;
 import it.jakegblp.lusk.api.wrappers.EnumWrapper;
-import org.bukkit.entity.ArmorStand;
 
 @SuppressWarnings("unused")
 public class ArmorStandClassInfos {
     static {
-        if (Classes.getExactClassInfo(ArmorStand.class) == null) {
-            Classes.registerClass(new ClassInfo<>(ArmorStand.class, "armorstand")
-                    .user("armor ?stands?")
-                    .name("Armor Stand")
-                    .description("An armor stand.") // add example
-                    .since("1.3")
-                    .defaultExpression(new EventValueExpression<>(ArmorStand.class))
-                    .changer(DefaultChangers.entityChanger));
-        }
         EnumWrapper<ArmorStandInteraction> ARMOR_STAND_INTERACTION_ENUM = new EnumWrapper<>(ArmorStandInteraction.class);
         Classes.registerClass(ARMOR_STAND_INTERACTION_ENUM.getClassInfo("armorstandinteraction")
                 .user("armor( |-)?stand interactions?")

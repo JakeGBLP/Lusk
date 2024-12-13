@@ -1,13 +1,12 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PAPER_TYPES;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - is Small (Property)")
 @Description("""
@@ -17,30 +16,30 @@ Gets and sets the `small` property of an armorstand entity or item, to do so wit
 @Since("1.0.2, 1.3 (item)")
 @DocumentationId("9059")
 @SuppressWarnings("unused")
-public class ExprArmorStandIsSmall extends SimplePropertyExpression<Object, Boolean> {
+public class ExprArmorStandIsSmall extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandIsSmall.class, Boolean.class, "[armor[ |-]stand]", "[is] small", "armorstands/itemtypes");
+        register(ExprArmorStandIsSmall.class, Boolean.class, ARMOR_STAND_PREFIX, "[is] small", ARMOR_STAND_PAPER_TYPES);
     }
 
     @Override
-    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return switch (mode) {
-            case SET -> new Class[]{Boolean.class};
-            case RESET, DELETE -> new Class[0];
-            default -> null;
-        };
+    public boolean allowSet() {
+        return true;
     }
 
     @Override
-    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        boolean hasArms = false;
-        if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            hasArms = bool;
-        }
-        for (Object armorStand : getExpr().getAll(event)) {
-            ArmorStandUtils.setIsSmall(armorStand, hasArms);
-        }
+    public boolean allowReset() {
+        return true;
+    }
+
+    @Override
+    public void set(Object from, Boolean to) {
+        ArmorStandUtils.setIsSmall(from, to);
+    }
+
+    @Override
+    public void reset(Object from) {
+        set(from, false);
     }
 
     @Override
@@ -51,10 +50,5 @@ public class ExprArmorStandIsSmall extends SimplePropertyExpression<Object, Bool
     @Override
     protected String getPropertyName() {
         return "the armor stand is small property";
-    }
-
-    @Override
-    public Class<? extends Boolean> getReturnType() {
-        return Boolean.class;
     }
 }

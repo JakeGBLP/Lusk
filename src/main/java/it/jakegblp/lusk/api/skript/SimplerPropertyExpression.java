@@ -6,30 +6,89 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimplerPropertyExpression<F,T> extends SimplePropertyExpression<F, T> {
+
+    /**
+     * @return whether this property can be set.
+     * {@inheritDoc}
+     */
     public boolean allowSet() {
         return false;
     }
+    /**
+     * @return whether this property can be reset.
+     * {@inheritDoc}
+     */
     public boolean allowReset() {
         return false;
     }
+    /**
+     * @return whether this property can be added to.
+     * {@inheritDoc}
+     */
     public boolean allowAdd() {
         return false;
     }
+    /**
+     * @return whether this property can be removed from.
+     * {@inheritDoc}
+     */
     public boolean allowRemove() {
         return false;
     }
+    /**
+     * @return whether this property can be mass removed from.
+     * {@inheritDoc}
+     */
     public boolean allowRemoveAll() {
         return false;
     }
+    /**
+     * @return whether this property can be deleted.
+     * {@inheritDoc}
+     */
     public boolean allowDelete() {
         return false;
     }
 
+    /**
+     * Sets this property for {@link F} to {@link T}.
+     * @param from the origin of this property
+     * @param to the new value of this property
+     * {@inheritDoc}
+     */
     public void set(F from, T to) {}
+    /**
+     * Adds {@link T} to this property for {@link F}.
+     * @param from the origin of this property
+     * @param to the value to add to this property
+     * {@inheritDoc}
+     */
     public void add(F from, T to) {}
+    /**
+     * Removes {@link T} from this property for {@link F}.
+     * @param from the origin of this property
+     * @param to the value to remove from this property
+     * {@inheritDoc}
+     */
     public void remove(F from, T to) {}
+    /**
+     * Removes all of {@link T} from this property for {@link F}.
+     * @param from the origin of this property
+     * @param to the value to mass remove from this property
+     * {@inheritDoc}
+     */
     public void removeAll(F from, T to) {}
+    /**
+     * Deletes this property for {@link F}.
+     * @param from the origin of this property
+     * {@inheritDoc}
+     */
     public void delete(F from) {}
+    /**
+     * Resets this property for {@link F}.
+     * @param from the origin of this property
+     * {@inheritDoc}
+     */
     public void reset(F from) {}
 
     @Override

@@ -8,8 +8,8 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -57,9 +57,9 @@ public class EvtArmorStandManipulate extends SkriptEvent {
                     return e.getRightClicked();
                 }
             }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStand.class, new Getter<>() {
+            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, LivingEntity.class, new Getter<>() {
                 @Override
-                public ArmorStand get(final PlayerArmorStandManipulateEvent e) {
+                public LivingEntity get(final PlayerArmorStandManipulateEvent e) {
                     return e.getRightClicked();
                 }
             }, EventValues.TIME_NOW);
@@ -115,7 +115,6 @@ public class EvtArmorStandManipulate extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        boolean eNotNull = e != null;
-        return "armor stand " + (slots != null && eNotNull ? slots.toString(e, debug) : "") + " " + (interactionLiteral != null && eNotNull ? interactionLiteral.toString(e, debug) : "");
+        return "armor stand " + (slots != null ? slots.toString(e, debug) : "") + " " + (interactionLiteral != null ? interactionLiteral.toString(e, debug) : "");
     }
 }

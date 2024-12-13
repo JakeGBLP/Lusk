@@ -102,30 +102,6 @@ public class LuskUtils {
     }
 
     /**
-     * Registers a property expression that includes the following patterns:<br>
-     * 1. <code>[the] %property% [property] of %fromType%</code><br>
-     * 2. <code>%fromType%'[s] %property% [property]</code><br>
-     *
-     * @param expressionClass the class of the expression to register
-     * @param type the class of the return type
-     * @param property a string indicates what this expression will return based on the given object
-     * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
-     * @param <T> a generic of the returned object
-     * @see LuskUtils#registerVerboseBooleanPropertyExpression(Class, Class, String, String, String)
-     */
-    public static <T> void registerVerbosePropertyExpression(
-            Class<? extends Expression<T>> expressionClass,
-            Class<T> type,
-            String property,
-            String fromType) {
-        String[] patterns = {
-                "[the] " + property + " [property] of %" + fromType + "%",
-                "%" + fromType + "%'[s] " + property + " [property]"
-        };
-        Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
-    }
-
-    /**
      * Registers a property expression that gets or is set to a boolean; includes the following patterns:<br>
      * 1. <code>[the] %prefix% %property% [state|property] of %fromType%</code><br>
      * 2. <code>%fromType%'[s] %prefix% %property% [state|property]</code><br>
@@ -138,7 +114,6 @@ public class LuskUtils {
      * @param property a string indicates what this expression will return based on the given object
      * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
      * @param <T> the returned type of the expression
-     * @see LuskUtils#registerVerbosePropertyExpression(Class, Class, String, String)
      */
     public static <T extends Boolean> void registerVerboseBooleanPropertyExpression(
             Class<? extends Expression<T>> expressionClass,
@@ -194,6 +169,5 @@ public class LuskUtils {
             default:
                 assert false;
         }
-
     }
 }

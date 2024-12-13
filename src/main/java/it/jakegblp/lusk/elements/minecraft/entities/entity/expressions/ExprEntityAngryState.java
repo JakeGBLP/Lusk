@@ -17,7 +17,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.EntityUtils.setAngry;
+import static it.jakegblp.lusk.utils.EntityUtils.setIsAngry;
 
 @Name("Entity - Angry State")
 @Description("Returns the Angry State of an entity.\n(Warden, PigZombie, Wolf, Enderman)\nCan be set for all except wardens.")
@@ -57,7 +57,7 @@ public class ExprEntityAngryState extends SimpleExpression<Boolean> {
     @Override
     public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
         if (delta[0] instanceof Boolean bool) {
-            livingEntityExpression.stream(e).forEach(livingEntity -> setAngry(livingEntity,bool));
+            livingEntityExpression.stream(e).forEach(livingEntity -> setIsAngry(livingEntity,bool));
         }
     }
 

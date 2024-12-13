@@ -14,18 +14,15 @@ types:
   enderdragonphase: ender dragon phase¦s @a
   blockface: block face¦s @a
   armorstandinteraction: armor stand interaction¦s @an
-  armorstand: armor stand¦s @an
   bodypart: body part¦s @a
   rotation: rotation¦s @a
   itemrarity: item rarit¦y¦ies @an
   voxelshape: voxel shape¦s @a
   wolfvariant: wolf variant¦s @a
-  wolf: wol¦f¦ves @a
   frogvariant: frog variant¦s @a
   anvilguiinventory: anvil gui inventor¦y¦ies @an
   axolotlvariant: axolotl variant¦s @an
   foxtype: fox types¦s @a
-  fox: fox¦es @a
   horsecolor: horse color¦s @a
   horsestyle: horse style¦s @a
   llamacolor: llama color¦s @a
@@ -37,7 +34,6 @@ types:
   sound: sound¦s @a
   blockstate: block state¦s @a
   timespanperiod: time span period¦s @a
-  abstractarrow: abstract arrowd¦s @an
 
 # -- Rotations --
 rotations:

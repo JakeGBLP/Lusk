@@ -11,27 +11,32 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerbosePropertyExpression;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - Disabled Slots")
 @Description("All the disabled slots of an armor stand.\nCan be set, remove from, added to, reset and deleted.")
 @Examples("add chest slot to disabled slots of {_armorStand}")
 @Since("1.3")
-public class ExprArmorStandDisabledSlots extends PropertyExpression<ArmorStand, EquipmentSlot> {
+public class ExprArmorStandDisabledSlots extends PropertyExpression<LivingEntity, EquipmentSlot> {
 
     static {
-        registerVerbosePropertyExpression(ExprArmorStandDisabledSlots.class,EquipmentSlot.class,"[armor[ |-]stand] disabled [equipment] slots", "armorstands");
+        register(ExprArmorStandDisabledSlots.class, EquipmentSlot.class, ARMOR_STAND_PREFIX + " disabled [equipment] slots", "livingentities");
     }
 
     @Override
-    protected EquipmentSlot[] get(Event event, ArmorStand[] source) {
-        return Arrays.stream(source).flatMap(armorStand -> armorStand.getDisabledSlots().stream())
+    protected EquipmentSlot[] get(Event event, LivingEntity[] source) {
+        return Arrays.stream(source)
+                .filter(ArmorStand.class::isInstance)
+                .map(ArmorStand.class::cast)
+                .flatMap(armorStand -> armorStand.getDisabledSlots().stream())
                 .toArray(EquipmentSlot[]::new);
     }
 
@@ -53,17 +58,20 @@ public class ExprArmorStandDisabledSlots extends PropertyExpression<ArmorStand, 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        setExpr((Expression<ArmorStand>) expressions[0]);
+        setExpr((Expression<LivingEntity>) expressions[0]);
         return true;
     }
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        Stream<ArmorStand> armorStands = getExpr().stream(event)
+                .filter(ArmorStand.class::isInstance)
+                .map(ArmorStand.class::cast);
         switch (mode) {
             case SET, ADD, REMOVE -> {
                 if (delta != null && delta.length > 0) {
                     EquipmentSlot[] slots = (EquipmentSlot[]) delta;
-                    getExpr().stream(event).forEach(armorStand -> {
+                    armorStands.forEach(armorStand -> {
                         switch (mode) {
                             case SET -> armorStand.setDisabledSlots(slots);
                             case ADD -> armorStand.addDisabledSlots(slots);
@@ -72,7 +80,7 @@ public class ExprArmorStandDisabledSlots extends PropertyExpression<ArmorStand, 
                     });
                 }
             }
-            case RESET, DELETE -> getExpr().stream(event).forEach(ArmorStand::setDisabledSlots);
+            case RESET, DELETE -> armorStands.forEach(ArmorStand::setDisabledSlots);
         }
     }
 

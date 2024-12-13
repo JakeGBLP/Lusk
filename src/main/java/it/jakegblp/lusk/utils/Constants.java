@@ -35,11 +35,6 @@ public class Constants {
 
     public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
 
-    public static final String
-            ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMORS_STAND_PREFIX = "[armor[ |-]stand]",
-            LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
-
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
             VERSION_SKRIPT = parseVersion(Skript.getVersion().toString()),
@@ -101,6 +96,12 @@ public class Constants {
             PAPER_HAS_PAPER_REGISTRY_ACCESS = classExists("io.papermc.paper.registry.RegistryAccess") && methodExists(RegistryAccess.class, "registryAccess"),
             PAPER_HAS_PAPER_REGISTRY_KEY = PAPER_HAS_PAPER_REGISTRY_ACCESS && classExists("io.papermc.paper.registry.RegistryKey") && methodExists(RegistryAccess.class, "getRegistry", RegistryKey.class);
 
+    public static final String
+            ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
+            ARMOR_STAND_PREFIX = "[armor[ |-]stand]",
+            ARMOR_STAND_PAPER_TYPES = "livingentity"+(PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
+            LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
+
     public static final Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
     public static final ExpressionType EVENT_OR_SIMPLE = SKRIPT_2_8 ? ExpressionType.EVENT : ExpressionType.SIMPLE;
@@ -152,5 +153,6 @@ public class Constants {
         put(766, parseVersion("1.20.6"));
         put(767, parseVersion("1.21.1"));
         put(768, parseVersion("1.21.3"));
+        put(769, parseVersion("1.21.4"));
     }};
 }

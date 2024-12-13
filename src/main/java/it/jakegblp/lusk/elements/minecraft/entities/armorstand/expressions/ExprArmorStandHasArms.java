@@ -1,19 +1,16 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PAPER_TYPES;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - has Arms (Property)")
 @Description("""
@@ -22,54 +19,44 @@ Gets and sets the `hasHarms` property of an armorstand entity or item, to do so 
 @Examples({"set has arms property of target to true", "set whether armor stand target has arms to true"})
 @Since("1.0.2, 1.3 (item)")
 @SuppressWarnings("unused")
-public class ExprArmorStandHasArms extends SimplePropertyExpression<Object, Boolean> {
+public class ExprArmorStandHasArms extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprArmorStandHasArms.class, Boolean.class, "[armor[ |-]stand]", "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", "armorstands/itemtypes");
+        register(ExprArmorStandHasArms.class, Boolean.class, ARMOR_STAND_PREFIX, "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", ARMOR_STAND_PAPER_TYPES);
     }
 
-    private boolean invisible;
+    @Override
+    public boolean setNegated(int matchedPattern, SkriptParser.ParseResult parseResult) {
+        return parseResult.hasTag("in");
+    }
 
     @Override
-    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        super.init(expressions, matchedPattern, isDelayed, parseResult);
-        invisible = parseResult.hasTag("in");
+    public boolean allowSet() {
         return true;
     }
 
-
     @Override
-    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return switch (mode) {
-            case SET -> new Class[]{Boolean.class};
-            case RESET, DELETE -> new Class[0];
-            default -> null;
-        };
+    public boolean allowReset() {
+        return true;
     }
 
     @Override
-    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        boolean hasArms = false;
-        if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
-            hasArms = bool ^ invisible;
-        }
-        for (Object armorStand : getExpr().getAll(event)) {
-            ArmorStandUtils.setHasArms(armorStand, hasArms);
-        }
+    public void set(Object from, Boolean to) {
+        ArmorStandUtils.setHasArms(from, to);
+    }
+
+    @Override
+    public void reset(Object from) {
+        set(from, !isNegated());
     }
 
     @Override
     public @Nullable Boolean convert(Object from) {
-        return invisible ^ ArmorStandUtils.hasArms(from);
+        return isNegated() ^ ArmorStandUtils.hasArms(from);
     }
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand arms "+(invisible ? "invisibility" : "visibility")+" property";
-    }
-
-    @Override
-    public Class<? extends Boolean> getReturnType() {
-        return Boolean.class;
+        return "the armor stand arms "+(isNegated() ? "in" : "") + "visibility property";
     }
 }

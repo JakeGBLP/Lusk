@@ -11,14 +11,16 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.enums.BodyPart;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
-import static it.jakegblp.lusk.utils.Constants.ARMORS_STAND_PREFIX;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 import static it.jakegblp.lusk.utils.EntityUtils.getArmorStandRotation;
 import static it.jakegblp.lusk.utils.EntityUtils.setArmorStandRotation;
 import static it.jakegblp.lusk.utils.VectorUtils.toVector;
@@ -28,11 +30,11 @@ import static it.jakegblp.lusk.utils.VectorUtils.toVector;
 @Examples({"broadcast rotation of target", "set head rotation of target to vector(45,0,0)\n# looks down a a 45 degrees - sad armor stand :("})
 @Since("1.0.2, 1.3 (Degrees)")
 @SuppressWarnings("unused")
-public class ExprArmorStandRotations extends PropertyExpression<ArmorStand,Vector> {
+public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vector> {
     // todo: allow radians too, perhaps make a reusable system that supports either
     static {
         register(ExprArmorStandRotations.class, Vector.class,
-                ARMORS_STAND_PREFIX+" %bodyparts% (rotation|pose)[s]", "armorstands");
+                ARMOR_STAND_PREFIX +" %bodyparts% (rotation|pose)[s]", "armorstands");
     }
 
     private Expression<BodyPart> bodyPartExpression;
@@ -66,11 +68,13 @@ public class ExprArmorStandRotations extends PropertyExpression<ArmorStand,Vecto
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        ArmorStand[] armorStands = getExpr().getAll(event);
+        Stream<ArmorStand> armorStands = getExpr().stream(event)
+                .filter(ArmorStand.class::isInstance)
+                .map(ArmorStand.class::cast);
         if (mode == Changer.ChangeMode.RESET) {
-            for (ArmorStand armorStand : armorStands) {
-                bodyPartExpression.stream(event).forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, EulerAngle.ZERO));
-            }
+            armorStands.forEach(armorStand ->
+                    bodyPartExpression.stream(event)
+                            .forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, EulerAngle.ZERO)));
         } else {
             Vector vector, current;
             if (delta[0] instanceof Vector v) {
@@ -81,14 +85,15 @@ public class ExprArmorStandRotations extends PropertyExpression<ArmorStand,Vecto
                 vector = null;
             }
             if (vector != null) {
-                for (ArmorStand armorStand : armorStands) {
-                    bodyPartExpression.stream(event).forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, switch (mode) {
-                        case SET -> vector;
-                        case ADD -> getArmorStandRotation(armorStand, bodyPart).add(vector);
-                        case REMOVE -> getArmorStandRotation(armorStand, bodyPart).subtract(vector);
-                        default -> new Vector();
-                    }));
-                }
+                armorStands.forEach(armorStand ->
+                        bodyPartExpression.stream(event)
+                                .forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, switch (mode) {
+                                    case SET -> vector;
+                                    case ADD -> getArmorStandRotation(armorStand, bodyPart).add(vector);
+                                    case REMOVE -> getArmorStandRotation(armorStand, bodyPart).subtract(vector);
+                                    default -> new Vector();
+                                }))
+                );
             }
         }
     }
@@ -99,8 +104,10 @@ public class ExprArmorStandRotations extends PropertyExpression<ArmorStand,Vecto
     }
 
     @Override
-    protected Vector[] get(Event event, ArmorStand[] source) {
+    protected Vector[] get(Event event, LivingEntity[] source) {
         return Arrays.stream(source)
+                .filter(ArmorStand.class::isInstance)
+                .map(ArmorStand.class::cast)
                 .flatMap(armorStand -> bodyPartExpression.stream(event)
                         .map(bodyPart -> getArmorStandRotation(armorStand, bodyPart))).toArray(Vector[]::new);
     }

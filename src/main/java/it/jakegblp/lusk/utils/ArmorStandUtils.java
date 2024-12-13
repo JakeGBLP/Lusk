@@ -15,7 +15,6 @@ public class ArmorStandUtils {
             meta.setMarker(marker);
         }
     }
-
     public static void setHasArms(Object object, boolean arms) {
         if (object instanceof ArmorStand armorStand) {
             armorStand.setArms(arms);

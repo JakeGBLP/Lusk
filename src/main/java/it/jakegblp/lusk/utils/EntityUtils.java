@@ -15,18 +15,17 @@ import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.VectorUtils.*;
 
 public class EntityUtils {
+
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
         return (entity instanceof Zombie zombie && zombie.shouldBurnInDay()) ||
                 (entity instanceof AbstractSkeleton skeleton && skeleton.shouldBurnInDay()) ||
                 (entity instanceof Phantom phantom && phantom.shouldBurnInDay());
     }
 
-    public static void setShouldBurnDuringTheDay(boolean shouldBurnDuringTheDay, LivingEntity... entities) {
-        for (LivingEntity entity : entities) {
-            if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(shouldBurnDuringTheDay);
-            else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(shouldBurnDuringTheDay);
-            else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(shouldBurnDuringTheDay);
-        }
+    public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean shouldBurnDuringTheDay) {
+        if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(shouldBurnDuringTheDay);
+        else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(shouldBurnDuringTheDay);
+        else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(shouldBurnDuringTheDay);
     }
 
     /**
@@ -62,7 +61,24 @@ public class EntityUtils {
         return false;
     }
 
-    public static void setAngry(LivingEntity entity, boolean bool) {
+    public static boolean isInterested(LivingEntity entity) {
+        if (PAPER_HAS_FOX_API && entity instanceof Fox fox) {
+            return fox.isInterested();
+        } else if (entity instanceof Wolf wolf) {
+            return wolf.isInterested();
+        }
+        return false;
+    }
+
+    public static void setIsInterested(LivingEntity entity, boolean interested) {
+        if (PAPER_HAS_FOX_API && entity instanceof Fox fox) {
+            fox.setInterested(interested);
+        } else if (entity instanceof Wolf wolf) {
+            wolf.setInterested(interested);
+        }
+    }
+
+    public static void setIsAngry(LivingEntity entity, boolean bool) {
         if (entity instanceof PigZombie pigZombie) {
             pigZombie.setAngry(bool);
         } else if (entity instanceof Wolf wolf) {

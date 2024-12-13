@@ -10,6 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
@@ -22,31 +23,32 @@ public class CondEquipmentSlotDisabledArmorStand extends Condition {
 
     static {
         Skript.registerCondition(CondEquipmentSlotDisabledArmorStand.class,
-                "%equipmentslots% (is|are) disabled (on|for) %armorstands%",
-                "%equipmentslots% (isn't|is not|aren't|are not) disabled (on|for) %armorstands%");
+                "%equipmentslots% (is|are) disabled (on|for) %livingentities%",
+                "%equipmentslots% (isn't|is not|aren't|are not) disabled (on|for) %livingentities%");
     }
 
     private Expression<EquipmentSlot> equipmentSlotExpression;
-    private Expression<ArmorStand> armorStandExpression;
+    private Expression<LivingEntity> livingEntityExpression;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         equipmentSlotExpression = (Expression<EquipmentSlot>) expressions[0];
-        armorStandExpression = (Expression<ArmorStand>) expressions[1];
+        livingEntityExpression = (Expression<LivingEntity>) expressions[1];
         setNegated(matchedPattern == 1);
         return true;
     }
 
     @Override
     public boolean check(Event event) {
-        return armorStandExpression.check(event,
-                armorStand -> equipmentSlotExpression.check(event, armorStand::isSlotDisabled),isNegated());
+        return livingEntityExpression.check(event, livingEntity ->
+                livingEntity instanceof ArmorStand armorStand &&
+                        equipmentSlotExpression.check(event, armorStand::isSlotDisabled, isNegated()));
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
         return equipmentSlotExpression.toString(event, debug) + " are "
-                + (isNegated() ? "not " : "") + "disabled for "+armorStandExpression.toString(event, debug);
+                + (isNegated() ? "not " : "") + "disabled for "+ livingEntityExpression.toString(event, debug);
     }
 }
