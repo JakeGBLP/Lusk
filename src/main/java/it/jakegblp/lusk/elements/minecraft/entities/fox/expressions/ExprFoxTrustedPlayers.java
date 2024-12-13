@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,10 +30,10 @@ import java.util.List;
 @Examples({"broadcast first trusted player of {_fox}", "set trusted players of {_fox} to {_notch} and {_steve}"})
 @Since("1.2")
 @SuppressWarnings("unused")
-public class ExprFoxTrustedPlayers extends PropertyExpression<Fox, OfflinePlayer> {
+public class ExprFoxTrustedPlayers extends PropertyExpression<LivingEntity, OfflinePlayer> {
 
     static {
-        register(ExprFoxTrustedPlayers.class, OfflinePlayer.class, "([first|:second] trusted player|both:trusted players)", "foxes");
+        register(ExprFoxTrustedPlayers.class, OfflinePlayer.class, "([first|:second] trusted player|both:trusted players)", "livingentities");
     }
 
     int state;
@@ -47,13 +48,15 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<Fox, OfflinePlayer
     }
 
     @Override
-    protected OfflinePlayer @NotNull [] get(@NotNull Event event, Fox @NotNull [] source) {
+    protected OfflinePlayer @NotNull [] get(@NotNull Event event, LivingEntity @NotNull [] source) {
         List<OfflinePlayer> trusted = new ArrayList<>();
-        for (Fox fox : source) {
-            if (state != 0 && fox.getFirstTrustedPlayer() instanceof OfflinePlayer player)
-                trusted.add(player);
-            if (state != -1 && fox.getSecondTrustedPlayer() instanceof OfflinePlayer player)
-                trusted.add(player);
+        for (LivingEntity livingEntity : source) {
+            if (livingEntity instanceof Fox fox) {
+                if (state != 0 && fox.getFirstTrustedPlayer() instanceof OfflinePlayer player)
+                    trusted.add(player);
+                if (state != -1 && fox.getSecondTrustedPlayer() instanceof OfflinePlayer player)
+                    trusted.add(player);
+            }
         }
         return trusted.toArray(new OfflinePlayer[0]);
     }
@@ -79,18 +82,19 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<Fox, OfflinePlayer
 
     @Override
     public void change(@NotNull Event event, @Nullable Object[] delta, Changer.@NotNull ChangeMode mode) {
+        Fox[] foxes = getExpr().stream(event).filter(Fox.class::isInstance).map(Fox.class::cast).toArray(Fox[]::new);
         if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
             if (state == -1) {
-                for (Fox fox : getExpr().getArray(event)) {
+                for (Fox fox : foxes) {
                     if (fox.getSecondTrustedPlayer() == null)
                         fox.setFirstTrustedPlayer(null);
                 }
             } else if (state == 0) {
-                for (Fox fox : getExpr().getArray(event)) {
+                for (Fox fox : foxes) {
                     fox.setSecondTrustedPlayer(null);
                 }
             } else {
-                for (Fox fox : getExpr().getArray(event)) {
+                for (Fox fox : foxes) {
                     fox.setSecondTrustedPlayer(null);
                     fox.setFirstTrustedPlayer(null);
                 }
@@ -98,21 +102,18 @@ public class ExprFoxTrustedPlayers extends PropertyExpression<Fox, OfflinePlayer
         } else if (mode == Changer.ChangeMode.SET) {
             if (delta == null || delta[0] == null) return;
             if (state == 1 && delta instanceof OfflinePlayer[] offlinePlayers) {
-                for (Fox fox : getExpr().getArray(event)) {
+                for (Fox fox : foxes) {
                     if (offlinePlayers[0] != null) fox.setFirstTrustedPlayer(offlinePlayers[0]);
                     if (offlinePlayers[1] != null) fox.setFirstTrustedPlayer(offlinePlayers[1]);
                 }
             } else if (delta[0] instanceof OfflinePlayer offlinePlayer) {
-                if (state == -1) {
-                    for (Fox fox : getExpr().getArray(event)) {
+                if (state == -1)
+                    for (Fox fox : foxes)
                         fox.setFirstTrustedPlayer(offlinePlayer);
-                    }
-                } else if (state == 0) {
-                    for (Fox fox : getExpr().getArray(event)) {
+                else if (state == 0)
+                    for (Fox fox : foxes)
                         if (fox.getFirstTrustedPlayer() != null)
                             fox.setSecondTrustedPlayer(offlinePlayer);
-                    }
-                }
             }
         }
     }
