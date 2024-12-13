@@ -1,17 +1,12 @@
 package it.jakegblp.lusk.elements.minecraft.entities.entity.expressions;
 
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.PropertyExpression;
-import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Entity - Client Sided Custom Name Visibility")
@@ -20,48 +15,36 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"broadcast custom name visibility of target"})
 @Since("1.3")
 @SuppressWarnings("unused")
-public class ExprCustomNameVisibility extends PropertyExpression<Entity, Boolean> {
+public class ExprCustomNameVisibility extends SimpleBooleanPropertyExpression<Entity> {
     static {
         register(ExprCustomNameVisibility.class, Boolean.class,
-                "[client[[-| ]side[d]]] custom[ |-]name visibility",
+                "[client[[-| ]side[d]]] custom[ |-]name [:in]visibility",
                 "entities");
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parseResult) {
-        setExpr((Expression<? extends Entity>) expressions[0]);
+    public boolean setNegated(int matchedPattern, SkriptParser.ParseResult parseResult) {
+        return parseResult.hasTag("in");
+    }
+
+    @Override
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    protected Boolean @NotNull [] get(@NotNull Event event, Entity @NotNull [] source) {
-        return getExpr().stream(event)
-                .map(Entity::isCustomNameVisible)
-                .toArray(Boolean[]::new);
+    public void set(Entity from, Boolean bool) {
+        from.setCustomNameVisible(bool);
     }
 
     @Override
-    public Class<?>[] acceptChange(final Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
+    public @Nullable Boolean convert(Entity from) {
+        return from.isCustomNameVisible() ^ isNegated();
     }
 
     @Override
-    public void change(@NotNull Event event, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET && delta.length > 0 && delta[0] instanceof Boolean visibility) {
-            for (Entity entity : getExpr().getArray(event)) {
-                entity.setCustomNameVisible(visibility);
-            }
-        }
+    protected String getPropertyName() {
+        return "custom name " + (isNegated() ? "in" : "") + "visibility";
     }
 
-    @Override
-    public @NotNull Class<? extends Boolean> getReturnType() {
-        return Boolean.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "client sided custom name visibility";
-    }
 }

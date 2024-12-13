@@ -6,7 +6,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
