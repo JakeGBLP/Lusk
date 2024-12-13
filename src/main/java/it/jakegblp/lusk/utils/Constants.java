@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.lang.ExpressionType;
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import com.google.common.collect.ImmutableMap;
@@ -69,6 +70,10 @@ public class Constants {
             HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS = methodExists(BlockBreakEvent.class, "isDropsItems"),
             /**
+             * Whether the current skript version is greater than or equal to 2.8
+             */
+            SKRIPT_2_8 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.8")),
+            /**
              * Whether the current skript version is greater than or equal to 2.9
              */
             SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
@@ -98,9 +103,11 @@ public class Constants {
 
     public static final Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
+    public static final ExpressionType EVENT_OR_SIMPLE = SKRIPT_2_8 ? ExpressionType.EVENT : ExpressionType.SIMPLE;
+
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
 
-    //todo: 1. Make file-reading system to allow users to update this. 2. idk i never ended up typing this one out
+    // todo: 1. Make file-reading system to allow users to update this. 2. idk i never ended up typing this one out
     public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
         put(4, parseVersion("1.7.5"));
         put(5, parseVersion("1.7.10"));
