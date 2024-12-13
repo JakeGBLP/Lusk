@@ -34,7 +34,7 @@ public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vec
     // todo: allow radians too, perhaps make a reusable system that supports either
     static {
         register(ExprArmorStandRotations.class, Vector.class,
-                ARMOR_STAND_PREFIX +" %bodyparts% (rotation|pose)[s]", "armorstands");
+                ARMOR_STAND_PREFIX +" %bodyparts% (rotation|pose)[s]", "livingentities");
     }
 
     private Expression<BodyPart> bodyPartExpression;
