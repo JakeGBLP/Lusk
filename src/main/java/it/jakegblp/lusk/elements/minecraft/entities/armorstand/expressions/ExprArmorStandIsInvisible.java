@@ -52,7 +52,7 @@ public class ExprArmorStandIsInvisible extends SimpleBooleanPropertyExpression<O
 
     @Override
     public @Nullable Boolean convert(Object from) {
-        return ArmorStandUtils.isInvisible(from) ^ isNegated();
+        return ArmorStandUtils.isInvisible(from) ^ !isNegated();
     }
 
     @Override
