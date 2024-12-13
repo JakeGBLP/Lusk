@@ -53,7 +53,7 @@ public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<
 
     @Override
     public @Nullable Boolean convert(Object from) {
-        return ArmorStandUtils.hasBasePlate(from);
+        return ArmorStandUtils.hasBasePlate(from) ^ isNegated();
     }
 
     @Override

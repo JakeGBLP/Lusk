@@ -46,7 +46,7 @@ public class ExprArmorStandIsMarker extends SimpleBooleanPropertyExpression<Obje
 
     @Override
     public @Nullable Boolean convert(Object from) {
-        return ArmorStandUtils.isMarker(from);
+        return ArmorStandUtils.isMarker(from) ^ isNegated();
     }
 
     @Override
