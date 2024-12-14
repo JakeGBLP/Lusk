@@ -1,0 +1,6 @@
+test "ExprEndCrystalBeamTarget":
+  spawn end crystal at location(0,100,0):
+    assert end crystal beam target location of entity is not set with "end crystal beam target is not set"
+    set end crystal beam target location of entity to location(10,100,0)
+    assert end crystal beam target location of entity is location(10,100,0) with "end crystal beam target is set correctly"
+    delete entity
