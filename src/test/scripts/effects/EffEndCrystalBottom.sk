@@ -1,5 +1,6 @@
 test "EffEndCrystalBottom":
   spawn end crystal at location(12,100,12):
+    hide entity's end crystal bottom plate
     assert entity is not showing its bottom plate with "bedrock plate not showing"
     show entity's end crystal bottom plate
     assert entity is showing its bottom plate with "bedrock plate showing"
