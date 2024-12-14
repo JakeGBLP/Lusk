@@ -47,6 +47,6 @@ public class CondIsInstantWorldBorderChange extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return (isNegated()) ^ ((WorldBorderBoundsChangeEvent) event).getType() == WorldBorderBoundsChangeEvent.Type.INSTANT_MOVE;
+        return isNegated() ^ ((WorldBorderBoundsChangeEvent) event).getType() == WorldBorderBoundsChangeEvent.Type.INSTANT_MOVE;
     }
 }

@@ -45,7 +45,6 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
 
     /**
      * @return if this boolean property expression is negated.
-     * {@inheritDoc}
      */
     public final boolean isNegated() {
         return isNegated;
@@ -56,7 +55,6 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
      * @param matchedPattern the matched pattern on init.
      * @param parseResult the parse result on init.
      * @return the negation value, false if not overridden.
-     * {@inheritDoc}
      */
     public boolean setNegated(int matchedPattern, SkriptParser.ParseResult parseResult) {
         return false;
@@ -64,8 +62,7 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
 
     /**
      * Sets the boolean value of this property.<br>
-     * Note: *Negation is handled internally*
-     * {@inheritDoc}
+     * Note: Negation is handled internally, it must not be used here.
      */
     @Override
     public void set(F from, Boolean to) {
@@ -73,10 +70,8 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
     }
 
     /**
-     * Resets the boolean value of this property.<br>
-     * Note:
-     * *if negation is implemented for {@link SimpleBooleanPropertyExpression#set(Object, Boolean)} then this method should return {@code !isNegated()}*
      * {@inheritDoc}
+     * Resets the boolean value of this property.
      */
     @Override
     public void reset(F from) {
@@ -84,12 +79,11 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
     }
 
     /**
-     * {@inheritDoc}
-     * Sets whether this boolean property should be negated,
-     * if this method is overridden it should return
-     * {@link SimpleBooleanPropertyExpression#init(Expression[], int, Kleenean, SkriptParser.ParseResult) super.init(...)}
+     * {@inheritDoc}<br><br>
+     * Sets whether this boolean property should be negated, false by default.<br><br>
+     * If this method is overridden, it should return
+     * {@link #init(Expression[], int, Kleenean, SkriptParser.ParseResult) super.init(...)}
      * to handle negation and literals.
-     * {@inheritDoc}
      */
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {

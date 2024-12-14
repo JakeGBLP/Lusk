@@ -38,7 +38,7 @@ public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<
 
     @Override
     public void reset(Object from) {
-        set(from, false);
+        ArmorStandUtils.setHasBasePlate(from, true);
     }
 
     @Override

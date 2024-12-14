@@ -47,7 +47,7 @@ public class ExprArmorStandHasArms extends SimpleBooleanPropertyExpression<Objec
 
     @Override
     public void reset(Object from) {
-        set(from, !isNegated());
+        ArmorStandUtils.setHasArms(from, false);
     }
 
     @Override

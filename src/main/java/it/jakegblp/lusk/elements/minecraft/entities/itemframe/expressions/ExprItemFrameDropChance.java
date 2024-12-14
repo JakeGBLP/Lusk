@@ -1,56 +1,86 @@
 package it.jakegblp.lusk.elements.minecraft.entities.itemframe.expressions;
 
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.NumberUtils.roundFloatPrecision;
 
 @Name("Item Frame - Item Drop Chance")
-@Description("The chance of the item being dropped upon this item frame's destruction.\nCan be set, must be within 0 and 1.\n1 = always drops; 0 = never drops.")
+@Description("""
+The chance of the item being dropped upon this item frame's destruction.
+Can be set, removed from, added to, reset (1) and deleted (0).
+
+The final value is always clamped between 0 and 1.
+
+1 = always drops; 0 = never drops.""")
 @Examples("set item frame drop chance of {_itemFrame} to 1 # always drops")
 @Since("1.3")
-public class ExprItemFrameDropChance extends SimplePropertyExpression<Entity,Number> {
+public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity,Number> {
 
     static {
-        register(ExprItemFrameDropChance.class, Number.class, "item[ |-]frame [item] drop chance", "entities");
+        register(ExprItemFrameDropChance.class, Number.class, "[item[ |-]frame] [item] drop chance", "entities");
     }
 
     @Override
-    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return switch (mode) {
-            case ADD, REMOVE, SET -> new Class[] { Number.class };
-            case RESET -> new Class[0];
-            default -> null;
-        };
+    public boolean allowSet() {
+        return true;
     }
 
     @Override
-    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        float chance;
-        if (delta != null && delta[0] instanceof Number number) {
-            chance = number.floatValue();
-        } else if (mode == Changer.ChangeMode.RESET) {
-            chance = 1f;
-        } else {
-            chance = 0f;
+    public boolean allowReset() {
+        return true;
+    }
+
+    @Override
+    public boolean allowAdd() {
+        return true;
+    }
+
+    @Override
+    public boolean allowRemove() {
+        return true;
+    }
+
+    @Override
+    public boolean allowDelete() {
+        return true;
+    }
+
+    @Override
+    public void set(Entity from, Number to) {
+        if (from instanceof ItemFrame itemFrame) {
+            itemFrame.setItemDropChance(Math.clamp(to.floatValue(),0,1));
         }
-        getExpr().stream(event).forEach(entity -> {
-            if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItemDropChance(Math.clamp(switch (mode) {
-                    case ADD -> itemFrame.getItemDropChance() + chance;
-                    case REMOVE -> itemFrame.getItemDropChance() - chance;
-                    default -> chance;
-                },0,1));
-            }
-        });
+    }
+
+    @Override
+    public void add(Entity from, Number to) {
+        if (from instanceof ItemFrame itemFrame) {
+            set(from, itemFrame.getItemDropChance()+to.floatValue());
+        }
+    }
+
+    @Override
+    public void remove(Entity from, Number to) {
+        if (from instanceof ItemFrame itemFrame) {
+            set(from, itemFrame.getItemDropChance()-to.floatValue());
+        }
+    }
+
+    @Override
+    public void delete(Entity from) {
+        set(from, 0);
+    }
+
+    @Override
+    public void reset(Entity from) {
+        set(from, 1);
     }
 
     @Override
