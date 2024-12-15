@@ -130,6 +130,7 @@ public class LuskUtils {
         };
         Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
     }
+
     public static void registerPrefixedPropertyCondition(
             Class<? extends Condition> condition,
             String prefix,
@@ -137,6 +138,7 @@ public class LuskUtils {
             String type) {
         registerPrefixedPropertyCondition(condition, PropertyCondition.PropertyType.BE, prefix, property, type);
     }
+
     public static void registerPrefixedPropertyCondition(
             Class<? extends Condition> condition,
             PropertyCondition.PropertyType propertyType,
