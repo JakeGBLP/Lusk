@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.api.wrappers;
+package it.jakegblp.lusk.api;
 
 import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.api.events.AnvilGuiClickEvent;

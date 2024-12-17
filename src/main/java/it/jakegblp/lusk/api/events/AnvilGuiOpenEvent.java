@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.api.events;
 
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

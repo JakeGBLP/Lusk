@@ -10,7 +10,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.events.AnvilGuiEvent;
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

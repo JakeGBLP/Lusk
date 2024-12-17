@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.anvilgui.types;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 
 public class AnvilGuiClassInfos {
     static {

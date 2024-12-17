@@ -7,7 +7,7 @@ import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
 import it.jakegblp.lusk.api.events.*;
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 

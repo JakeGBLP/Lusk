@@ -15,7 +15,7 @@ import it.jakegblp.lusk.api.events.AnvilGuiOpenEvent;
 import it.jakegblp.lusk.api.listeners.AnvilGuiClickListener;
 import it.jakegblp.lusk.api.listeners.AnvilGuiCloseListener;
 import it.jakegblp.lusk.api.listeners.AnvilGuiOpenListener;
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

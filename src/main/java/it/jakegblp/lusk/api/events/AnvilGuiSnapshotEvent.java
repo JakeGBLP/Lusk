@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.api.events;
 
-import it.jakegblp.lusk.api.wrappers.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
