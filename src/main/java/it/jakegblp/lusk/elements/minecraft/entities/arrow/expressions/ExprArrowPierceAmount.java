@@ -9,14 +9,14 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Projectile;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Abstract Arrow - Damage")
-@Description("Gets the base amount of damage one or more arrows will do.\nDefaults to 2.0 for a normal arrow with 0.5 * (1 + power level) added for arrows fired from enchanted bows.\nCan be set, added to, removed from, deleted (set to 0) and reset (set to 2, the default value).")
-@Examples("set arrow damage of {_arrows::*} to 3")
+@Name("Abstract Arrow - Pierce Amount")
+@Description("Sets the number of times this arrow can pierce through an entity. Must be between 0 and 127.")
+@Examples("set arrow pierce amount of {_arrows::*} to 3")
 @Since("1.3")
-public class ExprArrowDamage extends SimplerPropertyExpression<Projectile, Double> {
+public class ExprArrowPierceAmount extends SimplerPropertyExpression<Projectile, Integer> {
 
     static {
-        register(ExprArrowDamage.class, Double.class, "arrow damage", "projectiles");
+        register(ExprArrowPierceAmount.class, Integer.class, "arrow pierce (amount|level)", "projectiles");
     }
 
     @Override
@@ -45,51 +45,51 @@ public class ExprArrowDamage extends SimplerPropertyExpression<Projectile, Doubl
     }
 
     @Override
-    public void set(Projectile from, Double to) {
+    public void set(Projectile from, Integer to) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setDamage(to);
+            abstractArrow.setPierceLevel(Math.clamp(to, 0, 127));
         }
     }
 
     @Override
-    public void add(Projectile from, Double toAdd) {
+    public void add(Projectile from, Integer toAdd) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setDamage(abstractArrow.getDamage()+toAdd);
+            abstractArrow.setPierceLevel(Math.clamp(abstractArrow.getPierceLevel()+toAdd, 0, 127));
         }
     }
 
     @Override
-    public void remove(Projectile from, Double toRemove) {
+    public void remove(Projectile from, Integer toRemove) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setDamage(abstractArrow.getDamage() - toRemove);
+            abstractArrow.setPierceLevel(Math.clamp(abstractArrow.getPierceLevel() - toRemove, 0, 127));
         }
     }
 
     @Override
     public void delete(Projectile from) {
-        set(from, 0d);
+        set(from, 0);
     }
 
     @Override
     public void reset(Projectile from) {
-        set(from, 2d);
+        delete(from);
     }
 
     @Override
-    public @Nullable Double convert(Projectile from) {
+    public @Nullable Integer convert(Projectile from) {
         if (from instanceof AbstractArrow abstractArrow) {
-            return abstractArrow.getDamage();
+            return abstractArrow.getPierceLevel();
         }
         return null;
     }
 
     @Override
     protected String getPropertyName() {
-        return "arrow damage";
+        return "arrow piece amount";
     }
 
     @Override
-    public Class<? extends Double> getReturnType() {
-        return Double.class;
+    public Class<? extends Integer> getReturnType() {
+        return Integer.class;
     }
 }
