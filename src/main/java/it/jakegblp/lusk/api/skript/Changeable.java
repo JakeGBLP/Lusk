@@ -1,5 +1,8 @@
 package it.jakegblp.lusk.api.skript;
 
+import ch.njol.skript.classes.Changer;
+import org.jetbrains.annotations.Nullable;
+
 public interface Changeable<F,T> {
     /**
      * @return whether this property can be set.
@@ -84,4 +87,34 @@ public interface Changeable<F,T> {
      * {@inheritDoc}
      */
     default void reset(F from) {}
+
+    default void change(Changer.ChangeMode mode, F[] fArray, @Nullable T tArray) {
+        if (mode == Changer.ChangeMode.RESET) {
+            for (F from : fArray) {
+                reset(from);
+            }
+        } else if (mode == Changer.ChangeMode.DELETE) {
+            for (F from : fArray) {
+                delete(from);
+            }
+        } else {
+            if (mode == Changer.ChangeMode.SET) {
+                for (F from : fArray) {
+                    set(from, tArray);
+                }
+            } else if (mode == Changer.ChangeMode.ADD) {
+                for (F from : fArray) {
+                    add(from, tArray);
+                }
+            } else if (mode == Changer.ChangeMode.REMOVE) {
+                for (F from : fArray) {
+                    remove(from, tArray);
+                }
+            } else if (mode == Changer.ChangeMode.REMOVE_ALL) {
+                for (F from : fArray) {
+                    removeAll(from, tArray);
+                }
+            }
+        }
+    }
 }
