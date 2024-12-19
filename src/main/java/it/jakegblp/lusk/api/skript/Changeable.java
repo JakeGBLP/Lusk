@@ -88,7 +88,7 @@ public interface Changeable<F,T> {
      */
     default void reset(F from) {}
 
-    default void change(Changer.ChangeMode mode, F[] fArray, @Nullable T tArray) {
+    default void change(Changer.ChangeMode mode, F[] fArray, @Nullable Object delta) {
         if (mode == Changer.ChangeMode.RESET) {
             for (F from : fArray) {
                 reset(from);
@@ -98,21 +98,22 @@ public interface Changeable<F,T> {
                 delete(from);
             }
         } else {
+            T t = (T) delta;
             if (mode == Changer.ChangeMode.SET) {
                 for (F from : fArray) {
-                    set(from, tArray);
+                    set(from, t);
                 }
             } else if (mode == Changer.ChangeMode.ADD) {
                 for (F from : fArray) {
-                    add(from, tArray);
+                    add(from, t);
                 }
             } else if (mode == Changer.ChangeMode.REMOVE) {
                 for (F from : fArray) {
-                    remove(from, tArray);
+                    remove(from, t);
                 }
             } else if (mode == Changer.ChangeMode.REMOVE_ALL) {
                 for (F from : fArray) {
-                    removeAll(from, tArray);
+                    removeAll(from, t);
                 }
             }
         }
