@@ -38,7 +38,7 @@ public class ItemUtils {
 
     @Nullable
     public static ItemType getNullableItemType(ItemStack itemStack) {
-        if (itemStack == null) return null;
+        if (itemStack == null || itemStack.isEmpty()) return null;
         return new ItemType(itemStack);
     }
 
