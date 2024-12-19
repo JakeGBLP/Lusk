@@ -3,7 +3,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.armorstand.types;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
 import it.jakegblp.lusk.api.enums.BodyPart;
-import it.jakegblp.lusk.api.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.skript.EnumWrapper;
 
 @SuppressWarnings("unused")
 public class ArmorStandClassInfos {

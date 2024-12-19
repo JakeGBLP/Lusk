@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.sound.types;
 
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumRegistryWrapper;
+import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.Sound;
 
 @SuppressWarnings("unused")

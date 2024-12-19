@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.inventory.types;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.skript.EnumWrapper;
 import org.bukkit.inventory.EquipmentSlot;
 
 @SuppressWarnings("unused")

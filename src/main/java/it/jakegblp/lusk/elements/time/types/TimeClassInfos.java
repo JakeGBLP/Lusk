@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.time.types;
 
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Timespan;
-import it.jakegblp.lusk.api.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.skript.EnumWrapper;
 
 @SuppressWarnings("unused")
 public class TimeClassInfos {

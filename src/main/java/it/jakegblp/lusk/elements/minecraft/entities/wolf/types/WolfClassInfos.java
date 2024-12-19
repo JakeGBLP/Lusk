@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.wolf.types;
 
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumRegistryWrapper;
+import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.entity.Wolf;
 
 import static it.jakegblp.lusk.utils.Constants.HAS_WOLF_VARIANT;

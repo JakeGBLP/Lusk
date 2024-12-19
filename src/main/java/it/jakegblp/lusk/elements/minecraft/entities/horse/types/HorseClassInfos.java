@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.horse.types;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumRegistryWrapper;
+import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.entity.Horse;
 
 @SuppressWarnings("unused")

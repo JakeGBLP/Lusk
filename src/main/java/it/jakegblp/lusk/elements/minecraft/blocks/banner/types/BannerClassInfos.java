@@ -4,7 +4,7 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumRegistryWrapper;
+import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.jetbrains.annotations.Nullable;

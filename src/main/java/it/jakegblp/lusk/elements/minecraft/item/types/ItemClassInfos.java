@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.item.types;
 
 import ch.njol.skript.registrations.Classes;
-import it.jakegblp.lusk.api.wrappers.EnumWrapper;
+import it.jakegblp.lusk.api.skript.EnumWrapper;
 import org.bukkit.inventory.ItemRarity;
 
 import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
