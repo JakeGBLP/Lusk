@@ -5,22 +5,23 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.entity.Player;
-import org.bukkit.profile.PlayerTextures;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.PlayerUtils.isSlim;
 
 @Name("Player - is Slim")
 @Description("Checks if a player is slim.")
 @Examples({"if player is slim:"})
-@Since("1.0.2")
-public class CondPlayerSlim extends PropertyCondition<Player> {
-    static {
-        register(CondPlayerSlim.class, "slim", "players");
+@Since("1.0.2, 1.3 (OfflinePlayers)")
+public class CondPlayerSlim extends PropertyCondition<OfflinePlayer> {
+    static { // todo: paper only???
+        register(CondPlayerSlim.class, "slim", "offlineplayers");
     }
 
     @Override
-    public boolean check(Player player) {
-        return player != null && player.getPlayerProfile().getTextures().getSkinModel().equals(PlayerTextures.SkinModel.SLIM);
+    public boolean check(OfflinePlayer player) {
+        return isSlim(player);
     }
 
     @Override

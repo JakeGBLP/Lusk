@@ -1,8 +1,11 @@
 package it.jakegblp.lusk.utils;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
+import org.bukkit.profile.PlayerTextures;
 
 import static it.jakegblp.lusk.utils.DeprecationUtils.getScaleAttribute;
 import static it.jakegblp.lusk.utils.NumberUtils.areDoublesRoughlyEqual;
@@ -25,5 +28,13 @@ public class PlayerUtils {
             return areDoublesRoughlyEqual(height, 0.6);
         }
         return false;
+    }
+
+    public static boolean isSlim(OfflinePlayer player) {
+        PlayerProfile playerProfile = player.getPlayerProfile();
+        if (!playerProfile.isComplete()) {
+            playerProfile.complete();
+        }
+        return playerProfile.getTextures().getSkinModel().equals(PlayerTextures.SkinModel.SLIM);
     }
 }
