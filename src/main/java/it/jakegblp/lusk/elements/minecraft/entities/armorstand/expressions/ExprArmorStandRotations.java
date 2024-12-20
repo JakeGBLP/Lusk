@@ -21,12 +21,10 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
-import static it.jakegblp.lusk.utils.EntityUtils.getArmorStandRotation;
-import static it.jakegblp.lusk.utils.EntityUtils.setArmorStandRotation;
 import static it.jakegblp.lusk.utils.VectorUtils.toVector;
 
 @Name("Armor Stand - Rotations")
-@Description("Gets and sets a specific armor stand rotation.")
+@Description("The rotation of each part of an armor stand.\nCan be set, added to, removed from, and reset.\nAll change modes allow both a vector and an euler angle.")
 @Examples({"broadcast rotation of target", "set head rotation of target to vector(45,0,0)\n# looks down a a 45 degrees - sad armor stand :("})
 @Since("1.0.2, 1.3 (Degrees)")
 @SuppressWarnings("unused")
@@ -74,7 +72,7 @@ public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vec
         if (mode == Changer.ChangeMode.RESET) {
             armorStands.forEach(armorStand ->
                     bodyPartExpression.stream(event)
-                            .forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, EulerAngle.ZERO)));
+                            .forEach(bodyPart -> bodyPart.set(armorStand, null)));
         } else {
             Vector vector, current;
             if (delta[0] instanceof Vector v) {
@@ -87,11 +85,11 @@ public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vec
             if (vector != null) {
                 armorStands.forEach(armorStand ->
                         bodyPartExpression.stream(event)
-                                .forEach(bodyPart -> setArmorStandRotation(armorStand, bodyPart, switch (mode) {
+                                .forEach(bodyPart -> bodyPart.set(armorStand, switch (mode) {
                                     case SET -> vector;
-                                    case ADD -> getArmorStandRotation(armorStand, bodyPart).add(vector);
-                                    case REMOVE -> getArmorStandRotation(armorStand, bodyPart).subtract(vector);
-                                    default -> new Vector();
+                                    case ADD -> bodyPart.get(armorStand).add(vector);
+                                    case REMOVE -> bodyPart.get(armorStand).subtract(vector);
+                                    default -> null;
                                 }))
                 );
             }
@@ -109,7 +107,7 @@ public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vec
                 .filter(ArmorStand.class::isInstance)
                 .map(ArmorStand.class::cast)
                 .flatMap(armorStand -> bodyPartExpression.stream(event)
-                        .map(bodyPart -> getArmorStandRotation(armorStand, bodyPart))).toArray(Vector[]::new);
+                        .map(bodyPart -> bodyPart.get(armorStand))).toArray(Vector[]::new);
     }
 
     @Override
