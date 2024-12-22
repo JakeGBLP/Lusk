@@ -17,8 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Allay - Start/Stop Dance")
 @Description("Forces an Allay to start/stop dancing.")
-@Examples({"""
-        make target start dancing"""})
+@Examples("make target start dancing")
 @Since("1.0.2")
 @SuppressWarnings("unused")
 public class EffAllayDance extends Effect {
@@ -40,7 +39,7 @@ public class EffAllayDance extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + (event == null ? "" : entityExpression.toString(event, debug)) + (stop ? " stop" : " start") + " dancing";
+        return "make " + entityExpression.toString(event, debug) + (stop ? " stop" : " start") + " dancing";
     }
 
     @Override

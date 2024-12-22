@@ -1,83 +1,89 @@
 package it.jakegblp.lusk.elements.minecraft.entities.allay.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.DeprecationUtils;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
-import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
 
 @Name("Allay - Duplication Cooldown")
 @Description("Returns the duplication cooldown of an Allay.\nCan be set.")
 @Examples({"broadcast duplication cooldown of target"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Plural, Ticks)")
 @SuppressWarnings("unused")
-public class ExprAllayDuplicationCooldown extends SimpleExpression<Timespan> {
+public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entity,Object> {
     static {
-        // TODO: PROPERTY EXPR
-        Skript.registerExpression(ExprAllayDuplicationCooldown.class, Timespan.class, ExpressionType.PROPERTY,
-                "[the] allay duplication cool[ ]down of %entity%");
-
+        register(ExprAllayDuplicationCooldown.class, Object.class,
+                "allay duplication cooldown [time[span]|:ticks]", "entities");
     }
 
-    private Expression<Entity> entityExpression;
+    private boolean usesTicks;
 
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
-        return true;
+    @Override
+    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+        usesTicks = parseResult.hasTag("ticks");
+        return super.init(expressions, matchedPattern, isDelayed, parseResult);
     }
 
     @Override
-    protected Timespan @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Allay allay) {
-            return new Timespan[]{fromTicks(allay.getDuplicationCooldown())};
+    public @Nullable Object convert(Entity from) {
+        if (from instanceof Allay allay) {
+            long ticks = allay.getDuplicationCooldown();
+            return usesTicks ? ticks : fromTicks(ticks);
         }
-        return new Timespan[0];
+        return null;
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) ? new Class[]{Timespan.class} : null;
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        Long ticks;
+        if (delta != null && delta[0] != null) {
+            Object value = delta[0];
+            if (value instanceof Long l) ticks = l;
+            else if (value instanceof Timespan timespan) ticks = DeprecationUtils.getTicks(timespan);
+            else ticks = null;
+        } else ticks = null;
+        assert mode == Changer.ChangeMode.RESET || ticks != null;
+        getExpr().stream(event).forEach(livingEntity -> {
+            if (livingEntity instanceof Allay allay) {
+                switch (mode) {
+                    case REMOVE -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()-ticks);
+                    case ADD -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()+ticks);
+                    case SET -> allay.setDuplicationCooldown(ticks);
+                    case RESET -> allay.setDuplicationCooldown(0L);
+                }
+            }
+        });
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (entityExpression.getSingle(e) instanceof Allay allay) {
-            if (mode == Changer.ChangeMode.SET && delta[0] instanceof Timespan timespan) {
-                allay.setDuplicationCooldown(getTicks(timespan));
-            } else allay.resetDuplicationCooldown();
-        }
-
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case ADD, SET, REMOVE -> new Class[] {Timespan.class, Long.class};
+            case RESET -> new Class[0];
+            default -> null;
+        };
     }
 
     @Override
-    public boolean isSingle() {
-        return true;
+    protected String getPropertyName() {
+        return "allay duplication cooldown " + (usesTicks ? "ticks" : "timespan");
     }
 
     @Override
-    public @NotNull Class<? extends Timespan> getReturnType() {
-        return Timespan.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the allay duplication cooldown of " + (e == null ? "" : entityExpression.toString(e, debug));
+    public Class<?> getReturnType() {
+        return Object.class;
     }
 }

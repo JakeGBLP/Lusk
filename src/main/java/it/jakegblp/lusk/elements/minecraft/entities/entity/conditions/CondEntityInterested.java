@@ -2,13 +2,13 @@ package it.jakegblp.lusk.elements.minecraft.entities.entity.conditions;
 
 import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.*;
-import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Wolf;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.EntityUtils.isInterested;
+
 @Name("Animal - is Interested")
-@Description("Checks if an entity is interested.\n(Wolf, Fox)")
+@Description("Checks if the provided foxed or wolves are interested.\nFor Foxes, Paper 1.18.2+ is required.")
 @Examples({"on damage of wolf:\n\tif victim is interested:\n\t\tcancel event"})
 @Since("1.0.0")
 @DocumentationId("8796")
@@ -20,12 +20,7 @@ public class CondEntityInterested extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Fox fox) {
-            return fox.isInterested();
-        } else if (entity instanceof Wolf wolf) {
-            return wolf.isInterested();
-        }
-        return false;
+        return isInterested(entity);
     }
 
     @Override

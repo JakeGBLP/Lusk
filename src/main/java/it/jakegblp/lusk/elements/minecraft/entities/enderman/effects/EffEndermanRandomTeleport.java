@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.enderman.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -15,16 +12,20 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
 
 @Name("Enderman - Randomly Teleport")
-@Description("Attempts to teleport an enderman to a random nearby location.")
-@Examples({"""
-        randomly teleport (entities where [input is an enderman])"""})
-@Since("1.0.2")
+@Description("Attempts to teleport an enderman to a random nearby location.\nRequires Spigot 1.20.1+ or Paper, behavior might be slightly different.")
+@Examples({"randomly teleport {_endermen::*}"})
+@Since("1.0.2, 1.3 (Spigot)")
+@RequiredPlugins("Paper or 1.20.1+")
+@DocumentationId("9044")
 @SuppressWarnings("unused")
-public class EffEndermanTeleport extends Effect {
+public class EffEndermanRandomTeleport extends Effect {
     static {
-        Skript.registerEffect(EffEndermanTeleport.class, "[attempt to] randomly teleport %livingentities%");
+        if (isPaper() || MINECRAFT_1_20_1)
+            Skript.registerEffect(EffEndermanRandomTeleport.class, "[attempt to] randomly teleport %livingentities%");
     }
 
     private Expression<LivingEntity> entityExpression;
@@ -38,15 +39,15 @@ public class EffEndermanTeleport extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "attempt to randomly teleport " + (event == null ? "" : entityExpression.toString(event, debug));
+        return "attempt to randomly teleport " + entityExpression.toString(event, debug);
     }
 
     @Override
     protected void execute(@NotNull Event event) {
-        LivingEntity[] entities = entityExpression.getArray(event);
-        for (LivingEntity entity : entities) {
+        for (LivingEntity entity : entityExpression.getArray(event)) {
             if (entity instanceof Enderman enderman) {
-                enderman.teleportRandomly();
+                if (isPaper()) enderman.teleportRandomly();
+                else if (MINECRAFT_1_20_1) enderman.teleport();
             }
         }
     }

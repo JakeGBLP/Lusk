@@ -6,11 +6,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Sittable;
 import org.jetbrains.annotations.NotNull;
 
-@DocumentationId("CondSittable")
 @Name("Entity - Can Sit")
 @Description("Checks if an entity can normally sit.")
 @Examples("if target can sit:")
-@Since("1.0.2, 1.2 (Entities)")
+@Since("1.0.2, 1.2 (Plural)")
+@DocumentationId("9039")
 public class CondEntityCanSit extends PropertyCondition<Entity> {
 
     static {

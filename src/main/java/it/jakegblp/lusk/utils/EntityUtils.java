@@ -1,31 +1,47 @@
 package it.jakegblp.lusk.utils;
 
-import it.jakegblp.lusk.api.enums.BodyPart;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
-import static it.jakegblp.lusk.utils.VectorUtils.*;
 
 public class EntityUtils {
+    //todo: https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
 
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
-        return (entity instanceof Zombie zombie && zombie.shouldBurnInDay()) ||
-                (entity instanceof AbstractSkeleton skeleton && skeleton.shouldBurnInDay()) ||
-                (entity instanceof Phantom phantom && phantom.shouldBurnInDay());
+        if (entity instanceof Zombie zombie) return zombie.shouldBurnInDay();
+        else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API) {
+            if (entity instanceof Phantom phantom) return phantom.shouldBurnInDay();
+            else if (entity instanceof AbstractSkeleton skeleton) return skeleton.shouldBurnInDay();
+        } else if (entity instanceof Skeleton skeleton) {
+            try {
+                return (boolean) Skeleton.class.getMethod("shouldBurnInDay").invoke(skeleton);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
+        return false;
     }
 
-    public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean shouldBurnDuringTheDay) {
-        if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(shouldBurnDuringTheDay);
-        else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(shouldBurnDuringTheDay);
-        else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(shouldBurnDuringTheDay);
+    public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean value) {
+        if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(value);
+        else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API) {
+            if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
+            else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
+        } else if (entity instanceof Skeleton skeleton) {
+            try {
+                Skeleton.class.getMethod("setShouldBurnInDay", boolean.class).invoke(skeleton, value);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
     }
 
     /**
@@ -55,14 +71,14 @@ public class EntityUtils {
             return wolf.isAngry();
         } else if (HAS_WARDEN && entity instanceof Warden warden) {
             return warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
-        } else if (entity instanceof Enderman enderman) {
+        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
             return enderman.isScreaming();
         }
         return false;
     }
 
     public static boolean isInterested(LivingEntity entity) {
-        if (PAPER_HAS_FOX_API && entity instanceof Fox fox) {
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Fox fox) {
             return fox.isInterested();
         } else if (entity instanceof Wolf wolf) {
             return wolf.isInterested();
@@ -71,7 +87,7 @@ public class EntityUtils {
     }
 
     public static void setIsInterested(LivingEntity entity, boolean interested) {
-        if (PAPER_HAS_FOX_API && entity instanceof Fox fox) {
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Fox fox) {
             fox.setInterested(interested);
         } else if (entity instanceof Wolf wolf) {
             wolf.setInterested(interested);
@@ -83,9 +99,85 @@ public class EntityUtils {
             pigZombie.setAngry(bool);
         } else if (entity instanceof Wolf wolf) {
             wolf.setAngry(bool);
-        } else if (entity instanceof Enderman enderman) {
+        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
             enderman.setScreaming(bool);
         }
+    }
+
+    public static boolean isSitting(Entity entity) {
+        if (entity instanceof Sittable sittable) {
+            return sittable.isSitting();
+        } else {
+            return entity.getPose() == Pose.SITTING;
+        }
+    }
+
+    public static void setIsSitting(Entity entity, boolean sitting) {
+        if (entity instanceof Sittable sittable) {
+            sittable.setSitting(sitting);
+        } else if (isPaper() && MINECRAFT_1_20_1) {
+            if (sitting && entity.getPose() != Pose.SITTING) {
+                entity.setPose(Pose.SITTING);
+            } else if (entity.getPose() == Pose.SITTING) {
+                entity.setPose(Pose.STANDING);
+            }
+        }
+    }
+
+    public static boolean isScreaming(LivingEntity entity) {
+        if (entity instanceof Goat goat) {
+            return goat.isScreaming();
+        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+            return enderman.isScreaming();
+        }
+        return false;
+    }
+
+    public static void setIsScreaming(LivingEntity entity, boolean screaming) {
+        if (entity instanceof Goat goat) {
+            goat.setScreaming(screaming);
+        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+            enderman.setScreaming(screaming);
+        }
+    }
+
+    public static boolean isRoaring(LivingEntity entity) {
+        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API && entity instanceof Ravager ravager)
+            return ravager.getRoarTicks() > 0;
+        else if (entity instanceof EnderDragon enderDragon)
+            return enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;
+        else return entity.getPose() == Pose.ROARING;
+    }
+
+    public static boolean isConverting(LivingEntity entity) {
+        if (entity instanceof PiglinAbstract piglinAbstract)
+            return piglinAbstract.isConverting();
+        else if (entity instanceof Skeleton skeleton)
+            return skeleton.isConverting();
+        else if (entity instanceof Hoglin hoglin)
+            return hoglin.isConverting();
+        else if (entity instanceof Zombie zombie)
+            return zombie.isConverting();
+        else return false;
+    }
+
+    public static boolean isDancing(LivingEntity entity) {
+        if (entity instanceof Parrot parrot)
+            return parrot.isDancing();
+        else if (entity instanceof Piglin piglin)
+            return piglin.isDancing();
+        else if (entity instanceof Allay allay)
+            return allay.isDancing();
+        return false;
+    }
+
+    public static List<UUID> getArrayAsUUIDList(Object[] objects) {
+        return Arrays.stream(objects).map(o -> {
+            if (o instanceof Entity entity) return entity.getUniqueId();
+            else if (o instanceof String string) return UUID.fromString(string);
+            else if (o instanceof UUID aUuid) return aUuid;
+            return null;
+        }).filter(Objects::nonNull).toList();
     }
 
     @Nullable
@@ -167,33 +259,6 @@ public class EntityUtils {
             if (entityEquipment != null) {
                 entityEquipment.setItem(equipmentSlot, itemStack);
             }
-        }
-    }
-
-    @NotNull
-    public static Vector getArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart) {
-        return toDegreesVector(switch (bodyPart) {
-            case HEAD -> armorStand.getHeadPose();
-            case BODY -> armorStand.getBodyPose();
-            case LEFT_ARM -> armorStand.getLeftArmPose();
-            case RIGHT_ARM -> armorStand.getRightArmPose();
-            case LEFT_LEG -> armorStand.getLeftLegPose();
-            case RIGHT_LEG -> armorStand.getRightLegPose();
-        });
-    }
-
-    public static void setArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart, Vector vector) {
-        setArmorStandRotation(armorStand,bodyPart,toRadiansEulerAngle(vector));
-    }
-
-    public static void setArmorStandRotation(ArmorStand armorStand, BodyPart bodyPart, EulerAngle rotation) {
-        switch (bodyPart) {
-            case HEAD -> armorStand.setHeadPose(rotation);
-            case BODY -> armorStand.setBodyPose(rotation);
-            case LEFT_ARM -> armorStand.setLeftArmPose(rotation);
-            case RIGHT_ARM -> armorStand.setRightArmPose(rotation);
-            case LEFT_LEG -> armorStand.setLeftLegPose(rotation);
-            case RIGHT_LEG -> armorStand.setRightLegPose(rotation);
         }
     }
     //todo: add can pickup items for pre 2.8

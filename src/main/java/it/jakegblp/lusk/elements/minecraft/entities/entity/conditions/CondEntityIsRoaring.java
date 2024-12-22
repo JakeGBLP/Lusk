@@ -5,30 +5,23 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Pose;
-import org.bukkit.entity.Ravager;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.EntityUtils.isRoaring;
+
 @Name("Entity - is Roaring")
-@Description("Checks if an entity is roaring.")
+@Description("Checks if an entity is roaring.\nFor ravagers, Paper 1.19.2+ is required.")
 @Examples("on damage of ravager:\n\tvictim is roaring\n\tkill victim")
 @Since("1.1.1")
-public class CondEntityRoaring extends PropertyCondition<LivingEntity> {
+public class CondEntityIsRoaring extends PropertyCondition<LivingEntity> {
     static {
-        register(CondEntityRoaring.class, "roaring", "livingentities");
+        register(CondEntityIsRoaring.class, "roaring", "livingentities");
     }
 
     @Override
     public boolean check(LivingEntity entity) {
-        if (entity instanceof Ravager ravager) {
-            return ravager.getRoarTicks() > 0;
-        } else if (entity instanceof EnderDragon enderDragon) {
-            return enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;
-        } else {
-            return entity.getPose() == Pose.ROARING;
-        }
+        return isRoaring(entity);
     }
 
     @Override

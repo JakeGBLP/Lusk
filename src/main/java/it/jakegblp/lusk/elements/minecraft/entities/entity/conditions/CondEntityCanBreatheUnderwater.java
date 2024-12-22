@@ -6,14 +6,14 @@ import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Entity - Can Breathe Underwater")
-@Description("Checks if a living entity can breathe underwater.")
+@Description("Checks if the provided living entities can breathe underwater and will not take suffocation damage when their air supply reaches zero.")
 @Examples({"if {_entity} can breathe underwater:"})
 @Since("1.0.2")
 @DocumentationId("11180")
-public class CondEntityBreatheUnderwater extends PropertyCondition<LivingEntity> {
+public class CondEntityCanBreatheUnderwater extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondEntityBreatheUnderwater.class, PropertyType.CAN, "breathe underwater", "livingentities");
+        register(CondEntityCanBreatheUnderwater.class, PropertyType.CAN, "breathe underwater", "livingentities");
     }
 
     @Override

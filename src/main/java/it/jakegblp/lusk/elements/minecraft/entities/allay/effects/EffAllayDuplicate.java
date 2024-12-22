@@ -17,8 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Allay - Duplicate")
 @Description("Forces an allay to duplicate itself without dance or item necessary.")
-@Examples({"""
-        force duplicate (entities where [input is an allay])"""})
+@Examples("force duplicate (entities where [input is an allay])")
 @Since("1.0.2")
 @SuppressWarnings("unused")
 public class EffAllayDuplicate extends Effect {

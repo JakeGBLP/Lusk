@@ -1,76 +1,52 @@
 package it.jakegblp.lusk.elements.minecraft.entities.fireball.expressions;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
+import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
-import org.bukkit.entity.Entity;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SizedFireball;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Fireball - Item")
-@Description("Returns the displayed item of a fireball.\nCan be set.")
+@Name("Fireball - Displayed Item")
+@Description("Gets the displayed item of the provided fireballs.\nCan be set.")
 @Examples({"broadcast fireball item of target"})
-@Since("1.0.3")
-@SuppressWarnings("unused")
-public class ExprFireballItem extends SimpleExpression<ItemStack> {
+@Since("1.0.3, 1.3 (Plural)")
+public class ExprFireballItem extends SimplerPropertyExpression<Projectile, ItemType> {
+
     static {
-        // TODO: simple PROPERTY EXPR, plural
-        Skript.registerExpression(ExprFireballItem.class, ItemStack.class, ExpressionType.PROPERTY,
-                "[the] [displayed] fireball item of %entity%",
-                "%entity%'[s] [displayed] fireball item");
+        register(ExprFireballItem.class, ItemType.class, "[displayed] fireball item", "projectiles");
     }
 
-    private Expression<Entity> entityExpression;
+    @Override
+    public @Nullable ItemType convert(Projectile from) {
+        return from instanceof SizedFireball fireball ? new ItemType(fireball.getDisplayItem()) : null;
+    }
 
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
+    @Override
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    protected ItemStack @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof SizedFireball fireball) {
-            return new ItemStack[]{fireball.getDisplayItem()};
+    public void set(Projectile from, ItemType to) {
+        if (from instanceof SizedFireball fireball) {
+            ItemStack item = to.getRandom();
+            if (item == null) return;
+            fireball.setDisplayItem(item);
         }
-        return new ItemStack[0];
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{ItemStack.class} : null;
+    protected String getPropertyName() {
+        return "displayed fireball item";
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof ItemStack itemStack)
-            if (entityExpression.getSingle(e) instanceof SizedFireball fireball) fireball.setDisplayItem(itemStack);
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public @NotNull Class<? extends ItemStack> getReturnType() {
-        return ItemStack.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the displayed fireball item of " + (e == null ? "" : entityExpression.toString(e, debug));
+    public Class<? extends ItemType> getReturnType() {
+        return ItemType.class;
     }
 }

@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import static it.jakegblp.lusk.utils.EntityUtils.isInterested;
 import static it.jakegblp.lusk.utils.EntityUtils.setIsInterested;
 
-@Name("Wolf/Fox - is Interested (Property)")
-@Description("Returns whether or not a fox or wolf is interested.\nPaper is required to use this with foxes.")
+@Name("Entity - is Interested (Property)")
+@Description("Returns whether or not the provided foxes or wolves are interested.\nPaper 1.18.2+ is required to use this with foxes.")
 @Examples({"broadcast interested state of target"})
 @Since("1.0.2, 1.3 (Plural)")
 @DocumentationId("9056")
 @SuppressWarnings("unused")
-public class ExprEntityInterestedState extends SimpleBooleanPropertyExpression<LivingEntity> {
+public class ExprEntityIsInterested extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        register(ExprEntityInterestedState.class,Boolean.class,
+        register(ExprEntityIsInterested.class,Boolean.class,
                 "[[living[ |-]]entity]", "[is] interested", "livingentities");
     }
 
@@ -27,7 +27,7 @@ public class ExprEntityInterestedState extends SimpleBooleanPropertyExpression<L
 
     @Override
     protected String getPropertyName() {
-        return "entity is interested property";
+        return "is interested";
     }
 
     @Override
