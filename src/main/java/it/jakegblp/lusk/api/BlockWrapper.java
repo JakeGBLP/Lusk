@@ -193,7 +193,7 @@ public class BlockWrapper {
 
     @Nullable
     public BlockState getPlacedBlockState() {
-        if (block != null) return block.getState();
+        if (block != null) return block.getState(!shouldUpdate);
         else if (blockState != null && blockState.isPlaced()) return blockState;
         return null;
     }
@@ -401,6 +401,14 @@ public class BlockWrapper {
         if (getBlockState() instanceof Bell bell)
             return bell.getShakingTicks();
         return null;
+    }
+
+    public boolean isBellResonating() {
+        return getBlockState() instanceof Bell bell && bell.isResonating();
+    }
+
+    public boolean isBellRinging() {
+        return getBlockState() instanceof Bell bell && bell.isShaking();
     }
 
     public void ringBell(@Nullable Entity entity, @Nullable BlockFace blockFace) {
