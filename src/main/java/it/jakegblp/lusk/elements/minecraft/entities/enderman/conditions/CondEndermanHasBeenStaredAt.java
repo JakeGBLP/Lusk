@@ -6,16 +6,20 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+
 @Name("Enderman - Has Been Stared At")
 @Description("Checks if an enderman has been stared at.")
 @Examples({"if target has been stared at:"})
 @Since("1.0.2")
 @DocumentationId("9021")
+@RequiredPlugins("Paper 1.18.2+")
 @SuppressWarnings("unused")
-public class CondEndermanBeenStaredAt extends PropertyCondition<LivingEntity> {
+public class CondEndermanHasBeenStaredAt extends PropertyCondition<LivingEntity> {
 
     static {
-        register(CondEndermanBeenStaredAt.class, PropertyType.HAVE, "been stared at", "livingentities");
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+            register(CondEndermanHasBeenStaredAt.class, PropertyType.HAVE, "been stared at", "livingentities");
     }
 
     @Override
