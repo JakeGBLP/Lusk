@@ -12,7 +12,15 @@ import org.jetbrains.annotations.NotNull;
 
 @Name("Player - Client Version")
 @Description("Returns the Minecraft version of a player, snapshots are not included.")
-@Examples({"broadcast version of player\n\nkick player due to \"stop using 1.8!\" if version of player = 1.8.9"})
+@Examples("""
+        broadcast version of player
+        
+        if version of player = 1.19.3:
+            send "why so specific of a version?"
+        
+        if version of player < 1.9.0:
+            send "i think you should update but you do you"
+        """)
 @Since("1.0.0")
 @SuppressWarnings("unused")
 public class ExprPlayerVersion extends SimplePropertyExpression<Player, Semver> {
