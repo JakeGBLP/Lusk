@@ -52,7 +52,7 @@ public class ExprArmorStandDisabledSlots extends PropertyExpression<LivingEntity
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "the armor stand disabled equipment slots of " + getExpr().toString(event, debug);
+        return "armor stand disabled equipment slots of " + getExpr().toString(event, debug);
     }
 
     @Override

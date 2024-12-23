@@ -9,7 +9,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PAPER_TYPES;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - has Base Plate (Property)")
@@ -17,13 +17,13 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 Gets and sets the `hasBasePlate` property of an armorstand entity or item, to do so with an armorstand item you must be using Paper.
 """)
 @Examples({"set has base plate property of target to true", "set whether armor stand target has base plate to true"})
-@Since("1.0.2, 1.3 (item)")
+@Since("1.0.2, 1.3 (Item)")
 @SuppressWarnings("unused")
 public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<Object> {
 
     static {
         register(ExprArmorStandHasBasePlate.class, Boolean.class, ARMOR_STAND_PREFIX,
-                "([have|has|show[s]|should show] [its|their] base plate|base plate [:in]visibility)", ARMOR_STAND_PAPER_TYPES);
+                "([have|has|show[s]|should show] [its|their] base plate|base plate [:in]visibility)", ARMOR_STAND_TYPES);
     }
 
     @Override
@@ -58,6 +58,6 @@ public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand base plate "+(isNegated() ? "in" : "") + "visibility property";
+        return "armor stand base plate "+(isNegated() ? "in" : "") + "visibility property";
     }
 }

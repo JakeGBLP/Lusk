@@ -9,7 +9,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PAPER_TYPES;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - is Invisible (Property)")
@@ -22,7 +22,7 @@ Gets and sets the `Invisible` property of an armorstand entity or item, to do so
 public class ExprArmorStandIsInvisible extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        register(ExprArmorStandIsInvisible.class, Boolean.class, ARMOR_STAND_PREFIX, "([is] [:in]visible|[:in]visibility)", ARMOR_STAND_PAPER_TYPES);
+        register(ExprArmorStandIsInvisible.class, Boolean.class, ARMOR_STAND_PREFIX, "([is] [:in]visible|[:in]visibility)", ARMOR_STAND_TYPES);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class ExprArmorStandIsInvisible extends SimpleBooleanPropertyExpression<O
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand is "+(isNegated() ? "in" : "") +"visible property";
+        return "armor stand is "+(isNegated() ? "in" : "") +"visible property";
     }
 }

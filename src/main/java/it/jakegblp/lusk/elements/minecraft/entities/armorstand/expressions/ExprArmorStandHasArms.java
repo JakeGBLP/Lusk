@@ -9,7 +9,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PAPER_TYPES;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - has Arms (Property)")
@@ -17,12 +17,12 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 Gets and sets the `hasHarms` property of an armorstand entity or item, to do so with an armorstand item you must be using Paper.
 """)
 @Examples({"set has arms property of target to true", "set whether armor stand target has arms to true"})
-@Since("1.0.2, 1.3 (item)")
+@Since("1.0.2, 1.3 (Item)")
 @SuppressWarnings("unused")
 public class ExprArmorStandHasArms extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        register(ExprArmorStandHasArms.class, Boolean.class, ARMOR_STAND_PREFIX, "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", ARMOR_STAND_PAPER_TYPES);
+        register(ExprArmorStandHasArms.class, Boolean.class, ARMOR_STAND_PREFIX, "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", ARMOR_STAND_TYPES);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class ExprArmorStandHasArms extends SimpleBooleanPropertyExpression<Objec
 
     @Override
     protected String getPropertyName() {
-        return "the armor stand arms "+(isNegated() ? "in" : "") + "visibility property";
+        return "armor stand arms "+(isNegated() ? "in" : "") + "visibility property";
     }
 }
