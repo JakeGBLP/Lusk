@@ -16,8 +16,8 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
 @SuppressWarnings("unused")
 public class ExprEntityShouldBurnInDay extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        register(ExprEntityShouldBurnInDay.class,Boolean.class,
-                "[[living[ |-]]entity]","(should|will) burn (during the day|(in|under) [the] (sun|day)light)","livingentities");
+        register(ExprEntityShouldBurnInDay.class,Boolean.class, "[[living[ |-]]entity]",
+                "(should|will) burn (during the day|(in|under) [the] (sun[light]|daylight))","livingentities");
     }
 
     @Override
