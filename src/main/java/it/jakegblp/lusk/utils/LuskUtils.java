@@ -1,18 +1,12 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.SkriptAPIException;
-import ch.njol.skript.conditions.base.PropertyCondition;
-import ch.njol.skript.lang.Condition;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -101,75 +95,4 @@ public class LuskUtils {
         else return Kleenean.UNKNOWN;
     }
 
-    /**
-     * Registers a property expression that gets or is set to a boolean; includes the following patterns:<br>
-     * 1. <code>[the] %prefix% %property% [state|property] of %fromType%</code><br>
-     * 2. <code>%fromType%'[s] %prefix% %property% [state|property]</code><br>
-     * 3. <code>whether or not [the] %prefix% %fromType% %property%</code><br>
-     * 4. <code>whether [the] %prefix% %fromType% %property% [or not]</code>
-     *
-     * @param expressionClass the class of the expression to register
-     * @param type the class of the return type
-     * @param prefix a (usually optional) string that comes before the property to indicate what kind of object it can be used for
-     * @param property a string indicates what this expression will return based on the given object
-     * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
-     * @param <T> the returned type of the expression
-     */
-    public static <T extends Boolean> void registerVerboseBooleanPropertyExpression(
-            Class<? extends Expression<T>> expressionClass,
-            Class<T> type,
-            @Nullable String prefix,
-            String property,
-            String fromType) {
-        prefix = prefix != null ? prefix + " " : "";
-        String[] patterns = {
-                "[the] " + prefix + property + " [state|property] of %" + fromType + "%",
-                "%" + fromType + "%'[s] " + prefix + property + " [state|property]",
-                "whether or not [the] " + prefix + "%" + fromType + "% " + property,
-                "whether [the] " + prefix + "%" + fromType + "% " + property + " [or not]"
-        };
-        Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
-    }
-
-    public static void registerPrefixedPropertyCondition(
-            Class<? extends Condition> condition,
-            String prefix,
-            String property,
-            String type) {
-        registerPrefixedPropertyCondition(condition, PropertyCondition.PropertyType.BE, prefix, property, type);
-    }
-
-    public static void registerPrefixedPropertyCondition(
-            Class<? extends Condition> condition,
-            PropertyCondition.PropertyType propertyType,
-            String prefix,
-            String property,
-            String type) {
-        if (type.contains("%"))
-            throw new SkriptAPIException("The type argument must not contain any '%'s");
-        switch (propertyType) {
-            case BE:
-                Skript.registerCondition(condition,
-                        prefix + " %" + type + "% (is|are) " + property,
-                        prefix + " %" + type + "% (isn't|is not|aren't|are not) " + property);
-                break;
-            case CAN:
-                Skript.registerCondition(condition,
-                        prefix + " %" + type + "% can " + property,
-                        prefix + " %" + type + "% (can't|cannot|can not) " + property);
-                break;
-            case HAVE:
-                Skript.registerCondition(condition,
-                        prefix + " %" + type + "% (has|have) " + property,
-                        prefix + " %" + type + "% (doesn't|does not|do not|don't) have " + property);
-                break;
-            case WILL:
-                Skript.registerCondition(condition,
-                        prefix + " %" + type + "% will " + property,
-                        prefix + " %" + type + "% (will (not|neither)|won't) " + property);
-                break;
-            default:
-                assert false;
-        }
-    }
 }
