@@ -14,7 +14,7 @@ public class SoundClassInfos {
                             .user("sounds?")
                             .name("Sound")
                             .description("All the sounds, this varies across versions, some sounds might be removed.")
-                            .since("1.4"));
+                            .since("1.3"));
         }
     }
 }
