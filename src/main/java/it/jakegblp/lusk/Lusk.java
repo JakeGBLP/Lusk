@@ -109,7 +109,7 @@ public class Lusk extends JavaPlugin {
             consoleLog(" - {0} {1}{2}", finish[i], elementNames[i], finish[i] == 1 ? "" : "s");
         }
         if (!buildType.equals("release")) {
-            consoleLog("&eThis is a {0} build and should not be used in production unless stated otherwise.", buildType);
+            consoleLog("&eThis is a {0} build and should not be used in production unless stated to be stable.", buildType);
             consoleLog("&eReport bugs at https://github.com/JakeGBLP/Lusk/issues");
         }
         new UpdateChecker(this);
