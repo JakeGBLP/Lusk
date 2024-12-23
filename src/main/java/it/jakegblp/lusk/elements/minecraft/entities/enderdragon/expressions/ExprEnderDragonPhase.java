@@ -24,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Since("1.0.2")
 @SuppressWarnings("unused")
 public class ExprEnderDragonPhase extends SimpleExpression<EnderDragon.Phase> {
-    static {
+    static { // todo: add per enderdragon property, also add this https://github.com/PaperMC/Paper/commit/29144573e697aac0235f00e185195166058081d2
         Skript.registerExpression(ExprEnderDragonPhase.class, EnderDragon.Phase.class, EVENT_OR_SIMPLE,
                 "(the |event-)[new|:current] ender[ ]dragon phase");
     }
