@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.enderman.expressions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
@@ -20,6 +17,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Description("Returns the Escape Reason in an Enderman Escape Event.\nThis Expression requires Paper.")
 @Examples({"on enderman escape:\n\tbroadcast event-enderman escape reason"})
 @Since("1.0.0")
+@RequiredPlugins("Paper")
 @SuppressWarnings("unused")
 public class ExprEndermanEscapeReason extends SimpleExpression<EndermanEscapeEvent.Reason> {
     static {
