@@ -8,8 +8,7 @@ import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import org.bukkit.block.Bell;
-import org.bukkit.block.Block;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,11 +22,11 @@ import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
         Note: if you wish to use this expression on Skript 2.9+ you will need to use Lusk 1.3+.
         """)
 @Examples({"on bell ring:\n\twait 5 seconds\n\tbroadcast resonating time of event-block"})
-@Since("1.0.3, 1.3 (ticks)")
+@Since("1.0.3, 1.3 (Ticks, BlockStates)")
 @SuppressWarnings("unused")
-public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Object> {
+public class ExprBellResonatingTime extends SimplePropertyExpression<Object, Object> {
     static {
-        register(ExprBellResonatingTime.class, Object.class, "resonating (time|:ticks)", "blocks");
+        register(ExprBellResonatingTime.class, Object.class, "resonating (time|:ticks)", "blocks/blockstates");
     }
 
     boolean useTicks;
@@ -45,13 +44,9 @@ public class ExprBellResonatingTime extends SimplePropertyExpression<Block, Obje
 
     @Override
     @Nullable
-    public Object convert(Block block) {
-        if (block.getState() instanceof Bell bell) {
-            int ticks = bell.getResonatingTicks();
-            if (useTicks) return ticks;
-            else return fromTicks(ticks);
-        }
-        return null;
+    public Object convert(Object block) {
+        Integer ticks = new BlockWrapper(block).getBellResonatingTicks();
+        return (useTicks || ticks == null) ? ticks : fromTicks(ticks);
     }
 
     @Override
