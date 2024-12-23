@@ -1,77 +1,55 @@
 package it.jakegblp.lusk.elements.minecraft.entities.dolphin.expressions;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.doc.*;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Dolphin;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+
 @Name("Dolphin - Has Fish State")
-@Description("Returns whether or not a dolphin has a fish.\nCan be set.")
+@Description("Returns whether or not the provided dolphins have been fed a fish.\nCan be set.")
 @Examples({"broadcast has fish state of target"})
-@Since("1.0.3")
+@Since("1.0.3, 1.3 (Plural)")
+@RequiredPlugins("Paper")
 @SuppressWarnings("unused")
-public class ExprDolphinHasFishState extends SimpleExpression<Boolean> {
+public class ExprDolphinHasFishState extends SimpleBooleanPropertyExpression<LivingEntity> {
+
     static {
-        // todo: simple property expression, verbose util method, util, plural
-        Skript.registerExpression(ExprDolphinHasFishState.class, Boolean.class, ExpressionType.PROPERTY,
-                "[the] dolphin [has] been fed fish state of %entity%",
-                "%entity%'[s] dolphin [has] been fed fish state",
-                "whether [the] dolphin %entity% has been fed fish [or not]",
-                "whether [or not [the] dolphin %entity% has been fed fish]");
-    }
-
-    private Expression<Entity> entityExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
-        return true;
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+            register(ExprDolphinHasFishState.class, Boolean.class, "[dolphin]", "[has] been fed [a] fish", "livingentities");
     }
 
     @Override
-    protected Boolean @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Dolphin dolphin) {
-            return new Boolean[]{dolphin.hasFish()};
+    public @Nullable Boolean convert(LivingEntity from) {
+        return from instanceof Dolphin dolphin && dolphin.hasFish();
+    }
+
+    @Override
+    public void set(LivingEntity from, Boolean to) {
+        if (from instanceof Dolphin dolphin) {
+            dolphin.setHasFish(to);
         }
-        return new Boolean[0];
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
-    }
-
-    @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Boolean aBoolean)
-            if (entityExpression.getSingle(e) instanceof Dolphin dolphin) dolphin.setHasFish(aBoolean);
-    }
-
-    @Override
-    public boolean isSingle() {
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    public @NotNull Class<? extends Boolean> getReturnType() {
-        return Boolean.class;
+    public void reset(LivingEntity from) {
+        set(from, false);
     }
 
     @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the dolphin has been fed fish state of " + (e == null ? "" : entityExpression.toString(e, debug));
+    public boolean allowReset() {
+        return true;
+    }
+
+    @Override
+    protected String getPropertyName() {
+        return "has been fed a fish";
     }
 }

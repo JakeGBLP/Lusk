@@ -1,78 +1,72 @@
 package it.jakegblp.lusk.elements.minecraft.entities.dolphin.expressions;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.doc.*;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.bukkit.entity.Dolphin;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+
 @Name("Dolphin - Moisture Level")
-@Description("Returns the moisture level of a dolphin.\nCan be set.")
+@Description("Returns the moisture level of the provided dolphins.\nCan be set, added to, and removed from.")
 @Examples({"broadcast moisture of target"})
-@Since("1.0.3")
+@Since("1.0.3, 1.3 (Plural, Add, Remove)")
+@RequiredPlugins("Paper")
 @SuppressWarnings("unused")
-public class ExprDolphinMoisture extends SimpleExpression<Integer> {
+public class ExprDolphinMoisture extends SimplerPropertyExpression<LivingEntity,Integer> {
+
     static {
-        // todo: simple property expression, util, plural, livingentity
-        Skript.registerExpression(ExprDolphinMoisture.class, Integer.class, ExpressionType.PROPERTY,
-                "[the] dolphin moist(ure|ness) of %entity%",
-                "%entity%'[s] dolphin moist(ure|ness)");
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+            register(ExprDolphinMoisture.class,Integer.class,
+                    "dolphin moist(ure [level|amount]|ness [amount])", "livingentities");
     }
 
-    private Expression<Entity> entityExpression;
+    @Override
+    public @Nullable Integer convert(LivingEntity from) {
+        return from instanceof Dolphin dolphin ? dolphin.getMoistness() : null;
+    }
 
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
+    @Override
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    protected Integer @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof Dolphin dolphin) {
-            return new Integer[]{dolphin.getMoistness()};
-        }
-        return new Integer[0];
-    }
-
-    @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return (mode == Changer.ChangeMode.SET) ? new Class[]{Integer.class} : null;
-    }
-
-    @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Integer integer) {
-            if (entityExpression.getSingle(e) instanceof Dolphin dolphin) {
-                dolphin.setMoistness(integer);
-            }
-        }
-    }
-
-    @Override
-    public boolean isSingle() {
+    public boolean allowAdd() {
         return true;
     }
 
     @Override
-    public @NotNull Class<? extends Integer> getReturnType() {
+    public boolean allowRemove() {
+        return true;
+    }
+
+    @Override
+    public void set(LivingEntity from, Integer to) {
+        if (from instanceof Dolphin dolphin)
+            dolphin.setMoistness(to);
+    }
+
+    @Override
+    public void add(LivingEntity from, Integer to) {
+        if (from instanceof Dolphin dolphin)
+            dolphin.setMoistness(dolphin.getMoistness()+to);
+    }
+
+    @Override
+    public void remove(LivingEntity from, Integer to) {
+        if (from instanceof Dolphin dolphin)
+            dolphin.setMoistness(dolphin.getMoistness() - to);
+    }
+
+    @Override
+    protected String getPropertyName() {
+        return "dolphin moisture level";
+    }
+
+    @Override
+    public Class<? extends Integer> getReturnType() {
         return Integer.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the dolphin moisture of " + (e == null ? "" : entityExpression.toString(e, debug));
     }
 }
