@@ -31,10 +31,11 @@ public abstract class PrefixedPropertyCondition<T> extends PropertyCondition<T> 
                 prefix + "%" + type + "% "+propertyType.getPattern(true)+" " + property);
     }
 
+    @Nullable
     public abstract String getPrefix();
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return getPrefix() + " " + super.toString(event, debug);
+        return (getPrefix() != null ? getPrefix() + " " : "") + super.toString(event, debug);
     }
 }
