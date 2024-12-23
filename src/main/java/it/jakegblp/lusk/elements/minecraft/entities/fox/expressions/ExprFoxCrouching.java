@@ -8,8 +8,6 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
-
 @Name("Fox - is Crouching (Property)")
 @Description("Gets whether the provided foxes are crouching, can be set and reset.")
 @Examples({"broadcast the fox is crouching property of target"})
@@ -17,14 +15,12 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExp
 @SuppressWarnings("unused")
 public class ExprFoxCrouching extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        registerVerboseBooleanPropertyExpression(ExprFoxCrouching.class, Boolean.class, "fox", "[is] crouching","livingentities");
+        register(ExprFoxCrouching.class, Boolean.class, "fox", "[is] crouching","livingentities");
     }
 
     @Override
     public Boolean convert(LivingEntity from) {
-        if (from instanceof Fox fox)
-            return fox.isCrouching();
-        return false;
+        return from instanceof Fox fox && fox.isCrouching();
     }
 
     @Override
@@ -50,6 +46,6 @@ public class ExprFoxCrouching extends SimpleBooleanPropertyExpression<LivingEnti
 
     @Override
     protected String getPropertyName() {
-        return "fox is crouching property";
+        return "fox is crouching";
     }
 }

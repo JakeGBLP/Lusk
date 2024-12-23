@@ -5,8 +5,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_FOX_API;
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 
 @Name("Fox - is Sleeping (Property)")
 @Description("""
@@ -23,8 +22,8 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExp
 public class ExprFoxSleeping extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_HAS_FOX_API)
-            registerVerboseBooleanPropertyExpression(ExprFoxLeaping.class, Boolean.class, "fox", "[is] sleeping","livingentities");
+        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+            register(ExprFoxLeaping.class, Boolean.class, "fox", "[is] sleeping","livingentities");
     }
 
     @Override
@@ -36,10 +35,7 @@ public class ExprFoxSleeping extends SimpleBooleanPropertyExpression<LivingEntit
 
     @Override
     public Boolean convert(LivingEntity from) {
-        if (from instanceof Fox fox) {
-            return fox.isSleeping();
-        }
-        return false;
+        return from.isSleeping();
     }
 
     @Override
@@ -60,6 +56,6 @@ public class ExprFoxSleeping extends SimpleBooleanPropertyExpression<LivingEntit
 
     @Override
     protected String getPropertyName() {
-        return "fox is sleeping property";
+        return "fox is sleeping";
     }
 }

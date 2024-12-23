@@ -8,8 +8,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_FOX_API;
-import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExpression;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 
 @Name("Fox - is Faceplanted (Property)")
 @Description("Gets whether the provided foxes are faceplanted, if running Paper this can be set and reset.")
@@ -19,12 +18,12 @@ import static it.jakegblp.lusk.utils.LuskUtils.registerVerboseBooleanPropertyExp
 public class ExprFoxFaceplanted extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        registerVerboseBooleanPropertyExpression(ExprFoxFaceplanted.class, Boolean.class, "fox", "[is] face[ |-]planted","livingentities");
+        register(ExprFoxFaceplanted.class, Boolean.class, "fox", "[is] face[ |-]planted","livingentities");
     }
 
     @Override
     protected String getPropertyName() {
-        return "fox is faceplanted property";
+        return "fox is faceplanted";
     }
 
     @Override
@@ -41,19 +40,16 @@ public class ExprFoxFaceplanted extends SimpleBooleanPropertyExpression<LivingEn
 
     @Override
     public Boolean convert(LivingEntity from) {
-        if (from instanceof Fox fox) {
-            return fox.isFaceplanted();
-        }
-        return false;
+        return from instanceof Fox fox && fox.isFaceplanted();
     }
 
     @Override
     public boolean allowSet() {
-        return PAPER_HAS_FOX_API;
+        return PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
     }
 
     @Override
     public boolean allowReset() {
-        return PAPER_HAS_FOX_API;
+        return PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
     }
 }
