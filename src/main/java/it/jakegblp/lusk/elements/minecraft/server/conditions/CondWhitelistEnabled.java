@@ -16,8 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Server - Whitelist is Enabled")
 @Description("Checks whether the server has a whitelist or not.")
-@Examples({"""
-        """})
+@Examples("if the whitelist is enabled:")
 @Since("1.0.2")
 public class CondWhitelistEnabled extends Condition {
     static {
@@ -38,6 +37,6 @@ public class CondWhitelistEnabled extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return (isNegated()) ^ Bukkit.hasWhitelist();
+        return isNegated() ^ Bukkit.hasWhitelist();
     }
 }

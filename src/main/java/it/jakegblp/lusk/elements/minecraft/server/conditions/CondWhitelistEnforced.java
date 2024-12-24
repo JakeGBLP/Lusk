@@ -16,8 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Server - Whitelist is Enforced")
 @Description("Checks whether the whitelist is enforced. If the whitelist is enforced, non-whitelisted players will be disconnected when the server whitelist is reloaded.")
-@Examples({"""
-        """})
+@Examples("if the whitelist is not enforced:")
 @Since("1.0.2")
 public class CondWhitelistEnforced extends Condition {
     static {
@@ -38,6 +37,6 @@ public class CondWhitelistEnforced extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return (isNegated()) ^ Bukkit.isWhitelistEnforced();
+        return isNegated() ^ Bukkit.isWhitelistEnforced();
     }
 }
