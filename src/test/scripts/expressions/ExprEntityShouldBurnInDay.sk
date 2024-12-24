@@ -1,21 +1,21 @@
-test "ExprArmorStandCanMove":
+test "ExprEntityShouldBurnInDay":
   spawn phantom at location(0,0,0):
     assert should burn during the day property of entity is true with "should burn during the day property of phantom %entity% is false instead of true"
-    set can move property of entity to false
+    set should burn during the day of entity to false
     assert should burn during the day property of entity is false with "should burn during the day property of phantom %entity% is true instead of false"
     delete entity
   spawn skeleton at location(0,0,0):
     assert should burn during the day property of entity is true with "should burn during the day property of skeleton %entity% is false instead of true"
-    set can move property of entity to false
+    set should burn during the day of entity to false
     assert should burn during the day property of entity is false with "should burn during the day property of skeleton %entity% is true instead of false"
     delete entity
   spawn stray at location(0,0,0):
     assert should burn during the day property of entity is true with "should burn during the day property of stray %entity% is false instead of true"
-    set can move property of entity to false
+    set should burn during the day of entity to false
     assert should burn during the day property of entity is false with "should burn during the day property of stray %entity% is true instead of false"
     delete entity
   spawn zombie at location(0,0,0):
     assert should burn during the day property of entity is true with "should burn during the day property of zombie %entity% is false instead of true"
-    set can move property of entity to false
+    set should burn during the day of entity to false
     assert should burn during the day property of entity is false with "should burn during the day property of zombie %entity% is true instead of false"
     delete entity
