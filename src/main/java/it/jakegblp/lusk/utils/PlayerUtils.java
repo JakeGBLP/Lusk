@@ -17,7 +17,7 @@ public class PlayerUtils {
         return !player.isInWater() && player.getPose() == Pose.SWIMMING;
     }
 
-    public static boolean isSlim(OfflinePlayer player) {
+    public static boolean isSlim(OfflinePlayer player) { // todo: handle spigot
         PlayerProfile playerProfile = player.getPlayerProfile();
         if (!playerProfile.isComplete()) {
             playerProfile.complete();

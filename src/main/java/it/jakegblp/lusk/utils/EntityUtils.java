@@ -17,7 +17,7 @@ import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
 
 public class EntityUtils {
-    //todo: https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
+    // https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
 
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
         if (entity instanceof Zombie zombie) return zombie.shouldBurnInDay();
