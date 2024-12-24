@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.elements.minecraft.entities.endersignal.conditions;
 
-import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
@@ -8,19 +7,18 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.skript.PrefixedPropertyCondition;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
-
-import static it.jakegblp.lusk.utils.LuskUtils.registerPrefixedPropertyCondition;
 
 @Name("Ender Signal - is Going to Drop/Shatter")
 @Description("Checks if the provided ender signals should drop an item on death. If true, they will drop an item. If false, they will shatter.")
 @Examples("if ender signal {_enderSingle} is going to drop:")
 @Since("1.3")
-public class CondEnderSignalItemDrop extends PropertyCondition<Entity> {
+public class CondEnderSignalItemDrop extends PrefixedPropertyCondition<Entity> {
 
     static {
-        registerPrefixedPropertyCondition(CondEnderSignalItemDrop.class,
+        register(CondEnderSignalItemDrop.class,
                 "[ender (signal|eye)]", "going to (drop|:shatter)", "entities");
     }
 
@@ -40,5 +38,10 @@ public class CondEnderSignalItemDrop extends PropertyCondition<Entity> {
     @Override
     protected String getPropertyName() {
         return "going to " + (shatter ? "shatter" : "drop");
+    }
+
+    @Override
+    public String getPrefix() {
+        return "ender signal";
     }
 }
