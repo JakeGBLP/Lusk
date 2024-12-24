@@ -4,11 +4,12 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import it.jakegblp.lusk.api.skript.ExtendedPropertyType;
 import it.jakegblp.lusk.api.skript.PrefixedPropertyCondition;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 
-@Name("Allay - Can Be Duplicated")
+@Name("Allay - can Be Duplicated")
 @Description("Checks if an allay can be duplicated.")
 @Examples({"if target can be duplicated:"})
 @Since("1.0.2, 1.3 (Plural)")
@@ -16,7 +17,7 @@ import org.bukkit.entity.Entity;
 public class CondAllayCanBeDuplicated extends PrefixedPropertyCondition<Entity> {
 
     static {
-        register(CondAllayCanBeDuplicated.class,PropertyType.CAN,"[allay[s]]","be duplicated","entities");
+        register(CondAllayCanBeDuplicated.class, ExtendedPropertyType.CAN,"[allay[s]]","be duplicated","entities");
     }
 
     @Override
