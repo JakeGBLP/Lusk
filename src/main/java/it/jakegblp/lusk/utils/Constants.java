@@ -13,9 +13,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Location;
 import org.bukkit.Registry;
-import org.bukkit.entity.EnderSignal;
-import org.bukkit.entity.Fox;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
@@ -25,8 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static ch.njol.skript.Skript.*;
+import static ch.njol.skript.Skript.classExists;
 import static ch.njol.skript.Skript.methodExists;
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
 
@@ -48,7 +47,6 @@ public class Constants {
             PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
 
     public static final boolean
-            //todo: see how things play out with old, papermc item rarity
             HAS_BELL_RESONATE_EVENT = classExists("org.bukkit.event.block.BellResonateEvent"),
             SPIGOT_HAS_BELL_RING_EVENT = classExists("org.bukkit.event.block.BellRingEvent"),
             HAS_VOXEL_SHAPE = classExists("org.bukkit.util.VoxelShape"),
@@ -71,13 +69,43 @@ public class Constants {
              * Whether the current skript version is greater than or equal to 2.9
              */
             SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
-            SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.10")), //I forgot why I added this
+            /**
+             * Whether the current server version is greater than or equal to 1.18.2
+             */
+            MINECRAFT_1_18_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.18.2")),
+            /**
+             * Whether the current server version is greater than or equal to 1.19.2
+             */
+            MINECRAFT_1_19_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.19.2")),
+            ///**
+            // * Whether the current server version is greater than or equal to 1.19.3
+            // */
+            //MINECRAFT_1_19_3 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.19.3")),
+            /**
+             * Whether the current server version is greater than or equal to 1.20.1
+             */
+            MINECRAFT_1_20_1 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.1")),
+            /**
+             * Whether the current server version is greater than or equal to 1.20.2
+             */
+            MINECRAFT_1_20_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.2")),
+            /**
+             * Whether the current server version is greater than or equal to 1.20.4
+             */
+            MINECRAFT_1_20_4 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.4")),
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
-            PAPER_HAS_FOX_API = methodExists(Fox.class,"isInterested"),
+            PAPER_HAS_1_18_2_EXTENDED_ENTITY_API = MINECRAFT_1_18_2 && isPaper(),
+            /**
+             * Whether, at runtime, the server includes APIs for
+             * {@link Fox}, {@link Cat}, {@link Dolphin}, {@link Enderman}, {@link EnderDragon}.
+             */
+            PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
+            // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
+            //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
 
             PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION = methodExists(EnderSignal.class, "setTargetLocation", Location.class, boolean.class),
             PAPER_HAS_WORLD_BORDER_EVENT = classExists("io.papermc.paper.event.world.border.WorldBorderEvent"),
@@ -99,7 +127,7 @@ public class Constants {
     public static final String
             ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
             ARMOR_STAND_PREFIX = "[armor[ |-]stand]",
-            ARMOR_STAND_PAPER_TYPES = "livingentity"+(PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
+            ARMOR_STAND_TYPES = "livingentity" + (PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
             LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
     public static final Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
