@@ -4,7 +4,9 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
+import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.block.BlockState;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockClassInfos {
@@ -26,7 +28,7 @@ public class BlockClassInfos {
 
                         @Override
                         public @NotNull String toString(BlockState blockState, int flags) {
-                            return (blockState.isPlaced() ? "placed " : "") +"BlockState of type '"+blockState.getType()+"' at '"+blockState.getLocation()+'"';
+                            return (blockState.isPlaced() ? "placed " : "") + "BlockState of type '" + blockState.getType() + "' at '" + blockState.getLocation() + '"';
                         }
 
                         @Override
@@ -34,6 +36,15 @@ public class BlockClassInfos {
                             return toString(blockState, 0);
                         }
                     }));
+        }
+        if (Classes.getExactClassInfo(BlockIgniteEvent.IgniteCause.class) == null) {
+            Classes.registerClass(
+                    new EnumRegistryWrapper(BlockIgniteEvent.IgniteCause.class, null, "ignition")
+                            .getClassInfo("ignitecause")
+                            .user("ignit(e|ion) ?causes?")
+                            .name("Ignition Cause")
+                            .description("All the Ignition Causes.")
+                            .since("1.3"));
         }
     }
 }
