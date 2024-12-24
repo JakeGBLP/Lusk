@@ -9,7 +9,10 @@ import static it.jakegblp.lusk.utils.EntityUtils.setShouldBurnDuringTheDay;
 import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
 
 @Name("Entity - Should Burn During The Day (Property)")
-@Description("Returns whether or not the provided entities should burn during the day.\nApplies to zombies, skeletons, and phantoms\nCan be set.")
+@Description("""
+        Returns whether or not the provided entities should burn during the day.
+        Applies to zombies, skeletons, and phantoms
+        Can be set.""")
 @Examples({"broadcast the should burn under sunlight property of target","set the should burn during the day property of {_entity}"})
 @Since("1.0.3, 1.1.1 (Skeleton,Phantom), 1.3 (Safety)")
 @DocumentationId("11901")
