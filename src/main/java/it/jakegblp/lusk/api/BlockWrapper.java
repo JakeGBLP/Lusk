@@ -49,7 +49,6 @@ public class BlockWrapper {
             this.blockData = null;
             this.blockDataMeta = null;
             this.blockStateMeta = null;
-            this.shouldUpdate = false;
         } else if (object instanceof BlockState aBlockState) {
             this.block = null;
             this.blockState = aBlockState;
@@ -57,7 +56,6 @@ public class BlockWrapper {
             this.blockData = null;
             this.blockDataMeta = null;
             this.blockStateMeta = null;
-            this.shouldUpdate = false;
         } else if (object instanceof ItemType itemType) {
             this.block = null;
             this.blockState = null;
@@ -65,7 +63,6 @@ public class BlockWrapper {
             this.blockData = null;
             this.blockDataMeta = null;
             this.blockStateMeta = null;
-            this.shouldUpdate = shouldUpdate;
         } else if (object instanceof ItemMeta itemMeta) {
             this.block = null;
             this.blockState = null;
@@ -73,7 +70,6 @@ public class BlockWrapper {
             this.blockData = null;
             this.blockDataMeta = itemMeta instanceof BlockDataMeta meta ? meta : null;
             this.blockStateMeta = itemMeta instanceof BlockStateMeta meta ? meta : null;
-            this.shouldUpdate = false;
         } else if (object instanceof BlockData aBlockData) {
             this.block = null;
             this.blockState = null;
@@ -81,7 +77,6 @@ public class BlockWrapper {
             this.blockData = aBlockData;
             this.blockDataMeta = null;
             this.blockStateMeta = null;
-            this.shouldUpdate = false;
         } else {
             this.block = null;
             this.blockState = null;
@@ -89,8 +84,8 @@ public class BlockWrapper {
             this.blockData = null;
             this.blockDataMeta = null;
             this.blockStateMeta = null;
-            this.shouldUpdate = false;
         }
+        this.shouldUpdate = shouldUpdate;
     }
 
     @Nullable
