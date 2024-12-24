@@ -16,15 +16,15 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
 import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
 
-@Name("Chicken - Egg Lay Time")
+@Name("Chicken - Egg Lay Time/Ticks")
 @Description("Returns the time till a chicken lays an egg.")
 @Examples({"set egg lay time of target to 2 minutes"})
-@Since("1.0.3")
+@Since("1.0.3, 1.3 (Ticks)")
 @RequiredPlugins("Paper")
 @SuppressWarnings("unused")
 public class ExprChickenEggLayTime extends SimplePropertyExpression<LivingEntity, Object> {
 
-    static { // todo: simpler
+    static { // todo: simpler, use that one other expression as a reference
         if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
             register(ExprChickenEggLayTime.class, Object.class, "[chicken] egg lay (time|:ticks)", "livingentities");
     }
