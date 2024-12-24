@@ -1,9 +1,6 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.util.Timespan;
-import org.bukkit.attribute.Attribute;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Function;
@@ -35,18 +32,6 @@ public class DeprecationUtils {
     }
 
     public static final Function<Timespan, Long> GET_TICKS;
-
-
-    @Nullable
-    public static Attribute getScaleAttribute() {
-        if (HAS_SCALE_ATTRIBUTE) {
-            return Attribute.SCALE;
-        }
-        try {
-            return (Attribute) Attribute.class.getDeclaredField("GENERIC_SCALE").get(null);
-        } catch (final NoSuchFieldException | SecurityException | IllegalAccessException ignored) {}
-        return null;
-    }
 
     /**
      * Replaces deprecated methods and avoids reflection for pre-TimePeriod implementation.
