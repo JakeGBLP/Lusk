@@ -5,7 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.api.wrappers.BlockWrapper;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Block - can Be Waterlogged")
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CondBlockCanBeWaterLogged extends PropertyCondition<Object> {
     static {
-        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN,"be water[ |-]logged", "blocks/blockstates/blockdatas");
+        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN,"be water[ |-]logged", "blocks/blockstates/blockdatas/itemtypes");
     }
 
     @Override

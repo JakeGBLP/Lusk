@@ -5,7 +5,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.api.wrappers.BlockWrapper;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 
 @Name("Block - is Waterlogged")
@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 @Examples({"if event-block is waterlogged:\n\tbroadcast \"%event-block% is waterlogged!\""})
 @Since("1.3")
 @SuppressWarnings("unused")
-public class CondBlockWaterLogged extends PropertyCondition<Object> {
+public class CondBlockIsWaterLogged extends PropertyCondition<Object> {
     static {
-        register(CondBlockWaterLogged.class, "water[ |-]logged", "blocks/blockstates/blockdatas");
+        register(CondBlockIsWaterLogged.class, "water[ |-]logged", "blocks/blockstates/blockdatas/itemtypes");
     }
 
     @Override

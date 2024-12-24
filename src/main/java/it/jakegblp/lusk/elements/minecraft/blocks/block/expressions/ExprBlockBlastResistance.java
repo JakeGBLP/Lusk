@@ -1,12 +1,11 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.block.expressions;
 
-import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import org.bukkit.Material;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
         """)
 @Examples({"broadcast blast resistance of obsidian"})
 @Since("1.0.0")
-public class ExprBlockBlastResistance extends SimplePropertyExpression<ItemType, Float> {
+public class ExprBlockBlastResistance extends SimplePropertyExpression<Object, Float> {
     static {
-        register(ExprBlockBlastResistance.class, Float.class, "[block] blast resistance", "itemtypes");
+        register(ExprBlockBlastResistance.class, Float.class, "[block] blast resistance", "itemtypes/blocks/blockdatas/blockstates");
     }
 
     @Override
@@ -31,9 +30,8 @@ public class ExprBlockBlastResistance extends SimplePropertyExpression<ItemType,
 
     @Override
     @Nullable
-    public Float convert(ItemType itemType) {
-        Material material = itemType.getMaterial();
-        return material.isBlock() ? material.getBlastResistance() : null;
+    public Float convert(Object o) {
+        return new BlockWrapper(o).getBlastResistance();
     }
 
     @Override

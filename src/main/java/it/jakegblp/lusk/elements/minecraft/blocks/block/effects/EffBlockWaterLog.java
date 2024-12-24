@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.api.wrappers.BlockWrapper;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 public class EffBlockWaterLog extends Effect {
     static {
         Skript.registerEffect(EffBlockWaterLog.class,
-                "[not:un]water[ |-]log %blocks/blockstates%",
-                "make %blocks/blockstates% [:not] water[ |-]logged");
+                "[not:un]water[ |-]log %blocks/blockdatas/blockstates/itemtypes%",
+                "make %blocks/blockdatas/blockstates/itemtypes% [:not] water[ |-]logged");
     }
 
     private Expression<Object> blockExpression;

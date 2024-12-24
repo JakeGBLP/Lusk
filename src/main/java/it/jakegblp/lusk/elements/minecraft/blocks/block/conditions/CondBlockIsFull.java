@@ -5,23 +5,21 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import org.bukkit.block.Block;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
-
-import static it.jakegblp.lusk.utils.BlockUtils.isFullBlock;
 
 @Name("Block - is Full Block")
 @Description("Checks if a block is a full block (like dirt, stone, endstone).\nEssentially checks if a block is 1x1x1 and only has one mesh.")
 @Examples({"if event-block is a full block:"})
-@Since("1.2.1-beta1")
-public class CondFullBlock extends PropertyCondition<Block> {
+@Since("1.2.1, 1.3 (BlockStates)")
+public class CondBlockIsFull extends PropertyCondition<Object> {
     static {
-        register(CondFullBlock.class, "[a] full block[s]", "blocks");
+        register(CondBlockIsFull.class, "[a] full block[s]", "blocks/blockstates");
     }
 
     @Override
-    public boolean check(Block block) {
-        return isFullBlock(block);
+    public boolean check(Object o) {
+        return new BlockWrapper(o).isFull();
     }
 
     @Override
