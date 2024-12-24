@@ -16,7 +16,7 @@ public class CondEntityShouldBurnInDay extends PrefixedPropertyCondition<LivingE
 
     static {
         register(CondEntityShouldBurnInDay.class, ExtendedPropertyType.SHOULD, "[[living[ |-]]entity]",
-                "burn (during the day|(in|under) [the] (sun[light]|daylight))","livingentities");
+                "burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))","livingentities");
     }
 
     @Override

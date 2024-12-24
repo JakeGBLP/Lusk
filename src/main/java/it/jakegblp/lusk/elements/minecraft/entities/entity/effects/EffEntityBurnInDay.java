@@ -23,8 +23,8 @@ public class EffEntityBurnInDay extends Effect {
 
     static {
         Skript.registerEffect(EffEntityBurnInDay.class,
-                "make %livingentities% [:not] burn (during the day|(in|under) [the] (sun[light]|daylight))",
-                "make %livingentities% [:not] immune to [the] sun");
+                "make %livingentities% [:not] burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))",
+                "make %livingentities% [:not] immune to [the] (sun[light]|daylight)");
     }
 
     private Expression<LivingEntity> entity;
