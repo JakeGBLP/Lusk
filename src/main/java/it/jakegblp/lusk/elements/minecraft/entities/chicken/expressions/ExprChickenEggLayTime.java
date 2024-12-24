@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.chicken.expressions;
 
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -15,6 +12,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
 import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
 import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
 
@@ -22,11 +20,13 @@ import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
 @Description("Returns the time till a chicken lays an egg.")
 @Examples({"set egg lay time of target to 2 minutes"})
 @Since("1.0.3")
+@RequiredPlugins("Paper")
 @SuppressWarnings("unused")
 public class ExprChickenEggLayTime extends SimplePropertyExpression<LivingEntity, Object> {
 
-    static {
-        register(ExprChickenEggLayTime.class,Object.class, "[chicken] egg lay (time|:ticks)", "livingentities");
+    static { // todo: simpler
+        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+            register(ExprChickenEggLayTime.class, Object.class, "[chicken] egg lay (time|:ticks)", "livingentities");
     }
 
     private boolean usesTicks;
