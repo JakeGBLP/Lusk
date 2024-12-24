@@ -1,86 +1,65 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.jukebox.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
-import org.bukkit.block.Block;
-import org.bukkit.block.Jukebox;
-import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.Nullable;
 
-@Name("JukeBox - Record")
+@Name("Jukebox - Record/Disc")
 @Description("Returns the music disc within a jukebox.\nCan be set, reset and deleted.")
 @Examples({"broadcast the music disc of {_j}"})
-@Since("1.0.3")
+@Since("1.0.3, 1.3 (Plural, Blockstate)")
 @DocumentationId("9162")
 @SuppressWarnings("unused")
-public class ExprJukeboxRecord extends SimpleExpression<ItemType> {
+public class ExprJukeboxRecord extends SimplerPropertyExpression<Object,ItemType> {
+
     static {
-        // TODO: simple PROPERTY EXPR, plural
-        Skript.registerExpression(ExprJukeboxRecord.class, ItemType.class, ExpressionType.PROPERTY,
-                "[the] [music] (disc|record) (of|[with]in) %block%",
-                "%block%'[s] [music] (disc|record)");
+        register(ExprJukeboxRecord.class, ItemType.class, "[jukebox] [music] (disc|record)", "blocks/blockstates/itemtypes");
     }
 
-    private Expression<Block> blockExpression;
+    @Override
+    public @Nullable ItemType convert(Object from) {
+        return new BlockWrapper(from).getJukeboxRecord();
+    }
 
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        blockExpression = (Expression<Block>) exprs[0];
+    @Override
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    protected ItemType @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            if (block.getState() instanceof Jukebox jukebox) {
-                return new ItemType[]{new ItemType(jukebox.getRecord())};
-            }
-        }
-        return new ItemType[0];
-    }
-
-    @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
-            return new Class[]{ItemStack[].class};
-        }
-        return null;
-    }
-
-    @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null && block.getState() instanceof Jukebox jukebox) {
-            if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE)
-                jukebox.setRecord(null);
-            else if (delta[0] instanceof ItemStack itemStack)
-                jukebox.setRecord(itemStack);
-            jukebox.update();
-        }
-    }
-
-    @Override
-    public boolean isSingle() {
+    public boolean allowReset() {
         return true;
     }
 
     @Override
-    public @NotNull Class<? extends ItemType> getReturnType() {
+    public boolean allowDelete() {
+        return true;
+    }
+
+    @Override
+    public void set(Object from, ItemType to) {
+        new BlockWrapper(from,true).setJukeboxRecord(to);
+    }
+
+    @Override
+    public void delete(Object from) {
+        set(from, null);
+    }
+
+    @Override
+    public void reset(Object from) {
+        delete(from);
+    }
+
+    @Override
+    protected String getPropertyName() {
+        return "jukebox music record";
+    }
+
+    @Override
+    public Class<? extends ItemType> getReturnType() {
         return ItemType.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the music disc of " + blockExpression.toString(e, debug);
     }
 }
