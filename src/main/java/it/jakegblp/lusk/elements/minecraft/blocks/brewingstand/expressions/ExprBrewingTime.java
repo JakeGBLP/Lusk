@@ -1,88 +1,72 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.brewingstand.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.BrewingStand;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import it.jakegblp.lusk.api.BlockWrapper;
+import it.jakegblp.lusk.utils.DeprecationUtils;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
-import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
-
-@Name("Brewing - Time")
+@Name("Brewing - Remaining Time")
 @Description("Returns the brewing time of a Brewing Stand (the time before the brewing is over, 0 seconds = finished, 20 seconds = just started. Can be set to a longer time, progress won't be displayed until it reaches 20 seconds).\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3 (Plural, Blockstate, Item, Ticks)")
 @SuppressWarnings("unused")
-public class ExprBrewingTime extends SimpleExpression<Timespan> {
+public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
+
     static {
-        // todo: simple property expression, plural, utils
-        Skript.registerExpression(ExprBrewingTime.class, Timespan.class, ExpressionType.PROPERTY,
-                "[the] brewing time of %block%",
-                "%block%'[s] brewing time");
+        register(ExprBrewingTime.class, Object.class, "[remaining] brewing (time[span]|:ticks)", "blocks/blockstates/itemtypes");
     }
 
-    private Expression<Block> blockExpression;
+    private boolean usesTicks;
 
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {
-        blockExpression = (Expression<Block>) exprs[0];
-        return true;
+    @Override
+    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
+        usesTicks = parseResult.hasTag("ticks");
+        return super.init(expressions, matchedPattern, isDelayed, parseResult);
     }
 
     @Override
-    protected Timespan @NotNull [] get(@NotNull Event e) {
-        Block block = blockExpression.getSingle(e);
-        if (block != null) {
-            BlockState blockState = block.getState();
-            if (blockState instanceof BrewingStand brewingStand) {
-                return new Timespan[]{fromTicks(brewingStand.getBrewingTime())};
+    public @Nullable Object convert(Object from) {
+        Integer ticks = new BlockWrapper(from).getBrewingTime();
+        if (ticks != null) {
+            if (usesTicks) {
+                return ticks;
+            } else {
+                return DeprecationUtils.fromTicks(ticks);
             }
         }
-        return new Timespan[0];
+        return null;
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return (mode == Changer.ChangeMode.SET) ? new Class[]{Timespan.class} : null;
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return mode == Changer.ChangeMode.SET ? new Class<?>[]{Timespan.class, Integer.class} : null;
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Timespan timespan) {
-            Block block = blockExpression.getSingle(e);
-            if (block != null && block.getState() instanceof BrewingStand brewingStand) {
-                brewingStand.setBrewingTime(((int) getTicks(timespan)));
-                brewingStand.update(true);
-            }
+    public void set(Object from, Object to) {
+        if (to instanceof Integer integer) {
+            new BlockWrapper(from).setBrewingTime(integer);
+        } else if (to instanceof Timespan timespan) {
+            new BlockWrapper(from).setBrewingTime((int)DeprecationUtils.getTicks(timespan));
         }
     }
 
     @Override
-    public boolean isSingle() {
-        return true;
+    protected String getPropertyName() {
+        return "remaining brewing " + (usesTicks ? "ticks" : "time");
     }
 
     @Override
-    public @NotNull Class<? extends Timespan> getReturnType() {
-        return Timespan.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the brewing time of " + blockExpression.toString(e, debug);
+    public Class<?> getReturnType() {
+        return Object.class;
     }
 }
