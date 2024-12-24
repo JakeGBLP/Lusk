@@ -38,7 +38,7 @@ public class BlockWrapper {
     private final boolean shouldUpdate;
 
     public BlockWrapper(Object object) {
-        this(object,false);
+        this(object,true);
     }
 
     public BlockWrapper(Object object, boolean shouldUpdate) {
