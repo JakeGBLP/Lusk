@@ -13,7 +13,6 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Location;
 import org.bukkit.Registry;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.HumanEntity;
@@ -64,7 +63,6 @@ public class Constants {
             HAS_AXOLOTL_VARIANT = classExists("org.bukkit.entity.Axolotl$Variant"),
             HAS_REMOVE_ENCHANTMENTS_METHOD = methodExists(ItemStack.class, "removeEnchantments"),
             //HAS_GENERIC_SCALE_ATTRIBUTE = Skript.fieldExists(Attribute.class, "GENERIC_SCALE"),
-            HAS_SCALE_ATTRIBUTE = fieldExists(Attribute.class, "SCALE"),
             HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS = methodExists(BlockBreakEvent.class, "isDropsItems"),
             /**
              * Whether the current skript version is greater than or equal to 2.8
