@@ -58,5 +58,6 @@ processResources {
 
 shadowJar {
     archiveFileName = project.name + "-" + project.version + ".jar"
+    relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
 }
