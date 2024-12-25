@@ -20,8 +20,9 @@ public class EntityUtils {
     // https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
 
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
+        if (!isPaper()) return false;
         if (entity instanceof Zombie zombie) return zombie.shouldBurnInDay();
-        else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API) {
+        else if (MINECRAFT_1_18_2) {
             if (entity instanceof Phantom phantom) return phantom.shouldBurnInDay();
             else if (entity instanceof AbstractSkeleton skeleton) return skeleton.shouldBurnInDay();
         } else if (entity instanceof Skeleton skeleton) {
@@ -33,8 +34,9 @@ public class EntityUtils {
     }
 
     public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean value) {
+        if (!isPaper()) return;
         if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(value);
-        else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API) {
+        else if (MINECRAFT_1_18_2) {
             if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
             else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
         } else if (entity instanceof Skeleton skeleton) {

@@ -1,10 +1,7 @@
 package it.jakegblp.lusk.elements.minecraft.entities.entity.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -19,6 +16,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.setShouldBurnDuringTheDay;
 @Description("Makes the provided entities burn (or not) when under the sun.")
 @Examples("make target burn during the day")
 @Since("1.3")
+@RequiredPlugins("Paper")
 public class EffEntityBurnInDay extends Effect {
 
     static {

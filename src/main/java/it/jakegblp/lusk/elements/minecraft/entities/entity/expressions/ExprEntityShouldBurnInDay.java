@@ -15,6 +15,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
         Can be set.""")
 @Examples({"broadcast the should burn under sunlight property of target","set the should burn during the day property of {_entity}"})
 @Since("1.0.3, 1.1.1 (Skeleton,Phantom), 1.3 (Safety)")
+@RequiredPlugins("Paper")
 @DocumentationId("11901")
 @SuppressWarnings("unused")
 public class ExprEntityShouldBurnInDay extends SimpleBooleanPropertyExpression<LivingEntity> {

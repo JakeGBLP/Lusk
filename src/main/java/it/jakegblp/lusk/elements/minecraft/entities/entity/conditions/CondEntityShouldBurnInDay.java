@@ -11,6 +11,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
 @Description("Checks if an Entity should burn in daylight.\n(Zombie,Phantom,Skeleton)\n\nFor skeletons, this does not take into account the entity's natural fire immunity.")
 @Examples({"if target should burn in daylight:"})
 @Since("1.0.3, 1.1.1 (Skeleton,Phantom)")
+@RequiredPlugins("Paper")
 @DocumentationId("11181")
 public class CondEntityShouldBurnInDay extends PrefixedPropertyCondition<LivingEntity> {
 
