@@ -39,7 +39,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
     compileOnly 'com.github.SkriptLang:Skript:2.9.5'
     implementation 'org.bstats:bstats-bukkit:3.1.0'
-    implementation 'org.bstats:bstats-base:3.1.0'
     implementation 'com.vdurmont:semver4j:3.1.0'
     implementation 'net.wesjd:anvilgui:1.10.3-SNAPSHOT'
     shadow 'junit:junit:3.8.2'
@@ -59,10 +58,5 @@ processResources {
 
 shadowJar {
     archiveFileName = project.name + "-" + project.version + ".jar"
-    dependencies {
-        include(dependency('org.bstats:bstats-bukkit'))
-        include(dependency('org.bstats:bstats-base'))
-    }
-    relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
 }

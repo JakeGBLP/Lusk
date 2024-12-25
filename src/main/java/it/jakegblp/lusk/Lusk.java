@@ -5,9 +5,10 @@ import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
-import it.jakegblp.lusk.libs.bstats.Metrics;
 import it.jakegblp.lusk.utils.BorrowedUtils;
 import it.jakegblp.lusk.utils.Constants;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -65,7 +66,7 @@ public class Lusk extends JavaPlugin {
         String version = getDescription().getVersion().toLowerCase();
         String buildType = getBuildType();
 
-        metrics.addCustomChart(new Metrics.DrilldownPie("version_type", () -> {
+        metrics.addCustomChart(new DrilldownPie("version_type", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
 
             String localBuildType = getBuildType();
@@ -83,7 +84,7 @@ public class Lusk extends JavaPlugin {
             return map;
         }));
 
-        metrics.addCustomChart(new Metrics.DrilldownPie("skript_version", () -> {
+        metrics.addCustomChart(new DrilldownPie("skript_version", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
 
             Version skriptVersion = Skript.getVersion();
