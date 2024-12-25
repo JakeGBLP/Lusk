@@ -21,18 +21,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-@Name("Enchanted Book- Stored Enchantments")
-@Description("Returns the Enchantments stored in an enchanted book.")
+@Name("Enchanted Book - Stored Enchantments")
+@Description("Returns the Enchantments stored in an enchanted book.\nCan be set, added to, removed from, reset and deleted.")
 @Examples({"broadcast stored enchantments of tool"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprStoredEnchantments extends PropertyExpression<ItemType, EnchantmentType> {
-    //todo: it works but add tests
+
     static {
         Skript.registerExpression(ExprStoredEnchantments.class, EnchantmentType.class, ExpressionType.PROPERTY,
-                "[the] enchantment[ types]s stored in %itemtypes%",
-                "[the] stored enchantment[ types]s of %itemtypes%",
-                "%itemtypes%'[s] stored enchantment[ types]s");
+                "[the] enchantment[ type]s stored in %itemtypes%",
+                "[the] stored enchantment[ type]s of %itemtypes%",
+                "%itemtypes%'[s] stored enchantment[ type]s");
     }
 
     @Override
@@ -60,8 +60,9 @@ public class ExprStoredEnchantments extends PropertyExpression<ItemType, Enchant
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case ADD, REMOVE, REMOVE_ALL, SET -> CollectionUtils.array(Enchantment[].class, EnchantmentType[].class);
+            case ADD, REMOVE, SET -> CollectionUtils.array(Enchantment[].class, EnchantmentType[].class);
             case DELETE, RESET -> CollectionUtils.array();
+            default -> null;
         };
     }
 
@@ -81,7 +82,7 @@ public class ExprStoredEnchantments extends PropertyExpression<ItemType, Enchant
                 for (ItemType item : source)
                     ItemUtils.addStoredEnchantments(item, enchants);
                 break;
-            case REMOVE, REMOVE_ALL:
+            case REMOVE:
                 for (ItemType item : source)
                     ItemUtils.removeStoredEnchantments(item, enchants);
                 break;
