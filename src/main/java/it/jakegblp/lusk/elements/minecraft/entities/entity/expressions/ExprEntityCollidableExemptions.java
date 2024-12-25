@@ -33,10 +33,10 @@ Note: **the client may predict the collision between itself and another entity, 
 """)
 @Examples("send collidable exemptions of {_entity}")
 @Since("1.3")
-public class ExprCollidableExemptions extends SimplerPluralPropertyExpression<LivingEntity, Object> {
+public class ExprEntityCollidableExemptions extends SimplerPluralPropertyExpression<LivingEntity, Object> {
 
     static {
-        register(ExprCollidableExemptions.class,Object.class, "collidable exemptions [uuid:uuid[s]]", "livingentities");
+        register(ExprEntityCollidableExemptions.class,Object.class, "collidable exemptions [uuid:uuid[s]]", "livingentities");
     }
 
     private boolean uuid;

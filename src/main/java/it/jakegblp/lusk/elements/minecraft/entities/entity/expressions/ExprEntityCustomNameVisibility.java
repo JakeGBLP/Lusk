@@ -15,9 +15,9 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"broadcast custom name visibility of target"})
 @Since("1.3")
 @SuppressWarnings("unused")
-public class ExprCustomNameVisibility extends SimpleBooleanPropertyExpression<Entity> {
+public class ExprEntityCustomNameVisibility extends SimpleBooleanPropertyExpression<Entity> {
     static {
-        register(ExprCustomNameVisibility.class, Boolean.class,
+        register(ExprEntityCustomNameVisibility.class, Boolean.class,
                 "[client[[-| ]side[d]]] custom[ |-]name [:in]visibility",
                 "entities");
     }
