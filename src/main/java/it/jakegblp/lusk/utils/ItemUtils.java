@@ -9,13 +9,16 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -100,6 +103,50 @@ public class ItemUtils {
     public static ItemStack getSingleItemTypeToItemStack(@Nullable Expression<ItemType> expression, @NotNull Event event) {
         if (expression == null) return null;
         return getNullableItemStack(expression.getSingle(event));
+    }
+
+    public static boolean hasChargedProjectiles(@NotNull ItemType itemType) {
+        return itemType.getItemMeta() instanceof CrossbowMeta crossbowMeta && crossbowMeta.hasChargedProjectiles();
+    }
+
+    @NullMarked
+    public static void addChargedProjectiles(ItemType itemType, ItemType... projectiles) {
+        if (itemType.getItemMeta() instanceof CrossbowMeta crossbowMeta) {
+            for (ItemType projectile : projectiles) {
+                ItemStack itemStack = projectile.getRandom();
+                if (itemStack != null) {
+                    crossbowMeta.addChargedProjectile(itemStack);
+                }
+            }
+            itemType.setItemMeta(crossbowMeta);
+        }
+    }
+
+    @NullMarked
+    public static void setChargedProjectiles(ItemType itemType, ItemType @Nullable ... projectiles) {
+        if (itemType.getItemMeta() instanceof CrossbowMeta crossbowMeta) {
+            crossbowMeta.setChargedProjectiles(
+                    projectiles == null ? null : Arrays.stream(projectiles).map(ItemType::getRandom).toList());
+            itemType.setItemMeta(crossbowMeta);
+        }
+    }
+
+    @NullMarked
+    public static void removeChargedProjectiles(ItemType itemType, ItemType... projectiles) {
+        if (itemType.getItemMeta() instanceof CrossbowMeta crossbowMeta) {
+            List<ItemStack> itemStacks = new ArrayList<>(crossbowMeta.getChargedProjectiles());
+            itemStacks.removeAll(Arrays.stream(projectiles).map(ItemType::getRandom).toList());
+            crossbowMeta.setChargedProjectiles(itemStacks);
+            itemType.setItemMeta(crossbowMeta);
+        }
+    }
+
+    @NotNull
+    public static ItemType[] getChargedProjectiles(@NotNull ItemType itemType) {
+        if (itemType.getItemMeta() instanceof CrossbowMeta crossbowMeta) {
+            return crossbowMeta.getChargedProjectiles().stream().map(ItemType::new).toArray(ItemType[]::new);
+        }
+        return new ItemType[0];
     }
 
     @NullMarked
