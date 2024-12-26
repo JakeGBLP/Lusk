@@ -8,6 +8,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.DeprecationUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -79,12 +80,11 @@ public class EffPlayerRiptide extends Effect {
         } else {
             Timespan timespan = timespanExpression.getSingle(event);
             if (timespan == null) return;
-            duration = (int) timespan.getTicks();
+            duration = (int) DeprecationUtils.getTicks(timespan);
             attackStrength = numberExpression.getOptionalSingle(event).orElse(0).floatValue();
             if (attackStrength <= 0) return;
             attackItem = getSingleItemTypeToItemStack(itemTypeExpression,event);
         }
-
         playerExpression.stream(event).forEach(player -> {
             if (!stop || player.isRiptiding()) {
                 player.startRiptideAttack(duration, attackStrength, attackItem);

@@ -20,6 +20,7 @@ public abstract class SimplerPropertyExpression<F,T> extends SimplePropertyExpre
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
         change(mode, getExpr().getAll(event), delta == null ? null : (T) delta[0]);
     }

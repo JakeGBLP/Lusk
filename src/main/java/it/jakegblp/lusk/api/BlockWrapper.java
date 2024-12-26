@@ -375,10 +375,12 @@ public class BlockWrapper {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isSignEditable() {
         return MINECRAFT_1_20_1 ? !isSignWaxed() : getBlockState() instanceof Sign sign && sign.isEditable();
     }
 
+    @SuppressWarnings("deprecation")
     public void setIsSignEditable(boolean isSignEditable) {
         if (MINECRAFT_1_20_1) setIsSignWaxed(!isSignEditable);
         else if (getBlockState() instanceof Sign sign) sign.setEditable(isSignEditable);
