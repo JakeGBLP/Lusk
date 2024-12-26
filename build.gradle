@@ -34,9 +34,9 @@ dependencies {
     shadow('junit:junit:3.8.2')
 }
 
-//java {
-//    toolchain.languageVersion.set(JavaLanguageVersion.of(latestJava))
-//}
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(latestJava))
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-source', '' + oldestJava, '-target', '' + oldestJava]
