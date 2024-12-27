@@ -48,6 +48,6 @@ public class CondConsumeBrewingFuel extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return (isNegated()) ^ ((BrewingStandFuelEvent) event).isConsuming();
+        return isNegated() ^ ((BrewingStandFuelEvent) event).isConsuming();
     }
 }

@@ -50,6 +50,6 @@ public class CondRiseComposterLevel extends Condition {
         if (event instanceof EntityCompostItemEvent entityCompostItemEvent) {
             return isNegated() ^ entityCompostItemEvent.willRaiseLevel();
         }
-        return (isNegated()) ^ ((CompostItemEvent) event).willRaiseLevel();
+        return isNegated() ^ ((CompostItemEvent) event).willRaiseLevel();
     }
 }
