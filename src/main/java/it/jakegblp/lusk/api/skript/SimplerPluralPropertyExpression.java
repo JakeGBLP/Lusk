@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import static it.jakegblp.lusk.utils.ClassUtils.getArrayClass;
 
-public abstract class SimplerPluralPropertyExpression<F,T> extends SimplePropertyExpression<F, T>  implements Changeable<F,T[]> {
+public abstract class SimplerPluralPropertyExpression<F,T> extends SimplePropertyExpression<F, T> implements Changeable<F,T[]> {
 
     public abstract T[] get(F f);
 
