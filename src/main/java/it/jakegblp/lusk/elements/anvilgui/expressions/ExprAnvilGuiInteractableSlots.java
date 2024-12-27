@@ -22,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
 @Name("Anvil GUI - Interactable Slots")
 @Description("Gets the interactable slots of an Anvil GUI.\nAllowed slots: 0, 1 and 2\nNo slots are interactable by default, resetting or deleting this will make all slots not interactable.")
-@Examples({"set anvil gui right item of {_anvil} to barrier named \"<red>Click To Close!\""})
+@Examples({"set anvil gui interactable slots of {_anvil} to 0 and 1"})
 @Since("1.3")
 public class ExprAnvilGuiInteractableSlots extends PropertyExpression<AnvilGuiWrapper, Integer> {
 

@@ -14,7 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
 @Name("Anvil GUI - Opened Anvil GUI")
 @Description("Gets the open anvil GUI of one or more players.")
-@Examples({"set anvil gui right item of {_anvil} to barrier named \"<red>Click To Close!\""})
+@Examples({"set {_anvilGui} to the currently open anvil gui of {_player}"})
 @Since("1.3")
 public class ExprAnvilGuiOfPlayer extends SimplePropertyExpression<Player, AnvilGuiWrapper> {
 

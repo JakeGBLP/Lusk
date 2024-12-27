@@ -49,14 +49,13 @@ public class CondAnvilGuiViewing extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        Player[] players = playerExpression.getAll(event);
-        if (any) {
-            return AnvilGuiWrapper.isViewingAnyAnvilGui(players);
-        }
-        AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(event);
-        if (anvilGuiWrapper == null) {
-            return false;
-        }
-        return anvilGuiWrapper.isOpenTo(players);
+        return playerExpression.check(event, player -> {
+            if (any) return AnvilGuiWrapper.isViewingAnyAnvilGui(player);
+            AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(event);
+            if (anvilGuiWrapper == null) {
+                return false;
+            }
+            return anvilGuiWrapper.isOpenTo(player);
+        });
     }
 }

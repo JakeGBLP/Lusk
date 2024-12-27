@@ -20,13 +20,13 @@ public class EvtAnvilGuiEvents {
                         Called when an Anvil Gui is opened.
                         Can be cancelled.
                         """)
-                .examples("")
+                .examples("on anvil gui open:")
                 .since("1.3");
         Skript.registerEvent("Anvil GUI - on Anvil Gui Click", SimpleEvent.class, AnvilGuiClickEvent.class, ANVIL_GUI_PREFIX + " click[ed]")
                 .description("""
                         Called when an Anvil Gui is clicked.
                         """)
-                .examples("")
+                .examples("on anvil gui click:")
                 .since("1.3");
         Skript.registerEvent("Anvil GUI - on Anvil Gui Close", SimpleEvent.class, AnvilGuiCloseEvent.class, ANVIL_GUI_PREFIX + " close[d]")
                 .description("""
@@ -34,7 +34,7 @@ public class EvtAnvilGuiEvents {
                         *Note*:
                         - To cancel this event you'll need to use the `Anvil GUI - Prevent Closing` effect before this event is called.
                         """)
-                .examples("")
+                .examples("on anvil gui close:")
                 .since("1.3");
 
         EventValues.registerEventValue(AnvilGuiClickEvent.class, Integer.class, new Getter<>() {

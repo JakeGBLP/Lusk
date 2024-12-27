@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Anvil GUI - new Anvil Gui")
-@Description("Creates a new anvil gui. Allows you to copy slots and text data from another anvil gui.")
+@Description("Creates a new anvil gui. Allows you to copy slots and text data from another anvil gui, this doesn't copy the \"prevent closing\" property, this is intentional.")
 @Examples({"set {_anvil} to a new anvil gui"})
 @Since("1.3")
 public class ExprNewAnvilGui extends SimpleExpression<AnvilGuiWrapper> {

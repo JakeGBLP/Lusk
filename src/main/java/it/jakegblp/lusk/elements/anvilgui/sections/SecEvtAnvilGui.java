@@ -33,7 +33,17 @@ import java.util.function.Consumer;
         """)
 @Examples(
         """
-                """
+        set {_anvilGui} to a new anvil gui
+        
+        when {_anvilGui} gets opened:
+            broadcast "%{_anvilGui}% has been opened!"
+        
+        when {_anvilGui} gets clicked:
+            broadcast "%{_anvilGui}% has been clicked!"
+        
+        when {_anvilGui} gets closed:
+            broadcast "%{_anvilGui}% has been closed!"
+        """
 )
 @Since("1.3")
 public class SecEvtAnvilGui extends Section {

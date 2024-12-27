@@ -19,7 +19,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
 @Name("Anvil GUI - Close")
 @Description("Closes an anvil gui.\n*NOTES*:\n- Won't do anything if the anvil gui is not open.\n- Must be used before opening another anvil gui for a player.")
-@Examples({"close anvil the anvil gui"})
+@Examples({"close anvil gui the anvil gui"})
 @Since("1.3")
 public class EffAnvilGuiClose extends Effect {
     static {

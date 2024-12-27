@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Anvil GUI - Can Be Closed")
 @Description("Checks if an anvil gui can be closed.\nThis is only true if the `Anvil GUI - Prevent Closing` effect is used and cannot be reversed without creating a new gui.")
-@Examples({"set anvil gui right item of {_anvil} to barrier named \"<red>Click To Close!\""})
+@Examples({"if {_anvilGui} can be closed:"})
 @Since("1.3")
 public class CondAnvilGuiCanBeClosed extends Condition {
     static {

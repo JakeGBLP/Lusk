@@ -14,7 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
 @Name("Anvil GUI - Inventory")
 @Description("Gets the inventory of one or more anvil guis, this shouldn't be used to edit slots or in non-anvil-gui events.")
-@Examples({"set {_anvil} to a new anvil gui"})
+@Examples({"set {_anvil} to anvil gui inventory of {_anvilGui}"})
 @Since("1.3")
 public class ExprAnvilGuiInventory extends SimplePropertyExpression<AnvilGuiWrapper, Inventory> {
     static {
