@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Name("BrewingStand - Fuel Item")
 @Description("Returns the brewing fuel item of a Brewing Stand.\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing fuel of event-block"})
-@Since("1.0.2, 1.3 (Blockstate, Item)")
+@Since("1.0.2, 1.3 (Plural, Blockstate, Item)")
 @SuppressWarnings("unused")
 public class ExprBrewingFuel extends SimplerPropertyExpression<Object, ItemType> {
 
