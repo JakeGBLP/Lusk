@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 
-@Name("Dolphin - Has Fish State")
+@Name("Dolphin - Has Been Fish (Property)")
 @Description("Returns whether or not the provided dolphins have been fed a fish.\nCan be set.")
 @Examples({"broadcast has fish state of target"})
 @Since("1.0.3, 1.3 (Plural)")

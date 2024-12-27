@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 
-@Name("Dolphin - Has Fish")
+@Name("Dolphin - Has Been Fed Fish")
 @Description("Checks if a dolphin has a fish.")
 @Examples({"on damage:\n\tif victim has a fish:\n\t\tbroadcast \"It has a fish!\""})
 @Since("1.0.3")
@@ -18,7 +18,7 @@ public class CondDolphinBeenFedFish extends PropertyCondition<LivingEntity> {
 
     static {
         if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
-            register(CondDolphinBeenFedFish.class, PropertyType.HAVE, "been fed fish", "livingentities");
+            register(CondDolphinBeenFedFish.class, PropertyType.HAVE, "been fed [a] fish", "livingentities");
     }
 
     @Override
