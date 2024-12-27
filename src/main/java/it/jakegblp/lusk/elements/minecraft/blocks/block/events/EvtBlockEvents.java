@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_4;
 
 public class EvtBlockEvents {
     static {
-        Skript.registerEvent("on Block Fluid Level Change", SimpleEvent.class, FluidLevelChangeEvent.class, "fluid level chang(e[d]|ing)")
+        Skript.registerEvent("Block - on Fluid Level Change", SimpleEvent.class, FluidLevelChangeEvent.class, "fluid level chang(e[d]|ing)")
                 .description("""
                         Called when the fluid level of a block changes due to changes in adjacent blocks.""")
                 .examples("on fluid level change:")
@@ -27,7 +27,7 @@ public class EvtBlockEvents {
             }
         }, EventValues.TIME_NOW);
         if (MINECRAFT_1_20_4 && isPaper()) {
-            Skript.registerEvent("on Block Damage Update", SimpleEvent.class, BlockBreakProgressUpdateEvent.class,
+            Skript.registerEvent("Block - on Damage Update", SimpleEvent.class, BlockBreakProgressUpdateEvent.class,
                     "block damag(ing|e) update", "block break progress update")
                     .description("""
                             Called when the progress of a block break is updated.

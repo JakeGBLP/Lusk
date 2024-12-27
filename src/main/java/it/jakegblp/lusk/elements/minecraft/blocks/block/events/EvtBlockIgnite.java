@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.ArrayUtils.haveSameElements;
 public class EvtBlockIgnite extends SkriptEvent {
 
     static {
-        Skript.registerEvent("on Block Ignite [Lusk Extension]",EvtBlockIgnite.class, BlockIgniteEvent.class,
+        Skript.registerEvent("Block - on Ignite [Lusk Extension]",EvtBlockIgnite.class, BlockIgniteEvent.class,
                 "[lusk] [:player] block ignit(e|ion) [due to %-*ignitecauses%]")
                 .description("""
                         **THIS IS AN EXTENDED VERSION OF SKRIPT'S IGNITE EVENT.**
