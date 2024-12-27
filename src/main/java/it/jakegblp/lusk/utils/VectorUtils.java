@@ -3,6 +3,8 @@ package it.jakegblp.lusk.utils;
 import it.jakegblp.lusk.api.enums.Axis4D;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.map.MapCursor;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -45,6 +47,20 @@ public class VectorUtils {
                 case X -> location.getX();
                 case Y -> location.getY();
                 case Z -> location.getZ();
+                case W -> null;
+            };
+        } else if (object instanceof Block block) {
+            return switch (axis) {
+                case X -> block.getX();
+                case Y -> block.getY();
+                case Z -> block.getZ();
+                case W -> null;
+            };
+        } else if (object instanceof BlockState blockState) {
+            return switch (axis) {
+                case X -> blockState.getX();
+                case Y -> blockState.getY();
+                case Z -> blockState.getZ();
                 case W -> null;
             };
         } else if (object instanceof Vector vector) {
