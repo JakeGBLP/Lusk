@@ -5,7 +5,9 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
+import it.jakegblp.lusk.api.skript.EnumWrapper;
 import org.bukkit.block.BlockState;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +47,16 @@ public class BlockClassInfos {
                             .name("Ignition Cause")
                             .description("All the Ignition Causes.")
                             .since("1.3"));
+        }
+
+        if (Classes.getExactClassInfo(Action.class) == null) {
+            EnumWrapper<Action> BLOCK_ACTION_ENUM = new EnumWrapper<>(Action.class);
+            Classes.registerClass(BLOCK_ACTION_ENUM.getClassInfo("blockaction")
+                    .user("block ?actions?")
+                    .name("Block Action")
+                    .description("All the Block Actions.")
+                    .examples("physical", "left click air")
+                    .since("1.3"));
         }
     }
 }
