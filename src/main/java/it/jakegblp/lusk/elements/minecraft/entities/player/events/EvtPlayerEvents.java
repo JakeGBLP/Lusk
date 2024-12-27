@@ -22,8 +22,10 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerHarvestBlockEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
@@ -38,6 +40,17 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.0");
         }
+        Skript.registerEvent("Player - on Velocity Change", SimpleEvent.class, PlayerVelocityEvent.class, "player velocity [chang(e[d]|ing)]")
+                .description("Called when the velocity of a player changes due to outside circumstances.")
+                .examples("on player velocity change:")
+                .since("1.3");
+        EventValues.registerEventValue(PlayerVelocityEvent.class, Vector.class, new Getter<>() {
+
+            @Override
+            public @NotNull Vector get(PlayerVelocityEvent event) {
+                return event.getVelocity();
+            }
+        }, EventValues.TIME_NOW);
         if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Player - on Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail", "fail[ed] to (sleep|enter [the] bed)")
                     .description("Called when a player attempts to sleep but fails..")
