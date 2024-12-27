@@ -22,8 +22,8 @@ public class EffEndCrystalBottom extends Effect {
 
     static {
         Skript.registerEffect(EffEndCrystalBottom.class,
-                "(hide|:show) end[er] crystal (bottom|bedrock) (plate|slate) of %entities%",
-                "(hide|:show) %entities%'[s] end[er] crystal (bottom|bedrock) (plate|slate)"
+                "(hide|:show) end[er] crystal (bottom|bedrock) [plate|slate] of %entities%",
+                "(hide|:show) %entities%'[s] end[er] crystal (bottom|bedrock) [plate|slate]"
         );
     }
 
