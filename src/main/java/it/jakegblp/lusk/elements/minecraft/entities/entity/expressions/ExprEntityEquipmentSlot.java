@@ -48,6 +48,11 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
     }
 
     @Override
+    public boolean isSingle() {
+        return super.isSingle() && equipmentSlotExpression.isSingle();
+    }
+
+    @Override
     protected ItemType @NotNull [] get(@NotNull Event event, LivingEntity @NotNull [] source) {
         return getExpr().stream(event)
                 .flatMap(entity -> equipmentSlotExpression.stream(event)
@@ -67,17 +72,12 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
         ItemStack itemStack;
         if (mode == Changer.ChangeMode.SET && delta.length > 0 && delta[0] instanceof ItemType itemType) {
             itemStack = itemType.getRandom();
-        } else if (mode == Changer.ChangeMode.DELETE) {
-            itemStack = ItemStack.empty();
         } else {
             itemStack = null;
         }
-        if (itemStack != null) {
-            getExpr().stream(event)
-                    .forEach(entity -> equipmentSlotExpression.stream(event)
-                            .forEach(equipmentSlot ->
-                                    EntityUtils.setEntityEquipmentSlot(entity,equipmentSlot,itemStack)));
-        }
+        getExpr().stream(event)
+                .forEach(entity -> equipmentSlotExpression.stream(event)
+                        .forEach(equipmentSlot -> EntityUtils.setEntityEquipmentSlot(entity,equipmentSlot,itemStack)));
     }
 
     @Override
@@ -87,6 +87,6 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "equipment slots "+equipmentSlotExpression.toString(event,debug);
+        return "equipment slots " + equipmentSlotExpression.toString(event,debug) + " of "+getExpr().toString(event,debug);
     }
 }
