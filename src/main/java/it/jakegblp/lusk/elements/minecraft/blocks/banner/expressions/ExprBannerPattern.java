@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Banner Pattern - From Pattern Type and Color")
 @Description("Created a Banner Pattern from a Pattern Type and a (dye) Color.")
-@Examples({})
+@Examples("banner pattern skull pattern type with color blue")
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprBannerPattern extends SimpleExpression<Pattern> {
