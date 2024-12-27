@@ -16,7 +16,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Bounding Box - Corners/Center")
+@Name("Bounding Box - Corners/Center Coordinates")
 @Description("Gets the x,y or z coordinate for the lesser corner, the greater corner or the center of one or more bounding boxes.")
 @Examples({"broadcast box lesser x-loc of target"})
 @Since("1.3")
