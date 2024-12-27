@@ -9,7 +9,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Entity - Client Sided Custom Name Visibility")
+@Name("Entity - Client Sided Custom Name Visibility (Property)")
 @Description("Gets whether or not the entity's custom name is displayed client side.\n" +
         "This value has no effect on players, they will always display their name.")
 @Examples({"broadcast custom name visibility of target"})
