@@ -10,7 +10,7 @@ import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Ender Signal - Item")
+@Name("Ender Signal - is Going to Drop/Shatter (Property)")
 @Description("""
 Gets the item the provided ender signals will display and drop on death.
 """)
