@@ -9,7 +9,7 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Projectile;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Abstract Arrow - Pierce Amount")
+@Name("Arrow - Pierce Amount")
 @Description("Sets the number of times this arrow can pierce through an entity. Must be between 0 and 127.")
 @Examples("set arrow pierce amount of {_arrows::*} to 3")
 @Since("1.3")

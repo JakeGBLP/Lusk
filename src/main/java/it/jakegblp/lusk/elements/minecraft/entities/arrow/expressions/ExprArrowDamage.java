@@ -9,7 +9,7 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Projectile;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Abstract Arrow - Damage")
+@Name("Arrow - Damage")
 @Description("Gets the base amount of damage one or more arrows will do.\nDefaults to 2.0 for a normal arrow with 0.5 * (1 + power level) added for arrows fired from enchanted bows.\nCan be set, added to, removed from, deleted (set to 0) and reset (set to 2, the default value).")
 @Examples("set arrow damage of {_arrows::*} to 3")
 @Since("1.3")
