@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBlockFaceBetween extends SimpleExpression<BlockFace> {
     static {
         Skript.registerExpression(ExprBlockFaceBetween.class, BlockFace.class, ExpressionType.COMBINED,
-                "[the] [block[ ]]face from %block% to %block%");
+                "[the] [block[ ]]face (from|between) %block% (to|and) %block%");
     }
 
     Expression<Block> fromExpression;
