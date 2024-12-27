@@ -23,7 +23,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 public class EffAnvilGuiPreventClosing extends Effect {
     static {
         Skript.registerEffect(EffAnvilGuiPreventClosing.class,
-                "prevent [" + ANVIL_GUI_PREFIX + "] %anvilguiinventory% from closing");
+                "prevent [" + ANVIL_GUI_PREFIX + "] %anvilguiinventory% from (closing|being closed)");
     }
 
     private Expression<AnvilGuiWrapper> anvilGuiWrapperExpression;
