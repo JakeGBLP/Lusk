@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
-@Name("Anvil GUI - Open to Player")
+@Name("Anvil GUI - Open")
 @Description(
         """
                 Opens an anvil GUI to one or more players.
