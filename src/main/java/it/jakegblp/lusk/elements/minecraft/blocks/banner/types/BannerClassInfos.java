@@ -25,7 +25,7 @@ public class BannerClassInfos {
         if (Classes.getExactClassInfo(Pattern.class) == null) {
             Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerpattern")
                         .user("banner ?patterns?")
-                        .name("Banner Pattern")
+                        .name("Banner - Pattern")
                         .description("A Banner Pattern.") // add example
                         .since("1.3")
                     .parser(new Parser<>() {
