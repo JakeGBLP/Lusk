@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class CondAnvilGuiCanBeClosed extends Condition {
     static {
         Skript.registerCondition(CondAnvilGuiCanBeClosed.class,
-                "(%anvilguiinventory%|event:[the] anvil) can[not:( no|n')t] be closed");
+                "(%anvilguiinventory%|event:[the] anvil) can[not:([ ]no|n')t] be closed");
     }
 
     private boolean isEvent;
