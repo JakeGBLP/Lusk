@@ -9,47 +9,64 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
-import org.bukkit.entity.Entity;
+import it.jakegblp.lusk.utils.LuskUtils;
 import org.bukkit.entity.Goat;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Goat - Has Left/Right Horn")
-@Description("Checks if goat has either horn.")
+@Name("Goat - Has Left/Right/Both/Either Horn")
+@Description("Checks if goat has the left, right, both or either horn.")
 @Examples({"if target has its left horn:"})
-@Since("1.0.3")
+@Since("1.0.3, 1.3 (Plural, Both/Either)")
 @SuppressWarnings("unused")
 public class CondGoatHasHorns extends Condition {
     static {
         Skript.registerCondition(CondGoatHasHorns.class,
-                "%entity% has [its|the] (:left|right) horn",
-                "%entity% does(n't| not) have [its|the] (:left|right) horn");
+                "%livingentities% (has|have) [its|the[ir]] (:left|:right|either|any) [goat] horn",
+                "%livingentities% (doesn't|does not|do not|don't) have [its|the[ir]] (:left|:right|either|any) [goat] horn",
+                "%livingentities% (has|have) [its|the[ir]|both] [goat] horns",
+                "%livingentities% (doesn't|does not|do not|don't) have [its|the[ir]|both] [goat] horns"
+        );
     }
 
-    private Expression<Entity> entityExpression;
-    private boolean left;
+    private Expression<LivingEntity> entityExpression;
+    /**
+     * TRUE = left; FALSE = right; UNKNOWN = either
+     */
+    private Kleenean left = null;
+    private boolean both = false;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        entityExpression = (Expression<Entity>) expressions[0];
-        left = parser.hasTag("left");
-        setNegated(matchedPattern == 1);
+        entityExpression = (Expression<LivingEntity>) expressions[0];
+        if (matchedPattern > 1)
+            both = true;
+        else
+            left = LuskUtils.getKleenean(parser.hasTag("left"), parser.hasTag("right"));
+        setNegated((matchedPattern % 2) != 0);
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event == null ? "" : entityExpression.toString(event, debug)) + (isNegated() ? " does not have" : " has") + " its " + (left ? "left" : "right") + "horn";
+        return entityExpression.toString(event, debug) + (isNegated() ? " does not have " : " has ")
+                + (both ? "both horns" : switch (left) {
+                    case TRUE -> "its left horn";
+                    case FALSE -> "its right horn";
+                    case UNKNOWN -> "either horn";
+        });
     }
 
     @Override
     public boolean check(@NotNull Event event) {
-        Entity entity = entityExpression.getSingle(event);
-        if (entity instanceof Goat goat) {
-            return isNegated() ^ left ? goat.hasLeftHorn() : goat.hasRightHorn();
-        }
-        return false;
+        return entityExpression.check(event, entity -> entity instanceof Goat goat
+                && (both ? goat.hasLeftHorn() && goat.hasRightHorn() : switch (left) {
+                    case TRUE -> goat.hasLeftHorn();
+                    case FALSE -> goat.hasRightHorn();
+                    case UNKNOWN -> goat.hasLeftHorn() || goat.hasRightHorn();
+                }));
     }
 }
