@@ -25,7 +25,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 public class ExprFluidLevelChangeNewBlockData extends SimpleExpression<BlockData> {
 
 	static {
-		Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class,EVENT_OR_SIMPLE,
+		Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class, EVENT_OR_SIMPLE,
 				"[the] [new] fluid level [block[ |-]]data");
 	}
 
