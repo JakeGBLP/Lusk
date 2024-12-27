@@ -16,7 +16,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Bounding Box - Height and Width x/z")
+@Name("Bounding Box - Height and Width X/Z")
 @Description("Gets the height, X width and Z width of 1 or more bounding boxes.")
 @Examples({"broadcast box height of bounding box of target"})
 @Since("1.2.1")
