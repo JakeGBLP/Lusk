@@ -14,7 +14,7 @@ import it.jakegblp.lusk.api.BlockWrapper;
 import it.jakegblp.lusk.utils.DeprecationUtils;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Brewing - Remaining Time")
+@Name("Brewing - Remaining Time/Ticks")
 @Description("Returns the brewing time of a Brewing Stand (the time before the brewing is over, 0 seconds = finished, 20 seconds = just started. Can be set to a longer time, progress won't be displayed until it reaches 20 seconds).\nCan be set.")
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
 @Since("1.0.2, 1.3 (Plural, Blockstate, Item, Ticks)")
