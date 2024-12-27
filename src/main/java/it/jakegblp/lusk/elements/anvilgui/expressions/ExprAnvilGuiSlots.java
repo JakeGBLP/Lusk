@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
-@Name("Anvil GUI - First/Second/Result Items")
+@Name("Anvil GUI - First/Second/Result Item")
 @Description("Gets one of the 3 items in an anvil gui.\n*NOTES*:\n- These can be set.\n- To apply the changes you need to reopen the anvil gui to the player.")
 @Examples({"set anvil gui right item of {_anvil} to barrier named \"<red>Click To Close!\""})
 @Since("1.3")
