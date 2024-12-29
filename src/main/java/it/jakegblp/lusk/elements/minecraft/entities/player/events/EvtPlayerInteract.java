@@ -35,8 +35,8 @@ public class EvtPlayerInteract extends SkriptEvent {
                         
                         `event-equipmentslot` = the slot of the used hand
                         `event-blockaction` = the action of this event
-                        `event-vector` the vector from the player to the interaction point
-                        `event-location` the location of the interaction point
+                        `event-vector` = the vector from the player to the interaction point
+                        `event-location` = the location of the interaction point
                         """)
                 .examples("on player main hand interaction:", "on player interacting with an entity:\n\tif event-equipmentslot = hand slot:")
                 .since("1.3");
