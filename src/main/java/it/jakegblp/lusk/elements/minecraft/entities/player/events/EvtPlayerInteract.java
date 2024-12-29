@@ -27,11 +27,13 @@ public class EvtPlayerInteract extends SkriptEvent {
     static {
         Skript.registerEvent("Player - on Interact", EvtPlayerInteract.class,
                 CollectionUtils.array(PlayerInteractEvent.class, PlayerInteractAtEntityEvent.class),
-                        "player [(:main|:off)[ |-]hand [slot]] interact[ing|ion] [entity:(on|with|at) [an] entity|block:(with|on) [a] block]")
+                        "player [[:main|:off][ |-]hand [slot]] interact[ing|ion] [entity:(on|with|at) [an] entity|block:(with|on) [a] block]")
                 .description("""
                         Called when a player interacts with a block or entity by clicking.
                         
                         This event is always called unlike Skript's click event, meaning that it can be called for both hands.
+                        
+                        You can use `main hand` and `off hand` to make it per hand.
                         
                         `event-equipmentslot` = the slot of the used hand
                         `event-blockaction` = the action of this event
