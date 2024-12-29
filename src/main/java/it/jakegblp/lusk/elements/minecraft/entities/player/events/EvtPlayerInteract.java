@@ -58,12 +58,10 @@ public class EvtPlayerInteract extends SkriptEvent {
         EventValues.registerEventValue(PlayerInteractEvent.class, Vector.class, new Getter<>() {
             @Override
             public @Nullable Vector get(PlayerInteractEvent event) {
-                if (isPaper()) {
-                    Location interactionPoint = event.getInteractionPoint();
-                    if (interactionPoint == null) return null;
-                    return interactionPoint.getDirection().subtract(event.getPlayer().getLocation().getDirection());
-                }
-                return event.getClickedPosition();
+                if (!isPaper()) return event.getClickedPosition();
+                Location interactionPoint = event.getInteractionPoint();
+                if (interactionPoint == null) return null;
+                return interactionPoint.getDirection().subtract(event.getPlayer().getLocation().getDirection());
             }
         }, EventValues.TIME_NOW);
 
