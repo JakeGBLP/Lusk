@@ -125,7 +125,7 @@ public class BoundingBoxClassInfos {
 
                         @Override
                         public @NotNull String toString(final VoxelShape s, final int flags) {
-                            return "VoxelShape [" + (s.getBoundingBoxes().stream().map(box -> toSkriptConfigNumberAccuracy(box.toString())).collect(Collectors.joining(", ")));
+                            return "VoxelShape [" + (s.getBoundingBoxes().stream().map(box -> toSkriptConfigNumberAccuracy(box.toString())).collect(Collectors.joining(", "))) + "]";
                         }
 
                         @Override
