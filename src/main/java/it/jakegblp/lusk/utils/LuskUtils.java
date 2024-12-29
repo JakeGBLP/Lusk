@@ -22,28 +22,40 @@ public class LuskUtils {
 
     /**
      * Uses MessageFormat.
-     * @param format Minimessage format
+     * @param message the message to send, uses '&' formatting
      * @param args MessageFormat arguments
      */
-    public static void consoleLog(String format, Object... args) {
-        send(Bukkit.getConsoleSender(), format, args);
+    public static void consoleLog(String message, Object... args) {
+        send(Bukkit.getConsoleSender(), message, args);
+    }
+
+
+    /**
+     * Sends a warning in the console, the warning always starts with "&cWARNING: " and the leading color is red ('&c');
+     * this should not be changed.<br>
+     * Uses MessageFormat.
+     * @param message the message to send, uses '&' formatting
+     * @param args MessageFormat arguments
+     */
+    public static void warning(String message, Object... args) {
+        send(Bukkit.getConsoleSender(), "&cWARNING: " + message, args);
     }
 
     /**
      * Uses MessageFormat.
      * For console logging use {@link #consoleLog(String, Object...) the console log method}
      * @param sender A CommandSender
-     * @param format Minimessage format
+     * @param message the message to send, uses '&' formatting
      * @param args MessageFormat arguments
      */
-    public static void send(@NotNull CommandSender sender, String format, Object... args) {
-        sendMessage(sender,LUSK_PREFIX + "&7" + MessageFormat.format(format, args));
+    public static void send(@NotNull CommandSender sender, String message, Object... args) {
+        sendMessage(sender,LUSK_PREFIX + "&7" + MessageFormat.format(message, args));
     }
     /**
      * Sends a message with `&` color codes to a CommandSender.
      *
      * @param sender  The CommandSender to send the message to.
-     * @param message The message with `&` color codes.
+     * @param message the message to send, uses '&' formatting
      */
     @SuppressWarnings("deprecation")
     public static void sendMessage(@NotNull CommandSender sender, String message) {
