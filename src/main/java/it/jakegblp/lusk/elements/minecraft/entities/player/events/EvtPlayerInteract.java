@@ -19,6 +19,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
+
+@SuppressWarnings("deprecation")
 public class EvtPlayerInteract extends SkriptEvent {
 
     static {
@@ -55,16 +58,22 @@ public class EvtPlayerInteract extends SkriptEvent {
         EventValues.registerEventValue(PlayerInteractEvent.class, Vector.class, new Getter<>() {
             @Override
             public @Nullable Vector get(PlayerInteractEvent event) {
-                Location interactionPoint = event.getInteractionPoint();
-                if (interactionPoint == null) return null;
-                return interactionPoint.getDirection().subtract(event.getPlayer().getLocation().getDirection());
+                if (isPaper()) {
+                    Location interactionPoint = event.getInteractionPoint();
+                    if (interactionPoint == null) return null;
+                    return interactionPoint.getDirection().subtract(event.getPlayer().getLocation().getDirection());
+                }
+                return event.getClickedPosition();
             }
         }, EventValues.TIME_NOW);
 
         EventValues.registerEventValue(PlayerInteractEvent.class, Location.class, new Getter<>() {
             @Override
             public @Nullable Location get(PlayerInteractEvent event) {
-                return event.getInteractionPoint();
+                if (isPaper()) return event.getInteractionPoint();
+                Vector offset = event.getClickedPosition();
+                if (offset == null) return null;
+                return event.getPlayer().getLocation().add(offset);
             }
         }, EventValues.TIME_NOW);
 
