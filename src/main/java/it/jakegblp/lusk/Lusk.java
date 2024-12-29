@@ -23,7 +23,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
 /**
  * Small parts of this class are taken from SkBee
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class Lusk extends JavaPlugin {
     private static Lusk instance;
     private SkriptAddon addon;

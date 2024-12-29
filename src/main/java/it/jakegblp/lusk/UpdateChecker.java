@@ -27,6 +27,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.*;
 /*
  * @author ShaneBeee, JakeGBLP
  */
+@SuppressWarnings("deprecation")
 public class UpdateChecker implements Listener {
 
     public static final Function<String, URL> GET_URL_METHOD = Skript.methodExists(URL.class, "of", URI.class, URLStreamHandler.class) ? string -> {
