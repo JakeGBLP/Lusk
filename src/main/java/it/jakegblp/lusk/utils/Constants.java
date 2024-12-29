@@ -51,6 +51,8 @@ public class Constants {
             SPIGOT_HAS_BELL_RING_EVENT = classExists("org.bukkit.event.block.BellRingEvent"),
             HAS_VOXEL_SHAPE = classExists("org.bukkit.util.VoxelShape"),
             HAS_SPAWN_CATEGORY = classExists("org.bukkit.entity.SpawnCategory"),
+            HAS_ENTITY_SNAPSHOT = classExists("org.bukkit.entity.EntitySnapshot"),
+            HAS_ENTITY_SNAPSHOT_GET_AS_STRING = HAS_ENTITY_SNAPSHOT && methodExists(EntitySnapshot.class, "getAsString"),
             HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
             HAS_GENERATED_STRUCTURE = classExists(" org.bukkit.generator.structure.GeneratedStructure"),
             SPIGOT_HAS_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),

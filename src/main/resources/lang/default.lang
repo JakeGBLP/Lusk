@@ -35,6 +35,7 @@ types:
   blockstate: block state¦s @a
   timespanperiod: time span period¦s @a
   ignitecause: ignition cause¦s @an
+  entitysnapshot: entity snapshot¦s @an
 
 # -- Rotations --
 rotations:
