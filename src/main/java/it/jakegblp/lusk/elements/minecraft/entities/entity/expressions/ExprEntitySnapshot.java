@@ -13,7 +13,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 @Examples({"broadcast entity height of target"})
 @Since("1.3")
 @RequiredPlugins("1.20.2")
-@SuppressWarnings({"unused", "UsesUnstableApi"})
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 public class ExprEntitySnapshot extends SimplePropertyExpression<Entity, EntitySnapshot> {
     static {
         if (HAS_ENTITY_SNAPSHOT)
