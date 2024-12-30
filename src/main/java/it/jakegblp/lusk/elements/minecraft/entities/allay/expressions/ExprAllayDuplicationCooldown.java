@@ -48,24 +48,25 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entit
 
     @Override
     public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        Long ticks;
-        if (delta != null && delta[0] != null) {
-            Object value = delta[0];
-            if (value instanceof Long l) ticks = l;
-            else if (value instanceof Timespan timespan) ticks = DeprecationUtils.getTicks(timespan);
-            else ticks = null;
-        } else ticks = null;
-        assert mode == Changer.ChangeMode.RESET || ticks != null;
-        getExpr().stream(event).forEach(livingEntity -> {
-            if (livingEntity instanceof Allay allay) {
+        long ticks;
+        if (delta == null) {
+            if (mode == Changer.ChangeMode.RESET) ticks = 0L;
+            else return;
+        } else if (delta.length < 1) return;
+        else if (delta[0] instanceof Number number)
+            ticks = number.longValue();
+        else if (delta[0] instanceof Timespan timespan)
+            ticks = DeprecationUtils.getTicks(timespan);
+        else return;
+        for (Entity entity : getExpr().getAll(event)) {
+            if (entity instanceof Allay allay) {
                 switch (mode) {
                     case REMOVE -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()-ticks);
                     case ADD -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()+ticks);
-                    case SET -> allay.setDuplicationCooldown(ticks);
-                    case RESET -> allay.setDuplicationCooldown(0L);
+                    case SET, RESET -> allay.setDuplicationCooldown(ticks);
                 }
             }
-        });
+        }
     }
 
     @Override

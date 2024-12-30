@@ -36,14 +36,9 @@ public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
     @Override
     public @Nullable Object convert(Object from) {
         Integer ticks = new BlockWrapper(from).getBrewingTime();
-        if (ticks != null) {
-            if (usesTicks) {
-                return ticks;
-            } else {
-                return DeprecationUtils.fromTicks(ticks);
-            }
-        }
-        return null;
+        if (ticks == null) return null;
+        if (usesTicks) return ticks;
+        return DeprecationUtils.fromTicks(ticks);
     }
 
     @Override
