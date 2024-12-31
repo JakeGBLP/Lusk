@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprItemFrameIsFixed extends SimpleBooleanPropertyExpression<Entity> {
 
     static {
-        register(ExprItemFrameIsFixed.class, Boolean.class, "[item[ |-]frame]", "[is] fixed", "entities");
+        register(ExprItemFrameIsFixed.class, Boolean.class, "item[ |-]frame", "[is] fixed", "entities");
     }
 
     @Override
