@@ -24,7 +24,7 @@ The final value is always clamped between 0 and 1.
 public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity,Number> {
 
     static {
-        register(ExprItemFrameDropChance.class, Number.class, "[item[ |-]frame] [item] drop chance", "entities");
+        register(ExprItemFrameDropChance.class, Number.class, "item[ |-]frame [item] drop chance", "entities");
     }
 
     @Override
