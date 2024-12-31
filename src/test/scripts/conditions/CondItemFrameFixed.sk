@@ -1,6 +1,6 @@
 test "CondItemFrameFixed":
   spawn item frame at location(1,3,3):
     assert item frame entity is not fixed with "item frame is fixed instead of not fixed"
-    set is fixed property of entity to true
+    set itemframe is fixed property of entity to true
     assert item frame entity is fixed with "item frame is not fixed instead of fixed"
     delete entity
