@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
-@Name("New Velocity Vector")
+@Name("on Velocity Change - New Velocity Vector")
 @Description("The velocity vector in the Player Velocity Change Event, can be set, deleted and reset.")
 @Examples("set the new player velocity to vector(4,6,3)")
 @Since("1.3")
