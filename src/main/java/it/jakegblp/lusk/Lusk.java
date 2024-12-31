@@ -47,7 +47,6 @@ public class Lusk extends JavaPlugin {
         }
         registerListeners(
                 new JumpListener.SpigotJumpListener(),
-                new JumpListener.PaperJumpListener(),
                 new JumpListener(),
                 new RightClickListener(),
                 new BlockBreakListener(),
