@@ -81,8 +81,7 @@ public class EffPlayerRiptide extends Effect {
             Timespan timespan = timespanExpression.getSingle(event);
             if (timespan == null) return;
             duration = (int) DeprecationUtils.getTicks(timespan);
-            Number n = numberExpression.getSingle(event);
-            attackStrength = n == null ? 0 : n.floatValue();
+            attackStrength = numberExpression == null ? 0 : numberExpression.getOptionalSingle(event).orElse(0).floatValue();
             if (attackStrength <= 0) return;
             attackItem = getSingleItemTypeToItemStack(itemTypeExpression,event);
         }
