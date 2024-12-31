@@ -65,7 +65,7 @@ public class EffPlayerRiptide extends Effect {
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         return "make "+playerExpression.toString(event, debug)+" for "+timespanExpression.toString(event, debug) +
                 (itemTypeExpression == null ? "" : " using "+itemTypeExpression.toString(event, debug)) +
-                " with attack strength "+numberExpression.toString(event, debug);
+                " with attack strength "+(numberExpression == null ? "" : numberExpression.toString(event, debug));
     }
 
     @Override
