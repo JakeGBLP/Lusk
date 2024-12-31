@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 
 /**
-This effect is heavily influenced by {@link EffSecSpawn Skript's Spawn effect section}.
+This class is heavily influenced by {@link EffSecSpawn Skript's Spawn effect section}.
 @author JakeGBLP, SkriptLang
  */
 @Name("Entity Snapshot - Spawn")
