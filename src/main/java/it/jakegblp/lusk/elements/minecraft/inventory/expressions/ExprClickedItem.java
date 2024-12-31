@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Inventory Click - Clicked Item")
+@Name("on Inventory Click - Clicked Item")
 @Description({"Can be set."})
 @Examples({"set clicked itemtype to stone"})
 @Since("1.3")
