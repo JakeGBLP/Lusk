@@ -15,8 +15,8 @@ public class BannerClassInfos {
         if (Classes.getExactClassInfo(PatternType.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(PatternType.class, null, "pattern_type")
-                            .getClassInfo("patterntype")
-                            .user("pattern ?types?")
+                            .getClassInfo("bannerpatterntype")
+                            .user("banner ?pattern ?types?")
                             .name("Banner - Pattern Type")
                             .description("Represents all the available banner pattern types.")
                             .documentationId("8850")
