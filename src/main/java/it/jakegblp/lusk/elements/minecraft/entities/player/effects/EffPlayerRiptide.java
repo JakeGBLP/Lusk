@@ -44,28 +44,33 @@ public class EffPlayerRiptide extends Effect {
     }
 
     private Expression<Player> playerExpression;
-    private Expression<Timespan> timespanExpression;
-    private Expression<ItemType> itemTypeExpression;
-    private Expression<Number> numberExpression;
-    private boolean stop = false;
+    private Expression<Timespan> timespanExpression = null;
+    private Expression<ItemType> itemTypeExpression = null;
+    private Expression<Number> numberExpression = null;
+    private boolean stop ;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
         playerExpression = (Expression<Player>) expressions[0];
-        if (matchedPattern == 0) {
+        stop = matchedPattern == 1;
+        if (!stop) {
             timespanExpression = (Expression<Timespan>) expressions[1];
             itemTypeExpression = (Expression<ItemType>) expressions[2];
             numberExpression = (Expression<Number>) expressions[3];
-        } else stop = true;
+        }
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make "+playerExpression.toString(event, debug)+" for "+timespanExpression.toString(event, debug) +
-                (itemTypeExpression == null ? "" : " using "+itemTypeExpression.toString(event, debug)) +
-                " with attack strength "+(numberExpression == null ? "" : numberExpression.toString(event, debug));
+        StringBuilder builder = new StringBuilder("make ").append(playerExpression.toString(event, debug));
+        if (stop) return builder.append(" stop riptiding").toString();
+        builder.append(" start riptiding for ");
+        if (timespanExpression != null) builder.append(timespanExpression.toString(event, debug));
+        if (itemTypeExpression != null) builder.append(" using ").append(itemTypeExpression.toString(event, debug));
+        if (numberExpression != null) builder.append(" with attack damage ").append(numberExpression.toString(event, debug));
+        return builder.toString();
     }
 
     @Override
