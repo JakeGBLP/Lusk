@@ -52,6 +52,7 @@ public class Lusk extends JavaPlugin {
                 new BlockBreakListener(),
                 new HealListener(),
                 new DeathListener(),
+                new ResurrectListener(),
                 new DamageListener(),
                 new PlayerItemDropListener(),
                 new InventoryClickListener(),
