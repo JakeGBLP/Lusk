@@ -86,14 +86,14 @@ public class EffPlayerRiptide extends Effect {
             Timespan timespan = timespanExpression.getSingle(event);
             if (timespan == null) return;
             duration = (int) DeprecationUtils.getTicks(timespan);
-            attackStrength = numberExpression == null ? 0 : numberExpression.getOptionalSingle(event).orElse(0).floatValue();
-            if (attackStrength <= 0) return;
+            if (duration < 1) return;
+            attackStrength = numberExpression == null ? 0 : Math.max(numberExpression.getOptionalSingle(event).orElse(0).floatValue(),0);
             attackItem = getSingleItemTypeToItemStack(itemTypeExpression,event);
         }
-        playerExpression.stream(event).forEach(player -> {
+        for (Player player : playerExpression.getAll(event)) {
             if (!stop || player.isRiptiding()) {
                 player.startRiptideAttack(duration, attackStrength, attackItem);
             }
-        });
+        }
     }
 }
