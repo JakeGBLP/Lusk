@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class EvtLoomPatternSelect extends SkriptEvent {
     static {
         if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
-            Skript.registerEvent("Loom - on Pattern Select", EvtLoomPatternSelect.class, PlayerLoomPatternSelectEvent.class, "[loom] pattern select [of %-patterntypes%]")
+            Skript.registerEvent("Loom - on Pattern Select", EvtLoomPatternSelect.class, PlayerLoomPatternSelectEvent.class, "[loom] pattern select [of %-bannerpatterntypes%]")
                     .description("This Event requires Paper.\n\nCalled when a player selects a banner pattern in a loom inventory.")
                     .examples("""
                             on pattern select of border:

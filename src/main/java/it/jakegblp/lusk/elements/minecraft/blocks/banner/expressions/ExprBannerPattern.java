@@ -25,7 +25,7 @@ public class ExprBannerPattern extends SimpleExpression<Pattern> {
 
     static {// todo: not related to this expression in particular but make future banner stuff work on banner items
         Skript.registerExpression(ExprBannerPattern.class, Pattern.class, ExpressionType.COMBINED,
-                "banner pattern %patterntype% with color %color%");
+                "banner pattern %bannerpatterntype% with color %color%");
     }
 
     Expression<PatternType> patternTypeExpression;
