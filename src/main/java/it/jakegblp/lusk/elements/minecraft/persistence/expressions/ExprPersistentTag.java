@@ -19,7 +19,7 @@ public class ExprPersistentTag extends PropertyExpression<PersistentDataContaine
 
     static {
         register(ExprPersistentTag.class, Object.class, "%persistenttagtype% %string%", "persistentdatacontainers");
-        // todo: fix issues with number classes, add nested tags, improve toString
+        // todo: fix issues with number classes, add nested tags, improve toString, support PDH ^^^
     }
 
     private Expression<PersistentTagType> tagTypeExpression;
