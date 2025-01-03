@@ -4,7 +4,9 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 public enum PersistentTagType {
@@ -42,5 +44,10 @@ public enum PersistentTagType {
 
     public void set(PersistentDataContainer container, NamespacedKey key, Object o) {
         set.accept(container, key, o);
+    }
+
+    @Nullable
+    public static PersistentTagType fromDataType(PersistentDataType<?, ?> type) {
+        return Arrays.stream(values()).filter(persistentTagType -> persistentTagType.type == type).findFirst().orElse(null);
     }
 }
