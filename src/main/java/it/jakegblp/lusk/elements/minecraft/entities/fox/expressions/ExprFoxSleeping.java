@@ -23,7 +23,7 @@ public class ExprFoxSleeping extends SimpleBooleanPropertyExpression<LivingEntit
 
     static {
         if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
-            register(ExprFoxLeaping.class, Boolean.class, "fox", "[is] sleeping","livingentities");
+            register(ExprFoxSleeping.class, Boolean.class, "fox", "[is] sleeping","livingentities");
     }
 
     @Override

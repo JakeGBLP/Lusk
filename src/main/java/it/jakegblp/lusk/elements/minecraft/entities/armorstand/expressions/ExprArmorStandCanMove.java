@@ -22,7 +22,7 @@ Unlike other Armorstand properties, this one cannot be used on the armorstand it
 public class ExprArmorStandCanMove extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        register(ExprArmorStandCanTick.class, Boolean.class, ARMOR_STAND_PREFIX, "[can] move", "livingentities");
+        register(ExprArmorStandCanMove.class, Boolean.class, ARMOR_STAND_PREFIX, "[can] move", "livingentities");
     }
 
     @Override
