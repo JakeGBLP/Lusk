@@ -1,10 +1,12 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.util.ColorRGB;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,6 +107,10 @@ public class LuskUtils {
         if (a) return Kleenean.TRUE;
         else if (b) return Kleenean.FALSE;
         else return Kleenean.UNKNOWN;
+    }
+
+    public static ColorRGB getColorAsRGB(@NotNull Color color) {
+        return new ColorRGB(color.getRed(), color.getGreen(), color.getBlue());
     }
 
 }
