@@ -55,12 +55,12 @@ public class ExprPersistentTag extends PropertyExpression<Object, Object> {
 
     @Override
     public Class<?> getReturnType() {
-        return tagTypeLiteral != null ? tagTypeLiteral.getSingle().getType().getComplexType() : Object.class;
+        return tagTypeLiteral != null ? tagTypeLiteral.getSingle().getDataType().getComplexType() : Object.class;
     }
 
     @Override
     public boolean isSingle() {
-        return super.isSingle() || (tagTypeLiteral != null && tagTypeLiteral.getSingle().getType().getComplexType().isArray());
+        return super.isSingle() || (tagTypeLiteral != null && tagTypeLiteral.getSingle().getDataType().getComplexType().isArray());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ExprPersistentTag extends PropertyExpression<Object, Object> {
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET, DELETE -> new Class[]{tagTypeLiteral != null ? tagTypeLiteral.getSingle().getType().getComplexType() : Object.class};
+            case SET, DELETE -> new Class[]{tagTypeLiteral != null ? tagTypeLiteral.getSingle().getDataType().getComplexType() : Object.class};
             default -> null;
         };
     }

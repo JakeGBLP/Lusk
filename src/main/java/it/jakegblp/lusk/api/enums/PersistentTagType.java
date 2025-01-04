@@ -34,8 +34,15 @@ public enum PersistentTagType {
         this.set = (TriConsumer<PersistentDataContainer, NamespacedKey, Object>) set;
     }
 
-    public PersistentDataType<?, ?> getType() {
+    public PersistentDataType<?, ?> getDataType() {
         return type;
+    }
+
+    public static PersistentTagType getByTag(NamespacedKey key, PersistentDataContainer container) {
+        for (PersistentTagType value : values()) {
+            if (container.has(key, value.getDataType())) return value;
+        }
+        return null;
     }
 
     public Object get(PersistentDataContainer container, NamespacedKey key) {

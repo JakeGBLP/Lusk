@@ -4,11 +4,9 @@ import it.jakegblp.lusk.api.enums.PersistentTagType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
 public class PDCApi {
 
@@ -78,7 +76,13 @@ public class PDCApi {
                     container.set(key, PersistentDataType.LONG_ARRAY, Arrays.stream(numbers).mapToLong(Number::longValue).toArray());
                 }
             }
-            case TAG_CONTAINER -> null;
+            case TAG_CONTAINER -> {
+                if (object instanceof PersistentDataContainer c) {
+                    container.set(key, PersistentDataType.TAG_CONTAINER, c);
+                }
+            }
         }
     }
+
+    public static PersistentTagType getNestedContainer(NamespacedKey key, PersistentDataContainer container) {}
 }

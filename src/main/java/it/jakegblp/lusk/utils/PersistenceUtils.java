@@ -11,7 +11,7 @@ public class PersistenceUtils {
     @Nullable
     public static PersistentTagType getPersistentDataType(PersistentDataContainer container, NamespacedKey key) {
         for (PersistentTagType value : PersistentTagType.values()) {
-            if (container.has(key, value.getType()))
+            if (container.has(key, value.getDataType()))
                 return value;
         }
         return null;
@@ -21,7 +21,7 @@ public class PersistenceUtils {
     public static Object getValue(PersistentDataContainer container, NamespacedKey key) {
         PersistentTagType tag = getPersistentDataType(container, key);
         if (tag == null) return null;
-        return container.get(key, tag.getType());
+        return container.get(key, tag.getDataType());
     }
 
     public static String asString(PersistentDataContainer container) {
