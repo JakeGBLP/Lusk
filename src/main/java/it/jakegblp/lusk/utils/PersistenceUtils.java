@@ -1,10 +1,12 @@
 package it.jakegblp.lusk.utils;
 
+import it.jakegblp.lusk.api.PDCApi;
 import it.jakegblp.lusk.api.enums.PersistentTagType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public class PersistenceUtils {
@@ -33,7 +35,9 @@ public class PersistenceUtils {
             if (i > 0) builder.append(", ");
             PersistentTagType tagType = getPersistentDataType(container, key);
             if (tagType == null) continue;
-            Object value = tagType.get(container,key);
+            Object value = PDCApi.getTag(container, tagType, key);
+            assert value != null;
+            //Object value = tagType.get(container,key);
             builder.append('"').append(key.asString()).append("\": ");
             switch (tagType) {
                 case BYTE -> builder.append(value).append('b');
@@ -44,9 +48,9 @@ public class PersistenceUtils {
                 case DOUBLE -> builder.append(value);
                 case BOOLEAN -> builder.append(value);
                 case STRING -> builder.append('"').append(value).append('"');
-                case BYTE_ARRAY -> builder.append("-").append(value).append("-");
-                case INTEGER_ARRAY -> builder.append("-").append(value).append("-");
-                case LONG_ARRAY -> builder.append("-").append(value).append("-");
+                case BYTE_ARRAY -> builder.append(Arrays.toString((byte[]) value));
+                case INTEGER_ARRAY -> builder.append(Arrays.toString((int[]) value));
+                case LONG_ARRAY -> builder.append(Arrays.toString((long[]) value));
                 case TAG_CONTAINER -> builder.append(asString((PersistentDataContainer) value));
             }
             i++;

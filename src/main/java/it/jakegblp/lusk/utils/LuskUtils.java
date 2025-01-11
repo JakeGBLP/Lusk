@@ -5,8 +5,10 @@ import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -107,4 +109,16 @@ public class LuskUtils {
         else return Kleenean.UNKNOWN;
     }
 
+    @Nullable
+    public static NamespacedKey getNamespacedKey(@NotNull String key) {
+        if (key.isEmpty()) return null;
+        if (!key.contains(":")) key = "minecraft:" + key;
+        if (key.length() > MAX_NAMESPACED_KEY_LENGTH) {
+            warning("Namespacedkey {0} with length {1} exceeds the max length of {2}!", key, key.length(), MAX_NAMESPACED_KEY_LENGTH);
+            return null;
+        }
+        key = key.toLowerCase();
+        if (key.contains(" ")) key = key.replace(" ", "_");
+        return NamespacedKey.fromString(key);
+    }
 }

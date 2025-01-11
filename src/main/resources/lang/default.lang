@@ -39,6 +39,7 @@ types:
   persistentdataholder: persistent data holder¦s @a
   persistentdatacontainer: persistent data container¦s @a
   persistenttagtype: persistent tag type¦s @a
+  namespacedkey: namespaced key¦s @a
 
 # -- Rotations --
 rotations:
