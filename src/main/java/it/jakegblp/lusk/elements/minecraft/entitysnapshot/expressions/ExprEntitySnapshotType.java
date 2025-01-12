@@ -6,6 +6,8 @@ import ch.njol.skript.entity.EntityType;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.entity.EntitySnapshot;
 
+import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
+
 @Name("Entity Snapshot - Entity Type")
 @Description("Gets the entity type of the provided entity snapshots.")
 @Examples("send entity snapshot type of {_entitySnapshot}")
@@ -14,7 +16,8 @@ import org.bukkit.entity.EntitySnapshot;
 public class ExprEntitySnapshotType extends SimplePropertyExpression<EntitySnapshot, EntityType> {
 
     static {
-        register(ExprEntitySnapshotType.class, EntityType.class, "entity[ |-]snapshot type", "entitysnapshots");
+        if (HAS_ENTITY_SNAPSHOT)
+            register(ExprEntitySnapshotType.class, EntityType.class, "entity[ |-]snapshot type", "entitysnapshots");
     }
 
     @Override

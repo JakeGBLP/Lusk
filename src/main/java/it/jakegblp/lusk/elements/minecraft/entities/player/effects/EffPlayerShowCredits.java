@@ -34,7 +34,7 @@ public class EffPlayerShowCredits extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "show the end poem to " + (event == null ? "" : players.toString(event, debug));
+        return "show the end poem to " + players.toString(event, debug);
     }
 
     @Override

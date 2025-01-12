@@ -41,7 +41,7 @@ public class ExprFluidLevelChangeNewBlockData extends SimpleExpression<BlockData
 
 	@Override
 	public Class<? extends BlockData> getReturnType() {
-		return BlockData.class	;
+		return BlockData.class;
 	}
 
 	@Override

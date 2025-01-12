@@ -22,13 +22,13 @@ import java.util.function.Predicate;
 
 @Name("Bounding Box - Entities Within")
 @Description("Gets all the entities within a bounding box in a specific world.")
-@Examples({"broadcast entities within {_box} in {_world}"})
+@Examples({"broadcast entities within box {_box} in {_world}"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprBoundingBoxEntities extends SimpleExpression<Entity> {
     static {
         Skript.registerExpression(ExprBoundingBoxEntities.class, Entity.class, ExpressionType.COMBINED,
-        "[all [[of] the]|the] %*entitydatas% (of|in|within) [bounding] box[es] %boundingboxes% in [world[s]] %worlds%");
+        "[all [[of] the]|the] %*entitydatas% (of|in|within) [bounding[ ]]box[es] %boundingboxes% in [world[s]] %worlds%");
     }
     private Expression<EntityData<?>> entityDataExpression;
     private Expression<BoundingBox> boundingBoxExpression;

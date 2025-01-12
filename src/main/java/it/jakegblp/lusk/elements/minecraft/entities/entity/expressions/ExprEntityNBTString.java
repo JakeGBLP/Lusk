@@ -6,6 +6,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntitySnapshot;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_5;
+
 @Name("Entity/Snapshot - NBT String")
 @Description("Gets the provided entities or entity snapshots as their NBT string.\n" +
         "Don't rely on this as the structure of the results can change across versions.")
@@ -16,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEntityNBTString extends SimplerPropertyExpression<Object, String> {
 
     static {
-        register(ExprEntityNBTString.class, String.class, "entity (nbt string|string nbt)", "entities/entitysnapshots");
+        if (MINECRAFT_1_20_5)
+            register(ExprEntityNBTString.class, String.class, "entity (nbt string|string nbt)", "entities/entitysnapshots");
     }
 
     @Override

@@ -67,6 +67,6 @@ public class SecEvtBreak extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? blockExpression.toString(event, b) : "") + " gets " + (mine ? "mined" : "broken");
+        return "when " + blockExpression.toString(event, b) + " gets " + (mine ? "mined" : "broken");
     }
 }
