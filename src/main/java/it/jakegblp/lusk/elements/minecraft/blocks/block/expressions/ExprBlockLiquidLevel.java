@@ -18,7 +18,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.getKleenean;
 @Name("Block - Liquid Level")
 @Description("""
 Represents the maximum, minimum or current amount of fluid contained within a block, either by itself or inside a cauldron.
-Minimum Level requires Paper.
+Minimum Level requires Paper and 1.18.2.
 
 This expression includes liquid blocks, cauldron and composters.
 
@@ -30,7 +30,7 @@ All falling fluids have the same behaviour, but the level corresponds to that of
 May not be higher than the max level.
 
 Can be set, added to, removed from and reset.
-Reset requires Paper.
+Reset requires Paper and 1.18.2.
 """)
 @Examples({"broadcast max block level of event-block", "set block level of {_block} to 3"})
 @Since("1.3.2")
