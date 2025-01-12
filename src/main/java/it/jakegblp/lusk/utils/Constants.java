@@ -99,6 +99,10 @@ public class Constants {
              * Whether the current server version is greater than or equal to 1.20.5
              */
             MINECRAFT_1_20_5 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.5")),
+            /**
+             * Whether the current server version is greater than or equal to 1.20.6
+             */
+            MINECRAFT_1_20_6 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.6")),
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
@@ -112,6 +116,8 @@ public class Constants {
             PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
             // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
             //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
+            PAPER_1_20_4 = MINECRAFT_1_20_4 && isPaper(),
+            PAPER_1_20_6 = MINECRAFT_1_20_6 && isPaper(),
 
             PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION = methodExists(EnderSignal.class, "setTargetLocation", Location.class, boolean.class),
             PAPER_HAS_WORLD_BORDER_EVENT = classExists("io.papermc.paper.event.world.border.WorldBorderEvent"),

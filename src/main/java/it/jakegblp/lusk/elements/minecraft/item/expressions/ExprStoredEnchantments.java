@@ -60,9 +60,8 @@ public class ExprStoredEnchantments extends PropertyExpression<ItemType, Enchant
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case ADD, REMOVE, SET -> CollectionUtils.array(Enchantment[].class, EnchantmentType[].class);
+            case ADD, REMOVE, REMOVE_ALL, SET -> CollectionUtils.array(Enchantment[].class, EnchantmentType[].class);
             case DELETE, RESET -> CollectionUtils.array();
-            default -> null;
         };
     }
 
@@ -78,18 +77,18 @@ public class ExprStoredEnchantments extends PropertyExpression<ItemType, Enchant
         }
 
         switch (mode) {
-            case ADD:
+            case ADD -> {
                 for (ItemType item : source)
                     ItemUtils.addStoredEnchantments(item, enchants);
-                break;
-            case REMOVE:
+            }
+            case REMOVE, REMOVE_ALL -> {
                 for (ItemType item : source)
                     ItemUtils.removeStoredEnchantments(item, enchants);
-                break;
-            case SET, DELETE, RESET:
+            }
+            case SET, DELETE, RESET -> {
                 for (ItemType item : source)
                     ItemUtils.setStoredEnchantments(item, enchants);
-                break;
+            }
         }
     }
 }

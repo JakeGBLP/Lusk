@@ -2,16 +2,18 @@ package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.util.Color;
 import ch.njol.skript.util.EnchantmentType;
+import io.papermc.paper.potion.SuspiciousEffectEntry;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.CrossbowMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -21,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_REMOVE_ENCHANTMENTS_METHOD;
+import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.LuskUtils.getColorAsRGB;
 
 public class ItemUtils {
 
@@ -61,16 +63,16 @@ public class ItemUtils {
         return itemStack;
     };
 
-    /**
-     * Filters a list of materials and returns an array of all the materials that can become items.
-     *
-     * @param materials the materials to filter
-     * @return A stream of materials that can become items.
-     * @see Material#isItem()
-     */
-    private static Stream<Material> validMaterials(@NotNull Material... materials) {
-        return Arrays.stream(materials).filter(Material::isItem);
-    }
+    ///**
+    // * Filters a list of materials and returns an array of all the materials that can become items.
+    // *
+    // * @param materials the materials to filter
+    // * @return A stream of materials that can become items.
+    // * @see Material#isItem()
+    // */
+    //private static Stream<Material> validMaterials(@NotNull Material... materials) {
+    //    return Arrays.stream(materials).filter(Material::isItem);
+    //}
 
     public static ItemType[] unenchant(@NotNull ItemType... itemTypes) {
         return Arrays.stream(itemTypes)
@@ -86,13 +88,13 @@ public class ItemUtils {
     }
 
 
-    public static ItemStack[] toItemStacks(@NotNull Material... materials) {
-        return validMaterials(materials).map(ItemStack::new).toArray(ItemStack[]::new);
-    }
-
-    public static ItemType[] toItemTypes(@NotNull Material... materials) {
-        return validMaterials(materials).map(ItemType::new).toArray(ItemType[]::new);
-    }
+    //public static ItemStack[] toItemStacks(@NotNull Material... materials) {
+    //    return validMaterials(materials).map(ItemStack::new).toArray(ItemStack[]::new);
+    //}
+//
+    //public static ItemType[] toItemTypes(@NotNull Material... materials) {
+    //    return validMaterials(materials).map(ItemType::new).toArray(ItemType[]::new);
+    //}
 
     public static Enchantment[] getSupportedEnchantments(@NotNull ItemStack itemStack) {
         return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).stream()
@@ -218,5 +220,88 @@ public class ItemUtils {
                 return null;
             }
         }).filter(Objects::nonNull).toArray(EnchantmentType[]::new);
+    }
+
+    public static boolean hasSuspiciousStewPotionEffects(@NotNull ItemType itemType) {
+        return itemType.getItemMeta() instanceof SuspiciousStewMeta meta
+                && meta.hasCustomEffects();
+    }
+
+    @NullMarked
+    public static PotionEffect[] getSuspiciousStewPotionEffects(ItemType itemType) {
+        if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta && meta.hasCustomEffects())
+            return meta.getCustomEffects().toArray(new PotionEffect[0]);
+        return new PotionEffect[0];
+    }
+
+    @NullMarked
+    @SuppressWarnings("deprecation")
+    public static void setSuspiciousStewPotionEffects(ItemType itemType, PotionEffect @Nullable ... effects) {
+        if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta) {
+            meta.clearCustomEffects();
+            if (effects != null) {
+                for (PotionEffect effect : effects) {
+                    if (PAPER_1_20_4)
+                        meta.addCustomEffect(SuspiciousEffectEntry.create(effect.getType(), effect.getDuration()), true);
+                    else
+                        meta.addCustomEffect(effect, true);
+                }
+            }
+            itemType.setItemMeta(meta);
+        }
+    }
+
+    @NullMarked
+    @SuppressWarnings("deprecation")
+    public static void addSuspiciousStewPotionEffects(ItemType itemType, PotionEffect... effects) {
+        if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta) {
+            for (PotionEffect effect : effects) {
+                if (PAPER_1_20_4)
+                    meta.addCustomEffect(SuspiciousEffectEntry.create(effect.getType(), effect.getDuration()), false);
+                else
+                    meta.addCustomEffect(effect, false);
+            }
+            itemType.setItemMeta(meta);
+        }
+    }
+
+    public static void removeSuspiciousStewPotionEffects(ItemType itemType, @Nullable Object... objects) {
+        if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta) {
+            for (Object object : objects) {
+                PotionEffectType type;
+                if (object instanceof PotionEffect potionEffect) {
+                    type = potionEffect.getType();
+                } else if (object instanceof PotionEffectType potionEffectType) {
+                    type = potionEffectType;
+                } else continue;
+                meta.removeCustomEffect(type);
+            }
+            itemType.setItemMeta(meta);
+        }
+    }
+
+    public static void clearSuspiciousStewPotionEffects(ItemType itemType) {
+        if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta) {
+            meta.clearCustomEffects();
+            itemType.setItemMeta(meta);
+        }
+    }
+
+    public static boolean isArmorDyed(@NotNull ItemType itemType) {
+        return itemType.getItemMeta() instanceof LeatherArmorMeta meta
+                && (PAPER_1_20_6 ? meta.isDyed()
+                : meta.getColor().equals(Bukkit.getItemFactory().getDefaultLeatherColor()));
+    }
+
+    @Nullable
+    public static Color getArmorColor(@NotNull ItemType itemType) {
+        return itemType.getItemMeta() instanceof LeatherArmorMeta meta
+                ? getColorAsRGB(meta.getColor()) : null;
+    }
+
+    public static void setArmorColor(@NotNull ItemType itemType, @NotNull Color color) {
+        if (itemType.getItemMeta() instanceof LeatherArmorMeta meta) {
+            meta.setColor(color.asBukkitColor());
+        }
     }
 }
