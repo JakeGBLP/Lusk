@@ -5,6 +5,7 @@ import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.meta.BlockDataMeta;
@@ -17,9 +18,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemType;
+import static it.jakegblp.lusk.utils.LuskUtils.warning;
 
 public class BlockWrapper {
 
@@ -257,6 +261,30 @@ public class BlockWrapper {
      */
     public boolean canBeWaterlogged() {
         return getBlockData() instanceof Waterlogged;
+    }
+
+    public void setLiquidLevel(int level) {
+        if (getBlockData() instanceof Levelled levelled && level <= levelled.getMaximumLevel()
+                && (!PAPER_HAS_1_18_2_EXTENDED_ENTITY_API || level >= levelled.getMinimumLevel())) {
+            try {
+                levelled.setLevel(level);
+            } catch (IllegalArgumentException e) {
+                warning("Illegal block liquid level: {0}, error: {1}", level, e.getMessage());
+            }
+            updateBlockData(levelled);
+        }
+    }
+
+    public Integer getLiquidLevel() {
+        return getBlockData() instanceof Levelled levelled ? levelled.getLevel() : null;
+    }
+
+    public Integer getMaxLiquidLevel() {
+        return getBlockData() instanceof Levelled levelled ? levelled.getMaximumLevel() : null;
+    }
+
+    public Integer getMinLiquidLevel() {
+        return isPaper() && getBlockData() instanceof Levelled levelled ? levelled.getMinimumLevel() : null;
     }
 
     @Nullable

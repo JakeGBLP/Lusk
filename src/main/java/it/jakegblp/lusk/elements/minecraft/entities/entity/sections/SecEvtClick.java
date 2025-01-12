@@ -86,6 +86,6 @@ public class SecEvtClick extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? entityExpression.toString(event, b) : "") + " gets clicked";
+        return "when " + entityExpression.toString(event, b) + " gets clicked";
     }
 }

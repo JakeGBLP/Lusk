@@ -28,9 +28,9 @@ public class EffPlayerFakeExperience extends Effect {
                 "show [fake] [e]xp[erience] progress %number% to %players%");
     }
 
-    private Expression<Integer> level;
-    private Expression<Number> progress;
-    private Expression<Player> players;
+    private Expression<Integer> levelExpression;
+    private Expression<Number> progressExpression;
+    private Expression<Player> playerExpression;
     private int pattern;
 
     @Override
@@ -38,15 +38,15 @@ public class EffPlayerFakeExperience extends Effect {
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, SkriptParser.@NotNull ParseResult parser) {
         pattern = matchedPattern;
         if (pattern == 2) {
-            progress = (Expression<Number>) expressions[0];
-            players = (Expression<Player>) expressions[1];
+            progressExpression = (Expression<Number>) expressions[0];
+            playerExpression = (Expression<Player>) expressions[1];
         } else if (pattern == 1) {
-            level = (Expression<Integer>) expressions[0];
-            players = (Expression<Player>) expressions[1];
+            levelExpression = (Expression<Integer>) expressions[0];
+            playerExpression = (Expression<Player>) expressions[1];
         } else {
-            level = (Expression<Integer>) expressions[0];
-            progress = (Expression<Number>) expressions[1];
-            players = (Expression<Player>) expressions[2];
+            levelExpression = (Expression<Integer>) expressions[0];
+            progressExpression = (Expression<Number>) expressions[1];
+            playerExpression = (Expression<Player>) expressions[2];
         }
         return true;
     }
@@ -56,17 +56,17 @@ public class EffPlayerFakeExperience extends Effect {
         Float xp = null;
         Integer lvl = null;
         if (pattern == 0 || pattern == 2) {
-            Number progressNumber = progress.getSingle(event);
+            Number progressNumber = progressExpression.getSingle(event);
             if (progressNumber == null) return;
             xp = progressNumber.floatValue();
             xp = Math.max(Math.min(xp, 1), 0);
         }
         if (pattern == 0 || pattern == 1) {
-            lvl = level.getSingle(event);
+            lvl = levelExpression.getSingle(event);
             if (lvl == null) return;
             lvl = Math.max(lvl, 0);
         }
-        for (Player player : players.getArray(event)) {
+        for (Player player : playerExpression.getArray(event)) {
             if (pattern == 2 && xp != null) {
                 player.sendExperienceChange(xp);
             } else if (pattern == 1 && lvl != null) {
@@ -83,18 +83,14 @@ public class EffPlayerFakeExperience extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        String xp, lvl, ps;
-        xp = lvl = ps = "";
-        if (event != null) {
-            xp = progress.toString(event, debug);
-            lvl = level.toString(event, debug);
-            ps = players.toString(event, debug);
-        }
+        String progress = progressExpression.toString(event,debug),
+                player = playerExpression.toString(event,debug),
+                level = levelExpression.toString(event,debug);
         StringBuilder string = new StringBuilder("show fake experience");
-        if (pattern == 0) string.append("level ").append(lvl).append(" and progress ").append(xp);
-        else if (pattern == 1) string.append("level ").append(lvl);
-        else string.append("progress ").append(xp);
-        string.append(" to ").append(ps);
+        if (pattern == 0) string.append("level ").append(level).append(" and progress ").append(progress);
+        else if (pattern == 1) string.append("level ").append(level);
+        else string.append("progress ").append(progress);
+        string.append(" to ").append(player);
         return string.toString();
     }
 

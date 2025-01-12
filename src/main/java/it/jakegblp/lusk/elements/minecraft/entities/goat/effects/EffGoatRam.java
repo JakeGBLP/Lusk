@@ -41,7 +41,7 @@ public class EffGoatRam extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + (event == null ? "" : entityExpression.toString(event, debug)) + " ram " + (event == null ? "" : entityExpression1.toString(event, debug));
+        return "make " + entityExpression.toString(event, debug) + " ram " + entityExpression1.toString(event, debug);
     }
 
     @Override

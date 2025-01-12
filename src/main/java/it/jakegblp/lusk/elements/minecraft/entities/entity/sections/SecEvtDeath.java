@@ -65,6 +65,6 @@ public class SecEvtDeath extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? entity.toString(event, b) : "") + " dies";
+        return "when " + entity.toString(event, b) + " dies";
     }
 }

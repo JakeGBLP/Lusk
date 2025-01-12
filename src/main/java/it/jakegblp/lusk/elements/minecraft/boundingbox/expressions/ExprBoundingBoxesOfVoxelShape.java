@@ -20,7 +20,7 @@ import java.util.List;
 
 @Name("Bounding Box - of Voxel Shape")
 @Description("Converts shapes into a collection of Bounding Boxes equivalent to the shape they come from.")
-@Examples({"broadcast bounding boxes of {_voxelShape}}"})
+@Examples({"broadcast bounding boxes of {_voxelShape}"})
 @Since("1.2")
 @SuppressWarnings("unused")
 public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape, BoundingBox> {
@@ -55,6 +55,6 @@ public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the bounding boxes of " + (event != null ? getExpr().toString(event, debug) : "");
+        return "the bounding boxes of " + getExpr().toString(event, debug);
     }
 }

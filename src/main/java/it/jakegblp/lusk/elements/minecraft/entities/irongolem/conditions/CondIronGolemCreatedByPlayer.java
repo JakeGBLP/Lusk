@@ -9,8 +9,8 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,30 +23,26 @@ import org.jetbrains.annotations.Nullable;
 public class CondIronGolemCreatedByPlayer extends Condition {
     static {
         Skript.registerCondition(CondIronGolemCreatedByPlayer.class,
-                "%entity% was[no:(n't| not)] (created|built) by ([a] player|players)");
+                "%livingentities% was[not:(n't| not)] (created|built) by ([a] player|players)");
     }
 
-    private Expression<Entity> entityExpression;
+    private Expression<LivingEntity> entityExpression;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
-        entityExpression = (Expression<Entity>) expressions[0];
-        setNegated(parser.hasTag("no"));
+        entityExpression = (Expression<LivingEntity>) expressions[0];
+        setNegated(parser.hasTag("not"));
         return true;
     }
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (event == null ? "" : entityExpression.toString(event, debug)) + "was " + (isNegated() ? "not " : "") + "created by a player";
+        return entityExpression.toString(event, debug) + "were " + (isNegated() ? "not " : "") + "created by a player";
     }
 
     @Override
     public boolean check(@NotNull Event event) {
-        Entity entity = entityExpression.getSingle(event);
-        if (entity instanceof IronGolem ironGolem) {
-            return isNegated() ^ ironGolem.isPlayerCreated();
-        }
-        return false;
+        return entityExpression.check(event, o -> o instanceof IronGolem ironGolem && ironGolem.isPlayerCreated());
     }
 }

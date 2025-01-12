@@ -21,8 +21,8 @@ import org.jetbrains.annotations.Nullable;
 public class CondBoundingBoxOverlaps extends Condition {
     static {
         Skript.registerCondition(CondBoundingBoxOverlaps.class,
-                "%boundingboxes% overlap[s] [with] [bounding [box]] %boundingboxes%",
-                "%boundingboxes% do[es](n't| not) overlap [with] [bounding [box]] %boundingboxes%"
+                "%boundingboxes% overlap[s] [with] [[bounding[ ]]box] %boundingboxes%",
+                "%boundingboxes% do[es](n't| not) overlap [with] [[bounding[ ]]box] %boundingboxes%"
         );
     }
 

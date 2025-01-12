@@ -5,6 +5,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.*;
 
@@ -20,34 +22,36 @@ public class EventUtils {
         }
     }
 
-    public static boolean matchesDropEvent(InventoryClickEvent event, PlayerDropItemEvent dropItemEvent) {
-        return event != null && dropsAtAll(event)
-                && event.getWhoClicked().getUniqueId().equals(dropItemEvent.getPlayer().getUniqueId());
+    public static boolean matchesDropEvent(
+            @Nullable InventoryClickEvent inventoryClickEvent, @NotNull PlayerDropItemEvent dropItemEvent) {
+        return inventoryClickEvent != null && dropsAtAll(inventoryClickEvent)
+                && inventoryClickEvent.getWhoClicked().getUniqueId().equals(dropItemEvent.getPlayer().getUniqueId());
     }
 
-    public static boolean dropsAtAll(InventoryClickEvent event) {
+    public static boolean dropsAtAll(@NotNull InventoryClickEvent event) {
         if (!dropsFromCursor(event) && event.getCurrentItem() == null)
             return false;
         return DROP_ACTION_DATA.contains(event.getAction());
     }
 
-    public static boolean dropsFromCursor(InventoryClickEvent event) {
+    public static boolean dropsFromCursor(@NotNull InventoryClickEvent event) {
         return DROP_ACTION_DATA.indexOf(event.getAction()) > 1;
     }
 
-    public static boolean dropsAllItems(InventoryClickEvent event) {
+    public static boolean dropsAllItems(@NotNull InventoryClickEvent event) {
         return DROP_ACTION_DATA.indexOf(event.getAction()) > 0 && DROP_ACTION_DATA.indexOf(event.getAction()) < 3;
     }
 
-    public static boolean picksUp(InventoryClickEvent event) {
+    public static boolean picksUp(@NotNull InventoryClickEvent event) {
         return PICKUP_ACTION_DATA.contains(event.getAction());
     }
 
-    public static boolean placesDown(InventoryClickEvent event) {
+    public static boolean placesDown(@NotNull InventoryClickEvent event) {
         return PLACE_ACTION_DATA.contains(event.getAction());
     }
 
-    public static ArmorStandInteraction getInteraction(PlayerArmorStandManipulateEvent event) {
+    @NotNull
+    public static ArmorStandInteraction getInteraction(@NotNull PlayerArmorStandManipulateEvent event) {
         boolean toolIsAir = event.getPlayerItem().getType().isAir();
         boolean equippedIsAir = event.getArmorStandItem().getType().isAir();
         if (toolIsAir) {

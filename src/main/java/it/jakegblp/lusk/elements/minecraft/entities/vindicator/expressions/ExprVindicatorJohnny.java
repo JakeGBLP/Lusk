@@ -74,7 +74,7 @@ public class ExprVindicatorJohnny extends PropertyExpression<LivingEntity, Boole
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the vindicator is johnny state of " + (event != null ? getExpr().toString(event, debug) : "");
+        return "the vindicator is johnny state of " + getExpr().toString(event, debug);
     }
 
     @SuppressWarnings("unchecked")

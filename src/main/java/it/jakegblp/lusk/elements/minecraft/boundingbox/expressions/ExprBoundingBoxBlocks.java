@@ -21,13 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Blocks Within")
 @Description("Gets all the blocks within a bounding box in a specific world.")
-@Examples({"broadcast blocks within {_box} in {_world}"})
+@Examples({"broadcast blocks within box {_box} in {_world}"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
     static {
         Skript.registerExpression(ExprBoundingBoxBlocks.class, Block.class, ExpressionType.COMBINED,
-                "[all [[of] the]|the] blocks within [bounding] box[es] %boundingboxes% in [world[s]] %worlds%");
+                "[all [[of] the]|the] blocks within [bounding[ ]]box[es] %boundingboxes% in [world[s]] %worlds%");
     }
 
     private Expression<BoundingBox> boundingBoxExpression;

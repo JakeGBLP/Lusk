@@ -33,14 +33,14 @@ public class LuskUtils {
 
 
     /**
-     * Sends a warning in the console, the warning always starts with "&cWARNING: " and the leading color is red ('&c');
+     * Sends a warning in the console, the warning always starts with "&eWARNING: " and the leading color is yellow ('&e');
      * this should not be changed.<br>
      * Uses MessageFormat.
      * @param message the message to send, uses '&' formatting
      * @param args MessageFormat arguments
      */
     public static void warning(String message, Object... args) {
-        send(Bukkit.getConsoleSender(), "&cWARNING: " + message, args);
+        send(Bukkit.getConsoleSender(), "&eWARNING: " + message, args);
     }
 
     /**

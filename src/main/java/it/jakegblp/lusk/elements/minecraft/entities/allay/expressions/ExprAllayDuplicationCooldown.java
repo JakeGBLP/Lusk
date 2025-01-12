@@ -12,7 +12,7 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.utils.DeprecationUtils;
 import org.bukkit.entity.Allay;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,10 +23,10 @@ import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
 @Examples({"broadcast duplication cooldown of target"})
 @Since("1.0.2, 1.3 (Plural, Ticks)")
 @SuppressWarnings("unused")
-public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entity,Object> {
+public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<LivingEntity,Object> {
     static {
         register(ExprAllayDuplicationCooldown.class, Object.class,
-                "allay duplication cooldown [time[span]|:ticks]", "entities");
+                "allay duplication cooldown [time[span]|:ticks]", "livingentities");
     }
 
     private boolean usesTicks;
@@ -38,7 +38,7 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entit
     }
 
     @Override
-    public @Nullable Object convert(Entity from) {
+    public @Nullable Object convert(LivingEntity from) {
         if (from instanceof Allay allay) {
             long ticks = allay.getDuplicationCooldown();
             return usesTicks ? ticks : fromTicks(ticks);
@@ -58,7 +58,7 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entit
         else if (delta[0] instanceof Timespan timespan)
             ticks = DeprecationUtils.getTicks(timespan);
         else return;
-        for (Entity entity : getExpr().getAll(event)) {
+        for (LivingEntity entity : getExpr().getAll(event)) {
             if (entity instanceof Allay allay) {
                 switch (mode) {
                     case REMOVE -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()-ticks);
@@ -85,6 +85,6 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Entit
 
     @Override
     public Class<?> getReturnType() {
-        return Object.class;
+        return usesTicks ? Long.class : Timespan.class;
     }
 }

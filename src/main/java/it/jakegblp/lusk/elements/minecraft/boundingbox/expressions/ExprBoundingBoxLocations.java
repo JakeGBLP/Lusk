@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Bounding Box - Corners/Center")
 @Description("Gets either the lesser or the greater corner or the lesser of one or more bounding boxes.\n\nReturns vectors.")
-@Examples({"broadcast box lesser of target"})
+@Examples({"broadcast box lesser corner of bounding box of target","send box greater corner of {_box}"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Vector> {
@@ -64,7 +64,6 @@ public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Ve
             else builder.append("lesser");
             builder.append(" corner");
         }
-        builder.append(" of ").append(getExpr().toString(event, debug));
-        return builder.toString();
+        return builder.append(" of ").append(getExpr().toString(event, debug)).toString();
     }
 }

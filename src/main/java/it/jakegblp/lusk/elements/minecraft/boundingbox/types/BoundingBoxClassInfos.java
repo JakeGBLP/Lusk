@@ -29,7 +29,7 @@ public class BoundingBoxClassInfos {
                     .user("bounding ?box(es)?")
                     .name("Bounding Box")
                     .description("A Bounding Box.\n\nPersistent in global variables since 1.2.") // add example
-                    .since("1.0.2, 1.2 (Savable)")
+                    .since("1.0.2, 1.2 (Variables)")
                     .documentationId("9096")
                     .parser(new Parser<>() {
                         @Override

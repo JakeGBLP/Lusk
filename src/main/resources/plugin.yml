@@ -1,6 +1,7 @@
 name: Lusk
 version: @version@
 main: it.jakegblp.lusk.Lusk
+website: https://github.com/JakeGBLP/Lusk
 api-version: 1.13
 depend:
   - Skript

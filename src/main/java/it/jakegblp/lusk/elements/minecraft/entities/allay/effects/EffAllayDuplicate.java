@@ -36,7 +36,7 @@ public class EffAllayDuplicate extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "force duplicate " + (event == null ? "" : entityExpression.toString(event, debug));
+        return "force duplicate " + entityExpression.toString(event, debug);
     }
 
     @Override

@@ -70,6 +70,6 @@ public class SecEvtDamage extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? victim.toString(event, b) : "") + " gets damaged";
+        return "when " + victim.toString(event, b) + " gets damaged";
     }
 }

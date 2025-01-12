@@ -72,9 +72,8 @@ public class ExprNewBoundingBox extends SimpleExpression<BoundingBox> {
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         if (empty) return "a new empty bounding box";
-        boolean eventNotNull = event != null;
         if (objectExpression2 == null)
-            return "a new bounding box from " + (eventNotNull ? objectExpression1.toString(event, debug) : "");
-        return "a new bounding box from " + (eventNotNull ? objectExpression1.toString(event, debug) : "") + " and " + (eventNotNull ? objectExpression2.toString(event, debug) : "");
+            return "a new bounding box from " + objectExpression1.toString(event, debug);
+        return "a new bounding box from " + objectExpression1.toString(event, debug) + " and " + objectExpression2.toString(event, debug);
     }
 }
