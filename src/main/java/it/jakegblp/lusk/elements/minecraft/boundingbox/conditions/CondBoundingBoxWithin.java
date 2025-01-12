@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 public class CondBoundingBoxWithin extends Condition {
     static {
         Skript.registerCondition(CondBoundingBoxWithin.class,
-                "%vectors/locations/boundingboxes% (is|are) (within|in[side [of]]) [bounding box] %boundingbox%",
-                "%vectors/locations/boundingboxes% (isn't|is not|aren't|are not) (within|in[side [of]]) [bounding box] %boundingbox%"
+                "%vectors/locations/boundingboxes% (is|are) (within|in[side [of]]) [[bounding[ ]]box] %boundingbox%",
+                "%vectors/locations/boundingboxes% (isn't|is not|aren't|are not) (within|in[side [of]]) [[bounding[ ]]box] %boundingbox%"
         );
     }
 
