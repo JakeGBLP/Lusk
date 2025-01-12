@@ -64,7 +64,6 @@ public class ExprBoundingBoxLocations extends PropertyExpression<BoundingBox, Ve
             else builder.append("lesser");
             builder.append(" corner");
         }
-        builder.append(" of ").append(getExpr().toString(event, debug));
-        return builder.toString();
+        return builder.append(" of ").append(getExpr().toString(event, debug)).toString();
     }
 }

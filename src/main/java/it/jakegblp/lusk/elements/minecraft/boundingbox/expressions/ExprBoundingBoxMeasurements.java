@@ -57,8 +57,8 @@ public class ExprBoundingBoxMeasurements extends PropertyExpression<BoundingBox,
     @Override
     @NotNull
     public String toString(@Nullable Event event, boolean debug) {
-        return "the bounding box " +
+        return "bounding box " +
                 (coordinate == Axis.Y ? "height " : ((coordinate == Axis.X ? "x" : "z") + " width ")) +
-                (event != null ? getExpr().toString(event, debug) : "");
+                getExpr().toString(event, debug);
     }
 }

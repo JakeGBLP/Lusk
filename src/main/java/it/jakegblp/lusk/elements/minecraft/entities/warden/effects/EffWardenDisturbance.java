@@ -16,9 +16,10 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Warden Disturbance")
+@Name("Warden - Disturb")
 @Description("Makes a warden sense a disturbance at the provided location.")
 @Examples({"""
+        disturb {_warden} from {_location}
         """})
 @Since("1.0.2")
 @SuppressWarnings("unused")
@@ -40,7 +41,7 @@ public class EffWardenDisturbance extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "disturb " + (event == null ? "" : entitiesExpression.toString(event, debug)) + " from " + (event == null ? "" : locationExpression.toString(event, debug));
+        return "disturb " + entitiesExpression.toString(event, debug) + " from " + locationExpression.toString(event, debug);
     }
 
     @Override

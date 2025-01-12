@@ -69,10 +69,10 @@ public class ExprBoundingBoxCoordinates extends PropertyExpression<BoundingBox, 
     @Override
     @NotNull
     public String toString(@Nullable Event event, boolean debug) {
-        return "the bounding box " +
+        return "bounding box " +
                 (state == null ? "center" : state ? "greater" : "lesser") +
                 coordinate +
                 "-coordinate of " +
-                (event != null ? getExpr().toString(event, debug) : "");
+                getExpr().toString(event, debug);
     }
 }

@@ -69,6 +69,6 @@ public class SecEvtHeal extends Section {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        return "when " + (event != null ? entity.toString(event, b) : "") + " gets healed";
+        return "when " + entity.toString(event, b) + " gets healed";
     }
 }

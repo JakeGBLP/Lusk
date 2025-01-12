@@ -55,6 +55,6 @@ public class ExprBoundingBoxesOfVoxelShape extends PropertyExpression<VoxelShape
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "the bounding boxes of " + (event != null ? getExpr().toString(event, debug) : "");
+        return "the bounding boxes of " + getExpr().toString(event, debug);
     }
 }
