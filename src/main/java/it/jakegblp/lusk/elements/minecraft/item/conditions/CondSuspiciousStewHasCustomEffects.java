@@ -12,7 +12,7 @@ import static it.jakegblp.lusk.utils.ItemUtils.hasSuspiciousStewPotionEffects;
 @Name("Suspicious Stew - has Custom Potion Effects")
 @Description("Checks if the provided suspicious stews have any custom potion effects.")
 @Examples({"if tool of player has custom potion effects:"})
-@Since("1.3.2")
+@Since("1.3.3")
 @SuppressWarnings("unused")
 public class CondSuspiciousStewHasCustomEffects extends PropertyCondition<ItemType> {
 

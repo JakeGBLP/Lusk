@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.ItemUtils.setArmorColor;
 @Name("Armor - Color")
 @Description("Gets the color of the provided armor items.\nThis works for leather armor, horse leather armor and wolf armor.\nCan be set.")
 @Examples("if chestplate of player is dyed:")
-@Since("1.3.2")
+@Since("1.3.3")
 public class ExprArmorColor extends SimplerPropertyExpression<ItemType, Color> {
 
     static {

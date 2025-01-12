@@ -28,7 +28,7 @@ import java.util.Arrays;
         Remove and remove all can take either potion effects or potion effect types.
         """)
 @Examples("set suspicious stew potion effects to strength potion effect of strength of tier 1 for 15 seconds")
-@Since("1.3.2")
+@Since("1.3.3")
 public class ExprSuspiciousStewCustomPotionEffects extends PropertyExpression<ItemType, PotionEffect> {
 
     static {

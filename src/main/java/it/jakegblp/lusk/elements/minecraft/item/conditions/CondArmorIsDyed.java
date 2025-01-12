@@ -17,7 +17,7 @@ This works for leather armor, horse leather armor and wolf armor.
 This might not work correctly on Spigot.
 """)
 @Examples("if chestplate of player is dyed:")
-@Since("1.3.2")
+@Since("1.3.3")
 public class CondArmorIsDyed extends PropertyCondition<ItemType> {
 
     static {
