@@ -167,7 +167,8 @@ public class PDCApi {
         return new Nested(container, key);
     }
 
-    public static boolean hasTag(@NotNull String tag, @NotNull PersistentDataContainer container) {
+    @NullMarked
+    public static boolean hasTag(String tag, PersistentDataContainer container) {
         return getNestedContainer(container, tag) != null;
     }
 
