@@ -12,6 +12,7 @@ import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.jetbrains.annotations.Nullable;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 import static it.jakegblp.lusk.utils.LuskUtils.getKleenean;
 
 @Name("Block - Liquid Level")
@@ -36,7 +37,7 @@ Reset requires Paper.
 public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integer> {
 
     static {
-        register(ExprBlockLiquidLevel.class, Integer.class, "["+(isPaper() ? " (:max|:min)" : "max:max")+"[imum]] block [liquid] level", "blocks/itemtypes/blockdatas/blockstates");
+        register(ExprBlockLiquidLevel.class, Integer.class, "["+(PAPER_HAS_1_18_2_EXTENDED_ENTITY_API ? " (:max|:min)" : "max:max")+"[imum]] block [liquid] level", "blocks/itemtypes/blockdatas/blockstates");
     }
 
     Kleenean max;

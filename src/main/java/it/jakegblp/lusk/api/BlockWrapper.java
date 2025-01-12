@@ -20,6 +20,7 @@ import java.util.List;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemType;
 import static it.jakegblp.lusk.utils.LuskUtils.warning;
@@ -264,7 +265,7 @@ public class BlockWrapper {
 
     public void setLiquidLevel(int level) {
         if (getBlockData() instanceof Levelled levelled && level <= levelled.getMaximumLevel()
-                && (!isPaper() || level >= levelled.getMinimumLevel())) {
+                && (!PAPER_HAS_1_18_2_EXTENDED_ENTITY_API || level >= levelled.getMinimumLevel())) {
             try {
                 levelled.setLevel(level);
             } catch (IllegalArgumentException e) {
