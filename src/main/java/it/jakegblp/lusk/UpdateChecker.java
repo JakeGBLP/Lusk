@@ -65,7 +65,7 @@ public class UpdateChecker implements Listener {
                 Bukkit.getScheduler().runTaskLater(UpdateChecker.this.plugin, () -> getUpdateVersion(true).thenApply(version -> {
                     send(player,"Lusk is &c&lOUTDATED&f!");
                     send(player,"New version: {0}", version);
-                    send(player,"Download at: https://github.com/JakeGBLP/Lusk/releases");
+                    send(player,"Download at: https://modrinth.com/plugin/lusk/versions");
                     return true;
                 }), 30);
             }
@@ -81,7 +81,7 @@ public class UpdateChecker implements Listener {
             }
             consoleLog("&a&lUpdate Available:");
             consoleLog(" &l»&c   {0} &7→&a {1}",this.pluginVersion,version);
-            consoleLog(" &l»&7 Download at: https://github.com/JakeGBLP/Lusk/releases");
+            consoleLog(" &l»&7 Download at: https://modrinth.com/plugin/lusk/versions");
             return true;
         }).exceptionally(throwable -> {
             consoleLog("&aLusk is up to date!");
