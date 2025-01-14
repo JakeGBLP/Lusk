@@ -14,7 +14,8 @@ public class RabbitClassInfos {
                             .getClassInfo("rabbittype")
                             .user("rabbit ?(variant|type)s?")
                             .description("All the Rabbit Types.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("RabbitType"));
         }
 
     }
