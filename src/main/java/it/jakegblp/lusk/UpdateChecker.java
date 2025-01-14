@@ -116,24 +116,25 @@ public class UpdateChecker implements Listener {
         CompletableFuture<Version> future = new CompletableFuture<>();
         if (async) {
             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                Version latest = getLatestVersionFromGitHub();
+                Version latest = getLatestVersionFromModrinth();
                 if (latest == null) future.cancel(true);
                 future.complete(latest);
             });
         } else {
-            Version latest = getLatestVersionFromGitHub();
+            Version latest = getLatestVersionFromModrinth();
             if (latest == null) future.cancel(true);
             future.complete(latest);
         }
         return future;
     }
 
-    private @Nullable Version getLatestVersionFromGitHub() {
+    private @Nullable Version getLatestVersionFromModrinth() {
         try {
-            URL url = GET_URL_METHOD.apply("https://api.github.com/repos/JakeGBLP/Lusk/releases/latest");
+            URL url = GET_URL_METHOD.apply("https://api.modrinth.com/v3/project/Lusk/version");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
-            String tag_name = jsonObject.get("tag_name").getAsString();
+            JsonArray jsonArray = new Gson().fromJson(reader, JsonArray.class);
+            JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
+            String tag_name = jsonObject.get("version_number").getAsString();
             return new Version(tag_name);
         } catch (IOException e) {
             consoleLog("&cChecking for update failed!");
