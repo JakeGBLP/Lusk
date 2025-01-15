@@ -13,8 +13,10 @@ public class LlamaClassInfos {
                     new EnumRegistryWrapper(Llama.Color.class, null, "llama_color")
                             .getClassInfo("llamacolor")
                             .user("llama ?(variant|colou?r|type)s?")
+                            .name("Llama - Color")
                             .description("All the Llama colors.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("LlamaColor"));
         }
 
     }

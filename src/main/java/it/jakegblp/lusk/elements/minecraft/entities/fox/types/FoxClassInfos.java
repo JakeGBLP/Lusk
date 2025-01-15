@@ -13,8 +13,10 @@ public class FoxClassInfos {
                     new EnumRegistryWrapper(Fox.Type.class, null, "fox_type")
                             .getClassInfo("foxtype")
                             .user("fox ?(variant|colou?r|type)s?")
+                            .name("Fox - Type")
                             .description("All the Fox Types.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("FoxType"));
         }
 
     }

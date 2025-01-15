@@ -14,8 +14,10 @@ public class WolfClassInfos {
                     new EnumRegistryWrapper(Wolf.Variant.class, null, "wolf_variant")
                             .getClassInfo("wolfvariant")
                             .user("wolf ?(variant|type)s?")
+                            .name("Wolf - Variant")
                             .description("All the Wolf Variants.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("WolfVariant"));
         }
     }
 }

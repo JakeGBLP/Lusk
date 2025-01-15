@@ -13,8 +13,10 @@ public class FrogClassInfos {
                     new EnumRegistryWrapper(Frog.Variant.class, null, "frog_variant")
                             .getClassInfo("frogvariant")
                             .user("frog ?(variant|colou?r|temperature)s?")
+                            .name("Frog - Variant")
                             .description("All the Frog Variants.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("FrogVariant"));
         }
 
     }

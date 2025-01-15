@@ -13,16 +13,20 @@ public class HorseClassInfos {
                     new EnumRegistryWrapper(Horse.Color.class, null, "horse_color")
                             .getClassInfo("horsecolor")
                             .user("horse ?colou?rs?")
+                            .name("Horse - Color")
                             .description("All the Horse Colors.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("HorseColor"));
         }
         if (Skript.classExists("org.bukkit.entity.Horse$Style") && Classes.getExactClassInfo(Horse.Style.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(Horse.Style.class, null, "horse_style")
                             .getClassInfo("horsestyle")
                             .user("horse ?styles?")
+                            .name("Horse - Style")
                             .description("All the Horse Styles.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("HorseStyle"));
         }
     }
 }

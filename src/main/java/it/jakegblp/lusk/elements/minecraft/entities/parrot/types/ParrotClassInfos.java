@@ -13,8 +13,10 @@ public class ParrotClassInfos {
                     new EnumRegistryWrapper(Parrot.Variant.class, null, "parrot_variant")
                             .getClassInfo("parrotvariant")
                             .user("parrot ?(variant|colou?r|type)s?")
+                            .name("Parrot - Variant")
                             .description("All the Parrot Variants.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("ParrotVariant"));
         }
 
     }
