@@ -72,6 +72,10 @@ public class Constants {
              */
             SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
             /**
+             * Whether the current skript version is greater than or equal to 2.10
+             */
+            SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.10")),
+            /**
              * Whether the current server version is greater than or equal to 1.18.2
              */
             MINECRAFT_1_18_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.18.2")),
