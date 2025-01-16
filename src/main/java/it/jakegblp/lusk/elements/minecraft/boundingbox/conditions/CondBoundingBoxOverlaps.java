@@ -44,7 +44,7 @@ public class CondBoundingBoxOverlaps extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return boundingBox1.check(event, box1 -> boundingBox2.check(event, box1::overlaps), isNegated());
+        return boundingBox1.check(event, box1 -> boundingBox2.check(event, box1::overlaps, isNegated()));
     }
 
     @Override
