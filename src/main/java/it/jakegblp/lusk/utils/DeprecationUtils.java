@@ -55,6 +55,7 @@ public class DeprecationUtils {
         return getTicks(timespan) * 50;
     }
 
+    @lombok.SneakyThrows
     public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
         if (SKRIPT_2_10) {
             return expr.check(event, predicate);
@@ -76,7 +77,7 @@ public class DeprecationUtils {
                 Method checkMethod = expr.getClass().getMethod("check", Event.class, checkerClass);
                 return (boolean) checkMethod.invoke(expr, event, checkerInstance);
             } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
-                throw new RuntimeException("Could not create instance of Checker.", e);
+                throw e;
             }
         }
     }
