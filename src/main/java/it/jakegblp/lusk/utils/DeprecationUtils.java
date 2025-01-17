@@ -1,9 +1,7 @@
 package it.jakegblp.lusk.utils;
 
-import ch.njol.skript.lang.Expression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Checker;
-import org.bukkit.event.Event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,23 +51,36 @@ public class DeprecationUtils {
         return getTicks(timespan) * 50;
     }
 
-    @lombok.SneakyThrows
-    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
+    public static <P extends Predicate<T>,T> P asPredicateOrChecker(P predicate) {
         if (SKRIPT_2_10) {
-            return expr.check(event, predicate);
+            return predicate;
         } else {
-            //return expr.check(event, (ch.njol.util.Checker<T>) predicate);
-            return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
+            return (P) new Checker<T>() {
+                @Override
+                public boolean check(T o) {
+                    return predicate.test(o);
+                }
+            };
         }
     }
 
-    @lombok.SneakyThrows
-    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate, boolean negated) {
-        if (SKRIPT_2_10) {
-            return expr.check(event, predicate, negated);
-        } else {
-            //return expr.check(event, (ch.njol.util.Checker<T>) predicate, negated);
-            return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
-        }
-    }
+    //@lombok.SneakyThrows
+    //public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
+    //    if (SKRIPT_2_10) {
+    //        return expr.check(event, predicate);
+    //    } else {
+    //        //return expr.check(event, (ch.njol.util.Checker<T>) predicate);
+    //        return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
+    //    }
+    //}
+//
+    //@lombok.SneakyThrows
+    //public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate, boolean negated) {
+    //    if (SKRIPT_2_10) {
+    //        return expr.check(event, predicate, negated);
+    //    } else {
+    //        //return expr.check(event, (ch.njol.util.Checker<T>) predicate, negated);
+    //        return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
+    //    }
+    //}
 }
