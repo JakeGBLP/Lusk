@@ -44,9 +44,9 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(latestJava))
 }
 
-//tasks.withType(JavaCompile).configureEach {
-//    options.compilerArgs += ['-source', '' + oldestJava, '-target', '' + oldestJava]
-//}
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-source', '' + oldestJava, '-target', '' + oldestJava]
+}
 
 processResources {
     filter(ReplaceTokens, tokens: [version: version])
