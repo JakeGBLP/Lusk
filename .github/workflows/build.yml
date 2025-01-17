@@ -18,14 +18,11 @@ jobs:
         uses: sdkman/sdkman-action@main
         with:
           candidate: gradle
-          version: 8.6
+          version: 7.3.3
       - name: Generate Gradle wrapper
         run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Set Gradle version
-        run: |
-          sed -i 's/distributionUrl=.*/distributionUrl=https\:\/\/services.gradle.org\/distributions\/gradle-7.3.3-bin.zip/' gradle/wrapper/gradle-wrapper.properties
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload artifacts
