@@ -162,7 +162,7 @@ public class Constants {
         put(109, parseVersion("1.9.2"));
         put(110, parseVersion("1.9.4"));
         put(210, parseVersion("1.10.2"));
-        put(315, parseVersion("1.11.0"));
+        put(315, parseVersion("1.11"));
         put(316, parseVersion("1.11.2"));
         put(335, parseVersion("1.12.0"));
         put(338, parseVersion("1.12.1"));
@@ -170,7 +170,7 @@ public class Constants {
         put(393, parseVersion("1.13"));
         put(401, parseVersion("1.13.1"));
         put(404, parseVersion("1.13.2"));
-        put(477, parseVersion("1.14.0"));
+        put(477, parseVersion("1.14"));
         put(480, parseVersion("1.14.1"));
         put(485, parseVersion("1.14.2"));
         put(490, parseVersion("1.14.3"));
@@ -178,7 +178,7 @@ public class Constants {
         put(573, parseVersion("1.15"));
         put(575, parseVersion("1.15.1"));
         put(577, parseVersion("1.15.2"));
-        put(735, parseVersion("1.16.0"));
+        put(735, parseVersion("1.16"));
         put(736, parseVersion("1.16.1"));
         put(751, parseVersion("1.16.2"));
         put(753, parseVersion("1.16.3"));

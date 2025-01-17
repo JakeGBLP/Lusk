@@ -19,6 +19,7 @@ import static it.jakegblp.lusk.utils.Constants.*;
 public class LuskUtils {
 
     public static Semver parseVersion(String s) {
+        if (s.matches("^\\d+.\\d+$")) s += ".0";
         return new Semver(s, Semver.SemverType.LOOSE);
     }
 

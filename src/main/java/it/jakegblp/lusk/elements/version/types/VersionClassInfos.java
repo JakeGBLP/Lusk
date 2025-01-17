@@ -49,7 +49,9 @@ public class VersionClassInfos {
 
                         @Override
                         public @NotNull String toVariableNameString(final Semver v) {
-                            return v.toString();
+                            String s = v.toString();
+                            if (s.endsWith(".0")) s = s.substring(0, s.length() - 2);
+                            return s;
                         }
 
                         @Override
