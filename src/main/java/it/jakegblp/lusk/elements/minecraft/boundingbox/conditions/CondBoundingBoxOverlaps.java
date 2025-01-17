@@ -14,9 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
-
-import static it.jakegblp.lusk.utils.DeprecationUtils.asPredicateOrChecker;
+import static it.jakegblp.lusk.utils.DeprecationUtils.test;
 
 @Name("Bounding Box - Overlaps")
 @Description("Whether or not one or more bounding boxes overlap other bounding boxes.\nBounding boxes that are only intersecting at the borders are not considered overlapping.")
@@ -48,7 +46,7 @@ public class CondBoundingBoxOverlaps extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return boundingBox1.check(event, asPredicateOrChecker((Predicate<BoundingBox>) box1 -> boundingBox2.check(event, asPredicateOrChecker((Predicate<BoundingBox>) box1::overlaps))), isNegated());
+        return test(event,boundingBox1, box1 -> test(event, boundingBox2, box1::overlaps), isNegated());
     }
 
     @Override
