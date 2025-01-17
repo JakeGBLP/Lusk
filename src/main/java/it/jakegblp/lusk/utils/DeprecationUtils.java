@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.Variable;
 import ch.njol.skript.util.Timespan;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +58,8 @@ public class DeprecationUtils {
     public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
         if (SKRIPT_2_10) {
             return expr.check(event, predicate);
+        } else if (expr instanceof Variable<T> variable) {
+            return variable.check(event, predicate);
         } else {
             try {
                 Class<?> checkerClass = Class.forName("ch.njol.util.Checker");
