@@ -22,7 +22,7 @@ jobs:
         uses: sdkman/sdkman-action@main
         with:
           candidate: gradle
-          version: 8.6
+          version: 8.9
       - name: Generate Gradle wrapper
         run: gradle wrapper
       - name: Grant execute permission for gradlew
