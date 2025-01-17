@@ -4,6 +4,7 @@ import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.api.events.AnvilGuiClickEvent;
 import it.jakegblp.lusk.api.events.AnvilGuiCloseEvent;
 import it.jakegblp.lusk.api.events.AnvilGuiOpenEvent;
+import lombok.Getter;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.Bukkit;
@@ -19,12 +20,17 @@ import java.util.stream.Collectors;
 public class AnvilGuiWrapper {
     private static final Map<AnvilGuiWrapper, Set<UUID>> OPEN_GUIS = new HashMap<>();
 
+    @Getter
     private final AnvilGUI.Builder builder;
+    @Getter
     private AnvilGUI anvilGUI;
+    @Getter
     private String title, text;
+    @Getter
     private ItemStack left, right, output;
     private int[] interactableSlots = null;
     private boolean isClosing;
+    @Getter
     private boolean preventsClose;
 
     public AnvilGuiWrapper() {
@@ -50,10 +56,6 @@ public class AnvilGuiWrapper {
         this.isClosing = this.preventsClose = false;
         this.anvilGUI = null;
         this.interactableSlots = anvilGuiWrapper.interactableSlots;
-    }
-
-    public AnvilGUI.Builder getBuilder() {
-        return builder;
     }
 
     public void open(Player... players) {
@@ -180,25 +182,9 @@ public class AnvilGuiWrapper {
         preventsClose = true;
     }
 
-    public boolean isPreventsClose() {
-        return preventsClose;
-    }
-
-    public AnvilGUI getAnvilGUI() {
-        return anvilGUI;
-    }
-
-    public ItemStack getLeft() {
-        return left;
-    }
-
     public void setLeft(ItemStack left) {
         this.left = left;
         this.builder.itemLeft(left);
-    }
-
-    public ItemStack getRight() {
-        return right;
     }
 
     public void setRight(ItemStack right) {
@@ -206,26 +192,14 @@ public class AnvilGuiWrapper {
         this.builder.itemRight(right);
     }
 
-    public ItemStack getOutput() {
-        return output;
-    }
-
     public void setOutput(ItemStack output) {
         this.output = output;
         this.builder.itemOutput(output);
     }
 
-    public String getText() {
-        return text;
-    }
-
     public void setText(String text) {
         this.text = text;
         this.builder.text(text);
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(@NotNull String title) {
