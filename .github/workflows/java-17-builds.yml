@@ -10,17 +10,21 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: validate gradle wrapper
-        uses: gradle/wrapper-validation-action@v2
-      - name: Set up JDK 21
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: 21
           distribution: 'adopt'
           cache: gradle
+      - name: Install Gradle
+        uses: sdkman/sdkman-action@main
+        with:
+          candidate: gradle
+          version: 8.6
+      - name: Generate Gradle wrapper
+        run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Skript and run test scripts
