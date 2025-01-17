@@ -8,14 +8,11 @@ import com.vdurmont.semver4j.Semver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Pattern;
-
+import static it.jakegblp.lusk.utils.Constants.REGEX_VERSION;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 
 @SuppressWarnings("unused")
 public class VersionClassInfos {
-    // todo: move this to constants class
-    public static final Pattern VERSION_PATTERN = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?[-+a-zA-Z0-9.]*$");
 
     static {
         if (Classes.getExactClassInfo(Semver.class) == null)
@@ -33,7 +30,7 @@ public class VersionClassInfos {
                         @Nullable
                         public Semver parse(final @NotNull String s, final @NotNull ParseContext context) {
                             if (s.isEmpty()) return null;
-                            if (VERSION_PATTERN.matcher(s).matches()) return parseVersion(s);
+                            if (REGEX_VERSION.matcher(s).matches()) return parseVersion(s);
                             return null;
                         }
 

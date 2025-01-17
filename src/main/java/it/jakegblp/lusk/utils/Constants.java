@@ -27,6 +27,7 @@ import static ch.njol.skript.Skript.classExists;
 import static ch.njol.skript.Skript.methodExists;
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
+import static it.jakegblp.lusk.utils.LuskUtils.parseVersionTruncated;
 import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
 
 public class Constants {
@@ -35,9 +36,14 @@ public class Constants {
 
     public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
 
+    public static final Pattern
+            REGEX_TRUNCATED_VERSION = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?"),
+            REGEX_VERSION = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?[-+a-zA-Z0-9.]*$"),
+            REGEX_NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
+
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            VERSION_SKRIPT = parseVersion(Skript.getVersion().toString()),
+            VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
             OLDEST_SUPPORTED = parseVersion("1.16"),
             NEWEST_SUPPORTED = parseVersion("1.21.4");
 
@@ -146,7 +152,6 @@ public class Constants {
             ARMOR_STAND_TYPES = "livingentity" + (PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
             LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
-    public static final Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
     public static final ExpressionType EVENT_OR_SIMPLE = SKRIPT_2_8 ? ExpressionType.EVENT : ExpressionType.SIMPLE;
 
