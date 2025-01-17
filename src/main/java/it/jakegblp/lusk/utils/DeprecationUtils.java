@@ -1,10 +1,13 @@
 package it.jakegblp.lusk.utils;
 
+import ch.njol.skript.lang.Expression;
 import ch.njol.skript.util.Timespan;
-import ch.njol.util.Checker;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -51,36 +54,38 @@ public class DeprecationUtils {
         return getTicks(timespan) * 50;
     }
 
-    public static <P extends Predicate<T>,T> P asPredicateOrChecker(P predicate) {
+    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
         if (SKRIPT_2_10) {
-            return predicate;
+            return expr.check(event, predicate);
         } else {
-            return (P) new Checker<T>() {
-                @Override
-                public boolean check(T o) {
-                    return predicate.test(o);
-                }
-            };
+            try {
+                Class<?> checkerClass = Class.forName("ch.njol.util.Checker");
+
+                Object checkerInstance = Proxy.newProxyInstance(
+                        checkerClass.getClassLoader(),
+                        new Class<?>[]{checkerClass},
+                        (proxy, method, args) -> {
+                            if ("check".equals(method.getName()) && args.length == 1) {
+                                return predicate.test((T) args[0]);
+                            }
+                            return null;
+                        }
+                );
+
+                Method checkMethod = expr.getClass().getMethod("check", Event.class, checkerClass);
+                return (boolean) checkMethod.invoke(expr, event, checkerInstance);
+            } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
+                throw new RuntimeException("Could not create instance of Checker.", e);
+            }
         }
     }
 
-    //@lombok.SneakyThrows
-    //public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
-    //    if (SKRIPT_2_10) {
-    //        return expr.check(event, predicate);
-    //    } else {
-    //        //return expr.check(event, (ch.njol.util.Checker<T>) predicate);
-    //        return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
-    //    }
-    //}
-//
-    //@lombok.SneakyThrows
-    //public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate, boolean negated) {
-    //    if (SKRIPT_2_10) {
-    //        return expr.check(event, predicate, negated);
-    //    } else {
-    //        //return expr.check(event, (ch.njol.util.Checker<T>) predicate, negated);
-    //        return (Boolean) expr.getClass().getMethod("check", Event.class, Checker.class).invoke(expr, event, (Checker<T>) predicate::test);
-    //    }
-    //}
+    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate, @Nullable Boolean negated) {
+        boolean bool = test(event, expr, predicate);
+        if (negated != null) {
+            return bool ^ negated;
+        }
+        return bool;
+    }
+
 }
