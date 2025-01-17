@@ -18,18 +18,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AnvilGuiWrapper {
+
     private static final Map<AnvilGuiWrapper, Set<UUID>> OPEN_GUIS = new HashMap<>();
 
     @Getter
     private final AnvilGUI.Builder builder;
+
     @Getter
     private AnvilGUI anvilGUI;
+
     @Getter
     private String title, text;
+
     @Getter
     private ItemStack left, right, output;
+
     private int[] interactableSlots = null;
+
     private boolean isClosing;
+
     @Getter
     private boolean preventsClose;
 
