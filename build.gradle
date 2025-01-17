@@ -88,10 +88,10 @@ void createTestTask(String name, String desc, String environments, int javaVersi
                 project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
                 sourceSets.main.runtimeClasspath
         ])
-        main = 'ch.njol.skript.test.platform.PlatformMain'
+        main = 'it.jakegblp.lusk.test.platform.PlatformMain'
         args = [
                 'build/test_runners',
-                'src/test/skript/tests',
+                'src/test/scripts',
                 'src/test/resources/runner_data',
                 environments,
                 project.findProperty('verbosity') ?: "null",
@@ -111,5 +111,5 @@ void createTestTask(String name, String desc, String environments, int javaVersi
     }
 }
 
-String environments = 'src/test/skript/environments/'
+String environments = 'src/test/environments/'
 createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'java17', java17, 0)
