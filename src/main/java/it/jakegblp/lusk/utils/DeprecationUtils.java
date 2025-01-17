@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.LuskUtils.warning;
 
 public class DeprecationUtils {
 
@@ -57,6 +58,7 @@ public class DeprecationUtils {
 
     @lombok.SneakyThrows
     public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
+        warning("skript version: {0}, >= 2.10: {1}", VERSION_SKRIPT, SKRIPT_2_10);
         if (SKRIPT_2_10) {
             return expr.check(event, predicate);
         } else {
