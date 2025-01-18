@@ -35,7 +35,7 @@ dependencies {
     implementation('com.vdurmont:semver4j:3.1.0')
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
-    testImplementation  'com.google.code.gson:gson:2.11.0'
+    testImplementation 'com.google.code.gson:gson:2.11.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -45,7 +45,7 @@ dependencies {
 }
 
 configurations {
-    testImplementation.extendsFrom testShadow
+    testImplementation.extendsFrom shadow
 }
 
 java {
