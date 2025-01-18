@@ -47,7 +47,7 @@ public class PlatformMain {
 		long timeout = Long.parseLong(args[5]);
 		if (timeout < 0)
 			timeout = 0;
-		Set<String> jvmArgs = Sets.newHashSet(Arrays.copyOfRange(args, 10, args.length));
+		Set<String> jvmArgs = Sets.newHashSet(Arrays.copyOfRange(args, 6, args.length));
 		if (jvmArgs.stream().noneMatch(arg -> arg.contains("-Xmx")))
 			jvmArgs.add("-Xmx5G");
 
