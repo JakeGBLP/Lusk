@@ -9,7 +9,6 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,14 +35,10 @@ public class PlatformMain {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		Path runnerRoot = Paths.get(args[0]);
-		assert runnerRoot != null;
-		Path testsRoot = Paths.get(args[1]).toAbsolutePath();
-		assert testsRoot != null;
-		Path dataRoot = Paths.get(args[2]);
-		assert dataRoot != null;
-		Path envsRoot = Paths.get(args[3]);
-		assert envsRoot != null;
-		String verbosity = args[4].toUpperCase(Locale.ENGLISH);
+        Path testsRoot = Paths.get(args[1]).toAbsolutePath();
+        Path dataRoot = Paths.get(args[2]);
+        Path envsRoot = Paths.get(args[3]);
+        String verbosity = args[4].toUpperCase(Locale.ENGLISH);
 		long timeout = Long.parseLong(args[5]);
 		if (timeout < 0)
 			timeout = 0;
@@ -57,17 +52,15 @@ public class PlatformMain {
 			envs = Files.walk(envsRoot).filter(path -> !Files.isDirectory(path))
 					.map(path -> {
 						try {
-							return gson.fromJson(new String(Files.readAllBytes(path), StandardCharsets.UTF_8), Environment.class);
+							return gson.fromJson(Files.readString(path), Environment.class);
 						} catch (JsonSyntaxException | IOException e) {
 							throw new RuntimeException(e);
 						}
 					}).collect(Collectors.toList());
 		} else {
-			envs = Collections.singletonList(gson.fromJson(new String(
-					Files.readAllBytes(envsRoot),StandardCharsets.UTF_8), Environment.class));
+			envs = Collections.singletonList(gson.fromJson(Files.readString(envsRoot), Environment.class));
 		}
-		System.out.println("Test environments: " + String.join(", ",
-				envs.stream().map(Environment::getName).collect(Collectors.toList())));
+		System.out.println("Test environments: " + envs.stream().map(Environment::getName).collect(Collectors.joining(", ")));
 		
 		Set<String> allTests = new HashSet<>();
 		Map<String, List<NonNullPair<Environment, String>>> failures = new HashMap<>();
@@ -104,33 +97,33 @@ public class PlatformMain {
 		}
 
 		// Sort results in alphabetical order
-		List<String> succeeded = allTests.stream().filter(name -> !failures.containsKey(name)).collect(Collectors.toList());
-		Collections.sort(succeeded);
-		List<String> failNames = new ArrayList<>(failures.keySet());
+		List<String> succeeded = allTests.stream().filter(name -> !failures.containsKey(name)).sorted().collect(Collectors.toList());
+        List<String> failNames = new ArrayList<>(failures.keySet());
 		Collections.sort(failNames);
 
 		// All succeeded tests in a single line
-		StringBuilder output = new StringBuilder(String.format("%s Results %s%n", StringUtils.repeat("-", 25), StringUtils.repeat("-", 25)));
-		output.append("\nTested environments: " + String.join(", ",
-				envs.stream().map(Environment::getName).collect(Collectors.toList())));
-		output.append("\nSucceeded:\n  " + String.join(( ", "), succeeded));
+		StringBuilder output = new StringBuilder(String.format("%s Results %s%n", StringUtils.repeat("-", 25), StringUtils.repeat("-", 25)))
+				.append("\nTested environments: ")
+				.append(envs.stream().map(Environment::getName).collect(Collectors.joining(", ")))
+				.append("\nSucceeded:\n  ")
+				.append(String.join((", "), succeeded));
 
 		if (!failNames.isEmpty()) { // More space for failed tests, they're important
 			output.append("\nFailed:");
 			for (String failed : failNames) {
 				List<NonNullPair<Environment, String>> errors = failures.get(failed);
-				output.append("\n  " + failed + " (on " + errors.size() + " environment" + (errors.size() == 1 ? "" : "s") + ")");
+				output.append("\n  ").append(failed).append(" (on ").append(errors.size()).append(" environment").append(errors.size() == 1 ? "" : "s").append(")");
 				for (NonNullPair<Environment, String> error : errors) {
-					output.append("\n    " + error.getSecond() + " (on " + error.getFirst().getName() + ")");
+					output.append("\n    ").append(error.getSecond()).append(" (on ").append(error.getFirst().getName()).append(")");
 				}
 			}
 			output.append(String.format("%n%n%s", StringUtils.repeat("-", 60)));
-			System.err.print(output.toString());
+			System.err.print(output);
 			System.exit(failNames.size()); // Error code to indicate how many tests failed.
 			return;
 		}
 		output.append(String.format("%n%n%s", StringUtils.repeat("-", 60)));
-		System.out.print(output.toString());
+		System.out.print(output);
 	}
 
 }

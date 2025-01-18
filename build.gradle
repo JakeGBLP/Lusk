@@ -35,6 +35,7 @@ dependencies {
     implementation('com.vdurmont:semver4j:3.1.0')
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
+    implementation 'com.google.code.gson:gson:2.11.0'
     testImplementation 'com.google.code.gson:gson:2.11.0'
     testImplementation 'com.google.guava:guava:32.1.2-jre'
 
@@ -109,4 +110,4 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, 0)
+createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, -1)
