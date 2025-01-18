@@ -79,8 +79,9 @@ tasks.build {
 // Create a test task with given name, environments dir/file, dev mode and java version.
 // -1 on the timeout means it'll be disabled.
 void createTestTask(String name, String desc, String environments, int javaVersion, long timeout) {
-    if (timeout == 0)
+    if (timeout == 0) {
         timeout = 300000 // 5 minutes
+    }
     def artifact = 'build' + File.separator + 'libs' + File.separator + 'Lusk-nightly.jar'
     tasks.register(name, JavaExec) {
         description = desc
@@ -91,8 +92,8 @@ void createTestTask(String name, String desc, String environments, int javaVersi
         group = 'execution'
         classpath = files([
                 artifact,
-                project.configurations.runtimeClasspath.find { it.name.startsWith('gson') },
-                sourceSets.main.runtimeClasspath
+                sourceSets.main.runtimeClasspath,
+                configurations.testRuntimeClasspath // Includes test dependencies like Gson
         ])
         main = 'it.jakegblp.lusk.test.platform.PlatformMain'
         args = [
