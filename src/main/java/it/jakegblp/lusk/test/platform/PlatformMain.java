@@ -43,12 +43,8 @@ public class PlatformMain {
 		assert dataRoot != null;
 		Path envsRoot = Paths.get(args[3]);
 		assert envsRoot != null;
-		boolean devMode = "true".equals(args[4]);
-		boolean genDocs = "true".equals(args[5]);
-		boolean jUnit = "true".equals(args[6]);
-		boolean debug = "true".equals(args[7]);
-		String verbosity = args[8].toUpperCase(Locale.ENGLISH);
-		long timeout = Long.parseLong(args[9]);
+		String verbosity = args[4].toUpperCase(Locale.ENGLISH);
+		long timeout = Long.parseLong(args[5]);
 		if (timeout < 0)
 			timeout = 0;
 		Set<String> jvmArgs = Sets.newHashSet(Arrays.copyOfRange(args, 10, args.length));
@@ -82,13 +78,8 @@ public class PlatformMain {
 		for (Environment env : envs) {
 			System.out.println("Starting testing on " + env.getName());
 			env.initialize(dataRoot, runnerRoot, false);
-			TestResults results = env.runTests(runnerRoot, testsRoot, devMode, genDocs, jUnit, debug, verbosity, timeout, jvmArgs);
+			TestResults results = env.runTests(runnerRoot, testsRoot, verbosity, timeout, jvmArgs);
 			if (results == null) {
-				if (devMode) {
-					// Nothing to report, it's the dev mode environment.
-					System.exit(0);
-					return;
-				}
 				System.err.println("The test environment '" + env.getName() + "' failed to produce test results.");
 				System.exit(3);
 				return;
@@ -112,12 +103,6 @@ public class PlatformMain {
 			return;
 		}
 
-		// Task was to generate docs, no test results other than docsFailed.
-		if (genDocs) {
-			System.exit(0);
-			return;
-		}
-
 		// Sort results in alphabetical order
 		List<String> succeeded = allTests.stream().filter(name -> !failures.containsKey(name)).collect(Collectors.toList());
 		Collections.sort(succeeded);
@@ -128,7 +113,7 @@ public class PlatformMain {
 		StringBuilder output = new StringBuilder(String.format("%s Results %s%n", StringUtils.repeat("-", 25), StringUtils.repeat("-", 25)));
 		output.append("\nTested environments: " + String.join(", ",
 				envs.stream().map(Environment::getName).collect(Collectors.toList())));
-		output.append("\nSucceeded:\n  " + String.join((jUnit ? "\n  " : ", "), succeeded));
+		output.append("\nSucceeded:\n  " + String.join(( ", "), succeeded));
 
 		if (!failNames.isEmpty()) { // More space for failed tests, they're important
 			output.append("\nFailed:");

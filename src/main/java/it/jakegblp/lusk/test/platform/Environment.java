@@ -200,7 +200,7 @@ public class Environment {
 	}
 
 	@Nullable
-	public TestResults runTests(Path runnerRoot, Path testsRoot, boolean devMode, boolean genDocs, boolean jUnit, boolean debug,
+	public TestResults runTests(Path runnerRoot, Path testsRoot,
 	                            String verbosity, long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
 		
 		Path env = runnerRoot.resolve(name);
@@ -211,17 +211,10 @@ public class Environment {
 		args.add("-ea");
 		args.add("-Dskript.testing.enabled=true");
 		args.add("-Dskript.testing.dir=" + testsRoot);
-		args.add("-Dskript.testing.devMode=" + devMode);
-		args.add("-Dskript.testing.genDocs=" + genDocs);
-		args.add("-Dskript.testing.junit=" + jUnit);
 		if (!verbosity.equalsIgnoreCase("null"))
 			args.add("-Dskript.testing.verbosity=" + verbosity);
-		if (genDocs)
-			args.add("-Dskript.forceregisterhooks=true");
 		args.add("-Dskript.testing.results=test_results.json");
 		args.add("-Ddisable.watchdog=true");
-		if (debug)
-			args.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000");
 		args.addAll(jvmArgs);
 		args.addAll(Arrays.asList(commandLine));
 
@@ -236,7 +229,7 @@ public class Environment {
 		Runtime.getRuntime().addShutdownHook(new Thread(process::destroy));
 
 		// Catch tests running for abnormally long time
-		if (!devMode && timeout > 0) {
+		if (timeout > 0) {
 			new Timer("runner watchdog", true).schedule(new TimerTask() {
 				@Override
 				public void run() {
