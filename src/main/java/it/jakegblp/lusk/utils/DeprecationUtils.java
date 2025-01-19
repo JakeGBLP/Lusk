@@ -100,19 +100,39 @@ public class DeprecationUtils {
             EventValues.registerEventValue(event, type, function::apply, time);
         } else {
             try {
+
                 Class<?> getterClass = Class.forName("ch.njol.skript.util.Getter");
-                Object getterInstance = Proxy.newProxyInstance(
+
+                Object getterInstance = java.lang.reflect.Proxy.newProxyInstance(
                         getterClass.getClassLoader(),
                         new Class<?>[]{getterClass},
-                        (proxy, method, args) -> {
-                            if ("get".equals(method.getName()) && args != null && args.length == 1) {
-                                Object arg = args[0];
-                                if (type.isInstance(arg)) return function.apply(event.cast(arg));
+                        (proxy, method, methodArgs) -> {
+                            if ("get".equals(method.getName())) {
+                                // Implement the logic for the get method here
+                                return "Value from get method"; // Replace with actual logic
                             }
                             return null;
                         }
                 );
-
+                //Constructor<?> constructor = getterClass.getDeclaredConstructor();
+                //constructor.setAccessible(true);
+                //Object getterInstance = constructor.newInstance();
+//
+                //// Assuming the get method takes an Object as an argument
+                //var method = getterClass.getMethod("get", Object.class);
+                //Object result = method.invoke(getterInstance, new Object()); // Replace with actual argument
+                //Object getterInstance = Proxy.newProxyInstance(
+                //        getterClass.getClassLoader(),
+                //        new Class<?>[]{getterClass},
+                //        (proxy, method, args) -> {
+                //            if ("get".equals(method.getName()) && args != null && args.length == 1) {
+                //                Object arg = args[0];
+                //                if (type.isInstance(arg)) return function.apply(event.cast(arg));
+                //            }
+                //            return null;
+                //        }
+                //);
+//
                 Method registerMethod = EventValues.class.getDeclaredMethod(
                         "registerEventValue",
                         Class.class,
