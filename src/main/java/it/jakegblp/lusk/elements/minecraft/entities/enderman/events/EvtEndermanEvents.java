@@ -3,9 +3,10 @@ package it.jakegblp.lusk.elements.minecraft.entities.enderman.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import com.destroystokyo.paper.event.entity.EndermanAttackPlayerEvent;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtEndermanEvents {
@@ -24,12 +25,7 @@ public class EvtEndermanEvents {
                     .since("1.0.0")
                     .requiredPlugins("Paper");
 
-            EventValues.registerEventValue(EndermanEscapeEvent.class, EndermanEscapeEvent.Reason.class, new Getter<>() {
-                @Override
-                public EndermanEscapeEvent.Reason get(final EndermanEscapeEvent e) {
-                    return e.getReason();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(EndermanEscapeEvent.class, EndermanEscapeEvent.Reason.class, EndermanEscapeEvent::getReason, EventValues.TIME_NOW);
         }
         if (Skript.classExists("com.destroystokyo.paper.event.entity.EndermanAttackPlayerEvent")) {
             Skript.registerEvent("Enderman - on Attack Decide", SimpleEvent.class, EndermanAttackPlayerEvent.class, "enderman [attack] decid(e[d]|ing)", "enderman decid(e[d]|ing) to attack")

@@ -61,7 +61,7 @@ public class DeprecationUtils {
     }
 
     @SuppressWarnings("all")
-    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate) {
+    public static <T> boolean test(Expression<T> expr, Event event, Predicate<T> predicate, Class<T> type) {
         if (SKRIPT_2_10) {
             return expr.check(event, predicate);
         } else {
@@ -73,14 +73,14 @@ public class DeprecationUtils {
                         new Class<?>[]{checkerClass},
                         (proxy, method, args) -> {
                             if ("check".equals(method.getName()) && args != null && args.length == 1) {
-                                return predicate.test((T) args[0]);
+                                Object arg = args[0];
+                                if (type.isInstance(arg)) return predicate.test(type.cast(arg));
                             }
                             return null;
                         }
                 );
 
-                Method checkMethod = expr.getClass().getMethod("check", Event.class, checkerClass);
-                return (boolean) checkMethod.invoke(expr, event, checkerInstance);
+                return (boolean) expr.getClass().getMethod("check", Event.class, checkerClass).invoke(expr, event, checkerInstance);
             } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
                 warning("Something went wrong with a condition: {0}", e.getMessage());
             }
@@ -88,8 +88,8 @@ public class DeprecationUtils {
         return false;
     }
 
-    public static <T> boolean test(Event event, Expression<T> expr, Predicate<T> predicate, @Nullable Boolean negated) {
-        boolean bool = test(event, expr, predicate);
+    public static <T> boolean test(Expression<T> expr, Event event, Predicate<T> predicate, Class<T> type, @Nullable Boolean negated) {
+        boolean bool = test(expr, event, predicate, type);
         if (negated != null) return bool ^ negated;
         return bool;
     }
@@ -106,7 +106,8 @@ public class DeprecationUtils {
                         new Class<?>[]{getterClass},
                         (proxy, method, args) -> {
                             if ("get".equals(method.getName()) && args != null && args.length == 1) {
-                                return function.apply((E) args[0]);
+                                Object arg = args[0];
+                                if (type.isInstance(arg)) return function.apply(event.cast(arg));
                             }
                             return null;
                         }
@@ -120,7 +121,6 @@ public class DeprecationUtils {
                         int.class
                 );
                 registerMethod.invoke(null, event, type, getterInstance, time);
-
             } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
                      IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -144,7 +144,8 @@ public class DeprecationUtils {
                         new Class<?>[]{converterClass},
                         (proxy, method, args) -> {
                             if ("convert".equals(method.getName()) && args != null && args.length == 1) {
-                                return converter.apply((F) args[0]);
+                                Object arg = args[0];
+                                if (from.isInstance(arg)) return converter.apply(from.cast(arg));
                             }
                             return null;
                         }

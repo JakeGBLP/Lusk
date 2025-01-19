@@ -9,10 +9,11 @@ public enum ExtendedPropertyType {
     BE("(is|are)","(isn't|is not|aren't|are not)"),
     CAN("can","(can't|cannot|can not)"),
     HAVE("(has|have)","(doesn't|does not|do not|don't) have"),
-    WILL("will","(will (not|neither)|won't)"),
-    WOULD("would","(would (not|neither)|wouldn't)"),
-    COULD("could","(could (not|neither)|couldn't)"),
-    SHOULD("should","(should (not|neither)|shouldn't)"),;
+    WILL("will","(will not|won't)"),
+    WOULD("would","(would not|wouldn't)"),
+    COULD("could","(could not|couldn't)"),
+    SHOULD("should","(should not|shouldn't)"),
+    WAS("(was|were)","(was not|wasn't|were not|weren't)"),;
 
     private final String normal, negated;
 

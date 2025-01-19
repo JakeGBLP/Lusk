@@ -3,12 +3,12 @@ package it.jakegblp.lusk.elements.minecraft.blocks.dispenser.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.block.BlockFailedDispenseEvent;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
-import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 public class EvtDispenserEvents {
     static {
@@ -17,12 +17,7 @@ public class EvtDispenserEvents {
                     .description("Called when an equipable item is dispensed from a block and equipped on a nearby entity.")
                     .examples("")
                     .since("1.0.0");
-            EventValues.registerEventValue(BlockDispenseArmorEvent.class, Entity.class, new Getter<>() {
-                @Override
-                public Entity get(final BlockDispenseArmorEvent e) {
-                    return e.getTargetEntity();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(BlockDispenseArmorEvent.class, Entity.class, BlockDispenseArmorEvent::getTargetEntity, EventValues.TIME_NOW);
         }
         if (Skript.classExists("io.papermc.paper.event.block.BlockFailedDispenseEvent")) {
             Skript.registerEvent("Dispenser - on Dispense Fail", SimpleEvent.class, BlockFailedDispenseEvent.class, "dispense fail", "failed [to] dispense")
@@ -39,12 +34,7 @@ public class EvtDispenserEvents {
                     .examples("")
                     .requiredPlugins("Paper")
                     .since("1.0.2");
-            EventValues.registerEventValue(BlockPreDispenseEvent.class, Integer.class, new Getter<>() {
-                @Override
-                public @NotNull Integer get(final BlockPreDispenseEvent e) {
-                    return e.getSlot();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(BlockPreDispenseEvent.class, Integer.class, BlockPreDispenseEvent::getSlot, EventValues.TIME_NOW);
         }
     }
 }

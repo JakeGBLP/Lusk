@@ -3,7 +3,6 @@ package it.jakegblp.lusk.elements.minecraft.entities.player.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.slot.CursorSlot;
 import ch.njol.skript.util.slot.DroppedItemSlot;
 import ch.njol.skript.util.slot.InventorySlot;
@@ -26,9 +25,10 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtPlayerEvents {
@@ -44,31 +44,15 @@ public class EvtPlayerEvents {
                 .description("Called when the velocity of a player changes due to outside circumstances.")
                 .examples("on player velocity change:")
                 .since("1.3");
-        EventValues.registerEventValue(PlayerVelocityEvent.class, Vector.class, new Getter<>() {
-
-            @Override
-            public @NotNull Vector get(PlayerVelocityEvent event) {
-                return event.getVelocity();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(PlayerVelocityEvent.class, Vector.class, PlayerVelocityEvent::getVelocity, EventValues.TIME_NOW);
         if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Player - on Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail", "fail[ed] to (sleep|enter [the] bed)")
                     .description("Called when a player attempts to sleep but fails..")
                     .examples("")
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PlayerBedFailEnterEvent.class, Block.class, new Getter<>() {
-                @Override
-                public @NotNull Block get(final PlayerBedFailEnterEvent e) {
-                    return e.getBed();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerBedFailEnterEvent.class, Location.class, new Getter<>() {
-                @Override
-                public @NotNull Location get(final PlayerBedFailEnterEvent e) {
-                    return e.getBed().getLocation();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(PlayerBedFailEnterEvent.class, Block.class, PlayerBedFailEnterEvent::getBed, EventValues.TIME_NOW);
+            registerEventValue(PlayerBedFailEnterEvent.class, Location.class, e -> e.getBed().getLocation(), EventValues.TIME_NOW);
         }
         if (Skript.classExists("io.papermc.paper.event.player.PrePlayerAttackEntityEvent")) {
             Skript.registerEvent("Player - on Pre Damage", SimpleEvent.class, PrePlayerAttackEntityEvent.class, "pre[-| ]damage")
@@ -78,12 +62,7 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PrePlayerAttackEntityEvent.class, Entity.class, new Getter<>() {
-                @Override
-                public @NotNull Entity get(final PrePlayerAttackEntityEvent e) {
-                    return e.getAttacked();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(PrePlayerAttackEntityEvent.class, Entity.class, PrePlayerAttackEntityEvent::getAttacked, EventValues.TIME_NOW);
         }
         if (Skript.classExists("com.destroystokyo.paper.event.player.PlayerPostRespawnEvent")) {
             Skript.registerEvent("Player - on Post-Respawn", SimpleEvent.class, PlayerPostRespawnEvent.class, "post[-| ]respawn")
@@ -92,12 +71,7 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PlayerPostRespawnEvent.class, Location.class, new Getter<>() {
-                @Override
-                public @NotNull Location get(final PlayerPostRespawnEvent e) {
-                    return e.getRespawnedLocation();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(PlayerPostRespawnEvent.class, Location.class, PlayerPostRespawnEvent::getRespawnedLocation, EventValues.TIME_NOW);
         }
         if (Skript.classExists("com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent")) {
             Skript.registerEvent("Whitelist - on Player Profile Verify", SimpleEvent.class, ProfileWhitelistVerifyEvent.class, "[player] [profile] whitelist verify")
@@ -106,15 +80,12 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.2")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(ProfileWhitelistVerifyEvent.class, OfflinePlayer.class, new Getter<>() {
-                @Override
-                public @Nullable OfflinePlayer get(final ProfileWhitelistVerifyEvent e) {
-                    UUID id = e.getPlayerProfile().getId();
-                    if (id != null) {
-                        return Bukkit.getOfflinePlayer(id);
-                    }
-                    return null;
+            registerEventValue(ProfileWhitelistVerifyEvent.class, OfflinePlayer.class, e -> {
+                UUID id = e.getPlayerProfile().getId();
+                if (id != null) {
+                    return Bukkit.getOfflinePlayer(id);
                 }
+                return null; // todo: utils
             }, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.player.PlayerAttemptPickupItemEvent")) {
@@ -132,18 +103,8 @@ public class EvtPlayerEvents {
                             This event is not called for when a block is broken.""")
                     .examples("")
                     .since("1.1.1");
-            EventValues.registerEventValue(PlayerHarvestBlockEvent.class, Block.class, new Getter<>() {
-                @Override
-                public @NotNull Block get(PlayerHarvestBlockEvent event) {
-                    return event.getHarvestedBlock();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerHarvestBlockEvent.class, ItemStack[].class, new Getter<>() {
-                @Override
-                public @NotNull ItemStack[] get(PlayerHarvestBlockEvent event) {
-                    return event.getItemsHarvested().toArray(new ItemStack[0]);
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(PlayerHarvestBlockEvent.class, Block.class, PlayerHarvestBlockEvent::getHarvestedBlock, EventValues.TIME_NOW);
+            registerEventValue(PlayerHarvestBlockEvent.class, ItemStack[].class, e -> e.getItemsHarvested().toArray(new ItemStack[0]), EventValues.TIME_NOW);
         }
 
         Skript.registerEvent("Player - on Inventory Slot Drop", SimpleEvent.class, PlayerInventorySlotDropEvent.class, "player slot drop")
@@ -152,53 +113,20 @@ public class EvtPlayerEvents {
                         """)
                 .examples("")
                 .since("1.3");
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, new Getter<>() {
-            @Override
-            public @NotNull Slot get(PlayerInventorySlotDropEvent event) {
-                if (event.getSlot() >= 36) {
-                    return new ch.njol.skript.util.slot.EquipmentSlot(event.getPlayer(), event.getSlot());
-                } else if (event.isDropsFromCursor()) {
-                    return new CursorSlot(event.getPlayer(), event.getItem());
-                } else {
-                    return new InventorySlot(event.getInventory(), event.getSlot());
-                }
+        registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, e -> {
+            if (e.getSlot() >= 36) {
+                return new ch.njol.skript.util.slot.EquipmentSlot(e.getPlayer(), e.getSlot());
+            } else if (e.isDropsFromCursor()) {
+                return new CursorSlot(e.getPlayer(), e.getItem());
+            } else {
+                return new InventorySlot(e.getInventory(), e.getSlot());
             }
         }, EventValues.TIME_PAST);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, new Getter<>() {
-            @Override
-            public @NotNull Slot get(PlayerInventorySlotDropEvent event) {
-                return new DroppedItemSlot(event.getItemEntity());
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Item.class, new Getter<>() {
-            @Override
-            public @NotNull Item get(PlayerInventorySlotDropEvent event) {
-                return event.getItemEntity();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, new Getter<>() {
-            @Override
-            public @NotNull ItemStack get(PlayerInventorySlotDropEvent event) {
-                return event.getOriginalItem();
-            }
-        }, EventValues.TIME_PAST);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, new Getter<>() {
-            @Override
-            public @NotNull ItemStack get(PlayerInventorySlotDropEvent event) {
-                return event.getItem();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Inventory.class, new Getter<>() {
-            @Override
-            public @NotNull Inventory get(PlayerInventorySlotDropEvent event) {
-                return event.getInventory();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(PlayerInventorySlotDropEvent.class, Integer.class, new Getter<>() {
-            @Override
-            public @NotNull Integer get(PlayerInventorySlotDropEvent event) {
-                return event.getSlot();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(PlayerInventorySlotDropEvent.class, Slot.class, e -> new DroppedItemSlot(e.getItemEntity()), EventValues.TIME_NOW);
+        registerEventValue(PlayerInventorySlotDropEvent.class, Item.class, PlayerInventorySlotDropEvent::getItemEntity, EventValues.TIME_NOW);
+        registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, PlayerInventorySlotDropEvent::getOriginalItem, EventValues.TIME_PAST);
+        registerEventValue(PlayerInventorySlotDropEvent.class, ItemStack.class, PlayerInventorySlotDropEvent::getItem, EventValues.TIME_NOW);
+        registerEventValue(PlayerInventorySlotDropEvent.class, Inventory.class, PlayerInventorySlotDropEvent::getInventory, EventValues.TIME_NOW);
+        registerEventValue(PlayerInventorySlotDropEvent.class, Integer.class, PlayerInventorySlotDropEvent::getSlot, EventValues.TIME_NOW);
     }
 }

@@ -70,6 +70,10 @@ public class Constants {
             HAS_REMOVE_ENCHANTMENTS_METHOD = methodExists(ItemStack.class, "removeEnchantments"),
             HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS = methodExists(BlockBreakEvent.class, "isDropsItems"),
             /**
+             * Whether the current skript version is greater than or equal to 2.7
+             */
+            SKRIPT_2_7 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.7")),
+            /**
              * Whether the current skript version is greater than or equal to 2.8
              */
             SKRIPT_2_8 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.8")),
