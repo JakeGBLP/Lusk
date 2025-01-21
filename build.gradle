@@ -80,6 +80,9 @@ shadowJar {
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
 
     exclude 'it/jakegblp/lusk/test/**'
+    dependencies {
+        exclude(dependency('org.javassist:javassist:3.30.2-GA'))
+    }
 }
 
 tasks.register('testShadowJar', ShadowJar) {
