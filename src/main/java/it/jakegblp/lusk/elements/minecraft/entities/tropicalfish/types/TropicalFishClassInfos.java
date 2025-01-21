@@ -13,8 +13,10 @@ public class TropicalFishClassInfos {
                     new EnumRegistryWrapper(TropicalFish.Pattern.class, null, "tropical_fish_pattern")
                             .getClassInfo("tropicalfishpattern")
                             .user("tropical ?fish ?(variant|pattern|type)s?")
+                            .name("Tropical Fish - Pattern")
                             .description("All the Tropical Fish Patterns.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("TropicalFishPattern"));
         }
 
     }

@@ -3,15 +3,14 @@ package it.jakegblp.lusk.elements.anvilgui.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
 import it.jakegblp.lusk.api.events.*;
 import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 public class EvtAnvilGuiEvents {
     static {
@@ -37,40 +36,15 @@ public class EvtAnvilGuiEvents {
                 .examples("on anvil gui close:")
                 .since("1.3");
 
-        EventValues.registerEventValue(AnvilGuiClickEvent.class, Integer.class, new Getter<>() {
-            @Override
-            public Integer get(final AnvilGuiClickEvent e) {
-                return e.getSlot();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(AnvilGuiClickEvent.class, Slot.class, new Getter<>() {
-            @Override
-            public Slot get(final AnvilGuiClickEvent e) {
-                return new InventorySlot(e.getInventory(), e.getSlot());
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(AnvilGuiClickEvent.class, Integer.class, AnvilGuiClickEvent::getSlot, EventValues.TIME_NOW);
+        registerEventValue(AnvilGuiClickEvent.class, Slot.class, e -> new InventorySlot(e.getInventory(), e.getSlot()), EventValues.TIME_NOW);
 
         // click and close only
-        EventValues.registerEventValue(AnvilGuiSnapshotEvent.class, String.class, new Getter<>() {
-            @Override
-            public @NotNull String get(final AnvilGuiSnapshotEvent e) {
-                return e.getText();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(AnvilGuiSnapshotEvent.class, String.class, AnvilGuiSnapshotEvent::getText, EventValues.TIME_NOW);
 
         // common event values
-        EventValues.registerEventValue(AnvilGuiEvent.class, AnvilGuiWrapper.class, new Getter<>() {
-            @Override
-            public @NotNull AnvilGuiWrapper get(final AnvilGuiEvent e) {
-                return e.getAnvil();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(AnvilGuiEvent.class, Inventory.class, new Getter<>() {
-            @Override
-            public @NotNull Inventory get(final AnvilGuiEvent e) {
-                return e.getInventory();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(AnvilGuiEvent.class, AnvilGuiWrapper.class, AnvilGuiEvent::getAnvil, EventValues.TIME_NOW);
+        registerEventValue(AnvilGuiEvent.class, Inventory.class, AnvilGuiEvent::getInventory, EventValues.TIME_NOW);
 
     }
 }

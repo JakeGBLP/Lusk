@@ -14,7 +14,8 @@ public class AxolotlClassInfos {
                     .user("axolotl ?(variant|colou?r)s?")
                     .name("Axolotl - Variant")
                     .description("All the Axolotl Variants.")
-                    .since("1.3"));
+                    .since("1.3")
+                    .documentationId("AxolotlVariant"));
         }
 
     }

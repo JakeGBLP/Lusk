@@ -4,13 +4,12 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
-import org.bukkit.inventory.InventoryView;
-import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtFurnaceEvents {
@@ -18,28 +17,15 @@ public class EvtFurnaceEvents {
         if (Skript.classExists("org.bukkit.event.inventory.FurnaceExtractEvent")) {
             Skript.registerEvent("Furnace - on Item Extract", SimpleEvent.class, FurnaceExtractEvent.class, "furnace [item] extract[ed|ing]")
                     .description("""
-                            This event is called when a player takes items out of the furnace.""")
+                            This event is called when a player takes items out of the furnace.
+                            
+                            event-integer -> item amount being retrieved
+                            """)
                     .examples("")
                     .since("1.0.1");
-            EventValues.registerEventValue(FurnaceExtractEvent.class, Slot.class, new Getter<>() {
-                @Override
-                public @NotNull Slot get(final FurnaceExtractEvent e) {
-                    InventoryView inventoryView = e.getPlayer().getOpenInventory();
-                    return new InventorySlot(inventoryView.getTopInventory(), 2);
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(FurnaceExtractEvent.class, ItemType.class, new Getter<>() {
-                @Override
-                public @NotNull ItemType get(final FurnaceExtractEvent e) {
-                    return new ItemType(e.getItemType());
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(FurnaceExtractEvent.class, Integer.class, new Getter<>() {
-                @Override
-                public @NotNull Integer get(final FurnaceExtractEvent e) {
-                    return e.getItemAmount();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(FurnaceExtractEvent.class, Slot.class, e -> new InventorySlot(e.getPlayer().getOpenInventory().getTopInventory(), 2), EventValues.TIME_NOW);
+            registerEventValue(FurnaceExtractEvent.class, ItemType.class, e -> new ItemType(e.getItemType()), EventValues.TIME_NOW);
+            registerEventValue(FurnaceExtractEvent.class, Integer.class, FurnaceExtractEvent::getItemAmount, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.inventory.FurnaceStartSmeltEvent")) {
             Skript.registerEvent("Furnace - on Start Smelting", SimpleEvent.class, FurnaceStartSmeltEvent.class, "furnace start[ed|ing] [to] smelt[ed|ing]", "furnace smelt[ed|ing] start[ed|ing]")
@@ -50,12 +36,7 @@ public class EvtFurnaceEvents {
                               broadcast "<bold>let him cook!"
                             """)
                     .since("1.0.1");
-            EventValues.registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, new Getter<>() {
-                @Override
-                public @NotNull Integer get(final FurnaceStartSmeltEvent e) {
-                    return e.getTotalCookTime();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(FurnaceStartSmeltEvent.class, Integer.class, FurnaceStartSmeltEvent::getTotalCookTime, EventValues.TIME_NOW);
         }
     }
 }

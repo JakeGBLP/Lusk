@@ -1,0 +1,37 @@
+name: Java 17 Tests #CI (MC 1.19.4-1.20.4)
+
+on:
+  - push
+  - pull_request
+
+
+jobs:
+  build:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'adopt'
+          cache: gradle
+      - name: Install Gradle
+        uses: sdkman/sdkman-action@main
+        with:
+          candidate: gradle
+          version: 8.9
+      - name: Generate Gradle wrapper
+        run: gradle wrapper
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Skript and run test scripts
+        run: ./gradlew clean skriptTestJava17
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly
+          path: build/libs/*

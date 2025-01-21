@@ -5,14 +5,13 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.ArrayUtils.haveSameElements;
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 public class EvtBlockIgnite extends SkriptEvent {
 
@@ -34,18 +33,8 @@ public class EvtBlockIgnite extends SkriptEvent {
                 .examples("on lusk block ignite due to lava_ignition:","on lusk player block ignition:")
                 .since("1.3");
 
-        EventValues.registerEventValue(BlockIgniteEvent.class, Entity.class, new Getter<>() {
-            @Override
-            public @Nullable Entity get(final BlockIgniteEvent e) {
-                return e.getIgnitingEntity();
-            }
-        }, EventValues.TIME_NOW);
-        EventValues.registerEventValue(BlockIgniteEvent.class, BlockIgniteEvent.IgniteCause.class, new Getter<>() {
-            @Override
-            public BlockIgniteEvent.@NotNull IgniteCause get(final BlockIgniteEvent e) {
-                return e.getCause();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(BlockIgniteEvent.class, Entity.class, BlockIgniteEvent::getIgnitingEntity, EventValues.TIME_NOW);
+        registerEventValue(BlockIgniteEvent.class, BlockIgniteEvent.IgniteCause.class, BlockIgniteEvent::getCause, EventValues.TIME_NOW);
     }
 
     private boolean justPlayer;

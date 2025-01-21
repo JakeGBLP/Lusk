@@ -27,6 +27,7 @@ import static ch.njol.skript.Skript.classExists;
 import static ch.njol.skript.Skript.methodExists;
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
+import static it.jakegblp.lusk.utils.LuskUtils.parseVersionTruncated;
 import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
 
 public class Constants {
@@ -35,9 +36,14 @@ public class Constants {
 
     public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
 
+    public static final Pattern
+            REGEX_TRUNCATED_VERSION = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?"),
+            REGEX_VERSION = Pattern.compile("^\\d+\\.\\d+(\\.\\d+)?[-+a-zA-Z0-9.]*$"),
+            REGEX_NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
+
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            VERSION_SKRIPT = parseVersion(Skript.getVersion().toString()),
+            VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
             OLDEST_SUPPORTED = parseVersion("1.16"),
             NEWEST_SUPPORTED = parseVersion("1.21.4");
 
@@ -64,6 +70,10 @@ public class Constants {
             HAS_REMOVE_ENCHANTMENTS_METHOD = methodExists(ItemStack.class, "removeEnchantments"),
             HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS = methodExists(BlockBreakEvent.class, "isDropsItems"),
             /**
+             * Whether the current skript version is greater than or equal to 2.7
+             */
+            SKRIPT_2_7 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.7")),
+            /**
              * Whether the current skript version is greater than or equal to 2.8
              */
             SKRIPT_2_8 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.8")),
@@ -71,6 +81,10 @@ public class Constants {
              * Whether the current skript version is greater than or equal to 2.9
              */
             SKRIPT_2_9 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.9")),
+            /**
+             * Whether the current skript version is greater than or equal to 2.10
+             */
+            SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.10")),
             /**
              * Whether the current server version is greater than or equal to 1.18.2
              */
@@ -99,6 +113,10 @@ public class Constants {
              * Whether the current server version is greater than or equal to 1.20.5
              */
             MINECRAFT_1_20_5 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.5")),
+            /**
+             * Whether the current server version is greater than or equal to 1.20.6
+             */
+            MINECRAFT_1_20_6 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.6")),
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
@@ -112,6 +130,8 @@ public class Constants {
             PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
             // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
             //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
+            PAPER_1_20_4 = MINECRAFT_1_20_4 && isPaper(),
+            PAPER_1_20_6 = MINECRAFT_1_20_6 && isPaper(),
 
             PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION = methodExists(EnderSignal.class, "setTargetLocation", Location.class, boolean.class),
             PAPER_HAS_WORLD_BORDER_EVENT = classExists("io.papermc.paper.event.world.border.WorldBorderEvent"),
@@ -136,7 +156,6 @@ public class Constants {
             ARMOR_STAND_TYPES = "livingentity" + (PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
             LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
-    public static final Pattern NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
     public static final ExpressionType EVENT_OR_SIMPLE = SKRIPT_2_8 ? ExpressionType.EVENT : ExpressionType.SIMPLE;
 
@@ -152,7 +171,7 @@ public class Constants {
         put(109, parseVersion("1.9.2"));
         put(110, parseVersion("1.9.4"));
         put(210, parseVersion("1.10.2"));
-        put(315, parseVersion("1.11.0"));
+        put(315, parseVersion("1.11"));
         put(316, parseVersion("1.11.2"));
         put(335, parseVersion("1.12.0"));
         put(338, parseVersion("1.12.1"));
@@ -160,7 +179,7 @@ public class Constants {
         put(393, parseVersion("1.13"));
         put(401, parseVersion("1.13.1"));
         put(404, parseVersion("1.13.2"));
-        put(477, parseVersion("1.14.0"));
+        put(477, parseVersion("1.14"));
         put(480, parseVersion("1.14.1"));
         put(485, parseVersion("1.14.2"));
         put(490, parseVersion("1.14.3"));
@@ -168,7 +187,7 @@ public class Constants {
         put(573, parseVersion("1.15"));
         put(575, parseVersion("1.15.1"));
         put(577, parseVersion("1.15.2"));
-        put(735, parseVersion("1.16.0"));
+        put(735, parseVersion("1.16"));
         put(736, parseVersion("1.16.1"));
         put(751, parseVersion("1.16.2"));
         put(753, parseVersion("1.16.3"));

@@ -15,6 +15,8 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+
 @Name("Armor Stand - is Equipment Slot Disabled")
 @Description("Checks if a specific equipment slot of an armorstand is disabled.")
 @Examples("if chest slot is disabled for {_armorStand}:")
@@ -41,9 +43,11 @@ public class CondEquipmentSlotDisabledArmorStand extends Condition {
 
     @Override
     public boolean check(Event event) {
-        return livingEntityExpression.check(event, livingEntity ->
-                livingEntity instanceof ArmorStand armorStand &&
-                        equipmentSlotExpression.check(event, armorStand::isSlotDisabled, isNegated()));
+        return test(livingEntityExpression, event,
+                livingEntity -> livingEntity instanceof ArmorStand armorStand
+                        && test(equipmentSlotExpression, event,
+                        armorStand::isSlotDisabled, EquipmentSlot.class),
+                LivingEntity.class, isNegated());
     }
 
     @Override

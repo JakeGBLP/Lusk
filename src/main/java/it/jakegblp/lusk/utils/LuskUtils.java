@@ -1,15 +1,19 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.util.ColorRGB;
 import ch.njol.util.Kleenean;
 import com.vdurmont.semver4j.Semver;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static it.jakegblp.lusk.utils.Constants.*;
@@ -17,7 +21,17 @@ import static it.jakegblp.lusk.utils.Constants.*;
 public class LuskUtils {
 
     public static Semver parseVersion(String s) {
-        return new Semver(s, Semver.SemverType.LOOSE);
+        if (s.matches("^\\d+.\\d+$")) s += ".0";
+        return new Semver(s, Semver.SemverType.STRICT);
+    }
+
+    public static Semver parseVersionTruncated(String s) {
+        Matcher matcher = REGEX_TRUNCATED_VERSION.matcher(s);
+
+        if (matcher.find()) {
+            s = matcher.group();
+        }
+        return parseVersion(s);
     }
 
     /**
@@ -70,7 +84,7 @@ public class LuskUtils {
      * @return The provided string with all numbers replaced with themselves limited to Skript's number accuracy from its config file.
      */
     public static String toSkriptConfigNumberAccuracy(String string) {
-        return NUMBER_WITH_DECIMAL.matcher(string).replaceAll(n -> Skript.toString(Double.parseDouble(n.group())));
+        return REGEX_NUMBER_WITH_DECIMAL.matcher(string).replaceAll(n -> Skript.toString(Double.parseDouble(n.group())));
     }
 
     public static long getTotalNeededXP(int level) {
@@ -105,6 +119,10 @@ public class LuskUtils {
         if (a) return Kleenean.TRUE;
         else if (b) return Kleenean.FALSE;
         else return Kleenean.UNKNOWN;
+    }
+
+    public static ColorRGB getColorAsRGB(@NotNull Color color) {
+        return new ColorRGB(color.getRed(), color.getGreen(), color.getBlue());
     }
 
 }

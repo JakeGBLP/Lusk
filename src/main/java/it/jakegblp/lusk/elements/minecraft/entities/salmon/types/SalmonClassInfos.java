@@ -13,8 +13,10 @@ public class SalmonClassInfos {
                     new EnumRegistryWrapper(Salmon.Variant.class, null, "salmon_variant")
                             .getClassInfo("salmonvariant")
                             .user("salmon ?(variant|type)s?")
+                            .name("Salmon - Variant")
                             .description("All the Salmon Variants.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("SalmonVariant"));
         }
 
     }

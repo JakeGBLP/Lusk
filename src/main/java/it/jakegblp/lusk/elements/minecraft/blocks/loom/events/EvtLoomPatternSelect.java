@@ -4,8 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerLoomPatternSelectEvent;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.event.Event;
@@ -13,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtLoomPatternSelect extends SkriptEvent {
@@ -32,12 +32,7 @@ public class EvtLoomPatternSelect extends SkriptEvent {
                             """)
                     .requiredPlugins("Paper")
                     .since("1.0.0");
-            EventValues.registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, new Getter<>() {
-                @Override
-                public @NotNull PatternType get(final PlayerLoomPatternSelectEvent e) {
-                    return e.getPatternType();
-                }
-            }, 0);
+            registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, PlayerLoomPatternSelectEvent::getPatternType, 0);
         }
     }
 

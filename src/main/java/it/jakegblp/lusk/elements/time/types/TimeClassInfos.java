@@ -4,10 +4,12 @@ import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Timespan;
 import it.jakegblp.lusk.api.skript.EnumWrapper;
 
+import static it.jakegblp.lusk.utils.Constants.SKRIPT_HAS_TIMESPAN_TIMEPERIOD;
+
 @SuppressWarnings("unused")
 public class TimeClassInfos {
     static {
-        if (Classes.getExactClassInfo(Timespan.TimePeriod.class) == null) {
+        if (SKRIPT_HAS_TIMESPAN_TIMEPERIOD && Classes.getExactClassInfo(Timespan.TimePeriod.class) == null) {
             EnumWrapper<Timespan.TimePeriod> TIMEPERIOD_ENUM = new EnumWrapper<>(Timespan.TimePeriod.class, null, null);
             Classes.registerClass(TIMEPERIOD_ENUM.getClassInfo("timespanperiod")
                     .user("time ?span ?periods?")

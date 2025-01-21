@@ -6,8 +6,8 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
+import it.jakegblp.lusk.utils.EventUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.DeprecationUtils.test;
 import static it.jakegblp.lusk.utils.EventUtils.getInteraction;
 
 @SuppressWarnings("unused")
@@ -45,42 +47,12 @@ public class EvtArmorStandManipulate extends SkriptEvent {
                                 broadcast event-item and event-equipmentslot
                             """)
                     .since("1.1.1");
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, EquipmentSlot.class, new Getter<>() {
-                @Override
-                public EquipmentSlot get(final PlayerArmorStandManipulateEvent e) {
-                    return e.getSlot();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, Entity.class, new Getter<>() {
-                @Override
-                public Entity get(final PlayerArmorStandManipulateEvent e) {
-                    return e.getRightClicked();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, LivingEntity.class, new Getter<>() {
-                @Override
-                public LivingEntity get(final PlayerArmorStandManipulateEvent e) {
-                    return e.getRightClicked();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, new Getter<>() {
-                @Override
-                public ItemType get(final PlayerArmorStandManipulateEvent e) {
-                    return new ItemType(e.getPlayerItem());
-                }
-            }, EventValues.TIME_FUTURE);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, new Getter<>() {
-                @Override
-                public ItemType get(final PlayerArmorStandManipulateEvent e) {
-                    return new ItemType(e.getArmorStandItem());
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStandInteraction.class, new Getter<>() {
-                @Override
-                public ArmorStandInteraction get(final PlayerArmorStandManipulateEvent e) {
-                    return getInteraction(e);
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, EquipmentSlot.class, PlayerArmorStandManipulateEvent::getSlot, EventValues.TIME_NOW);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, Entity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, LivingEntity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getPlayerItem()), EventValues.TIME_FUTURE);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getArmorStandItem()), EventValues.TIME_NOW);
+            registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStandInteraction.class, EventUtils::getInteraction, EventValues.TIME_NOW);
         }
     }
 
@@ -100,16 +72,13 @@ public class EvtArmorStandManipulate extends SkriptEvent {
     }
 
     @Override
-    public boolean check(@NotNull Event e) {
-        PlayerArmorStandManipulateEvent event = (PlayerArmorStandManipulateEvent) e;
-        boolean toolIsAir = event.getPlayerItem().getType().isAir();
-        boolean equippedIsAir = event.getArmorStandItem().getType().isAir();
+    public boolean check(@NotNull Event event) {
+        PlayerArmorStandManipulateEvent armorStandManipulateEvent = (PlayerArmorStandManipulateEvent) event;
+        boolean toolIsAir = armorStandManipulateEvent.getPlayerItem().getType().isAir();
+        boolean equippedIsAir = armorStandManipulateEvent.getArmorStandItem().getType().isAir();
         List<ArmorStandInteraction> list = Arrays.stream(interactionLiteral.getAll()).toList();
-        if (list.contains(ArmorStandInteraction.CHANGE) || list.contains(getInteraction(event))) {
-            if (slots != null)
-                return slots.check(event, slot -> slot.equals(event.getSlot()));
-            return true;
-        }
+        if (list.contains(ArmorStandInteraction.CHANGE) || list.contains(getInteraction(armorStandManipulateEvent)))
+            return slots == null || test(slots, armorStandManipulateEvent, slot -> slot.equals(armorStandManipulateEvent.getSlot()), EquipmentSlot.class);
         return false;
     }
 

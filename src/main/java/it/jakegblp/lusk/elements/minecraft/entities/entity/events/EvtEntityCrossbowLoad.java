@@ -4,8 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -13,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT;
+import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtEntityCrossbowLoad extends SkriptEvent {
@@ -23,12 +22,7 @@ public class EvtEntityCrossbowLoad extends SkriptEvent {
                     .examples("")
                     .since("1.0.1")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, new Getter<>() {
-                @Override
-                public @NotNull ItemStack get(final EntityLoadCrossbowEvent e) {
-                    return e.getCrossbow();
-                }
-            }, 0);
+            registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, EntityLoadCrossbowEvent::getCrossbow, 0);
         }
     }
 

@@ -13,8 +13,10 @@ public class MushroomCowClassInfos {
                     new EnumRegistryWrapper(MushroomCow.Variant.class, null, "mushroom_cow_variant")
                             .getClassInfo("mushroomcowvariant")
                             .user("mushroom ?cow ?(variant|colou?r|type)s?")
+                            .name("Mushroom Cow - Varian")
                             .description("All the Mushroom Cow Variants.")
-                            .since("1.3"));
+                            .since("1.3")
+                            .documentationId("MushroomCowVariant"));
         }
 
     }

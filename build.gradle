@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id 'com.gradleup.shadow' version '8.3.0'
@@ -12,6 +13,8 @@ compileJava {
 version = "1.3.3-beta1"
 def latestJava = 21
 def oldestJava = 16
+
+def java17 = 17
 
 
 repositories {
@@ -27,11 +30,26 @@ repositories {
 dependencies {
     implementation('org.jetbrains:annotations:20.1.0')
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
-    compileOnly('com.github.SkriptLang:Skript:2.9.5')
+    compileOnly('com.github.SkriptLang:Skript:2.10.0')
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.vdurmont:semver4j:3.1.0')
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
+
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    testRuntimeOnly 'com.google.code.gson:gson:2.11.0'
+    testRuntimeOnly 'com.google.guava:guava:32.1.2-jre'
+    testImplementation 'com.google.code.gson:gson:2.11.0'
+    testImplementation 'com.google.guava:guava:32.1.2-jre'
+}
+
+configurations {
+    testImplementation.extendsFrom shadow
 }
 
 java {
@@ -46,18 +64,77 @@ processResources {
     filter(ReplaceTokens, tokens: [version: version])
 }
 
+
+build {
+    dependsOn shadowJar
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.add("-Xlint:unchecked")
+        options.compilerArgs.add("-Xlint:deprecation")
+    }
+}
+
 shadowJar {
     archiveFileName = project.name + "-" + project.version + ".jar"
     relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
+
+    exclude 'it/jakegblp/lusk/test/**'
 }
 
-tasks.build {
-    dependsOn shadowJar
-    tasks.withType(JavaCompile).tap {
-        configureEach {
-            options.compilerArgs.add("-Xlint:unchecked")
-            options.compilerArgs.add("-Xlint:deprecation")
-        }
+tasks.register('testShadowJar', ShadowJar) {
+    archiveFileName = project.name + "-" + project.version + "-test.jar"
+    from sourceSets.main.output // Main compiled classes
+    from sourceSets.test.output // Test compiled classes and resources
+    configurations = [project.configurations.testRuntimeClasspath] // Include test runtime dependencies
+
+    relocate 'org.bstats', 'it.jakegblp.lusk.libs.bstats'
+    relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
+    relocate 'com.google.common', 'it.jakegblp.lusk.libs.guava'
+    relocate 'com.google.gson', 'it.jakegblp.lusk.libs.gson'
+}
+
+
+tasks.register('testBuild') {
+    dependsOn testShadowJar
+    description = "Runs a test build"
+    group = "build"
+    doLast {
+        println "Test build completed: ${testShadowJar.archiveFile.get().asFile}"
     }
 }
+
+
+
+// Create a test task with given name, environments dir/file, dev mode and java version.
+// -1 on the timeout means it'll be disabled.
+void createTestTask(String name, String desc, String environments, int javaVersion, long timeout) {
+    if (timeout == 0) {
+        timeout = 300000 // 5 minutes
+    }
+    def artifact = 'build' + File.separator + 'libs' + File.separator + 'Lusk-nightly.jar'
+    tasks.register(name, JavaExec) {
+        description = desc
+        dependsOn build
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
+        group = 'execution'
+        classpath = files([
+                artifact,
+                sourceSets.main.runtimeClasspath,
+                configurations.testRuntimeClasspath
+        ])
+        main = 'it.jakegblp.lusk.test.platform.PlatformMain'
+        args = [
+                'build/test_runners',
+                'src/test/scripts',
+                'src/test/resources/runner_data',
+                environments,
+                project.findProperty('verbosity') ?: "null",
+                timeout
+        ]
+    }
+}
+
+String environments = 'src/test/environments/'
+createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, -1)

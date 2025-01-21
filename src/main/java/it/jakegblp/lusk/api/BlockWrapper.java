@@ -8,6 +8,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -300,6 +301,14 @@ public class BlockWrapper {
             brewingStand.getInventory().setFuel(getNullableItemStack(ingredient));
             updateBlockState(brewingStand);
         }
+    }
+
+    @Nullable
+    public BrewerInventory getBrewerInventory() {
+        if (getBlockState() instanceof BrewingStand brewingStand) {
+            return brewingStand.getInventory();
+        }
+        return null;
     }
 
     @Nullable
