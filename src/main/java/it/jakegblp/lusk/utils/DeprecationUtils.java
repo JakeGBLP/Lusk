@@ -4,6 +4,9 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Timespan;
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.converter.Converters;
@@ -100,25 +103,45 @@ public class DeprecationUtils {
             EventValues.registerEventValue(event, type, function::apply, time);
         } else {
             try {
-
                 Class<?> getterClass = Class.forName("ch.njol.skript.util.Getter");
 
-                Object getterInstance = java.lang.reflect.Proxy.newProxyInstance(
-                        getterClass.getClassLoader(),
-                        new Class<?>[]{getterClass},
-                        (proxy, method, methodArgs) -> {
-                            if ("get".equals(method.getName())) {
-                                // Implement the logic for the get method here
-                                return "Value from get method"; // Replace with actual logic
-                            }
-                            return null;
+                ProxyFactory factory = new ProxyFactory();
+                factory.setSuperclass(getterClass);
+                factory.setFilter(new MethodFilter() {
+                    @Override
+                    public boolean isHandled(Method method) {
+                        return method.getName().equals("get");
+                    }
+                });
+                MethodHandler handler = new MethodHandler() {
+                    @Override
+                    public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
+                        if (args != null && args.length == 1) {
+                            Object arg = args[0];
+                            if (type.isInstance(arg)) return function.apply(event.cast(arg));
                         }
-                );
+                        return null;
+                    }
+                };
+
+                Object getterInstance = factory.create(new Class<?>[0], new Object[0], handler);
+
+                //Object getterInstance = java.lang.reflect.Proxy.newProxyInstance(
+                //        getterClass.getClassLoader(),
+                //        new Class<?>[]{getterClass},
+                //        (proxy, method, methodArgs) -> {
+                //            if ("get".equals(method.getName())) {
+                //                // Implement the logic for the get method here
+                //                return "Value from get method"; // Replace with actual logic
+                //            }
+                //            return null;
+                //        }
+                //);
                 //Constructor<?> constructor = getterClass.getDeclaredConstructor();
                 //constructor.setAccessible(true);
                 //Object getterInstance = constructor.newInstance();
 //
-                //// Assuming the get method takes an Object as an argument
+                // Assuming the get method takes an Object as an argument
                 //var method = getterClass.getMethod("get", Object.class);
                 //Object result = method.invoke(getterInstance, new Object()); // Replace with actual argument
                 //Object getterInstance = Proxy.newProxyInstance(
@@ -142,7 +165,7 @@ public class DeprecationUtils {
                 );
                 registerMethod.invoke(null, event, type, getterInstance, time);
             } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
-                     IllegalAccessException e) {
+                     IllegalAccessException | InstantiationException e) {
                 throw new RuntimeException(e);
             }
         }
