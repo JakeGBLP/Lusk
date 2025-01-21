@@ -28,6 +28,7 @@ public class EntitySnapshotClassInfos {
                             Represents an immutable copy of an entity's state. Can be used at any time to create an instance of the stored entity.
                             
                             Requires 1.20.5 to be stored and parsed.
+                            **This will NOT work when using Skript 2.10+**
                             """)
                     .since("1.3")
                     .requiredPlugins("1.20.2+, 1.20.5+ (for storing)")
@@ -37,8 +38,7 @@ public class EntitySnapshotClassInfos {
                         public EntitySnapshot parse(final @NotNull String s, final @NotNull ParseContext context) {
                             try {
                                 return Bukkit.getEntityFactory().createEntitySnapshot(s);
-                            } catch (IllegalArgumentException ignored) {
-                            }
+                            } catch (IllegalArgumentException ignored) {}
                             return null;
                         }
 
