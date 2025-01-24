@@ -27,42 +27,48 @@ repositories {
     maven { url "https://jitpack.io/" }
 }
 
-// Define source sets for Skript and Minecraft versions
 sourceSets {
     skript_v2_6_4 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_6_4'
         }
+        compileClasspath += main.output
     }
     skript_v2_7_3 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_7_3'
         }
+        compileClasspath += main.output
     }
     skript_v2_8_7 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_8_7'
         }
+        compileClasspath += main.output
     }
     skript_v2_9_5 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_9_5'
         }
+        compileClasspath += main.output
     }
     skript_v2_10_0 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_10_0'
         }
+        compileClasspath += main.output
     }
     minecraft_v1_20 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_20'
         }
+        compileClasspath += main.output
     }
     minecraft_v1_21 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_21'
         }
+        compileClasspath += main.output
     }
 }
 
