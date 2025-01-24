@@ -4,6 +4,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
 import ch.njol.skript.util.Timespan;
+import ch.njol.util.Checker;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -31,12 +32,22 @@ public class Skript_2_9_5 implements SkriptAdapter {
 
     @Override
     public <T> boolean test(Expression<T> expr, Event event, Predicate<T> predicate) {
-        return expr.check(event, predicate::test);
+        return expr.check(event, new Checker<T>() {
+            @Override
+            public boolean check(T o) {
+                return predicate.test(o);
+            }
+        });
     }
 
     @Override
     public <T> boolean test(Expression<T> expr, Event event, Predicate<T> predicate, boolean isNegated) {
-        return expr.check(event, predicate::test, isNegated);
+        return expr.check(event, new Checker<T>() {
+            @Override
+            public boolean check(T o) {
+                return predicate.test(o);
+            }
+        }, isNegated);
     }
 
     @Override
