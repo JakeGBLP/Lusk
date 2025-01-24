@@ -1,1 +1,8 @@
 rootProject.name = 'Lusk'
+include ':version_adapter'
+include ':skript_v2_6_4'
+include ':skript_v2_7_3'
+include ':skript_v2_8_7'
+include ':skript_v2_9_5'
+include ':skript_v2_10_0'
+

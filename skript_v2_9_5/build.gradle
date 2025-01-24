@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url 'https://repo.skriptlang.org/releases' }
+}
+
+dependencies {
+    compileOnly('com.github.SkriptLang:Skript:2.9.5')
+    implementation('org.jetbrains:annotations:20.1.0')
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    implementation project(":version_adapter")
+}
+
+tasks.named('build').configure {
+    enabled = false
+}

@@ -27,22 +27,6 @@ repositories {
     maven { url "https://jitpack.io/" }
 }
 
-sourceSets {
-
-    minecraft_v1_20 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_20'
-        }
-        compileClasspath += main.output
-    }
-    minecraft_v1_21 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_21'
-        }
-        compileClasspath += main.output
-    }
-}
-
 dependencies {
     implementation('org.jetbrains:annotations:20.1.0')
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
@@ -52,8 +36,12 @@ dependencies {
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
 
-    minecraft_v1_20Implementation 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
-    minecraft_v1_21Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+    implementation project(":version_adapter")
+    implementation project(":skript_v2_6_4")
+    implementation project(":skript_v2_7_3")
+    implementation project(":skript_v2_8_7")
+    implementation project(":skript_v2_9_5")
+    implementation project(":skript_v2_10_0")
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -65,28 +53,6 @@ dependencies {
     testRuntimeOnly 'com.google.guava:guava:32.1.2-jre'
     testImplementation 'com.google.code.gson:gson:2.11.0'
     testImplementation 'com.google.guava:guava:32.1.2-jre'
-}
-
-def skriptVersions = ['2.6.4', '2.7.3', '2.8.7', '2.9.5', '2.10.0']
-
-skriptVersions.each { version ->
-    def versionUnderscored = version.replace('.', '_')
-
-    configurations.create("skript_v${versionUnderscored}Implementation")
-
-    dependencies {
-        add("skript_v${versionUnderscored}Implementation", "com.github.SkriptLang:Skript:$version")
-        add("skript_v${versionUnderscored}Implementation", "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
-    }
-
-    sourceSets {
-        "skript_v${versionUnderscored}" {
-            java {
-                srcDir "src/main/java/it/jakegblp/lusk/version/skript/v${versionUnderscored}"
-            }
-            compileClasspath += main.output
-        }
-    }
 }
 
 java {

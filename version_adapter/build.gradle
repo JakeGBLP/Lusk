@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.skriptlang.org/releases' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'com.github.SkriptLang:Skript:2.10.0'
+    compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
+    implementation('com.vdurmont:semver4j:3.1.0')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.named('build').configure {
+    enabled = false
+}

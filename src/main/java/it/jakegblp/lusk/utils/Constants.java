@@ -11,7 +11,6 @@ import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import it.jakegblp.lusk.api.MinecraftAdapter;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.Location;
 import org.bukkit.Registry;
@@ -52,7 +51,7 @@ public class Constants {
             VERSION_SKRIPT_NEWEST_SUPPORTED = parseVersion("2.10");
 
     public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT);
-    public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
+    //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
 
     public static final List<InventoryAction>
             DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
