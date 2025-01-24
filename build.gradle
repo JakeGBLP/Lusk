@@ -74,6 +74,11 @@ build {
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
+    doLast {
+        subprojects.each { subproject ->
+            delete subproject.layout.buildDirectory
+        }
+    }
 }
 
 shadowJar {
@@ -127,7 +132,7 @@ void createTestTask(String name, String desc, String environments, int javaVersi
                 sourceSets.main.runtimeClasspath,
                 configurations.testRuntimeClasspath
         ])
-        main = 'it.jakegblp.lusk.test.platform.PlatformMain'
+        mainClass = 'it.jakegblp.lusk.test.platform.PlatformMain'
         args = [
                 'build/test_runners',
                 'src/test/scripts',

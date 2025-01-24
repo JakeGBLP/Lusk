@@ -24,7 +24,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-tasks.named('build').configure {
-    enabled = false
-}
