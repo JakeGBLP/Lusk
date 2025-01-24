@@ -16,7 +16,6 @@ def oldestJava = 16
 
 def java17 = 17
 
-
 repositories {
     mavenCentral()
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
@@ -67,7 +66,6 @@ processResources {
     filter(ReplaceTokens, tokens: [version: version])
 }
 
-
 build {
     dependsOn shadowJar
     tasks.withType(JavaCompile).configureEach {
@@ -101,7 +99,6 @@ tasks.register('testShadowJar', ShadowJar) {
     relocate 'com.google.gson', 'it.jakegblp.lusk.libs.gson'
 }
 
-
 tasks.register('testBuild') {
     dependsOn testShadowJar
     description = "Runs a test build"
@@ -110,8 +107,6 @@ tasks.register('testBuild') {
         println "Test build completed: ${testShadowJar.archiveFile.get().asFile}"
     }
 }
-
-
 
 // Create a test task with given name, environments dir/file, dev mode and java version.
 // -1 on the timeout means it'll be disabled.
