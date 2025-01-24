@@ -28,36 +28,7 @@ repositories {
 }
 
 sourceSets {
-    skript_v2_6_4 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_6_4'
-        }
-        compileClasspath += main.output
-    }
-    skript_v2_7_3 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_7_3'
-        }
-        compileClasspath += main.output
-    }
-    skript_v2_8_7 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_8_7'
-        }
-        compileClasspath += main.output
-    }
-    skript_v2_9_5 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_9_5'
-        }
-        compileClasspath += main.output
-    }
-    skript_v2_10_0 {
-        java {
-            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_10_0'
-        }
-        compileClasspath += main.output
-    }
+
     minecraft_v1_20 {
         java {
             srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_20'
@@ -81,23 +52,6 @@ dependencies {
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
 
-
-
-    skript_v2_6_4Implementation 'com.github.SkriptLang:Skript:2.6.4'
-    skript_v2_6_4Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
-    skript_v2_7_3Implementation 'com.github.SkriptLang:Skript:2.7.3'
-    skript_v2_7_3Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
-    skript_v2_8_7Implementation 'com.github.SkriptLang:Skript:2.8.7'
-    skript_v2_8_7Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
-    skript_v2_9_5Implementation 'com.github.SkriptLang:Skript:2.9.5'
-    skript_v2_9_5Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
-    skript_v2_10_0Implementation 'com.github.SkriptLang:Skript:2.10.0'
-    skript_v2_10_0Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
     minecraft_v1_20Implementation 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
     minecraft_v1_21Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
 
@@ -113,15 +67,26 @@ dependencies {
     testImplementation 'com.google.guava:guava:32.1.2-jre'
 }
 
-configurations {
-    testImplementation.extendsFrom shadow
-    skript_v2_6_4Implementation.extendsFrom implementation
-    skript_v2_7_3Implementation.extendsFrom implementation
-    skript_v2_8_7Implementation.extendsFrom implementation
-    skript_v2_9_5Implementation.extendsFrom implementation
-    skript_v2_10_0Implementation.extendsFrom implementation
-    minecraft_v1_20Implementation.extendsFrom implementation
-    minecraft_v1_21Implementation.extendsFrom implementation
+def skriptVersions = ['2.6.4', '2.7.3', '2.8.7', '2.9.5', '2.10.0']
+
+skriptVersions.each { version ->
+    def versionUnderscored = version.replace('.', '_')
+
+    configurations.create("skript_v${versionUnderscored}Implementation")
+
+    dependencies {
+        add("skript_v${versionUnderscored}Implementation", "com.github.SkriptLang:Skript:$version")
+        add("skript_v${versionUnderscored}Implementation", "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    }
+
+    sourceSets {
+        "skript_v${versionUnderscored}" {
+            java {
+                srcDir "src/main/java/it/jakegblp/lusk/version/skript/v${versionUnderscored}"
+            }
+            compileClasspath += main.output
+        }
+    }
 }
 
 java {
