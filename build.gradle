@@ -35,12 +35,12 @@ dependencies {
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
 
-    implementation project(":version_adapter")
-    implementation project(":skript_v2_6_4")
-    implementation project(":skript_v2_7_3")
-    implementation project(":skript_v2_8_7")
-    implementation project(":skript_v2_9_5")
-    implementation project(":skript_v2_10_0")
+    compileOnly project(":version_adapter")
+    compileOnly project(":skript_v2_6_4")
+    compileOnly project(":skript_v2_7_3")
+    compileOnly project(":skript_v2_8_7")
+    compileOnly project(":skript_v2_9_5")
+    compileOnly project(":skript_v2_10_0")
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -72,11 +72,11 @@ build {
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
-    doLast {
-        subprojects.each { subproject ->
-            delete subproject.layout.buildDirectory
-        }
-    }
+    //doLast {
+    //    subprojects.each { subproject ->
+    //        delete subproject.layout.buildDirectory
+    //    }
+    //}
 }
 
 shadowJar {
@@ -140,4 +140,9 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, 0)
+createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, -1)
+
+tasks.register('skriptTest') {
+    description = 'Runs tests on all environments.'
+    dependsOn skriptTestJava17
+}

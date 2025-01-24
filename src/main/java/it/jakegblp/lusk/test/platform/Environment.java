@@ -156,6 +156,7 @@ public class Environment {
 	}
 
     public void initialize(Path dataRoot, Path runnerRoot, boolean remake) throws IOException {
+		System.out.println("------initializing");
 		Path env = runnerRoot.resolve(name);
 		boolean onlyCopySkript = Files.exists(env) && !remake;
 
@@ -197,12 +198,14 @@ public class Environment {
 				Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
+		System.out.println("------initialized!!!!!!!!");
 	}
 
 	@Nullable
 	public TestResults runTests(Path runnerRoot, Path testsRoot,
 	                            String verbosity, long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
-		
+
+		System.out.println("------running tests");
 		Path env = runnerRoot.resolve(name);
 		Path resultsPath = env.resolve("test_results.json");
 		Files.deleteIfExists(resultsPath);

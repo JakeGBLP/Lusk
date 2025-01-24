@@ -54,6 +54,7 @@ public class PlatformMain {
 						try {
 							return gson.fromJson(Files.readString(path), Environment.class);
 						} catch (JsonSyntaxException | IOException e) {
+							System.out.println("------ couldn't read environment ");
 							throw new RuntimeException(e);
 						}
 					}).collect(Collectors.toList());
@@ -124,6 +125,7 @@ public class PlatformMain {
 		}
 		output.append(String.format("%n%n%s", StringUtils.repeat("-", 60)));
 		System.out.print(output);
+		System.exit(0);
 	}
 
 }
