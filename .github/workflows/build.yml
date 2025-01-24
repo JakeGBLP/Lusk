@@ -55,7 +55,33 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Lusk_back.jar
+          name: Lusk_test.jar
+          path: build/libs/*.jar
+  test_build_2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 16
+          distribution: 'adopt'
+      - name: Install Gradle
+        uses: sdkman/sdkman-action@main
+        with:
+          candidate: gradle
+          version: 7.0
+      - name: Generate Gradle wrapper
+        run: gradle wrapper
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew testBuild
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lusk_test_2.jar
           path: build/libs/*.jar
   test_dev_feature:
     runs-on: ubuntu-latest
@@ -127,7 +153,7 @@ jobs:
           extra_plugins_directory: extra-plugins/
   test_2_7_3:
     runs-on: ubuntu-latest
-    needs: [test_build]
+    needs: [test_build_2]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -144,7 +170,7 @@ jobs:
           extra_plugins_directory: extra-plugins/
   test_2_6_4:
     runs-on: ubuntu-latest
-    needs: [test_build]
+    needs: [test_build_2]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
