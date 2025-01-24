@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 
 @Name("Anvil GUI - is Viewing")
 @Description("Checks if a player is currently viewing a specific anvil GUI or any at all.")
@@ -54,6 +54,6 @@ public class CondAnvilGuiViewing extends Condition {
             AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(event);
             if (anvilGuiWrapper == null) return false;
             return anvilGuiWrapper.isOpenTo(player);
-        }, Player.class);
+        });
     }
 }

@@ -9,7 +9,7 @@ import ch.njol.skript.util.slot.Slot;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtFurnaceEvents {

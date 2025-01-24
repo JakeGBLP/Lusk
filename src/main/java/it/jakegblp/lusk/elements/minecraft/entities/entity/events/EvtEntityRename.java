@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtEntityRename extends SkriptEvent {

@@ -27,6 +27,45 @@ repositories {
     maven { url "https://jitpack.io/" }
 }
 
+// Define source sets for Skript and Minecraft versions
+sourceSets {
+    skript_v2_6_4 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_6_4'
+        }
+    }
+    skript_v2_7_3 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_7_3'
+        }
+    }
+    skript_v2_8_7 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_8_7'
+        }
+    }
+    skript_v2_9_5 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_9_5'
+        }
+    }
+    skript_v2_10_0 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/skript/v2_10_0'
+        }
+    }
+    minecraft_v1_20 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_20'
+        }
+    }
+    minecraft_v1_21 {
+        java {
+            srcDir 'src/main/java/it/jakegblp/lusk/version/minecraft/v1_21'
+        }
+    }
+}
+
 dependencies {
     implementation('org.jetbrains:annotations:20.1.0')
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
@@ -34,8 +73,27 @@ dependencies {
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.vdurmont:semver4j:3.1.0')
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
-    implementation('org.javassist:javassist:3.30.2-GA')
     shadow('junit:junit:3.8.2')
+
+
+
+    skript_v2_6_4Implementation 'com.github.SkriptLang:Skript:2.6.4'
+    skript_v2_6_4Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    skript_v2_7_3Implementation 'com.github.SkriptLang:Skript:2.7.3'
+    skript_v2_7_3Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    skript_v2_8_7Implementation 'com.github.SkriptLang:Skript:2.8.7'
+    skript_v2_8_7Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    skript_v2_9_5Implementation 'com.github.SkriptLang:Skript:2.9.5'
+    skript_v2_9_5Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    skript_v2_10_0Implementation 'com.github.SkriptLang:Skript:2.10.0'
+    skript_v2_10_0Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    minecraft_v1_20Implementation 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    minecraft_v1_21Implementation 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -51,6 +109,13 @@ dependencies {
 
 configurations {
     testImplementation.extendsFrom shadow
+    skript_v2_6_4Implementation.extendsFrom implementation
+    skript_v2_7_3Implementation.extendsFrom implementation
+    skript_v2_8_7Implementation.extendsFrom implementation
+    skript_v2_9_5Implementation.extendsFrom implementation
+    skript_v2_10_0Implementation.extendsFrom implementation
+    minecraft_v1_20Implementation.extendsFrom implementation
+    minecraft_v1_21Implementation.extendsFrom implementation
 }
 
 java {
@@ -80,9 +145,6 @@ shadowJar {
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
 
     exclude 'it/jakegblp/lusk/test/**'
-    exclude 'org/javassist/bytecode/**'
-    dependencies {
-    }
 }
 
 tasks.register('testShadowJar', ShadowJar) {
@@ -95,8 +157,6 @@ tasks.register('testShadowJar', ShadowJar) {
     relocate 'net.wesjd.anvilgui', 'it.jakegblp.lusk.libs.anvilgui'
     relocate 'com.google.common', 'it.jakegblp.lusk.libs.guava'
     relocate 'com.google.gson', 'it.jakegblp.lusk.libs.gson'
-    dependencies {
-    }
 }
 
 

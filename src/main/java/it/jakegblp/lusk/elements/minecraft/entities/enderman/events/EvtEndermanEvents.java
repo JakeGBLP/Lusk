@@ -6,7 +6,7 @@ import ch.njol.skript.registrations.EventValues;
 import com.destroystokyo.paper.event.entity.EndermanAttackPlayerEvent;
 import com.destroystokyo.paper.event.entity.EndermanEscapeEvent;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtEndermanEvents {

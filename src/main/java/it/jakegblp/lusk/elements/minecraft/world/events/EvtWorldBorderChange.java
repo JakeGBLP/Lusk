@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtWorldBorderChange extends SkriptEvent {

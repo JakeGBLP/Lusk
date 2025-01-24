@@ -14,7 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 
 @Name("Bounding Box - Overlaps")
 @Description("Whether or not one or more bounding boxes overlap other bounding boxes.\nBounding boxes that are only intersecting at the borders are not considered overlapping.")
@@ -46,7 +46,7 @@ public class CondBoundingBoxOverlaps extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return test(boundingBox1, event, box1 -> test(boundingBox2, event, box1::overlaps, BoundingBox.class), BoundingBox.class, isNegated());
+        return test(boundingBox1, event, box1 -> test(boundingBox2, event, box1::overlaps), isNegated());
     }
 
     @Override

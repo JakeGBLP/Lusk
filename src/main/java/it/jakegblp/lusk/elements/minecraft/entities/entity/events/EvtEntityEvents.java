@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtEntityEvents {
     static {

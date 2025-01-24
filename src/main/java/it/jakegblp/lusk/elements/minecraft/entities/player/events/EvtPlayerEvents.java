@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtPlayerEvents {

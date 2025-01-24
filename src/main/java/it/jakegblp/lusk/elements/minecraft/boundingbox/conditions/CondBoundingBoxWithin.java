@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 
 @Name("Bounding Box - X is Within")
 @Description("Whether or not a Vector, Location, or Bounding Box is within a Bounding Box.\n\nVector and Location = Checks if the Bounding Box contains a specified position.\nBounding Box = Checks if the Bounding Box fully contains a Bounding Box.")
@@ -54,7 +54,7 @@ public class CondBoundingBoxWithin extends Condition {
                     else if (object instanceof Location location) return boundingBox.contains(location.toVector());
                     else if (object instanceof BoundingBox box) return boundingBox.contains(box);
                     else return false;
-                }, Object.class), BoundingBox.class, isNegated());
+                }), isNegated());
     }
 
     @Override

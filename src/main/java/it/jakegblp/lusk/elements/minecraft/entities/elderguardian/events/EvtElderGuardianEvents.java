@@ -6,7 +6,7 @@ import ch.njol.skript.registrations.EventValues;
 import io.papermc.paper.event.entity.ElderGuardianAppearanceEvent;
 import org.bukkit.entity.Player;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtElderGuardianEvents {
