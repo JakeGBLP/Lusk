@@ -1,11 +1,11 @@
 package it.jakegblp.lusk.test.platform;
 
-import ch.njol.skript.test.utils.TestResults;
 import ch.njol.util.NonNullPair;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import it.jakegblp.lusk.test.utils.TestResults;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -35,9 +35,13 @@ public class PlatformMain {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		Path runnerRoot = Paths.get(args[0]);
+		assert runnerRoot != null;
         Path testsRoot = Paths.get(args[1]).toAbsolutePath();
+		assert testsRoot != null;
         Path dataRoot = Paths.get(args[2]);
+		assert dataRoot != null;
         Path envsRoot = Paths.get(args[3]);
+		assert envsRoot != null;
         String verbosity = args[4].toUpperCase(Locale.ENGLISH);
 		long timeout = Long.parseLong(args[5]);
 		if (timeout < 0)
@@ -54,7 +58,7 @@ public class PlatformMain {
 						try {
 							return gson.fromJson(Files.readString(path), Environment.class);
 						} catch (JsonSyntaxException | IOException e) {
-							System.out.println("------ couldn't read environment ");
+							System.err.println("------ couldn't read environment ");
 							throw new RuntimeException(e);
 						}
 					}).collect(Collectors.toList());

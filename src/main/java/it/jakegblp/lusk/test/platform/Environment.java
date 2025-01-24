@@ -5,8 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import ch.njol.skript.test.utils.TestResults;
-
+import it.jakegblp.lusk.test.utils.TestResults;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -198,7 +197,7 @@ public class Environment {
 				Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
-		System.out.println("------initialized!!!!!!!!");
+		System.out.println("------initialized");
 	}
 
 	@Nullable
@@ -232,7 +231,8 @@ public class Environment {
 		Runtime.getRuntime().addShutdownHook(new Thread(process::destroy));
 
 		// Catch tests running for abnormally long time
-		if (timeout > 0) {
+		boolean devMode = true;
+		if (!devMode && timeout > 0) {
 			new Timer("runner watchdog", true).schedule(new TimerTask() {
 				@Override
 				public void run() {

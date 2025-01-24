@@ -140,7 +140,7 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, -1)
+createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, 1000)
 
 tasks.register('skriptTest') {
     description = 'Runs tests on all environments.'
