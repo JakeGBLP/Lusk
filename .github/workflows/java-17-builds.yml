@@ -29,5 +29,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: lusk-nightly
+          name: lusk-nightly.jar
           path: build/libs/*

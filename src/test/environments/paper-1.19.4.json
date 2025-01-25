@@ -9,7 +9,13 @@
       "target": "paperclip.jar"
     }
   ],
-  "skriptTarget": "plugins/Skript.jar",
+  "skriptDownloads": [
+    {
+      "version": "2.9.5",
+      "target": "plugins/Skript.jar"
+    }
+  ],
+  "luskTarget": "plugins/Lusk.jar",
   "commandLine": [
     "-Dcom.mojang.eula.agree=true",
     "-jar", "paperclip.jar", "--nogui"

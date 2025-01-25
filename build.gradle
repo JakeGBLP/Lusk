@@ -35,12 +35,12 @@ dependencies {
     implementation('net.wesjd:anvilgui:1.10.3-SNAPSHOT')
     shadow('junit:junit:3.8.2')
 
-    compileOnly project(":version_adapter")
-    compileOnly project(":skript_v2_6_4")
-    compileOnly project(":skript_v2_7_3")
-    compileOnly project(":skript_v2_8_7")
-    compileOnly project(":skript_v2_9_5")
-    compileOnly project(":skript_v2_10_0")
+    implementation project(":version_adapter")
+    implementation project(":skript_v2_6_4")
+    implementation project(":skript_v2_7_3")
+    implementation project(":skript_v2_8_7")
+    implementation project(":skript_v2_9_5")
+    implementation project(":skript_v2_10_0")
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -72,11 +72,11 @@ build {
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
-    //doLast {
-    //    subprojects.each { subproject ->
-    //        delete subproject.layout.buildDirectory
-    //    }
-    //}
+    doLast {
+        subprojects.each { subproject ->
+            delete subproject.layout.buildDirectory
+        }
+    }
 }
 
 shadowJar {

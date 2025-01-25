@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,9 +64,42 @@ public class Environment {
 
     }
 
+	public static class SkriptResource extends Resource {
+
+		private final String version;
+
+		@Nullable
+		private transient String source;
+
+		public SkriptResource(String version, String target) {
+			super(null, target);
+			this.version = version;
+		}
+
+		@Override
+		public String getSource() {
+			try {
+				generateSkriptSource();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			if (source == null)
+				throw new IllegalStateException();
+			return source;
+		}
+
+		public void generateSkriptSource() {
+			if (source != null)
+				return;
+
+			source = "https://repo.skriptlang.org/releases/com/github/SkriptLang/Skript/" + version + "/Skript-" + version + ".jar";
+		}
+	}
+
 	public static class PaperResource extends Resource {
 
 		private final String version;
+
 		@Nullable
 		private transient String source;
 
@@ -74,6 +107,7 @@ public class Environment {
 			super(null, target);
 			this.version = version;
 		}
+
 
 		@Override
 		public String getSource() {
@@ -133,47 +167,61 @@ public class Environment {
 	 */
 	@Nullable
 	private final List<PaperResource> paperDownloads;
+	/**
+	 * Skript resources that need to be downloaded.
+	 */
+	@Nullable
+	private final List<SkriptResource> skriptDownloads;
 
 	/**
-	 * Where Skript should be placed under platform root.
+	 * Where Lusk should be placed under platform root.
 	 * Directories created as needed.
 	 */
-	private final String skriptTarget;
+	private final String luskTarget;
 
 	/**
 	 * Added after platform's own JVM flags.
 	 */
 	private final String[] commandLine;
 
-	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, String skriptTarget, String... commandLine) {
+	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, @Nullable List<SkriptResource> skriptDownloads, String luskTarget, String... commandLine) {
 		this.name = name;
 		this.resources = resources;
 		this.downloads = downloads;
 		this.paperDownloads = paperDownloads;
-		this.skriptTarget = skriptTarget;
+		this.skriptDownloads = skriptDownloads;
+		this.luskTarget = luskTarget;
 		this.commandLine = commandLine;
 	}
 
     public void initialize(Path dataRoot, Path runnerRoot, boolean remake) throws IOException {
-		System.out.println("------initializing");
+		System.out.println("------initializing - "+ name);
 		Path env = runnerRoot.resolve(name);
-		boolean onlyCopySkript = Files.exists(env) && !remake;
 
-		// Copy Skript to platform
-		Path skript = env.resolve(skriptTarget);
-		Files.createDirectories(skript.getParent());
-		try {
-			Files.copy(new File(getClass().getProtectionDomain().getCodeSource().getLocation()
-				.toURI()).toPath(), skript, StandardCopyOption.REPLACE_EXISTING);
-		} catch (URISyntaxException e) {
-			throw new AssertionError(e);
+// Copy Lusk to platform
+		Path lusk = env.resolve(luskTarget); // luskTarget must include "plugins/Lusk.jar"
+		System.out.println("1:"+lusk);
+		System.out.println("2:"+Files.createDirectories(lusk.getParent()));
+        // Get the path to the current JAR
+		{
+			Path buildLibsDir = Paths.get("build", "libs");
+			File[] jarFiles = buildLibsDir.toFile().listFiles((dir, name) -> name.endsWith(".jar"));
+
+			if (jarFiles == null || jarFiles.length == 0) {
+				System.out.println("No JAR files found in the build/libs directory!");
+				return;
+			}
+
+			// Get the first JAR file in the directory
+			Path source = jarFiles[0].toPath();
+			System.out.println("Source JAR: " + source);
+
+			// Copy the JAR file to the target path
+			Files.copy(source, lusk, StandardCopyOption.REPLACE_EXISTING);
+			System.out.println("Copied to: " + lusk);
 		}
 
-		if (onlyCopySkript) {
-			return;
-		}
-
-		// Copy resources
+        // Copy resources
 		for (Resource resource : resources) {
 			Path source = dataRoot.resolve(resource.getSource());
 			Path target = env.resolve(resource.getTarget());
@@ -186,12 +234,15 @@ public class Environment {
 			downloads.addAll(this.downloads);
 		if (this.paperDownloads != null)
 			downloads.addAll(this.paperDownloads);
+		if (this.skriptDownloads != null)
+			downloads.addAll(this.skriptDownloads);
 		// Download additional resources
 		for (Resource resource : downloads) {
 			assert resource != null;
 			String source = resource.getSource();
 			URL url = new URL(source);
 			Path target = env.resolve(resource.getTarget());
+			System.out.println("some path:       " + target);
 			Files.createDirectories(target.getParent());
 			try (InputStream is = url.openStream()) {
 				Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
