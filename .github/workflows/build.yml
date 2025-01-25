@@ -57,32 +57,6 @@ jobs:
         with:
           name: Lusk_test.jar
           path: build/libs/*.jar
-  test_build_2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: 16
-          distribution: 'adopt'
-      - name: Install Gradle
-        uses: sdkman/sdkman-action@main
-        with:
-          candidate: gradle
-          version: 8.9
-      - name: Generate Gradle wrapper
-        run: gradle wrapper
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew testBuild
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Lusk_test_2.jar
-          path: build/libs/*.jar
   test_dev_feature:
     runs-on: ubuntu-latest
     needs: [test_build]
@@ -100,7 +74,7 @@ jobs:
           test_script_directory: src/test/scripts
           skript_repo_ref: dev/feature
           extra_plugins_directory: extra-plugins/
-  test_2_10_0:
+  test_dev_patch:
     runs-on: ubuntu-latest
     needs: [test_build]
     steps:
@@ -115,73 +89,5 @@ jobs:
         uses: SkriptLang/skript-test-action@v1.2
         with:
           test_script_directory: src/test/scripts
-          skript_repo_ref: 2.10.0
-          extra_plugins_directory: extra-plugins/
-  test_2_9_5:
-    runs-on: ubuntu-latest
-    needs: [test_build]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: 2.9.5
-          extra_plugins_directory: extra-plugins/
-  test_2_8_7:
-    runs-on: ubuntu-latest
-    needs: [test_build]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: 2.8.7
-          extra_plugins_directory: extra-plugins/
-  test_2_7_3:
-    runs-on: ubuntu-latest
-    needs: [test_build_2]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: 2.7.3
-          extra_plugins_directory: extra-plugins/
-  test_2_6_4:
-    runs-on: ubuntu-latest
-    needs: [test_build_2]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: 2.6.4
+          skript_repo_ref: dev/patch
           extra_plugins_directory: extra-plugins/
