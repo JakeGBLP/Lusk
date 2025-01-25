@@ -20,6 +20,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_19_2;
 
 public class EvtEntityEvents {
     static {
@@ -74,7 +75,8 @@ public class EvtEntityEvents {
             registerEventValue(EntityPlaceEvent.class, Block.class, EntityPlaceEvent::getBlock, EventValues.TIME_NOW);
             registerEventValue(EntityPlaceEvent.class, Player.class, EntityPlaceEvent::getPlayer, EventValues.TIME_NOW);
             registerEventValue(EntityPlaceEvent.class, BlockFace.class, EntityPlaceEvent::getBlockFace, EventValues.TIME_NOW);
-            registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, EntityPlaceEvent::getHand, EventValues.TIME_NOW);
+            if (MINECRAFT_1_19_2)
+                registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, EntityPlaceEvent::getHand, EventValues.TIME_NOW);
         }
         if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
             Skript.registerEvent("Entity - on Collide With Block", SimpleEvent.class, EntityInsideBlockEvent.class, "entity ((collide with|in[side]) [a] block)")

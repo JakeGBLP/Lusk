@@ -11,10 +11,14 @@ compileJava {
 }
 
 version = "1.3.3-beta1"
-def latestJava = 21
-def oldestJava = 16
 
+def java16 = 16
 def java17 = 17
+def java21 = 21
+
+def oldestJava = java16
+def latestJava = java21
+
 
 repositories {
     mavenCentral()
@@ -140,9 +144,14 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('skriptTestJava17', 'Runs tests on all Java 17 environments.', environments + 'paper-1.19.4.json', java17, 1000)
+createTestTask('luskTest_1_16_5', 'Runs tests on Paper 1.16.5.', environments + 'paper-1.16.5.json', java16, -1)
+createTestTask('luskTest_1_17_1', 'Runs tests on Paper 1.17.1.', environments + 'paper-1.17.1.json', java17, -1)
+createTestTask('luskTest_1_18_2', 'Runs tests on Paper 1.18.2.', environments + 'paper-1.18.2.json', java17, -1)
+createTestTask('luskTest_1_19_4', 'Runs tests on Paper 1.19.4.', environments + 'paper-1.19.4.json', java17, -1)
+createTestTask('luskTest_1_20_6', 'Runs tests on Paper 1.20.6.', environments + 'paper-1.20.6.json', java21, -1)
+createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 'paper-1.21.4.json', java21, -1)
 
 tasks.register('skriptTest') {
     description = 'Runs tests on all environments.'
-    dependsOn skriptTestJava17
+    dependsOn luskTest_1_16_5, luskTest_1_17_1, luskTest_1_18_2, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4
 }

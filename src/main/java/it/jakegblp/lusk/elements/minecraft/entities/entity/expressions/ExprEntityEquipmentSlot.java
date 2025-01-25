@@ -21,7 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 @Name("Entity - Item from Equipment Slot")
-@Description("Gets the item in one or more equipment slots of one or more entities, if the entity cannot use a provided slot it will fail silently.\n\nCan be set.")
+@Description("""
+        Gets the item in one or more equipment slots of one or more entities, if the entity cannot use a provided slot it will fail silently.
+        This might not work when trying to get a slot on an entity that doesnt have that slot AND if you're not running at least Paper 1.21
+        
+        Can be set.""")
 @Examples({"broadcast equipment slot chest slot"})
 @Since("1.3")
 @SuppressWarnings("unused")

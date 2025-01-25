@@ -1,9 +1,6 @@
 package it.jakegblp.lusk.elements.minecraft.boundingbox.expressions;
 
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.block.Block;
 import org.bukkit.util.VoxelShape;
@@ -16,6 +13,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_VOXEL_SHAPE;
 @Description("Returns the detailed collision shape of a block.")
 @Examples({"broadcast voxel shape of target block"})
 @Since("1.2")
+@RequiredPlugins("1.17")
 public class ExprVoxelShapeOf extends SimplePropertyExpression<Block, VoxelShape> {
 
     static {

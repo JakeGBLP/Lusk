@@ -244,7 +244,7 @@ public class EntityUtils {
     public static ItemStack getEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot) {
         if (livingEntity instanceof Player player) {
             return player.getInventory().getItem(equipmentSlot);
-        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (PAPER_1_21 && livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 return entityEquipment.getItem(equipmentSlot);
@@ -256,7 +256,7 @@ public class EntityUtils {
     public static void setEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
         if (livingEntity instanceof Player player) {
             player.getInventory().setItem(equipmentSlot, itemStack);
-        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (PAPER_1_21 && livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 entityEquipment.setItem(equipmentSlot, itemStack);
