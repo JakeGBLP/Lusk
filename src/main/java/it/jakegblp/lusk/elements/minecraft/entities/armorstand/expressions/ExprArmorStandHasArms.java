@@ -22,7 +22,7 @@ Gets and sets the `hasHarms` property of an armorstand entity or item, to do so 
 public class ExprArmorStandHasArms extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        register(ExprArmorStandHasArms.class, Boolean.class, ARMOR_STAND_PREFIX, "([have|has|show[s]|should show] [its|their] arms|arms [:in]visibility)", ARMOR_STAND_TYPES);
+        register(ExprArmorStandHasArms.class, Boolean.class, ARMOR_STAND_PREFIX, "((have|has|show[s]) [its|their] arms|[have|has] arms [:in]visibility)", ARMOR_STAND_TYPES);
     }
 
     @Override

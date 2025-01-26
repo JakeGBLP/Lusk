@@ -194,32 +194,18 @@ public class Environment {
 		this.commandLine = commandLine;
 	}
 
-    public void initialize(Path dataRoot, Path runnerRoot, boolean remake) throws IOException {
-		System.out.println("------initializing - "+ name);
+    public void initialize(Path dataRoot, Path runnerRoot) throws IOException {
 		Path env = runnerRoot.resolve(name);
+		Path lusk = env.resolve(luskTarget);
+		Files.createDirectories(lusk.getParent());
+		Path buildLibsDir = Paths.get("build", "libs");
+		File[] jarFiles = buildLibsDir.toFile().listFiles((dir, name) -> name.endsWith(".jar"));
 
-// Copy Lusk to platform
-		Path lusk = env.resolve(luskTarget); // luskTarget must include "plugins/Lusk.jar"
-		System.out.println("1:"+lusk);
-		System.out.println("2:"+Files.createDirectories(lusk.getParent()));
-        // Get the path to the current JAR
-		{
-			Path buildLibsDir = Paths.get("build", "libs");
-			File[] jarFiles = buildLibsDir.toFile().listFiles((dir, name) -> name.endsWith(".jar"));
+		if (jarFiles == null || jarFiles.length == 0)
+			throw new RuntimeException("No JAR files found in the build/libs directory!");
 
-			if (jarFiles == null || jarFiles.length == 0) {
-				System.out.println("No JAR files found in the build/libs directory!");
-				return;
-			}
-
-			// Get the first JAR file in the directory
-			Path source = jarFiles[0].toPath();
-			System.out.println("Source JAR: " + source);
-
-			// Copy the JAR file to the target path
-			Files.copy(source, lusk, StandardCopyOption.REPLACE_EXISTING);
-			System.out.println("Copied to: " + lusk);
-		}
+		Path luskSource = jarFiles[0].toPath();
+		Files.copy(luskSource, lusk, StandardCopyOption.REPLACE_EXISTING);
 
         // Copy resources
 		for (Resource resource : resources) {
@@ -248,14 +234,11 @@ public class Environment {
 				Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
-		System.out.println("------initialized");
 	}
 
 	@Nullable
-	public TestResults runTests(Path runnerRoot, Path testsRoot,
-	                            String verbosity, long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
-
-		System.out.println("------running tests");
+	public TestResults runTests(Path runnerRoot, Path testsRoot, String verbosity,
+								long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
 		Path env = runnerRoot.resolve(name);
 		Path resultsPath = env.resolve("test_results.json");
 		Files.deleteIfExists(resultsPath);

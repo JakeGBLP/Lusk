@@ -11,10 +11,14 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
 @Name("Entity - Should Burn During The Day (Property)")
 @Description("""
         Returns whether or not the provided entities should burn during the day.
-        Applies to zombies, skeletons, and phantoms
-        Can be set.""")
-@Examples({"broadcast the should burn under sunlight property of target","set the should burn during the day property of {_entity}"})
-@Since("1.0.3, 1.1.1 (Skeleton,Phantom), 1.3 (Safety)")
+        Applies to zombies, skeletons (all types), and phantoms
+        
+        In 1.17.1 this doesn't work with skeleton variants, such as strays, but it does work with base skeletons.
+        
+        Can be set.
+        """)
+@Examples({"broadcast the should burn under sunlight property of target","set the should burn during the day property of {_entity} to false"})
+@Since("1.0.3, 1.1.1 (Skeleton,Phantom), 1.3 (Safety), 1.3.3 (1.16.5 bug fixes)")
 @RequiredPlugins("Paper")
 @DocumentationId("11901")
 @SuppressWarnings("unused")

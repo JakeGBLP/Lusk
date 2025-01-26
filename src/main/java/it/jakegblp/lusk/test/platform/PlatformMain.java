@@ -56,7 +56,6 @@ public class PlatformMain {
 						try {
 							return gson.fromJson(Files.readString(path), Environment.class);
 						} catch (JsonSyntaxException | IOException e) {
-							System.err.println("------ couldn't read environment ");
 							throw new RuntimeException(e);
 						}
 					}).collect(Collectors.toList());
@@ -73,7 +72,7 @@ public class PlatformMain {
 		envs.sort(Comparator.comparing(Environment::getName));
 		for (Environment env : envs) {
 			System.out.println("Starting testing on " + env.getName());
-			env.initialize(dataRoot, runnerRoot, false);
+			env.initialize(dataRoot, runnerRoot);
 			TestResults results = env.runTests(runnerRoot, testsRoot, verbosity, timeout, jvmArgs);
 			if (results == null) {
 				System.err.println("The test environment '" + env.getName() + "' failed to produce test results.");
