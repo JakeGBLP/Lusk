@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.boundingbox.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
-import ch.njol.skript.expressions.base.PropertyExpression;
+import it.jakegblp.lusk.api.skript.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;

@@ -1,34 +1,24 @@
 package it.jakegblp.lusk.elements.minecraft.entities.itemframe.types;
 
+import it.jakegblp.lusk.api.GenericRelation;
 import org.bukkit.Rotation;
-import org.jetbrains.annotations.NotNull;
-import org.skriptlang.skript.lang.comparator.Comparator;
-import org.skriptlang.skript.lang.comparator.Comparators;
-import org.skriptlang.skript.lang.comparator.Relation;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
 
 @SuppressWarnings("unused")
 public class ItemFrameComparators {
     static {
-        Comparators.registerComparator(Rotation.class, Rotation.class, new Comparator<>() {
-            @Override
-            public @NotNull Relation compare(Rotation rotation1, Rotation rotation2) {
-                int a = rotation1.ordinal();
-                int b = rotation2.ordinal();
-                if (a > b) {
-                    return Relation.GREATER;
-                } else if (a < b) {
-                    return Relation.SMALLER;
-                } else {
-                    return Relation.EQUAL;
-                }
-            }
-
-            @Override
-            public boolean supportsOrdering() {
-                return true;
+        registerComparator(Rotation.class, Rotation.class, (rotation1, rotation2) -> {
+            int a = rotation1.ordinal();
+            int b = rotation2.ordinal();
+            if (a > b) {
+                return GenericRelation.GREATER;
+            } else if (a < b) {
+                return GenericRelation.SMALLER;
+            } else {
+                return GenericRelation.EQUAL;
             }
         });
-
     }
 
     public ItemFrameComparators() {}

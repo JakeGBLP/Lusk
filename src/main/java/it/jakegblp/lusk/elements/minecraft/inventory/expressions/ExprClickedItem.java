@@ -6,6 +6,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.EventValueExpression;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprClickedItem extends EventValueExpression<ItemStack> {
 	// todo: implement this for future events
 	static {
-		register(ExprClickedItem.class, ItemStack.class, "[event-|the ][clicked ]item[stack|type]");
+		SkriptUtils.register(ExprClickedItem.class, ItemStack.class, "[event-|the ]clicked item[stack|type]");
 	}
 
 	public ExprClickedItem() {

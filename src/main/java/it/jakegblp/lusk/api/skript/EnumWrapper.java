@@ -4,10 +4,10 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.util.StringUtils;
+import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.utils.CompatibilityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.skriptlang.skript.lang.comparator.Comparators;
-import org.skriptlang.skript.lang.comparator.Relation;
 
 import java.util.*;
 
@@ -129,8 +129,8 @@ public final class EnumWrapper<E extends Enum<E>> {
     }
 
     private void registerComparator(Class<E> c) {
-        if (Comparators.exactComparatorExists(c, c)) return;
-        Comparators.registerComparator(c, c, (o1, o2) -> Relation.get(o1.equals(o2)));
+        if (CompatibilityUtils.exactComparatorExists(c, c)) return;
+        CompatibilityUtils.registerComparator(c, c, (o1, o2) -> GenericRelation.get(o1.equals(o2)));
     }
 
 }

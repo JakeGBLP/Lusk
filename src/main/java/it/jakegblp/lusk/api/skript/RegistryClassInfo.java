@@ -7,14 +7,14 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.util.StringUtils;
 import ch.njol.yggdrasil.Fields;
 import com.google.common.base.Preconditions;
+import it.jakegblp.lusk.api.GenericRelation;
 import it.jakegblp.lusk.utils.BorrowedUtils;
+import it.jakegblp.lusk.utils.CompatibilityUtils;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.skriptlang.skript.lang.comparator.Comparators;
-import org.skriptlang.skript.lang.comparator.Relation;
 
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
@@ -99,8 +99,8 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
         this.registry = registry;
         this.prefix = prefix == null ? null : prefix.replaceAll(" ", "_");
         this.suffix = suffix == null ? null : suffix.replaceAll(" ", "_");
-        if (!Comparators.exactComparatorExists(registryClass, registryClass)) {
-            Comparators.registerComparator(registryClass, registryClass, (o1, o2) -> Relation.get(o1.equals(o2)));
+        if (!CompatibilityUtils.exactComparatorExists(registryClass, registryClass)) {
+            CompatibilityUtils.registerComparator(registryClass, registryClass, (o1, o2) -> GenericRelation.get(o1.equals(o2)));
         }
         if (usage) this.usage(getNames());
         this.supplier(registry::iterator);

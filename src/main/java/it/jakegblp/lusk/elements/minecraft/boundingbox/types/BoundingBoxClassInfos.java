@@ -13,11 +13,12 @@ import org.bukkit.generator.structure.StructurePiece;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.skriptlang.skript.lang.converter.Converters;
 import org.jetbrains.annotations.Nullable;
+
 import java.io.StreamCorruptedException;
 import java.util.stream.Collectors;
 
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerConverter;
 import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
@@ -98,12 +99,12 @@ public class BoundingBoxClassInfos {
                             return false;
                         }
                     }));
-            Converters.registerConverter(Block.class, BoundingBox.class, Block::getBoundingBox);
-            Converters.registerConverter(Entity.class, BoundingBox.class, Entity::getBoundingBox);
+            registerConverter(Block.class, BoundingBox.class, Block::getBoundingBox);
+            registerConverter(Entity.class, BoundingBox.class, Entity::getBoundingBox);
             if (HAS_STRUCTURE_PIECE)
-                Converters.registerConverter(StructurePiece.class, BoundingBox.class, StructurePiece::getBoundingBox);
+                registerConverter(StructurePiece.class, BoundingBox.class, StructurePiece::getBoundingBox);
             if (HAS_GENERATED_STRUCTURE)
-                Converters.registerConverter(GeneratedStructure.class, BoundingBox.class, GeneratedStructure::getBoundingBox);
+                registerConverter(GeneratedStructure.class, BoundingBox.class, GeneratedStructure::getBoundingBox);
         }
         if (HAS_VOXEL_SHAPE && Classes.getExactClassInfo(VoxelShape.class) == null)
             Classes.registerClass(new ClassInfo<>(VoxelShape.class, "voxelshape")
