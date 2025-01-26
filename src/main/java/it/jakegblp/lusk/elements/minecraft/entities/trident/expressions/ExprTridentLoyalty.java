@@ -11,6 +11,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.utils.LuskMath;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.Event;
@@ -73,7 +74,7 @@ public class ExprTridentLoyalty extends SimpleExpression<Integer> {
                     integer = trident.getLoyaltyLevel() + integer;
                 else if (mode == Changer.ChangeMode.REMOVE)
                     integer = trident.getLoyaltyLevel() - integer;
-                trident.setLoyaltyLevel(Math.clamp(integer, 0, 127));
+                trident.setLoyaltyLevel(LuskMath.fit(0, integer, 127));
             }
         }
     }
@@ -90,6 +91,6 @@ public class ExprTridentLoyalty extends SimpleExpression<Integer> {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the trident loyalty level of " + (e == null ? "" : projectileExpression.toString(e, debug));
+        return "the trident loyalty level of " + projectileExpression.toString(e, debug);
     }
 }

@@ -17,13 +17,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+
 @Name("Fox - Trusts Players")
 @Description("Checks if the provided foxes trust the provided offline players.")
 @Examples({"if {_fox} trusts player:"})
 @Since("1.3")
 public class CondFoxTrusts extends Condition {
 
-    static {
+    static { // todo: property condition
         Skript.registerCondition(CondFoxTrusts.class,
                 "[fox[es]] %livingentities% trust[s] %offlineplayers%",
                 "[fox[es]] %livingentities% do[es](n't| not) trust %offlineplayers%");
@@ -34,9 +36,9 @@ public class CondFoxTrusts extends Condition {
 
     @Override
     public boolean check(Event event) {
-        return livingEntityExpression.check(event,livingEntity -> {
+        return test(livingEntityExpression, event, livingEntity -> {
             if (livingEntity instanceof Fox fox) {
-                return offlinePlayerExpression.check(event,offlinePlayer -> {
+                return test(offlinePlayerExpression, event, offlinePlayer -> {
                     if (fox.getFirstTrustedPlayer() == null) return false;
                     UUID uuid = offlinePlayer.getUniqueId();
                     if (fox.getFirstTrustedPlayer().getUniqueId() == uuid) return true;
@@ -44,12 +46,13 @@ public class CondFoxTrusts extends Condition {
                 });
             }
             return false;
-        },isNegated());
+        }, isNegated());
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "foxes "+livingEntityExpression.toString(event, debug)+(isNegated() ? " does not" : "")+" trust "+offlinePlayerExpression.toString(event, debug);
+        return "foxes " + livingEntityExpression.toString(event, debug)
+                + (isNegated() ? " does not" : "") + " trust " + offlinePlayerExpression.toString(event, debug);
     }
 
     @Override

@@ -10,7 +10,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
-import it.jakegblp.lusk.utils.DeprecationUtils;
+import it.jakegblp.lusk.utils.CompatibilityUtils;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +45,7 @@ public class ExprEnderSignalDespawnTime extends SimplerPropertyExpression<Entity
             if (usesTicks) {
                 return ticks;
             } else {
-                return DeprecationUtils.fromTicks(ticks);
+                return CompatibilityUtils.fromTicks(ticks);
             }
         }
         return null;
@@ -71,7 +71,7 @@ public class ExprEnderSignalDespawnTime extends SimplerPropertyExpression<Entity
             if (to instanceof Integer integer) {
                 enderSignal.setDespawnTimer(integer);
             } else if (to instanceof Timespan timespan) {
-                enderSignal.setDespawnTimer((int) DeprecationUtils.getTicks(timespan));
+                enderSignal.setDespawnTimer((int) CompatibilityUtils.getTicks(timespan));
             }
         }
     }

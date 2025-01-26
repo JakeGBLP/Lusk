@@ -23,7 +23,7 @@ public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<
 
     static {
         register(ExprArmorStandHasBasePlate.class, Boolean.class, ARMOR_STAND_PREFIX,
-                "([have|has|show[s]|should show] [its|their] base plate|base plate [:in]visibility)", ARMOR_STAND_TYPES);
+                "((have|has|show[s]) [its|their] base plate|[have|has] base plate [:in]visibility)", ARMOR_STAND_TYPES);
     }
 
     @Override

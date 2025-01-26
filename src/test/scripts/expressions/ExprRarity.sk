@@ -1,5 +1,5 @@
-test "ExprRarity":
+test "ExprRarity" when running minecraft "1.20.5":
   set {_item} to iron sword
   set item rarity of {_item} to epic
   assert item rarity of {_item} is epic with "item rarity of iron sword %{_item}% is not epic"
-  assert {_item} is epic with "item rarity state of iron sword %{_item}% is not epic"
+  assert {_item} is epic with "item rarity of iron sword %{_item}% is not epic"

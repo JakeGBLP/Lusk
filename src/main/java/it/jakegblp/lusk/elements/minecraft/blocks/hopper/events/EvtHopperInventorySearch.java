@@ -4,8 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.HopperInventorySearchEvent;
 import org.bukkit.inventory.Inventory;
@@ -13,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtHopperInventorySearch extends SkriptEvent {
@@ -25,12 +24,7 @@ public class EvtHopperInventorySearch extends SkriptEvent {
                     .description("Called each time a Hopper attempts to find its source/attached containers.")
                     .examples("on hopper inventory search:\n\tbroadcast event-inventory")
                     .since("1.0.4");
-            EventValues.registerEventValue(HopperInventorySearchEvent.class, Inventory.class, new Getter<>() {
-                @Override
-                public @Nullable Inventory get(final HopperInventorySearchEvent e) {
-                    return e.getInventory();
-                }
-            }, 0);
+            registerEventValue(HopperInventorySearchEvent.class, Inventory.class, HopperInventorySearchEvent::getInventory, 0);
         }
     }
 

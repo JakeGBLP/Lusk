@@ -4,14 +4,14 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerLecternPageChangeEvent;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtLecternPageChange extends SkriptEvent {
@@ -35,18 +35,8 @@ public class EvtLecternPageChange extends SkriptEvent {
                             """)
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, new Getter<>() {
-                @Override
-                public @NotNull ItemStack get(final PlayerLecternPageChangeEvent e) {
-                    return e.getBook();
-                }
-            }, 0);
-            EventValues.registerEventValue(PlayerLecternPageChangeEvent.class, Block.class, new Getter<>() {
-                @Override
-                public @NotNull Block get(final PlayerLecternPageChangeEvent e) {
-                    return e.getLectern().getBlock();
-                }
-            }, 0);
+            registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, PlayerLecternPageChangeEvent::getBook, 0);
+            registerEventValue(PlayerLecternPageChangeEvent.class, Block.class, e -> e.getLectern().getBlock(), 0);
         }
     }
 

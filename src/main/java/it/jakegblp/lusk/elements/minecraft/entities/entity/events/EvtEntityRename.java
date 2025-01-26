@@ -6,8 +6,6 @@ import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerNameEntityEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -16,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtEntityRename extends SkriptEvent {
@@ -28,12 +28,7 @@ public class EvtEntityRename extends SkriptEvent {
                               broadcast entity's display name""")
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PlayerNameEntityEvent.class, Entity.class, new Getter<>() {
-                @Override
-                public @NotNull Entity get(final PlayerNameEntityEvent e) {
-                    return e.getEntity();
-                }
-            }, 0);
+            registerEventValue(PlayerNameEntityEvent.class, Entity.class, PlayerNameEntityEvent::getEntity, 0);
         }
     }
 

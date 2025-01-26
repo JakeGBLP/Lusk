@@ -3,8 +3,9 @@ package it.jakegblp.lusk.elements.minecraft.entities.entity.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
+import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import io.papermc.paper.event.entity.EntityInsideBlockEvent;
+import io.papermc.paper.event.entity.EntityKnockbackEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,8 +19,11 @@ import org.bukkit.event.entity.EntityPoseChangeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_19_2;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_20_6;
 
 public class EvtEntityEvents {
     static {
@@ -30,12 +34,7 @@ public class EvtEntityEvents {
                             This can be cancelled but the used item will still be consumed.""")
                     .examples("")
                     .since("1.0.2");
-            EventValues.registerEventValue(EntityEnterLoveModeEvent.class, CommandSender.class, new Getter<>() {
-                @Override
-                public @Nullable CommandSender get(final EntityEnterLoveModeEvent e) {
-                    return e.getHumanEntity();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(EntityEnterLoveModeEvent.class, CommandSender.class, EntityEnterLoveModeEvent::getHumanEntity, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityPoseChangeEvent")) {
             Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "[entity] pose change[d]")
@@ -46,35 +45,39 @@ public class EvtEntityEvents {
                             """)
                     .examples("")
                     .since("1.0.2, 1.3 (past event-pose)");
-            EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<>() {
-                @Override
-                public @NotNull Pose get(final EntityPoseChangeEvent e) {
-                    return e.getEntity().getPose();
-                }
-            }, EventValues.TIME_PAST);
-            EventValues.registerEventValue(EntityPoseChangeEvent.class, Pose.class, new Getter<>() {
-                @Override
-                public @NotNull Pose get(final EntityPoseChangeEvent e) {
-                    return e.getPose();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(EntityPoseChangeEvent.class, Pose.class, e -> e.getEntity().getPose(), EventValues.TIME_PAST);
+            registerEventValue(EntityPoseChangeEvent.class, Pose.class, EntityPoseChangeEvent::getPose, EventValues.TIME_NOW);
         }
         if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
-            Skript.registerEvent("Entity - on Attack Push", SimpleEvent.class, EntityPushedByEntityAttackEvent.class, "(damage|attack) push")
+            Skript.registerEvent("Entity - on Push by Entity Attack", SimpleEvent.class, EntityPushedByEntityAttackEvent.class, "(entity attack push|push by [entity] attack)")
                     .description("""
                             Fired when an entity is pushed by another entity's attack.
                             The acceleration vector can be modified. If this event is cancelled, the entity will not get pushed.
                             
                             Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
-                    .examples("")
+                    .examples("on entity attack push:")
                     .requiredPlugins("Paper")
                     .since("1.0.2");
-            EventValues.registerEventValue(EntityPushedByEntityAttackEvent.class, Vector.class, new Getter<>() {
-                @Override
-                public @NotNull Vector get(final EntityPushedByEntityAttackEvent e) {
-                    return e.getKnockback();
-                }
-            }, EventValues.TIME_NOW);
+        }
+        if (PAPER_1_20_6) {
+            Skript.registerEvent("Entity - on Knockback", SimpleEvent.class, EntityKnockbackEvent.class, "entity knockback")
+                    .description("""
+                            Called when an entity receives knockback.""")
+                    .examples("on entity knockback:")
+                    .requiredPlugins("Paper")
+                    .since("1.3.3");
+            registerEventValue(EntityKnockbackEvent.class, Vector.class, EntityKnockbackEvent::getKnockback, EventValues.TIME_NOW);
+        }
+        // todo: merge most knockback events, support the deprecated spigot ones,
+        //  support deprecated acceleration method.
+        if (isPaper()) {
+            Skript.registerEvent("Entity - on Knockback by Entity", SimpleEvent.class, EntityKnockbackByEntityEvent.class, "entity knockback by entity")
+                    .description("""
+                            Fired when an Entity is knocked back by the hit of another Entity.
+                            The acceleration vector can be modified. If this event is cancelled, the entity is not knocked back.""")
+                    .examples("on entity knockback by entity:")
+                    .requiredPlugins("Paper")
+                    .since("1.3.3");
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityShootBowEvent")) {
             Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot[ing]")
@@ -82,12 +85,7 @@ public class EvtEntityEvents {
                             Called when a LivingEntity shoots a bow firing an arrow.""")
                     .examples("")
                     .since("1.1.1");
-            EventValues.registerEventValue(EntityShootBowEvent.class, Projectile.class, new Getter<>() {
-                @Override
-                public @Nullable Projectile get(EntityShootBowEvent event) {
-                    return (event.getProjectile() instanceof Projectile projectile) ? projectile : null;
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(EntityShootBowEvent.class, Projectile.class, e -> e.getProjectile() instanceof Projectile projectile ? projectile : null, EventValues.TIME_NOW);
         }
         if (Skript.classExists("org.bukkit.event.entity.EntityPlaceEvent")) {
             Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity [getting] place[d]")
@@ -96,30 +94,11 @@ public class EvtEntityEvents {
                             Note that this event is currently only fired for four specific placements: armor stands, boats, minecarts, and end crystals.""")
                     .examples("")
                     .since("1.1.1");
-            EventValues.registerEventValue(EntityPlaceEvent.class, Block.class, new Getter<>() {
-                @Override
-                public @NotNull Block get(EntityPlaceEvent event) {
-                    return event.getBlock();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(EntityPlaceEvent.class, Player.class, new Getter<>() {
-                @Override
-                public @Nullable Player get(EntityPlaceEvent event) {
-                    return event.getPlayer();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(EntityPlaceEvent.class, BlockFace.class, new Getter<>() {
-                @Override
-                public @NotNull BlockFace get(EntityPlaceEvent event) {
-                    return event.getBlockFace();
-                }
-            }, EventValues.TIME_NOW);
-            EventValues.registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, new Getter<>() {
-                @Override
-                public @NotNull EquipmentSlot get(EntityPlaceEvent event) {
-                    return event.getHand();
-                }
-            }, EventValues.TIME_NOW);
+            registerEventValue(EntityPlaceEvent.class, Block.class, EntityPlaceEvent::getBlock, EventValues.TIME_NOW);
+            registerEventValue(EntityPlaceEvent.class, Player.class, EntityPlaceEvent::getPlayer, EventValues.TIME_NOW);
+            registerEventValue(EntityPlaceEvent.class, BlockFace.class, EntityPlaceEvent::getBlockFace, EventValues.TIME_NOW);
+            if (MINECRAFT_1_19_2)
+                registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, EntityPlaceEvent::getHand, EventValues.TIME_NOW);
         }
         if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
             Skript.registerEvent("Entity - on Collide With Block", SimpleEvent.class, EntityInsideBlockEvent.class, "entity ((collide with|in[side]) [a] block)")

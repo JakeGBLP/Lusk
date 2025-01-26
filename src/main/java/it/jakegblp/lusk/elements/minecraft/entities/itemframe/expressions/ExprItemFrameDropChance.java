@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import it.jakegblp.lusk.utils.LuskMath;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +56,7 @@ public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity,Nu
     @Override
     public void set(Entity from, Number to) {
         if (from instanceof ItemFrame itemFrame) {
-            itemFrame.setItemDropChance(Math.clamp(to.floatValue(),0,1));
+            itemFrame.setItemDropChance(LuskMath.fit(0, to.floatValue(), 1));
         }
     }
 

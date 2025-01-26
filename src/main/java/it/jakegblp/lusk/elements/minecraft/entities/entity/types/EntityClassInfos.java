@@ -12,13 +12,13 @@ import static it.jakegblp.lusk.utils.Constants.HAS_SPAWN_CATEGORY;
 public class EntityClassInfos {
     static {
         if (Skript.classExists("org.bukkit.entity.Pose") && Classes.getExactClassInfo(Pose.class) == null) {
-            EnumWrapper<Pose> POSE_ENUM = new EnumWrapper<>(Pose.class);
+            EnumWrapper<Pose> POSE_ENUM = new EnumWrapper<>(Pose.class, null, "pose");
             Classes.registerClass(POSE_ENUM.getClassInfo("pose")
                     .user("poses?")
                     .name("Pose")
                     .description("All the Poses.") // add example
                     .documentationId("9099")
-                    .since("1.0.2"));
+                    .since("1.0.2, 1.3.3 (Suffix)"));
         }
         if (HAS_SPAWN_CATEGORY && Classes.getExactClassInfo(SpawnCategory.class) == null) {
             EnumWrapper<SpawnCategory> SPAWNCATEGORY_ENUM = new EnumWrapper<>(SpawnCategory.class);

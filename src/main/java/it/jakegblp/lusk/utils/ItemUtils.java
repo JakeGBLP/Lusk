@@ -30,7 +30,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.getColorAsRGB;
 public class ItemUtils {
 
     @Nullable
-    public static ItemMeta getItemMetaFromUnknown(Object object) {
+    public static ItemMeta getItemMetaFromUnknown(@Nullable Object object) {
         if (object instanceof ItemStack itemStack) {
             return itemStack.getItemMeta();
         } else if (object instanceof ItemType itemType) {
@@ -42,13 +42,13 @@ public class ItemUtils {
     }
 
     @Nullable
-    public static ItemType getNullableItemType(ItemStack itemStack) {
-        if (itemStack == null || itemStack.isEmpty()) return null;
+    public static ItemType getNullableItemType(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType().isEmpty()) return null;
         return new ItemType(itemStack);
     }
 
     @Nullable
-    public static ItemStack getNullableItemStack(ItemType itemType) {
+    public static ItemStack getNullableItemStack(@Nullable ItemType itemType) {
         if (itemType == null) return null;
         return itemType.getRandom();
     }

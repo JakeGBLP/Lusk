@@ -1,11 +1,12 @@
 package it.jakegblp.lusk.elements.skript.events;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.command.CommandEvent;
 import ch.njol.skript.command.EffectCommandEvent;
 import ch.njol.skript.lang.util.SimpleEvent;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import org.bukkit.command.CommandSender;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtSkriptEvents {
     static {
@@ -21,23 +22,7 @@ public class EvtSkriptEvents {
                         """
                 )
                 .since("1.3");
-        EventValues.registerEventValue(EffectCommandEvent.class, String.class, new Getter<>() {
-            @Override
-            public String get(EffectCommandEvent e) {
-                return e.getCommand();
-            }
-        }, 0);
-        EventValues.registerEventValue(EffectCommandEvent.class, String.class, new Getter<>() {
-            @Override
-            public String get(EffectCommandEvent e) {
-                return e.getCommand();
-            }
-        }, 0);
-        EventValues.registerEventValue(EffectCommandEvent.class, CommandSender.class, new Getter<>() {
-            @Override
-            public CommandSender get(EffectCommandEvent e) {
-                return e.getSender();
-            }
-        }, 0);
+        registerEventValue(EffectCommandEvent.class, String.class, CommandEvent::getCommand,0);
+        registerEventValue(EffectCommandEvent.class, CommandSender.class, CommandEvent::getSender, 0);
     }
 }

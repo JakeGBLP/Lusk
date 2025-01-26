@@ -1,15 +1,12 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.PropertyExpression;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import it.jakegblp.lusk.api.skript.PropertyExpression;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -25,6 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 @Description("All the disabled slots of an armor stand.\nCan be set, remove from, added to, reset and deleted.")
 @Examples("add chest slot to disabled slots of {_armorStand}")
 @Since("1.3")
+@RequiredPlugins("Skript 2.7+")
 public class ExprArmorStandDisabledSlots extends PropertyExpression<LivingEntity, EquipmentSlot> {
 
     static {

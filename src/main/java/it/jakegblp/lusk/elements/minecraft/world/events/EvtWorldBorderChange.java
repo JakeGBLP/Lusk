@@ -4,8 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import ch.njol.util.coll.CollectionUtils;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeEvent;
 import io.papermc.paper.event.world.border.WorldBorderBoundsChangeFinishEvent;
@@ -13,10 +11,12 @@ import io.papermc.paper.event.world.border.WorldBorderCenterChangeEvent;
 import io.papermc.paper.event.world.border.WorldBorderEvent;
 import org.bukkit.World;
 import org.bukkit.event.Event;
+import org.bukkit.event.world.WorldEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtWorldBorderChange extends SkriptEvent {
@@ -37,12 +37,7 @@ public class EvtWorldBorderChange extends SkriptEvent {
                             """)
                     .since("1.0.2")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(WorldBorderEvent.class, World.class, new Getter<>() {
-                @Override
-                public @NotNull World get(final WorldBorderEvent e) {
-                    return e.getWorld();
-                }
-            }, 0);
+            registerEventValue(WorldBorderEvent.class, World.class, WorldEvent::getWorld, 0);
         }
     }
 

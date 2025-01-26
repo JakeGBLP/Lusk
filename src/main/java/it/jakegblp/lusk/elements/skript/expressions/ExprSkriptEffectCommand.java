@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.EventValueExpression;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprSkriptEffectCommand extends EventValueExpression<String> {
 
 	static {
-		register(ExprSkriptEffectCommand.class, String.class, "[event-|the ][skript] effect command [string]");
+		SkriptUtils.register(ExprSkriptEffectCommand.class, String.class, "[event-|the ][skript] effect command [string]");
 	}
 
 	public ExprSkriptEffectCommand() {

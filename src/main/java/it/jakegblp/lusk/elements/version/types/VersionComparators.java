@@ -1,25 +1,16 @@
 package it.jakegblp.lusk.elements.version.types;
 
 import com.vdurmont.semver4j.Semver;
-import org.jetbrains.annotations.NotNull;
-import org.skriptlang.skript.lang.comparator.Comparator;
-import org.skriptlang.skript.lang.comparator.Comparators;
-import org.skriptlang.skript.lang.comparator.Relation;
+import it.jakegblp.lusk.api.GenericRelation;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
 
 public class VersionComparators {
 
     static {
-        Comparators.registerComparator(Semver.class, Semver.class, new Comparator<>() {
-            @Override
-            public @NotNull Relation compare(Semver v1, Semver v2) {
-                return v1.isGreaterThan(v2) ? Relation.GREATER : v2.isGreaterThan(v1) ? Relation.SMALLER : Relation.EQUAL;
-            }
-
-            @Override
-            public boolean supportsOrdering() {
-                return true;
-            }
-        });
+        registerComparator(Semver.class, Semver.class, (version1, version2) ->
+                version1.isGreaterThan(version2) ? GenericRelation.GREATER :
+                        version2.isGreaterThan(version1) ? GenericRelation.SMALLER : GenericRelation.EQUAL);
     }
 
     public VersionComparators() {

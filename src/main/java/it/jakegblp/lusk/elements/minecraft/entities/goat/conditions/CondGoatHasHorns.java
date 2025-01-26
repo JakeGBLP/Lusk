@@ -16,13 +16,15 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+
 @Name("Goat - Has Left/Right/Both/Either Horn")
 @Description("Checks if goat has the left, right, both or either horn.")
 @Examples({"if target has its left horn:"})
 @Since("1.0.3, 1.3 (Plural, Both/Either)")
 @SuppressWarnings("unused")
 public class CondGoatHasHorns extends Condition {
-    static {
+    static { // todo: property expression
         Skript.registerCondition(CondGoatHasHorns.class,
                 "%livingentities% (has|have) [its|the[ir]] (:left|:right|either|any) [goat] horn",
                 "%livingentities% (doesn't|does not|do not|don't) have [its|the[ir]] (:left|:right|either|any) [goat] horn",
@@ -42,10 +44,8 @@ public class CondGoatHasHorns extends Condition {
     @Override
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parser) {
         entityExpression = (Expression<LivingEntity>) expressions[0];
-        if (matchedPattern > 1)
-            both = true;
-        else
-            left = LuskUtils.getKleenean(parser.hasTag("left"), parser.hasTag("right"));
+        if (matchedPattern > 1) both = true;
+        else left = LuskUtils.getKleenean(parser.hasTag("left"), parser.hasTag("right"));
         setNegated((matchedPattern % 2) != 0);
         return true;
     }
@@ -62,7 +62,7 @@ public class CondGoatHasHorns extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return entityExpression.check(event, entity -> entity instanceof Goat goat
+        return test(entityExpression, event, entity -> entity instanceof Goat goat
                 && (both ? goat.hasLeftHorn() && goat.hasRightHorn() : switch (left) {
                     case TRUE -> goat.hasLeftHorn();
                     case FALSE -> goat.hasRightHorn();

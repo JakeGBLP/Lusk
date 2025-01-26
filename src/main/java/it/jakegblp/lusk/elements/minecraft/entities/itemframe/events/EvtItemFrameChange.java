@@ -4,14 +4,14 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtItemFrameChange extends SkriptEvent {
@@ -33,18 +33,8 @@ public class EvtItemFrameChange extends SkriptEvent {
                             """)
                     .since("1.0.0")
                     .requiredPlugins("Paper");
-            EventValues.registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, new Getter<>() {
-                @Override
-                public @NotNull Entity get(final PlayerItemFrameChangeEvent e) {
-                    return e.getItemFrame();
-                }
-            }, 0);
-            EventValues.registerEventValue(PlayerItemFrameChangeEvent.class, ItemStack.class, new Getter<>() {
-                @Override
-                public @NotNull ItemStack get(final PlayerItemFrameChangeEvent e) {
-                    return e.getItemStack();
-                }
-            }, 0);
+            registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, PlayerItemFrameChangeEvent::getItemFrame, 0);
+            registerEventValue(PlayerItemFrameChangeEvent.class, ItemStack.class, PlayerItemFrameChangeEvent::getItemStack, 0);
         }
     }
 

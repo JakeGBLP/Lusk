@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import it.jakegblp.lusk.utils.LuskMath;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Projectile;
 import org.jetbrains.annotations.Nullable;
@@ -47,21 +48,21 @@ public class ExprArrowPierceAmount extends SimplerPropertyExpression<Projectile,
     @Override
     public void set(Projectile from, Integer to) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setPierceLevel(Math.clamp(to, 0, 127));
+            abstractArrow.setPierceLevel(LuskMath.fit(0, to, 127));
         }
     }
 
     @Override
     public void add(Projectile from, Integer toAdd) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setPierceLevel(Math.clamp(abstractArrow.getPierceLevel()+toAdd, 0, 127));
+            abstractArrow.setPierceLevel(LuskMath.fit(0, abstractArrow.getPierceLevel()+toAdd, 127));
         }
     }
 
     @Override
     public void remove(Projectile from, Integer toRemove) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setPierceLevel(Math.clamp(abstractArrow.getPierceLevel() - toRemove, 0, 127));
+            abstractArrow.setPierceLevel(LuskMath.fit(0, abstractArrow.getPierceLevel() - toRemove, 127));
         }
     }
 

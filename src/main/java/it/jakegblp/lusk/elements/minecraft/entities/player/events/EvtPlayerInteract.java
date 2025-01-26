@@ -5,7 +5,6 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.utils.LuskUtils;
@@ -20,6 +19,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("deprecation")
 public class EvtPlayerInteract extends SkriptEvent {
@@ -43,60 +43,23 @@ public class EvtPlayerInteract extends SkriptEvent {
                 .examples("on player main hand interaction:", "on player interacting with an entity:\n\tif event-equipmentslot = hand slot:")
                 .since("1.3");
 
-        EventValues.registerEventValue(PlayerInteractEvent.class, EquipmentSlot.class, new Getter<>() {
-            @Override
-            public @Nullable EquipmentSlot get(PlayerInteractEvent event) {
-                return event.getHand();
-            }
+        registerEventValue(PlayerInteractEvent.class, EquipmentSlot.class, PlayerInteractEvent::getHand, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractEvent.class, Action.class, PlayerInteractEvent::getAction, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractEvent.class, Vector.class, e -> {
+            if (!isPaper()) return e.getClickedPosition();
+            Location interactionPoint = e.getInteractionPoint();
+            if (interactionPoint == null) return null;
+            return interactionPoint.getDirection().subtract(e.getPlayer().getLocation().getDirection());
         }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractEvent.class, Action.class, new Getter<>() {
-            @Override
-            public Action get(PlayerInteractEvent event) {
-                return event.getAction();
-            }
-        }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractEvent.class, Vector.class, new Getter<>() {
-            @Override
-            public @Nullable Vector get(PlayerInteractEvent event) {
-                if (!isPaper()) return event.getClickedPosition();
-                Location interactionPoint = event.getInteractionPoint();
-                if (interactionPoint == null) return null;
-                return interactionPoint.getDirection().subtract(event.getPlayer().getLocation().getDirection());
-            }
-        }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractEvent.class, Location.class, new Getter<>() {
-            @Override
-            public @Nullable Location get(PlayerInteractEvent event) {
-                if (isPaper()) return event.getInteractionPoint();
-                Vector offset = event.getClickedPosition();
+        registerEventValue(PlayerInteractEvent.class, Location.class, e -> {
+                if (isPaper()) return e.getInteractionPoint();
+                Vector offset = e.getClickedPosition();
                 if (offset == null) return null;
-                return event.getPlayer().getLocation().add(offset);
-            }
+                return e.getPlayer().getLocation().add(offset);
         }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractEntityEvent.class, EquipmentSlot.class, new Getter<>() {
-            @Override
-            public EquipmentSlot get(PlayerInteractEntityEvent event) {
-                return event.getHand();
-            }
-        }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractAtEntityEvent.class, Location.class, new Getter<>() {
-            @Override
-            public Location get(PlayerInteractAtEntityEvent event) {
-                return event.getRightClicked().getLocation().add(event.getClickedPosition());
-            }
-        }, EventValues.TIME_NOW);
-
-        EventValues.registerEventValue(PlayerInteractAtEntityEvent.class, Vector.class, new Getter<>() {
-            @Override
-            public Vector get(PlayerInteractAtEntityEvent event) {
-                return event.getClickedPosition();
-            }
-        }, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractEntityEvent.class, EquipmentSlot.class, PlayerInteractEntityEvent::getHand, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractAtEntityEvent.class, Location.class, e -> e.getRightClicked().getLocation().add(e.getClickedPosition()), EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractAtEntityEvent.class, Vector.class, PlayerInteractAtEntityEvent::getClickedPosition, EventValues.TIME_NOW);
     }
 
     private Kleenean isEntityInteraction;

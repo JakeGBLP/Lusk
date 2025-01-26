@@ -16,12 +16,14 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+
 @Name("Anvil GUI - is Viewing")
 @Description("Checks if a player is currently viewing a specific anvil GUI or any at all.")
 @Examples({"if player is viewing any anvil guis:\n\tbroadcast \"%player% is viewing an anvil gui!\""})
 @Since("1.3")
 public class CondAnvilGuiViewing extends Condition {
-    static {
+    static { // todo: property condition?
         Skript.registerCondition(CondAnvilGuiViewing.class,
                 "%players% (is[not:(n't| not)]|are[not:(n't| not)]) viewing (any:an[y] anvil gui[s]|" + Constants.ANVIL_GUI_PREFIX + " %-anvilguiinventory%)");
     }
@@ -34,9 +36,7 @@ public class CondAnvilGuiViewing extends Condition {
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parser) {
         any = parser.hasTag("any");
-        if (!any) {
-            anvilGuiWrapperExpression = (Expression<AnvilGuiWrapper>) expressions[1];
-        }
+        if (!any) anvilGuiWrapperExpression = (Expression<AnvilGuiWrapper>) expressions[1];
         playerExpression = (Expression<Player>) expressions[0];
         setNegated(parser.hasTag("not"));
         return true;
@@ -49,12 +49,10 @@ public class CondAnvilGuiViewing extends Condition {
 
     @Override
     public boolean check(@NotNull Event event) {
-        return playerExpression.check(event, player -> {
+        return test(playerExpression, event, player -> {
             if (any) return AnvilGuiWrapper.isViewingAnyAnvilGui(player);
             AnvilGuiWrapper anvilGuiWrapper = anvilGuiWrapperExpression.getSingle(event);
-            if (anvilGuiWrapper == null) {
-                return false;
-            }
+            if (anvilGuiWrapper == null) return false;
             return anvilGuiWrapper.isOpenTo(player);
         });
     }

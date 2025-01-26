@@ -19,8 +19,8 @@ import org.bukkit.event.entity.EntityEnterLoveModeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.fromTicks;
-import static it.jakegblp.lusk.utils.DeprecationUtils.getTicks;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.getTicks;
 
 @Name("Entity - Love Duration")
 @Description("Returns the love duration of an animal.\n Can be set.")

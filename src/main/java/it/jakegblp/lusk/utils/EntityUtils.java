@@ -22,28 +22,24 @@ public class EntityUtils {
     public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
         if (!isPaper()) return false;
         if (entity instanceof Zombie zombie) return zombie.shouldBurnInDay();
-        else if (MINECRAFT_1_18_2) {
-            if (entity instanceof Phantom phantom) return phantom.shouldBurnInDay();
-            else if (entity instanceof AbstractSkeleton skeleton) return skeleton.shouldBurnInDay();
-        } else if (entity instanceof Skeleton skeleton) {
+        else if (MINECRAFT_1_18_2 && entity instanceof AbstractSkeleton skeleton) return skeleton.shouldBurnInDay();
+        else if (entity instanceof Skeleton skeleton) {
             try {
                 return (boolean) Skeleton.class.getMethod("shouldBurnInDay").invoke(skeleton);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
-        }
+        } else if (entity instanceof Phantom phantom) return phantom.shouldBurnInDay();
         return false;
     }
 
     public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean value) {
         if (!isPaper()) return;
         if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(value);
-        else if (MINECRAFT_1_18_2) {
-            if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
-            else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
-        } else if (entity instanceof Skeleton skeleton) {
+        else if (MINECRAFT_1_18_2 && entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
+        else if (entity instanceof Skeleton skeleton) {
             try {
                 Skeleton.class.getMethod("setShouldBurnInDay", boolean.class).invoke(skeleton, value);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
-        }
+        } else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
     }
 
     /**
@@ -244,7 +240,7 @@ public class EntityUtils {
     public static ItemStack getEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot) {
         if (livingEntity instanceof Player player) {
             return player.getInventory().getItem(equipmentSlot);
-        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (!PAPER_1_21 || livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 return entityEquipment.getItem(equipmentSlot);
@@ -256,7 +252,7 @@ public class EntityUtils {
     public static void setEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
         if (livingEntity instanceof Player player) {
             player.getInventory().setItem(equipmentSlot, itemStack);
-        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (!PAPER_1_21 || livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 entityEquipment.setItem(equipmentSlot, itemStack);
