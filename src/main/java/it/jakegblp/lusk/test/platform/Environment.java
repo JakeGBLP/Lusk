@@ -228,7 +228,6 @@ public class Environment {
 			String source = resource.getSource();
 			URL url = new URL(source);
 			Path target = env.resolve(resource.getTarget());
-			System.out.println("some path:       " + target);
 			Files.createDirectories(target.getParent());
 			try (InputStream is = url.openStream()) {
 				Files.copy(is, target, StandardCopyOption.REPLACE_EXISTING);
