@@ -140,6 +140,7 @@ public class Constants {
             PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
             // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
             //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
+            PAPER_1_20_1 = MINECRAFT_1_20_1 && isPaper(),
             PAPER_1_20_4 = MINECRAFT_1_20_4 && isPaper(),
             PAPER_1_20_6 = MINECRAFT_1_20_6 && isPaper(),
             PAPER_1_21 = MINECRAFT_1_21 && isPaper(),
