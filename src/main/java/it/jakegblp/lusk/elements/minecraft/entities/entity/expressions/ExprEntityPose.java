@@ -23,7 +23,7 @@ Can be set.
 
 Setting the "Fixed" pose will make it stay until manually changed, this requires Paper 1.20.1+
 """)
-@Examples({"broadcast pose of target"})
+@Examples({"broadcast pose of target", "set fixed pose of target to dying pose"})
 @Since("1.0.2, 1.3 (Plural), 1.3.3 (Changeable and Fixed)")
 public class ExprEntityPose extends SimplerPropertyExpression<Entity, Pose> {
 
