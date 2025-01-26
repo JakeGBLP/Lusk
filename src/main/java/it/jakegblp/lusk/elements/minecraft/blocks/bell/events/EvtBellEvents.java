@@ -10,7 +10,7 @@ import org.bukkit.event.block.BellResonateEvent;
 import org.bukkit.event.block.BellRingEvent;
 
 import static it.jakegblp.lusk.utils.Constants.*;
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtBellEvents {

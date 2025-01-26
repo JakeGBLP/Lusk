@@ -5,6 +5,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
+import it.jakegblp.lusk.utils.LuskMath;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.jetbrains.annotations.Nullable;
@@ -49,21 +50,21 @@ public class ExprLlamaStrength extends SimplerPropertyExpression<LivingEntity,In
     @Override
     public void set(LivingEntity from, Integer to) {
         if (from instanceof Llama llama) {
-            llama.setStrength(Math.clamp(to,1,5));
+            llama.setStrength(LuskMath.fit(1, to, 5));
         }
     }
 
     @Override
     public void add(LivingEntity from, Integer to) {
         if (from instanceof Llama llama) {
-            llama.setStrength(Math.clamp(llama.getStrength()+to,1,5));
+            llama.setStrength(LuskMath.fit(1, llama.getStrength()+to, 5));
         }
     }
 
     @Override
     public void remove(LivingEntity from, Integer to) {
         if (from instanceof Llama llama) {
-            llama.setStrength(Math.clamp(llama.getStrength()-to,1,5));
+            llama.setStrength(LuskMath.fit(1, llama.getStrength()-to, 5));
         }
     }
 

@@ -76,8 +76,8 @@ public class UpdateChecker implements Listener {
         consoleLog("&oChecking for update...");
         getUpdateVersion(false).thenApply(version -> {
             consoleLog("&cLusk is not up to date!");
-            if (Constants.VERSION_SERVER.isGreaterThan(Constants.NEWEST_SUPPORTED)) {
-                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, please update.",Constants.VERSION_SERVER,this.pluginVersion);
+            if (Constants.VERSION_SERVER.isGreaterThan(Constants.VERSION_SERVER_NEWEST_SUPPORTED)) {
+                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, please update.", Constants.VERSION_SERVER, this.pluginVersion);
             }
             consoleLog("&a&lUpdate Available:");
             consoleLog(" &l»&c   {0} &7→&a {1}",this.pluginVersion,version);
@@ -85,10 +85,15 @@ public class UpdateChecker implements Listener {
             return true;
         }).exceptionally(throwable -> {
             consoleLog("&aLusk is up to date!");
-            if (Constants.VERSION_SERVER.isLowerThan(Constants.OLDEST_SUPPORTED)) {
-                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, stability is not guaranteed.",Constants.VERSION_SERVER,this.pluginVersion);
-            } else if (Constants.VERSION_SERVER.isGreaterThan(Constants.NEWEST_SUPPORTED)) {
-                consoleLog("&eYou're running Minecraft {0} which doesn't support yet, please report any issue at https://github.com/JakeGBLP/Lusk/issues",Constants.VERSION_SERVER);
+            if (Constants.VERSION_SERVER.isLowerThan(Constants.VERSION_SERVER_OLDEST_SUPPORTED)) {
+                warning("You're running Minecraft {0} which is not supported by Lusk {1}, stability is not guaranteed.", Constants.VERSION_SERVER, this.pluginVersion);
+            } else if (Constants.VERSION_SERVER.isGreaterThan(Constants.VERSION_SERVER_NEWEST_SUPPORTED)) {
+                warning("You're running Minecraft {0} which isn't supported yet, please report any issue at https://github.com/JakeGBLP/Lusk/issues", Constants.VERSION_SERVER);
+            }
+            if (Constants.VERSION_SKRIPT.isLowerThan(Constants.VERSION_SKRIPT_OLDEST_SUPPORTED)) {
+                warning("You're running Skript {0} which is not supported by Lusk {1}, stability is not guaranteed.", Constants.VERSION_SKRIPT, this.pluginVersion);
+            } else if (Constants.VERSION_SKRIPT.isGreaterThan(Constants.VERSION_SKRIPT_NEWEST_SUPPORTED)) {
+                warning("You're running Skript {0} which isn't supported yet, please report any issue at https://github.com/JakeGBLP/Lusk/issues", Constants.VERSION_SERVER);
             }
             return true;
         });

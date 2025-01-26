@@ -2,10 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.item.expressions;
 
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemRarity;
@@ -18,6 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
 @Description("Returns the rarity of an item.\nCan be set.\n\nBefore Lusk 1.2 (and Minecraft 1.20.5), this expression returned strings and also worked for enchantments, due to some major changes enchantments no longer have a rarity.")
 @Examples({"broadcast item rarity of tool", "set item rarity of {_sword} to epic"})
 @Since("1.0.0, 1.2 (ItemRarity)")
+@RequiredPlugins("1.20.5")
 @SuppressWarnings("unused")
 public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
     //todo: add tests

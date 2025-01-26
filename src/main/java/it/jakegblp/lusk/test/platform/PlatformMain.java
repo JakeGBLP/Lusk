@@ -1,12 +1,10 @@
 package it.jakegblp.lusk.test.platform;
 
-import ch.njol.skript.test.utils.TestResults;
-import ch.njol.util.NonNullPair;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import org.apache.commons.lang3.StringUtils;
+import it.jakegblp.lusk.test.utils.TestResults;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,9 +33,13 @@ public class PlatformMain {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		Path runnerRoot = Paths.get(args[0]);
+		assert runnerRoot != null;
         Path testsRoot = Paths.get(args[1]).toAbsolutePath();
+		assert testsRoot != null;
         Path dataRoot = Paths.get(args[2]);
+		assert dataRoot != null;
         Path envsRoot = Paths.get(args[3]);
+		assert envsRoot != null;
         String verbosity = args[4].toUpperCase(Locale.ENGLISH);
 		long timeout = Long.parseLong(args[5]);
 		if (timeout < 0)
@@ -63,14 +65,14 @@ public class PlatformMain {
 		System.out.println("Test environments: " + envs.stream().map(Environment::getName).collect(Collectors.joining(", ")));
 		
 		Set<String> allTests = new HashSet<>();
-		Map<String, List<NonNullPair<Environment, String>>> failures = new HashMap<>();
+		Map<String, List<Failure>> failures = new HashMap<>();
 		
 		boolean docsFailed = false;
 		// Run tests and collect the results
 		envs.sort(Comparator.comparing(Environment::getName));
 		for (Environment env : envs) {
 			System.out.println("Starting testing on " + env.getName());
-			env.initialize(dataRoot, runnerRoot, false);
+			env.initialize(dataRoot, runnerRoot);
 			TestResults results = env.runTests(runnerRoot, testsRoot, verbosity, timeout, jvmArgs);
 			if (results == null) {
 				System.err.println("The test environment '" + env.getName() + "' failed to produce test results.");
@@ -86,7 +88,7 @@ public class PlatformMain {
 				String error = fail.getValue();
 				assert error != null;
 				failures.computeIfAbsent(fail.getKey(), (k) -> new ArrayList<>())
-						.add(new NonNullPair<>(env, error));
+						.add(new Failure(env, error));
 			}
 		}
 
@@ -102,7 +104,7 @@ public class PlatformMain {
 		Collections.sort(failNames);
 
 		// All succeeded tests in a single line
-		StringBuilder output = new StringBuilder(String.format("%s Results %s%n", StringUtils.repeat("-", 25), StringUtils.repeat("-", 25)))
+		StringBuilder output = new StringBuilder(String.format("%s Results %s%n", "-".repeat(25), "-".repeat(25)))
 				.append("\nTested environments: ")
 				.append(envs.stream().map(Environment::getName).collect(Collectors.joining(", ")))
 				.append("\nSucceeded:\n  ")
@@ -111,19 +113,20 @@ public class PlatformMain {
 		if (!failNames.isEmpty()) { // More space for failed tests, they're important
 			output.append("\nFailed:");
 			for (String failed : failNames) {
-				List<NonNullPair<Environment, String>> errors = failures.get(failed);
+				List<Failure> errors = failures.get(failed);
 				output.append("\n  ").append(failed).append(" (on ").append(errors.size()).append(" environment").append(errors.size() == 1 ? "" : "s").append(")");
-				for (NonNullPair<Environment, String> error : errors) {
-					output.append("\n    ").append(error.getSecond()).append(" (on ").append(error.getFirst().getName()).append(")");
+				for (Failure error : errors) {
+					output.append("\n    ").append(error.string()).append(" (on ").append(error.environment().getName()).append(")");
 				}
 			}
-			output.append(String.format("%n%n%s", StringUtils.repeat("-", 60)));
+			output.append(String.format("%n%n%s", "-".repeat(25)));
 			System.err.print(output);
 			System.exit(failNames.size()); // Error code to indicate how many tests failed.
 			return;
 		}
-		output.append(String.format("%n%n%s", StringUtils.repeat("-", 60)));
+		output.append(String.format("%n%n%s", "-".repeat(25)));
 		System.out.print(output);
+		System.exit(0);
 	}
 
 }

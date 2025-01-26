@@ -1,6 +1,8 @@
 test "ExprItemFrameIsFixed":
-  spawn item frame at location(2,3,3):
-    assert itemframe is fixed property of entity is false with "item frame is fixed property is true instead of false"
+  set {_location} to location(2,3,3)
+  set block at {_location} to air
+  spawn item frame at {_location}:
+    assert (itemframe is fixed property of entity) is false with "item frame is fixed property is true instead of false"
     set itemframe is fixed property of entity to true
-    assert itemframe is fixed property of entity is true with "item frame is fixed property is false instead of true"
+    assert (itemframe is fixed property of entity) is true with "item frame is fixed property is false instead of true"
     delete entity

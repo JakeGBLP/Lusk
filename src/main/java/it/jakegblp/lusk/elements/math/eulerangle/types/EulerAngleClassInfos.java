@@ -11,10 +11,10 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.skriptlang.skript.lang.converter.Converters;
 
 import java.io.StreamCorruptedException;
 
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerConverter;
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
 public class EulerAngleClassInfos {
@@ -86,8 +86,8 @@ public class EulerAngleClassInfos {
                             return false;
                         }
                     }));
-            Converters.registerConverter(EulerAngle.class, Vector.class, VectorUtils::toVector);
-            Converters.registerConverter(Vector.class, EulerAngle.class, VectorUtils::toEulerAngle);
+            registerConverter(EulerAngle.class, Vector.class, VectorUtils::toVector);
+            registerConverter(Vector.class, EulerAngle.class, VectorUtils::toEulerAngle);
         }
     }
 }

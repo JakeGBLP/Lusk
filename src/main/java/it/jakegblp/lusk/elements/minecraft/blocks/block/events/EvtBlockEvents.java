@@ -10,7 +10,7 @@ import org.bukkit.event.block.FluidLevelChangeEvent;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_4;
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtBlockEvents {
     static {

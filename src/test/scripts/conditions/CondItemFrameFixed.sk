@@ -1,5 +1,7 @@
 test "CondItemFrameFixed":
-  spawn item frame at location(1,3,3):
+  set {_location} to location(1,3,3)
+  set block at {_location} to air
+  spawn item frame at {_location}:
     assert item frame entity is not fixed with "item frame is fixed instead of not fixed"
     set itemframe is fixed property of entity to true
     assert item frame entity is fixed with "item frame is not fixed instead of fixed"

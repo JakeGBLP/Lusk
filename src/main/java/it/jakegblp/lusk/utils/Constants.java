@@ -11,6 +11,7 @@ import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.entity.*;
@@ -43,9 +44,14 @@ public class Constants {
 
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
+            VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.16"),
+            VERSION_SERVER_NEWEST_SUPPORTED = parseVersion("1.21.4"),
             VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
-            OLDEST_SUPPORTED = parseVersion("1.16"),
-            NEWEST_SUPPORTED = parseVersion("1.21.4");
+            VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6"),
+            VERSION_SKRIPT_NEWEST_SUPPORTED = parseVersion("2.10");
+
+    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT);
+    //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
 
     public static final List<InventoryAction>
             DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
@@ -117,6 +123,10 @@ public class Constants {
              * Whether the current server version is greater than or equal to 1.20.6
              */
             MINECRAFT_1_20_6 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.6")),
+            /**
+             * Whether the current server version is greater than or equal to 1.21
+             */
+            MINECRAFT_1_21 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21")),
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
@@ -130,8 +140,10 @@ public class Constants {
             PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
             // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
             //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
+            PAPER_1_20_1 = MINECRAFT_1_20_1 && isPaper(),
             PAPER_1_20_4 = MINECRAFT_1_20_4 && isPaper(),
             PAPER_1_20_6 = MINECRAFT_1_20_6 && isPaper(),
+            PAPER_1_21 = MINECRAFT_1_21 && isPaper(),
 
             PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION = methodExists(EnderSignal.class, "setTargetLocation", Location.class, boolean.class),
             PAPER_HAS_WORLD_BORDER_EVENT = classExists("io.papermc.paper.event.world.border.WorldBorderEvent"),

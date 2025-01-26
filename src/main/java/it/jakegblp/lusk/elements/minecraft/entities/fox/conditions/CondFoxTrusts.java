@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 
 @Name("Fox - Trusts Players")
 @Description("Checks if the provided foxes trust the provided offline players.")
@@ -43,10 +43,10 @@ public class CondFoxTrusts extends Condition {
                     UUID uuid = offlinePlayer.getUniqueId();
                     if (fox.getFirstTrustedPlayer().getUniqueId() == uuid) return true;
                     return fox.getSecondTrustedPlayer() != null && fox.getSecondTrustedPlayer().getUniqueId() == uuid;
-                }, OfflinePlayer.class);
+                });
             }
             return false;
-        }, LivingEntity.class, isNegated());
+        }, isNegated());
     }
 
     @Override

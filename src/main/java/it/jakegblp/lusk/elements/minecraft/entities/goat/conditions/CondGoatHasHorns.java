@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 
 @Name("Goat - Has Left/Right/Both/Either Horn")
 @Description("Checks if goat has the left, right, both or either horn.")
@@ -67,6 +67,6 @@ public class CondGoatHasHorns extends Condition {
                     case TRUE -> goat.hasLeftHorn();
                     case FALSE -> goat.hasRightHorn();
                     case UNKNOWN -> goat.hasLeftHorn() || goat.hasRightHorn();
-                }), LivingEntity.class);
+                }));
     }
 }

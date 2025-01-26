@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.DeprecationUtils.test;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
 import static it.jakegblp.lusk.utils.EventUtils.getInteraction;
 
 @SuppressWarnings("unused")
@@ -78,7 +78,7 @@ public class EvtArmorStandManipulate extends SkriptEvent {
         boolean equippedIsAir = armorStandManipulateEvent.getArmorStandItem().getType().isAir();
         List<ArmorStandInteraction> list = Arrays.stream(interactionLiteral.getAll()).toList();
         if (list.contains(ArmorStandInteraction.CHANGE) || list.contains(getInteraction(armorStandManipulateEvent)))
-            return slots == null || test(slots, armorStandManipulateEvent, slot -> slot.equals(armorStandManipulateEvent.getSlot()), EquipmentSlot.class);
+            return slots == null || test(slots, armorStandManipulateEvent, slot -> slot.equals(armorStandManipulateEvent.getSlot()));
         return false;
     }
 

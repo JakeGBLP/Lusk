@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.inventory.Inventory;
 
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtGrindstoneEvents {
     static {

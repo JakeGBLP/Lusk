@@ -5,8 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import ch.njol.skript.test.utils.TestResults;
-
+import it.jakegblp.lusk.test.utils.TestResults;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,11 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,9 +64,42 @@ public class Environment {
 
     }
 
+	public static class SkriptResource extends Resource {
+
+		private final String version;
+
+		@Nullable
+		private transient String source;
+
+		public SkriptResource(String version, String target) {
+			super(null, target);
+			this.version = version;
+		}
+
+		@Override
+		public String getSource() {
+			try {
+				generateSkriptSource();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			if (source == null)
+				throw new IllegalStateException();
+			return source;
+		}
+
+		public void generateSkriptSource() {
+			if (source != null)
+				return;
+
+			source = "https://repo.skriptlang.org/releases/com/github/SkriptLang/Skript/" + version + "/Skript-" + version + ".jar";
+		}
+	}
+
 	public static class PaperResource extends Resource {
 
 		private final String version;
+
 		@Nullable
 		private transient String source;
 
@@ -75,6 +107,7 @@ public class Environment {
 			super(null, target);
 			this.version = version;
 		}
+
 
 		@Override
 		public String getSource() {
@@ -134,46 +167,47 @@ public class Environment {
 	 */
 	@Nullable
 	private final List<PaperResource> paperDownloads;
+	/**
+	 * Skript resources that need to be downloaded.
+	 */
+	@Nullable
+	private final List<SkriptResource> skriptDownloads;
 
 	/**
-	 * Where Skript should be placed under platform root.
+	 * Where Lusk should be placed under platform root.
 	 * Directories created as needed.
 	 */
-	private final String skriptTarget;
+	private final String luskTarget;
 
 	/**
 	 * Added after platform's own JVM flags.
 	 */
 	private final String[] commandLine;
 
-	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, String skriptTarget, String... commandLine) {
+	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, @Nullable List<SkriptResource> skriptDownloads, String luskTarget, String... commandLine) {
 		this.name = name;
 		this.resources = resources;
 		this.downloads = downloads;
 		this.paperDownloads = paperDownloads;
-		this.skriptTarget = skriptTarget;
+		this.skriptDownloads = skriptDownloads;
+		this.luskTarget = luskTarget;
 		this.commandLine = commandLine;
 	}
 
-    public void initialize(Path dataRoot, Path runnerRoot, boolean remake) throws IOException {
+    public void initialize(Path dataRoot, Path runnerRoot) throws IOException {
 		Path env = runnerRoot.resolve(name);
-		boolean onlyCopySkript = Files.exists(env) && !remake;
+		Path lusk = env.resolve(luskTarget);
+		Files.createDirectories(lusk.getParent());
+		Path buildLibsDir = Paths.get("build", "libs");
+		File[] jarFiles = buildLibsDir.toFile().listFiles((dir, name) -> name.endsWith(".jar"));
 
-		// Copy Skript to platform
-		Path skript = env.resolve(skriptTarget);
-		Files.createDirectories(skript.getParent());
-		try {
-			Files.copy(new File(getClass().getProtectionDomain().getCodeSource().getLocation()
-				.toURI()).toPath(), skript, StandardCopyOption.REPLACE_EXISTING);
-		} catch (URISyntaxException e) {
-			throw new AssertionError(e);
-		}
+		if (jarFiles == null || jarFiles.length == 0)
+			throw new RuntimeException("No JAR files found in the build/libs directory!");
 
-		if (onlyCopySkript) {
-			return;
-		}
+		Path luskSource = jarFiles[0].toPath();
+		Files.copy(luskSource, lusk, StandardCopyOption.REPLACE_EXISTING);
 
-		// Copy resources
+        // Copy resources
 		for (Resource resource : resources) {
 			Path source = dataRoot.resolve(resource.getSource());
 			Path target = env.resolve(resource.getTarget());
@@ -186,6 +220,8 @@ public class Environment {
 			downloads.addAll(this.downloads);
 		if (this.paperDownloads != null)
 			downloads.addAll(this.paperDownloads);
+		if (this.skriptDownloads != null)
+			downloads.addAll(this.skriptDownloads);
 		// Download additional resources
 		for (Resource resource : downloads) {
 			assert resource != null;
@@ -200,9 +236,8 @@ public class Environment {
 	}
 
 	@Nullable
-	public TestResults runTests(Path runnerRoot, Path testsRoot,
-	                            String verbosity, long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
-		
+	public TestResults runTests(Path runnerRoot, Path testsRoot, String verbosity,
+								long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
 		Path env = runnerRoot.resolve(name);
 		Path resultsPath = env.resolve("test_results.json");
 		Files.deleteIfExists(resultsPath);
@@ -229,7 +264,8 @@ public class Environment {
 		Runtime.getRuntime().addShutdownHook(new Thread(process::destroy));
 
 		// Catch tests running for abnormally long time
-		if (timeout > 0) {
+		boolean devMode = true;
+		if (!devMode && timeout > 0) {
 			new Timer("runner watchdog", true).schedule(new TimerTask() {
 				@Override
 				public void run() {

@@ -36,6 +36,7 @@ types:
   timespanperiod: time span period¦s @a
   ignitecause: ignition cause¦s @an
   entitysnapshot: entity snapshot¦s @an
+  blockaction: block action¦s @a
 
 # -- Rotations --
 rotations:

@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.DeprecationUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("deprecation")
 public class EvtPlayerInteract extends SkriptEvent {
