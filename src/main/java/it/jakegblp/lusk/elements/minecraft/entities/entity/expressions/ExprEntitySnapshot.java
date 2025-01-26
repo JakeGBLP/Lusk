@@ -10,7 +10,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 
 @Name("Entity - Snapshot")
 @Description("Creates an EntitySnapshot representing the current state of this entity.")
-@Examples({"broadcast entity height of target"})
+@Examples({"broadcast entity snapshot of target"})
 @Since("1.3")
 @RequiredPlugins("1.20.2")
 @SuppressWarnings({"unused", "UnstableApiUsage"})
