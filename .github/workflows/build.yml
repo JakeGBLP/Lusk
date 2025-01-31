@@ -27,7 +27,7 @@ jobs:
       - name: Compile Minecraft Spigot (via BuildTools)
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
-          version: '1.16.5'
+          versions: "1.16.5"
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload artifacts
