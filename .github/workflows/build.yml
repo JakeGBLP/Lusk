@@ -25,28 +25,46 @@ jobs:
         with:
           java-version: 16
           distribution: 'adopt'
+          cache: maven
 
       - name: Compile Spigot 1.16.5-1.17.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.16.5,1.17,1.17.1"
 
+      - name: Remap 1.17
+        run: ./gradlew nms_v1_17:remap
+
+      - name: Remap 1.17.1
+        run: ./gradlew nms_v1_17_1:remap
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'adopt'
+          cache: maven
 
       - name: Compile Spigot 1.18.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.18,1.18.1,1.18.2"
 
+      - name: Remap 1.18
+        run: ./gradlew nms_v1_18:remap
+
+      - name: Remap 1.18.1
+        run: ./gradlew nms_v1_18_1:remap
+
+      - name: Remap 1.18.2
+        run: ./gradlew nms_v1_18_2:remap
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'adopt'
+          cache: maven
 
       - name: Build with Gradle
         run: ./gradlew build
