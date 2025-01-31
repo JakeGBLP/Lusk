@@ -1,0 +1,4 @@
+test "EffNmsIronGolemOfferRose":
+  spawn iron golem at location(12,70,12):
+    make target offer a flower
+    delete entity

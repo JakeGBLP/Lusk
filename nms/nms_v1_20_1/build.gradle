@@ -1,0 +1,39 @@
+plugins {
+    id('java')
+    id 'io.github.patrick.remapper' version '1.4.2'
+}
+
+def oldestJava = 16
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+}
+
+dependencies {
+    implementation('org.jetbrains:annotations:20.1.0')
+    compileOnly 'org.spigotmc:spigot:1.20.1-R0.1-SNAPSHOT:remapped-mojang'
+    implementation project(":version_adapter")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-source', '' + oldestJava, '-target', '' + oldestJava]
+}
+
+tasks {
+    remap {
+        version.set("1.20.1")
+    }
+}
+
+tasks {
+    build {
+        dependsOn tasks.remap
+    }
+}

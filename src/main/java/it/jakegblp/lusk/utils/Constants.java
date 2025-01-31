@@ -11,6 +11,7 @@ import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import it.jakegblp.lusk.api.NMSAdapter;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.Location;
 import org.bukkit.Registry;
@@ -50,8 +51,8 @@ public class Constants {
             VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6"),
             VERSION_SKRIPT_NEWEST_SUPPORTED = parseVersion("2.10");
 
-    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT);
-    //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
+    public static final SkriptAdapter SKRIPT = VersionResolver.resolveSkriptAdapter(VERSION_SKRIPT);
+    public static final NMSAdapter NMS = VersionResolver.resolveNMSAdapter(VERSION_SERVER);
 
     public static final List<InventoryAction>
             DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
@@ -127,6 +128,7 @@ public class Constants {
              * Whether the current server version is greater than or equal to 1.21
              */
             MINECRAFT_1_21 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21")),
+            HAS_NMS = NMS != null,
             SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
             HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),

@@ -40,11 +40,11 @@ dependencies {
     shadow('junit:junit:3.8.2')
 
     implementation project(":version_adapter")
-    implementation project(":skript_v2_6_4")
-    implementation project(":skript_v2_7_3")
-    implementation project(":skript_v2_8_7")
-    implementation project(":skript_v2_9_5")
-    implementation project(":skript_v2_10_0")
+    subprojects.each {
+        if (it.name.startsWith("skript_") || it.name.startsWith("nms_")) {
+            implementation project(it.path)
+        }
+    }
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
@@ -78,7 +78,11 @@ build {
     }
     doLast {
         subprojects.each { subproject ->
-            delete subproject.layout.buildDirectory
+            subproject.tasks.matching { it.name == "build" }.configureEach {
+                doLast {
+                    delete subproject.layout.buildDirectory
+                }
+            }
         }
     }
 }
@@ -112,9 +116,13 @@ tasks.register('testBuild') {
     }
 }
 
+enum Modifiers {
+    DEV_MODE, GEN_NIGHTLY_DOCS, GEN_RELEASE_DOCS, DEBUG, PROFILE, JUNIT
+}
+
 // Create a test task with given name, environments dir/file, dev mode and java version.
 // -1 on the timeout means it'll be disabled.
-void createTestTask(String name, String desc, String environments, int javaVersion, long timeout) {
+void createTestTask(String name, String desc, String environments, int javaVersion, long timeout, Modifiers... modifiers) {
     if (timeout == 0) {
         timeout = 300000 // 5 minutes
     }
@@ -124,6 +132,10 @@ void createTestTask(String name, String desc, String environments, int javaVersi
         dependsOn build
         javaLauncher = javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
+
+        if (modifiers.contains(Modifiers.DEV_MODE)) {
+            standardInput = System.in
         }
         group = 'execution'
         classpath = files([
@@ -137,6 +149,7 @@ void createTestTask(String name, String desc, String environments, int javaVersi
                 'src/test/scripts',
                 'src/test/resources/runner_data',
                 environments,
+                modifiers.contains(Modifiers.DEV_MODE),
                 project.findProperty('verbosity') ?: "null",
                 timeout
         ]
@@ -144,23 +157,124 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('luskTest_1_16_5_skript_2_6_4', 'Runs tests on Paper 1.16.5 and with Skript 2.6.4.', environments + 'paper-1.16.5_skript-2.6.4.json', java16, -1)
-createTestTask('luskTest_1_16_5_skript_2_7_3', 'Runs tests on Paper 1.16.5 and with Skript 2.7.3.', environments + 'paper-1.16.5_skript-2.7.3.json', java16, -1)
-createTestTask('luskTest_1_16_5_skript_2_8_7', 'Runs tests on Paper 1.16.5 and with Skript 2.8.7.', environments + 'paper-1.16.5_skript-2.8.7.json', java16, -1)
+createTestTask('luskTest_1_16_5_skript_2_6_4', 'Runs tests on Paper 1.16.5 with Skript 2.6.4.', environments + 'paper-1.16.5_skript-2.6.4.json', java16, -1)
+createTestTask('luskTest_1_16_5_skript_2_7_3', 'Runs tests on Paper 1.16.5 with Skript 2.7.3.', environments + 'paper-1.16.5_skript-2.7.3.json', java16, -1)
+createTestTask('luskTest_1_16_5_skript_2_8_7', 'Runs tests on Paper 1.16.5 with Skript 2.8.7.', environments + 'paper-1.16.5_skript-2.8.7.json', java16, -1)
+
+createTestTask('luskTest_1_16_5_skript_2_6_4_spigot', 'Runs tests on Spigot 1.16.5 with Skript 2.6.4.', environments + 'spigot-1.16.5_skript-2.6.4.json', java16, -1)
+createTestTask('luskTest_1_16_5_skript_2_7_3_spigot', 'Runs tests on Spigot 1.16.5 with Skript 2.7.3.', environments + 'spigot-1.16.5_skript-2.7.3.json', java16, -1)
+createTestTask('luskTest_1_16_5_skript_2_8_7_spigot', 'Runs tests on Spigot 1.16.5 with Skript 2.8.7.', environments + 'spigot-1.16.5_skript-2.8.7.json', java16, -1)
 
 createTestTask('luskTest_1_16_5', 'Runs tests on Paper 1.16.5.', environments + 'paper-1.16.5.json', java16, -1)
+createTestTask('luskTest_1_17', 'Runs tests on Paper 1.17.', environments + 'paper-1.17.json', java17, -1)
 createTestTask('luskTest_1_17_1', 'Runs tests on Paper 1.17.1.', environments + 'paper-1.17.1.json', java17, -1)
+createTestTask('luskTest_1_18', 'Runs tests on Paper 1.18.', environments + 'paper-1.18.json', java17, -1)
+createTestTask('luskTest_1_18_1', 'Runs tests on Paper 1.18.1.', environments + 'paper-1.18.1.json', java17, -1)
 createTestTask('luskTest_1_18_2', 'Runs tests on Paper 1.18.2.', environments + 'paper-1.18.2.json', java17, -1)
+createTestTask('luskTest_1_19', 'Runs tests on Paper 1.19.', environments + 'paper-1.19.json', java17, -1)
+createTestTask('luskTest_1_19_1', 'Runs tests on Paper 1.19.1.', environments + 'paper-1.19.1.json', java17, -1)
+createTestTask('luskTest_1_19_2', 'Runs tests on Paper 1.19.2.', environments + 'paper-1.19.2.json', java17, -1)
+createTestTask('luskTest_1_19_3', 'Runs tests on Paper 1.19.3.', environments + 'paper-1.19.3.json', java17, -1)
 createTestTask('luskTest_1_19_4', 'Runs tests on Paper 1.19.4.', environments + 'paper-1.19.4.json', java17, -1)
+createTestTask('luskTest_1_20', 'Runs tests on Paper 1.20.', environments + 'paper-1.20.json', java21, -1)
+createTestTask('luskTest_1_20_1', 'Runs tests on Paper 1.20.1.', environments + 'paper-1.20.1.json', java21, -1)
+createTestTask('luskTest_1_20_2', 'Runs tests on Paper 1.20.2.', environments + 'paper-1.20.2.json', java21, -1)
+createTestTask('luskTest_1_20_3', 'Runs tests on Paper 1.20.3.', environments + 'paper-1.20.3.json', java21, -1)
+createTestTask('luskTest_1_20_4', 'Runs tests on Paper 1.20.4.', environments + 'paper-1.20.4.json', java21, -1)
+createTestTask('luskTest_1_20_5', 'Runs tests on Paper 1.20.5.', environments + 'paper-1.20.5.json', java21, -1)
 createTestTask('luskTest_1_20_6', 'Runs tests on Paper 1.20.6.', environments + 'paper-1.20.6.json', java21, -1)
+createTestTask('luskTest_1_21', 'Runs tests on Paper 1.21.', environments + 'paper-1.21.json', java21, -1)
+createTestTask('luskTest_1_21_1', 'Runs tests on Paper 1.21.1.', environments + 'paper-1.21.1.json', java21, -1)
+createTestTask('luskTest_1_21_2', 'Runs tests on Paper 1.21.2.', environments + 'paper-1.21.2.json', java21, -1)
+createTestTask('luskTest_1_21_3', 'Runs tests on Paper 1.21.3.', environments + 'paper-1.21.3.json', java21, -1)
 createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 'paper-1.21.4.json', java21, -1)
 
-tasks.register("luskTestOlderSkriptVersions") {
-    description = 'Runs tests on older skript versions.'
-    dependsOn luskTest_1_16_5_skript_2_6_4, luskTest_1_16_5_skript_2_7_3, luskTest_1_16_5_skript_2_8_7
+createTestTask('luskTest_1_16_5_spigot', 'Runs tests on Spigot 1.16.5.', environments + 'spigot-1.16.5.json', java16, -1)
+createTestTask('luskTest_1_17_spigot', 'Runs tests on Spigot 1.17.', environments + 'spigot-1.17.json', java17, -1)
+createTestTask('luskTest_1_17_1_spigot', 'Runs tests on Spigot 1.17.1.', environments + 'spigot-1.17.1.json', java17, -1)
+createTestTask('luskTest_1_18_spigot', 'Runs tests on Spigot 1.18.', environments + 'spigot-1.18.json', java17, -1)
+createTestTask('luskTest_1_18_1_spigot', 'Runs tests on Spigot 1.18.1.', environments + 'spigot-1.18.1.json', java17, -1)
+createTestTask('luskTest_1_18_2_spigot', 'Runs tests on Spigot 1.18.2.', environments + 'spigot-1.18.2.json', java17, -1)
+createTestTask('luskTest_1_19_spigot', 'Runs tests on Spigot 1.19.', environments + 'spigot-1.19.json', java17, -1)
+createTestTask('luskTest_1_19_1_spigot', 'Runs tests on Spigot 1.19.1.', environments + 'spigot-1.19.1.json', java17, -1)
+createTestTask('luskTest_1_19_2_spigot', 'Runs tests on Spigot 1.19.2.', environments + 'spigot-1.19.2.json', java17, -1)
+createTestTask('luskTest_1_19_3_spigot', 'Runs tests on Spigot 1.19.3.', environments + 'spigot-1.19.3.json', java17, -1)
+createTestTask('luskTest_1_19_4_spigot', 'Runs tests on Spigot 1.19.4.', environments + 'spigot-1.19.4.json', java17, -1)
+createTestTask('luskTest_1_20_spigot', 'Runs tests on Spigot 1.20.', environments + 'spigot-1.20.json', java21, -1)
+createTestTask('luskTest_1_20_1_spigot', 'Runs tests on Spigot 1.20.1.', environments + 'spigot-1.20.1.json', java21, -1)
+createTestTask('luskTest_1_20_2_spigot', 'Runs tests on Spigot 1.20.2.', environments + 'spigot-1.20.2.json', java21, -1)
+createTestTask('luskTest_1_20_3_spigot', 'Runs tests on Spigot 1.20.3.', environments + 'spigot-1.20.3.json', java21, -1)
+createTestTask('luskTest_1_20_4_spigot', 'Runs tests on Spigot 1.20.4.', environments + 'spigot-1.20.4.json', java21, -1)
+createTestTask('luskTest_1_20_5_spigot', 'Runs tests on Spigot 1.20.5.', environments + 'spigot-1.20.5.json', java21, -1)
+createTestTask('luskTest_1_20_6_spigot', 'Runs tests on Spigot 1.20.6.', environments + 'spigot-1.20.6.json', java21, -1)
+createTestTask('luskTest_1_21_spigot', 'Runs tests on Spigot 1.21.', environments + 'spigot-1.21.json', java21, -1)
+createTestTask('luskTest_1_21_1_spigot', 'Runs tests on Spigot 1.21.1.', environments + 'spigot-1.21.1.json', java21, -1)
+createTestTask('luskTest_1_21_2_spigot', 'Runs tests on Spigot 1.21.2.', environments + 'spigot-1.21.2.json', java21, -1)
+createTestTask('luskTest_1_21_3_spigot', 'Runs tests on Spigot 1.21.3.', environments + 'spigot-1.21.3.json', java21, -1)
+createTestTask('luskTest_1_21_4_spigot', 'Runs tests on Spigot 1.21.4.', environments + 'spigot-1.21.4.json', java21, -1)
+
+tasks.register("luskTestSkript") {
+    description = 'Runs tests on older skript versions with Paper and Spigot.'
+    dependsOn luskTest_1_16_5_skript_2_6_4,
+              luskTest_1_16_5_skript_2_7_3,
+              luskTest_1_16_5_skript_2_8_7,
+              luskTest_1_16_5_skript_2_6_4_spigot,
+              luskTest_1_16_5_skript_2_7_3_spigot,
+              luskTest_1_16_5_skript_2_8_7_spigot
 }
 
-tasks.register('luskTest') {
-    description = 'Runs tests on all environments.'
-    dependsOn luskTestOlderSkriptVersions, luskTest_1_16_5, luskTest_1_17_1, luskTest_1_18_2, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4
+tasks.register('luskTestPaper') {
+    description = 'Runs tests on all Paper environments.'
+    dependsOn luskTestSkript,
+              luskTest_1_16_5,
+              luskTest_1_17,
+              luskTest_1_17_1,
+              luskTest_1_18,
+              luskTest_1_18_1,
+              luskTest_1_18_2,
+              luskTest_1_19,
+              luskTest_1_19_1,
+              luskTest_1_19_2,
+              luskTest_1_19_3,
+              luskTest_1_19_4,
+              luskTest_1_20,
+              luskTest_1_20_1,
+              luskTest_1_20_2,
+              luskTest_1_20_3,
+              luskTest_1_20_4,
+              luskTest_1_20_5,
+              luskTest_1_20_6,
+              luskTest_1_21,
+              luskTest_1_21_1,
+              luskTest_1_21_2,
+              luskTest_1_21_3,
+              luskTest_1_21_4
 }
+
+tasks.register('luskTestSpigot') {
+    description = 'Runs tests on all Spigot environments.'
+    dependsOn luskTest_1_16_5_spigot,
+              luskTest_1_17_spigot,
+              luskTest_1_17_1_spigot,
+              luskTest_1_18_spigot,
+              luskTest_1_18_1_spigot,
+              luskTest_1_18_2_spigot,
+              luskTest_1_19_spigot,
+              luskTest_1_19_1_spigot,
+              luskTest_1_19_2_spigot,
+              luskTest_1_19_3_spigot,
+              luskTest_1_19_4_spigot,
+              luskTest_1_20_spigot,
+              luskTest_1_20_1_spigot,
+              luskTest_1_20_2_spigot,
+              luskTest_1_20_3_spigot,
+              luskTest_1_20_4_spigot,
+              luskTest_1_20_5_spigot,
+              luskTest_1_20_6_spigot,
+              luskTest_1_21_spigot,
+              luskTest_1_21_1_spigot,
+              luskTest_1_21_2_spigot,
+              luskTest_1_21_3_spigot,
+              luskTest_1_21_4_spigot
+}
+
