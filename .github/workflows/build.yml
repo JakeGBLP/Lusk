@@ -40,11 +40,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: 21
-          distribution: 'adopt'
       - name: Install Gradle
         uses: sdkman/sdkman-action@main
         with:

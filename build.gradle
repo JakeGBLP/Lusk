@@ -213,6 +213,84 @@ createTestTask('luskTest_1_21_2_spigot', 'Runs tests on Spigot 1.21.2.', environ
 createTestTask('luskTest_1_21_3_spigot', 'Runs tests on Spigot 1.21.3.', environments + 'spigot-1.21.3.json', java21, -1)
 createTestTask('luskTest_1_21_4_spigot', 'Runs tests on Spigot 1.21.4.', environments + 'spigot-1.21.4.json', java21, -1)
 
+tasks.register("luskTest_1_21_x_all") {
+    description = 'Runs tests on all 1.21.x versions with both Paper and Spigot.'
+    dependsOn luskTest_1_21,
+            luskTest_1_21_1,
+            luskTest_1_21_2,
+            luskTest_1_21_3,
+            luskTest_1_21_4,
+            luskTest_1_21_spigot,
+            luskTest_1_21_1_spigot,
+            luskTest_1_21_2_spigot,
+            luskTest_1_21_3_spigot,
+            luskTest_1_21_4_spigot
+}
+
+tasks.register("luskTest_1_20_x_all") {
+    description = 'Runs tests on all 1.20.x versions with both Paper and Spigot.'
+    dependsOn luskTest_1_20,
+            luskTest_1_20_1,
+            luskTest_1_20_2,
+            luskTest_1_20_3,
+            luskTest_1_20_4,
+            luskTest_1_20_5,
+            luskTest_1_20_6,
+            luskTest_1_20_spigot,
+            luskTest_1_20_1_spigot,
+            luskTest_1_20_2_spigot,
+            luskTest_1_20_3_spigot,
+            luskTest_1_20_4_spigot,
+            luskTest_1_20_5_spigot,
+            luskTest_1_20_6_spigot
+}
+
+tasks.register("luskTest_1_19_x_all") {
+    description = 'Runs tests on all 1.19.x versions with both Paper and Spigot.'
+    dependsOn luskTest_1_19,
+            luskTest_1_19_1,
+            luskTest_1_19_2,
+            luskTest_1_19_3,
+            luskTest_1_19_4,
+            luskTest_1_19_spigot,
+            luskTest_1_19_1_spigot,
+            luskTest_1_19_2_spigot,
+            luskTest_1_19_3_spigot,
+            luskTest_1_19_4_spigot
+}
+
+
+tasks.register("luskTest_1_18_x_all") {
+    description = 'Runs tests on all 1.18.x versions with both Paper and Spigot.'
+    dependsOn luskTest_1_18,
+            luskTest_1_18_1,
+            luskTest_1_18_2,
+            luskTest_1_18_spigot,
+            luskTest_1_18_1_spigot,
+            luskTest_1_18_2_spigot
+}
+
+tasks.register("luskTest_1_17_x_all") {
+    description = 'Runs tests on all 1.17.x versions with both Paper and Spigot.'
+    dependsOn luskTest_1_17,
+            luskTest_1_17_1,
+            luskTest_1_17_spigot,
+            luskTest_1_17_1_spigot
+}
+
+tasks.register("luskTest_1_16_5_all") {
+    description = 'Runs tests on 1.16.5 with both Paper and Spigot and with all compatible Skript versions.'
+    dependsOn luskTest_1_16_5,
+            luskTest_1_16_5_skript_2_6_4,
+            luskTest_1_16_5_skript_2_7_3,
+            luskTest_1_16_5_skript_2_8_7,
+            luskTest_1_16_5_spigot,
+            luskTest_1_16_5_skript_2_6_4_spigot,
+            luskTest_1_16_5_skript_2_7_3_spigot,
+            luskTest_1_16_5_skript_2_8_7_spigot
+}
+
+
 tasks.register("luskTestSkript") {
     description = 'Runs tests on older skript versions with Paper.'
     dependsOn luskTest_1_16_5_skript_2_6_4,
@@ -281,4 +359,3 @@ tasks.register('luskTestSpigot') {
               luskTest_1_21_3_spigot,
               luskTest_1_21_4_spigot
 }
-
