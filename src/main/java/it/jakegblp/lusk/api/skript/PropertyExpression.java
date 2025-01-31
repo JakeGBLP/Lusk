@@ -12,7 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
 
-import it.jakegblp.lusk.utils.CompatibilityUtils;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -146,7 +146,7 @@ public abstract class PropertyExpression<F, T> extends SimpleExpression<T> {
 	protected T[] get(final F[] source, Function<? super F, ? extends T> converter) {
 		assert source != null;
 		assert converter != null;
-		return CompatibilityUtils.convertUnsafe(source, getReturnType(), converter);
+		return SkriptUtils.convertUnsafe(source, getReturnType(), converter);
 	}
 
 	@Override

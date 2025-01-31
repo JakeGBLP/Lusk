@@ -14,7 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Bounding Box - Overlaps")
 @Description("Whether or not one or more bounding boxes overlap other bounding boxes.\nBounding boxes that are only intersecting at the borders are not considered overlapping.")

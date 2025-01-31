@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.bukkit.inventory.Inventory;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 public class EvtBrewingStandEvents {
     static {

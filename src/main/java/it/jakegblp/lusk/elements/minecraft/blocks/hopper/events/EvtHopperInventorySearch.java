@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 @SuppressWarnings("unused")
 public class EvtHopperInventorySearch extends SkriptEvent {

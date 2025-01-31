@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.StreamCorruptedException;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerConverter;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerConverter;
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
 public class EulerAngleClassInfos {

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.getMilliseconds;
+import static it.jakegblp.lusk.utils.SkriptUtils.getMilliseconds;
 
 @Name("WorldBorder - Change Duration")
 @Description("Returns the duration of the change in the World Border Start Change event.\nCan be set.\nRequires Paper.")

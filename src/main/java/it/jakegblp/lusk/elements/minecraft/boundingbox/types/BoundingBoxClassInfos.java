@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.StreamCorruptedException;
 import java.util.stream.Collectors;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerConverter;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerConverter;
 import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 

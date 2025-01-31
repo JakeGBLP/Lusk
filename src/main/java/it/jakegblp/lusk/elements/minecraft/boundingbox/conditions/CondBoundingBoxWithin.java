@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Bounding Box - X is Within")
 @Description("Whether or not a Vector, Location, or Bounding Box is within a Bounding Box.\n\nVector and Location = Checks if the Bounding Box contains a specified position.\nBounding Box = Checks if the Bounding Box fully contains a Bounding Box.")

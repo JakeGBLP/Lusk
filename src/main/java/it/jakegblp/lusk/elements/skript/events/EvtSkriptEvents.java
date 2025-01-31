@@ -6,7 +6,7 @@ import ch.njol.skript.command.EffectCommandEvent;
 import ch.njol.skript.lang.util.SimpleEvent;
 import org.bukkit.command.CommandSender;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 public class EvtSkriptEvents {
     static {

@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Goat - Has Left/Right/Both/Either Horn")
 @Description("Checks if goat has the left, right, both or either horn.")

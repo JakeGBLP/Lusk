@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Fox - Trusts Players")
 @Description("Checks if the provided foxes trust the provided offline players.")

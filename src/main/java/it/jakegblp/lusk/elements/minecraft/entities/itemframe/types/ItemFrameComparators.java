@@ -3,7 +3,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.itemframe.types;
 import it.jakegblp.lusk.api.GenericRelation;
 import org.bukkit.Rotation;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;
 
 @SuppressWarnings("unused")
 public class ItemFrameComparators {

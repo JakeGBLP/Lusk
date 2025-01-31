@@ -11,7 +11,7 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import it.jakegblp.lusk.api.BlockWrapper;
-import it.jakegblp.lusk.utils.CompatibilityUtils;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Brewing - Remaining Time/Ticks")
@@ -38,7 +38,7 @@ public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
         Integer ticks = new BlockWrapper(from).getBrewingTime();
         if (ticks == null) return null;
         if (usesTicks) return ticks;
-        return CompatibilityUtils.fromTicks(ticks);
+        return SkriptUtils.fromTicks(ticks);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
         if (to instanceof Integer integer) {
             new BlockWrapper(from).setBrewingTime(integer);
         } else if (to instanceof Timespan timespan) {
-            new BlockWrapper(from).setBrewingTime((int) CompatibilityUtils.getTicks(timespan));
+            new BlockWrapper(from).setBrewingTime((int) SkriptUtils.getTicks(timespan));
         }
     }
 

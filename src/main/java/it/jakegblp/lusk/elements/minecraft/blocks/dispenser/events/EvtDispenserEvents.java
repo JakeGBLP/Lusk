@@ -8,7 +8,7 @@ import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 public class EvtDispenserEvents {
     static {

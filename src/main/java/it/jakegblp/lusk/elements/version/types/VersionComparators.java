@@ -3,7 +3,7 @@ package it.jakegblp.lusk.elements.version.types;
 import com.vdurmont.semver4j.Semver;
 import it.jakegblp.lusk.api.GenericRelation;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;
 
 public class VersionComparators {
 

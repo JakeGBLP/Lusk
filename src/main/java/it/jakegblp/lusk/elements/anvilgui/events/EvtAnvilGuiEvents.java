@@ -10,7 +10,7 @@ import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.inventory.Inventory;
 
 import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 public class EvtAnvilGuiEvents {
     static {

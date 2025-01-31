@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 import static it.jakegblp.lusk.utils.EventUtils.getInteraction;
 
 @SuppressWarnings("unused")

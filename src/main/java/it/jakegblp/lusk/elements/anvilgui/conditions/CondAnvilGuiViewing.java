@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Anvil GUI - is Viewing")
 @Description("Checks if a player is currently viewing a specific anvil GUI or any at all.")

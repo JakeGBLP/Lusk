@@ -4,7 +4,7 @@ import it.jakegblp.lusk.api.GenericRelation;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;
 import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
 
 @SuppressWarnings("unused")

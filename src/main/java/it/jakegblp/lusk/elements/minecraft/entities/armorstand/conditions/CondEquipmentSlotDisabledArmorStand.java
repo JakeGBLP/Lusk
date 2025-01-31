@@ -15,7 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.test;
+import static it.jakegblp.lusk.utils.SkriptUtils.test;
 
 @Name("Armor Stand - is Equipment Slot Disabled")
 @Description("Checks if a specific equipment slot of an armorstand is disabled.")

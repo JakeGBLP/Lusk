@@ -21,7 +21,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_19_2;
 import static it.jakegblp.lusk.utils.Constants.PAPER_1_20_6;
 

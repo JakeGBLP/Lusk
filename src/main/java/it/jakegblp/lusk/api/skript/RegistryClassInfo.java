@@ -9,7 +9,7 @@ import ch.njol.yggdrasil.Fields;
 import com.google.common.base.Preconditions;
 import it.jakegblp.lusk.api.GenericRelation;
 import it.jakegblp.lusk.utils.BorrowedUtils;
-import it.jakegblp.lusk.utils.CompatibilityUtils;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -99,8 +99,8 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
         this.registry = registry;
         this.prefix = prefix == null ? null : prefix.replaceAll(" ", "_");
         this.suffix = suffix == null ? null : suffix.replaceAll(" ", "_");
-        if (!CompatibilityUtils.exactComparatorExists(registryClass, registryClass)) {
-            CompatibilityUtils.registerComparator(registryClass, registryClass, (o1, o2) -> GenericRelation.get(o1.equals(o2)));
+        if (!SkriptUtils.exactComparatorExists(registryClass, registryClass)) {
+            SkriptUtils.registerComparator(registryClass, registryClass, (o1, o2) -> GenericRelation.get(o1.equals(o2)));
         }
         if (usage) this.usage(getNames());
         this.supplier(registry::iterator);

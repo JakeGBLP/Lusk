@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.ArrayUtils.haveSameElements;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerEventValue;
 
 public class EvtBlockIgnite extends SkriptEvent {
 

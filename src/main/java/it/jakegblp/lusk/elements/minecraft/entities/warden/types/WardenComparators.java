@@ -3,7 +3,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.warden.types;
 import it.jakegblp.lusk.api.GenericRelation;
 import org.bukkit.entity.Warden;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.registerComparator;
+import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;
 import static it.jakegblp.lusk.utils.Constants.HAS_WARDEN;
 
 @SuppressWarnings("unused")

@@ -12,7 +12,7 @@ import it.jakegblp.lusk.api.BlockWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
+import static it.jakegblp.lusk.utils.SkriptUtils.fromTicks;
 
 @Name("Bell - Shaking Time/Ticks")
 @Description("""

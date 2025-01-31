@@ -10,13 +10,13 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.utils.CompatibilityUtils;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
+import static it.jakegblp.lusk.utils.SkriptUtils.fromTicks;
 
 @Name("Allay - Duplication Cooldown")
 @Description("Returns the duplication cooldown of an Allay.\nCan be set.")
@@ -56,7 +56,7 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Livin
         else if (delta[0] instanceof Number number)
             ticks = number.longValue();
         else if (delta[0] instanceof Timespan timespan)
-            ticks = CompatibilityUtils.getTicks(timespan);
+            ticks = SkriptUtils.getTicks(timespan);
         else return;
         for (LivingEntity entity : getExpr().getAll(event)) {
             if (entity instanceof Allay allay) {

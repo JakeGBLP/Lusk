@@ -18,8 +18,8 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
-import static it.jakegblp.lusk.utils.CompatibilityUtils.getTicks;
+import static it.jakegblp.lusk.utils.SkriptUtils.fromTicks;
+import static it.jakegblp.lusk.utils.SkriptUtils.getTicks;
 
 @Name("Skeleton Horse - Trap Time")
 @Description("Returns the trap time of the skeleton horse.")

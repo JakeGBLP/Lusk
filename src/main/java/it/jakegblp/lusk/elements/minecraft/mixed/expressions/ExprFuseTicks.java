@@ -9,7 +9,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
-import it.jakegblp.lusk.utils.CompatibilityUtils;
+import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -57,7 +57,7 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
             ticks = minecart.getFuseTicks();
         } else return null;
         if (usesTicks) return ticks;
-        return CompatibilityUtils.fromTicks(ticks);
+        return SkriptUtils.fromTicks(ticks);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
     public void set(Object from, Object to) {
         int ticks;
         if (to instanceof Number number) ticks = number.intValue();
-        else if (to instanceof Timespan timespan) ticks = (int) CompatibilityUtils.getTicks(timespan);
+        else if (to instanceof Timespan timespan) ticks = (int) SkriptUtils.getTicks(timespan);
         else return;
         ticks = Math.max(ticks, 0);
         if (from instanceof Creeper creeper) {
@@ -101,7 +101,7 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
     public void add(Object from, Object to) {
         int ticks;
         if (to instanceof Number number) ticks = number.intValue();
-        else if (to instanceof Timespan timespan) ticks = (int) CompatibilityUtils.getTicks(timespan);
+        else if (to instanceof Timespan timespan) ticks = (int) SkriptUtils.getTicks(timespan);
         else return;
         ticks = Math.max(ticks, 0);
         if (from instanceof Creeper creeper) {
@@ -118,7 +118,7 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
     public void remove(Object from, Object to) {
         int ticks;
         if (to instanceof Number number) ticks = number.intValue();
-        else if (to instanceof Timespan timespan) ticks = (int) CompatibilityUtils.getTicks(timespan);
+        else if (to instanceof Timespan timespan) ticks = (int) SkriptUtils.getTicks(timespan);
         else return;
         add(from, -ticks);
     }
