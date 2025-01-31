@@ -43,7 +43,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 16
+          java-version: 21
           distribution: 'adopt'
       - name: Install Gradle
         uses: sdkman/sdkman-action@main
@@ -58,6 +58,11 @@ jobs:
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           version: '1.21.4'
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 16
+          distribution: 'adopt'
       - name: Build with Gradle
         run: ./gradlew testBuild
       - name: Upload artifacts
