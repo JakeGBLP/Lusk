@@ -30,9 +30,11 @@ jobs:
           distribution: 'adopt'
 
       - name: Compile Minecraft Spigot 1.16.5 (via BuildTools)
-        uses: SpraxDev/Action-SpigotMC@v5.1.0
-        with:
-          versions: "1.16.5"
+        run: |
+          export JAVA_HOME=$JAVA_HOME_16_X64
+          java -version
+          gh workflow run SpraxDev/Action-SpigotMC@v5.1.0 --with versions="1.16.5"
+
 
       - name: Compile Minecraft Spigot 1.17.1 (via BuildTools)
         run: |
