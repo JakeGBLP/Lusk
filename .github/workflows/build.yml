@@ -29,20 +29,26 @@ jobs:
             21
           distribution: 'adopt'
 
+      - name: Set Java 16 for Spigot 1.16.5
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_16_X64" >> $GITHUB_ENV
+          echo "PATH=$JAVA_HOME_16_X64/bin:$PATH" >> $GITHUB_ENV
+
       - name: Compile Minecraft Spigot 1.16.5 (via BuildTools)
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.16.5"
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME_16_X64 }}
 
+      - name: Set Java 17 for Spigot 1.17.1
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+          echo "PATH=$JAVA_HOME_17_X64/bin:$PATH" >> $GITHUB_ENV
 
       - name: Compile Minecraft Spigot 1.17.1 (via BuildTools)
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.17.1"
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
+
 
       - name: Build with Gradle
         run: ./gradlew build
