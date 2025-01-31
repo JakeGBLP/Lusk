@@ -1,0 +1,132 @@
+name: Paper 1.19.x
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  v1_19:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Lusk and run test scripts
+        run: ./gradlew clean luskTest_1_19
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*
+  v1_19_1:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Lusk and run test scripts
+        run: ./gradlew clean luskTest_1_19_1
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*
+  v1_19_2:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Lusk and run test scripts
+        run: ./gradlew clean luskTest_1_19_2
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*
+  v1_19_3:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Lusk and run test scripts
+        run: ./gradlew clean luskTest_1_19_3
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*
+  v1_19_4:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Lusk and run test scripts
+        run: ./gradlew clean luskTest_1_19_4
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*

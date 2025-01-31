@@ -1,13 +1,11 @@
 package it.jakegblp.lusk.elements.minecraft.entities.armorstand.expressions;
 
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 
+import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - can Tick (Property)")
@@ -18,19 +16,18 @@ Unlike other Armorstand properties, this one cannot be used on the armorstand it
 """)
 @Examples({"set can tick property of target to true", "set whether armor stand target can tick to true"})
 @Since("1.0.2")
+@RequiredPlugins("Paper")
 @SuppressWarnings("unused")
 public class ExprArmorStandCanTick extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        register(ExprArmorStandCanTick.class, Boolean.class, ARMOR_STAND_PREFIX, "[can] tick", "livingentities");
+        if (isPaper())
+            register(ExprArmorStandCanTick.class, Boolean.class, ARMOR_STAND_PREFIX, "[can] tick", "livingentities");
     }
 
     @Override
     public Boolean convert(LivingEntity from) {
-        if (from instanceof ArmorStand armorStand) {
-            return armorStand.canTick();
-        }
-        return false;
+        return from instanceof ArmorStand armorStand && armorStand.canTick();
     }
 
     @Override

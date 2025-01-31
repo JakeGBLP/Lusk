@@ -214,11 +214,15 @@ createTestTask('luskTest_1_21_3_spigot', 'Runs tests on Spigot 1.21.3.', environ
 createTestTask('luskTest_1_21_4_spigot', 'Runs tests on Spigot 1.21.4.', environments + 'spigot-1.21.4.json', java21, -1)
 
 tasks.register("luskTestSkript") {
-    description = 'Runs tests on older skript versions with Paper and Spigot.'
+    description = 'Runs tests on older skript versions with Paper.'
     dependsOn luskTest_1_16_5_skript_2_6_4,
               luskTest_1_16_5_skript_2_7_3,
-              luskTest_1_16_5_skript_2_8_7,
-              luskTest_1_16_5_skript_2_6_4_spigot,
+              luskTest_1_16_5_skript_2_8_7
+}
+
+tasks.register("luskTestSkript_Spigot") {
+    description = 'Runs tests on older skript versions with Spigot.'
+    dependsOn luskTest_1_16_5_skript_2_6_4_spigot,
               luskTest_1_16_5_skript_2_7_3_spigot,
               luskTest_1_16_5_skript_2_8_7_spigot
 }

@@ -193,7 +193,7 @@ public class BlockWrapper {
 
     @Nullable
     public BlockState getPlacedBlockState() {
-        if (block != null) return block.getState(!shouldUpdate);
+        if (block != null) return (shouldUpdate && isPaper()) ? block.getState(true) : block.getState();
         else if (blockState != null && blockState.isPlaced()) return blockState;
         return null;
     }

@@ -1,4 +1,4 @@
-test "ExprEntityShouldBurnInDay":
+test "ExprEntityShouldBurnInDay" when the server is running paper:
   set {_location} to location(90,90,90)
   spawn phantom at {_location}:
     assert should burn during the day property of entity is true with "should burn during the day property of phantom %entity% is false instead of true"

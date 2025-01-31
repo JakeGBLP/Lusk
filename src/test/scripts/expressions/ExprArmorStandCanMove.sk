@@ -1,4 +1,4 @@
-test "ExprArmorStandCanMove":
+test "ExprArmorStandCanMove" when the server is running paper:
   spawn armor stand at location(0,0,0):
     assert can move property of entity is true with "can move property of armor stand %entity% is false instead of true"
     set can move property of entity to false

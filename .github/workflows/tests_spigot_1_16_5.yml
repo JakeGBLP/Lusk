@@ -1,4 +1,4 @@
-name: Paper 1.16.5 and Skript 2.6.4-2.8.7
+name: Spigot 1.16.5 and Skript 2.6.4-2.8.7
 
 on:
   - push
@@ -23,7 +23,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Lusk and run test scripts
-        run: ./gradlew clean luskTest_1_16_5
+        run: ./gradlew clean luskTest_1_16_5_spigot
       - name: Upload Nightly Build
         uses: actions/upload-artifact@v4
         if: success()
@@ -48,7 +48,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Skript and run test scripts
-        run: ./gradlew clean luskTestSkript
+        run: ./gradlew clean luskTestSkript_Spigot
       - name: Upload Nightly Build
         uses: actions/upload-artifact@v4
         if: success()

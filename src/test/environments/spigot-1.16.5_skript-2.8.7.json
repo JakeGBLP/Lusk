@@ -1,0 +1,23 @@
+{
+  "name": "spigot-1.16.5",
+  "resources": [
+    {"source": "server.properties.generic", "target": "server.properties"}
+  ],
+  "spigotDownloads": [
+    {
+      "version": "1.16.5",
+      "target": "spigot-1.16.5.jar"
+    }
+  ],
+  "skriptDownloads": [
+    {
+      "version": "2.8.7",
+      "target": "plugins/Skript.jar"
+    }
+  ],
+  "luskTarget": "plugins/Lusk.jar",
+  "commandLine": [
+    "-Dcom.mojang.eula.agree=true",
+    "-jar", "spigot-1.16.5.jar", "--nogui"
+  ]
+}

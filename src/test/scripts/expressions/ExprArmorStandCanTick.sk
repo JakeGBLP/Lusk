@@ -1,4 +1,4 @@
-test "ExprArmorStandCanTick":
+test "ExprArmorStandCanTick" when the server is running paper:
   spawn armor stand at location(0,0,0):
     assert tick state of entity is true with "tick state of armor stand %entity% is false instead of true"
     set tick state of entity to false

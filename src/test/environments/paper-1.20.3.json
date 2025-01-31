@@ -1,0 +1,23 @@
+{
+  "name": "paper-1.20.3",
+  "resources": [
+    {"source": "server.properties.generic", "target": "server.properties"}
+  ],
+  "paperDownloads": [
+    {
+      "version": "1.20.3",
+      "target": "paperclip.jar"
+    }
+  ],
+  "skriptDownloads": [
+    {
+      "version": "2.9.5",
+      "target": "plugins/Skript.jar"
+    }
+  ],
+  "luskTarget": "plugins/Lusk.jar",
+  "commandLine": [
+    "-Dcom.mojang.eula.agree=true",
+    "-jar", "paperclip.jar", "--nogui"
+  ]
+}
