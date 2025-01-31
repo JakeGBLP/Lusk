@@ -33,14 +33,14 @@ jobs:
         run: |
           export JAVA_HOME=$JAVA_HOME_16_X64
           java -version
-          gh workflow run SpraxDev/Action-SpigotMC@v5.1.0 --with versions="1.16.5"
+          gh workflow run SpraxDev/Action-SpigotMC@v5.1.0 | versions="1.16.5"
 
 
       - name: Compile Minecraft Spigot 1.17.1 (via BuildTools)
         run: |
           export JAVA_HOME=$JAVA_HOME_17_X64
           java -version
-          gh workflow run SpraxDev/Action-SpigotMC@v5.1.0 --with versions="1.17.1"
+          gh workflow run SpraxDev/Action-SpigotMC@v5.1.0 | versions="1.17.1"
 
       - name: Build with Gradle
         run: ./gradlew build
