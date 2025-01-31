@@ -40,6 +40,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 21
+          distribution: 'adopt'
       - name: Install Gradle
         uses: sdkman/sdkman-action@main
         with:
@@ -52,7 +57,7 @@ jobs:
       - name: Compile Minecraft Spigot (via BuildTools)
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
-          versions: "1.21.4", "1.16.5"
+          version: '1.21.4'
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
