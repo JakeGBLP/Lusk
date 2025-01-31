@@ -9,17 +9,11 @@ import it.jakegblp.lusk.test.utils.TestResults;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +23,9 @@ import java.util.TimerTask;
 
 /**
  * Test environment information.
+ * <br><br>
+ * This class contains code taken from <a href="https://github.com/SkriptLang/Skript">SkriptLang/Skript</a>.
+ * @author JakeGBLP, SkriptLang
  */
 public class Environment {
 
@@ -91,9 +88,88 @@ public class Environment {
 		public void generateSkriptSource() {
 			if (source != null)
 				return;
-
-			source = "https://repo.skriptlang.org/releases/com/github/SkriptLang/Skript/" + version + "/Skript-" + version + ".jar";
+			System.out.println("skript version: " + version);
+			if (version.equals("2.10.0"))
+				source = "https://github.com/JakeGBLP/Skript/raw/2.10.0/final/Skript.jar";
+			else
+				source = "https://repo.skriptlang.org/releases/com/github/SkriptLang/Skript/" + version + "/Skript-" + version + ".jar";
 		}
+	}
+
+	public static class SpigotResource extends Resource {
+
+		private static final String BUILD_TOOLS_URL = "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar";
+		private static final String JAVA_EXEC = "java";
+		private Path serverFolder;
+		private Path buildToolsPath;
+		public Path root;
+
+		private final String version;
+
+		@Nullable
+		private transient String source;
+
+		public SpigotResource(String version, String target) {
+			super(null, target);
+			this.version = version;
+
+		}
+
+		public void definePaths() {
+			serverFolder = root.resolve("spigot-" + version);
+			buildToolsPath = serverFolder.resolve("BuildTools.jar");
+			serverFolder.toFile().mkdirs();
+		}
+
+		@Override
+		public String getSource() {
+			try {
+				generateSource();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			if (source == null)
+				throw new IllegalStateException();
+			return source;
+		}
+
+		public void generateSource() throws IOException, InterruptedException {
+			definePaths();
+			if (!serverFolder.resolve("spigot-" + version + ".jar").toFile().exists()) {
+				if (!buildToolsPath.toFile().exists()) {
+					downloadBuildTools();
+				}
+				buildSpigot(version);
+			}
+			source = serverFolder.toString();
+		}
+
+		private void downloadBuildTools() throws IOException {
+			System.out.println("Downloading BuildTools.jar...");
+			try (InputStream in = new URL(BUILD_TOOLS_URL).openStream()) {
+				Files.copy(in, buildToolsPath, StandardCopyOption.REPLACE_EXISTING);
+			}
+			System.out.println("Downloaded BuildTools.jar!");
+		}
+
+		private void buildSpigot(String version) throws IOException, InterruptedException {
+			System.out.println("Running BuildTools for Spigot " + version + "...");
+			ProcessBuilder processBuilder = new ProcessBuilder(
+					JAVA_EXEC, "-jar", buildToolsPath.toAbsolutePath().toString(), "--rev", version
+			);
+			processBuilder.directory(serverFolder.toFile());
+			processBuilder.inheritIO();
+			Process process = processBuilder.start();
+			int exitCode = process.waitFor();
+
+			if (exitCode == 0) {
+				System.out.println("Spigot build complete.");
+			} else {
+				System.out.println("BuildTools failed.");
+				throw new RuntimeException("BuildTools exited with code " + exitCode);
+			}
+		}
+
 	}
 
 	public static class PaperResource extends Resource {
@@ -107,7 +183,6 @@ public class Environment {
 			super(null, target);
 			this.version = version;
 		}
-
 
 		@Override
 		public String getSource() {
@@ -167,6 +242,13 @@ public class Environment {
 	 */
 	@Nullable
 	private final List<PaperResource> paperDownloads;
+
+	/**
+	 * Spigot resources that need to be downloaded.
+	 */
+	@Nullable
+	private final List<SpigotResource> spigotDownloads;
+
 	/**
 	 * Skript resources that need to be downloaded.
 	 */
@@ -184,17 +266,18 @@ public class Environment {
 	 */
 	private final String[] commandLine;
 
-	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, @Nullable List<SkriptResource> skriptDownloads, String luskTarget, String... commandLine) {
+	public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, @Nullable List<SpigotResource> spigotDownloads, @Nullable List<SkriptResource> skriptDownloads, String luskTarget, String... commandLine) {
 		this.name = name;
 		this.resources = resources;
 		this.downloads = downloads;
 		this.paperDownloads = paperDownloads;
+		this.spigotDownloads = spigotDownloads;
 		this.skriptDownloads = skriptDownloads;
 		this.luskTarget = luskTarget;
 		this.commandLine = commandLine;
 	}
 
-    public void initialize(Path dataRoot, Path runnerRoot) throws IOException {
+    public void initialize(Path dataRoot, Path runnerRoot) throws IOException, InterruptedException {
 		Path env = runnerRoot.resolve(name);
 		Path lusk = env.resolve(luskTarget);
 		Files.createDirectories(lusk.getParent());
@@ -207,10 +290,21 @@ public class Environment {
 		Path luskSource = jarFiles[0].toPath();
 		Files.copy(luskSource, lusk, StandardCopyOption.REPLACE_EXISTING);
 
+		if (this.spigotDownloads != null)
+			resources.addAll(this.spigotDownloads);
+
         // Copy resources
 		for (Resource resource : resources) {
+			System.out.println("---->"+dataRoot);
+			if (resource instanceof SpigotResource spigotResource) {
+				spigotResource.root = runnerRoot;
+				spigotResource.generateSource();
+				break;
+			}
 			Path source = dataRoot.resolve(resource.getSource());
 			Path target = env.resolve(resource.getTarget());
+			System.out.println("source: " +source);
+			System.out.println("target: " +target);
 			Files.createDirectories(target.getParent());
 			Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 		}
@@ -222,6 +316,7 @@ public class Environment {
 			downloads.addAll(this.paperDownloads);
 		if (this.skriptDownloads != null)
 			downloads.addAll(this.skriptDownloads);
+
 		// Download additional resources
 		for (Resource resource : downloads) {
 			assert resource != null;
@@ -236,7 +331,7 @@ public class Environment {
 	}
 
 	@Nullable
-	public TestResults runTests(Path runnerRoot, Path testsRoot, String verbosity,
+	public TestResults runTests(Path runnerRoot, Path testsRoot, boolean devMode, String verbosity,
 								long timeout, Set<String> jvmArgs) throws IOException, InterruptedException {
 		Path env = runnerRoot.resolve(name);
 		Path resultsPath = env.resolve("test_results.json");
@@ -246,6 +341,7 @@ public class Environment {
 		args.add("-ea");
 		args.add("-Dskript.testing.enabled=true");
 		args.add("-Dskript.testing.dir=" + testsRoot);
+		args.add("-Dskript.testing.devMode=" + devMode);
 		if (!verbosity.equalsIgnoreCase("null"))
 			args.add("-Dskript.testing.verbosity=" + verbosity);
 		args.add("-Dskript.testing.results=test_results.json");
@@ -260,11 +356,9 @@ public class Environment {
 				.redirectInput(Redirect.INHERIT)
 				.start();
 
-		// When we exit, try to make them exit too
 		Runtime.getRuntime().addShutdownHook(new Thread(process::destroy));
 
 		// Catch tests running for abnormally long time
-		boolean devMode = true;
 		if (!devMode && timeout > 0) {
 			new Timer("runner watchdog", true).schedule(new TimerTask() {
 				@Override
@@ -284,9 +378,12 @@ public class Environment {
 		// Read test results
 		if (!Files.exists(resultsPath))
 			return null;
+
 		TestResults results = new Gson().fromJson(new String(Files.readAllBytes(resultsPath)), TestResults.class);
 		assert results != null;
 		return results;
+
 	}
+
 
 }

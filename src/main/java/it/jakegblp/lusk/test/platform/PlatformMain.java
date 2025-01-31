@@ -21,44 +21,48 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Main entry point of test platform. It allows running this Skript on
- * multiple testing environments.
+ * Main entry point of the test platform, it allows Lusk to run multiple testing environments.
+ * <br><br>
+ * This class contains code taken from <a href="https://github.com/SkriptLang/Skript">SkriptLang/Skript</a>.
+ * @author JakeGBLP, SkriptLang
  */
 public class PlatformMain {
 	
 	public static void main(String... args) throws IOException, InterruptedException {
 		System.out.println("Initializing Lusk test platform...");
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		Path runnerRoot = Paths.get(args[0]);
-		assert runnerRoot != null;
         Path testsRoot = Paths.get(args[1]).toAbsolutePath();
-		assert testsRoot != null;
         Path dataRoot = Paths.get(args[2]);
-		assert dataRoot != null;
         Path envsRoot = Paths.get(args[3]);
-		assert envsRoot != null;
-        String verbosity = args[4].toUpperCase(Locale.ENGLISH);
-		long timeout = Long.parseLong(args[5]);
+
+        boolean devMode = "true".equals(args[4]);
+        String verbosity = args[5].toUpperCase(Locale.ENGLISH);
+		long timeout = Long.parseLong(args[6]);
 		if (timeout < 0)
 			timeout = 0;
-		Set<String> jvmArgs = Sets.newHashSet(Arrays.copyOfRange(args, 6, args.length));
+		Set<String> jvmArgs = Sets.newHashSet(Arrays.copyOfRange(args, 7, args.length));
 		if (jvmArgs.stream().noneMatch(arg -> arg.contains("-Xmx")))
 			jvmArgs.add("-Xmx5G");
 
 		// Load environments
 		List<Environment> envs;
 		if (Files.isDirectory(envsRoot)) {
-			envs = Files.walk(envsRoot).filter(path -> !Files.isDirectory(path))
-					.map(path -> {
-						try {
-							return gson.fromJson(Files.readString(path), Environment.class);
-						} catch (JsonSyntaxException | IOException e) {
-							throw new RuntimeException(e);
-						}
-					}).collect(Collectors.toList());
+			try (Stream<Path> paths = Files.walk(envsRoot)) {
+				envs = paths.filter(path -> !Files.isDirectory(path))
+						.map(path -> {
+							try {
+								return gson.fromJson(Files.readString(path), Environment.class);
+							} catch (JsonSyntaxException | IOException e) {
+								throw new RuntimeException(e);
+							}
+						})
+						.collect(Collectors.toList());
+			}
 		} else {
 			envs = Collections.singletonList(gson.fromJson(Files.readString(envsRoot), Environment.class));
 		}
@@ -73,7 +77,7 @@ public class PlatformMain {
 		for (Environment env : envs) {
 			System.out.println("Starting testing on " + env.getName());
 			env.initialize(dataRoot, runnerRoot);
-			TestResults results = env.runTests(runnerRoot, testsRoot, verbosity, timeout, jvmArgs);
+			TestResults results = env.runTests(runnerRoot, testsRoot, devMode, verbosity, timeout, jvmArgs);
 			if (results == null) {
 				System.err.println("The test environment '" + env.getName() + "' failed to produce test results.");
 				System.exit(3);
