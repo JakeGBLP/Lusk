@@ -166,8 +166,8 @@ createTestTask('luskTest_1_16_5_skript_2_7_3_spigot', 'Runs tests on Spigot 1.16
 createTestTask('luskTest_1_16_5_skript_2_8_7_spigot', 'Runs tests on Spigot 1.16.5 with Skript 2.8.7.', environments + 'spigot-1.16.5_skript-2.8.7.json', java16, -1)
 
 createTestTask('luskTest_1_16_5', 'Runs tests on Paper 1.16.5.', environments + 'paper-1.16.5.json', java16, -1)
-createTestTask('luskTest_1_17', 'Runs tests on Paper 1.17.', environments + 'paper-1.17.json', java17, -1)
-createTestTask('luskTest_1_17_1', 'Runs tests on Paper 1.17.1.', environments + 'paper-1.17.1.json', java17, -1)
+createTestTask('luskTest_1_17', 'Runs tests on Paper 1.17.', environments + 'paper-1.17.json', java16, -1)
+createTestTask('luskTest_1_17_1', 'Runs tests on Paper 1.17.1.', environments + 'paper-1.17.1.json', java16, -1)
 createTestTask('luskTest_1_18', 'Runs tests on Paper 1.18.', environments + 'paper-1.18.json', java17, -1)
 createTestTask('luskTest_1_18_1', 'Runs tests on Paper 1.18.1.', environments + 'paper-1.18.1.json', java17, -1)
 createTestTask('luskTest_1_18_2', 'Runs tests on Paper 1.18.2.', environments + 'paper-1.18.2.json', java17, -1)
@@ -190,8 +190,8 @@ createTestTask('luskTest_1_21_3', 'Runs tests on Paper 1.21.3.', environments + 
 createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 'paper-1.21.4.json', java21, -1)
 
 createTestTask('luskTest_1_16_5_spigot', 'Runs tests on Spigot 1.16.5.', environments + 'spigot-1.16.5.json', java16, -1)
-createTestTask('luskTest_1_17_spigot', 'Runs tests on Spigot 1.17.', environments + 'spigot-1.17.json', java17, -1)
-createTestTask('luskTest_1_17_1_spigot', 'Runs tests on Spigot 1.17.1.', environments + 'spigot-1.17.1.json', java17, -1)
+createTestTask('luskTest_1_17_spigot', 'Runs tests on Spigot 1.17.', environments + 'spigot-1.17.json', java16, -1)
+createTestTask('luskTest_1_17_1_spigot', 'Runs tests on Spigot 1.17.1.', environments + 'spigot-1.17.1.json', java16, -1)
 createTestTask('luskTest_1_18_spigot', 'Runs tests on Spigot 1.18.', environments + 'spigot-1.18.json', java17, -1)
 createTestTask('luskTest_1_18_1_spigot', 'Runs tests on Spigot 1.18.1.', environments + 'spigot-1.18.1.json', java17, -1)
 createTestTask('luskTest_1_18_2_spigot', 'Runs tests on Spigot 1.18.2.', environments + 'spigot-1.18.2.json', java17, -1)
