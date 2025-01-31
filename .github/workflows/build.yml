@@ -25,7 +25,16 @@ jobs:
         with:
           java-version: 16
           distribution: 'adopt'
-          cache: maven
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Compile Spigot 1.16.5-1.17.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
@@ -43,7 +52,16 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
-          cache: maven
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Compile Spigot 1.18.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
@@ -64,7 +82,16 @@ jobs:
         with:
           java-version: 21
           distribution: 'adopt'
-          cache: maven
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Build with Gradle
         run: ./gradlew build
