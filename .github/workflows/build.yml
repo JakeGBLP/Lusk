@@ -24,6 +24,10 @@ jobs:
         run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Compile Minecraft Spigot (via BuildTools)
+        uses: SpraxDev/Action-SpigotMC@v5.1.0
+        with:
+          version: '1.21.4'
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload artifacts
@@ -50,6 +54,10 @@ jobs:
         run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Compile Minecraft Spigot (via BuildTools)
+        uses: SpraxDev/Action-SpigotMC@v5.1.0
+        with:
+          version: '1.21.4'
       - name: Build with Gradle
         run: ./gradlew testBuild
       - name: Upload artifacts
