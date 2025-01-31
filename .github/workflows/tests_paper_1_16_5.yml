@@ -1,4 +1,4 @@
-name: Paper 1.16.5 and Skript 2.6.4-2.8.7
+name: Paper 1.16.5
 
 on:
   - push
@@ -30,7 +30,7 @@ jobs:
         with:
           name: lusk-nightly.jar
           path: build/libs/*
-  v1_16_5_Skript-2_6_4-2_7_3-2_8_7:
+  older_skript_versions:
     if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
     runs-on: ubuntu-latest
     steps:
