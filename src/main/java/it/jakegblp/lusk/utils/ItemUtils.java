@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.LuskUtils.getColorAsRGB;
 
@@ -43,11 +42,10 @@ public class ItemUtils {
     }
 
     public static boolean isItemEmpty(@Nullable ItemStack itemStack) {
-        return itemStack == null || (isPaper() && itemStack.isEmpty()) ||
-                switch (itemStack.getType()) {
-                    case AIR, CAVE_AIR, VOID_AIR -> true;
-                    default -> false;
-                };
+        return itemStack == null || switch (itemStack.getType()) {
+            case AIR, CAVE_AIR, VOID_AIR -> true;
+            default -> false;
+        };
     }
 
     @Nullable
