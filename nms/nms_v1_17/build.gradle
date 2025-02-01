@@ -29,6 +29,7 @@ tasks.withType(JavaCompile).configureEach {
 tasks {
     remap {
         version.set("1.17")
+        archiveName.set("v${version}.jar")
     }
 }
 
