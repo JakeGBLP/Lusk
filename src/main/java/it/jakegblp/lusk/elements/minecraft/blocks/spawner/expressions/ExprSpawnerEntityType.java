@@ -16,8 +16,8 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20;
 @Description("""
 Gets the spawner entity type of the provided spawners or trial spawners (1.21+).
 
-**Works with items.**
-**Works with Spawner Minecart (Requires 1.20+).**
+**Works with Items.**
+**Works with Spawner Minecarts (Requires 1.20+).**
 
 Can be set, reset (sets it to pig), and deleted (requires Minecraft 1.20+).
 """)
