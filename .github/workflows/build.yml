@@ -115,11 +115,8 @@ jobs:
       - name: Compile Spigot 1.21.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
-          versions: "1.21,1.21.1,1.21.3,1.21.4"
+          versions: "1.21.1,1.21.3,1.21.4"
           remapped: true
-
-      - name: Remap 1.21
-        run: ./gradlew nms:nms_v1_21:build
 
       - name: Remap 1.21.1
         run: ./gradlew nms:nms_v1_21_1:build
