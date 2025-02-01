@@ -1,5 +1,9 @@
 # How to build with these modules?
-- ## 1.17-Latest:
-  - Use Spigot's build tools for EACH version (minor and patch) with the remapped option turned ON; this will generate the remapped jars in your local maven repository.ù
-- ## 1.16.5:
-  - Not sure how I did it the first time, there might be no need to do anything as this module uses obfuscated mappings.
+1. [Download Spigot's BuildTools](https://www.spigotmc.org/wiki/buildtools/)
+2. For [Each Version](https://github.com/JakeGBLP/Lusk/blob/main/README.md#support):
+   1. Select the respective version.
+   2. Turn ON the option "Generate Remapped Jars."
+      1. This is not required for 1.16.5 as this version doesn't come with mojang mappings.
+   3. Click Compile.
+   4. Wait until it's completed.
+3. Build :D
