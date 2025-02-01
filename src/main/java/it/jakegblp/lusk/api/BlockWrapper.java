@@ -10,13 +10,14 @@ import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.minecart.SpawnerMinecart;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.spawner.Spawner;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -44,6 +45,12 @@ public class BlockWrapper {
     private final BlockDataMeta blockDataMeta;
     @Nullable
     private final BlockData blockData;
+
+    // todo: implement for all methods and include all possible types (item frame, displays etc)
+    @Nullable
+    @ApiStatus.Experimental
+    private final Entity entity;
+
     private final boolean shouldUpdate;
 
     public BlockWrapper(Object object) {
@@ -51,50 +58,42 @@ public class BlockWrapper {
     }
 
     public BlockWrapper(Object object, boolean shouldUpdate) {
-        if (object instanceof Block aBlock) {
-            this.block = aBlock;
-            this.blockState = null;
-            this.item = null;
-            this.blockData = null;
-            this.blockDataMeta = null;
-            this.blockStateMeta = null;
-        } else if (object instanceof BlockState aBlockState) {
-            this.block = null;
-            this.blockState = aBlockState;
-            this.item = null;
-            this.blockData = null;
-            this.blockDataMeta = null;
-            this.blockStateMeta = null;
-        } else if (object instanceof ItemType itemType) {
-            this.block = null;
-            this.blockState = null;
-            this.item = itemType;
-            this.blockData = null;
-            this.blockDataMeta = null;
-            this.blockStateMeta = null;
-        } else if (object instanceof ItemMeta itemMeta) {
-            this.block = null;
-            this.blockState = null;
-            this.item = null;
-            this.blockData = null;
-            this.blockDataMeta = itemMeta instanceof BlockDataMeta meta ? meta : null;
-            this.blockStateMeta = itemMeta instanceof BlockStateMeta meta ? meta : null;
-        } else if (object instanceof BlockData aBlockData) {
-            this.block = null;
-            this.blockState = null;
-            this.item = null;
-            this.blockData = aBlockData;
-            this.blockDataMeta = null;
-            this.blockStateMeta = null;
-        } else {
-            this.block = null;
-            this.blockState = null;
-            this.item = null;
-            this.blockData = null;
-            this.blockDataMeta = null;
-            this.blockStateMeta = null;
-        }
         this.shouldUpdate = shouldUpdate;
+
+        Block tempBlock = null;
+        BlockState tempBlockState = null;
+        ItemType tempItem = null;
+        BlockData tempBlockData = null;
+        BlockDataMeta tempBlockDataMeta = null;
+        BlockStateMeta tempBlockStateMeta = null;
+        Entity tempEntity = null;
+
+        if (object instanceof Block aBlock) {
+            tempBlock = aBlock;
+        } else if (object instanceof BlockState aBlockState) {
+            tempBlockState = aBlockState;
+        } else if (object instanceof ItemType itemType) {
+            tempItem = itemType;
+        } else if (object instanceof ItemMeta itemMeta) {
+            if (itemMeta instanceof BlockDataMeta meta) {
+                tempBlockDataMeta = meta;
+            }
+            if (itemMeta instanceof BlockStateMeta meta) {
+                tempBlockStateMeta = meta;
+            }
+        } else if (object instanceof BlockData aBlockData) {
+            tempBlockData = aBlockData;
+        } else if (object instanceof Entity anEntity) {
+            tempEntity = anEntity;
+        }
+
+        this.block = tempBlock;
+        this.blockState = tempBlockState;
+        this.item = tempItem;
+        this.blockData = tempBlockData;
+        this.blockDataMeta = tempBlockDataMeta;
+        this.blockStateMeta = tempBlockStateMeta;
+        this.entity = tempEntity;
     }
 
     @Nullable
@@ -118,6 +117,11 @@ public class BlockWrapper {
                 return meta.getBlockData(item.getMaterial());
         }
         return blockData;
+    }
+
+    @Nullable
+    public Entity getEntity() {
+        return entity;
     }
 
     /**
@@ -484,13 +488,15 @@ public class BlockWrapper {
     public EntityData<?> getSpawnerEntityType() {
         BlockState blockState = getBlockState();
         EntityType entityType;
-        if (blockState instanceof Spawner spawner)
+        if (blockState instanceof CreatureSpawner spawner)
             entityType = spawner.getSpawnedType();
-        else if (MINECRAFT_1_21 && blockState instanceof TrialSpawner trialSpawner) {
-            if (trialSpawner.isOminous())
-                entityType = trialSpawner.getOminousConfiguration().getSpawnedType();
-            else
-                entityType = trialSpawner.getNormalConfiguration().getSpawnedType();
+        else if (MINECRAFT_1_21) {
+            if (blockState instanceof TrialSpawner trialSpawner) {
+                if (trialSpawner.isOminous()) entityType = trialSpawner.getOminousConfiguration().getSpawnedType();
+                else entityType = trialSpawner.getNormalConfiguration().getSpawnedType();
+            } else if (getEntity() instanceof SpawnerMinecart spawnerMinecart)
+                entityType = spawnerMinecart.getSpawnedType();
+            else return null;
         } else return null;
         return toEntityData(entityType);
     }
@@ -502,13 +508,17 @@ public class BlockWrapper {
     @SuppressWarnings("UnstableApiUsage")
     public void setSpawnerEntityType(@Nullable EntityType entityType) {
         BlockState blockState = getBlockState();
-        if (blockState instanceof Spawner spawner)
+        if (entityType == null && !MINECRAFT_1_20) return;
+        if (blockState instanceof CreatureSpawner spawner) {
             spawner.setSpawnedType(entityType);
-        else if (MINECRAFT_1_21 && blockState instanceof TrialSpawner trialSpawner) {
-            if (trialSpawner.isOminous())
-                trialSpawner.getOminousConfiguration().setSpawnedType(entityType);
-            else
-                trialSpawner.getNormalConfiguration().setSpawnedType(entityType);
+            spawner.update();
+        } else if (MINECRAFT_1_21) {
+            if (blockState instanceof TrialSpawner trialSpawner) {
+                if (trialSpawner.isOminous()) trialSpawner.getOminousConfiguration().setSpawnedType(entityType);
+                else trialSpawner.getNormalConfiguration().setSpawnedType(entityType);
+                trialSpawner.update();
+            } else if (getEntity() instanceof SpawnerMinecart spawnerMinecart)
+                spawnerMinecart.setSpawnedType(entityType);
         }
     }
 
