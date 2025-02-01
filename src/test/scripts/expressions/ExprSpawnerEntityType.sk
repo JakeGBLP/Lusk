@@ -6,9 +6,8 @@ test "ExprSpawnerEntityType":
   set spawner entity type of {_spawner} to zombie
   assert spawner entity type of {_spawner} is zombie with "spawner entity type of spawner at location %{_location}% is not zombie"
 
-  server version >= 1.21.0
-
-  set block at {_location} to trial spawner
-  set {_spawner} to block at {_location}
-  set spawner entity type of {_spawner} to skeleton
-  assert spawner entity type of {_spawner} is zombie with "spawner entity type of spawner at location %{_location}% is not skeleton"
+  parse if server version >= 1.21.0:
+    set block at {_location} to trial spawner
+    set {_spawner} to block at {_location}
+    set spawner entity type of {_spawner} to skeleton
+    assert spawner entity type of {_spawner} is zombie with "spawner entity type of spawner at location %{_location}% is not skeleton"
