@@ -2,7 +2,8 @@ test "ExprSpawnerEntityType":
   set {_location} to location(10, 11, 10)
   set block at {_location} to spawner
   set {_spawner} to block at {_location}
-  assert spawner entity type of {_spawner} is pig with "spawner entity type of spawner at location %{_location}% is not pig (default)"
+  if server version >= 1.20.0:
+    assert spawner entity type of {_spawner} is pig with "spawner entity type of spawner at location %{_location}% is not pig (default)"
   set spawner entity type of {_spawner} to zombie
   assert spawner entity type of {_spawner} is zombie with "spawner entity type of spawner at location %{_location}% is not zombie"
 
