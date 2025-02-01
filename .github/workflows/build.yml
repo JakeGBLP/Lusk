@@ -44,10 +44,10 @@ jobs:
           remapped: true
 
       - name: Remap 1.17
-        run: ./gradlew nms:nms_v1_17:remap
+        run: ./gradlew nms:nms_v1_17:build
 
       - name: Remap 1.17.1
-        run: ./gradlew nms:nms_v1_17_1:remap
+        run: ./gradlew nms:nms_v1_17_1:build
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -62,13 +62,13 @@ jobs:
           remapped: true
 
       - name: Remap 1.18
-        run: ./gradlew nms:nms_v1_18:remap
+        run: ./gradlew nms:nms_v1_18:build
 
       - name: Remap 1.18.1
-        run: ./gradlew nms:nms_v1_18_1:remap
+        run: ./gradlew nms:nms_v1_18_1:build
 
       - name: Remap 1.18.2
-        run: ./gradlew nms:nms_v1_18_2:remap
+        run: ./gradlew nms:nms_v1_18_2:build
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
