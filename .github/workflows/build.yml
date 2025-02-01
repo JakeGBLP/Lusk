@@ -97,11 +97,8 @@ jobs:
       - name: Compile Spigot 1.20.x
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
-          versions: "1.20,1.20.1,1.20.2,1.20.4,1.20.6"
+          versions: "1.20.1,1.20.2,1.20.4,1.20.6"
           remapped: true
-
-      - name: Remap 1.20
-        run: ./gradlew nms:nms_v1_20:build
 
       - name: Remap 1.20.1
         run: ./gradlew nms:nms_v1_20_1:build
