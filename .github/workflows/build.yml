@@ -41,6 +41,7 @@ jobs:
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.16.5,1.17,1.17.1"
+          remapped: true
 
       - name: Remap 1.17
         run: ./gradlew nms:nms_v1_17:remap
@@ -58,6 +59,7 @@ jobs:
         uses: SpraxDev/Action-SpigotMC@v5.1.0
         with:
           versions: "1.18,1.18.1,1.18.2"
+          remapped: true
 
       - name: Remap 1.18
         run: ./gradlew nms:nms_v1_18:remap
