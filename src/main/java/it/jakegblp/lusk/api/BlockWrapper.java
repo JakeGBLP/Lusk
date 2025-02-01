@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.api;
 
 import ch.njol.skript.aliases.ItemType;
+import ch.njol.skript.entity.EntityData;
 import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -8,10 +9,12 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.spawner.Spawner;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -20,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.EntityUtils.toEntityData;
+import static it.jakegblp.lusk.utils.EntityUtils.toEntityType;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemType;
 import static it.jakegblp.lusk.utils.LuskUtils.warning;
@@ -474,4 +478,38 @@ public class BlockWrapper {
         if (material != null && material.isBlock()) return material.getBlastResistance();
         return null;
     }
+
+    @Nullable
+    @SuppressWarnings("UnstableApiUsage")
+    public EntityData<?> getSpawnerEntityType() {
+        BlockState blockState = getBlockState();
+        EntityType entityType;
+        if (blockState instanceof Spawner spawner)
+            entityType = spawner.getSpawnedType();
+        else if (MINECRAFT_1_21 && blockState instanceof TrialSpawner trialSpawner) {
+            if (trialSpawner.isOminous())
+                entityType = trialSpawner.getOminousConfiguration().getSpawnedType();
+            else
+                entityType = trialSpawner.getNormalConfiguration().getSpawnedType();
+        } else return null;
+        return toEntityData(entityType);
+    }
+
+    public void setSpawnerEntityType(@Nullable EntityData<?> entityData) {
+        setSpawnerEntityType(toEntityType(entityData));
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public void setSpawnerEntityType(@Nullable EntityType entityType) {
+        BlockState blockState = getBlockState();
+        if (blockState instanceof Spawner spawner)
+            spawner.setSpawnedType(entityType);
+        else if (MINECRAFT_1_21 && blockState instanceof TrialSpawner trialSpawner) {
+            if (trialSpawner.isOminous())
+                trialSpawner.getOminousConfiguration().setSpawnedType(entityType);
+            else
+                trialSpawner.getNormalConfiguration().setSpawnedType(entityType);
+        }
+    }
+
 }
