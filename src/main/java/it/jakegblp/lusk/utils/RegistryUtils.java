@@ -28,7 +28,8 @@ public class RegistryUtils {
                     try {
                         Class<?> theClass = Class.forName(className);
                         if (Classes.getExactClassInfo(theClass) == null) {
-                            registries.putIfAbsent(Class.forName(className), getRegistryFromField(field));
+                            Registry<?> registry = getRegistryFromField(field);
+                            if (registry != null) registries.putIfAbsent(Class.forName(className), registry);
                         }
                     } catch (IllegalAccessException | ClassNotFoundException e) {
                         String message = (e instanceof IllegalAccessException)
