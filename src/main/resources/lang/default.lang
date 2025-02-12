@@ -37,6 +37,10 @@ types:
   ignitecause: ignition cause¦s @an
   entitysnapshot: entity snapshot¦s @an
   blockaction: block action¦s @a
+  persistentdataholder: persistent data holder¦s @a
+  persistentdatacontainer: persistent data container¦s @a
+  persistenttagtype: persistent tag type¦s @a
+  namespacedkey: namespaced key¦s @a
 
 # - Packet-related -
   entityanimation: entity animation¦s @an

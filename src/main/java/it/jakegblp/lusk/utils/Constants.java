@@ -35,6 +35,8 @@ public class Constants {
 
     public static final double EPSILON = 1e-7;
 
+    public static final short MAX_NAMESPACED_KEY_LENGTH = isPaper() ? Short.MAX_VALUE : 255;
+
     public static final String[] LUSK_COLORS = new String[]{"&7", "&9"};
 
     public static final Pattern
