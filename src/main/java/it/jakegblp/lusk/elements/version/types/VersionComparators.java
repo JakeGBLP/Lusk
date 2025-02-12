@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.elements.version.types;
 
 import com.vdurmont.semver4j.Semver;
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 
 import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;
 

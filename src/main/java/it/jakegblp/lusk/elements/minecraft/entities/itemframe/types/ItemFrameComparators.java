@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.elements.minecraft.entities.itemframe.types;
 
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import org.bukkit.Rotation;
 
 import static it.jakegblp.lusk.utils.SkriptUtils.registerComparator;

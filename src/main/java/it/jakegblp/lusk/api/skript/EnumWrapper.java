@@ -4,7 +4,7 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.util.StringUtils;
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import it.jakegblp.lusk.utils.SkriptUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

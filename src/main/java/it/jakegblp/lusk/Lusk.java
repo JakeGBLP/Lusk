@@ -7,6 +7,9 @@ import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
 import it.jakegblp.lusk.utils.BorrowedUtils;
 import it.jakegblp.lusk.utils.Constants;
+import it.jakegblp.lusk.utils.NMSUtils;
+import it.jakegblp.lusk.utils.VersionResolver;
+import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static it.jakegblp.lusk.utils.Constants.VERSION_SERVER;
 import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
 
 /**
@@ -25,6 +29,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
  */
 @SuppressWarnings({"unused", "deprecation"})
 public class Lusk extends JavaPlugin {
+    @Getter
     private static Lusk instance;
     private SkriptAddon addon;
 
@@ -36,15 +41,18 @@ public class Lusk extends JavaPlugin {
 
         int[] elementCountBefore = BorrowedUtils.getElementCount();
 
+        NMSUtils.NMS = VersionResolver.resolveNMSAdapter(VERSION_SERVER);
+        if (NMSUtils.NMS != null)
+            registerListeners(new PlayerJoinListener());
+
         try {
             addon.loadClasses("it.jakegblp.lusk", "elements");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (Constants.PAPER_HAS_PLAYER_JUMP_EVENT && Constants.PAPER_HAS_ENTITY_JUMP_EVENT) {
-            Lusk.registerListeners(new JumpListener.PaperJumpListener());
-        }
+        if (Constants.PAPER_HAS_PLAYER_JUMP_EVENT && Constants.PAPER_HAS_ENTITY_JUMP_EVENT)
+            registerListeners(new JumpListener.PaperJumpListener());
         registerListeners(
                 new JumpListener.SpigotJumpListener(),
                 new JumpListener(),
@@ -116,10 +124,6 @@ public class Lusk extends JavaPlugin {
         new UpdateChecker(this);
         long end = System.currentTimeMillis();
         consoleLog("&aLusk {0} has been enabled! &8[&7{1}&8]", version, new Timespan(end - start));
-    }
-
-    public static Lusk getInstance() {
-        return instance;
     }
 
     public static void registerListeners(Listener... listeners) {

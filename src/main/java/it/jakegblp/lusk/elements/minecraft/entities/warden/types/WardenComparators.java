@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.elements.minecraft.entities.warden.types;
 
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import org.bukkit.entity.Warden;
 
 import static it.jakegblp.lusk.utils.Constants.*;

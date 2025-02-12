@@ -7,7 +7,7 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.util.StringUtils;
 import ch.njol.yggdrasil.Fields;
 import com.google.common.base.Preconditions;
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import it.jakegblp.lusk.utils.BorrowedUtils;
 import it.jakegblp.lusk.utils.SkriptUtils;
 import org.bukkit.Keyed;

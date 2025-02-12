@@ -3,7 +3,7 @@ package it.jakegblp.lusk.version.skript.v2_10_0;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Timespan;
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.event.Event;
 import org.skriptlang.skript.lang.comparator.Comparators;

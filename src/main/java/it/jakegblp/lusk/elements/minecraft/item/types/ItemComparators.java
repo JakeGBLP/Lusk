@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.elements.minecraft.item.types;
 
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 

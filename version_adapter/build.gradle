@@ -20,6 +20,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     compileOnly 'com.github.SkriptLang:Skript:2.10.0'
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
+    compileOnly("io.netty:netty-all:4.1.117.Final")
     implementation('com.vdurmont:semver4j:3.1.0')
 }
 

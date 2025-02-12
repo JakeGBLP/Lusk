@@ -10,21 +10,23 @@ import it.jakegblp.lusk.version.skript.v2_6_4.Skript_2_6_4;
 import it.jakegblp.lusk.version.skript.v2_7_3.Skript_2_7_3;
 import it.jakegblp.lusk.version.skript.v2_8_7.Skript_2_8_7;
 import it.jakegblp.lusk.version.skript.v2_9_5.Skript_2_9_5;
-import it.jakegblp.lusk.versions.nms.v1_16_5.NMS_1_16_5;
-import it.jakegblp.lusk.versions.nms.v1_17.NMS_1_17;
-import it.jakegblp.lusk.versions.nms.v1_17_1.NMS_1_17_1;
-import it.jakegblp.lusk.versions.nms.v1_18.NMS_1_18;
-import it.jakegblp.lusk.versions.nms.v1_18_1.NMS_1_18_1;
-import it.jakegblp.lusk.versions.nms.v1_18_2.NMS_1_18_2;
-import it.jakegblp.lusk.versions.nms.v1_19.NMS_1_19;
-import it.jakegblp.lusk.versions.nms.v1_19_1.NMS_1_19_1;
-import it.jakegblp.lusk.versions.nms.v1_19_3.NMS_1_19_3;
-import it.jakegblp.lusk.versions.nms.v1_19_4.NMS_1_19_4;
-import it.jakegblp.lusk.versions.nms.v1_20_1.NMS_1_20_1;
-import it.jakegblp.lusk.versions.nms.v1_20_2.NMS_1_20_2;
-import it.jakegblp.lusk.versions.nms.v1_20_4.NMS_1_20_4;
-import it.jakegblp.lusk.versions.nms.v1_20_6.NMS_1_20_6;
-import it.jakegblp.lusk.versions.nms.v1_21_1.NMS_1_21_1;
+import it.jakegblp.lusk.version.nms.v1_16_5.NMS_1_16_5;
+import it.jakegblp.lusk.version.nms.v1_17.NMS_1_17;
+import it.jakegblp.lusk.version.nms.v1_17_1.NMS_1_17_1;
+import it.jakegblp.lusk.version.nms.v1_18.NMS_1_18;
+import it.jakegblp.lusk.version.nms.v1_18_1.NMS_1_18_1;
+import it.jakegblp.lusk.version.nms.v1_18_2.NMS_1_18_2;
+import it.jakegblp.lusk.version.nms.v1_19.NMS_1_19;
+import it.jakegblp.lusk.version.nms.v1_19_1.NMS_1_19_1;
+import it.jakegblp.lusk.version.nms.v1_19_3.NMS_1_19_3;
+import it.jakegblp.lusk.version.nms.v1_19_4.NMS_1_19_4;
+import it.jakegblp.lusk.version.nms.v1_20_1.NMS_1_20_1;
+import it.jakegblp.lusk.version.nms.v1_20_2.NMS_1_20_2;
+import it.jakegblp.lusk.version.nms.v1_20_4.NMS_1_20_4;
+import it.jakegblp.lusk.version.nms.v1_20_6.NMS_1_20_6;
+import it.jakegblp.lusk.version.nms.v1_21_1.NMS_1_21_1;
+
+import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
 
 public class VersionResolver {
 
@@ -47,6 +49,7 @@ public class VersionResolver {
     }
 
     public static NMSAdapter resolveNMSAdapter(Semver version) {
+        consoleLog("nms version: {0}", version.toString());
         int major = version.getMajor(),
                 minor = version.getMinor(),
                 patch = version.getPatch();

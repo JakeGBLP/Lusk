@@ -2,6 +2,7 @@ package it.jakegblp.lusk.api;
 
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.util.Timespan;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import org.bukkit.event.Event;
 
 import java.util.function.BiFunction;

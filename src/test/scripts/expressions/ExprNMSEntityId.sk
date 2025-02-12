@@ -1,0 +1,8 @@
+test "ExprNMSEntityId"
+  set {_location} to location(92,92,92)
+  spawn pig at {_location}:
+    set {_id} to entity id of entity
+    assert {_id} is set with "id of %entity% is not set"
+    set entity id of entity to 900
+    assert entity id of entity is 900 with "id of %entity% is not 900"
+    delete entity

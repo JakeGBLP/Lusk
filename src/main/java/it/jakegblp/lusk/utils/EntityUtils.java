@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.NMSUtils.NMS;
 
 public class EntityUtils {
     // https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
@@ -259,6 +260,14 @@ public class EntityUtils {
             }
         }
     }
+
+    @Nullable
+    public static Integer getEntityId(Entity entity) {
+        if (MINECRAFT_1_20_6) return entity.getEntityId();
+        else if (NMS != null) return getEntityId(entity);
+        return null;
+    }
+
     //todo: add can pickup items for pre 2.8
     //todo: add isImmuneToZombification for hoglins and piglins
 }

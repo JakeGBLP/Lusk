@@ -5,8 +5,9 @@ import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.util.Timespan;
-import it.jakegblp.lusk.api.GenericRelation;
+import it.jakegblp.lusk.api.enums.GenericRelation;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -69,4 +70,11 @@ public class SkriptUtils {
     public static boolean exactComparatorExists(Class<?> firstType, Class<?> secondType) {
         return SKRIPT.exactComparatorExists(firstType, secondType);
     }
+
+    @Nullable
+    public static <T> T getSingle(@Nullable Expression<T> expr, Event event) {
+        if (expr == null) return null;
+        return expr.getSingle(event);
+    }
+
 }

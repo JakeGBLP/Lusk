@@ -38,6 +38,10 @@ types:
   entitysnapshot: entity snapshot¦s @an
   blockaction: block action¦s @a
 
+# - Packet-related -
+  entityanimation: entity animation¦s @an
+
+
 # -- Rotations --
 rotations:
   none: 0 degrees, 0 degree rotation, no rotation, 360 degrees, 360 degree rotation, 360 degrees clockwise, clockwise 360, counter clockwise 360
