@@ -20,8 +20,14 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     compileOnly 'com.github.SkriptLang:Skript:2.10.0'
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
-    compileOnly("io.netty:netty-all:4.1.117.Final")
+    compileOnly("io.netty:netty-all:4.2.0.RC3")
     implementation('com.vdurmont:semver4j:3.1.0')
+
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
 tasks.withType(JavaCompile).configureEach {
