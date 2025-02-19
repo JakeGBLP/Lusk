@@ -9,8 +9,7 @@ import org.bukkit.profile.PlayerTextures;
 public class PlayerUtils {
 
     /**
-     * Checks whether a player is crawling; this takes into account the scale attribute since it modifies the
-     * size of the player and makes the calculations done in this method incorrect.
+     * Checks whether a player is crawling.
      * @param player the player to check for
      * @return whether the player is crawling
      */
