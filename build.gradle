@@ -10,7 +10,7 @@ compileJava {
     options.encoding = "UTF-8"
 }
 
-version = "1.3.4-beta1"
+version = "1.3.4-beta2"
 
 def java16 = 16
 def java17 = 17
