@@ -11,7 +11,7 @@ public class EvtSmithingTableEvents {
                             "item smith[ed|ing]")
                     .description("Called when the recipe of an Item is completed inside a smithing table.")
                     .examples("on item smith:")
-                    .since("1.3.4");
+                    .since("1.3.4-beta2");
         }
     }
 }
