@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.utils;
 
+import ch.njol.skript.entity.EntityData;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -259,6 +260,17 @@ public class EntityUtils {
             }
         }
     }
+
+    @Nullable
+    public static EntityData<?> toEntityData(EntityType entityType) {
+        return entityType == null ? null : ch.njol.skript.bukkitutil.EntityUtils.toSkriptEntityData(entityType);
+    }
+
+    @Nullable
+    public static EntityType toEntityType(EntityData<?> entityType) {
+        return entityType == null ? null : ch.njol.skript.bukkitutil.EntityUtils.toBukkitEntityType(entityType);
+    }
+
     //todo: add can pickup items for pre 2.8
     //todo: add isImmuneToZombification for hoglins and piglins
 }

@@ -1,0 +1,14 @@
+test "ExprSpawnerEntityType":
+  set {_location} to location(10, 11, 10)
+  set block at {_location} to spawner
+  set {_spawner} to block at {_location}
+  if server version >= 1.20.0:
+    assert spawner entity type of {_spawner} is not set with "spawner entity type of spawner at location %{_location}% is not set"
+  set spawner entity type of {_spawner} to a zombie
+  assert spawner entity type of {_spawner} is a zombie with "spawner entity type of spawner at location %{_location}% is not zombie"
+
+  parse if server version >= 1.21.0:
+    set block at {_location} to trial spawner
+    set {_spawner} to block at {_location}
+    set spawner entity type of {_spawner} to skeleton
+    assert spawner entity type of {_spawner} is skeleton with "spawner entity type of spawner at location %{_location}% is not skeleton"

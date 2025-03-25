@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Block - Blast Resistance")
 @Description("""
-        Obtains the blast resistance value (also known as block "durability").
+        Gets the blast resistance value (also known as block "durability").
         This value is used in explosions to calculate whether a block should be broken or not.
         
         Only works for placeable item/blocks.

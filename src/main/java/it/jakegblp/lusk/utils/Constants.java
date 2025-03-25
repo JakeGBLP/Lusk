@@ -104,6 +104,10 @@ public class Constants {
             // */
             //MINECRAFT_1_19_3 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.19.3")),
             /**
+             * Whether the current server version is greater than or equal to 1.20
+             */
+            MINECRAFT_1_20 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20")),
+            /**
              * Whether the current server version is greater than or equal to 1.20.1
              */
             MINECRAFT_1_20_1 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.1")),
