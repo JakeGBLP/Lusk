@@ -7,6 +7,7 @@ import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
 import it.jakegblp.lusk.utils.BorrowedUtils;
 import it.jakegblp.lusk.utils.Constants;
+import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ import static it.jakegblp.lusk.utils.LuskUtils.consoleLog;
  */
 @SuppressWarnings({"unused", "deprecation"})
 public class Lusk extends JavaPlugin {
+    @Getter
     private static Lusk instance;
     private SkriptAddon addon;
 
@@ -116,10 +118,6 @@ public class Lusk extends JavaPlugin {
         new UpdateChecker(this);
         long end = System.currentTimeMillis();
         consoleLog("&aLusk {0} has been enabled! &8[&7{1}&8]", version, new Timespan(end - start));
-    }
-
-    public static Lusk getInstance() {
-        return instance;
     }
 
     public static void registerListeners(Listener... listeners) {

@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+// todo: handle 2.11 deprecation
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.OFF_HAND;
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.TOOL;
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;

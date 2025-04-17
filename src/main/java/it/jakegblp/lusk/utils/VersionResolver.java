@@ -20,8 +20,7 @@ public class VersionResolver {
                 case 7 -> new Skript_2_7_3();
                 case 8 -> new Skript_2_8_7();
                 case 9 -> new Skript_2_9_5();
-                case 10 -> new Skript_2_10_0();
-                default -> null;
+                default -> new Skript_2_10_0();
             };
             default -> null;
         };
