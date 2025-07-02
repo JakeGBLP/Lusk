@@ -79,3 +79,5 @@ fabric.properties
 
 /build/libs/Lusk-1.1.jar
 /.gradle/file-system.probe
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
