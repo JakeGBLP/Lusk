@@ -20,8 +20,8 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static ch.njol.skript.Skript.classExists;
@@ -30,6 +30,7 @@ import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersion;
 import static it.jakegblp.lusk.utils.LuskUtils.parseVersionTruncated;
 import static it.jakegblp.lusk.utils.RegistryUtils.generateRegistries;
+import static java.util.Map.entry;
 
 public class Constants {
 
@@ -178,50 +179,53 @@ public class Constants {
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
 
     // todo: 1. Make file-reading system to allow users to update this. 2. idk i never ended up typing this one out
-    public static final HashMap<Integer, Semver> versions = new HashMap<>() {{
-        put(4, parseVersion("1.7.5"));
-        put(5, parseVersion("1.7.10"));
-        put(47, parseVersion("1.8.9"));
-        put(107, parseVersion("1.9"));
-        put(108, parseVersion("1.9.1"));
-        put(109, parseVersion("1.9.2"));
-        put(110, parseVersion("1.9.4"));
-        put(210, parseVersion("1.10.2"));
-        put(315, parseVersion("1.11"));
-        put(316, parseVersion("1.11.2"));
-        put(335, parseVersion("1.12.0"));
-        put(338, parseVersion("1.12.1"));
-        put(340, parseVersion("1.12.2"));
-        put(393, parseVersion("1.13"));
-        put(401, parseVersion("1.13.1"));
-        put(404, parseVersion("1.13.2"));
-        put(477, parseVersion("1.14"));
-        put(480, parseVersion("1.14.1"));
-        put(485, parseVersion("1.14.2"));
-        put(490, parseVersion("1.14.3"));
-        put(498, parseVersion("1.14.4"));
-        put(573, parseVersion("1.15"));
-        put(575, parseVersion("1.15.1"));
-        put(577, parseVersion("1.15.2"));
-        put(735, parseVersion("1.16"));
-        put(736, parseVersion("1.16.1"));
-        put(751, parseVersion("1.16.2"));
-        put(753, parseVersion("1.16.3"));
-        put(754, parseVersion("1.16.5"));
-        put(755, parseVersion("1.17"));
-        put(756, parseVersion("1.17.1"));
-        put(757, parseVersion("1.18.1"));
-        put(758, parseVersion("1.18.2"));
-        put(759, parseVersion("1.19"));
-        put(760, parseVersion("1.19.2"));
-        put(761, parseVersion("1.19.3"));
-        put(762, parseVersion("1.19.4"));
-        put(763, parseVersion("1.20.1"));
-        put(764, parseVersion("1.20.2"));
-        put(765, parseVersion("1.20.4"));
-        put(766, parseVersion("1.20.6"));
-        put(767, parseVersion("1.21.1"));
-        put(768, parseVersion("1.21.3"));
-        put(769, parseVersion("1.21.4"));
-    }};
+    public static final Map<Integer, Semver> versions = Map.ofEntries(
+        entry(4, parseVersion("1.7.5")),
+        entry(5, parseVersion("1.7.10")),
+        entry(47, parseVersion("1.8.9")),
+        entry(107, parseVersion("1.9")),
+        entry(108, parseVersion("1.9.1")),
+        entry(109, parseVersion("1.9.2")),
+        entry(110, parseVersion("1.9.4")),
+        entry(210, parseVersion("1.10.2")),
+        entry(315, parseVersion("1.11")),
+        entry(316, parseVersion("1.11.2")),
+        entry(335, parseVersion("1.12.0")),
+        entry(338, parseVersion("1.12.1")),
+        entry(340, parseVersion("1.12.2")),
+        entry(393, parseVersion("1.13")),
+        entry(401, parseVersion("1.13.1")),
+        entry(404, parseVersion("1.13.2")),
+        entry(477, parseVersion("1.14")),
+        entry(480, parseVersion("1.14.1")),
+        entry(485, parseVersion("1.14.2")),
+        entry(490, parseVersion("1.14.3")),
+        entry(498, parseVersion("1.14.4")),
+        entry(573, parseVersion("1.15")),
+        entry(575, parseVersion("1.15.1")),
+        entry(577, parseVersion("1.15.2")),
+        entry(735, parseVersion("1.16")),
+        entry(736, parseVersion("1.16.1")),
+        entry(751, parseVersion("1.16.2")),
+        entry(753, parseVersion("1.16.3")),
+        entry(754, parseVersion("1.16.5")),
+        entry(755, parseVersion("1.17")),
+        entry(756, parseVersion("1.17.1")),
+        entry(757, parseVersion("1.18.1")),
+        entry(758, parseVersion("1.18.2")),
+        entry(759, parseVersion("1.19")),
+        entry(760, parseVersion("1.19.2")),
+        entry(761, parseVersion("1.19.3")),
+        entry(762, parseVersion("1.19.4")),
+        entry(763, parseVersion("1.20.1")),
+        entry(764, parseVersion("1.20.2")),
+        entry(765, parseVersion("1.20.4")),
+        entry(766, parseVersion("1.20.6")),
+        entry(767, parseVersion("1.21.1")),
+        entry(768, parseVersion("1.21.3")),
+        entry(769, parseVersion("1.21.4")),
+        entry(770, parseVersion("1.21.5")),
+        entry(771, parseVersion("1.21.6")),
+        entry(772, parseVersion("1.21.7"))
+    );
 }
