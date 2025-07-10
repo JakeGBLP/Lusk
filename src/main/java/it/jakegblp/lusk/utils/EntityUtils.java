@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -179,6 +180,41 @@ public class EntityUtils {
         }).filter(Objects::nonNull).toList();
     }
 
+    public static final Class<?> COW_CLASS;
+    public static final @Nullable Method COW_GET_VARIANT_METHOD;
+    public static final @Nullable Method COW_SET_VARIANT_METHOD;
+
+    static {
+        try {
+            COW_CLASS = Class.forName("org.bukkit.entity.Cow");
+            COW_GET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("getVariant");
+            COW_SET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("setVariant", Cow.Variant.class);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+        }
+    }
+
+    public static void setCowVariant(AbstractCow cow, Cow.Variant variant) {
+        if (COW_CLASS.isAssignableFrom(cow.getClass())) {
+            try {
+                COW_SET_VARIANT_METHOD.invoke(cow, variant);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+            }
+        }
+    }
+
+    public static Cow.Variant getCowVariant(AbstractCow cow) {
+        if (COW_CLASS.isAssignableFrom(cow.getClass())) {
+            try {
+                return (Cow.Variant) COW_GET_VARIANT_METHOD.invoke(cow);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+            }
+        }
+        return null;
+    }
+
     @Nullable
     public static Object getVariant(LivingEntity livingEntity) {
         if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl) {
@@ -207,8 +243,8 @@ public class EntityUtils {
             return salmon.getVariant();
         } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig) {
             return pig.getVariant();
-        } else if (HAS_COW_VARIANT && livingEntity instanceof Cow cow) {
-            return cow.getVariant();
+        } else if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow) {
+            return getCowVariant(abstractCow);
         } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken) {
             return chicken.getVariant();
         }
@@ -242,8 +278,8 @@ public class EntityUtils {
             axolotl.setVariant(variant);
         } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken && unknownVariant instanceof Chicken.Variant variant) {
             chicken.setVariant(variant);
-        } else if (HAS_COW_VARIANT && livingEntity instanceof Cow cow && unknownVariant instanceof Cow.Variant variant) {
-            cow.setVariant(variant);
+        } else if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow && unknownVariant instanceof Cow.Variant variant) {
+            setCowVariant(abstractCow, variant);
         } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig && unknownVariant instanceof Pig.Variant variant) {
             pig.setVariant(variant);
         }
