@@ -185,12 +185,18 @@ public class EntityUtils {
     public static final @Nullable Method COW_SET_VARIANT_METHOD;
 
     static {
-        try {
-            COW_CLASS = Class.forName("org.bukkit.entity.Cow");
-            COW_GET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("getVariant");
-            COW_SET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("setVariant", Cow.Variant.class);
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+        if (HAS_COW_VARIANT) {
+            try {
+                COW_CLASS = Class.forName("org.bukkit.entity.Cow");
+                COW_GET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("getVariant");
+                COW_SET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("setVariant", Cow.Variant.class);
+            } catch (ClassNotFoundException | NoSuchMethodException e) {
+                throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+            }
+        } else {
+            COW_CLASS = null;
+            COW_GET_VARIANT_METHOD = null;
+            COW_SET_VARIANT_METHOD = null;
         }
     }
 
