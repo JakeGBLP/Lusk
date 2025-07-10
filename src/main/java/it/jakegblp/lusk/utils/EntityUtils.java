@@ -181,9 +181,9 @@ public class EntityUtils {
 
     @Nullable
     public static Object getVariant(LivingEntity livingEntity) {
-        if (livingEntity instanceof Axolotl axolotl) {
+        if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl) {
             return axolotl.getVariant();
-        } else if (livingEntity instanceof Frog frog) {
+        } else if (HAS_FROG_VARIANT && livingEntity instanceof Frog frog) {
             return frog.getVariant();
         } else if (livingEntity instanceof MushroomCow mushroomCow) {
             return mushroomCow.getVariant();
@@ -201,10 +201,16 @@ public class EntityUtils {
             return panda.getMainGene();
         } else if (livingEntity instanceof TropicalFish tropicalFish) {
             return tropicalFish.getPattern();
-        } else if (livingEntity instanceof Wolf wolf) {
+        } else if (HAS_FROG_VARIANT && livingEntity instanceof Wolf wolf) {
             return wolf.getVariant();
-        } else if (livingEntity instanceof Salmon salmon) {
+        } else if (HAS_SALMON_VARIANT && livingEntity instanceof Salmon salmon) {
             return salmon.getVariant();
+        } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig) {
+            return pig.getVariant();
+        } else if (HAS_COW_VARIANT && livingEntity instanceof Cow cow) {
+            return cow.getVariant();
+        } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken) {
+            return chicken.getVariant();
         }
         return null;
     }
@@ -234,6 +240,12 @@ public class EntityUtils {
             salmon.setVariant(variant);
         } else if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl && unknownVariant instanceof Axolotl.Variant variant) {
             axolotl.setVariant(variant);
+        } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken && unknownVariant instanceof Chicken.Variant variant) {
+            chicken.setVariant(variant);
+        } else if (HAS_COW_VARIANT && livingEntity instanceof Cow cow && unknownVariant instanceof Cow.Variant variant) {
+            cow.setVariant(variant);
+        } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig && unknownVariant instanceof Pig.Variant variant) {
+            pig.setVariant(variant);
         }
     }
 

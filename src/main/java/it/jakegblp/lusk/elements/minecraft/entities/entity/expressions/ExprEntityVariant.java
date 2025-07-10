@@ -15,8 +15,15 @@ import static it.jakegblp.lusk.utils.EntityUtils.setVariant;
 @Description("""
         Returns the Variant of an Entity.
         Can be set.
+        This does not use strings.
         
         Currently supports:
+        - Cow (1.21.5+)
+        - Chicken (1.21.5+)
+        - Pig (1.21.5+)
+        - Wolf (1.20.5+)
+        - Frog (1.19+)
+        - Axolotl (1.17+)
         - Mushroom Cow
         - Parrot
         - Llama
@@ -25,15 +32,12 @@ import static it.jakegblp.lusk.utils.EntityUtils.setVariant;
         - Rabbit
         - Panda
         - Tropical Fish
-        - Frog
-        - Wolf
         - Salmon
-        - Axolotl
         """)
 @Examples({"broadcast variant of event-entity","set variant of target to \"red\""})
-@Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More)")
+@Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More), 1.3.5 (Cow, Chicken, Pig + Safety Checks)")
 @SuppressWarnings({"unused", "ConstantConditions"})
-public class ExprEntityVariant extends SimplerPropertyExpression<LivingEntity,Object> {
+public class ExprEntityVariant extends SimplerPropertyExpression<LivingEntity, Object> {
 
     static {
         register(ExprEntityVariant.class, Object.class, "[entity] variant", "livingentities");
