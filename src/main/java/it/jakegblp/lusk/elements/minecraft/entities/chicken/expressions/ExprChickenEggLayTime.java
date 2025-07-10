@@ -12,9 +12,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.getTicks;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
 
 @Name("Chicken - Egg Lay Time/Ticks")
 @Description("Returns the time till a chicken lays an egg.")

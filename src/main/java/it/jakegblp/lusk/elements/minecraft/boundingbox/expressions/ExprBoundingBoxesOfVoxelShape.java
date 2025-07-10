@@ -2,16 +2,17 @@ package it.jakegblp.lusk.elements.minecraft.boundingbox.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
-import it.jakegblp.lusk.api.skript.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.skript.PropertyExpression;
 import org.bukkit.event.Event;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 

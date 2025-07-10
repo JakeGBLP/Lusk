@@ -5,12 +5,12 @@ import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.slot.InventorySlot;
 import ch.njol.skript.util.slot.Slot;
-import it.jakegblp.lusk.api.events.*;
 import it.jakegblp.lusk.api.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.events.*;
 import org.bukkit.inventory.Inventory;
 
-import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 
 public class EvtAnvilGuiEvents {
     static {

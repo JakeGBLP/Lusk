@@ -9,8 +9,8 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.utils.ArmorStandUtils;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
+import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 
 @Name("Armor Stand - is Invisible (Property)")
 @Description("""

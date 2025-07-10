@@ -10,14 +10,14 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-import java.util.Arrays;
-
 import it.jakegblp.lusk.utils.CompatibilityUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.skriptlang.skript.lang.converter.Converter;
 import org.skriptlang.skript.lang.converter.Converters;
+
+import java.util.Arrays;
 
 /**
  * Copied from {@link ch.njol.skript.expressions.base.PropertyExpression}<br><br>

@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.api.listeners;
 
-import it.jakegblp.lusk.api.events.AnvilGuiClickEvent;
 import it.jakegblp.lusk.api.AnvilGuiWrapper;
+import it.jakegblp.lusk.api.events.AnvilGuiClickEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

@@ -5,8 +5,8 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import it.jakegblp.lusk.api.BlockWrapper;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.jetbrains.annotations.Nullable;
 
 @Name("BrewingStand - Fuel Item")

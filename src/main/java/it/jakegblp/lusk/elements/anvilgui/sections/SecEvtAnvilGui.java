@@ -9,16 +9,17 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import it.jakegblp.lusk.api.events.AnvilGuiClickEvent;
 import it.jakegblp.lusk.api.events.AnvilGuiCloseEvent;
 import it.jakegblp.lusk.api.events.AnvilGuiOpenEvent;
 import it.jakegblp.lusk.api.listeners.AnvilGuiClickListener;
 import it.jakegblp.lusk.api.listeners.AnvilGuiCloseListener;
 import it.jakegblp.lusk.api.listeners.AnvilGuiOpenListener;
-import it.jakegblp.lusk.api.AnvilGuiWrapper;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Consumer;
 

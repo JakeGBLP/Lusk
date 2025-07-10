@@ -2,8 +2,8 @@ package it.jakegblp.lusk.elements.minecraft.blocks.jukebox.expressions;
 
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.doc.*;
-import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import it.jakegblp.lusk.api.BlockWrapper;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Jukebox - Record/Disc")

@@ -2,7 +2,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.entity.expressions;
 
 import ch.njol.skript.doc.*;
 import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
-import org.bukkit.entity.*;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.EntityUtils.isAngry;

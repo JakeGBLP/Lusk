@@ -9,8 +9,8 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import it.jakegblp.lusk.api.BlockWrapper;
+import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import it.jakegblp.lusk.utils.CompatibilityUtils;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,8 +1,8 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.sign.expressions;
 
 import ch.njol.skript.doc.*;
-import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import it.jakegblp.lusk.api.BlockWrapper;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Sign - is Editable (Property)")

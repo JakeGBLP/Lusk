@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
+import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT;
 
 @SuppressWarnings("unused")
 public class EvtEntityCrossbowLoad extends SkriptEvent {

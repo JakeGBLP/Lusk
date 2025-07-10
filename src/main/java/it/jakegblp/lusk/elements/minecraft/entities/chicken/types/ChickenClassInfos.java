@@ -3,7 +3,6 @@ package it.jakegblp.lusk.elements.minecraft.entities.chicken.types;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Cow;
 
 import static it.jakegblp.lusk.utils.Constants.HAS_CHICKEN_VARIANT;
 

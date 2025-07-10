@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BorrowedUtils {
