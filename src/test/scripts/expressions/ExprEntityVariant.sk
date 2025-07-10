@@ -2,7 +2,7 @@ test "ExprEntityVariant":
   set {_loc} to location(7,7,7)
   parse if server version >= 1.20.5:
     spawn wolf at {_loc}:
-      set {_variant} to woods wolf variant
+      set {_variant} to woods
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
