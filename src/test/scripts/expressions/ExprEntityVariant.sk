@@ -1,0 +1,82 @@
+test "ExprEntityVariant":
+  set {_loc} to location(7,7,7)
+  parse if server version >= 1.20.5:
+    spawn wolf at {_loc}:
+      set {_variant} to woods wolf variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  parse if server version >= 1.21.5:
+    spawn pig at {_loc}:
+      set {_variant} to warm pig variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+    spawn chicken at {_loc}:
+      set {_variant} to warm chicken variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+    spawn cow at {_loc}:
+      set {_variant} to warm cow variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  parse if server version >= 1.19:
+    spawn frog at {_loc}:
+      set {_variant} to warm frog variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  parse if server version >= 1.17:
+    spawn axolotl at {_loc}:
+      set {_variant} to blue frog variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  spawn mushroom cow at {_loc}:
+    set {_variant} to brown mushroom cow variant
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn parrot at {_loc}:
+    set {_variant} to blue parrot variant
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn llama at {_loc}:
+    set {_variant} to creamy llama variant
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn fox at {_loc}:
+    set {_variant} to snow fox variant
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn cat at {_loc}:
+    set {_variant} to tabby
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  spawn rabbit at {_loc}:
+    set {_variant} to brown rabbit type
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn panda at {_loc}:
+    set {_variant} to lazy
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn tropical fish at {_loc}:
+    set {_variant} to glitter tropical fish pattern
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+  spawn salmon at {_loc}:
+    set {_variant} to small salmon variant
+    set entity variant of entity to {_variant}
+    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+    delete entity
+
