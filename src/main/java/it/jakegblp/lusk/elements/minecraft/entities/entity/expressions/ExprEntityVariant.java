@@ -21,6 +21,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.setVariant;
         - Cow (1.21.5+)
         - Chicken (1.21.5+)
         - Pig (1.21.5+)
+        - Salmon (1.21.2+)
         - Wolf (1.20.5+)
         - Frog (1.19+)
         - Axolotl (1.17+)
@@ -32,7 +33,6 @@ import static it.jakegblp.lusk.utils.EntityUtils.setVariant;
         - Rabbit
         - Panda
         - Tropical Fish
-        - Salmon
         """)
 @Examples({"broadcast variant of event-entity","set variant of target to \"red\""})
 @Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More), 1.3.5 (Cow, Chicken, Pig + Safety Checks)")

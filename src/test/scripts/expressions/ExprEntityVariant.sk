@@ -22,6 +22,12 @@ test "ExprEntityVariant":
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
+  parse if server version >= 1.21.2:
+    spawn salmon at {_loc}:
+      set {_variant} to small salmon variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
   parse if server version >= 1.19:
     spawn frog at {_loc}:
       set {_variant} to warm frog variant
@@ -30,7 +36,7 @@ test "ExprEntityVariant":
       delete entity
   parse if server version >= 1.17:
     spawn axolotl at {_loc}:
-      set {_variant} to blue frog variant
+      set {_variant} to blue axolotl variant
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
@@ -45,12 +51,12 @@ test "ExprEntityVariant":
     assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
     delete entity
   spawn llama at {_loc}:
-    set {_variant} to creamy llama variant
+    set {_variant} to creamy llama color
     set entity variant of entity to {_variant}
     assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
     delete entity
   spawn fox at {_loc}:
-    set {_variant} to snow fox variant
+    set {_variant} to snow fox type
     set entity variant of entity to {_variant}
     assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
     delete entity
@@ -58,7 +64,7 @@ test "ExprEntityVariant":
     set {_variant} to tabby
     set entity variant of entity to {_variant}
     assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-      delete entity
+    delete entity
   spawn rabbit at {_loc}:
     set {_variant} to brown rabbit type
     set entity variant of entity to {_variant}
@@ -71,11 +77,6 @@ test "ExprEntityVariant":
     delete entity
   spawn tropical fish at {_loc}:
     set {_variant} to glitter tropical fish pattern
-    set entity variant of entity to {_variant}
-    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-    delete entity
-  spawn salmon at {_loc}:
-    set {_variant} to small salmon variant
     set entity variant of entity to {_variant}
     assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
     delete entity

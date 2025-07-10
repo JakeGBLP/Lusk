@@ -67,7 +67,7 @@ public class Constants {
             HAS_ENTITY_SNAPSHOT = classExists("org.bukkit.entity.EntitySnapshot"),
             HAS_ENTITY_SNAPSHOT_GET_AS_STRING = HAS_ENTITY_SNAPSHOT && methodExists(EntitySnapshot.class, "getAsString"),
             HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
-            HAS_GENERATED_STRUCTURE = classExists(" org.bukkit.generator.structure.GeneratedStructure"),
+            HAS_GENERATED_STRUCTURE = classExists("org.bukkit.generator.structure.GeneratedStructure"),
             SPIGOT_HAS_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
             HAS_WARDEN = classExists("org.bukkit.entity.Warden"),
             HAS_SALMON_VARIANT = classExists("org.bukkit.entity.Salmon$Variant"),
