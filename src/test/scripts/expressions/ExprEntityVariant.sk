@@ -6,22 +6,23 @@ test "ExprEntityVariant":
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
-  parse if server version >= 1.21.5:
-    spawn pig at {_loc}:
-      set {_variant} to warm pig variant
-      set entity variant of entity to {_variant}
-      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-      delete entity
-    spawn chicken at {_loc}:
-      set {_variant} to warm chicken variant
-      set entity variant of entity to {_variant}
-      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-      delete entity
-    spawn cow at {_loc}:
-      set {_variant} to warm cow variant
-      set entity variant of entity to {_variant}
-      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-      delete entity
+  parse if skript version < 2.12.0:
+    parse if server version >= 1.21.5:
+      spawn pig at {_loc}:
+        set {_variant} to warm pig variant
+        set entity variant of entity to {_variant}
+        assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+        delete entity
+      spawn chicken at {_loc}:
+        set {_variant} to warm chicken variant
+        set entity variant of entity to {_variant}
+        assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+        delete entity
+      spawn cow at {_loc}:
+        set {_variant} to warm cow variant
+        set entity variant of entity to {_variant}
+        assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+        delete entity
   parse if server version >= 1.21.2:
     spawn salmon at {_loc}:
       set {_variant} to small salmon variant
