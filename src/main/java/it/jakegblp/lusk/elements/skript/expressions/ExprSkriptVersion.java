@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.elements.minecraft.server.expressions;
+package it.jakegblp.lusk.elements.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
@@ -15,19 +15,19 @@ import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Server - Version")
-@Description("The server version.")
-@Examples("send the server version")
-@Since("1.3")
-public class ExprServerVersion extends SimpleExpression<Semver> {
+@Name("Skript - Version")
+@Description("The skript version.")
+@Examples("send the skript version")
+@Since("1.3.6")
+public class ExprSkriptVersion extends SimpleExpression<Semver> {
 
     static {
-        Skript.registerExpression(ExprServerVersion.class, Semver.class, ExpressionType.SIMPLE, "[the] server version");
+        Skript.registerExpression(ExprSkriptVersion.class, Semver.class, ExpressionType.SIMPLE, "[the] skript version");
     }
 
     @Override
     protected @Nullable Semver[] get(Event event) {
-        return new Semver[]{Constants.VERSION_SERVER};
+        return new Semver[]{Constants.VERSION_SKRIPT};
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ExprServerVersion extends SimpleExpression<Semver> {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "server version";
+        return "skript version";
     }
 
     @Override
