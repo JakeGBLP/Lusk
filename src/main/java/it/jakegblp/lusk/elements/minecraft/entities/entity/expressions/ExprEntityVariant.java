@@ -35,7 +35,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.setVariant;
         - Tropical Fish
         """)
 @Examples({"broadcast variant of event-entity","set variant of target to \"red\""})
-@Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More), 1.3.5 (Cow, Chicken, Pig + Safety Checks)")
+@Since("1.0.0, 1.0.2 (Set), 1.0.3 (String + More), 1.3.6 (Cow, Chicken, Pig + Safety Checks)")
 @SuppressWarnings({"unused", "ConstantConditions"})
 public class ExprEntityVariant extends SimplerPropertyExpression<LivingEntity, Object> {
 

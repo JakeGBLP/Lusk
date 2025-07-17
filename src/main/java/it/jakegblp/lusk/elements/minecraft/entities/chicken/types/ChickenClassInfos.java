@@ -16,7 +16,7 @@ public class ChickenClassInfos {
                             .user("chicken ?variants?")
                             .name("Chicken - Variant")
                             .description("All the Chicken Variants.")
-                            .since("1.3.5")
+                            .since("1.3.6")
                             .documentationId("ChickenVariant"));
         }
 

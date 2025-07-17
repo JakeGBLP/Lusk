@@ -16,7 +16,7 @@ public class CowClassInfos {
                             .user("cow ?variants?")
                             .name("Cow - Variant")
                             .description("All the Cow Variants.")
-                            .since("1.3.5")
+                            .since("1.3.6")
                             .documentationId("CowVariant"));
         }
 

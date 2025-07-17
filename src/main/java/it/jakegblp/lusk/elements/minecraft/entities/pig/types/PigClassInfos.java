@@ -16,7 +16,7 @@ public class PigClassInfos {
                             .user("pig ?variants?")
                             .name("Pig - Variant")
                             .description("All the Pig Variants.")
-                            .since("1.3.5")
+                            .since("1.3.6")
                             .documentationId("PigVariant"));
         }
 
