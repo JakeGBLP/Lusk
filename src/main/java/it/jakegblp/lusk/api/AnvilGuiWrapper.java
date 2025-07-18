@@ -85,20 +85,22 @@ public class AnvilGuiWrapper {
     }
 
     public void closeAndOpen(Player... players) {
-        Set<AnvilGuiWrapper> guisToRemove = OPEN_GUIS.entrySet().stream()
-                .filter(entry -> Arrays.stream(players)
-                        .anyMatch(player -> entry.getValue().contains(player.getUniqueId())))
-                .distinct()
-                .peek(entry -> entry.getKey().close())
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+        Set<AnvilGuiWrapper> guisToClose = new HashSet<>();
 
-        guisToRemove.forEach(OPEN_GUIS::remove);
+        for (Map.Entry<AnvilGuiWrapper, Set<UUID>> entry : OPEN_GUIS.entrySet())
+            for (Player player : players)
+                if (entry.getValue().contains(player.getUniqueId())) {
+                    guisToClose.add(entry.getKey());
+                    break;
+                }
 
-        for (Player player : players) {
-            open(player);
+        for (AnvilGuiWrapper gui : guisToClose) {
+            gui.close();
+            OPEN_GUIS.remove(gui);
         }
 
+        for (Player player : players)
+            open(player);
     }
 
     public boolean isOpenTo(Player... players) {
