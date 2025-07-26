@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 @Description("""
 Gets and sets the `hasBasePlate` property of an armorstand entity or item, to do so with an armorstand item you must be using Paper.
 """)
-@Examples({"set has base plate property of target to true", "set whether armor stand target has base plate to true"})
+@Examples({"set has base plate property of target to true", "set has base plate state of target to false"})
 @Since("1.0.2, 1.3 (Item)")
 @SuppressWarnings("unused")
 public class ExprArmorStandHasBasePlate extends SimpleBooleanPropertyExpression<Object> {

@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 @Description("""
 Gets and sets the `Invisible` property of an armorstand entity or item, to do so with an armorstand item you must be using Paper.
 """)
-@Examples({"set invisibility property of target to true", "set whether armor stand target is visible to true"})
+@Examples({"set invisibility property of target to true", "set is visible property of target to false"})
 @Since("1.3")
 @SuppressWarnings("unused")
 public class ExprArmorStandIsInvisible extends SimpleBooleanPropertyExpression<Object> {

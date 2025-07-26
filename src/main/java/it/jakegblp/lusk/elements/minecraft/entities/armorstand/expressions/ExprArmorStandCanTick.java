@@ -16,7 +16,7 @@ Gets and sets the `canTick` property of an armorstand entity or item.
 
 Unlike other Armorstand properties, this one cannot be used on the armorstand item as of 1.21.3.
 """)
-@Examples({"set can tick property of target to true", "set whether armor stand target can tick to true"})
+@Examples({"set can tick property of target to true", "set can tick state of target to false"})
 @Since("1.0.2")
 @SuppressWarnings("unused")
 public class ExprArmorStandCanTick extends SimpleBooleanPropertyExpression<LivingEntity> {

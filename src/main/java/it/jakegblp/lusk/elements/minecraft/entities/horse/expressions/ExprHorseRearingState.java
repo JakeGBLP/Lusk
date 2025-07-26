@@ -1,77 +1,55 @@
 package it.jakegblp.lusk.elements.minecraft.entities.horse.expressions;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
+
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Horse - Rearing State")
-@Description("Returns whether or not an horse is rearing.\nCan be set.")
-@Examples({"broadcast rearing state of target"})
+@Name("Horse - is Rearing (Property)")
+@Description("Returns whether or not an horse is rearing.\nCan be set and reset.")
+@Examples({"broadcast horse rearing state of target"})
 @Since("1.0.3")
 @SuppressWarnings("unused")
-public class ExprHorseRearingState extends SimpleExpression<Boolean> {
+public class ExprHorseRearingState extends SimpleBooleanPropertyExpression<LivingEntity> {
+
     static {
-        Skript.registerExpression(ExprHorseRearingState.class, Boolean.class, ExpressionType.PROPERTY,
-                "[the] horse [is] rearing state of %entity%",
-                "%entity%'[s] horse [is] rearing state",
-                "whether [the] horse %entity% is rearing [or not]",
-                "whether [or not] [the] horse %entity% is rearing");
-    }
-
-    private Expression<Entity> entityExpression;
-
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {
-        entityExpression = (Expression<Entity>) exprs[0];
-        return true;
+        register(ExprHorseRearingState.class, Boolean.class, "horse", "[is] rearing", "livingentities");
     }
 
     @Override
-    protected Boolean @NotNull [] get(@NotNull Event e) {
-        Entity entity = entityExpression.getSingle(e);
-        if (entity instanceof AbstractHorse horse) {
-            return new Boolean[]{horse.isRearing()};
+    public void set(LivingEntity from, Boolean to) {
+        if (from instanceof AbstractHorse horse) {
+            horse.setRearing(to);
         }
-        return new Boolean[0];
     }
 
     @Override
-    public Class<?>[] acceptChange(Changer.@NotNull ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[]{Boolean.class} : null;
+    public void reset(LivingEntity from) {
+        set(from, false);
     }
 
     @Override
-    public void change(@NotNull Event e, Object @NotNull [] delta, Changer.@NotNull ChangeMode mode) {
-        if (delta[0] instanceof Boolean aBoolean)
-            if (entityExpression.getSingle(e) instanceof AbstractHorse horse)
-                horse.setRearing(aBoolean);
+    public @Nullable Boolean convert(LivingEntity from) {
+        return from instanceof AbstractHorse horse && horse.isRearing();
     }
 
     @Override
-    public boolean isSingle() {
+    protected String getPropertyName() {
+        return "horse is rearing state";
+    }
+
+    @Override
+    public boolean allowSet() {
         return true;
     }
 
     @Override
-    public @NotNull Class<? extends Boolean> getReturnType() {
-        return Boolean.class;
-    }
-
-    @Override
-    public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "the horse is rearing state of " + (e == null ? "" : entityExpression.toString(e, debug));
+    public boolean allowReset() {
+        return true;
     }
 }

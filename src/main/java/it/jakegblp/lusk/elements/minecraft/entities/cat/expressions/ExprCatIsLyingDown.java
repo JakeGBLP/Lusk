@@ -51,6 +51,6 @@ public class ExprCatIsLyingDown extends SimpleBooleanPropertyExpression<LivingEn
 
     @Override
     protected String getPropertyName() {
-        return "is lying down";
+        return "cat is lying down";
     }
 }

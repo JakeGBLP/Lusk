@@ -1,5 +1,5 @@
-import org.apache.tools.ant.filters.ReplaceTokens
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'com.gradleup.shadow' version '8.3.0'
@@ -10,7 +10,7 @@ compileJava {
     options.encoding = "UTF-8"
 }
 
-version = "1.3.7"
+version = "1.3.8"
 
 def java16 = 16
 def java17 = 17
@@ -32,7 +32,7 @@ repositories {
 
 dependencies {
     implementation('org.jetbrains:annotations:20.1.0')
-    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     compileOnly('com.github.SkriptLang:Skript:2.12.0')
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.vdurmont:semver4j:3.1.0')
@@ -157,6 +157,7 @@ createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 
 createTestTask('luskTest_1_21_5', 'Runs tests on Paper 1.21.5.', environments + 'paper-1.21.5.json', java21, -1)
 createTestTask('luskTest_1_21_6', 'Runs tests on Paper 1.21.6.', environments + 'paper-1.21.6.json', java21, -1)
 createTestTask('luskTest_1_21_7', 'Runs tests on Paper 1.21.7.', environments + 'paper-1.21.7.json', java21, -1)
+createTestTask('luskTest_1_21_8', 'Runs tests on Paper 1.21.8.', environments + 'paper-1.21.8.json', java21, -1)
 
 tasks.register("luskTestOlderSkriptVersions") {
     description = 'Runs tests on older skript versions.'

@@ -1,0 +1,32 @@
+name: Paper 1.21.8
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Skript and run test scripts
+        run: ./gradlew clean luskTest_1_21_8
+      - name: Upload Nightly Build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: lusk-nightly.jar
+          path: build/libs/*

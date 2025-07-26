@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 @Description("""
 Gets and sets the `marker` property of an armorstand entity or item, to do so with an armorstand item you must have Paper.
 """)
-@Examples({"set marker of target to true", "set whether armor stand target is marker to true"})
+@Examples({"set marker of target to true"})
 @Since("1.0.2, 1.3 (Item)")
 @SuppressWarnings("unused")
 public class ExprArmorStandIsMarker extends SimpleBooleanPropertyExpression<Object> {

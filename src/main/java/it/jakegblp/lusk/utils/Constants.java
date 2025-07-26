@@ -96,6 +96,10 @@ public class Constants {
              */
             SKRIPT_2_10 = VERSION_SKRIPT.isGreaterThanOrEqualTo(parseVersion("2.10")),
             /**
+             * Whether the current server version is greater than or equal to 1.18
+             */
+            MINECRAFT_1_18 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.18")),
+            /**
              * Whether the current server version is greater than or equal to 1.18.2
              */
             MINECRAFT_1_18_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.18.2")),
@@ -140,6 +144,7 @@ public class Constants {
             HAS_HOPPER_INVENTORY_SEARCH_EVENT = classExists("org.bukkit.event.inventory.HopperInventorySearchEvent"),
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
+            PAPER_1_18 = MINECRAFT_1_18 && isPaper(),
             PAPER_HAS_1_18_2_EXTENDED_ENTITY_API = MINECRAFT_1_18_2 && isPaper(),
             /**
              * Whether, at runtime, the server includes APIs for

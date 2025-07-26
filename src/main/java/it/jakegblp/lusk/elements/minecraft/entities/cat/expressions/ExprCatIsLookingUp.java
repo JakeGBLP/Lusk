@@ -51,6 +51,6 @@ public class ExprCatIsLookingUp extends SimpleBooleanPropertyExpression<LivingEn
 
     @Override
     protected String getPropertyName() {
-        return "is looking up";
+        return "cat is looking up";
     }
 }

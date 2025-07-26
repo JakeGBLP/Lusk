@@ -68,24 +68,21 @@ public class BlockWrapper {
         BlockStateMeta tempBlockStateMeta = null;
         Entity tempEntity = null;
 
-        if (object instanceof Block aBlock) {
+        if (object instanceof Block aBlock)
             tempBlock = aBlock;
-        } else if (object instanceof BlockState aBlockState) {
+        else if (object instanceof BlockState aBlockState)
             tempBlockState = aBlockState;
-        } else if (object instanceof ItemType itemType) {
+        else if (object instanceof ItemType itemType)
             tempItem = itemType;
-        } else if (object instanceof ItemMeta itemMeta) {
-            if (itemMeta instanceof BlockDataMeta meta) {
+        else if (object instanceof ItemMeta itemMeta) {
+            if (itemMeta instanceof BlockDataMeta meta)
                 tempBlockDataMeta = meta;
-            }
-            if (itemMeta instanceof BlockStateMeta meta) {
+            if (itemMeta instanceof BlockStateMeta meta)
                 tempBlockStateMeta = meta;
-            }
-        } else if (object instanceof BlockData aBlockData) {
+        } else if (object instanceof BlockData aBlockData)
             tempBlockData = aBlockData;
-        } else if (object instanceof Entity anEntity) {
+        else if (object instanceof Entity anEntity)
             tempEntity = anEntity;
-        }
 
         this.block = tempBlock;
         this.blockState = tempBlockState;
