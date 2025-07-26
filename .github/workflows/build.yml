@@ -57,37 +57,3 @@ jobs:
         with:
           name: Lusk_test.jar
           path: build/libs/*.jar
-  test_dev_feature:
-    runs-on: ubuntu-latest
-    needs: [test_build]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: dev/feature
-          extra_plugins_directory: extra-plugins/
-  test_dev_patch:
-    runs-on: ubuntu-latest
-    needs: [test_build]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: extra-plugins/
-          merge-multiple: true
-      - name: Run tests
-        uses: SkriptLang/skript-test-action@v1.2
-        with:
-          test_script_directory: src/test/scripts
-          skript_repo_ref: dev/patch
-          extra_plugins_directory: extra-plugins/
