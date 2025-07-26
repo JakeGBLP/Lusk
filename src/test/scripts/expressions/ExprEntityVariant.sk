@@ -24,11 +24,18 @@ test "ExprEntityVariant":
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
-  spawn mushroom cow at {_loc}:
-    set {_variant} to brown mushroom cow variant
-    set entity variant of entity to {_variant}
-    assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-    delete entity
+  parse if skript version > 2.6.4:
+    spawn mushroom cow at {_loc}:
+      set {_variant} to brown mushroom cow variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
+  else:
+    spawn mooshroom at {_loc}:
+      set {_variant} to brown mushroom cow variant
+      set entity variant of entity to {_variant}
+      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
+      delete entity
   spawn parrot at {_loc}:
     set {_variant} to blue parrot variant
     set entity variant of entity to {_variant}
