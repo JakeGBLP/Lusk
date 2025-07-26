@@ -7,6 +7,8 @@ import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
+
 @Name("Bucketable - Base Bucket Item")
 @Description("Gets the base item of this entity in a bucket form.")
 @Examples({"set {_bucket} to base bucket item of {_fish}"})
@@ -15,7 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBucketableBaseBucketItem extends SimplerPropertyExpression<LivingEntity, ItemType> {
 
     static {
-        register(ExprBucketableBaseBucketItem.class, ItemType.class, "base bucket item", "livingentities");
+        if (PAPER_1_18)
+            register(ExprBucketableBaseBucketItem.class, ItemType.class, "base bucket item", "livingentities");
     }
 
     @Override

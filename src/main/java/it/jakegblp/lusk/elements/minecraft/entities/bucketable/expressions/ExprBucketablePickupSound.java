@@ -7,6 +7,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
+
 @Name("Bucketable - Bucket Pickup Sound")
 @Description("Gets the sound that is played when the provided entity is picked up in a bucket.")
 @Examples({"set {_sound} to bucket pickup sound of {_fish}"})
@@ -15,7 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBucketablePickupSound extends SimplerPropertyExpression<LivingEntity, Sound> {
 
     static {
-        register(ExprBucketablePickupSound.class, Sound.class, "bucket pickup sound", "livingentities");
+        if (PAPER_1_18)
+            register(ExprBucketablePickupSound.class, Sound.class, "bucket pickup sound", "livingentities");
     }
 
     @Override
