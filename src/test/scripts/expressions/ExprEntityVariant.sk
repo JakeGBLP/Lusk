@@ -25,7 +25,7 @@ test "ExprEntityVariant":
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
   set {_mushroom} to "mooshroom" parsed as entity type
-  if {_mushroom} is not set:
+  parse if {_mushroom} is not set:
     set {_mushroom} to mushroom cow
   spawn {_mushroom} at {_loc}:
     set {_variant} to brown mushroom cow variant
