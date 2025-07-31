@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Llama - Caravan Tail")
 @Description("Returns the caravan tail of a llama.")
@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 @SuppressWarnings("unused")
 public class ExprLlamaCaravanTail extends SimplePropertyExpression<LivingEntity, LivingEntity> {
     static {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             register(ExprLlamaCaravanTail.class, LivingEntity.class, "[llama] caravan tail", "livingentities");
     }
 

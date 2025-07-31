@@ -6,7 +6,7 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Enderman - Has Been Stared At (Property)")
 @Description("Returns whether or not an enderman has been stared at.\nCan be set.")
@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 public class ExprEndermanBeenStaredAt extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(ExprEndermanBeenStaredAt.class,Boolean.class,
                     "[enderman]","[has] been (stared|looked) at", "livingentities");
     }

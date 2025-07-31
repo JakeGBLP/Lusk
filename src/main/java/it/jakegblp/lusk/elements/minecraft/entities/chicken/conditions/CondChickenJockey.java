@@ -5,7 +5,7 @@ import ch.njol.skript.doc.*;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Chicken - is Chicken Jockey")
 @Description("Checks if the provided chickens are chicken jockeys.")
@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 public class CondChickenJockey extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             register(CondChickenJockey.class, "[a] chicken jockey", "livingentities");
     }
 

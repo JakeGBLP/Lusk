@@ -3,6 +3,7 @@ package it.jakegblp.lusk.api;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.entity.EntityData;
 import it.jakegblp.lusk.utils.Constants;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemType;
 import static it.jakegblp.lusk.utils.LuskUtils.warning;
 
+@AllArgsConstructor()
 public class BlockWrapper {
 
     @Nullable
@@ -54,43 +57,91 @@ public class BlockWrapper {
     private final boolean shouldUpdate;
 
     public BlockWrapper(Object object) {
-        this(object,true);
+        this(object, false);
     }
 
     public BlockWrapper(Object object, boolean shouldUpdate) {
-        this.shouldUpdate = shouldUpdate;
+        this(
+                object instanceof Block aBlock ? aBlock : null,
+                object instanceof ItemType itemType ? itemType : null,
+                object instanceof BlockStateMeta itemMeta ? itemMeta : null,
+                object instanceof BlockState aBlockState ? aBlockState : null,
+                object instanceof BlockDataMeta itemMeta ? itemMeta : null,
+                object instanceof BlockData aBlockData ? aBlockData : null,
+                object instanceof Entity anEntity ? anEntity : null,
+                shouldUpdate
+        );
+    }
 
-        Block tempBlock = null;
-        BlockState tempBlockState = null;
-        ItemType tempItem = null;
-        BlockData tempBlockData = null;
-        BlockDataMeta tempBlockDataMeta = null;
-        BlockStateMeta tempBlockStateMeta = null;
-        Entity tempEntity = null;
+    public BlockWrapper(
+            Block block,
+            ItemType item,
+            BlockStateMeta blockStateMeta,
+            BlockState blockState,
+            BlockDataMeta blockDataMeta,
+            BlockData blockData,
+            Entity entity) {
+        this(
+                block,
+                item,
+                blockStateMeta,
+                blockState,
+                blockDataMeta,
+                blockData,
+                entity,
+                false
+        );
+    }
 
-        if (object instanceof Block aBlock)
-            tempBlock = aBlock;
-        else if (object instanceof BlockState aBlockState)
-            tempBlockState = aBlockState;
-        else if (object instanceof ItemType itemType)
-            tempItem = itemType;
-        else if (object instanceof ItemMeta itemMeta) {
-            if (itemMeta instanceof BlockDataMeta meta)
-                tempBlockDataMeta = meta;
-            if (itemMeta instanceof BlockStateMeta meta)
-                tempBlockStateMeta = meta;
-        } else if (object instanceof BlockData aBlockData)
-            tempBlockData = aBlockData;
-        else if (object instanceof Entity anEntity)
-            tempEntity = anEntity;
+    public BlockWrapper(@NotNull Block block, boolean shouldUpdate) {
+        this(block, null, null, null, null, null, null, shouldUpdate);
+    }
+    public BlockWrapper(@NotNull Block block) {
+        this(block, false);
+    }
 
-        this.block = tempBlock;
-        this.blockState = tempBlockState;
-        this.item = tempItem;
-        this.blockData = tempBlockData;
-        this.blockDataMeta = tempBlockDataMeta;
-        this.blockStateMeta = tempBlockStateMeta;
-        this.entity = tempEntity;
+    public BlockWrapper(@NotNull BlockState blockState, boolean shouldUpdate) {
+        this(null, null, null, blockState, null, null, null, shouldUpdate);
+    }
+    public BlockWrapper(@NotNull BlockState blockState) {
+        this(blockState, false);
+    }
+
+    public BlockWrapper(@NotNull BlockData blockData, boolean shouldUpdate) {
+        this(null, null, null, null, null, blockData, null, shouldUpdate);
+    }
+    public BlockWrapper(@NotNull BlockData blockData) {
+        this(blockData, false);
+    }
+
+    public BlockWrapper(@NotNull ItemType item, boolean shouldUpdate) {
+        this(null, item, null, null, null, null, null, shouldUpdate);
+    }
+    public BlockWrapper(@NotNull ItemType item) {
+        this(item, false);
+    }
+
+    public BlockWrapper(@NotNull ItemMeta itemMeta, boolean shouldUpdate) {
+        this(
+                null,
+                null,
+                itemMeta instanceof BlockStateMeta meta ? meta : null,
+                null,
+                itemMeta instanceof BlockDataMeta meta ? meta : null,
+                null,
+                null,
+                shouldUpdate
+                );
+    }
+    public BlockWrapper(@NotNull ItemMeta itemMeta) {
+        this(itemMeta, false);
+    }
+
+    public BlockWrapper(@NotNull Entity entity, boolean shouldUpdate) {
+        this(null, null, null, null, null, null, entity, shouldUpdate);
+    }
+    public BlockWrapper(@NotNull Entity entity) {
+        this(entity, false);
     }
 
     @Nullable
@@ -271,7 +322,7 @@ public class BlockWrapper {
 
     public void setLiquidLevel(int level) {
         if (getBlockData() instanceof Levelled levelled && level <= levelled.getMaximumLevel()
-                && (!PAPER_HAS_1_18_2_EXTENDED_ENTITY_API || level >= levelled.getMinimumLevel())) {
+                && (!PAPER_1_18_2 || level >= levelled.getMinimumLevel())) {
             try {
                 levelled.setLevel(level);
             } catch (IllegalArgumentException e) {

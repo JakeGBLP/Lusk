@@ -44,8 +44,8 @@ public class ExprBellShakingTime extends SimplePropertyExpression<Object, Object
 
     @Override
     @Nullable
-    public Object convert(Object block) {
-        Integer ticks = new BlockWrapper(block).getBellShakingTicks();
+    public Object convert(Object o) {
+        Integer ticks = new BlockWrapper(o).getBellShakingTicks();
         return (useTicks || ticks == null) ? ticks : fromTicks(ticks);
     }
 

@@ -5,7 +5,7 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 @Name("Fox - is Defending (Property)")
 @Description("Gets whether the provided foxed are defending, can be set and reset.")
 @Examples({"broadcast the fox is defending property of target"})
@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 public class ExprFoxDefending extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(ExprFoxDefending.class, Boolean.class, "fox", "[is] defending","livingentities");
     }
 

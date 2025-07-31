@@ -7,9 +7,12 @@ import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import io.papermc.paper.event.entity.EntityInsideBlockEvent;
 import io.papermc.paper.event.entity.EntityKnockbackEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
+import io.papermc.paper.event.entity.TameableDeathMessageEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.Projectile;
@@ -22,8 +25,7 @@ import org.bukkit.util.Vector;
 
 import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_19_2;
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_20_6;
+import static it.jakegblp.lusk.utils.Constants.*;
 
 public class EvtEntityEvents {
     static {
@@ -131,6 +133,16 @@ public class EvtEntityEvents {
                     .since("1.1.1")
                     .requiredPlugins("Paper")
                     .documentationID("11161");
+        }
+        if (PAPER_1_18_2) {
+            Skript.registerEvent("Tameable - on Death Message", SimpleEvent.class, TameableDeathMessageEvent.class, "(tameable|pet) death message")
+                    .description("""
+                            Called when a Tameable dies and sends a death message.""")
+                    .examples("")
+                    .requiredPlugins("Paper 1.18.2+")
+                    .since("1.3.8");
+            registerEventValue(TameableDeathMessageEvent.class, Entity.class, TameableDeathMessageEvent::getEntity, EventValues.TIME_NOW);
+            registerEventValue(TameableDeathMessageEvent.class, String.class, tameableDeathMessageEvent -> LegacyComponentSerializer.legacySection().serialize(tameableDeathMessageEvent.deathMessage()), EventValues.TIME_NOW);
         }
     }
 }

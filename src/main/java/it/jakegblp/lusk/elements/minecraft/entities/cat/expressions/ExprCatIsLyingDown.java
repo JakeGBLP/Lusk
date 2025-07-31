@@ -6,7 +6,7 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Cat - is Lying Down (Property)")
 @Description("Returns whether or not a cat is lying down.\nCan be set and reset.")
@@ -18,7 +18,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 public class ExprCatIsLyingDown extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(ExprCatIsLyingDown.class, Boolean.class, "cat", "[is] lying down", "livingentities");
     }
 

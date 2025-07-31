@@ -12,7 +12,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Llama - Leave Caravan")
 @Description("Makes a llama leave its caravan.")
@@ -22,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 @SuppressWarnings("unused")
 public class EffLlamaLeaveCaravan extends Effect {
     static {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             Skript.registerEffect(EffLlamaLeaveCaravan.class,
                     "make %livingentities% leave [its|the[ir]] caravan");
     }

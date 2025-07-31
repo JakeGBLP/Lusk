@@ -6,7 +6,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Fox - is Defending")
 @Description("Checks if the fox is defending.")
@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 @SuppressWarnings("unused")
 public class CondFoxDefending extends PrefixedPropertyCondition<LivingEntity> {
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(CondFoxDefending.class, "fox[es]", "defending", "livingentities");
     }
 

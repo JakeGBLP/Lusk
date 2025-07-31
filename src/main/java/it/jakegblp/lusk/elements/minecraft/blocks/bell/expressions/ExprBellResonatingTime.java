@@ -44,8 +44,8 @@ public class ExprBellResonatingTime extends SimplePropertyExpression<Object, Obj
 
     @Override
     @Nullable
-    public Object convert(Object block) {
-        Integer ticks = new BlockWrapper(block).getBellResonatingTicks();
+    public Object convert(Object o) {
+        Integer ticks = new BlockWrapper(o).getBellResonatingTicks();
         return (useTicks || ticks == null) ? ticks : fromTicks(ticks);
     }
 

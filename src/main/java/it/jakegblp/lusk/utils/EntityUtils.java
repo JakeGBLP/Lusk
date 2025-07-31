@@ -71,14 +71,14 @@ public class EntityUtils {
             return wolf.isAngry();
         } else if (HAS_WARDEN && entity instanceof Warden warden) {
             return warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
-        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
             return enderman.isScreaming();
         }
         return false;
     }
 
     public static boolean isInterested(LivingEntity entity) {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Fox fox) {
+        if (PAPER_1_18_2 && entity instanceof Fox fox) {
             return fox.isInterested();
         } else if (entity instanceof Wolf wolf) {
             return wolf.isInterested();
@@ -87,7 +87,7 @@ public class EntityUtils {
     }
 
     public static void setIsInterested(LivingEntity entity, boolean interested) {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Fox fox) {
+        if (PAPER_1_18_2 && entity instanceof Fox fox) {
             fox.setInterested(interested);
         } else if (entity instanceof Wolf wolf) {
             wolf.setInterested(interested);
@@ -99,7 +99,7 @@ public class EntityUtils {
             pigZombie.setAngry(bool);
         } else if (entity instanceof Wolf wolf) {
             wolf.setAngry(bool);
-        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
             enderman.setScreaming(bool);
         }
     }
@@ -127,7 +127,7 @@ public class EntityUtils {
     public static boolean isScreaming(LivingEntity entity) {
         if (entity instanceof Goat goat) {
             return goat.isScreaming();
-        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
             return enderman.isScreaming();
         }
         return false;
@@ -136,13 +136,13 @@ public class EntityUtils {
     public static void setIsScreaming(LivingEntity entity, boolean screaming) {
         if (entity instanceof Goat goat) {
             goat.setScreaming(screaming);
-        } else if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API && entity instanceof Enderman enderman) {
+        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
             enderman.setScreaming(screaming);
         }
     }
 
     public static boolean isRoaring(LivingEntity entity) {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API && entity instanceof Ravager ravager)
+        if (PAPER_1_19_2 && entity instanceof Ravager ravager)
             return ravager.getRoarTicks() > 0;
         else if (entity instanceof EnderDragon enderDragon)
             return enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;

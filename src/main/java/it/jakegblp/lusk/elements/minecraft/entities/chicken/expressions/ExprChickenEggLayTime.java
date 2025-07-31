@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.getTicks;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Chicken - Egg Lay Time/Ticks")
 @Description("Returns the time till a chicken lays an egg.")
@@ -25,7 +25,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 public class ExprChickenEggLayTime extends SimplePropertyExpression<LivingEntity, Object> {
 
     static { // todo: simpler, use that one other expression as a reference
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             register(ExprChickenEggLayTime.class, Object.class, "[chicken] egg lay (time|:ticks)", "livingentities");
     }
 

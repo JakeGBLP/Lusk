@@ -149,12 +149,12 @@ public class Constants {
 
             PAPER_HAS_ARMOR_STAND_META = classExists("com.destroystokyo.paper.inventory.meta.ArmorStandMeta"),
             PAPER_1_18 = MINECRAFT_1_18 && isPaper(),
-            PAPER_HAS_1_18_2_EXTENDED_ENTITY_API = MINECRAFT_1_18_2 && isPaper(),
+            PAPER_1_18_2 = MINECRAFT_1_18_2 && isPaper(),
             /**
              * Whether, at runtime, the server includes APIs for
              * {@link Fox}, {@link Cat}, {@link Dolphin}, {@link Enderman}, {@link EnderDragon}.
              */
-            PAPER_HAS_1_19_2_EXTENDED_ENTITY_API = MINECRAFT_1_19_2 && isPaper(),
+            PAPER_1_19_2 = MINECRAFT_1_19_2 && isPaper(),
             // https://github.com/PaperMC/Paper/commit/ec772bb8b8a185ffaea7db643f612211d43c9528
             //PAPER_HAS_1_19_3_EXTENDED_ENTITY_API = MINECRAFT_1_19_3 && isPaper(),
             PAPER_1_20_1 = MINECRAFT_1_20_1 && isPaper(),

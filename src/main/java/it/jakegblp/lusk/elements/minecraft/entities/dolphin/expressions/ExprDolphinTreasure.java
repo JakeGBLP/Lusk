@@ -7,7 +7,7 @@ import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Dolphin - Treasure Chest Location")
 @Description("""
@@ -25,7 +25,7 @@ The world of the location you give it does not matter, as the dolphin will alway
 @SuppressWarnings("unused")
 public class ExprDolphinTreasure extends SimplerPropertyExpression<LivingEntity, Location> {
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(ExprDolphinTreasure.class,Location.class,"dolphin treasure [chest] location", "livingentities");
     }
 

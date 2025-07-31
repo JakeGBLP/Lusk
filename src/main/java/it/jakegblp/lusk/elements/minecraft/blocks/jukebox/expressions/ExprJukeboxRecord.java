@@ -40,7 +40,7 @@ public class ExprJukeboxRecord extends SimplerPropertyExpression<Object,ItemType
 
     @Override
     public void set(Object from, ItemType to) {
-        new BlockWrapper(from,true).setJukeboxRecord(to);
+        new BlockWrapper(from, true).setJukeboxRecord(to);
     }
 
     @Override

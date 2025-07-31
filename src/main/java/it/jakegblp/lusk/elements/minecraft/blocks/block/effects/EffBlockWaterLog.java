@@ -44,6 +44,6 @@ public class EffBlockWaterLog extends Effect {
 
     @Override
     protected void execute(@NotNull Event event) {
-        new BlockWrapper(blockExpression.getSingle(event)).setWaterLogged(waterlog);
+        new BlockWrapper(blockExpression.getSingle(event), true).setWaterLogged(waterlog);
     }
 }

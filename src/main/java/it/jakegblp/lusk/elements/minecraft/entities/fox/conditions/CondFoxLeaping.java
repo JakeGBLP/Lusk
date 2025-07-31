@@ -6,7 +6,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Fox - is Leaping")
 @Description("Checks if a fox is leaping.")
@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 @SuppressWarnings("unused")
 public class CondFoxLeaping extends PrefixedPropertyCondition<LivingEntity> {
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(CondFoxLeaping.class, "[fox[es]]", "leaping", "livingentities");
     }
 

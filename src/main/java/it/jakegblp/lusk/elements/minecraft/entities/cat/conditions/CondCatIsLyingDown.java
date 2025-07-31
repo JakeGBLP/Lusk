@@ -6,7 +6,7 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Cat - is Lying Down")
 @Description("Checks if a cat is laying down.")
@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 public class CondCatIsLyingDown extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(CondCatIsLyingDown.class, "lying down", "livingentities");
     }
 

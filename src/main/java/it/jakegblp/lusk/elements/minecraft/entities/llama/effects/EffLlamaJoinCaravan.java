@@ -12,7 +12,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Llama - Join Caravan")
 @Description("Makes a llama join another llama's caravan.")
@@ -22,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 @SuppressWarnings("unused")
 public class EffLlamaJoinCaravan extends Effect {
     static {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             Skript.registerEffect(EffLlamaJoinCaravan.class,
                     "make %livingentities% join [the] caravan of %livingentity%",
                     "make %livingentities% join %livingentity%'[s] caravan");

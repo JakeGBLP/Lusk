@@ -6,7 +6,7 @@ import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Dolphin - Moisture Level")
 @Description("Returns the moisture level of the provided dolphins.\nCan be set, added to, and removed from.")
@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_18_2_EXTENDED_ENTITY_
 public class ExprDolphinMoisture extends SimplerPropertyExpression<LivingEntity,Integer> {
 
     static {
-        if (PAPER_HAS_1_18_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_18_2)
             register(ExprDolphinMoisture.class,Integer.class,
                     "dolphin moist(ure [level|amount]|ness [amount])", "livingentities");
     }

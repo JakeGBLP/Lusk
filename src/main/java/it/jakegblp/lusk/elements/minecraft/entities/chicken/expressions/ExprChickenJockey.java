@@ -6,7 +6,7 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_API;
+import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 
 @Name("Chicken - is Chicken Jockey (Property)")
 @Description("Checks if the provided chickens are chicken jockeys.")
@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_1_19_2_EXTENDED_ENTITY_
 public class ExprChickenJockey extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_HAS_1_19_2_EXTENDED_ENTITY_API)
+        if (PAPER_1_19_2)
             register(ExprChickenJockey.class,Boolean.class,"[is] [a] chicken jockey","livingentities");
     }
 
