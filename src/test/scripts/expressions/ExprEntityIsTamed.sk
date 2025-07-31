@@ -1,0 +1,6 @@
+test "ExprEntityIsTamed":
+  spawn horse at location(0,0,0):
+    assert is tamed property of entity is false with "tamed property of horse %entity% is true instead of false"
+    set is tamed property of entity to true
+    assert is tamed property of entity is true with "tamed property of horse %entity% is false instead of true"
+    delete entity
