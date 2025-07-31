@@ -56,12 +56,12 @@ public class ExprSpawnerEntityType extends SimplerPropertyExpression<Object, Ent
 
     @Override
     public void set(Object from, EntityData to) {
-        new BlockWrapper(from).setSpawnerEntityType(to);
+        new BlockWrapper(from, true).setSpawnerEntityType(to);
     }
 
     @Override
     public void reset(Object from) {
-        new BlockWrapper(from).setSpawnerEntityType(EntityType.PIG);
+        new BlockWrapper(from, true).setSpawnerEntityType(EntityType.PIG);
     }
 
     @Override

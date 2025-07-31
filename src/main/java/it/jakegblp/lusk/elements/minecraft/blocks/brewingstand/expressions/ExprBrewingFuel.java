@@ -37,7 +37,7 @@ public class ExprBrewingFuel extends SimplerPropertyExpression<Object, ItemType>
 
     @Override
     public void set(Object from, ItemType to) {
-        new BlockWrapper(from).setBrewingFuel(to);
+        new BlockWrapper(from, true).setBrewingFuel(to);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class ExprSignIsWaxed extends SimpleBooleanPropertyExpression<Object> {
 
     @Override
     public void set(Object from, Boolean to) {
-        new BlockWrapper(from).setIsSignWaxed(to);
+        new BlockWrapper(from, true).setIsSignWaxed(to);
     }
 
     @Override

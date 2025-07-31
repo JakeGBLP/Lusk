@@ -41,7 +41,7 @@ public class ExprBrewingFuelLevel extends SimplerPropertyExpression<Object,Integ
 
     @Override
     public void set(Object from, Integer to) {
-        new BlockWrapper(from).setBrewingFuelLevel(to);
+        new BlockWrapper(from, true).setBrewingFuelLevel(to);
     }
 
     @Override

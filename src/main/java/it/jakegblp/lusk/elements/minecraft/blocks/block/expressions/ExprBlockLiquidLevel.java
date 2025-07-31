@@ -80,7 +80,7 @@ public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integ
 
     @Override
     public void set(Object from, Integer to) {
-        new BlockWrapper(from).setLiquidLevel(to);
+        new BlockWrapper(from, true).setLiquidLevel(to);
     }
 
     @Override
@@ -90,13 +90,13 @@ public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integ
 
     @Override
     public void reset(Object from) {
-        BlockWrapper blockWrapper = new BlockWrapper(from);
+        BlockWrapper blockWrapper = new BlockWrapper(from, true);
         blockWrapper.setLiquidLevel(blockWrapper.getMinLiquidLevel());
     }
 
     @Override
     public void add(Object from, Integer to) {
-        BlockWrapper blockWrapper = new BlockWrapper(from);
+        BlockWrapper blockWrapper = new BlockWrapper(from, true);
         blockWrapper.setLiquidLevel(Math.min(blockWrapper.getLiquidLevel() + to,blockWrapper.getMaxLiquidLevel()));
     }
 

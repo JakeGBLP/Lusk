@@ -27,7 +27,7 @@ public class ExprBrewingIngredient extends SimplerPropertyExpression<Object, Ite
 
     @Override
     public void set(Object from, ItemType to) {
-        new BlockWrapper(from).setBrewingIngredient(to);
+        new BlockWrapper(from, true).setBrewingIngredient(to);
     }
 
     @Override

@@ -49,9 +49,9 @@ public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
     @Override
     public void set(Object from, Object to) {
         if (to instanceof Integer integer) {
-            new BlockWrapper(from).setBrewingTime(integer);
+            new BlockWrapper(from, true).setBrewingTime(integer);
         } else if (to instanceof Timespan timespan) {
-            new BlockWrapper(from).setBrewingTime((int) CompatibilityUtils.getTicks(timespan));
+            new BlockWrapper(from, true).setBrewingTime((int) CompatibilityUtils.getTicks(timespan));
         }
     }
 

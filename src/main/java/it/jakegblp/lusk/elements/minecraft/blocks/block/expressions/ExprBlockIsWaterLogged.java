@@ -26,7 +26,7 @@ public class ExprBlockIsWaterLogged extends SimpleBooleanPropertyExpression<Obje
 
     @Override
     public void set(Object from, Boolean to) {
-        new BlockWrapper(from).setWaterLogged(to);
+        new BlockWrapper(from, true).setWaterLogged(to);
     }
 
     @Override
