@@ -19,7 +19,7 @@ If tamed, an entity cannot be tamed by a player through normal methods, even if 
 public class ExprEntityIsTamed extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        register(ExprEntityIsTamed.class, Boolean.class, "tameable", "[is] tamed", "livingentities");
+        register(ExprEntityIsTamed.class, Boolean.class, "[tameable]", "[is] tamed", "livingentities");
     }
 
     @Override
@@ -41,6 +41,6 @@ public class ExprEntityIsTamed extends SimpleBooleanPropertyExpression<LivingEnt
 
     @Override
     protected String getPropertyName() {
-        return "is angry";
+        return "is tamed";
     }
 }
