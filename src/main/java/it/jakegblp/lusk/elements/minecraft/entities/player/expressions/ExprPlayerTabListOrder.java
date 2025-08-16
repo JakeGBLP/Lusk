@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_21_2;
 
 @Name("Player - Player Tab List Order")
-@Description("Returns he relative order that the player is shown on the player list.\nCan be set.")
+@Description("Returns he relative order that the player is shown on the player list.\nCan be set.\n\nSetting this mainly modifies the order for the player you're setting it for.")
 @Examples({"broadcast tab list order of player"})
 @Since("1.3.9")
 @RequiredPlugins("1.21.2")
