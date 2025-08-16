@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
         if version of player < 1.9.0:
             send "i think you should update but you do you"
         """)
-@Since("1.0.0")
+@Since("1.0.0, 1.3.9 (Plural)")
 @SuppressWarnings("unused")
 public class ExprPlayerVersion extends SimplePropertyExpression<Player, Semver> {
     static {
-        register(ExprPlayerVersion.class, Semver.class, "[minecraft|client|player] version", "player");
+        register(ExprPlayerVersion.class, Semver.class, "[minecraft|client|player] version", "players");
     }
 
     @Override

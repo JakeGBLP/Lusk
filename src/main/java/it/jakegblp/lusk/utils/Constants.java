@@ -140,6 +140,10 @@ public class Constants {
              */
             MINECRAFT_1_21 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21")),
             /**
+             * Whether the current server version is greater than or equal to 1.21.2
+             */
+            MINECRAFT_1_21_2 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21.2")),
+            /**
              * Whether the current server version is greater than or equal to 1.21.5
              */
             MINECRAFT_1_21_5 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21.5")),
@@ -185,12 +189,10 @@ public class Constants {
             ARMOR_STAND_TYPES = "livingentity" + (PAPER_HAS_ARMOR_STAND_META ? "/itemtypes" : ""),
             LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
 
-
     public static final ExpressionType EVENT_OR_SIMPLE = SKRIPT_2_8 ? ExpressionType.EVENT : ExpressionType.SIMPLE;
 
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
 
-    // todo: 1. Make file-reading system to allow users to update this. 2. idk i never ended up typing this one out
     public static final Map<Integer, Semver> versions = Map.ofEntries(
         entry(4, parseVersion("1.7.5")),
         entry(5, parseVersion("1.7.10")),

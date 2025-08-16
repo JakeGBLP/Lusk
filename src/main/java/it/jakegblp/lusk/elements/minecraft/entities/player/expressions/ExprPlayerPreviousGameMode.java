@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 @Name("Player - Previous Game Mode")
 @Description("Returns the previous gamemode of a player.")
 @Examples({"broadcast previous gamemode of player"})
-@Since("1.0.2")
+@Since("1.0.2, 1.3.9 (Plural)")
 @DocumentationId("9082")
 public class ExprPlayerPreviousGameMode extends SimplePropertyExpression<Player, GameMode> {
     static {
-        register(ExprPlayerPreviousGameMode.class, GameMode.class, "previous game[ ]mode", "player");
+        register(ExprPlayerPreviousGameMode.class, GameMode.class, "previous game[ ]mode", "players");
     }
 
     @Override
