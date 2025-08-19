@@ -14,7 +14,7 @@ For anything, reach out to me on Discord (@JakeGBLP) or open an Issue about it.
 
 ## ⭐ Featured:
 
-[<img width="500" alt="skriptdocs wiki logo temporary" src="https://github.com/user-attachments/assets/ed513861-8376-48c1-8431-a01c23ed74e4" />](https://skriptdocs.wiki/?addon=lusk)
+[![SkriptDocs](https://skriptdocs.wiki/viewdocs.png)](https://skriptdocs.wiki/?addon=lusk)
 
 ## Other:
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk)
