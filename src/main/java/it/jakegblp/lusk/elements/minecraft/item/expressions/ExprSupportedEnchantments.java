@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @Name("Item - Supported/Preferred Enchantments")
 @Description("Returns the Enchantments this item can normally have.")
 @Examples({"broadcast supported enchantments of tool"})
-@Since("1.3")
+@Since("1.3, 1.3.9 (Fixed Plurality)")
 @SuppressWarnings("unused")
 public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enchantment> {
 
@@ -40,7 +40,12 @@ public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enc
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "preferred enchantments of " + getExpr().toString(event, debug);
+        return "supported enchantments of " + getExpr().toString(event, debug);
+    }
+
+    @Override
+    public boolean isSingle() {
+        return false; // getExpr() instanceof Literal<? extends ItemStack> literal && literal.isSingle() && literal.getSingle().getEnchantments().size() <= 1;
     }
 
     @Override
