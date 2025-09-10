@@ -2,7 +2,7 @@
 > # » [CLICK HERE TO DOWNLOAD](https://modrinth.com/plugin/lusk) «
 > Since Lusk 1.3, all official releases of Lusk will only be available on Modrinth; Modrinth grants developers 75% of the ad revenue and this can REALLY help a ton when making updates!
 
-# [Click Here](https://discord.gg/JdJWgRqbyr) to join the Official Lusk Support Discord Server
+# [Click Here](https://discord.gg/XmBfsfzudJ) to join the Official Lusk Support Discord Server
 
 In this server you will receive support for Lusk among other things!
 
