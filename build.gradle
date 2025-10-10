@@ -159,7 +159,6 @@ createTestTask('luskTest_1_21_5', 'Runs tests on Paper 1.21.5.', environments + 
 createTestTask('luskTest_1_21_6', 'Runs tests on Paper 1.21.6.', environments + 'paper-1.21.6.json', java21, -1)
 createTestTask('luskTest_1_21_7', 'Runs tests on Paper 1.21.7.', environments + 'paper-1.21.7.json', java21, -1)
 createTestTask('luskTest_1_21_8', 'Runs tests on Paper 1.21.8.', environments + 'paper-1.21.8.json', java21, -1)
-createTestTask('luskTest_1_21_9', 'Runs tests on Paper 1.21.9.', environments + 'paper-1.21.9.json', java21, -1)
 createTestTask('luskTest_1_21_10', 'Runs tests on Paper 1.21.10.', environments + 'paper-1.21.10.json', java21, -1)
 
 tasks.register("luskTestOlderSkriptVersions") {
@@ -169,5 +168,5 @@ tasks.register("luskTestOlderSkriptVersions") {
 
 tasks.register('luskTest') {
     description = 'Runs tests on all environments.'
-    dependsOn luskTestOlderSkriptVersions, luskTest_1_16_5, luskTest_1_17_1, luskTest_1_18_2, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_9, luskTest_1_21_10
+    dependsOn luskTestOlderSkriptVersions, luskTest_1_16_5, luskTest_1_17_1, luskTest_1_18_2, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10
 }
