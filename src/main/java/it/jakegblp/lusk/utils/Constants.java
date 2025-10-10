@@ -240,6 +240,7 @@ public class Constants {
         entry(769, parseVersion("1.21.4")),
         entry(770, parseVersion("1.21.5")),
         entry(771, parseVersion("1.21.6")),
-        entry(772, parseVersion("1.21.8"))
+        entry(772, parseVersion("1.21.8")),
+        entry(773, parseVersion("1.21.10"))
     );
 }
