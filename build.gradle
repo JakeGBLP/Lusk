@@ -40,7 +40,6 @@ dependencies {
     implementation('net.wesjd:anvilgui:1.10.8-SNAPSHOT')
     shadow('junit:junit:3.8.2')
 
-    implementation("it.jakegblp:nms-shade:1.0.0")
     implementation project(":version_adapter")
     implementation project(":skript_v2_6_4")
     implementation project(":skript_v2_7_3")
