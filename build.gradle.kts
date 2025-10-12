@@ -15,7 +15,7 @@ plugins {
 group = "it.jakegblp"
 version = "2.0.0-alpha1"
 var latestSkriptVersion = "2.12.2"
-var latestMinecraftVersion = "1.21.8"
+var latestMinecraftVersion = "1.21.10"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
@@ -56,7 +56,6 @@ tasks {
         minecraftVersion(latestMinecraftVersion)
         downloadPlugins {
             url("https://github.com/SkriptLang/Skript/releases/download/$latestSkriptVersion/Skript-$latestSkriptVersion.jar")
-            //url("https://github.com/SkriptLang/Skript/releases/download/2.12.1/Skript-2.12.1.jar")
             url("https://github.com/SkriptLang/skript-reflect/releases/download/v2.6.1/skript-reflect-2.6.1.jar")
         }
 
