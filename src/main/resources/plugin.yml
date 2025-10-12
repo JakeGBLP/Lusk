@@ -1,0 +1,5 @@
+name: Luskv2
+version: @version@
+main: it.jakegblp.lusk.Lusk
+api-version: '1.21'
+authors: [ JakeGBLP ]

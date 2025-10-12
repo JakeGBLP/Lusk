@@ -1,0 +1,19 @@
+version: @version@
+
+types:
+  packet: packet¦s @a
+  bundlepacket: bundle packet¦s @a
+  clientpacket: client packet¦s @a
+  clientbundlepacket: client bundle packet¦s @a
+  blockdestructionpacket: block destruction packet¦s @a
+  equipmentpacket: equipment packet¦s @a
+  serverpacket: server packet¦s @a
+  entityspawnpacket: entity spawn packet¦s @an
+  playerpositionpacket: player position packet¦s @an
+  playerrotationpacket: player rotation packet¦s @an
+  entitymetadatapacket: entity metadata packet¦s @an
+  entitymetadata: entity metadata¦s @an
+  entitymetadatakey: entity metadata key¦s @an
+  entityanimation: entity animation¦s @an
+  byteflag: byteflag¦s @a
+  pose: pose¦s @a
