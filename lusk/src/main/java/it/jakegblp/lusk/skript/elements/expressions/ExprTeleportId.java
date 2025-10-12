@@ -2,7 +2,6 @@ package it.jakegblp.lusk.skript.elements.expressions;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
-import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;

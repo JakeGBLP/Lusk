@@ -2,11 +2,11 @@ package it.jakegblp.lusk.nms.core.world.entity;
 
 import it.jakegblp.lusk.common.ReflectionUtils;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
-
 import org.bukkit.entity.Entity;
 
 public abstract class FlagByte<B extends BitFlag<T>, E extends Entity, T> implements NMSObject<Byte>, Cloneable {
 
+    @SuppressWarnings("unchecked")
     public static <B extends Enum<B> & BitFlag<?>, E extends Entity> FlagByte<B, E, ?> dynamic(Class<? extends FlagByte<B, E, ?>> byteFlagClass) {
         return (FlagByte<B, E, ?>) ReflectionUtils.newInstance(ReflectionUtils.getDeclaredConstructor(byteFlagClass));
     }
@@ -33,6 +33,7 @@ public abstract class FlagByte<B extends BitFlag<T>, E extends Entity, T> implem
         return component.decode(bits);
     }
 
+    @SuppressWarnings("unchecked")
     public void setUnsafe(B component, Object newValue) {
         if (!component.getValueClass().isInstance(newValue))
             throw new IllegalArgumentException("Passed incorrect class: "+newValue.getClass().getName()+", expected: "+component.getValueClass().getName());

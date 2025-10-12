@@ -4,14 +4,13 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
 import com.google.common.collect.BiMap;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
 
-import java.util.*;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorExists;

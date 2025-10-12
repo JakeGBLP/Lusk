@@ -2,10 +2,10 @@ package it.jakegblp.lusk.nms.impl.from_1_18_to_1_19_1;
 
 import it.jakegblp.lusk.nms.core.adapters.EntityMetadataPacketAdapter;
 import it.jakegblp.lusk.nms.core.adapters.EntityTypeAdapter;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -16,7 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
@@ -80,6 +82,7 @@ public class From_1_18_To_1_19_1 implements
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public EntityMetadataPacket fromNMSEntityMetadataPacket(ClientboundSetEntityDataPacket from) {
         List<SynchedEntityData.DataItem<?>> dataItems = from.getUnpackedData();
         if (dataItems == null) return null;

@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.AbstractHorse;
 
-import java.util.Collection;
-
 public class AbstractHorseFlags extends FlagByte<AbstractHorseFlag, AbstractHorse, Boolean> implements Cloneable {
 
     public AbstractHorseFlags() {

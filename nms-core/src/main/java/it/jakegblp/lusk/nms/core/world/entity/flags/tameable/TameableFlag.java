@@ -1,11 +1,9 @@
 package it.jakegblp.lusk.nms.core.world.entity.flags.tameable;
 
 import it.jakegblp.lusk.nms.core.world.entity.BooleanFlag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 public enum TameableFlag implements BooleanFlag {
     IS_SITTING,
     UNUSED,
-    IS_TAMED;
+    IS_TAMED
 }

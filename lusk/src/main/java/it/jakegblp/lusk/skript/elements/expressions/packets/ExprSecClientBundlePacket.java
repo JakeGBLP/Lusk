@@ -10,9 +10,9 @@ import it.jakegblp.lusk.skript.api.OptionallySectionExpression;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
 
-import static it.jakegblp.lusk.skript.utils.Utils.*;
+import static it.jakegblp.lusk.skript.utils.Utils.parseSectionNodes;
 
 public class ExprSecClientBundlePacket extends OptionallySectionExpression<ClientBundlePacket> {
 

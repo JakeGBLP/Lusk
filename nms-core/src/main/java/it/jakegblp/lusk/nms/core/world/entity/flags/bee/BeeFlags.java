@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.bee;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.Bee;
 
-import java.util.Collection;
-
 public class BeeFlags extends FlagByte<BeeFlag, Bee, Boolean> {
 
     public BeeFlags() {

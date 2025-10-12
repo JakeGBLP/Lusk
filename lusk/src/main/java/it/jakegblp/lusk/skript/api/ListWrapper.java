@@ -1,13 +1,8 @@
 package it.jakegblp.lusk.skript.api;
 
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.util.coll.CollectionUtils;
 import com.google.common.collect.BiMap;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import org.apache.commons.lang3.ArrayUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.comparator.Comparators;
@@ -16,7 +11,6 @@ import org.skriptlang.skript.lang.comparator.Relation;
 import java.lang.reflect.Array;
 import java.util.Locale;
 import java.util.Set;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorExists;
@@ -53,6 +47,7 @@ public record ListWrapper<T>(Class<T> listedValueClass, @NotNull BiMap<@NotNull 
         return parseMap.keySet().stream().sorted().collect(Collectors.joining(", "));
     }
 
+    @SuppressWarnings("unchecked")
     public ClassInfo<T> getClassInfo(String codeName) {
         Set<T> values = parseMap.values();
         return new ClassInfo<>(listedValueClass, codeName).usage(getAllNames()).supplier(values.toArray(value -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
@@ -64,6 +59,7 @@ public record ListWrapper<T>(Class<T> listedValueClass, @NotNull BiMap<@NotNull 
      * @param codeName Name for class info
      * @return ClassInfo with default parser and usage
      */
+    @SuppressWarnings("unchecked")
     public ClassInfo<T> getClassInfoWithoutUsage(String codeName) {
         Set<T> values = parseMap.values();
         return new ClassInfo<>(listedValueClass, codeName).supplier(values.toArray(value -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));

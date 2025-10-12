@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.irongolem;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.IronGolem;
 
-import java.util.Collection;
-
 public class IronGolemFlags extends FlagByte<IronGolemFlag, IronGolem, Boolean> {
 
     public IronGolemFlags() {

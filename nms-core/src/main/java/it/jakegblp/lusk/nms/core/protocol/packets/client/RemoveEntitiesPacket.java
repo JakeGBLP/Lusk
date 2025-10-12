@@ -1,10 +1,13 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.SimpleList;
+import it.jakegblp.lusk.nms.core.annotations.Availability;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import lombok.*;
-import it.jakegblp.lusk.nms.core.annotations.Availability;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 

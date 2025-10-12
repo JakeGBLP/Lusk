@@ -10,11 +10,13 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.CatVariant;
+import net.minecraft.world.entity.animal.ChickenVariant;
+import net.minecraft.world.entity.animal.CowVariant;
+import net.minecraft.world.entity.animal.PigVariant;
 import net.minecraft.world.entity.animal.coppergolem.CopperGolemState;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
@@ -44,8 +46,6 @@ public final class v1_21_10 extends AbstractNMS<
 
     @Override
     public void init() {
-
-        ClientboundPlayerInfoUpdatePacket
         registerEntityDataSerializer(EntitySerializerKey.normal(Byte.class), BYTE);
         registerEntityDataSerializer(EntitySerializerKey.normal(Integer.class), INT);
         registerEntityDataSerializer(EntitySerializerKey.normal(Long.class), LONG);

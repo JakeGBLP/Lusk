@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.blaze;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.Blaze;
 
-import java.util.Collection;
-
 public class BlazeFlags extends FlagByte<BlazeFlag, Blaze, Boolean> {
 
     public BlazeFlags() {

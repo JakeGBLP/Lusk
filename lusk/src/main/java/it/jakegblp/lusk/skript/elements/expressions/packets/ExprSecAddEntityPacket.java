@@ -12,7 +12,6 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.BlockDestructionPacket;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.util.Vector;

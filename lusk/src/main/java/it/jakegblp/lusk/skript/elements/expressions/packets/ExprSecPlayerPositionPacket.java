@@ -3,7 +3,10 @@ package it.jakegblp.lusk.skript.elements.expressions.packets;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.expressions.base.SectionExpression;
-import ch.njol.skript.lang.*;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
@@ -22,7 +25,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class ExprSecPlayerPositionPacket extends SectionExpression<PlayerPositionPacket> {
 

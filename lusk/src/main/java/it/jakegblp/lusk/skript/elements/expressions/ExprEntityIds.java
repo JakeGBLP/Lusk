@@ -1,16 +1,11 @@
 package it.jakegblp.lusk.skript.elements.expressions;
 
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
-import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 

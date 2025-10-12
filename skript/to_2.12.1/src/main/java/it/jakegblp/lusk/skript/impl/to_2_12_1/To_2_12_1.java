@@ -1,9 +1,6 @@
 package it.jakegblp.lusk.skript.impl.to_2_12_1;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.config.SectionNode;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.parser.ParserInstance;
 import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
 

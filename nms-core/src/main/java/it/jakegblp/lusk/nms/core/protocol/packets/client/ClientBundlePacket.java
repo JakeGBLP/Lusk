@@ -1,13 +1,10 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Collection;
 import java.util.List;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;

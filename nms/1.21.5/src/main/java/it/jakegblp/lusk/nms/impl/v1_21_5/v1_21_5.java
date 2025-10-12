@@ -27,7 +27,6 @@ import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import org.bukkit.Chunk;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -46,7 +45,6 @@ public final class v1_21_5 extends AbstractNMS<
 
     @Override
     public void init() {
-        Chunk
         registerEntityDataSerializer(EntitySerializerKey.normal(Byte.class), BYTE);
         registerEntityDataSerializer(EntitySerializerKey.normal(Integer.class), INT);
         registerEntityDataSerializer(EntitySerializerKey.normal(Long.class), LONG);

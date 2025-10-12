@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.armorstand;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.ArmorStand;
 
-import java.util.Collection;
-
 public class ArmorStandFlags extends FlagByte<ArmorStandFlag, ArmorStand, Boolean> implements Cloneable {
 
     public ArmorStandFlags() {

@@ -1,7 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.github.patrick.gradle.remapper.RemapTask
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.gradle.kotlin.dsl.named
 
 plugins {
     java

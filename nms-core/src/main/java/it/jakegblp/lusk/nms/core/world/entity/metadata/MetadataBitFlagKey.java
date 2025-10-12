@@ -2,7 +2,6 @@ package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import lombok.Getter;
 import lombok.ToString;
 import org.bukkit.entity.Entity;
@@ -26,6 +25,7 @@ public class MetadataBitFlagKey<
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Class<T> valueClass() {
         return (Class<T>) bitFlag.getValueClass();
     }

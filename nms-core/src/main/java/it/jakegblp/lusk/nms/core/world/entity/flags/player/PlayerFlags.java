@@ -1,14 +1,10 @@
 package it.jakegblp.lusk.nms.core.world.entity.flags.player;
 
-import com.destroystokyo.paper.SkinParts;
-import it.jakegblp.lusk.nms.core.util.NMSObject;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 
-
-public class PlayerFlags extends FlagByte<PlayerFlag, Player, Boolean> implements SkinParts {
+public class PlayerFlags extends FlagByte<PlayerFlag, Player, Boolean> {
 
     public PlayerFlags() {
         super();
@@ -33,66 +29,59 @@ public class PlayerFlags extends FlagByte<PlayerFlag, Player, Boolean> implement
         return new PlayerFlags(flags);
     }
 
-    @Override
-    public boolean hasCapeEnabled() {
+    public boolean hasCape() {
         return get(PlayerFlag.CAPE);
     }
 
-    public void setCapeEnabled(boolean enabled) {
+    public void setCape(boolean enabled) {
         set(PlayerFlag.CAPE, enabled);
     }
 
-    @Override
-    public boolean hasJacketEnabled() {
+    public boolean hasJacket() {
         return get(PlayerFlag.JACKET);
     }
 
-    public void setJacketEnabled(boolean enabled) {
+    public void setJacket(boolean enabled) {
         set(PlayerFlag.JACKET, enabled);
     }
 
-    @Override
-    public boolean hasLeftSleeveEnabled() {
+    public boolean hasLeftSleeve() {
         return get(PlayerFlag.LEFT_SLEEVE);
     }
 
-    public void setLeftSleeveEnabled(boolean enabled) {
+    public void setLeftSleeve(boolean enabled) {
         set(PlayerFlag.LEFT_SLEEVE, enabled);
     }
 
-    @Override
-    public boolean hasRightSleeveEnabled() {
+    public boolean hasRightSleeve() {
         return get(PlayerFlag.RIGHT_SLEEVE);
     }
 
-    public void setRightSleeveEnabled(boolean enabled) {
+    public void setRightSleeve(boolean enabled) {
         set(PlayerFlag.RIGHT_SLEEVE, enabled);
     }
 
-    @Override
-    public boolean hasLeftPantsEnabled() {
+    public boolean hasLeftPants() {
         return get(PlayerFlag.LEFT_PANTS);
     }
 
-    public void setLeftPantsEnabled(boolean enabled) {
+    public void setLeftPants(boolean enabled) {
         set(PlayerFlag.LEFT_PANTS, enabled);
     }
 
-    @Override
-    public boolean hasRightPantsEnabled() {
+    public boolean hasRightPants() {
         return get(PlayerFlag.RIGHT_PANTS);
     }
 
-    public void setRightPantsEnabled(boolean enabled) {
+    public void setRightPants(boolean enabled) {
         set(PlayerFlag.RIGHT_PANTS, enabled);
     }
 
-    @Override
-    public boolean hasHatsEnabled() {
+    public boolean hasHat() {
         return get(PlayerFlag.HAT);
     }
 
-    public void setHatsEnabled(boolean enabled) {
+    public void setHat(boolean enabled) {
         set(PlayerFlag.HAT, enabled);
     }
 
@@ -102,10 +91,5 @@ public class PlayerFlags extends FlagByte<PlayerFlag, Player, Boolean> implement
 
     public void setUnused(boolean enabled) {
         set(PlayerFlag.UNUSED, enabled);
-    }
-
-    @Override
-    public int getRaw() {
-        return flags;
     }
 }

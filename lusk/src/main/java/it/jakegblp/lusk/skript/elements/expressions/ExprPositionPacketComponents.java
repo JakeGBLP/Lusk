@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.arithmetic.Arithmetics;
 import org.skriptlang.skript.lang.arithmetic.Operator;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static ch.njol.skript.classes.Changer.ChangeMode.*;
 import static it.jakegblp.lusk.nms.core.world.entity.flags.entity.RelativeFlag.*;

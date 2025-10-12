@@ -2,7 +2,6 @@ package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
-import it.jakegblp.lusk.nms.core.world.entity.SemiBooleanFlag;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -21,7 +20,7 @@ public record EntityMetadata(
         this(new ArrayList<>());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <E extends Entity, T> boolean setUnsafe(
             @NotNull MetadataKeyReference<E, T> key,
             Object value
@@ -35,6 +34,7 @@ public record EntityMetadata(
             return set(key, (T) value);
     }
 
+    @SuppressWarnings("unchecked")
     public <
             E extends Entity,
             B extends Enum<B> & BitFlag<T>,
@@ -58,6 +58,7 @@ public record EntityMetadata(
     }
 
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <E extends Entity, T> boolean set(
             @NotNull MetadataKeyReference<E, T> key,
             T value

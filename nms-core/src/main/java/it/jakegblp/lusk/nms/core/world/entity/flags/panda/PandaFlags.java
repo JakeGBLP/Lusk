@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.panda;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.Panda;
 
-import java.util.Collection;
-
 public class PandaFlags extends FlagByte<PandaFlag, Panda, Boolean> {
 
     public PandaFlags() {

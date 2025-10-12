@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.nms.impl.from_1_21_3;
 
-import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
 import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerRotationPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
@@ -9,8 +9,6 @@ import net.minecraft.network.protocol.game.ClientboundPlayerRotationPacket;
 import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Set;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 

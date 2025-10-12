@@ -4,8 +4,6 @@ import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Collection;
-
 public class LivingEntityFlags extends FlagByte<LivingEntityFlag, LivingEntity, Object> {
 
     public LivingEntityFlags() {

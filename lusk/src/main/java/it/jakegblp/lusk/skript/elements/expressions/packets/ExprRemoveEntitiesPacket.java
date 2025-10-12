@@ -1,24 +1,16 @@
 package it.jakegblp.lusk.skript.elements.expressions.packets;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.aliases.ItemType;
-import ch.njol.skript.config.SectionNode;
-import ch.njol.skript.doc.*;
-import ch.njol.skript.lang.*;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.skript.util.EnchantmentType;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
-import it.jakegblp.lusk.skript.api.OptionallySectionExpression;
-import org.bukkit.Material;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
-
-import static it.jakegblp.lusk.skript.utils.Utils.parseSectionNodes;
 
 public class ExprRemoveEntitiesPacket extends SimpleExpression<RemoveEntitiesPacket> {
 

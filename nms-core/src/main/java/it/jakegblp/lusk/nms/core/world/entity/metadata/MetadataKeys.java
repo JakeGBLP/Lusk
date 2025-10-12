@@ -10,34 +10,34 @@ import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse.AbstractHorseFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse.AbstractHorseFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.armorstand.ArmorStandFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.armorstand.ArmorStandFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bat.BatFlags;
+import it.jakegblp.lusk.nms.core.world.entity.flags.armorstand.ArmorStandFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.bat.BatFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bee.BeeFlags;
+import it.jakegblp.lusk.nms.core.world.entity.flags.bat.BatFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.bee.BeeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.flags.bee.BeeFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.blaze.BlazeFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.blaze.BlazeFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.fox.FoxFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.fox.FoxFlag;
+import it.jakegblp.lusk.nms.core.world.entity.flags.fox.FoxFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.irongolem.IronGolemFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.irongolem.IronGolemFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.livingentity.LivingEntityFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.livingentity.LivingEntityFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.mob.MobFlags;
+import it.jakegblp.lusk.nms.core.world.entity.flags.livingentity.LivingEntityFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.mob.MobFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.panda.PandaFlags;
+import it.jakegblp.lusk.nms.core.world.entity.flags.mob.MobFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.panda.PandaFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.player.PlayerFlags;
+import it.jakegblp.lusk.nms.core.world.entity.flags.panda.PandaFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.player.PlayerFlag;
+import it.jakegblp.lusk.nms.core.world.entity.flags.player.PlayerFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.projectile.arrow.AbstractArrowFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.projectile.arrow.AbstractArrowFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.sheep.SheepFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.sheep.SheepFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.snowgolem.SnowmanFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.snowgolem.SnowmanFlag;
+import it.jakegblp.lusk.nms.core.world.entity.flags.snowgolem.SnowmanFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.spider.SpiderFlag;
 import it.jakegblp.lusk.nms.core.world.entity.flags.spider.SpiderFlags;
 import it.jakegblp.lusk.nms.core.world.entity.flags.tameable.TameableFlag;
@@ -185,7 +185,7 @@ public final class MetadataKeys {
         }
     }
 
-
+    @SuppressWarnings("unchecked")
     public static <
             E extends Entity,
             B1 extends Enum<B1> & BitFlag<T1>,

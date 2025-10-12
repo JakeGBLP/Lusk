@@ -19,7 +19,6 @@ import it.jakegblp.lusk.skript.api.*;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
-import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.converter.Converters;
 
 public class Types {

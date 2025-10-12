@@ -5,8 +5,6 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import org.bukkit.util.Vector;
 
-import java.util.Set;
-
 public class From_1_18_To_1_19_3 implements PlayerPositionPacketAdapter<ClientboundPlayerPositionPacket.RelativeArgument, ClientboundPlayerPositionPacket> {
 
     @Override

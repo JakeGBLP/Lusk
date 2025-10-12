@@ -1,10 +1,13 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import lombok.*;
+import it.jakegblp.lusk.nms.core.annotations.Availability;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
-import it.jakegblp.lusk.nms.core.annotations.Availability;
 
 import java.util.UUID;
 

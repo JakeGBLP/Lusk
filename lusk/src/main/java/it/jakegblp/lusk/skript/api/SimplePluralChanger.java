@@ -2,9 +2,9 @@ package it.jakegblp.lusk.skript.api;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 

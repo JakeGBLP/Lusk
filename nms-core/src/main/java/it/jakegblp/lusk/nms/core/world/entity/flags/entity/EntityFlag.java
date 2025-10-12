@@ -1,9 +1,6 @@
 package it.jakegblp.lusk.nms.core.world.entity.flags.entity;
 
-import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.BooleanFlag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 public enum EntityFlag implements BooleanFlag {
     BURNING,
@@ -13,5 +10,5 @@ public enum EntityFlag implements BooleanFlag {
     SWIMMING,
     INVISIBLE,
     GLOWING,
-    GLIDING;
+    GLIDING
 }

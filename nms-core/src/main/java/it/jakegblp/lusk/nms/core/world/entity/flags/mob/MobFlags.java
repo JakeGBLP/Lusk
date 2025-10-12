@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.mob;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.Mob;
 
-import java.util.Collection;
-
 
 public class MobFlags extends FlagByte<MobFlag, Mob, Boolean> {
 

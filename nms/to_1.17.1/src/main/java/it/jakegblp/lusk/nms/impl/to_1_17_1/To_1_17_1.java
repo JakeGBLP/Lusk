@@ -39,12 +39,14 @@ import org.bukkit.entity.Pose;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
 import static it.jakegblp.lusk.common.StructureTranslation.fromMapToPairList;
 import static it.jakegblp.lusk.common.StructureTranslation.fromPairListToMap;
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
 
 @Getter
 @SuppressWarnings("rawtypes")
@@ -155,6 +157,7 @@ public class To_1_17_1 implements
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public EntityMetadataPacket fromNMSEntityMetadataPacket(PacketPlayOutEntityMetadata from) {
         List<DataWatcher.Item<?>> items = from.b();
         if (items == null) return null;

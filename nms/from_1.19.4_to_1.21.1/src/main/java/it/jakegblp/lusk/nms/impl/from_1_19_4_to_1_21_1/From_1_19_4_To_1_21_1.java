@@ -6,8 +6,6 @@ import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.world.entity.RelativeMovement;
 import org.bukkit.util.Vector;
 
-import java.util.Set;
-
 public class From_1_19_4_To_1_21_1 implements PlayerPositionPacketAdapter<RelativeMovement, ClientboundPlayerPositionPacket> {
     @Override
     public Class<RelativeMovement> getNMSRelativeFlagClass() {

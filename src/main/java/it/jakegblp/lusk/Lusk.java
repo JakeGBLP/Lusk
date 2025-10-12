@@ -2,7 +2,6 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
-import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.factory.SkriptAdapterFactory;

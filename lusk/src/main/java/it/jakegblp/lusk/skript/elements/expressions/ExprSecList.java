@@ -11,7 +11,9 @@ import it.jakegblp.lusk.skript.utils.Utils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static it.jakegblp.lusk.skript.utils.Utils.parseSectionNodes;

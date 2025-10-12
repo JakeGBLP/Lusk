@@ -7,7 +7,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

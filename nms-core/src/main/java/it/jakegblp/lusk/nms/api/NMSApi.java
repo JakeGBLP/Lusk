@@ -1,7 +1,5 @@
 package it.jakegblp.lusk.nms.api;
 
-import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientBundlePacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import lombok.Getter;

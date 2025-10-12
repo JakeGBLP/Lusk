@@ -20,8 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.common.ReflectionUtils.*;
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 public interface MajorChangesAdapter<
         NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,

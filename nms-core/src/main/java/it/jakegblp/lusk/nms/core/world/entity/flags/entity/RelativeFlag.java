@@ -1,9 +1,9 @@
 package it.jakegblp.lusk.nms.core.world.entity.flags.entity;
 
+import it.jakegblp.lusk.common.Validatable;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.annotations.Availability;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
-import it.jakegblp.lusk.common.Validatable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Unmodifiable;

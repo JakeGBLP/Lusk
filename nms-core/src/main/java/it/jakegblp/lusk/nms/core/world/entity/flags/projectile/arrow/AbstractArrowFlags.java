@@ -3,8 +3,6 @@ package it.jakegblp.lusk.nms.core.world.entity.flags.projectile.arrow;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import org.bukkit.entity.AbstractArrow;
 
-import java.util.Collection;
-
 public class AbstractArrowFlags extends FlagByte<AbstractArrowFlag, AbstractArrow, Boolean> {
 
     public AbstractArrowFlags() {
