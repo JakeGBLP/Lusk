@@ -18,10 +18,10 @@ import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorE
 /**
  * @author Peter Güttinger, ShaneBeee, JakeGBLP
  */
-public record ListWrapper<T>(Class<T> listedValueClass, @NotNull BiMap<@NotNull String, T> parseMap) {
+public record ListWrapper<T>(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, T> parseMap) {
 
     public ListWrapper {
-        registerComparator();
+        registerComparator(listedValueClass);
     }
 
     @Nullable
@@ -65,9 +65,9 @@ public record ListWrapper<T>(Class<T> listedValueClass, @NotNull BiMap<@NotNull 
         return new ClassInfo<>(listedValueClass, codeName).supplier(values.toArray(value -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
     }
 
-    private void registerComparator() {
-        if (exactComparatorExists(listedValueClass, listedValueClass)) return;
-        Comparators.registerComparator(listedValueClass, listedValueClass, (o1, o2) -> Relation.get(o1.equals(o2)));
+    private void registerComparator(Class<T> typeClass) {
+        if (exactComparatorExists(typeClass, typeClass)) return;
+        Comparators.registerComparator(typeClass, typeClass, (o1, o2) -> Relation.get(o1.equals(o2)));
     }
 
     static class SimpleListParser<T> extends SimpleParser<T> {
