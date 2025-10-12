@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.annotations;
+package it.jakegblp.lusk.common.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

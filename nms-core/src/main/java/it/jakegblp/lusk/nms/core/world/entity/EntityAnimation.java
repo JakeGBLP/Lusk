@@ -3,7 +3,7 @@ package it.jakegblp.lusk.nms.core.world.entity;
 import it.jakegblp.lusk.common.CanonicallyOrdered;
 import it.jakegblp.lusk.common.Validatable;
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.annotations.Availability;
+import it.jakegblp.lusk.common.annotations.Availability;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

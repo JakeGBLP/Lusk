@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.annotations.Availability;
+import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.nms.core.world.entity.flags.entity.RelativeFlag;
 import lombok.Getter;
 import lombok.Setter;
