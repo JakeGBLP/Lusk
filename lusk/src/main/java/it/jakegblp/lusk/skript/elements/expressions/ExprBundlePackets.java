@@ -34,6 +34,11 @@ public class ExprBundlePackets extends PropertyExpression<BundlePacket<?>, Packe
     }
 
     @Override
+    public boolean isSingle() {
+        return false;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         setExpr((Expression<? extends BundlePacket<?>>) expressions[0]);

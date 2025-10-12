@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.SimpleList;
-import it.jakegblp.lusk.nms.core.annotations.Availability;
+import it.jakegblp.lusk.common.annotations.Availability;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.EqualsAndHashCode;
