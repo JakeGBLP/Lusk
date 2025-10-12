@@ -4,7 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.adapters.*;
+import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SetEquipmentPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.injection.InjectionListener;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
@@ -29,31 +32,16 @@ public abstract class AbstractNMS<
         > {
 
     public static AbstractNMS<?> NMS;
-
+    @SuppressWarnings("rawtypes")
     protected final BiMap<EntitySerializerKey, EntityDataSerializer> entityDataSerializerMap = HashBiMap.create();
     @Delegate
     @SuppressWarnings("rawtypes")
-    protected final EntityTypeAdapter entityTypeAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
-    protected final MajorChangesAdapter majorChangesAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
-    protected final AddEntityPacketAdapter addEntityPacketAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
-    protected final EntityMetadataPacketAdapter entityMetadataPacketAdapter;
+    protected final SharedBehaviorAdapter sharedBehaviorAdapter;
     @Delegate
     protected final PlayerRotationPacketAdapter playerRotationPacketAdapter;
     @Delegate
     @SuppressWarnings("rawtypes")
-    protected final ClientBundlePacketAdapter clientBundlePacketAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
     protected final SetEquipmentPacketAdapter setEquipmentPacketAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
-    protected final AdventureAdapter adventureAdapter;
     @Delegate
     @SuppressWarnings("rawtypes")
     protected final PlayerPositionPacketAdapter playerPositionPacketAdapter;
@@ -65,27 +53,17 @@ public abstract class AbstractNMS<
     public AbstractNMS(
             JavaPlugin plugin,
             Version version,
-            EntityTypeAdapter<?> entityTypeAdapter,
             @SuppressWarnings("rawtypes")
-            MajorChangesAdapter majorChangesAdapter,
-            AddEntityPacketAdapter<?> addEntityPacketAdapter,
-            EntityMetadataPacketAdapter<?> entityMetadataPacketAdapter,
+            SharedBehaviorAdapter sharedBehaviorAdapter,
             PlayerRotationPacketAdapter playerRotationPacketAdapter,
-            ClientBundlePacketAdapter<?> clientBundlePacketAdapter,
             SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter,
-            AdventureAdapter<?, ?> adventureAdapter,
             PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
-        this.entityTypeAdapter = entityTypeAdapter;
-        this.majorChangesAdapter = majorChangesAdapter;
-        this.addEntityPacketAdapter = addEntityPacketAdapter;
-        this.entityMetadataPacketAdapter = entityMetadataPacketAdapter;
+        this.sharedBehaviorAdapter = sharedBehaviorAdapter;
         this.playerRotationPacketAdapter = playerRotationPacketAdapter;
-        this.clientBundlePacketAdapter = clientBundlePacketAdapter;
         this.setEquipmentPacketAdapter = setEquipmentPacketAdapter;
-        this.adventureAdapter = adventureAdapter;
         this.playerPositionPacketAdapter = playerPositionPacketAdapter;
         Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
         init();
@@ -94,12 +72,14 @@ public abstract class AbstractNMS<
     public abstract void init();
 
     public void registerEntityDataSerializer(
+            @SuppressWarnings("rawtypes")
             EntitySerializerKey info,
             EntityDataSerializer entityDataSerializer
     ) {
         entityDataSerializerMap.put(info, entityDataSerializer);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void registerEntityDataSerializer(
             @NotNull Class<?> serializerClass,
             @NotNull EntitySerializerKey.Type serializerType,
@@ -112,6 +92,7 @@ public abstract class AbstractNMS<
      * This method must only be used for unimplemented serializers or ones without an easy implementation.<br>
      * This is not to be kept final.
      */
+    @SuppressWarnings("rawtypes")
     public void registerUnknownEntityDataSerializer(
             EntitySerializerKey info,
             EntityDataSerializer entityDataSerializer

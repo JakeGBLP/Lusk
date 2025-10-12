@@ -1,7 +1,10 @@
 package it.jakegblp.lusk.nms.factory;
 
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.adapters.*;
+import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SetEquipmentPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,14 +15,10 @@ public class NMSBuilder {
 
     private final int major, minor, patch;
     private JavaPlugin plugin;
-    private EntityTypeAdapter<?> entityTypeAdapter;
-    private MajorChangesAdapter majorChangesAdapter;
-    private AddEntityPacketAdapter<?> addEntityPacketAdapter;
-    private EntityMetadataPacketAdapter<?> entityMetadataPacketAdapter;
+    @SuppressWarnings("rawtypes")
+    private SharedBehaviorAdapter sharedBehaviorAdapter;
     private PlayerRotationPacketAdapter playerRotationPacketAdapter;
-    private ClientBundlePacketAdapter<?> clientBundlePacketAdapter;
     private SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter;
-    private AdventureAdapter<?, ?> adventureAdapter;
     private PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter;
 
     public NMSBuilder(int major, int minor, int patch) {
@@ -34,25 +33,15 @@ public class NMSBuilder {
                 getDeclaredConstructor(
                         forClassName("it.jakegblp.lusk.nms.impl." + version + "." + version),
                         JavaPlugin.class,
-                        EntityTypeAdapter.class,
-                        MajorChangesAdapter.class,
-                        AddEntityPacketAdapter.class,
-                        EntityMetadataPacketAdapter.class,
+                        SharedBehaviorAdapter.class,
                         PlayerRotationPacketAdapter.class,
-                        ClientBundlePacketAdapter.class,
                         SetEquipmentPacketAdapter.class,
-                        AdventureAdapter.class,
                         PlayerPositionPacketAdapter.class
                 ),
                 plugin,
-                entityTypeAdapter,
-                majorChangesAdapter,
-                addEntityPacketAdapter,
-                entityMetadataPacketAdapter,
+                sharedBehaviorAdapter,
                 playerRotationPacketAdapter,
-                clientBundlePacketAdapter,
                 setEquipmentPacketAdapter,
-                adventureAdapter,
                 playerPositionPacketAdapter
         );
     }

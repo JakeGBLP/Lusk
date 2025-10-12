@@ -2,7 +2,10 @@ package it.jakegblp.lusk.nms.impl.v1_20_6;
 
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.adapters.*;
+import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SetEquipmentPacketAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,8 +38,8 @@ public final class v1_20_6 extends AbstractNMS<
         EntityDataSerializer<?>
         > {
 
-    public v1_20_6(JavaPlugin plugin, EntityTypeAdapter<?> entityTypeAdapter, MajorChangesAdapter majorChangesAdapter, AddEntityPacketAdapter<?> addEntityPacketAdapter, EntityMetadataPacketAdapter<?> entityMetadataPacketAdapter, PlayerRotationPacketAdapter playerRotationPacketAdapter, ClientBundlePacketAdapter<?> clientBundlePacketAdapter, SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter, AdventureAdapter adventureAdapter, PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter) {
-        super(plugin, Version.of(1, 20, 6), entityTypeAdapter, majorChangesAdapter, addEntityPacketAdapter, entityMetadataPacketAdapter, playerRotationPacketAdapter, clientBundlePacketAdapter, setEquipmentPacketAdapter, adventureAdapter, playerPositionPacketAdapter);
+    public v1_20_6(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, PlayerRotationPacketAdapter playerRotationPacketAdapter, SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter, PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter) {
+        super(plugin, Version.of(1, 20, 6), sharedBehaviorAdapter, playerRotationPacketAdapter, setEquipmentPacketAdapter, playerPositionPacketAdapter);
     }
 
     @Override
