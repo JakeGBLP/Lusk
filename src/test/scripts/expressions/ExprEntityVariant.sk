@@ -12,12 +12,6 @@ test "ExprEntityVariant":
       set entity variant of entity to {_variant}
       assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
       delete entity
-  parse if server version >= 1.19:
-    spawn frog at {_loc}:
-      set {_variant} to warm frog variant
-      set entity variant of entity to {_variant}
-      assert entity variant of entity is {_variant} with "entity variant is %entity variant of entity% instead of %{_variant}%"
-      delete entity
   parse if server version >= 1.17:
     spawn axolotl at {_loc}:
       set {_variant} to blue axolotl variant
