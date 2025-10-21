@@ -4,7 +4,7 @@
 
 # [Click Here](https://discord.gg/XmBfsfzudJ) to join the Official Lusk Support Discord Server
 
-In this server you will receive support for Lusk among other things!
+In this server, you will receive support for Lusk among other things!
 
 # Lusk
 
@@ -18,15 +18,9 @@ For anything, reach out to me on Discord (@JakeGBLP) or open an Issue about it.
 
 ## ⭐ Featured:
 
-[![SkriptDocs](https://skriptdocs.wiki/viewdocs.png)](https://skriptdocs.wiki/?addon=lusk)
+[![SkriptDocs](http://skdocs.org/viewdocs.png)](https://skdocs.org/?addon=lusk)
 
 ## Other:
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=Lusk)
 
 [![Get on skUnity](https://skunity.com/branding/buttons/get_on_docs.png)](https://docs.skunity.com/syntax/search/addon:lusk)
-
-# Plans
-- More Section Events (Perhaps making them dynamic)
-- Citizens
-- Bounding Box
-- Other Misc Syntaxes
