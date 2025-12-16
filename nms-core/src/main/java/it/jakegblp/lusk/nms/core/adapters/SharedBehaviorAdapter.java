@@ -49,7 +49,8 @@ public interface SharedBehaviorAdapter<
         NMSRemoveEntitiesPacket,
         NMSEntityMetadataPacket,
         NMSPlayerInfoUpdatePacket,
-        NMSPlayerInfoUpdatePacketAction
+        NMSPlayerInfoUpdatePacketAction,
+        NMSSystemChatMessagePacket
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -205,6 +206,16 @@ public interface SharedBehaviorAdapter<
         return getNMSPlayerInfoUpdatePacketActionClass().isInstance(object);
     }
 
+    NMSSystemChatMessagePacket toNMSSystemChatMessagePacket(SystemChatMessagePacket from);
+
+    SystemChatMessagePacket fromNMSSystemChatMessagePacket(NMSSystemChatMessagePacket from);
+
+    Class<NMSSystemChatMessagePacket> getNMSSystemChatMessagePacketClass();
+
+    default boolean isNMSSystemChatMessagePacket(Object object) {
+        return getNMSSystemChatMessagePacketClass().isInstance(object);
+    }
+
     NMSEntityType toNMSEntityType(EntityType from);
 
     EntityType fromNMSEntityType(NMSEntityType to);
@@ -226,22 +237,31 @@ public interface SharedBehaviorAdapter<
     }
 
     NMSGameMode toNMSGameMode(GameMode from);
+
     GameMode fromNMSGameMode(NMSGameMode from);
+
     Class<NMSGameMode> getNMSGameModeClass();
+
     default boolean isNMSGameMode(Object object) {
         return getNMSGameModeClass().isInstance(object);
     }
 
     NMSPlayerProfile toNMSPlayerProfile(PlayerProfile from);
+
     PlayerProfile fromNMSPlayerProfile(NMSPlayerProfile from);
+
     Class<NMSPlayerProfile> getNMSPlayerProfileClass();
+
     default boolean isNMSPlayerProfile(Object object) {
         return getNMSPlayerProfileClass().isInstance(object);
     }
 
     NMSChatSessionData toNMSChatSessionData(ChatSessionData from);
+
     ChatSessionData fromNMSChatSessionData(NMSChatSessionData from);
+
     Class<NMSChatSessionData> getNMSChatSessionDataClass();
+
     default boolean isNMSChatSessionData(Object object) {
         return getNMSChatSessionDataClass().isInstance(object);
     }
@@ -289,7 +309,7 @@ public interface SharedBehaviorAdapter<
         ChannelPipeline pipeline = getChannel(getConnection(getPlayerConnection(serverPlayer))).pipeline();
         if (pipeline.get("packet_interceptor") != null) return;
 
-        pipeline.addBefore("packet_handler", "packet_interceptor", new ChannelDuplexHandler() {
+        pipeline.addBefore("packet_handler", "packet_interceptor-LUSK", new ChannelDuplexHandler() {
 
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
@@ -307,29 +327,27 @@ public interface SharedBehaviorAdapter<
                     return;
                 }
 
-                runMain(() -> {
-                    if (inactive(ctx)) return;
+                if (inactive(ctx)) return;
 
-                    if (PrePacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PrePacketReceiveEvent pre = new PrePacketReceiveEvent(player);
-                        Bukkit.getPluginManager().callEvent(pre);
-                        if (pre.isCancelled()) return;
-                    }
-                    Object newMsg = msg;
-                    if (PacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(msg, player);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) return;
-                        else if (event.isResolved())
-                            newMsg = event.getPacket().asNMS();
-                    }
+                if (PrePacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                    PrePacketReceiveEvent pre = new PrePacketReceiveEvent(player);
+                    Bukkit.getPluginManager().callEvent(pre);
+                    if (pre.isCancelled()) return;
+                }
+                Object newMsg = msg;
+                if (PacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                    PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(msg, player);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) return;
+                    else if (event.isResolved())
+                        newMsg = event.getPacket().asNMS();
+                }
 
-                    try {
-                        super.channelRead(ctx, newMsg);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                try {
+                    super.channelRead(ctx, newMsg);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override
@@ -342,39 +360,37 @@ public interface SharedBehaviorAdapter<
                     super.write(ctx, msg, promise);
                     return;
                 }
-                runMain(() -> {
-                    if (inactive(ctx)) {
+                if (inactive(ctx)) {
+                    promise.setSuccess();
+                    return;
+                }
+
+                if (PrePacketSendEvent.getHandlerList().getRegisteredListeners().length > 0 && !isNMSSystemChatMessagePacket(msg)) {
+                    PrePacketSendEvent pre = new PrePacketSendEvent(player);
+                    Bukkit.getPluginManager().callEvent(pre);
+                    if (pre.isCancelled()) {
                         promise.setSuccess();
                         return;
                     }
+                }
+                Object newMsg = msg;
+                if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                    PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        promise.setSuccess();
+                        return;
+                    }
+                    if (event.isResolved()) {
+                        newMsg = event.getPacket().asNMS();
+                    }
+                }
 
-                    if (PrePacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PrePacketSendEvent pre = new PrePacketSendEvent(player);
-                        Bukkit.getPluginManager().callEvent(pre);
-                        if (pre.isCancelled()) {
-                            promise.setSuccess();
-                            return;
-                        }
-                    }
-                    Object newMsg = msg;
-                    if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) {
-                            promise.setSuccess();
-                            return;
-                        }
-                        if (event.isResolved()) {
-                            newMsg = event.getPacket().asNMS();
-                        }
-                    }
-
-                    try {
-                        super.write(ctx, newMsg, promise);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                try {
+                    super.write(ctx, newMsg, promise);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override
