@@ -15,14 +15,14 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 public class SetEquipmentPacket implements ClientboundPacketWithId {
 
-    private int entityId;
+    private int id;
     @Availability(addedIn = "1.20.5")
     private boolean sanitized;
     private Map<EquipmentSlot, ItemStack> equipment;
 
     @Availability(addedIn = "1.20.5")
     public SetEquipmentPacket(int entityId, @Availability(addedIn = "1.20.5") boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
-        this.entityId = entityId;
+        this.id = entityId;
         this.sanitized = sanitized;
         this.equipment = equipment;
     }

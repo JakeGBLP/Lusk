@@ -4,27 +4,29 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.collect.BiMap;
 import io.netty.channel.*;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
-import it.jakegblp.lusk.nms.core.events.PacketReceiveEvent;
-import it.jakegblp.lusk.nms.core.events.PacketSendEvent;
-import it.jakegblp.lusk.nms.core.events.PrePacketReceiveEvent;
-import it.jakegblp.lusk.nms.core.events.PrePacketSendEvent;
+import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
+import lombok.SneakyThrows;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Method;
 import java.nio.channels.ClosedChannelException;
+import java.util.logging.Level;
 
 public interface SharedBehaviorAdapter<
         NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,
@@ -49,8 +51,13 @@ public interface SharedBehaviorAdapter<
         NMSRemoveEntitiesPacket,
         NMSEntityMetadataPacket,
         NMSPlayerInfoUpdatePacket,
-        NMSPlayerInfoUpdatePacketAction
+        NMSPlayerInfoUpdatePacketAction,
+        NMSSystemChatPacket,
+        NMSLevelParticlePacket
         > {
+
+
+
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
 
@@ -205,6 +212,34 @@ public interface SharedBehaviorAdapter<
         return getNMSPlayerInfoUpdatePacketActionClass().isInstance(object);
     }
 
+
+    //Please leave spaces so Poa can read this
+
+
+    NMSSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from);
+
+    SystemChatPacket fromNMSSystemChatPacket(NMSSystemChatPacket from);
+
+    Class<NMSSystemChatPacket> getNMSSystemChatPacketClass();
+
+    default boolean isNMSSystemChatPacket(Object object) {
+        return getNMSSystemChatPacketClass().isInstance(object);
+    }
+
+    //
+
+
+    NMSLevelParticlePacket toNMSLevelParticle(LevelParticlePacket from);
+
+    LevelParticlePacket fromNMSLevelParticle(NMSLevelParticlePacket from);
+
+    Class<NMSLevelParticlePacket> getNMSLevelParticleClass();
+
+    default boolean isNMSLevelParticle(Object object) {
+        return getNMSLevelParticleClass().isInstance(object);
+    }
+
+
     NMSEntityType toNMSEntityType(EntityType from);
 
     EntityType fromNMSEntityType(NMSEntityType to);
@@ -226,22 +261,31 @@ public interface SharedBehaviorAdapter<
     }
 
     NMSGameMode toNMSGameMode(GameMode from);
+
     GameMode fromNMSGameMode(NMSGameMode from);
+
     Class<NMSGameMode> getNMSGameModeClass();
+
     default boolean isNMSGameMode(Object object) {
         return getNMSGameModeClass().isInstance(object);
     }
 
     NMSPlayerProfile toNMSPlayerProfile(PlayerProfile from);
+
     PlayerProfile fromNMSPlayerProfile(NMSPlayerProfile from);
+
     Class<NMSPlayerProfile> getNMSPlayerProfileClass();
+
     default boolean isNMSPlayerProfile(Object object) {
         return getNMSPlayerProfileClass().isInstance(object);
     }
 
     NMSChatSessionData toNMSChatSessionData(ChatSessionData from);
+
     ChatSessionData fromNMSChatSessionData(NMSChatSessionData from);
+
     Class<NMSChatSessionData> getNMSChatSessionDataClass();
+
     default boolean isNMSChatSessionData(Object object) {
         return getNMSChatSessionDataClass().isInstance(object);
     }
@@ -285,11 +329,19 @@ public interface SharedBehaviorAdapter<
         injectPlayer(player, asServerPlayer(player), plugin);
     }
 
+    @SneakyThrows
     default void injectPlayer(Player player, NMSServerPlayer serverPlayer, JavaPlugin plugin) {
         ChannelPipeline pipeline = getChannel(getConnection(getPlayerConnection(serverPlayer))).pipeline();
         if (pipeline.get("packet_interceptor") != null) return;
 
         pipeline.addBefore("packet_handler", "packet_interceptor", new ChannelDuplexHandler() {
+
+            private final PluginManager pluginManager = Bukkit.getPluginManager();
+
+            private static Class<?> particleOptionsClass; //Some reason it's not mapping correctly :D
+            private static Method getTypeMethod;
+            private static final Class<?> craftParticleClass = Class.forName("org.bukkit.craftbukkit.CraftParticle");
+            private static Method minecraftToBukkitMethod;
 
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
@@ -307,31 +359,32 @@ public interface SharedBehaviorAdapter<
                     return;
                 }
 
-                runMain(() -> {
-                    if (inactive(ctx)) return;
+                if (inactive(ctx)) return;
 
-                    if (PrePacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PrePacketReceiveEvent pre = new PrePacketReceiveEvent(player);
-                        Bukkit.getPluginManager().callEvent(pre);
-                        if (pre.isCancelled()) return;
-                    }
-                    Object newMsg = msg;
-                    if (PacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(msg, player);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) return;
-                        else if (event.isResolved())
-                            newMsg = event.getPacket().asNMS();
-                    }
+                if (PrePacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                    PrePacketReceiveEvent pre = new PrePacketReceiveEvent(player, true);
+                    pluginManager.callEvent(pre);
+                    if (pre.isCancelled()) return;
+                }
+                Object newMsg = msg;
+//                if (PacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+//                    PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(msg, player);
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled()) return;
+//                    else if (event.isResolved())
+//                        newMsg = event.getPacket().asNMS();
+//                }
 
-                    try {
-                        super.channelRead(ctx, newMsg);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                //todo fix this above (make the event async)
+
+                try {
+                    super.channelRead(ctx, newMsg);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (inactive(ctx)) {
@@ -342,39 +395,96 @@ public interface SharedBehaviorAdapter<
                     super.write(ctx, msg, promise);
                     return;
                 }
-                runMain(() -> {
-                    if (inactive(ctx)) {
+                if (inactive(ctx)) {
+                    promise.setSuccess();
+                    return;
+                }
+
+                if (PrePacketSendEvent.getHandlerList().getRegisteredListeners().length > 0 && !isNMSClientBundlePacket(msg)) {
+                    PrePacketSendEvent pre = new PrePacketSendEvent(player, true);
+                    pluginManager.callEvent(pre);
+                    if (pre.isCancelled()) {
                         promise.setSuccess();
                         return;
                     }
+                }
+                Object newMsg = msg;
+//                if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
+//                    PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled()) {
+//                        promise.setSuccess();
+//                        return;
+//                    }
+//                    if (event.isResolved()) {
+//                        newMsg = event.getPacket().asNMS();
+//                    }
+//                }
 
-                    if (PrePacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PrePacketSendEvent pre = new PrePacketSendEvent(player);
-                        Bukkit.getPluginManager().callEvent(pre);
-                        if (pre.isCancelled()) {
-                            promise.setSuccess();
-                            return;
-                        }
+                //todo fix this above (make the event async)
+
+
+
+                if(isNMSLevelParticle(msg)){
+                    final LevelParticlePacket packet = fromNMSLevelParticle((NMSLevelParticlePacket) msg);
+
+                    final ParticleSendEvent particleSendEvent = new ParticleSendEvent(player, true);
+                    particleSendEvent.setX(packet.getX());
+                    particleSendEvent.setY(packet.getY());
+                    particleSendEvent.setZ(packet.getZ());
+                    particleSendEvent.setCount(packet.getCount());
+                    particleSendEvent.setMaxSpeed(packet.getMaxSpeed());
+                    particleSendEvent.setWorld(player.getWorld());
+                    particleSendEvent.setXOffset(packet.getXDist());
+                    particleSendEvent.setYOffset(packet.getYDist());
+                    particleSendEvent.setZOffset(packet.getZDist());
+
+                    final Object particle = packet.getParticle();
+
+                    if (particleOptionsClass == null) {
+                        particleOptionsClass = particle.getClass();
+                        getTypeMethod = particleOptionsClass.getDeclaredMethod("getType");
                     }
-                    Object newMsg = msg;
-                    if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                        PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) {
-                            promise.setSuccess();
-                            return;
-                        }
-                        if (event.isResolved()) {
-                            newMsg = event.getPacket().asNMS();
-                        }
-                    }
+
+                    Object type;
 
                     try {
-                        super.write(ctx, newMsg, promise);
+                        type = getTypeMethod.invoke(particle);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        super.write(ctx, msg, promise);
+                        plugin.getLogger().log(Level.WARNING, "Failed to invoke type method for particle");
+                        return;
                     }
-                });
+
+                    if (minecraftToBukkitMethod == null) {
+                        for (Method m : craftParticleClass.getMethods()) {
+                            if (m.getName().contains("minecraftToBukkit"))
+                                minecraftToBukkitMethod = m;
+                        }
+
+                        if (minecraftToBukkitMethod == null) {
+                            super.write(ctx, msg, promise);
+                            Bukkit.getLogger().log(Level.WARNING, "Failed to get minecraft to bukkit method");
+                            return;
+                        }
+                    }
+
+                    Object bukkitParticle = minecraftToBukkitMethod.invoke(craftParticleClass, type);
+
+                    particleSendEvent.setParticle((Particle) bukkitParticle);
+
+                    pluginManager.callEvent(particleSendEvent);
+
+                    if(particleSendEvent.isCancelled())
+                        return;
+
+                }
+
+                try {
+                    super.write(ctx, newMsg, promise);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override

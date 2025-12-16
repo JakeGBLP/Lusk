@@ -19,6 +19,7 @@ import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -76,7 +77,9 @@ public class AllVersions implements
                 ClientboundRemoveEntitiesPacket,
                 ClientboundSetEntityDataPacket,
                 ClientboundPlayerInfoUpdatePacket,
-                ClientboundPlayerInfoUpdatePacket.Action
+                ClientboundPlayerInfoUpdatePacket.Action,
+                ClientboundSystemChatPacket,
+                ClientboundLevelParticlesPacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -381,6 +384,45 @@ public class AllVersions implements
     public Class<ClientboundPlayerInfoUpdatePacket.Action> getNMSPlayerInfoUpdatePacketActionClass() {
         return ClientboundPlayerInfoUpdatePacket.Action.class;
     }
+
+
+    // leave space here for Poa to read
+
+
+    @Override
+    public ClientboundSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from) {
+        return new ClientboundSystemChatPacket(from.getComponent(), from.isOverlay());
+    }
+
+    @Override
+    public SystemChatPacket fromNMSSystemChatPacket(ClientboundSystemChatPacket from) {
+        return new SystemChatPacket(asComponent(from.content()), from.overlay());
+    }
+
+    @Override
+    public Class<ClientboundSystemChatPacket> getNMSSystemChatPacketClass() {
+        return ClientboundSystemChatPacket.class;
+    }
+
+
+    //
+
+
+    @Override
+    public ClientboundLevelParticlesPacket toNMSLevelParticle(LevelParticlePacket from) {
+        return new ClientboundLevelParticlesPacket((ParticleOptions) from.getParticle(), from.isOverrideLimiter(), from.isAlwaysShow(), from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount());
+    }
+
+    @Override
+    public LevelParticlePacket fromNMSLevelParticle(ClientboundLevelParticlesPacket from) {
+        return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), from.getParticle());
+    }
+
+    @Override
+    public Class<ClientboundLevelParticlesPacket> getNMSLevelParticleClass() {
+        return ClientboundLevelParticlesPacket.class;
+    }
+
 
     @Override
     public EntityType<?> toNMSEntityType(org.bukkit.entity.EntityType from) {

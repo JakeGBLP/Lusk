@@ -31,6 +31,7 @@ import it.jakegblp.lusk.skript.api.classinfo.SimpleClassInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
+import org.bukkit.Particle;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
@@ -219,6 +220,28 @@ public class Types {
                         }
                     }));
         }
+        if (Classes.getExactClassInfo(Particle.class) == null) {
+            Classes.registerClass(new ClassInfo<>(Particle.class, "particle")
+                    .since("1.3")
+                    .parser(new Parser<>() {
+                        @Override
+                        public boolean canParse(ParseContext context) {
+                            return false;
+                        }
+
+                        @Override
+                        public @NotNull String toString(Particle particle, int flags) {
+                            return particle.toString();
+                        }
+
+                        @Override
+                        public String toVariableNameString(Particle particle) {
+                            return toString(particle, 0);
+                        }
+
+                    }));
+        }
+
 
         // Paper
         if (Classes.getExactClassInfo(PlayerProfile.class) == null) {

@@ -166,6 +166,9 @@ public abstract class AbstractNMS<
         else if (isNMSPlayerRotationPacket(object)) return fromNMSPlayerRotationPacket(object);
         else if (isNMSPlayerPositionPacket(object)) return fromNMSPlayerPositionPacket(object);
         else if (isNMSRemoveEntitiesPacket(object)) return fromNMSRemoveEntitiesPacket(object);
+        else if (isNMSSystemChatPacket(object)) return fromNMSSystemChatPacket(object);
+        else if (isNMSLevelParticle(object)) return fromNMSLevelParticle(object);
+
         return null;
     }
 

@@ -93,7 +93,8 @@ public class EffSecSpawnFakeEntity extends OptionallySectionEffect {
                             loc.getYaw(),
                             bukkitEntityType,
                             0,
-                            new Vector());
+                            new Vector(),
+                            loc.getYaw());
                     if (hasSection()) {
                         EntityMetadataPacket entityMetadataPacket = new EntityMetadataPacket(id, ExprSecEntityMetadata.getMetadata(event, bukkitEntityType.getEntityClass(), expressionMap));
                         NMSApi.sendBundledPackets(playersExpression.getAll(event), entitySpawnPacket, entityMetadataPacket);
