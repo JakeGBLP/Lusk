@@ -1,8 +1,11 @@
 package it.jakegblp.lusk.nms.core.protocol.packets;
 
 import it.jakegblp.lusk.common.SimpleList;
+import it.jakegblp.lusk.nms.core.async.AsyncablesWrapper;
+import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -13,7 +16,7 @@ import java.util.List;
 @Getter
 @NullMarked
 @EqualsAndHashCode
-public abstract class BundlePacket<P extends Packet> implements Packet, SimpleList<P> {
+public abstract class BundlePacket<P extends Packet> implements Packet, SimpleList<P>, AsyncablesWrapper {
     protected final List<P> packets;
 
     public BundlePacket(P[] packets) {
@@ -97,5 +100,15 @@ public abstract class BundlePacket<P extends Packet> implements Packet, SimpleLi
     @Override
     public void remove(List<P> packets) {
         this.packets.removeAll(packets);
+    }
+
+    @Override
+    public ExecutionMode getExecutionMode() {
+        return ExecutionMode.getAsyncablePrioritizedMode(packets);
+    }
+
+    @Override
+    public @NotNull List<P> getAsyncables() {
+        return getPackets();
     }
 }

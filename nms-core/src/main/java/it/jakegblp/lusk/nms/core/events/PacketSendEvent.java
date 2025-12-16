@@ -3,19 +3,24 @@ package it.jakegblp.lusk.nms.core.events;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Setter
-public class PacketSendEvent<P extends ClientboundPacket> extends PacketEvent<P> implements Cancellable {
+public class PacketSendEvent<P extends ClientboundPacket> extends ClientPacketEvent<P> implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
     protected boolean cancelled;
 
-    public PacketSendEvent(P packet) {
-        super(packet);
+    public PacketSendEvent(P packet, Player player) {
+        super(packet, player);
+    }
+
+    public PacketSendEvent(Object nmsPacket, Player player) {
+        super(nmsPacket, player);
     }
 
     @Override

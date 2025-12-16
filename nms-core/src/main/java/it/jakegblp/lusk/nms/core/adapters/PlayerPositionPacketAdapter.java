@@ -1,10 +1,11 @@
 package it.jakegblp.lusk.nms.core.adapters;
 
+import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
 import it.jakegblp.lusk.nms.core.world.entity.flags.entity.RelativeFlag;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public interface PlayerPositionPacketAdapter<
         NMSRelativeFlag extends Enum<NMSRelativeFlag>,
@@ -21,11 +22,11 @@ public interface PlayerPositionPacketAdapter<
 
     @SuppressWarnings("unchecked")
     default Set<NMSRelativeFlag> asNMSRelativeFlags(Set<RelativeFlag> relativeFlags) {
-        return (Set<NMSRelativeFlag>) relativeFlags.stream().map(RelativeFlag::asNMS).collect(Collectors.toSet());
+        return (Set<NMSRelativeFlag>) new HashSet<>(CommonUtils.map(relativeFlags, RelativeFlag::asNMS));
     }
 
     default Set<RelativeFlag> fromNMSRelativeFlag(Set<NMSRelativeFlag> nmsRelativeFlags) {
-        return nmsRelativeFlags.stream().map(this::fromNMSRelativeFlag).collect(Collectors.toSet());
+        return new HashSet<>(CommonUtils.map(nmsRelativeFlags, this::fromNMSRelativeFlag));
     }
 
     Class<NMSRelativeFlag> getNMSRelativeFlagClass();

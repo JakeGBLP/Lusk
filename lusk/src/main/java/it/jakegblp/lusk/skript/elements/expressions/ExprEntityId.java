@@ -16,7 +16,7 @@ public class ExprEntityId extends SimplePropertyExpression<Object, Integer> {
         if (from instanceof Entity entity)
             return entity.getEntityId();
         else if (from instanceof ClientboundPacketWithId packet)
-            return packet.getEntityId();
+            return packet.getId();
         return null;
     }
 

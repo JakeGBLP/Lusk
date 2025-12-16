@@ -6,6 +6,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
+import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class EffRemoveEntities extends Effect {
                 packet.add(number.intValue());
             }
         }
-        NMSApi.sendPackets(players, packet);
+        NMSApi.sendPacket(players, packet, ExecutionMode.SYNCHRONOUS);
     }
 
     @Override

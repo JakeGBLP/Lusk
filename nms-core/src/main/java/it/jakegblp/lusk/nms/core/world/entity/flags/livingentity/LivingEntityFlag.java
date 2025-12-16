@@ -19,6 +19,7 @@ public enum LivingEntityFlag implements SemiBooleanFlag<Object> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Class<Object> getValueClass() {
             return (Class<Object>)(Class<?>)EquipmentSlot.class;
         }

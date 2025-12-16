@@ -1,15 +1,16 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
+import it.jakegblp.lusk.common.CommonUtils;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
-import java.util.Objects;
 
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.cloneIfNotNull;
 
+// todo: expand simple list api
 public interface EntityMetadataView {
 
     List<MetadataItem<? extends Entity, ?>> items();
@@ -23,7 +24,7 @@ public interface EntityMetadataView {
     }
 
     default int nonNullSize() {
-        return items().stream().filter(Objects::nonNull).toList().size();
+        return CommonUtils.nonNull(items()).size();
     }
 
     default boolean has(@Range(from = 0, to = 255) int id) {

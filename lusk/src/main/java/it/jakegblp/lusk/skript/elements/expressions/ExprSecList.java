@@ -7,21 +7,25 @@ import ch.njol.skript.expressions.base.SectionExpression;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.util.LiteralUtils;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.skript.utils.Utils;
+import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.skript.api.async.AsyncableSyntax;
+import it.jakegblp.lusk.skript.api.async.AsyncableSyntaxesWrapper;
+import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
 
-import static it.jakegblp.lusk.skript.utils.Utils.parseSectionNodes;
+import static it.jakegblp.lusk.skript.utils.AddonUtils.errorForNode;
+import static it.jakegblp.lusk.skript.utils.AddonUtils.parseSectionNodes;
 
-public class ExprSecList extends SectionExpression<Object> {
+public class ExprSecList extends SectionExpression<Object> implements AsyncableSyntaxesWrapper {
 
     static {
-        Skript.registerExpression(ExprSecList.class, Object.class, ExpressionType.SIMPLE, "[a[n]] [%-classinfos%] list [of|containing]");
+        Skript.registerExpression(ExprSecList.class, Object.class, ExpressionType.COMBINED, "[a[n]] [%-classinfos%] list [of|containing]");
     }
 
     private ExpressionList<?> objectExpressionList;
@@ -37,7 +41,7 @@ public class ExprSecList extends SectionExpression<Object> {
         classInfoExpression = (Expression<ClassInfo<?>>) expressions[0];
         List<Class<?>> allowedClasses = new ArrayList<>();
         boolean justObject = false;
-        for (Literal<? extends ClassInfo<?>> literal : Utils.getLiterals(classInfoExpression)) {
+        for (Literal<? extends ClassInfo<?>> literal : AddonUtils.getLiterals(classInfoExpression)) {
             for (ClassInfo<?> classInfo : literal.getAll()) {
                 Class<?> type = classInfo.getC();
                 if (type == Object.class) {
@@ -51,23 +55,24 @@ public class ExprSecList extends SectionExpression<Object> {
             allowedClasses = List.of(Object.class);
 
         Class<?>[] allowedClassesArray = allowedClasses.toArray(new Class[0]);
-        AtomicBoolean error = new AtomicBoolean(false);
-        objectExpressionList = parseSectionNodes(this.getAsSection(), node, Object.class, (subNode, key) -> {
-            Skript.error(key + " is " + SkriptParser.notOfType(allowedClassesArray));
-            error.set(true);
-        }, allowedClasses.toArray(Class[]::new));
-        if (objectExpressionList == null) {
+        var sectionParseResult = parseSectionNodes(this.getAsSection(), node, Object.class, (subNode, key) ->
+                errorForNode(subNode, key + " is " + SkriptParser.notOfType(allowedClassesArray)), allowedClasses.toArray(Class[]::new));
+        if (sectionParseResult.hasFailed()) {
             Skript.error("Parsed empty list section expression.");
             return false;
-        } else if (error.get())
-            return false;
-        objectExpressionList = (ExpressionList<?>) LiteralUtils.defendExpression(objectExpressionList);
+        }
+        objectExpressionList = (ExpressionList<?>) LiteralUtils.defendExpression(sectionParseResult.expressionList());
         return LiteralUtils.canInitSafely(objectExpressionList);
     }
 
     @Override
     protected Object @Nullable [] get(Event event) {
-        return objectExpressionList.getAll(event);
+        return Arrays.stream(objectExpressionList.getAll(event)).map(object -> {
+            for (Class<?> possibleReturnType : possibleReturnTypes())
+                if (possibleReturnType.isInstance(object))
+                    return object;
+            return null;
+        }).filter(Objects::nonNull).toArray();
     }
 
     @Override
@@ -82,7 +87,7 @@ public class ExprSecList extends SectionExpression<Object> {
 
     @Override
     public Class<?>[] possibleReturnTypes() {
-        return (classInfoExpression instanceof Literal<ClassInfo<?>> classInfoLiteral ? Arrays.stream(classInfoLiteral.getAll()).map(ClassInfo::getC).toArray(Class[]::new) : super.possibleReturnTypes());
+        return CommonUtils.mapToArray(Class.class, CommonUtils.flatMap(AddonUtils.getLiterals(classInfoExpression), literal -> Arrays.asList(literal.getAll())), ClassInfo::getC);
     }
 
     @Override
@@ -90,4 +95,8 @@ public class ExprSecList extends SectionExpression<Object> {
         return (classInfoExpression == null ? "" : classInfoExpression.toString(event, debug) + " ")+"list containing";
     }
 
+    @Override
+    public List<AsyncableSyntax> getAsyncableSyntaxes() {
+        return AsyncableSyntaxesWrapper.filterAsyncableSyntaxes(objectExpressionList.getExpressions());
+    }
 }

@@ -1,12 +1,11 @@
 package it.jakegblp.lusk.nms.core.world.entity.flags.textdisplay;
 
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+import lombok.NoArgsConstructor;
 import org.bukkit.entity.TextDisplay;
 
+@NoArgsConstructor
 public class TextDisplayFlags extends FlagByte<TextDisplayFlag, TextDisplay, Object> {
-
-    public TextDisplayFlags() {
-    }
 
     public TextDisplayFlags(byte value) {
         super(value);

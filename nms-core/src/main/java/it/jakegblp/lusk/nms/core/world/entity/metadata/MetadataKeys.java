@@ -6,6 +6,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
+import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse.AbstractHorseFlag;
@@ -70,8 +71,6 @@ import org.joml.Vector3f;
 
 import java.util.*;
 
-import static it.jakegblp.lusk.common.ReflectionUtils.forClassName;
-import static it.jakegblp.lusk.common.ReflectionUtils.forceInit;
 import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -181,7 +180,7 @@ public final class MetadataKeys {
                 MinecartKeys.class,
                 CommandMinecartKeys.class,
                 PoweredMinecartKeys.class}) {
-            forceInit(keysInterface);
+            SimpleClass.forceInit(keysInterface);
         }
     }
 
@@ -257,14 +256,13 @@ public final class MetadataKeys {
         return register(name, entityClass, valueClass, EntitySerializerKey.Type.NORMAL);
     }
 
-    @SuppressWarnings("unchecked")
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
             Class<E> entityClass,
             String stringClass,
             @NotNull EntitySerializerKey.Type type
     ) {
-        return register(name, entityClass, (Class<T>) forClassName(stringClass), type);
+        return register(name, entityClass, SimpleClass.quickClass(stringClass), type);
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
@@ -275,24 +273,22 @@ public final class MetadataKeys {
         return register(name, entityClass, valueClass, EntitySerializerKey.Type.NORMAL);
     }
 
-    @SuppressWarnings("unchecked")
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
             String entityClass,
             Class<T> valueClass,
             @NotNull EntitySerializerKey.Type type
     ) {
-        return register(name, (Class<E>) forClassName(entityClass), valueClass, type);
+        return register(name, SimpleClass.quickClass(entityClass), valueClass, type);
     }
 
-    @SuppressWarnings("unchecked")
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
             String stringEntityClass,
             String stringValueClass,
             @NotNull EntitySerializerKey.Type type
     ) {
-        return (MetadataKey<E, T>) register(name, (Class<? extends Entity>) forClassName(stringEntityClass), forClassName(stringValueClass), type);
+        return register(name, SimpleClass.quickClass(stringEntityClass), SimpleClass.quickClass(stringValueClass), type);
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(

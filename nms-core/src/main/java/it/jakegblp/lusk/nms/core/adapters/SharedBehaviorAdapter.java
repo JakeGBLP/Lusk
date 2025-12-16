@@ -1,14 +1,19 @@
 package it.jakegblp.lusk.nms.core.adapters;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.collect.BiMap;
 import io.netty.channel.*;
+import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.PacketReceiveEvent;
 import it.jakegblp.lusk.nms.core.events.PacketSendEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
+import it.jakegblp.lusk.nms.core.events.PrePacketReceiveEvent;
+import it.jakegblp.lusk.nms.core.events.PrePacketSendEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
+import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,8 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import static it.jakegblp.lusk.common.ReflectionUtils.*;
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+import java.nio.channels.ClosedChannelException;
 
 public interface SharedBehaviorAdapter<
         NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,
@@ -32,6 +36,9 @@ public interface SharedBehaviorAdapter<
         NMSComponent,
         NMSPacket,
         NMSNamespacedKey,
+        NMSGameMode,
+        NMSPlayerProfile,
+        NMSChatSessionData,
         NMSEntityType,
         NMSServerGamePacketListenerImpl,
         NMSConnection,
@@ -40,7 +47,9 @@ public interface SharedBehaviorAdapter<
         NMSEntityAnimationPacket,
         NMSAddEntityPacket,
         NMSRemoveEntitiesPacket,
-        NMSEntityMetadataPacket
+        NMSEntityMetadataPacket,
+        NMSPlayerInfoUpdatePacket,
+        NMSPlayerInfoUpdatePacketAction
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -63,16 +72,15 @@ public interface SharedBehaviorAdapter<
 
     @SuppressWarnings("unchecked")
     default NMSItemStack asNMSItemStack(ItemStack itemStack) {
-        return (NMSItemStack) invokeSafely(getMethod(getCraftItemStackClass(), "asNMSCopy", true, true, ItemStack.class), null, itemStack);
+        return (NMSItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
     }
 
     default ItemStack asItemStack(NMSItemStack itemStack) {
-        return (ItemStack) invokeSafely(getMethod(getCraftItemStackClass(), "asBukkitCopy", true, true, getNMSItemStackClass()), null, itemStack);
+        return (ItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
     }
 
-    @SuppressWarnings("unchecked")
     default Class<? extends ItemStack> getCraftItemStackClass() {
-        return (Class<? extends ItemStack>) forClassName(CRAFT_BUKKIT_PACKAGE + ".inventory.CraftItemStack");
+        return SimpleClass.quickClass(CRAFT_BUKKIT_PACKAGE + ".inventory.CraftItemStack");
     }
 
     Class<NMSItemStack> getNMSItemStackClass();
@@ -101,16 +109,14 @@ public interface SharedBehaviorAdapter<
 
     Player asPlayer(NMSServerPlayer serverPlayer);
 
-    @SuppressWarnings("unchecked")
     default NMSServerPlayer asServerPlayer(Player player) {
-        return (NMSServerPlayer) invokeSafely(getMethod(getCraftPlayerClass(), "getHandle", false, true), player);
+        return new SimpleClass<>(getCraftPlayerClass()).getMethod("getHandle", false, true).invoke(player);
     }
 
     Class<NMSServerPlayer> getNMSServerPlayerClass();
 
-    @SuppressWarnings("unchecked")
     default Class<? extends Player> getCraftPlayerClass() {
-        return (Class<? extends Player>) forClassName(CRAFT_BUKKIT_PACKAGE + ".entity.CraftPlayer");
+        return SimpleClass.quickClass(CRAFT_BUKKIT_PACKAGE + ".entity.CraftPlayer");
     }
 
     NMSServerGamePacketListenerImpl getPlayerConnection(NMSServerPlayer serverPlayer);
@@ -179,6 +185,26 @@ public interface SharedBehaviorAdapter<
         return getNMSEntityMetadataPacketClass().isInstance(object);
     }
 
+    NMSPlayerInfoUpdatePacket toNMSPlayerInfoUpdatePacket(PlayerInfoUpdatePacket from);
+
+    PlayerInfoUpdatePacket fromNMSPlayerInfoUpdatePacket(NMSPlayerInfoUpdatePacket from);
+
+    Class<NMSPlayerInfoUpdatePacket> getNMSPlayerInfoUpdatePacketClass();
+
+    default boolean isNMSPlayerInfoUpdatePacket(Object object) {
+        return getNMSPlayerInfoUpdatePacketClass().isInstance(object);
+    }
+
+    NMSPlayerInfoUpdatePacketAction toNMSPlayerInfoUpdatePacketAction(PlayerInfoUpdatePacket.Action<?> from);
+
+    PlayerInfoUpdatePacket.Action<?> fromNMSPlayerInfoUpdatePacketAction(NMSPlayerInfoUpdatePacketAction from);
+
+    Class<NMSPlayerInfoUpdatePacketAction> getNMSPlayerInfoUpdatePacketActionClass();
+
+    default boolean isNMSPlayerInfoUpdatePacketAction(Object object) {
+        return getNMSPlayerInfoUpdatePacketActionClass().isInstance(object);
+    }
+
     NMSEntityType toNMSEntityType(EntityType from);
 
     EntityType fromNMSEntityType(NMSEntityType to);
@@ -197,6 +223,27 @@ public interface SharedBehaviorAdapter<
 
     default boolean isNMSNamespacedKey(Object object) {
         return getNMSNamespacedKeyClass().isInstance(object);
+    }
+
+    NMSGameMode toNMSGameMode(GameMode from);
+    GameMode fromNMSGameMode(NMSGameMode from);
+    Class<NMSGameMode> getNMSGameModeClass();
+    default boolean isNMSGameMode(Object object) {
+        return getNMSGameModeClass().isInstance(object);
+    }
+
+    NMSPlayerProfile toNMSPlayerProfile(PlayerProfile from);
+    PlayerProfile fromNMSPlayerProfile(NMSPlayerProfile from);
+    Class<NMSPlayerProfile> getNMSPlayerProfileClass();
+    default boolean isNMSPlayerProfile(Object object) {
+        return getNMSPlayerProfileClass().isInstance(object);
+    }
+
+    NMSChatSessionData toNMSChatSessionData(ChatSessionData from);
+    ChatSessionData fromNMSChatSessionData(NMSChatSessionData from);
+    Class<NMSChatSessionData> getNMSChatSessionDataClass();
+    default boolean isNMSChatSessionData(Object object) {
+        return getNMSChatSessionDataClass().isInstance(object);
     }
 
     NMSComponent asNMSComponent(Component component);
@@ -235,44 +282,59 @@ public interface SharedBehaviorAdapter<
     }
 
     default void injectPlayer(Player player, JavaPlugin plugin) {
-        injectPlayer(asServerPlayer(player), plugin);
+        injectPlayer(player, asServerPlayer(player), plugin);
     }
 
-    default void injectPlayer(NMSServerPlayer serverPlayer, JavaPlugin plugin) {
+    default void injectPlayer(Player player, NMSServerPlayer serverPlayer, JavaPlugin plugin) {
         ChannelPipeline pipeline = getChannel(getConnection(getPlayerConnection(serverPlayer))).pipeline();
         if (pipeline.get("packet_interceptor") != null) return;
+
         pipeline.addBefore("packet_handler", "packet_interceptor", new ChannelDuplexHandler() {
+
+            private boolean inactive(ChannelHandlerContext ctx) {
+                return !ctx.channel().isActive() || Bukkit.isStopping();
+            }
+
+            private void runMain(Runnable task) {
+                Bukkit.getScheduler().runTask(plugin, task);
+            }
 
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                if (!ctx.channel().isActive()) return;
+                if (inactive(ctx)) return;
                 if (!getNMSPacketClass().isInstance(msg)) {
                     super.channelRead(ctx, msg);
                     return;
                 }
-                if (Bukkit.isStopping()) return;
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (!ctx.channel().isActive()) return;
-                    //System.out.println(msg.getClass());
-                    ServerboundPacket packet = (ServerboundPacket) NMS.fromNMSPacket(msg);
-                    PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(packet);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) return;
-                    Packet newPacket = event.getPacket();
-                    ctx.executor().execute(() -> {
-                        if (!ctx.channel().isActive()) return;
-                        try {
-                            super.channelRead(ctx, newPacket != packet ? newPacket.asNMS()  : msg);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
+
+                runMain(() -> {
+                    if (inactive(ctx)) return;
+
+                    if (PrePacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                        PrePacketReceiveEvent pre = new PrePacketReceiveEvent(player);
+                        Bukkit.getPluginManager().callEvent(pre);
+                        if (pre.isCancelled()) return;
+                    }
+                    Object newMsg = msg;
+                    if (PacketReceiveEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                        PacketReceiveEvent<ServerboundPacket> event = new PacketReceiveEvent<>(msg, player);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) return;
+                        else if (event.isResolved())
+                            newMsg = event.getPacket().asNMS();
+                    }
+
+                    try {
+                        super.channelRead(ctx, newMsg);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 });
             }
 
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-                if (!ctx.channel().isActive()) {
+                if (inactive(ctx)) {
                     promise.setSuccess();
                     return;
                 }
@@ -280,43 +342,49 @@ public interface SharedBehaviorAdapter<
                     super.write(ctx, msg, promise);
                     return;
                 }
-                if (Bukkit.isStopping()) return;
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    if (!ctx.channel().isActive()) {
+                runMain(() -> {
+                    if (inactive(ctx)) {
                         promise.setSuccess();
                         return;
                     }
-                    ClientboundPacket packet = (ClientboundPacket) NMS.fromNMSPacket(msg);
-                    PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(packet);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) {
-                        promise.setSuccess();
-                        return;
-                    }
-                    ClientboundPacket newPacket = event.getPacket();
-                    ctx.executor().execute(() -> {
-                        if (!ctx.channel().isActive()) {
+
+                    if (PrePacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                        PrePacketSendEvent pre = new PrePacketSendEvent(player);
+                        Bukkit.getPluginManager().callEvent(pre);
+                        if (pre.isCancelled()) {
                             promise.setSuccess();
                             return;
                         }
-                        try {
-                            super.write(ctx, newPacket != packet ? newPacket.asNMS() : msg, promise);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    }
+                    Object newMsg = msg;
+                    if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                        PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            promise.setSuccess();
+                            return;
                         }
-                    });
+                        if (event.isResolved()) {
+                            newMsg = event.getPacket().asNMS();
+                        }
+                    }
+
+                    try {
+                        super.write(ctx, newMsg, promise);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 });
             }
 
             @Override
             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-                // todo: figure out a better solution
-                if (cause instanceof java.nio.channels.ClosedChannelException) return;
+                if (cause instanceof ClosedChannelException) return;
                 cause.printStackTrace();
                 super.exceptionCaught(ctx, cause);
             }
         });
-
     }
+
 
 }

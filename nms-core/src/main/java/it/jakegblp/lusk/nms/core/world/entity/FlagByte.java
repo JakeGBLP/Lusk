@@ -1,24 +1,20 @@
 package it.jakegblp.lusk.nms.core.world.entity;
 
-import it.jakegblp.lusk.common.ReflectionUtils;
+import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.bukkit.entity.Entity;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class FlagByte<B extends BitFlag<T>, E extends Entity, T> implements NMSObject<Byte>, Cloneable {
 
-    @SuppressWarnings("unchecked")
     public static <B extends Enum<B> & BitFlag<?>, E extends Entity> FlagByte<B, E, ?> dynamic(Class<? extends FlagByte<B, E, ?>> byteFlagClass) {
-        return (FlagByte<B, E, ?>) ReflectionUtils.newInstance(ReflectionUtils.getDeclaredConstructor(byteFlagClass));
+        return SimpleClass.quickInstance(byteFlagClass);
     }
 
     protected byte flags;
-
-    public FlagByte() {
-    }
-
-    public FlagByte(byte flags) {
-        this.flags = flags;
-    }
 
     public abstract Class<B> getBitFlagClass();
 

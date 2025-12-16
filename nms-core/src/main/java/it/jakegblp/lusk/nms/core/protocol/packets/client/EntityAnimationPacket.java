@@ -12,7 +12,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @AllArgsConstructor
 public class EntityAnimationPacket implements ClientboundPacketWithId {
 
-    private int entityId;
+    private int id;
     private EntityAnimation entityAnimation;
 
     public EntityAnimationPacket(int entityId, int entityAnimationId) {

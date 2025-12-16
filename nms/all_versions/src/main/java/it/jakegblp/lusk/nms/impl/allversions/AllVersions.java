@@ -1,15 +1,21 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
+import com.destroystokyo.paper.profile.CraftPlayerProfile;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
+import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.papermc.paper.adventure.PaperAdventure;
+import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
+import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
@@ -17,6 +23,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -27,20 +34,21 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.convertIfNotNull;
 import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
 
 @Getter
@@ -55,6 +63,9 @@ public class AllVersions implements
                 Component,
                 Packet,
                 ResourceLocation,
+                GameType,
+                GameProfile,
+                RemoteChatSession.Data,
                 EntityType,
                 ServerGamePacketListenerImpl,
                 Connection,
@@ -63,7 +74,9 @@ public class AllVersions implements
                 ClientboundAnimatePacket,
                 ClientboundAddEntityPacket,
                 ClientboundRemoveEntitiesPacket,
-                ClientboundSetEntityDataPacket
+                ClientboundSetEntityDataPacket,
+                ClientboundPlayerInfoUpdatePacket,
+                ClientboundPlayerInfoUpdatePacket.Action
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -177,7 +190,7 @@ public class AllVersions implements
     @SuppressWarnings("ConstantConditions")
     public ClientboundAddEntityPacket toNMSAddEntityPacket(AddEntityPacket from) {
         return new ClientboundAddEntityPacket(
-                from.getEntityId(),
+                from.getId(),
                 from.getEntityUUID(),
                 from.getX(),
                 from.getY(),
@@ -234,7 +247,7 @@ public class AllVersions implements
 
     @Override
     public ClientboundBlockDestructionPacket toNMSBlockDestructionPacket(BlockDestructionPacket from) {
-        return new ClientboundBlockDestructionPacket(from.getEntityId(), asNMSBlockVector(from.getPosition()), from.getBlockDestructionStage());
+        return new ClientboundBlockDestructionPacket(from.getId(), asNMSBlockVector(from.getPosition()), from.getBlockDestructionStage());
     }
 
     @Override
@@ -250,7 +263,7 @@ public class AllVersions implements
     @Override
     public ClientboundAnimatePacket toNMSEntityAnimationPacket(EntityAnimationPacket from) {
         FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        friendlyByteBuf.writeVarInt(from.getEntityId());
+        friendlyByteBuf.writeVarInt(from.getId());
         friendlyByteBuf.writeByte(from.getEntityAnimationId());
         return ClientboundAnimatePacket.STREAM_CODEC.decode(friendlyByteBuf);
     }
@@ -284,10 +297,9 @@ public class AllVersions implements
     @SuppressWarnings("unchecked")
     public ClientboundSetEntityDataPacket toNMSEntityMetadataPacket(EntityMetadataPacket from) {
         return new ClientboundSetEntityDataPacket(
-                from.getEntityId(),
-                (List<SynchedEntityData.DataValue<?>>) (List<?>) from.getEntityMetadata().items().stream()
-                        .filter(Objects::nonNull)
-                        .map(item -> {
+                from.getId(),
+                CommonUtils.map(from.getEntityMetadata().items(),
+                        item -> {
                             Object nmsValue = NMS.toNMSObject(item.value());
                             EntitySerializerKey.Type type = item.serializerType();
                             return new SynchedEntityData.DataValue<>(
@@ -295,7 +307,7 @@ public class AllVersions implements
                                     (EntityDataSerializer<Object>) NMS.getEntityDataSerializer(
                                             NMS.getSerializableClass(item.valueClass()), type
                                     ), type == OPTIONAL ? Optional.ofNullable(nmsValue) : nmsValue);
-                        }).toList()
+                        })
         );
     }
 
@@ -314,6 +326,60 @@ public class AllVersions implements
     @Override
     public Class<ClientboundSetEntityDataPacket> getNMSEntityMetadataPacketClass() {
         return ClientboundSetEntityDataPacket.class;
+    }
+
+    @Override
+    public ClientboundPlayerInfoUpdatePacket toNMSPlayerInfoUpdatePacket(PlayerInfoUpdatePacket from) {
+        EnumSet<ClientboundPlayerInfoUpdatePacket.Action> actions = CommonUtils.copyOrEmptyEnumSet(CommonUtils.map(from.getActions(), this::toNMSPlayerInfoUpdatePacketAction), ClientboundPlayerInfoUpdatePacket.Action.class);
+        return new ClientboundPlayerInfoUpdatePacket(actions,
+                (List<ClientboundPlayerInfoUpdatePacket.Entry>) CommonUtils.map(from.getPlayerInfos(), playerInfo -> new ClientboundPlayerInfoUpdatePacket.Entry(
+                        playerInfo.getUUID(),
+                        convertIfNotNull(playerInfo.getPlayerProfile().getPlayerProfile(), this::toNMSPlayerProfile),
+                        playerInfo.isListed(),
+                        playerInfo.getLatency(),
+                        convertIfNotNull(playerInfo.getGameMode(), this::toNMSGameMode),
+                        convertIfNotNull(playerInfo.getDisplayName(), this::asNMSComponent),
+                        playerInfo.isShowHat(),
+                        playerInfo.getListOrder(),
+                        convertIfNotNull(playerInfo.getChatSession(), this::toNMSChatSessionData)
+                ))
+        );
+    }
+
+    @Override
+    public PlayerInfoUpdatePacket fromNMSPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket from) {
+        var actions = CommonUtils.map(from.actions(), this::fromNMSPlayerInfoUpdatePacketAction);
+        return new PlayerInfoUpdatePacket(Set.copyOf(actions), CommonUtils.map(from.entries(), entry -> new PlayerInfo(
+                entry.profileId(),
+                convertIfNotNull(entry.profile(), this::fromNMSPlayerProfile),
+                entry.listed(),
+                entry.latency(),
+                convertIfNotNull(entry.gameMode(), this::fromNMSGameMode),
+                convertIfNotNull(entry.displayName(), this::asComponent),
+                entry.showHat(),
+                entry.listOrder(),
+                convertIfNotNull(entry.chatSession(), this::fromNMSChatSessionData)
+        )));
+    }
+
+    @Override
+    public Class<ClientboundPlayerInfoUpdatePacket> getNMSPlayerInfoUpdatePacketClass() {
+        return ClientboundPlayerInfoUpdatePacket.class;
+    }
+
+    @Override
+    public ClientboundPlayerInfoUpdatePacket.Action toNMSPlayerInfoUpdatePacketAction(PlayerInfoUpdatePacket.Action<?> from) {
+        return ClientboundPlayerInfoUpdatePacket.Action.valueOf(from.name());
+    }
+
+    @Override
+    public PlayerInfoUpdatePacket.Action<?> fromNMSPlayerInfoUpdatePacketAction(ClientboundPlayerInfoUpdatePacket.Action from) {
+        return PlayerInfoUpdatePacket.Action.valueOf(from.name());
+    }
+
+    @Override
+    public Class<ClientboundPlayerInfoUpdatePacket.Action> getNMSPlayerInfoUpdatePacketActionClass() {
+        return ClientboundPlayerInfoUpdatePacket.Action.class;
     }
 
     @Override
@@ -345,6 +411,53 @@ public class AllVersions implements
     @Override
     public Class<ResourceLocation> getNMSNamespacedKeyClass() {
         return ResourceLocation.class;
+    }
+
+    @Override
+    public GameType toNMSGameMode(GameMode from) {
+        return GameType.valueOf(from.name());
+    }
+
+    @Override
+    public GameMode fromNMSGameMode(GameType from) {
+        return GameMode.valueOf(from.name());
+    }
+
+    @Override
+    public Class<GameType> getNMSGameModeClass() {
+        return GameType.class;
+    }
+
+    @Override
+    public GameProfile toNMSPlayerProfile(PlayerProfile from) {
+        return CraftPlayerProfile.asAuthlibCopy(from);
+    }
+
+    @Override
+    public PlayerProfile fromNMSPlayerProfile(GameProfile from) {
+        return CraftPlayerProfile.asBukkitCopy(from);
+    }
+
+    @Override
+    public Class<GameProfile> getNMSPlayerProfileClass() {
+        return GameProfile.class;
+    }
+
+    @Override
+    public RemoteChatSession.Data toNMSChatSessionData(ChatSessionData from) {
+        var key = from.profilePublicKey();
+        return new RemoteChatSession.Data(from.sessionId(), new ProfilePublicKey.Data(key.timestamp(), key.publicKey(), key.signature()));
+    }
+
+    @Override
+    public ChatSessionData fromNMSChatSessionData(RemoteChatSession.Data from) {
+        var data = from.profilePublicKey();
+        return new ChatSessionData(from.sessionId(), new it.jakegblp.lusk.nms.core.world.player.ProfilePublicKey(data.expiresAt(), data.key(), data.keySignature()));
+    }
+
+    @Override
+    public Class<RemoteChatSession.Data> getNMSChatSessionDataClass() {
+        return RemoteChatSession.Data.class;
     }
 
     @Override

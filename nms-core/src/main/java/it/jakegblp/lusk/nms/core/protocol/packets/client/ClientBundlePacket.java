@@ -14,10 +14,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @ToString
 public class ClientBundlePacket extends BundlePacket<ClientboundPacket> implements ClientboundPacket {
 
-    public static final ClientBundlePacket[] EMPTY_ARRAY = new ClientBundlePacket[0];
-
-    public ClientBundlePacket(
-            List<ClientboundPacket> packets) {
+    public ClientBundlePacket(List<ClientboundPacket> packets) {
         super(packets);
     }
 

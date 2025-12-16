@@ -161,6 +161,7 @@ public abstract class AbstractNMS<
         else if (isNMSBlockDestructionPacket(object)) return fromNMSBlockDestructionPacket(object);
         else if (isNMSClientBundlePacket(object)) return fromNMSClientBundlePacket(object);
         else if (isNMSEntityMetadataPacket(object)) return fromNMSEntityMetadataPacket(object);
+        else if (isNMSPlayerInfoUpdatePacket(object)) return fromNMSPlayerInfoUpdatePacket(object);
         else if (isNMSAddEntityPacket(object)) return fromNMSAddEntityPacket(object);
         else if (isNMSPlayerRotationPacket(object)) return fromNMSPlayerRotationPacket(object);
         else if (isNMSPlayerPositionPacket(object)) return fromNMSPlayerPositionPacket(object);
@@ -170,6 +171,9 @@ public abstract class AbstractNMS<
 
     public @Nullable Object fromNMSObject(@Nullable Object object) {
         if (isNMSEntityType(object)) return fromNMSEntityType(object);
+        else if (isNMSPlayerProfile(object)) return fromNMSPlayerProfile(object);
+        else if (isNMSGameMode(object)) return fromNMSGameMode(object);
+        else if (isNMSComponent(object)) return asComponent(object);
         else if (isNMSPacket(object)) return fromNMSPacket(object);
         return null;
     }

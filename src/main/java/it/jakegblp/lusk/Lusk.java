@@ -2,10 +2,11 @@ package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.factory.SkriptAdapterFactory;
-import it.jakegblp.lusk.skript.utils.Utils;
+import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
 import org.apache.commons.text.WordUtils;
 import org.bstats.bukkit.Metrics;
@@ -38,12 +39,13 @@ public final class Lusk extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        Instances.LUSK = this;
         serverVersion = Version.parse(Bukkit.getBukkitVersion().split("[^\\d.]")[0]);
         NMS = NMSFactory.createNMS(this, serverVersion);
         hookedWithSkript = isPluginEnabled("Skript");
         if (hookedWithSkript) {
             skriptVersion = Version.parse(Skript.getVersion().toString().split("[^\\d.]")[0]);
-            Utils.skriptAdapter = SkriptAdapterFactory.createSkriptAdapter(skriptVersion);
+            AddonUtils.skriptAdapter = SkriptAdapterFactory.createSkriptAdapter(skriptVersion);
             addon = Skript.registerAddon(this);
             addon.setLanguageFileDirectory("lang");
             int[] elementCountBefore = getSkriptElementCount();
@@ -65,6 +67,7 @@ public final class Lusk extends JavaPlugin {
             for (int i = 0; i < finish.length; i++) {
                 getLogger().info(" - "+finish[i]+" "+elementNames[i]+(finish[i] == 1 ? "" : "s"));
             }
+            Instances.SKRIPT_ADDON = addon;
             getLogger().info("Hooked with Skript!");
         }
         int pluginId = 17730;

@@ -2,28 +2,47 @@ package it.jakegblp.lusk.nms.core.events;
 
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import lombok.Getter;
-import lombok.Setter;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
+import org.jetbrains.annotations.Nullable;
 
-@Getter
-@Setter
-public class PacketEvent<P extends Packet> extends Event {
+import java.util.function.Supplier;
 
-    private static final HandlerList HANDLERS = new HandlerList();
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+
+public abstract class PacketEvent<P extends Packet> extends PlayerEvent {
+
+    @Nullable
+    private Supplier<P> supplier;
     protected P packet;
+    @Getter
+    protected boolean resolved;
+    @Getter
+    protected boolean modified = false;
 
-    public PacketEvent(P packet) {
+    protected PacketEvent(P packet, Player player) {
+        super(player);
         this.packet = packet;
+        this.resolved = true;
     }
 
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
+    @SuppressWarnings("unchecked")
+    protected PacketEvent(Object nmsPacket, Player player) {
+        super(player);
+        this.supplier = () -> (P) NMS.fromNMSPacket(nmsPacket);
+        this.resolved = false;
     }
 
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return HANDLERS;
+    public P getPacket() {
+        if (!resolved && supplier != null)
+            setPacket(supplier.get());
+        return packet;
+    }
+
+    public void setPacket(P packet) {
+        this.packet = packet;
+        if (resolved) modified = true;
+        this.supplier = null;
+        this.resolved = true;
     }
 }

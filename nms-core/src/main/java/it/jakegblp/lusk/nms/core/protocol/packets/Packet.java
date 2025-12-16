@@ -1,7 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets;
 
+import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
 
 @SuppressWarnings("rawtypes")
-public interface Packet extends NMSObject {
+public interface Packet extends NMSObject, Asyncable {
+
 }

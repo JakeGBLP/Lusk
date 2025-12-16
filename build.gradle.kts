@@ -13,7 +13,7 @@ plugins {
 
 group = "it.jakegblp"
 version = "2.0.0-alpha1"
-var latestSkriptVersion = "2.12.2"
+var latestSkriptVersion = "2.13.2"
 var latestMinecraftVersion = "1.21.10"
 
 java {
@@ -138,6 +138,8 @@ subprojects {
     dependencies {
         if (name != "common") {
             implementation(project(":common"))
+        } else {
+            compileOnly("com.github.SkriptLang:Skript:${latestSkriptVersion}")
         }
         if (name == "lusk") {
             compileOnly("com.github.SkriptLang:Skript:$latestSkriptVersion")

@@ -14,7 +14,7 @@ import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
-import it.jakegblp.lusk.skript.api.OptionallySectionEffect;
+import it.jakegblp.lusk.skript.api.optional.OptionallySectionEffect;
 import it.jakegblp.lusk.skript.elements.expressions.ExprSecEntityMetadata;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static it.jakegblp.lusk.skript.utils.Utils.getSingleDefaultOrNull;
+import static it.jakegblp.lusk.skript.utils.AddonUtils.getSingleDefaultOrNull;
 
 @Name("[NMS] Player - Spawn Fake Entity")
 @Description("""
