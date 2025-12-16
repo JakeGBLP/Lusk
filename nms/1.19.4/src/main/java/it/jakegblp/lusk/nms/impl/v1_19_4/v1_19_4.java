@@ -14,6 +14,7 @@ import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -71,5 +72,4 @@ public final class v1_19_4 extends AbstractNMS<
         registerEntityDataSerializer(EntitySerializerKey.normal(Vector3f.class), VECTOR3);
         registerEntityDataSerializer(EntitySerializerKey.normal(Quaternionf.class), QUATERNION);
     }
-
 }

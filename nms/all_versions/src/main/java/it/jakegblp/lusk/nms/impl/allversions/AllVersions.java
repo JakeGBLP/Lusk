@@ -76,7 +76,8 @@ public class AllVersions implements
                 ClientboundRemoveEntitiesPacket,
                 ClientboundSetEntityDataPacket,
                 ClientboundPlayerInfoUpdatePacket,
-                ClientboundPlayerInfoUpdatePacket.Action
+                ClientboundPlayerInfoUpdatePacket.Action,
+                ClientboundSystemChatPacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -380,6 +381,21 @@ public class AllVersions implements
     @Override
     public Class<ClientboundPlayerInfoUpdatePacket.Action> getNMSPlayerInfoUpdatePacketActionClass() {
         return ClientboundPlayerInfoUpdatePacket.Action.class;
+    }
+
+    @Override
+    public ClientboundSystemChatPacket toNMSSystemChatMessagePacket(SystemChatMessagePacket from) {
+        return new ClientboundSystemChatPacket(from.getComponent(), from.isOverlay());
+    }
+
+    @Override
+    public SystemChatMessagePacket fromNMSSystemChatMessagePacket(ClientboundSystemChatPacket from) {
+        return new SystemChatMessagePacket(asComponent(from.content()), from.overlay());
+    }
+
+    @Override
+    public Class<ClientboundSystemChatPacket> getNMSSystemChatMessagePacketClass() {
+        return ClientboundSystemChatPacket.class;
     }
 
     @Override
