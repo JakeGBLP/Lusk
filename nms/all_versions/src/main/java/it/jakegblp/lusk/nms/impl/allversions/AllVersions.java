@@ -11,14 +11,17 @@ import io.papermc.paper.adventure.PaperAdventure;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.tobemoved.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
@@ -35,6 +38,8 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -42,10 +47,12 @@ import net.minecraft.world.phys.Vec3;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
+import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
@@ -79,7 +86,8 @@ public class AllVersions implements
                 ClientboundPlayerInfoUpdatePacket,
                 ClientboundPlayerInfoUpdatePacket.Action,
                 ClientboundSystemChatPacket,
-                ClientboundLevelParticlesPacket
+                ClientboundLevelParticlesPacket,
+                ClientboundUpdateAttributesPacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -405,7 +413,41 @@ public class AllVersions implements
     }
 
 
-    //
+    private static final Class<?> attributePacketClass; // used cos easier constructor is private
+    private static final Constructor<?> attributePacketConstructor;
+
+    static {
+        try {
+            attributePacketClass = ClientboundUpdateAttributesPacket.class;
+            //noinspection JavaReflectionMemberAccess
+            attributePacketConstructor = attributePacketClass.getDeclaredConstructor(int.class, List.class);
+            attributePacketConstructor.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public ClientboundUpdateAttributesPacket toNMSAttributePacket(AttributePacket from) {
+        final Holder<Attribute> attributeHolder = CraftAttribute.bukkitToMinecraftHolder(from.getAttribute());
+        final net.minecraft.world.entity.ai.attributes.AttributeInstance attributeInstance = new net.minecraft.world.entity.ai.attributes.AttributeInstance(attributeHolder, a -> {});
+        attributeInstance.setBaseValue(from.getBase());
+
+        return new ClientboundUpdateAttributesPacket(from.getId(), List.of(attributeInstance));
+    }
+
+
+    @SneakyThrows
+    @Override
+    public AttributePacket fromNMSAttributePacket(ClientboundUpdateAttributesPacket from) {
+        return (AttributePacket) attributePacketConstructor.newInstance(from.getEntityId(), from.getValues());
+    }
+
+    @Override
+    public Class<ClientboundUpdateAttributesPacket> getNMSAttributePacketClass() {
+        return ClientboundUpdateAttributesPacket.class;
+    }
 
 
     @Override

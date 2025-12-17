@@ -17,6 +17,8 @@ public class PrePacketReceiveEvent extends PlayerEvent implements Cancellable {
 
     public PrePacketReceiveEvent(Player player, boolean async) {
         super(player, async);
+
+
     }
 
     public static HandlerList getHandlerList() {

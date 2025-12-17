@@ -53,7 +53,8 @@ public interface SharedBehaviorAdapter<
         NMSPlayerInfoUpdatePacket,
         NMSPlayerInfoUpdatePacketAction,
         NMSSystemChatPacket,
-        NMSLevelParticlePacket
+        NMSLevelParticlePacket,
+        NMSAttributePacket
         > {
 
 
@@ -227,6 +228,16 @@ public interface SharedBehaviorAdapter<
     }
 
     //
+
+    NMSAttributePacket toNMSAttributePacket(AttributePacket from);
+
+    AttributePacket fromNMSAttributePacket(NMSAttributePacket from);
+
+    Class<NMSAttributePacket> getNMSAttributePacketClass();
+
+    default boolean isNMSAttributePacket(Object object) {
+        return getNMSAttributePacketClass().isInstance(object);
+    }
 
 
     NMSLevelParticlePacket toNMSLevelParticle(LevelParticlePacket from);
@@ -495,6 +506,11 @@ public interface SharedBehaviorAdapter<
             }
         });
     }
+
+
+
+
+
 
 
 }
