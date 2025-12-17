@@ -23,8 +23,16 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
 
     static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
 
+    public static <T> @Nullable T quickInstance(Class<T> clazz) {
+        return new SimpleClass<>(clazz).getConstructor(false).newInstance();
+    }
+
     public static <T> @Nullable T quickInstance(Class<T> clazz, Object @NotNull ... args) {
         return new SimpleClass<>(clazz).getConstructor(false, CommonUtils.map(args, Object::getClass)).newInstance(args);
+    }
+
+    public static <T> @Nullable T quickInstance(Class<T> clazz, boolean useCache, Object @NotNull ... args) {
+        return new SimpleClass<>(clazz).getConstructor(useCache, CommonUtils.map(args, Object::getClass)).newInstance(args);
     }
 
     @SuppressWarnings("unchecked")
