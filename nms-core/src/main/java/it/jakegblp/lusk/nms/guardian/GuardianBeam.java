@@ -130,7 +130,7 @@ public class GuardianBeam {
 
         new AddEntityPacket(guardianID, guardianUUID, from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), EntityType.GUARDIAN, 0, new Vector(0, 0, 0), from.getY())
                 .send(player, ExecutionMode.ASYNCHRONOUS);
-        new AddEntityPacket(squidID, UUID.randomUUID(), to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch(), EntityType.SQUID, 0, new Vector(0, 0, 0), to.getY())
+        new AddEntityPacket(squidID, UUID.randomUUID(), to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch(), EntityType.BAT, 0, new Vector(0, 0, 0), to.getY())
                 .send(player, ExecutionMode.ASYNCHRONOUS);
 
 
@@ -154,7 +154,7 @@ public class GuardianBeam {
 
     private EntityMetadataPacket squidData() {
         final EntityMetadata entityMetadata = new EntityMetadata();
-        // entityMetadata.set(MetadataKeys.EntityKeys.INVISIBLE, true);
+         entityMetadata.set(MetadataKeys.EntityKeys.INVISIBLE, true);
 
         return new EntityMetadataPacket(squidID, entityMetadata);
     }
@@ -175,6 +175,7 @@ public class GuardianBeam {
             removeEntitiesPacket.send(player, ExecutionMode.ASYNCHRONOUS);
         }
         Bukkit.getScheduler().cancelTask(this.taskID);
+        beams.remove(this.id);
     }
 
 }
