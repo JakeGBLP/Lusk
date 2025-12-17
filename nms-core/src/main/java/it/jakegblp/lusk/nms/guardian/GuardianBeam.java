@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+
 public class GuardianBeam {
 
     public static final Map<String, GuardianBeam> beams = new HashMap<>();
