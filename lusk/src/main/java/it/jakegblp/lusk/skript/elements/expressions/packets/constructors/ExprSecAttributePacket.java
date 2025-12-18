@@ -9,10 +9,9 @@ import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AttributePacket;
-import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
+import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,8 @@ import org.skriptlang.skript.lang.entry.util.ExpressionEntryData;
 import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings("ALL")
+// poa stuff
+
 public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
 
     public static final EntryValidator VALIDATOR;
@@ -37,10 +37,7 @@ public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
                 .addEntryData(new ExpressionEntryData<>("id", null, false, Number.class))
                 .build();
 
-        Skript.registerExpression(
-                ExprSecAttributePacket.class,
-                AttributePacket.class,
-                ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprSecAttributePacket.class, AttributePacket.class, ExpressionType.COMBINED,
                 "[a] new attribute packet"
         );
     }

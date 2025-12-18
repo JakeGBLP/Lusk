@@ -12,7 +12,9 @@ import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.skript.api.section.SectionParseResult;
 import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.Event;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +29,17 @@ import java.util.function.Supplier;
 
 public class AddonUtils {
     public static SkriptAdapter skriptAdapter;
+
+    @Nullable
+    public static Vector getVectorFromExpression(@Nullable Expression<?> expression, Event event) {
+        if (expression == null) return null;
+        Object object = expression.getSingle(event);
+        if (object instanceof Vector vector)
+            return vector;
+        else if (object instanceof Location location)
+            return location.toVector();
+        return null;
+    }
 
     public static <T> T getSingleNullable(@Nullable Expression<T> expression, Event event) {
         return expression == null ? null : expression.getSingle(event);
@@ -82,7 +95,7 @@ public class AddonUtils {
             Bukkit.getLogger().info("node parse loop: "+key);
             if (key != null) {
                 Bukkit.getLogger().info("key is not null");
-                Supplier<Expression<?>> supplier = () -> new SkriptParser(key).parseExpression(possibleReturnTypes);;
+                Supplier<Expression<?>> supplier = () -> new SkriptParser(key).parseExpression(possibleReturnTypes);
                 Bukkit.getLogger().info("PRE SECTION CONTEXT MODIFICATION FOR "+key);
                 Expression<?> expression = modifySectionContext(sectionContext, subNode instanceof SectionNode sectionNode ? sectionNode : null, List.of(), supplier);
                 Bukkit.getLogger().info("POST SECTION CONTEXT MODIFICATION FOR "+key);

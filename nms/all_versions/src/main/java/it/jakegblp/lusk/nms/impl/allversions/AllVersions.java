@@ -11,7 +11,7 @@ import io.papermc.paper.adventure.PaperAdventure;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
-import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
+import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
@@ -41,7 +41,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -57,9 +56,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.convertIfNotNull;

@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
+import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,8 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Getter
 @Setter
 public class AttributePacket implements ClientboundPacket, Cloneable {
+
+    // todo: finish wrapper
 
     int id;
     List<AttributeSnapshot> attributes;

@@ -1,13 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.SimpleList;
-import it.jakegblp.lusk.common.annotations.Availability;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,16 +13,21 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Availability(addedIn = "1.17.1")
+@AllArgsConstructor
 public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integer> {
     protected IntList entityIds;
 
     public RemoveEntitiesPacket(List<Integer> entityIds) {
-        this.entityIds = new IntArrayList(entityIds);
+        this(new IntArrayList(entityIds));
+    }
+
+
+    public RemoveEntitiesPacket(int... entityIds) {
+        this(new IntArrayList(entityIds));
     }
 
     public RemoveEntitiesPacket() {
-        this.entityIds = new IntArrayList();
+        this(new IntArrayList());
     }
 
     @Override

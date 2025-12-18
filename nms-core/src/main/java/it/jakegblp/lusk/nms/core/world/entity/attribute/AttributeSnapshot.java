@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.world.entity;
+package it.jakegblp.lusk.nms.core.world.entity.attribute;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

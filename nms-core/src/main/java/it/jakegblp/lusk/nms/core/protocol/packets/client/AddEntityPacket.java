@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode // todo: move headYaw field to earlier in the constructors
 public class AddEntityPacket implements ClientboundPacketWithId {
 
     protected int id;
@@ -45,13 +44,26 @@ public class AddEntityPacket implements ClientboundPacketWithId {
 
     public AddEntityPacket(
             int id,
-            @NonNull UUID entityUUID,
+            @NotNull UUID entityUUID,
+            @NotNull Vector position,
+            float pitch,
+            float yaw,
+            @NotNull EntityType entityType,
+            int data,
+            @NotNull Vector velocity,
+            double headYaw) {
+        this(id, entityUUID, position.getX(), position.getY(), position.getZ(), pitch, yaw, entityType, data, velocity, headYaw);
+    }
+
+    public AddEntityPacket(
+            int id,
+            @NotNull UUID entityUUID,
             double x,
             double y,
             double z,
             float pitch,
             float yaw,
-            @NonNull EntityType entityType,
+            @NotNull EntityType entityType,
             int data,
             @NotNull Vector velocity,
             double headYaw) {

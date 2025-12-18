@@ -2,22 +2,35 @@ package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+import lombok.EqualsAndHashCode;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * See: <a href="https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Entity">Minecraft Wiki – Entity Metadata</a>
  */
-public record EntityMetadata(
-        List<MetadataItem<? extends Entity, ?>> items
-) implements EntityMetadataView {
+@EqualsAndHashCode
+public class EntityMetadata implements EntityMetadataView {
+    // todo: cloning
+    private final List<MetadataItem<? extends Entity, ?>> items;
+
+    public EntityMetadata(Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata) {
+        this();
+        // temporary solution
+        metadata.forEach((metadataKeyReference, o) ->
+                set((MetadataKeyReference<Entity, Object>)metadataKeyReference, o)
+        );
+    }
 
     public EntityMetadata() {
-        this(new ArrayList<>());
+        this(List.of());
+    }
+
+    protected EntityMetadata(List<MetadataItem<? extends Entity, ?>>  items) {
+        this.items = new ArrayList<>(items);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -25,7 +38,7 @@ public record EntityMetadata(
             @NotNull MetadataKeyReference<E, T> key,
             Object value
     ) {
-        System.out.println("'setUnsafe' with key: "+key+" and value: "+value);
+        System.out.println("'setUnsafe' with key: " + key + " and value: " + value);
         if (key instanceof MetadataBitFlagKey bitFlagKey)
             return setBitFlag(bitFlagKey, value);
         if (key.canBeSetTo(value))
@@ -101,6 +114,11 @@ public record EntityMetadata(
         int id = item.id();
         if (item.matches(items.get(id)))
             remove(id);
+    }
+
+    @Override
+    public List<MetadataItem<? extends Entity, ?>> items() {
+        return items;
     }
 
 }

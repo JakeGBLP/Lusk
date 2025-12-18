@@ -1,18 +1,12 @@
 package it.jakegblp.lusk.skript.elements.types;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.aliases.ItemType;
-import ch.njol.util.StringUtils;
 import org.bukkit.*;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.*;
+
+// poa stuff
 
 public class ParticleUtil {
 
@@ -37,25 +31,6 @@ public class ParticleUtil {
     }
 
     /**
-     * Returns a string for docs of all names of particles
-     *
-     * @return Names of all particles in one long string
-     */
-    public static String getNamesAsString() {
-        List<String> names = new ArrayList<>();
-        PARTICLES.forEach((s, particle) -> {
-            String name = s;
-
-            if (particle.getDataType() != Void.class) {
-                name = name + " [" + getDataType(particle) + "]";
-            }
-            names.add(name);
-        });
-        Collections.sort(names);
-        return StringUtils.join(names, ", ");
-    }
-
-    /**
      * Get the Minecraft name of a particle
      *
      * @param particle Particle to get name of
@@ -65,115 +40,5 @@ public class ParticleUtil {
         return PARTICLE_NAMES.get(particle);
     }
 
-    /**
-     * Get a list of all available particles
-     *
-     * @return List of all available particles
-     */
-    public static List<Particle> getAvailableParticles() {
-        return new ArrayList<>(PARTICLES.values());
-    }
-
-    /**
-     * Parse a particle by its Minecraft name
-     *
-     * @param key Minecraft name of particle
-     * @return Bukkit particle from Minecraft name (null if not available)
-     */
-    @Nullable
-    public static Particle parse(String key) {
-        if (PARTICLES.containsKey(key)) {
-            return PARTICLES.get(key);
-        }
-        return null;
-    }
-
-    private static String getDataType(Particle particle) {
-        Class<?> dataType = particle.getDataType();
-        if (dataType == ItemStack.class) {
-            return "itemtype";
-        } else if (dataType == DustOptions.class) {
-            return "dust-option";
-        } else if (dataType == BlockData.class) {
-            return "blockdata/itemtype";
-        } else if (dataType == Particle.DustTransition.class) {
-            return "dust-transition";
-        } else if (dataType == Vibration.class) {
-            return "vibration";
-        } else if (dataType == Integer.class) {
-            return "number(int)";
-        } else if (dataType == Float.class) {
-            return "number(float)";
-        } else if (dataType == Color.class) {
-            return "color/bukkitcolor";
-        } else if (HAS_TRAIL && dataType == Particle.Trail.class) {
-            return "trail";
-        } else if (HAS_SPELL && dataType == Particle.Spell.class) {
-            return "spell";
-        }
-        // For future particle data additions that haven't been added here yet
-        return "UNKNOWN";
-    }
-
-    public static void spawnParticle(@NotNull Particle particle, @Nullable Player[] players, @NotNull Location location, int count, Object data, Vector offset, double extra, boolean force) {
-        Object particleData = getData(particle, data);
-        if (particle.getDataType() != Void.class && particleData == null) return;
-
-        double x = offset.getX();
-        double y = offset.getY();
-        double z = offset.getZ();
-        if (players == null) {
-            World world = location.getWorld();
-            if (world == null) return;
-            world.spawnParticle(particle, location, count, x, y, z, extra, particleData, force);
-        } else {
-            for (Player player : players) {
-                assert player != null;
-                if (HAS_PLAYER_FORCE) {
-                    player.spawnParticle(particle, location, count, x, y, z, extra, particleData, force);
-                } else {
-                    player.spawnParticle(particle, location, count, x, y, z, extra, particleData);
-                }
-            }
-        }
-    }
-
-    @Nullable
-    private static Object getData(Particle particle, Object data) {
-        Class<?> dataType = particle.getDataType();
-        if (dataType == Void.class) {
-            return null;
-        } else if (dataType == Float.class && data instanceof Number number) {
-            return number.floatValue();
-        } else if (dataType == Integer.class && data instanceof Number number) {
-            return number.intValue();
-        } else if (dataType == ItemStack.class && data instanceof ItemType itemType) {
-            return itemType.getRandom();
-        } else if (dataType == DustOptions.class && data instanceof DustOptions) {
-            return data;
-        } else if (dataType == Particle.DustTransition.class && data instanceof Particle.DustTransition) {
-            return data;
-        } else if (dataType == Vibration.class && data instanceof Vibration) {
-            return data;
-        } else if (dataType == Color.class && data instanceof ch.njol.skript.util.Color skriptColor) {
-            return skriptColor.asBukkitColor();
-        } else if (dataType == Color.class && data instanceof Color) {
-            return data;
-        } else if (dataType == BlockData.class) {
-            if (data instanceof BlockData) {
-                return data;
-            } else if (data instanceof ItemType itemType) {
-                Material material = itemType.getMaterial();
-                if (material.isBlock()) {
-                    return material.createBlockData();
-                }
-            }
-        } else if (HAS_TRAIL && dataType == Particle.Trail.class && data instanceof Particle.Trail) {
-            return data;
-        } else if (HAS_SPELL && dataType == Particle.Spell.class && data instanceof Particle.Spell) {
-            return data;
-        }
-        return null;
-    }
 
 }

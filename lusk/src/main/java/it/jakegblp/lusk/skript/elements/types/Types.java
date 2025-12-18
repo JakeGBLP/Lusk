@@ -16,7 +16,9 @@ import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
+import it.jakegblp.lusk.nms.core.util.Displayable;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
+import it.jakegblp.lusk.nms.core.world.entity.guardian.GuardianBeam;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
@@ -32,14 +34,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
 import org.bukkit.Particle;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.skriptlang.skript.lang.converter.Converters;
 
-import javax.annotation.Nullable;
 import java.net.URL;
 
 public class Types {
@@ -174,6 +175,18 @@ public class Types {
                 .name("Player - Texture Payload")
                 .description("Contains all the texture data of a player.") // add example
                 .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(Displayable.class, "displayable")
+                .toString(displayable -> "displayable object")
+                .user("displayables?")
+                .name("Player - Displayable Object")
+                .description("An object that can be displayed and removed for players.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(GuardianBeam.class, "guardianbeam")
+                .toString(guardianBeam -> "guardian beam from " + Classes.toString(guardianBeam.getStart()) + " to " + Classes.toString(guardianBeam.getEnd()))
+                .user("guardian ?beams?")
+                .name("Guardian - Beam")
+                .description("A guardian beam, can be displayed and removed for players.\nNote: the developer is responsible for specifying to whom a guardian beam is displayed.") // add example
+                .since("2.0.0"));
 
         // Async
         Classes.registerClass(new SimpleClassInfo<>(CompletablePlayerProfile.class, "completableplayerprofile")
@@ -223,71 +236,26 @@ public class Types {
                     }));
         }
         if (Classes.getExactClassInfo(Particle.class) == null) {
-            Classes.registerClass(new ClassInfo<>(Particle.class, "particle")
+            EnumClassInfoWrapper<Particle> PARTICLE_ENUM = new EnumClassInfoWrapper<>(Particle.class);
+            Classes.registerClass(PARTICLE_ENUM.getClassInfo("particle")
                     .user("particles?")
                     .name("Particle")
-                    .description("Represents a particle which can be used in the 'Particle Spawn' effect.",
-                            "Some particles require extra data, these are distinguished by their data type within the square brackets.",
-                            "DustOption, DustTransition and Vibration each have their own functions to build the appropriate data for these particles.",
-                            "NOTE: These are auto-generated and may differ between server versions.")
-                    .usage(ParticleUtil.getNamesAsString())
-                    .after("itemtype")
-                    .since("1.9.0")
-                    .parser(new Parser<>() {
-                        @Nullable
-                        @Override
-                        public Particle parse(String s, ParseContext context) {
-                            return ParticleUtil.parse(s.replace(" ", "_"));
-                        }
-
-                        @Override
-                        public @NotNull String toString(Particle particle, int flags) {
-                            return ParticleUtil.getName(particle);
-                        }
-
-                        @Override
-                        public @NotNull String toVariableNameString(Particle particle) {
-                            return "particle:" + toString(particle, 0);
-                        }
-                    }));
+                    .description("All the particles.") // add example
+                    .since("2.0.0"));
         }
-        if (Classes.getExactClassInfo(Attribute.class) == null) {
-            Classes.registerClass(new ClassInfo<>(Attribute.class, "attribute")
-                    .user("attributes?")
-                    .name("Attribute")
-                    .description("Bukkit attribute (e.g. scale)")
-                    .parser(new Parser<>() {
-                        @SuppressWarnings("UnstableApiUsage")
-                        @Override
-                        public @Nullable Attribute parse(@NotNull String input, @NotNull ParseContext context) {
-                            String s = input.trim().toUpperCase().replace(' ', '_');
-                            // try exact match first
-                            try {
-                                return Attribute.valueOf(s);
-                            } catch (IllegalArgumentException ignored) {
-                            }
-
-                            // allow "scale" style inputs
-                            for (Attribute a : Attribute.values()) {
-                                String n = a.name();
-                                if (n.equals(s) || n.endsWith("_" + s) || n.contains(s)) return a;
-                            }
-                            return null;
-                        }
-
-                        @SuppressWarnings("UnstableApiUsage")
-                        @Override
-                        public @NotNull String toString(Attribute a, int flags) {
-                            return a.name().toLowerCase();
-                        }
-
-                        @SuppressWarnings("UnstableApiUsage")
-                        @Override
-                        public @NotNull String toVariableNameString(Attribute a) {
-                            return a.name().toLowerCase();
-                        }
-                    })
-            );
+        if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
+                    .toString(AttributeModifier::toString)
+                    .user("attribute ?modifiers?")
+                    .name("Attribute - Modifier")
+                    .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
+        }
+        if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
+                    .toString(AttributeModifier::toString)
+                    .user("attribute ?modifiers?")
+                    .name("Attribute - Modifier")
+                    .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
         }
 
 
