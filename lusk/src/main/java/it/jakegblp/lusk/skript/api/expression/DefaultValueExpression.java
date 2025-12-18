@@ -6,6 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
@@ -23,8 +24,15 @@ public class DefaultValueExpression<T> extends SimpleExpression<T> implements De
         this.immutable = null;
     }
 
-    public DefaultValueExpression(Class<T> type, T immutable) {
+    public DefaultValueExpression(Class<T> type, @Nullable T immutable) {
         this.type = type;
+        this.supplier = null;
+        this.immutable = immutable;
+    }
+
+    @SuppressWarnings("unchecked")
+    public DefaultValueExpression(@NotNull T immutable) {
+        this.type = (Class<T>) immutable.getClass();
         this.supplier = null;
         this.immutable = immutable;
     }

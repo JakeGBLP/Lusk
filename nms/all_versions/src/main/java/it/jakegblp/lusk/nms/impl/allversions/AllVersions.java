@@ -57,9 +57,11 @@ import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
+import org.bukkit.craftbukkit.CraftParticle;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
@@ -189,7 +191,6 @@ public class AllVersions implements
     public ServerGamePacketListenerImpl getPlayerConnection(ServerPlayer serverPlayer) {
         return serverPlayer.connection;
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -447,20 +448,14 @@ public class AllVersions implements
         return ClientboundPlayerInfoUpdatePacket.Action.class;
     }
 
-
-    // leave space here for Poa to read
-
+    @Override
+    public ClientboundSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from) {
+        return null;
+    }
 
     @Override
-    public ClientboundSetPlayerTeamPacket toNMSSetPlayerTeamPacket(TeamPacket from) {
-        var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
-        registryFriendlyByteBuf.writeUtf(from.getName());
-        registryFriendlyByteBuf.writeByte(from.getMethod());
-        if (from instanceof TeamPacket.ChangeTeamInfo changeTeamInfo)
-            toNMSTeamParameters(changeTeamInfo.getParameters()).write(registryFriendlyByteBuf);
-        if (from instanceof TeamPacket.WithMembers withMembers)
-            registryFriendlyByteBuf.writeCollection(withMembers.getMembers(), FriendlyByteBuf::writeUtf);
-        return ClientboundSetPlayerTeamPacket.STREAM_CODEC.decode(registryFriendlyByteBuf);
+    public SystemChatPacket fromNMSSystemChatPacket(ClientboundSystemChatPacket from) {
+        return null;
     }
 
     @Override
@@ -485,11 +480,61 @@ public class AllVersions implements
     }
 
     @Override
-    public Class<ClientboundSystemChatPacket> getNMSSystemChatPacketClass() {
-        return ClientboundSystemChatPacket.class;
-    }
     public Class<ClientboundSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass() {
         return ClientboundSetPlayerTeamPacket.class;
+    }
+    @Override
+    @Contract("null -> null")
+    public TeamParameters fromNMSTeamParameters(@Nullable ClientboundSetPlayerTeamPacket.Parameters from) {
+        return from == null ? null : new TeamParameters(
+                asComponent(from.getDisplayName()),
+                asComponent(from.getPlayerPrefix()),
+                asComponent(from.getPlayerSuffix()),
+                fromNMSTeamVisibility(from.getNametagVisibility()),
+                fromNMSTeamCollisionRule(from.getCollisionRule()),
+                NamedTextColor.NAMES.value(from.getColor().getName()),
+                from.getOptions());
+    }
+
+    @Override
+    public ClientboundSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        friendlyByteBuf.writeVarInt(from.getCameraId());
+        return ClientboundSetCameraPacket.STREAM_CODEC.decode(friendlyByteBuf);
+    }
+
+    @Override
+    public SetCameraPacket fromNMSSetCameraPacket(ClientboundSetCameraPacket from) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        ClientboundSetCameraPacket.STREAM_CODEC.encode(friendlyByteBuf, from);
+        return new SetCameraPacket(friendlyByteBuf.readInt());
+    }
+
+    @Override
+    public Class<ClientboundSetCameraPacket> getNMSSetCameraPacketClass() {
+        return ClientboundSetCameraPacket.class;
+    }
+
+
+    // leave space here for Poa to read
+
+
+    @Override
+    public ClientboundSetPlayerTeamPacket toNMSSetPlayerTeamPacket(TeamPacket from) {
+        var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
+        registryFriendlyByteBuf.writeUtf(from.getName());
+        registryFriendlyByteBuf.writeByte(from.getMethod());
+        if (from instanceof TeamPacket.ChangeTeamInfo changeTeamInfo)
+            toNMSTeamParameters(changeTeamInfo.getParameters()).write(registryFriendlyByteBuf);
+        if (from instanceof TeamPacket.WithMembers withMembers)
+            registryFriendlyByteBuf.writeCollection(withMembers.getMembers(), FriendlyByteBuf::writeUtf);
+        return ClientboundSetPlayerTeamPacket.STREAM_CODEC.decode(registryFriendlyByteBuf);
+    }
+
+
+    @Override
+    public Class<ClientboundSystemChatPacket> getNMSSystemChatPacketClass() {
+        return ClientboundSystemChatPacket.class;
     }
 
 
@@ -516,6 +561,7 @@ public class AllVersions implements
 
         return new ClientboundUpdateAttributesPacket(from.getId(), instances);
     }
+    @Override
     public ClientboundSetPlayerTeamPacket.Parameters toNMSTeamParameters(TeamParameters from) {
         var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
         ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getDisplayName()));
@@ -542,17 +588,6 @@ public class AllVersions implements
         }
         return new AttributePacket(from.getEntityId(), list);
     }
-    @Contract("null -> null")
-    public TeamParameters fromNMSTeamParameters(@Nullable ClientboundSetPlayerTeamPacket.Parameters from) {
-        return from == null ? null : new TeamParameters(
-                asComponent(from.getDisplayName()),
-                asComponent(from.getPlayerPrefix()),
-                asComponent(from.getPlayerSuffix()),
-                fromNMSTeamVisibility(from.getNametagVisibility()),
-                fromNMSTeamCollisionRule(from.getCollisionRule()),
-                NamedTextColor.NAMES.value(from.getColor().getName()),
-                from.getOptions());
-    }
 
     @Override
     public Class<ClientboundUpdateAttributesPacket> getNMSAttributePacketClass() {
@@ -567,11 +602,6 @@ public class AllVersions implements
     public ClientboundLevelParticlesPacket toNMSLevelParticle(LevelParticlePacket from) {
         return new ClientboundLevelParticlesPacket((ParticleOptions) from.getParticle(), from.isOverrideLimiter(), from.isAlwaysShow(), from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount());
     }
-    public ClientboundSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from) {
-        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        friendlyByteBuf.writeVarInt(from.getCameraId());
-        return ClientboundSetCameraPacket.STREAM_CODEC.decode(friendlyByteBuf);
-    }
 
     @Override
     public LevelParticlePacket fromNMSLevelParticle(ClientboundLevelParticlesPacket from) {
@@ -580,18 +610,10 @@ public class AllVersions implements
 
         return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), new it.jakegblp.lusk.nms.core.world.level.ParticleOptions(bukkitParticle));
     }
-    public SetCameraPacket fromNMSSetCameraPacket(ClientboundSetCameraPacket from) {
-        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        ClientboundSetCameraPacket.STREAM_CODEC.encode(friendlyByteBuf, from);
-        return new SetCameraPacket(friendlyByteBuf.readInt());
-    }
 
     @Override
     public Class<ClientboundLevelParticlesPacket> getNMSLevelParticleClass() {
         return ClientboundLevelParticlesPacket.class;
-    }
-    public Class<ClientboundSetCameraPacket> getNMSSetCameraPacketClass() {
-        return ClientboundSetCameraPacket.class;
     }
 
     @Override

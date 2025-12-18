@@ -217,61 +217,70 @@ public interface SharedBehaviorAdapter<
 
     //Please leave spaces so Poa can read this
 
-    TeamPacket fromNMSSetPlayerTeamPacket(NMSSetPlayerTeamPacket from);
-
     NMSSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from);
 
     SystemChatPacket fromNMSSystemChatPacket(NMSSystemChatPacket from);
-    Class<NMSSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass();
 
     Class<NMSSystemChatPacket> getNMSSystemChatPacketClass();
 
     default boolean isNMSSystemChatPacket(Object object) {
         return getNMSSystemChatPacketClass().isInstance(object);
     }
-    default boolean isNMSSetPlayerTeamPacket(Object object) {
-        return getNMSSetPlayerTeamPacketClass().isInstance(object);
-    }
 
     //
-
-
-
-    NMSTeamParameters toNMSTeamParameters(TeamParameters from);
 
 
     NMSAttributePacket toNMSAttributePacket(AttributePacket from);
 
     AttributePacket fromNMSAttributePacket(NMSAttributePacket from);
-    TeamParameters fromNMSTeamParameters(NMSTeamParameters from);
 
     Class<NMSAttributePacket> getNMSAttributePacketClass();
-    Class<NMSTeamParameters> getNMSTeamParametersClass();
 
     default boolean isNMSAttributePacket(Object object) {
         return getNMSAttributePacketClass().isInstance(object);
     }
-    default boolean isNMSTeamParameters(Object object) {
-        return getNMSTeamParametersClass().isInstance(object);
-    }
 
 
     NMSLevelParticlePacket toNMSLevelParticle(LevelParticlePacket from);
-    NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 
     LevelParticlePacket fromNMSLevelParticle(NMSLevelParticlePacket from);
-    SetCameraPacket fromNMSSetCameraPacket(NMSSetCameraPacket from);
 
     Class<NMSLevelParticlePacket> getNMSLevelParticleClass();
-    Class<NMSSetCameraPacket> getNMSSetCameraPacketClass();
 
     default boolean isNMSLevelParticle(Object object){
         return getNMSLevelParticleClass().isInstance(object);
     }
+
+
+    NMSSetPlayerTeamPacket toNMSSetPlayerTeamPacket(TeamPacket from);
+
+    TeamPacket fromNMSSetPlayerTeamPacket(NMSSetPlayerTeamPacket from);
+
+    Class<NMSSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass();
+
+    default boolean isNMSSetPlayerTeamPacket(Object object) {
+        return getNMSSetPlayerTeamPacketClass().isInstance(object);
+    }
+
+    NMSTeamParameters toNMSTeamParameters(TeamParameters from);
+
+    TeamParameters fromNMSTeamParameters(NMSTeamParameters from);
+
+    Class<NMSTeamParameters> getNMSTeamParametersClass();
+
+    default boolean isNMSTeamParameters(Object object) {
+        return getNMSTeamParametersClass().isInstance(object);
+    }
+
+    NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
+
+    SetCameraPacket fromNMSSetCameraPacket(NMSSetCameraPacket from);
+
+    Class<NMSSetCameraPacket> getNMSSetCameraPacketClass();
+
     default boolean isNMSSetCameraPacket(Object object) {
         return getNMSSetCameraPacketClass().isInstance(object);
     }
-
 
     NMSEntityType toNMSEntityType(EntityType from);
 

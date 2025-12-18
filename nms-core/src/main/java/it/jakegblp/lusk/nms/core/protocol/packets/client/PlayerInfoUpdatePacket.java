@@ -92,7 +92,6 @@ public class PlayerInfoUpdatePacket implements ClientboundPacket, AsyncablesWrap
         public static final @Availability(addedIn = "1.21.4") Action<Integer> UPDATE_LIST_ORDER = new Action<>("UPDATE_LIST_ORDER", "TAB_LIST_ORDER", Integer.class);
         public static final @Availability(addedIn = "1.21.4") Action<Boolean> UPDATE_HAT = new Action<>("UPDATE_HAT", "SHOW_HAT", Boolean.class);
 
-        @SuppressWarnings("unchecked") // maybe not needed?
         private static final Action<?>[] VALUES = (Action<?>[])values(Action.class);
 
         public static Action<?> fromPropertyName(String propertyName) {

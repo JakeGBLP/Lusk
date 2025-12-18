@@ -13,7 +13,7 @@ import java.util.*;
  * See: <a href="https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Entity">Minecraft Wiki – Entity Metadata</a>
  */
 @EqualsAndHashCode
-public class EntityMetadata implements EntityMetadataView {
+public class EntityMetadata implements EntityMetadataView, Cloneable {
     // todo: cloning
     private final List<MetadataItem<? extends Entity, ?>> items;
 
@@ -121,4 +121,8 @@ public class EntityMetadata implements EntityMetadataView {
         return items;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // todo: finish
+    }
 }

@@ -12,6 +12,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
+import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
@@ -68,37 +69,18 @@ public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
 
     @Override
     protected AddEntityPacket[] get(Event event) {
-        Object unprocessedLocation = locationExpression.getSingle(event);
-        double x,y,z;
-        float yaw, pitch;
-        if (unprocessedLocation instanceof Location location) {
-            x = location.x();
-            y = location.y();
-            z = location.z();
-            yaw = location.getYaw();
-            pitch = location.getPitch();
-        } else if (unprocessedLocation instanceof Vector vector) {
-            x = vector.getX();
-            y = vector.getY();
-            z = vector.getZ();
-            yaw = 0;
-            pitch = 0;
-        }
-        else return new AddEntityPacket[0];
+        Vector position = AddonUtils.getVectorFromExpression(locationExpression, event);
+        if (position == null) return new AddEntityPacket[0];
         EntityType type = entityTypeExpression.getSingle(event);
         if (type == null) return new AddEntityPacket[0];
         return new AddEntityPacket[]{new AddEntityPacket(
                 getSingleNullable(entityIdExpression, event, NMSApi.generateRandomEntityId()),
                 getSingleNullable(uuidExpression, event, UUID.randomUUID()),
-                x,
-                y,
-                z,
-                yaw,
-                pitch,
-                EntityUtils.toBukkitEntityType(type.data),
-                getSingleNullable(dataExpression, event, 0).intValue(),
+                position,
+                getSingleNullable(headYawExpression, event, 0).doubleValue(),
                 getSingleNullable(velocityExpression, event, new Vector()),
-                getSingleNullable(headYawExpression, event, 0).doubleValue()
+                EntityUtils.toBukkitEntityType(type.data),
+                getSingleNullable(dataExpression, event, 0).intValue()
         )};
     }
 

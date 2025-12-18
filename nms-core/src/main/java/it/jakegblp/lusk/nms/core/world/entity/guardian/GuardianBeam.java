@@ -155,8 +155,8 @@ public class GuardianBeam implements Cloneable, LazyProducer, Displayable {
         dirty = false;
         YawPitch yawPitch = YawPitch.between(start, end);
         displayPackets = new ClientboundPacket[] {
-                new AddEntityPacket(id, uuid, start, yawPitch.getYaw(), yawPitch.getPitch(), EntityType.GUARDIAN, 0, new Vector(0, 0, 0), yawPitch.yaw()),
-                new AddEntityPacket(targetId, targetUuid, end, 0, 0, EntityType.BAT, 0, new Vector(), 0),
+                new AddEntityPacket(id, uuid, start.getX(), start.getY(), start.getZ(), yawPitch.getYaw(), yawPitch.getPitch(), yawPitch.yaw(), 0, 0, 0, EntityType.GUARDIAN, 0),
+                new AddEntityPacket(targetId, targetUuid, end, 0, new Vector(), EntityType.BAT, 0),
                 new EntityMetadataPacket(id, BASE_GUARDIAN_DATA.apply(targetId)),
                 BASE_BAT_PACKET.apply(targetId)
         };

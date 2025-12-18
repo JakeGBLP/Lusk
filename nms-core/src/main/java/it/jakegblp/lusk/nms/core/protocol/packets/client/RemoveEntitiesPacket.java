@@ -56,8 +56,7 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
     }
 
     public void set(List<Integer> entityIds) {
-        clear();
-        add(entityIds);
+        this.entityIds = new IntArrayList(entityIds);
     }
 
     public void clear() {
