@@ -15,14 +15,14 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 public class SetEquipmentPacket implements ClientboundPacketWithId {
 
-    private int entityId;
+    private int id;
     @Availability(addedIn = "1.20.5")
     private boolean sanitized;
     private Map<EquipmentSlot, ItemStack> equipment;
 
     @Availability(addedIn = "1.20.5")
-    public SetEquipmentPacket(int entityId, @Availability(addedIn = "1.20.5") boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
-        this.entityId = entityId;
+    public SetEquipmentPacket(int id, @Availability(addedIn = "1.20.5") boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
+        this.id = id;
         this.sanitized = sanitized;
         this.equipment = equipment;
     }
@@ -33,16 +33,16 @@ public class SetEquipmentPacket implements ClientboundPacketWithId {
     }
 
     @Availability(addedIn = "1.20.5")
-    public SetEquipmentPacket(int entityId, boolean sanitized) {
-        this(entityId, sanitized, Map.of());
+    public SetEquipmentPacket(int id, boolean sanitized) {
+        this(id, sanitized, Map.of());
     }
 
-    public SetEquipmentPacket(int entityId, Map<EquipmentSlot, ItemStack> equipment) {
-        this(entityId, false, equipment);
+    public SetEquipmentPacket(int id, Map<EquipmentSlot, ItemStack> equipment) {
+        this(id, false, equipment);
     }
 
-    public SetEquipmentPacket(int entityId) {
-        this(entityId, false, Map.of());
+    public SetEquipmentPacket(int id) {
+        this(id, false, Map.of());
     }
 
     public void set(EquipmentSlot slot, ItemStack item) {

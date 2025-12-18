@@ -11,6 +11,7 @@ import it.jakegblp.lusk.nms.core.events.PrePacketSendEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
+import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
@@ -42,6 +44,9 @@ public interface SharedBehaviorAdapter<
         NMSEntityType,
         NMSServerGamePacketListenerImpl,
         NMSConnection,
+        NMSTeamVisibility,
+        NMSTeamCollisionRule,
+        NMSDedicatedServer,
         NMSClientBundlePacket,
         NMSBlockDestructionPacket,
         NMSEntityAnimationPacket,
@@ -49,7 +54,10 @@ public interface SharedBehaviorAdapter<
         NMSRemoveEntitiesPacket,
         NMSEntityMetadataPacket,
         NMSPlayerInfoUpdatePacket,
-        NMSPlayerInfoUpdatePacketAction
+        NMSPlayerInfoUpdatePacketAction,
+        NMSSetCameraPacket,
+        NMSSetPlayerTeamPacket,
+        NMSTeamParameters
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -70,13 +78,12 @@ public interface SharedBehaviorAdapter<
         return EquipmentSlot.valueOf(equipmentSlot.name().replace("HAND", "_HAND"));
     }
 
-    @SuppressWarnings("unchecked")
     default NMSItemStack asNMSItemStack(ItemStack itemStack) {
-        return (NMSItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
+        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
     }
 
     default ItemStack asItemStack(NMSItemStack itemStack) {
-        return (ItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
+        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
     }
 
     default Class<? extends ItemStack> getCraftItemStackClass() {
@@ -205,6 +212,36 @@ public interface SharedBehaviorAdapter<
         return getNMSPlayerInfoUpdatePacketActionClass().isInstance(object);
     }
 
+    NMSSetPlayerTeamPacket toNMSSetPlayerTeamPacket(TeamPacket from);
+
+    TeamPacket fromNMSSetPlayerTeamPacket(NMSSetPlayerTeamPacket from);
+
+    Class<NMSSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass();
+
+    default boolean isNMSSetPlayerTeamPacket(Object object) {
+        return getNMSSetPlayerTeamPacketClass().isInstance(object);
+    }
+
+    NMSTeamParameters toNMSTeamParameters(TeamParameters from);
+
+    TeamParameters fromNMSTeamParameters(NMSTeamParameters from);
+
+    Class<NMSTeamParameters> getNMSTeamParametersClass();
+
+    default boolean isNMSTeamParameters(Object object) {
+        return getNMSTeamParametersClass().isInstance(object);
+    }
+
+    NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
+
+    SetCameraPacket fromNMSSetCameraPacket(NMSSetCameraPacket from);
+
+    Class<NMSSetCameraPacket> getNMSSetCameraPacketClass();
+
+    default boolean isNMSSetCameraPacket(Object object) {
+        return getNMSSetCameraPacketClass().isInstance(object);
+    }
+
     NMSEntityType toNMSEntityType(EntityType from);
 
     EntityType fromNMSEntityType(NMSEntityType to);
@@ -269,6 +306,16 @@ public interface SharedBehaviorAdapter<
     NMSConnection getConnection(NMSServerGamePacketListenerImpl packetListener);
 
     Channel getChannel(NMSConnection connection);
+
+    NMSTeamVisibility toNMSTeamVisibility(Team.OptionStatus optionStatus);
+
+    NMSTeamCollisionRule toNMSTeamCollisionRule(Team.OptionStatus optionStatus);
+
+    Team.OptionStatus fromNMSTeamVisibility(NMSTeamVisibility teamVisibility);
+
+    Team.OptionStatus fromNMSTeamCollisionRule(NMSTeamCollisionRule teamCollisionRule);
+
+    NMSDedicatedServer getDedicatedServer();
 
     default void uninjectPlayer(Player player) {
         uninjectPlayer(asServerPlayer(player));

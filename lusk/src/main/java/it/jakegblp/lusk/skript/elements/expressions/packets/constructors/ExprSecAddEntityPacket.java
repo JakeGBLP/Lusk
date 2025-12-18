@@ -69,36 +69,22 @@ public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
     @Override
     protected AddEntityPacket[] get(Event event) {
         Object unprocessedLocation = locationExpression.getSingle(event);
-        double x,y,z;
-        float yaw, pitch;
-        if (unprocessedLocation instanceof Location location) {
-            x = location.x();
-            y = location.y();
-            z = location.z();
-            yaw = location.getYaw();
-            pitch = location.getPitch();
-        } else if (unprocessedLocation instanceof Vector vector) {
-            x = vector.getX();
-            y = vector.getY();
-            z = vector.getZ();
-            yaw = 0;
-            pitch = 0;
-        }
+        Location location;
+        if (unprocessedLocation instanceof Location location1)
+            location = location1;
+        else if (unprocessedLocation instanceof Vector vector)
+            location = new Location(null, vector.getX(), vector.getY(), vector.getZ());
         else return new AddEntityPacket[0];
         EntityType type = entityTypeExpression.getSingle(event);
         if (type == null) return new AddEntityPacket[0];
         return new AddEntityPacket[]{new AddEntityPacket(
                 getSingleNullable(entityIdExpression, event, NMSApi.generateRandomEntityId()),
                 getSingleNullable(uuidExpression, event, UUID.randomUUID()),
-                x,
-                y,
-                z,
-                yaw,
-                pitch,
-                EntityUtils.toBukkitEntityType(type.data),
-                getSingleNullable(dataExpression, event, 0).intValue(),
+                location,
+                getSingleNullable(headYawExpression, event, 0).doubleValue(),
                 getSingleNullable(velocityExpression, event, new Vector()),
-                getSingleNullable(headYawExpression, event, 0).doubleValue()
+                EntityUtils.toBukkitEntityType(type.data),
+                getSingleNullable(dataExpression, event, 0).intValue()
         )};
     }
 

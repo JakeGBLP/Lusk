@@ -1,14 +1,10 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -21,55 +17,46 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class AddEntityPacket implements ClientboundPacketWithId {
 
     protected int id;
     protected @NotNull UUID entityUUID;
-    protected double x, y, z, headYaw;
+    protected double x, y, z;
     protected float pitch, yaw;
+    protected double headYaw, xVelocity, yVelocity, zVelocity;
     protected @NotNull EntityType entityType;
     protected int data;
-    // might turn into 3 doubles
-    protected @NotNull Vector velocity;
 
     public AddEntityPacket(
             int id,
             @NotNull UUID entityUUID,
             @NotNull Location location,
+            double headYaw,
+            @NotNull Vector velocity,
             @NotNull EntityType entityType,
-            int data,
-            @NotNull Vector velocity,
-            double headYaw) {
-        this(id, entityUUID, location.x(), location.y(), location.z(), location.getYaw(), location.getPitch(), entityType, data, velocity, headYaw);
-    }
-
-    public AddEntityPacket(
-            int id,
-            @NonNull UUID entityUUID,
-            double x,
-            double y,
-            double z,
-            float pitch,
-            float yaw,
-            @NonNull EntityType entityType,
-            int data,
-            @NotNull Vector velocity,
-            double headYaw) {
-        this.id = id;
-        this.entityUUID = entityUUID;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.entityType = entityType;
-        this.data = data;
-        this.velocity = velocity;
-        this.headYaw = headYaw;
+            int data) {
+        this(id, entityUUID, location.x(), location.y(), location.z(), location.getYaw(), location.getPitch(), headYaw, velocity.getX(), velocity.getY(), velocity.getZ(), entityType, data);
     }
 
     @Override
     public Object asNMS() {
         return NMS.toNMSAddEntityPacket(this);
+    }
+
+    public Vector getVelocity() {
+        return new Vector(xVelocity, yVelocity, zVelocity);
+    }
+
+    /**
+     * @return a location where the world is always null
+     */
+    public Location getPosition() {
+        return new Location(null, x, y, z, yaw, pitch);
+    }
+
+    @Override
+    protected AddEntityPacket clone() throws CloneNotSupportedException {
+        return (AddEntityPacket) super.clone();
     }
 }

@@ -48,9 +48,11 @@ public class ExprSecEntityMetadataPacket extends SectionExpression<EntityMetadat
         entityTypeExpression = (Expression<EntityType>) expressions[0];
         EntryContainer container = VALIDATOR.validate(node);
         if (container == null) return false;
-        idExpression = (Expression<Number>) container.get("id", false);
+        idExpression = (Expression<Number>) container.getOptional("id", false);
+        if (idExpression == null) return false;
         Object metadata = container.getOptional("metadata", false);
-        if (metadata instanceof EntryContainer entryContainer)
+        if (metadata == null) return false;
+        else if (metadata instanceof EntryContainer entryContainer)
             expressionMap = ExprSecEntityMetadata.getMetadataExpressionMap(entityTypeExpression, entryContainer);
         else
             entityMetadataExpression = (Expression<EntityMetadata>) metadata;

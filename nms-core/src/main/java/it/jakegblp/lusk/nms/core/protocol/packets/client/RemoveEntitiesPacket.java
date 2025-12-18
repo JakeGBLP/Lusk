@@ -17,7 +17,6 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Availability(addedIn = "1.17.1")
 public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integer> {
     protected IntList entityIds;
 
@@ -55,8 +54,7 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
     }
 
     public void set(List<Integer> entityIds) {
-        clear();
-        add(entityIds);
+        this.entityIds = new IntArrayList(entityIds);
     }
 
     public void clear() {

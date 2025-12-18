@@ -20,7 +20,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @ToString(callSuper = true)
 @AllArgsConstructor
 public final class EntityMetadataPacket implements ClientboundPacketWithId {
-    private int entityId;
+    private int id;
     private Class<? extends Entity> target;
     private EntityMetadata entityMetadata;
 

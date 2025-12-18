@@ -24,6 +24,7 @@ public class NMSApi {
     @Getter
     private static int randomEntityId, randomTeleportId;
 
+    // todo: rethink this
     public static int generateRandomEntityId() {
         randomEntityId = RANDOM.nextInt();
         return randomEntityId;
