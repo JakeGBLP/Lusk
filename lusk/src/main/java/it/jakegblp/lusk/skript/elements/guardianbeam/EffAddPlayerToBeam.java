@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.skript.elements.effects.guardianbeam;
+package it.jakegblp.lusk.skript.elements.guardianbeam;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;

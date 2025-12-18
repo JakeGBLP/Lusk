@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.skript.elements.effects.guardianbeam;
+package it.jakegblp.lusk.skript.elements.guardianbeam;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
@@ -6,10 +6,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.nms.guardian.GuardianBeam;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class EffRemoveBeam extends Effect {
 
     static {
-        Skript.registerEffect(EffRemoveBeam.class, "remove guardian beam [with] [id] %string%");
+        Skript.registerEffect(EffRemoveBeam.class, "remove guardian beam [with] [id] %strings%");
     }
 
     private Expression<String> idExpression;
@@ -36,11 +33,15 @@ public class EffRemoveBeam extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        final GuardianBeam beam = GuardianBeam.getBeam(idExpression.getSingle(event));
-        if(beam == null)
-            return;
+        final String[] id = idExpression.getArray(event);
 
-        beam.destroy();
+        for (String s : id) {
+            final GuardianBeam beam = GuardianBeam.getBeam(s);
+            if(beam == null)
+                continue;
+
+            beam.destroy();
+        }
     }
 
     @Override

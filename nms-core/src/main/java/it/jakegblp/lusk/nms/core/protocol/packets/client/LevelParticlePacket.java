@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 
+import it.jakegblp.lusk.nms.core.world.level.ParticleOptions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LevelParticlePacket implements ClientboundPacket {
+public class LevelParticlePacket implements ClientboundPacket, Cloneable {
 
     private final double x;
     private final double y;
@@ -22,10 +23,21 @@ public class LevelParticlePacket implements ClientboundPacket {
     private final int count;
     private final boolean overrideLimiter;
     private final boolean alwaysShow;
-    private final Object particle; // todo ParticleOptions -> and in ParticleSendEvent (if we can be bothered)
+    private final ParticleOptions particle;
 
     @Override
     public Object asNMS() {
         return NMS.toNMSLevelParticle(this);
+    }
+
+    @Override
+    public LevelParticlePacket clone() {
+        try {
+            LevelParticlePacket clone = (LevelParticlePacket) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

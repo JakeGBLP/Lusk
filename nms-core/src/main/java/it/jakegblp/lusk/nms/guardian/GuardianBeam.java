@@ -2,11 +2,14 @@ package it.jakegblp.lusk.nms.guardian;
 
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -16,8 +19,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
+@Getter
 public class GuardianBeam {
 
     public static final Map<String, GuardianBeam> beams = new HashMap<>();
@@ -33,6 +36,7 @@ public class GuardianBeam {
     UUID guardianUUID = UUID.randomUUID();
     int squidID = ThreadLocalRandom.current().nextInt(999999, Integer.MAX_VALUE);
     List<UUID> viewers = new ArrayList<>();
+    boolean persistent;
 
     List<UUID> canSee = new ArrayList<>();
 
@@ -41,7 +45,7 @@ public class GuardianBeam {
     Plugin plugin;
 
 
-    public GuardianBeam(Plugin plugin, String id, Location from, Location to) {
+    public GuardianBeam(Plugin plugin, String id, Location from, Location to, boolean persistent) {
         this.id = id.toLowerCase();
 
         if (beams.containsKey(this.id)) {
@@ -50,13 +54,16 @@ public class GuardianBeam {
         }
 
         this.from = from;
-        this.to = to;
+        this.to = correctEndLocation(from, to);
+        this.persistent = persistent;
 
         this.plugin = plugin;
 
-        loop();
+        if(persistent)
+            loop();
         beams.put(this.id, this);
     }
+
 
     public void addViewer(UUID uuid) {
         if (viewers.contains(uuid))
@@ -85,6 +92,8 @@ public class GuardianBeam {
                     skip = false;
                     break;
                 }
+                else
+                    canSee.remove(uuid);
             }
 
             if (skip) { //no point running checks if no user is online
@@ -162,7 +171,7 @@ public class GuardianBeam {
     }
 
     private AttributePacket makeSmall(int entityID) { //todo dont use if below 1.21.5
-        return new AttributePacket(entityID, Attribute.SCALE, 0.1);
+        return new AttributePacket(entityID, List.of(new AttributeSnapshot(Attribute.SCALE, 0.01, List.of(new AttributeModifier(UUID.randomUUID(), "scale", 0.01, AttributeModifier.Operation.ADD_NUMBER)))));
     }
 
 
@@ -178,6 +187,15 @@ public class GuardianBeam {
         }
         Bukkit.getScheduler().cancelTask(this.taskID);
         beams.remove(this.id);
+    }
+
+    private Location correctEndLocation(Location start, Location end) {
+        Vector guardianVector = start.toVector();
+        Vector batVector = end.toVector();
+        Vector direction = guardianVector.subtract(batVector).normalize();
+
+        Vector newBatVector = batVector.add(direction);
+        return newBatVector.toLocation(end.getWorld());
     }
 
 }

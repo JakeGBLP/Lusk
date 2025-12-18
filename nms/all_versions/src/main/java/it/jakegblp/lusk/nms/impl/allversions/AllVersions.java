@@ -11,7 +11,7 @@ import io.papermc.paper.adventure.PaperAdventure;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.tobemoved.AttributeSnapshot;
+import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
@@ -23,6 +23,7 @@ import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -40,20 +41,25 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Registry;
+import org.bukkit.craftbukkit.CraftParticle;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
+import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.convertIfNotNull;
@@ -413,35 +419,43 @@ public class AllVersions implements
     }
 
 
-    private static final Class<?> attributePacketClass; // used cos easier constructor is private
-    private static final Constructor<?> attributePacketConstructor;
-
-    static {
-        try {
-            attributePacketClass = ClientboundUpdateAttributesPacket.class;
-            //noinspection JavaReflectionMemberAccess
-            attributePacketConstructor = attributePacketClass.getDeclaredConstructor(int.class, List.class);
-            attributePacketConstructor.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
     @Override
     public ClientboundUpdateAttributesPacket toNMSAttributePacket(AttributePacket from) {
-        final Holder<Attribute> attributeHolder = CraftAttribute.bukkitToMinecraftHolder(from.getAttribute());
-        final net.minecraft.world.entity.ai.attributes.AttributeInstance attributeInstance = new net.minecraft.world.entity.ai.attributes.AttributeInstance(attributeHolder, a -> {});
-        attributeInstance.setBaseValue(from.getBase());
+        final List<AttributeInstance> instances = new ArrayList<>();
 
-        return new ClientboundUpdateAttributesPacket(from.getId(), List.of(attributeInstance));
+
+        for (AttributeSnapshot attribute : from.getAttributes()) {
+            final Holder<Attribute> holder = CraftAttribute.bukkitToMinecraftHolder(attribute.getAttribute()); //todo test on 1.19.4
+            final AttributeInstance attributeInstance = new AttributeInstance(holder, a -> {});
+
+            Collection<net.minecraft.world.entity.ai.attributes.AttributeModifier> modifiers =
+                    attribute.getModifiers()
+                            .stream()
+                            .map(CraftAttributeInstance::convert)
+                            .toList();
+            attributeInstance.addPermanentModifiers(modifiers);
+            attributeInstance.setBaseValue(attribute.getBase());
+            instances.add(attributeInstance);
+        }
+
+
+
+        return new ClientboundUpdateAttributesPacket(from.getId(), instances);
     }
 
 
     @SneakyThrows
     @Override
     public AttributePacket fromNMSAttributePacket(ClientboundUpdateAttributesPacket from) {
-        return (AttributePacket) attributePacketConstructor.newInstance(from.getEntityId(), from.getValues());
+        List<AttributeSnapshot> list = new ArrayList<>();
+        for (ClientboundUpdateAttributesPacket.AttributeSnapshot value : from.getValues()) {
+            final org.bukkit.attribute.Attribute attribute = CraftAttribute.minecraftHolderToBukkit(value.attribute());
+
+            List<org.bukkit.attribute.AttributeModifier> modifiers = value.modifiers().stream().map(CraftAttributeInstance::convert).toList();
+
+            list.add(new AttributeSnapshot(attribute, value.base(), modifiers));
+        }
+        return new AttributePacket(from.getEntityId(), list);
     }
 
     @Override
@@ -457,7 +471,10 @@ public class AllVersions implements
 
     @Override
     public LevelParticlePacket fromNMSLevelParticle(ClientboundLevelParticlesPacket from) {
-        return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), from.getParticle());
+        final ParticleType<?> particle = from.getParticle().getType();
+        final Particle bukkitParticle = CraftParticle.minecraftToBukkit(particle); //todo test 1.19.4
+
+        return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), new it.jakegblp.lusk.nms.core.world.level.ParticleOptions(bukkitParticle));
     }
 
     @Override

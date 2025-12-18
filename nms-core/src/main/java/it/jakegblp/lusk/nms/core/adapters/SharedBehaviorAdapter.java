@@ -6,7 +6,6 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
-import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import lombok.SneakyThrows;
 import net.kyori.adventure.text.Component;
@@ -229,6 +228,10 @@ public interface SharedBehaviorAdapter<
 
     //
 
+
+
+
+
     NMSAttributePacket toNMSAttributePacket(AttributePacket from);
 
     AttributePacket fromNMSAttributePacket(NMSAttributePacket from);
@@ -349,18 +352,10 @@ public interface SharedBehaviorAdapter<
 
             private final PluginManager pluginManager = Bukkit.getPluginManager();
 
-            private static Class<?> particleOptionsClass; //Some reason it's not mapping correctly :D
-            private static Method getTypeMethod;
-            private static final Class<?> craftParticleClass = Class.forName("org.bukkit.craftbukkit.CraftParticle");
-            private static Method minecraftToBukkitMethod;
-
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
             }
 
-            private void runMain(Runnable task) {
-                Bukkit.getScheduler().runTask(plugin, task);
-            }
 
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -395,7 +390,7 @@ public interface SharedBehaviorAdapter<
                 }
             }
 
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings({"unchecked", "ExtractMethodRecommender"})
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (inactive(ctx)) {
@@ -450,45 +445,12 @@ public interface SharedBehaviorAdapter<
                     particleSendEvent.setYOffset(packet.getYDist());
                     particleSendEvent.setZOffset(packet.getZDist());
 
-                    final Object particle = packet.getParticle();
-
-                    if (particleOptionsClass == null) {
-                        particleOptionsClass = particle.getClass();
-                        getTypeMethod = particleOptionsClass.getDeclaredMethod("getType");
-                    }
-
-                    Object type;
-
-                    try {
-                        type = getTypeMethod.invoke(particle);
-                    } catch (Exception e) {
-                        super.write(ctx, msg, promise);
-                        plugin.getLogger().log(Level.WARNING, "Failed to invoke type method for particle");
-                        return;
-                    }
-
-                    if (minecraftToBukkitMethod == null) {
-                        for (Method m : craftParticleClass.getMethods()) {
-                            if (m.getName().contains("minecraftToBukkit"))
-                                minecraftToBukkitMethod = m;
-                        }
-
-                        if (minecraftToBukkitMethod == null) {
-                            super.write(ctx, msg, promise);
-                            Bukkit.getLogger().log(Level.WARNING, "Failed to get minecraft to bukkit method");
-                            return;
-                        }
-                    }
-
-                    Object bukkitParticle = minecraftToBukkitMethod.invoke(craftParticleClass, type);
-
-                    particleSendEvent.setParticle((Particle) bukkitParticle);
+                    particleSendEvent.setParticle(packet.getParticle().getType());
 
                     pluginManager.callEvent(particleSendEvent);
 
                     if(particleSendEvent.isCancelled())
                         return;
-
                 }
 
                 try {

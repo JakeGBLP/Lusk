@@ -9,7 +9,10 @@ import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AttributePacket;
+import it.jakegblp.lusk.nms.core.world.entity.AttributeSnapshot;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +21,7 @@ import org.skriptlang.skript.lang.entry.EntryValidator;
 import org.skriptlang.skript.lang.entry.util.ExpressionEntryData;
 
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("ALL")
 public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
@@ -69,7 +73,9 @@ public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
 
         if (attribute == null || value == null || id == null) return new AttributePacket[0];
 
-        return new AttributePacket[]{new AttributePacket(id.intValue(), attribute, value.doubleValue())};
+        final double base = value.doubleValue();
+
+        return new AttributePacket[]{new AttributePacket(id.intValue(), List.of(new AttributeSnapshot(attribute, base, List.of(new AttributeModifier(UUID.randomUUID(), "poa", base, AttributeModifier.Operation.ADD_NUMBER)))))};
     }
 
     @Override

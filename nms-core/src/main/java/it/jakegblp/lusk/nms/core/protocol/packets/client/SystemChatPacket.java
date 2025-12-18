@@ -10,7 +10,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SystemChatPacket implements ClientboundPacket{
+public class SystemChatPacket implements ClientboundPacket, Cloneable{
 
     Component component;
     boolean overlay;
@@ -18,5 +18,16 @@ public class SystemChatPacket implements ClientboundPacket{
     @Override
     public Object asNMS() {
         return NMS.toNMSSystemChatPacket(this);
+    }
+
+    @Override
+    public SystemChatPacket clone() {
+        try {
+            SystemChatPacket clone = (SystemChatPacket) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
