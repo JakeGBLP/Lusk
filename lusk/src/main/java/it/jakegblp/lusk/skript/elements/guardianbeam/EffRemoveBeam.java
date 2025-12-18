@@ -12,13 +12,13 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Remove Guardian Beam")
 @Description("Remove a client side guardian beam")
-@Examples({""})
+@Examples({"remove guardian beam with id \"test\""})
 @Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
 @Since("1.0.0")
 public class EffRemoveBeam extends Effect {
 
     static {
-        Skript.registerEffect(EffRemoveBeam.class, "remove guardian beam [with] [id] %strings%");
+        Skript.registerEffect(EffRemoveBeam.class, "remove [guardian] beam [with] [id] %strings%");
     }
 
     private Expression<String> idExpression;

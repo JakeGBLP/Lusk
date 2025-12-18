@@ -1,16 +1,26 @@
 package it.jakegblp.lusk.skript.elements.guardianbeam;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.guardian.GuardianBeam;
-import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
+
+@Name("All Guardian Beams")
+@Description("Returns all active guardian beams")
+@Examples({"""
+        send all guardian beams to player
+        
+        remove guardian beam with id (all guardian beams)
+        """})
+@Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
+@Since("1.0.0")
 public class ExprAllBeams extends SimpleExpression<String> {
 
     static {

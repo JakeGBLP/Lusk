@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Remove player to Guardian Beam")
 @Description("Remove a player to a client side guardian beam")
-@Examples({""})
+@Examples({"remove player from guardian beam with id \"test\""})
 @Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
 @Since("1.0.0")
 public class EffRemovePlayerFromBeam extends Effect {
 
     static {
-        Skript.registerEffect(EffRemovePlayerFromBeam.class, "remove player['s] %player% from [guardian] beam %string%");
+        Skript.registerEffect(EffRemovePlayerFromBeam.class, "remove [player[s]] %players% from [guardian] beam [with] [id] %string%");
     }
 
     private Expression<Player> playerExpression;

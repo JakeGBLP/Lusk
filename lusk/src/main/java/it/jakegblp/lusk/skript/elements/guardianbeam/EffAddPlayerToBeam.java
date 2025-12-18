@@ -13,13 +13,16 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Add player to Guardian Beam")
 @Description("Add a player to a client side guardian beam")
-@Examples({""})
+@Examples({"""
+        on join:
+            add player to guardian beam with id "test"
+        """})
 @Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
 @Since("1.0.0")
 public class EffAddPlayerToBeam extends Effect {
 
     static {
-        Skript.registerEffect(EffAddPlayerToBeam.class, "add player['s] %player% to [guardian] beam %string%");
+        Skript.registerEffect(EffAddPlayerToBeam.class, "add player['s] %player% to [guardian] beam [with] [id] %string%");
     }
 
     private Expression<Player> playerExpression;

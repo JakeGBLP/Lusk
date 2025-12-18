@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.skript.elements.guardianbeam;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -16,6 +17,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Level;
 
+@Name("Persistentcy of a beam")
+@Description("Returns a boolean if a beam is persistent to players")
+@Examples({"persistentcy of guardian beam with id \"test\""})
+@Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
+@Since("1.0.0")
 public class ExprBeamPersistent extends SimpleExpression<Boolean> {
 
     static {

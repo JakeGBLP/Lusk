@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.skript.elements.guardianbeam;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -16,7 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.logging.Level;
-
+@Name("Viewers of guardian beam")
+@Description("Returns a list of all players (offline players) of a guardian beam")
+@Examples({"""
+        send viewers of guardian beam "test"
+        """})
+@Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
+@Since("1.0.0")
 public class ExprViewersOfBeam extends SimpleExpression<OfflinePlayer> {
 
     static {

@@ -15,7 +15,11 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Create Guardian Beam")
 @Description("Creates a new client sided guardian beam\nThese do not persist after reboots\nIf a player leaves and rejoin they WILL continue to see the beam if you use the persistent option.")
-@Examples({""})
+@Examples({"""
+        create a guardian beam from (location of player) to (location of target block) for all players with id "test"
+        
+        create a guardian beam from (location of player) to (location of target block) for all players with id "test" persistently # (players will continue to see this beam until server reboot)
+        """})
 @Keywords({"packets", "packet", "protocol", "dispatch", "sync", "async", "guardian", "beam"})
 @Since("1.0.0")
 public class EffCreateBeam extends Effect {
