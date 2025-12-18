@@ -29,6 +29,7 @@ public class MetadataKey<E extends Entity, T> implements MetadataKeyReference<E,
         this(id, entityClass, new EntitySerializerKey<>(valueClass, serializerType));
     }
 
+
     @Override
     public @Range(from = 0, to = 255) int id() {
         return id;

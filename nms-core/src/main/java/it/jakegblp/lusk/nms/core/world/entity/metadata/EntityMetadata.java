@@ -2,22 +2,35 @@ package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+import lombok.EqualsAndHashCode;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * See: <a href="https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Entity">Minecraft Wiki – Entity Metadata</a>
  */
-public record EntityMetadata(
-        List<MetadataItem<? extends Entity, ?>> items
-) implements EntityMetadataView, Cloneable {
+@EqualsAndHashCode
+public class EntityMetadata implements EntityMetadataView {
+    // todo: cloning
+    private final List<MetadataItem<? extends Entity, ?>> items;
+
+    public EntityMetadata(Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata) {
+        this();
+        // temporary solution
+        metadata.forEach((metadataKeyReference, o) ->
+                set((MetadataKeyReference<Entity, Object>)metadataKeyReference, o)
+        );
+    }
 
     public EntityMetadata() {
-        this(new ArrayList<>());
+        this(List.of());
+    }
+
+    protected EntityMetadata(List<MetadataItem<? extends Entity, ?>>  items) {
+        this.items = new ArrayList<>(items);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -25,6 +38,7 @@ public record EntityMetadata(
             @NotNull MetadataKeyReference<E, T> key,
             Object value
     ) {
+        System.out.println("'setUnsafe' with key: " + key + " and value: " + value);
         if (key instanceof MetadataBitFlagKey bitFlagKey)
             return setBitFlag(bitFlagKey, value);
         if (key.canBeSetTo(value))
@@ -43,6 +57,7 @@ public record EntityMetadata(
             @NotNull MetadataBitFlagKey<E, B, F, T> key,
             T value
     ) {
+        System.out.println("'setBitFlag' with key: " + key + " and value: " + value);
         var parentKey = key.getParentKey();
         F byteFlag = null;
         if (has(parentKey)) {
@@ -61,6 +76,7 @@ public record EntityMetadata(
             @NotNull MetadataKeyReference<E, T> key,
             T value
     ) {
+        System.out.println("'set' with key reference: " + key + " and value: " + value);
         assert key.canBeSetTo(value);
         if (key instanceof MetadataBitFlagKey e)
             return setBitFlag(e, value);
@@ -72,6 +88,7 @@ public record EntityMetadata(
             @Range(from = 0, to = 255) int id,
             @NotNull MetadataItem<E, T> item
     ) {
+        System.out.println("'setInternal' with id: " + id + " and item: " + item);
         while (items.size() <= id)
             items.add(null);
         items.set(id, item);
@@ -100,7 +117,8 @@ public record EntityMetadata(
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone(); // todo: finish
+    public List<MetadataItem<? extends Entity, ?>> items() {
+        return items;
     }
+
 }

@@ -16,7 +16,9 @@ import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
+import it.jakegblp.lusk.nms.core.util.Displayable;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
+import it.jakegblp.lusk.nms.core.world.entity.guardian.GuardianBeam;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
@@ -31,6 +33,8 @@ import it.jakegblp.lusk.skript.api.classinfo.SimpleClassInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
+import org.bukkit.Particle;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.EquipmentSlot;
@@ -60,37 +64,37 @@ public class Types {
                 .description("A packet bound to the client. Sent from the server to the client.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(BundlePacket.class, "bundlepacket")
-                .toString(bundlePacket -> "Bundle Packet with Packets: "+ Classes.toString(bundlePacket.getPackets().toArray()))
+                .toString(bundlePacket -> "Bundle Packet with Packets: " + Classes.toString(bundlePacket.getPackets().toArray()))
                 .user("bundle ?packets?")
                 .name("Bundle Packet")
                 .description("A packet that wraps around other packets to send them all at once.") // add example
                 .changer(SimplePluralChanger.builder(BundlePacket.class, Packet.class, Packet[].class)
-                                .add(BundlePacket::add)
-                                .remove(BundlePacket::remove)
-                                .set(BundlePacket::set)
-                                .delete(BundlePacket::clear)
-                                .build())
+                        .add(BundlePacket::add)
+                        .remove(BundlePacket::remove)
+                        .set(BundlePacket::set)
+                        .delete(BundlePacket::clear)
+                        .build())
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(ClientBundlePacket.class, "clientbundlepacket")
-                .toString(clientBundlePacket -> "Client Bundle Packet with Packets: "+ Classes.toString(clientBundlePacket.getPackets().toArray()))
+                .toString(clientBundlePacket -> "Client Bundle Packet with Packets: " + Classes.toString(clientBundlePacket.getPackets().toArray()))
                 .user("client ?bundle ?packets?")
                 .name("Client Bundle Packet")
                 .description("A packet that wraps around other packets to send them to the client all at once.") // add example
                 .changer(SimplePluralChanger.builder(ClientBundlePacket.class, ClientboundPacket.class, ClientboundPacket[].class)
-                                .add(ClientBundlePacket::add)
-                                .remove(ClientBundlePacket::remove)
-                                .set(ClientBundlePacket::set)
-                                .delete(ClientBundlePacket::clear)
-                                .build())
+                        .add(ClientBundlePacket::add)
+                        .remove(ClientBundlePacket::remove)
+                        .set(ClientBundlePacket::set)
+                        .delete(ClientBundlePacket::clear)
+                        .build())
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(BlockDestructionPacket.class, "blockdestructionpacket")
-                .toString(blockDestructionPacket -> "Block Destruction Packet with id "+blockDestructionPacket.getId()+", stage "+blockDestructionPacket.getBlockDestructionStage()+" and location "+blockDestructionPacket.getPosition())
+                .toString(blockDestructionPacket -> "Block Destruction Packet with id " + blockDestructionPacket.getId() + ", stage " + blockDestructionPacket.getBlockDestructionStage() + " and location " + blockDestructionPacket.getPosition())
                 .user("block ?destruction ?packets?")
                 .name("Block Destruction Packet")
                 .description("A packet that dictates the destruction stage shown to the client.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(SetEquipmentPacket.class, "equipmentpacket")
-                .toString(equipmentPacket -> "Equipment Set Packet with id "+equipmentPacket.getId()+" and "+equipmentPacket.getEquipment().size()+ " equipments")
+                .toString(equipmentPacket -> "Equipment Set Packet with id " + equipmentPacket.getId() + " and " + equipmentPacket.getEquipment().size() + " equipments")
                 .user("(client ?)?(equipment ?(set ?)?|set ?equipment ?)packets?")
                 .name("Equipment Set Packet")
                 .description("A packet that dictates what the client sees as the equipment of an entity.") // add example
@@ -105,7 +109,7 @@ public class Types {
                 .description("A packet bound to the server. Sent from the client to the server.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(AddEntityPacket.class, "entityspawnpacket")
-                .toString(entitySpawnPacket -> "Entity Spawn Packet of " + EntityData.toString(entitySpawnPacket.getEntityType().getEntityClass()) + " with id "+entitySpawnPacket.getId())
+                .toString(entitySpawnPacket -> "Entity Spawn Packet of " + EntityData.toString(entitySpawnPacket.getEntityType().getEntityClass()) + " with id " + entitySpawnPacket.getId())
                 .user("entity ?spawn? packets?")
                 .name("Entity Spawn Packet")
                 .description("An entity spawn packet.") // add example
@@ -118,25 +122,25 @@ public class Types {
                 .since("2.0.0")
                 .changer(REMOVE_ENTITIES_PACKET_CHANGER));
         Classes.registerClass(new SimpleClassInfo<>(PlayerPositionPacket.class, "playerpositionpacket")
-                .toString(playerPositionPacket -> "Player Position Packet with teleport id "+ playerPositionPacket.getTeleportId())
+                .toString(playerPositionPacket -> "Player Position Packet with teleport id " + playerPositionPacket.getTeleportId())
                 .user("player ?position? packets?")
                 .name("Player Position Packet")
                 .description("A player position packet.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(PlayerRotationPacket.class, "playerrotationpacket")
-                .toString(playerRotationPacket -> "Player Rotation Packet with yaw "+ playerRotationPacket.getYaw() + " and pitch " + playerRotationPacket.getPitch())
+                .toString(playerRotationPacket -> "Player Rotation Packet with yaw " + playerRotationPacket.getYaw() + " and pitch " + playerRotationPacket.getPitch())
                 .user("player ?rotation? packets?")
                 .name("Player Rotation Packet")
                 .description("A player rotation packet.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(EntityMetadataPacket.class, "entitymetadatapacket")
-                .toString(entityMetadataPacket -> "Entity Metadata Packet with entity id "+ entityMetadataPacket.getId() + " and " + entityMetadataPacket.getEntityMetadata().size() + " entries")
+                .toString(entityMetadataPacket -> "Entity Metadata Packet with entity id " + entityMetadataPacket.getId() + " and " + entityMetadataPacket.getEntityMetadata().size() + " entries")
                 .user("entity ?metadata? packets?")
                 .name("Entity Metadata Packet")
                 .description("An entity metadata packet.") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(PlayerInfoUpdatePacket.class, "playerinfopacket")
-                .toString(packet -> "Player Info Packet with "+ packet.getPlayerInfos().size() + " entries and " + packet.getActions().size() + " actions")
+                .toString(packet -> "Player Info Packet with " + packet.getPlayerInfos().size() + " entries and " + packet.getActions().size() + " actions")
                 .user("entity ?metadata? packets?")
                 .name("Entity Metadata Packet")
                 .description("An entity metadata packet.") // add example
@@ -171,6 +175,18 @@ public class Types {
                 .name("Player - Texture Payload")
                 .description("Contains all the texture data of a player.") // add example
                 .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(Displayable.class, "displayable")
+                .toString(displayable -> "displayable object")
+                .user("displayables?")
+                .name("Player - Displayable Object")
+                .description("An object that can be displayed and removed for players.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(GuardianBeam.class, "guardianbeam")
+                .toString(guardianBeam -> "guardian beam from " + Classes.toString(guardianBeam.getStart()) + " to " + Classes.toString(guardianBeam.getEnd()))
+                .user("guardian ?beams?")
+                .name("Guardian - Beam")
+                .description("A guardian beam, can be displayed and removed for players.\nNote: the developer is responsible for specifying to whom a guardian beam is displayed.") // add example
+                .since("2.0.0"));
 
         // Async
         Classes.registerClass(new SimpleClassInfo<>(CompletablePlayerProfile.class, "completableplayerprofile")
@@ -198,9 +214,9 @@ public class Types {
                     .user("block ?states?")
                     .name("BlockState")
                     .description("""
-                    Represents a captured state of a block, which will not change automatically.
-                    Unlike Block, which only one object can exist per coordinate, BlockState can exist multiple times for any given Block. Note that another plugin may change the state of the block and you will not know, or they may change the block to another type entirely, causing your BlockState to become invalid.
-                    """)
+                            Represents a captured state of a block, which will not change automatically.
+                            Unlike Block, which only one object can exist per coordinate, BlockState can exist multiple times for any given Block. Note that another plugin may change the state of the block and you will not know, or they may change the block to another type entirely, causing your BlockState to become invalid.
+                            """)
                     .since("1.3")
                     .parser(new Parser<>() {
                         @Override
@@ -219,6 +235,29 @@ public class Types {
                         }
                     }));
         }
+        if (Classes.getExactClassInfo(Particle.class) == null) {
+            EnumClassInfoWrapper<Particle> PARTICLE_ENUM = new EnumClassInfoWrapper<>(Particle.class);
+            Classes.registerClass(PARTICLE_ENUM.getClassInfo("particle")
+                    .user("particles?")
+                    .name("Particle")
+                    .description("All the particles.") // add example
+                    .since("2.0.0"));
+        }
+        if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
+                    .toString(AttributeModifier::toString)
+                    .user("attribute ?modifiers?")
+                    .name("Attribute - Modifier")
+                    .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
+        }
+        if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
+                    .toString(AttributeModifier::toString)
+                    .user("attribute ?modifiers?")
+                    .name("Attribute - Modifier")
+                    .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
+        }
+
 
         // Paper
         if (Classes.getExactClassInfo(PlayerProfile.class) == null) {
@@ -268,3 +307,4 @@ public class Types {
         Converters.registerConverter(Packet.class, ClientboundPacket.class, from -> from instanceof ClientboundPacket clientboundPacket ? clientboundPacket : null);
     }
 }
+

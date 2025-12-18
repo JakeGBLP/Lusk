@@ -5,18 +5,16 @@ import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.parser.ParserInstance;
-import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.skript.api.section.SectionParseResult;
 import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.event.Event;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,35 +30,15 @@ import java.util.function.Supplier;
 public class AddonUtils {
     public static SkriptAdapter skriptAdapter;
 
-    public static NamedTextColor toNamedTextColor(Color color) {
-        DyeColor dyeColor = color.asDyeColor();
-        if (dyeColor == null) return null;
-        return switch (dyeColor) {
-            case BLACK -> NamedTextColor.BLACK;
-            case GRAY -> NamedTextColor.DARK_GRAY;
-            case LIGHT_GRAY -> NamedTextColor.GRAY;
-            case WHITE -> NamedTextColor.WHITE;
-            case ORANGE -> NamedTextColor.GOLD;
-            case MAGENTA -> NamedTextColor.LIGHT_PURPLE;
-            case LIGHT_BLUE -> NamedTextColor.AQUA;
-            case YELLOW -> NamedTextColor.YELLOW;
-            case LIME -> NamedTextColor.GREEN;
-            case PINK -> NamedTextColor.RED;
-            case CYAN -> NamedTextColor.DARK_AQUA;
-            case PURPLE -> NamedTextColor.DARK_PURPLE;
-            case BLUE -> NamedTextColor.DARK_BLUE;
-            case BROWN -> NamedTextColor.BLUE;
-            case GREEN -> NamedTextColor.DARK_GREEN;
-            case RED -> NamedTextColor.DARK_RED;
-        };
-    }
-
-    public static @Nullable Component handleComponent(@Nullable Expression<?> expression, Event event) {
+    @Nullable
+    public static Vector getVectorFromExpression(@Nullable Expression<?> expression, Event event) {
         if (expression == null) return null;
         Object object = expression.getSingle(event);
-        if (object instanceof Component component) return component;
-        else if (object instanceof String string) return Component.text(string);
-        else return null;
+        if (object instanceof Vector vector)
+            return vector;
+        else if (object instanceof Location location)
+            return location.toVector();
+        return null;
     }
 
     public static <T> T getSingleNullable(@Nullable Expression<T> expression, Event event) {
@@ -117,7 +95,7 @@ public class AddonUtils {
             Bukkit.getLogger().info("node parse loop: "+key);
             if (key != null) {
                 Bukkit.getLogger().info("key is not null");
-                Supplier<Expression<?>> supplier = () -> new SkriptParser(key).parseExpression(possibleReturnTypes);;
+                Supplier<Expression<?>> supplier = () -> new SkriptParser(key).parseExpression(possibleReturnTypes);
                 Bukkit.getLogger().info("PRE SECTION CONTEXT MODIFICATION FOR "+key);
                 Expression<?> expression = modifySectionContext(sectionContext, subNode instanceof SectionNode sectionNode ? sectionNode : null, List.of(), supplier);
                 Bukkit.getLogger().info("POST SECTION CONTEXT MODIFICATION FOR "+key);

@@ -7,11 +7,16 @@ import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class CommonUtils {
+
+    public static int randomId() {
+        return ThreadLocalRandom.current().nextInt(999999, Integer.MAX_VALUE);
+    }
 
     /**
      * @param compactUUID a uuid without dashes, must have a length of 32.

@@ -110,6 +110,10 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
         return new SimpleMethod(m);
     }
 
+    public @NotNull SimpleMethod getMethod(String name, Class<?>... params) {
+        return getMethod(name, false, false, params);
+    }
+
     public @NotNull SimpleField<T, ?> getField(String name) {
         return getField(name, false);
     }

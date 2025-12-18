@@ -457,6 +457,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface DisplayKeys {
+        // todo: skript way to go from and to serializable types, we want timespan for this, not integer
         MetadataKey<Display, Integer> INTERPOLATION_DELAY = register("INTERPOLATION_DELAY", "org.bukkit.entity.Display", Integer.class);
         MetadataKey<Display, Integer> INTERPOLATION_DURATION = register("INTERPOLATION_DURATION", "org.bukkit.entity.Display", Integer.class);
         MetadataKey<Display, Integer> TELEPORT_INTERPOLATION_DURATION = register("TELEPORT_INTERPOLATION_DURATION", "org.bukkit.entity.Display", Integer.class);

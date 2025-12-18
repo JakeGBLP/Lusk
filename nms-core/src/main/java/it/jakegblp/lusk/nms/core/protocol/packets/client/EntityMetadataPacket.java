@@ -1,14 +1,14 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.entity.Entity;
 
-import java.util.List;
+import java.util.Map;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
@@ -27,16 +27,16 @@ public final class EntityMetadataPacket implements ClientboundPacketWithId {
     public EntityMetadataPacket(
             int id,
             Class<? extends Entity> target,
-            List<MetadataItem<? extends Entity, ?>> items
+            Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata
     ) {
-        this(id, target, new EntityMetadata(items));
+        this(id, target, new EntityMetadata(metadata));
     }
 
     public EntityMetadataPacket(
             int id,
-            List<MetadataItem<? extends Entity, ?>> items
+            Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata
     ) {
-        this(id, Entity.class, items);
+        this(id, Entity.class, metadata);
     }
 
     public EntityMetadataPacket(

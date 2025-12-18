@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
 
@@ -90,12 +91,10 @@ public class EffSecSpawnFakeEntity extends OptionallySectionEffect {
                             loc.getZ(),
                             loc.getPitch(),
                             loc.getYaw(),
-                            0,
-                            0,
-                            0,
-                            0,
                             bukkitEntityType,
-                            0);
+                            0,
+                            new Vector(),
+                            loc.getYaw());
                     if (hasSection()) {
                         EntityMetadataPacket entityMetadataPacket = new EntityMetadataPacket(id, ExprSecEntityMetadata.getMetadata(event, bukkitEntityType.getEntityClass(), expressionMap));
                         NMSApi.sendBundledPackets(playersExpression.getAll(event), entitySpawnPacket, entityMetadataPacket);
