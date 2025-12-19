@@ -71,12 +71,8 @@ public final class CompletablePlayerProfile implements Cloneable, Asyncable, NMS
     }
 
     @Override
-    public CompletablePlayerProfile clone() {
-        try {
-            return (CompletablePlayerProfile) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError(e);
-        }
+    public CompletablePlayerProfile clone() throws CloneNotSupportedException {
+        return new CompletablePlayerProfile(playerProfile.clone(), shouldComplete, executionMode);
     }
 
     @Override

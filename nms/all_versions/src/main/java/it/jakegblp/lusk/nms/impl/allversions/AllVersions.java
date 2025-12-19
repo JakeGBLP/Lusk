@@ -17,9 +17,12 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
+import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
@@ -27,13 +30,16 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EntityType;
@@ -45,16 +51,20 @@ import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Team;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
-import org.bukkit.craftbukkit.CraftParticle;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -80,6 +90,9 @@ public class AllVersions implements
                 EntityType,
                 ServerGamePacketListenerImpl,
                 Connection,
+                Team.Visibility,
+                Team.CollisionRule,
+                DedicatedServer,
                 ClientboundBundlePacket,
                 ClientboundBlockDestructionPacket,
                 ClientboundAnimatePacket,
@@ -90,7 +103,10 @@ public class AllVersions implements
                 ClientboundPlayerInfoUpdatePacket.Action,
                 ClientboundSystemChatPacket,
                 ClientboundLevelParticlesPacket,
-                ClientboundUpdateAttributesPacket
+                ClientboundUpdateAttributesPacket,
+                ClientboundSetCameraPacket,
+                ClientboundSetPlayerTeamPacket,
+                ClientboundSetPlayerTeamPacket.Parameters
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -227,10 +243,12 @@ public class AllVersions implements
                 from.getZ(),
                 from.getXRot(),
                 from.getYRot(),
+                from.getYHeadRot(),
+                from.getX(),
+                from.getY(),
+                from.getZ(),
                 fromNMSEntityType(from.getType()),
-                from.getData(),
-                new Vector(from.getX(), from.getY(), from.getZ()),
-                from.getYHeadRot()
+                from.getData()
         );
     }
 
@@ -257,6 +275,39 @@ public class AllVersions implements
     @Override
     public Channel getChannel(Connection connection) {
         return connection.channel;
+    }
+
+    @Override
+    public Team.Visibility toNMSTeamVisibility(org.bukkit.scoreboard.Team.OptionStatus optionStatus) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        friendlyByteBuf.writeByte(optionStatus.ordinal());
+        return Team.Visibility.STREAM_CODEC.decode(friendlyByteBuf);
+    }
+
+    @Override
+    public Team.CollisionRule toNMSTeamCollisionRule(org.bukkit.scoreboard.Team.OptionStatus optionStatus) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        friendlyByteBuf.writeByte(optionStatus.ordinal());
+        return Team.CollisionRule.STREAM_CODEC.decode(friendlyByteBuf);
+    }
+
+    @Override
+    public org.bukkit.scoreboard.Team.OptionStatus fromNMSTeamVisibility(Team.Visibility visibility) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        Team.Visibility.STREAM_CODEC.encode(friendlyByteBuf, visibility);
+        return org.bukkit.scoreboard.Team.OptionStatus.values()[friendlyByteBuf.readInt()];
+    }
+
+    @Override
+    public org.bukkit.scoreboard.Team.OptionStatus fromNMSTeamCollisionRule(Team.CollisionRule collisionRule) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        Team.CollisionRule.STREAM_CODEC.encode(friendlyByteBuf, collisionRule);
+        return org.bukkit.scoreboard.Team.OptionStatus.values()[friendlyByteBuf.readInt()];
+    }
+
+    @Override
+    public DedicatedServer getDedicatedServer() {
+        return ((CraftServer)Bukkit.getServer()).getServer();
     }
 
     @Override
@@ -401,18 +452,44 @@ public class AllVersions implements
 
 
     @Override
-    public ClientboundSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from) {
-        return new ClientboundSystemChatPacket(from.getComponent(), from.isOverlay());
+    public ClientboundSetPlayerTeamPacket toNMSSetPlayerTeamPacket(TeamPacket from) {
+        var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
+        registryFriendlyByteBuf.writeUtf(from.getName());
+        registryFriendlyByteBuf.writeByte(from.getMethod());
+        if (from instanceof TeamPacket.ChangeTeamInfo changeTeamInfo)
+            toNMSTeamParameters(changeTeamInfo.getParameters()).write(registryFriendlyByteBuf);
+        if (from instanceof TeamPacket.WithMembers withMembers)
+            registryFriendlyByteBuf.writeCollection(withMembers.getMembers(), FriendlyByteBuf::writeUtf);
+        return ClientboundSetPlayerTeamPacket.STREAM_CODEC.decode(registryFriendlyByteBuf);
     }
 
     @Override
-    public SystemChatPacket fromNMSSystemChatPacket(ClientboundSystemChatPacket from) {
-        return new SystemChatPacket(asComponent(from.content()), from.overlay());
+    public TeamPacket fromNMSSetPlayerTeamPacket(ClientboundSetPlayerTeamPacket from) {
+        ClientboundSetPlayerTeamPacket.Action
+                teamAction = from.getTeamAction(),
+                playerAction = from.getPlayerAction();
+        int method;
+        if (teamAction != null) {
+            method = switch (teamAction) {
+                case ADD -> 0;
+                case REMOVE -> 1;
+            };
+        } else if (playerAction != null) {
+            method = switch (playerAction) {
+                case ADD -> 3;
+                case REMOVE -> 4;
+            };
+        } else
+            method = 0;
+        return TeamPacket.fromMethod(method, from.getName(), fromNMSTeamParameters(from.getParameters().orElse(null)), new HashSet<>(from.getPlayers()));
     }
 
     @Override
     public Class<ClientboundSystemChatPacket> getNMSSystemChatPacketClass() {
         return ClientboundSystemChatPacket.class;
+    }
+    public Class<ClientboundSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass() {
+        return ClientboundSetPlayerTeamPacket.class;
     }
 
 
@@ -423,7 +500,8 @@ public class AllVersions implements
 
         for (AttributeSnapshot attribute : from.getAttributes()) {
             final Holder<Attribute> holder = CraftAttribute.bukkitToMinecraftHolder(attribute.getAttribute()); //todo test on 1.19.4
-            final AttributeInstance attributeInstance = new AttributeInstance(holder, a -> {});
+            final AttributeInstance attributeInstance = new AttributeInstance(holder, a -> {
+            });
 
             Collection<net.minecraft.world.entity.ai.attributes.AttributeModifier> modifiers =
                     attribute.getModifiers()
@@ -436,8 +514,18 @@ public class AllVersions implements
         }
 
 
-
         return new ClientboundUpdateAttributesPacket(from.getId(), instances);
+    }
+    public ClientboundSetPlayerTeamPacket.Parameters toNMSTeamParameters(TeamParameters from) {
+        var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getDisplayName()));
+        registryFriendlyByteBuf.writeByte(from.getOptions());
+        Team.Visibility.STREAM_CODEC.encode(registryFriendlyByteBuf, toNMSTeamVisibility(from.getNametagVisibility()));
+        Team.CollisionRule.STREAM_CODEC.encode(registryFriendlyByteBuf, toNMSTeamCollisionRule(from.getCollisionRule()));
+        registryFriendlyByteBuf.writeVarInt(ChatFormatting.getByName(NamedTextColor.NAMES.key(from.getColor())).getId());
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getPlayerPrefix()));
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getPlayerSuffix()));
+        return new ClientboundSetPlayerTeamPacket.Parameters(registryFriendlyByteBuf);
     }
 
 
@@ -454,16 +542,35 @@ public class AllVersions implements
         }
         return new AttributePacket(from.getEntityId(), list);
     }
+    @Contract("null -> null")
+    public TeamParameters fromNMSTeamParameters(@Nullable ClientboundSetPlayerTeamPacket.Parameters from) {
+        return from == null ? null : new TeamParameters(
+                asComponent(from.getDisplayName()),
+                asComponent(from.getPlayerPrefix()),
+                asComponent(from.getPlayerSuffix()),
+                fromNMSTeamVisibility(from.getNametagVisibility()),
+                fromNMSTeamCollisionRule(from.getCollisionRule()),
+                NamedTextColor.NAMES.value(from.getColor().getName()),
+                from.getOptions());
+    }
 
     @Override
     public Class<ClientboundUpdateAttributesPacket> getNMSAttributePacketClass() {
         return ClientboundUpdateAttributesPacket.class;
+    }
+    public Class<ClientboundSetPlayerTeamPacket.Parameters> getNMSTeamParametersClass() {
+        return ClientboundSetPlayerTeamPacket.Parameters.class;
     }
 
 
     @Override
     public ClientboundLevelParticlesPacket toNMSLevelParticle(LevelParticlePacket from) {
         return new ClientboundLevelParticlesPacket((ParticleOptions) from.getParticle(), from.isOverrideLimiter(), from.isAlwaysShow(), from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount());
+    }
+    public ClientboundSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        friendlyByteBuf.writeVarInt(from.getCameraId());
+        return ClientboundSetCameraPacket.STREAM_CODEC.decode(friendlyByteBuf);
     }
 
     @Override
@@ -473,12 +580,19 @@ public class AllVersions implements
 
         return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), new it.jakegblp.lusk.nms.core.world.level.ParticleOptions(bukkitParticle));
     }
+    public SetCameraPacket fromNMSSetCameraPacket(ClientboundSetCameraPacket from) {
+        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        ClientboundSetCameraPacket.STREAM_CODEC.encode(friendlyByteBuf, from);
+        return new SetCameraPacket(friendlyByteBuf.readInt());
+    }
 
     @Override
     public Class<ClientboundLevelParticlesPacket> getNMSLevelParticleClass() {
         return ClientboundLevelParticlesPacket.class;
     }
-
+    public Class<ClientboundSetCameraPacket> getNMSSetCameraPacketClass() {
+        return ClientboundSetCameraPacket.class;
+    }
 
     @Override
     public EntityType<?> toNMSEntityType(org.bukkit.entity.EntityType from) {

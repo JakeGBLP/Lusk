@@ -169,7 +169,8 @@ public abstract class AbstractNMS<
         else if (isNMSSystemChatPacket(object)) return fromNMSSystemChatPacket(object);
         else if (isNMSLevelParticle(object)) return fromNMSLevelParticle(object);
         else if (isNMSAttributePacket(object)) return fromNMSAttributePacket(object);
-
+        else if (isNMSSetPlayerTeamPacket(object)) return fromNMSSetPlayerTeamPacket(object);
+        else if (isNMSSetCameraPacket(object)) return fromNMSSetCameraPacket(object);
         return null;
     }
 
@@ -178,6 +179,9 @@ public abstract class AbstractNMS<
         else if (isNMSPlayerProfile(object)) return fromNMSPlayerProfile(object);
         else if (isNMSGameMode(object)) return fromNMSGameMode(object);
         else if (isNMSComponent(object)) return asComponent(object);
+        else if (isNMSTeamParameters(object)) return fromNMSTeamParameters(object);
+        else if (isNMSNamespacedKey(object)) return asNamespacedKey(object);
+        else if (isNMSPlayerInfoUpdatePacketAction(object)) return fromNMSPlayerInfoUpdatePacketAction(object);
         else if (isNMSPacket(object)) return fromNMSPacket(object);
         return null;
     }

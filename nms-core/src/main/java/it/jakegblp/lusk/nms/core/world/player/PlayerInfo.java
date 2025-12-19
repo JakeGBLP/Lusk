@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Getter
-public class PlayerInfo implements AsyncablesWrapper {
+public class PlayerInfo implements AsyncablesWrapper, Cloneable {
     @Setter
     protected @NotNull UUID UUID;
     protected CompletablePlayerProfile playerProfile;
@@ -221,5 +221,14 @@ public class PlayerInfo implements AsyncablesWrapper {
     @Override
     public @NotNull List<? extends Asyncable> getAsyncables() {
         return List.of(playerProfile);
+    }
+
+    @Override
+    public PlayerInfo clone() throws CloneNotSupportedException {
+        PlayerInfo clone = (PlayerInfo) super.clone();
+        clone.actions = new HashSet<>(actions);
+        clone.chatSession = chatSession.clone();
+        clone.playerProfile = playerProfile.clone();
+        return clone;
     }
 }

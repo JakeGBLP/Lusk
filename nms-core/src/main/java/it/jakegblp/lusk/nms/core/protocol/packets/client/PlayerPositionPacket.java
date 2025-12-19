@@ -94,4 +94,13 @@ public class PlayerPositionPacket implements ClientboundPacket {
     public Object asNMS() {
         return NMS.asNMSPlayerPositionPacket(this);
     }
+
+    @Override
+    public PlayerPositionPacket clone() throws CloneNotSupportedException {
+        var clone = (PlayerPositionPacket) super.clone();
+        clone.setPosition(position.clone());
+        clone.setVelocity(velocity.clone());
+        clone.setRelativeFlags(Set.copyOf(relativeFlags));
+        return clone;
+    }
 }

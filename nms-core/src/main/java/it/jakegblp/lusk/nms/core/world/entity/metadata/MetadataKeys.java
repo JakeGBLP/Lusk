@@ -6,6 +6,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
+import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
@@ -532,6 +533,7 @@ public final class MetadataKeys {
     public interface PlayerKeys {
         MetadataKey<Player, Float> ADDITIONAL_HEARTS = register("ADDITIONAL_HEARTS", Player.class, Float.class);
         MetadataKey<Player, Integer> SCORE = register("SCORE", Player.class, Integer.class);
+        //@Availability(addedIn = "", removedIn = "")
         MetadataKey<Player, PlayerFlags> PLAYER_FLAGS = register("PLAYER_FLAGS", Player.class, PlayerFlags.class);
         MetadataKey<Player, Boolean> CAPE = register(PLAYER_FLAGS, PlayerFlag.CAPE);
         MetadataKey<Player, Boolean> JACKET = register(PLAYER_FLAGS, PlayerFlag.JACKET);

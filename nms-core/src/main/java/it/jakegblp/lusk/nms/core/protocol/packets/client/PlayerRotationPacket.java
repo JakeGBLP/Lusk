@@ -52,4 +52,8 @@ public class PlayerRotationPacket implements ClientboundPacket, UnsupportedPacke
         return () -> new UnsupportedOperationException("The 'Player Rotation' packet requires 1.21.2!");
     }
 
+    @Override
+    public PlayerRotationPacket clone() throws CloneNotSupportedException {
+        return (PlayerRotationPacket) super.clone();
+    }
 }

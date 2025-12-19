@@ -6,13 +6,14 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import lombok.SneakyThrows;
+import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
@@ -20,12 +21,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Method;
 import java.nio.channels.ClosedChannelException;
-import java.util.logging.Level;
 
 public interface SharedBehaviorAdapter<
         NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,
@@ -43,6 +43,9 @@ public interface SharedBehaviorAdapter<
         NMSEntityType,
         NMSServerGamePacketListenerImpl,
         NMSConnection,
+        NMSTeamVisibility,
+        NMSTeamCollisionRule,
+        NMSDedicatedServer,
         NMSClientBundlePacket,
         NMSBlockDestructionPacket,
         NMSEntityAnimationPacket,
@@ -53,11 +56,11 @@ public interface SharedBehaviorAdapter<
         NMSPlayerInfoUpdatePacketAction,
         NMSSystemChatPacket,
         NMSLevelParticlePacket,
-        NMSAttributePacket
+        NMSAttributePacket,
+        NMSSetCameraPacket,
+        NMSSetPlayerTeamPacket,
+        NMSTeamParameters
         > {
-
-
-
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
 
@@ -77,13 +80,12 @@ public interface SharedBehaviorAdapter<
         return EquipmentSlot.valueOf(equipmentSlot.name().replace("HAND", "_HAND"));
     }
 
-    @SuppressWarnings("unchecked")
     default NMSItemStack asNMSItemStack(ItemStack itemStack) {
-        return (NMSItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
+        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
     }
 
     default ItemStack asItemStack(NMSItemStack itemStack) {
-        return (ItemStack) new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
+        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
     }
 
     default Class<? extends ItemStack> getCraftItemStackClass() {
@@ -215,42 +217,59 @@ public interface SharedBehaviorAdapter<
 
     //Please leave spaces so Poa can read this
 
+    TeamPacket fromNMSSetPlayerTeamPacket(NMSSetPlayerTeamPacket from);
 
     NMSSystemChatPacket toNMSSystemChatPacket(SystemChatPacket from);
 
     SystemChatPacket fromNMSSystemChatPacket(NMSSystemChatPacket from);
+    Class<NMSSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass();
 
     Class<NMSSystemChatPacket> getNMSSystemChatPacketClass();
 
     default boolean isNMSSystemChatPacket(Object object) {
         return getNMSSystemChatPacketClass().isInstance(object);
     }
+    default boolean isNMSSetPlayerTeamPacket(Object object) {
+        return getNMSSetPlayerTeamPacketClass().isInstance(object);
+    }
 
     //
 
 
 
+    NMSTeamParameters toNMSTeamParameters(TeamParameters from);
 
 
     NMSAttributePacket toNMSAttributePacket(AttributePacket from);
 
     AttributePacket fromNMSAttributePacket(NMSAttributePacket from);
+    TeamParameters fromNMSTeamParameters(NMSTeamParameters from);
 
     Class<NMSAttributePacket> getNMSAttributePacketClass();
+    Class<NMSTeamParameters> getNMSTeamParametersClass();
 
     default boolean isNMSAttributePacket(Object object) {
         return getNMSAttributePacketClass().isInstance(object);
     }
+    default boolean isNMSTeamParameters(Object object) {
+        return getNMSTeamParametersClass().isInstance(object);
+    }
 
 
     NMSLevelParticlePacket toNMSLevelParticle(LevelParticlePacket from);
+    NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 
     LevelParticlePacket fromNMSLevelParticle(NMSLevelParticlePacket from);
+    SetCameraPacket fromNMSSetCameraPacket(NMSSetCameraPacket from);
 
     Class<NMSLevelParticlePacket> getNMSLevelParticleClass();
+    Class<NMSSetCameraPacket> getNMSSetCameraPacketClass();
 
-    default boolean isNMSLevelParticle(Object object) {
+    default boolean isNMSLevelParticle(Object object){
         return getNMSLevelParticleClass().isInstance(object);
+    }
+    default boolean isNMSSetCameraPacket(Object object) {
+        return getNMSSetCameraPacketClass().isInstance(object);
     }
 
 
@@ -327,6 +346,16 @@ public interface SharedBehaviorAdapter<
     NMSConnection getConnection(NMSServerGamePacketListenerImpl packetListener);
 
     Channel getChannel(NMSConnection connection);
+
+    NMSTeamVisibility toNMSTeamVisibility(Team.OptionStatus optionStatus);
+
+    NMSTeamCollisionRule toNMSTeamCollisionRule(Team.OptionStatus optionStatus);
+
+    Team.OptionStatus fromNMSTeamVisibility(NMSTeamVisibility teamVisibility);
+
+    Team.OptionStatus fromNMSTeamCollisionRule(NMSTeamCollisionRule teamCollisionRule);
+
+    NMSDedicatedServer getDedicatedServer();
 
     default void uninjectPlayer(Player player) {
         uninjectPlayer(asServerPlayer(player));
@@ -468,11 +497,6 @@ public interface SharedBehaviorAdapter<
             }
         });
     }
-
-
-
-
-
 
 
 }

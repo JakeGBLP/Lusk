@@ -68,4 +68,11 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
     public Object asNMS() {
         return NMS.toNMSRemoveEntitiesPacket(this);
     }
+
+    @Override
+    public RemoveEntitiesPacket clone() throws CloneNotSupportedException {
+        var clone = (RemoveEntitiesPacket) super.clone();
+        clone.set(this.entityIds);
+        return clone;
+    }
 }

@@ -11,8 +11,9 @@ import java.util.function.Function;
 public class NullabilityUtils {
 
     @SuppressWarnings("unchecked")
-    public static <T> T cloneIfNotNull(T obj) {
+    public static <T> T cloneIfNotNull(@Nullable T obj) {
         if (obj == null) return null;
+        else if (obj instanceof Boolean || obj instanceof String || obj instanceof Number || obj instanceof Character) return obj;
         else if (obj instanceof FlagByte<?,?,?> flagByte) return (T) flagByte.clone();
         else if (obj instanceof BlockVector blockVector) return (T) blockVector.clone();
         Exception cause = null;

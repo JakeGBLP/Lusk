@@ -2,7 +2,7 @@ package it.jakegblp.lusk.common;
 
 import org.jetbrains.annotations.NotNull;
 
-public record Version(int major, int minor, int patch) implements Comparable<Version> {
+public record Version(int major, int minor, int patch) implements Comparable<Version>, Cloneable {
     public Version {
         if (major < 0 || minor < 0 || patch < 0)
             throw new IllegalArgumentException("Version numbers must be non-negative");
@@ -55,6 +55,11 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
     }
     public boolean isLowerOrEqual(Version other) {
         return compareTo(other) <= 0;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
