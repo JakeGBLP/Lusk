@@ -36,9 +36,9 @@ public class EffShowRemoveDisplayable extends Effect {
         for (Displayable displayable : displayableExpression.getArray(event)) {
             Player[] players = playerExpression.getArray(event);
             if (remove)
-                displayable.remove(players);
+                displayable.removeViewers(players);
             else
-                displayable.display(players);
+                displayable.addViewers(players);
         }
     }
 

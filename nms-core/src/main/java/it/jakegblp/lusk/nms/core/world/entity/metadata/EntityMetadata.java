@@ -70,6 +70,21 @@ public class EntityMetadata implements EntityMetadataView, Cloneable {
         return setInternal(parentKey.id(), parentKey.asItem(byteFlag));
     }
 
+    public <E extends Entity, T> EntityMetadata with(
+            @NotNull MetadataKeyReference<E, T> key,
+            T value
+    ) {
+        this.set(key, value);
+        return this;
+    }
+
+    public <E extends Entity, T> EntityMetadata without(
+            @NotNull MetadataKeyReference<E, T> key
+    ) {
+        this.remove(key);
+        return this;
+    }
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <E extends Entity, T> boolean set(
