@@ -473,7 +473,7 @@ public final class MetadataKeys {
         MetadataKey<Display, Float> SHADOW_STRENGTH = register("SHADOW_STRENGTH", "org.bukkit.entity.Display", Float.class);
         MetadataKey<Display, Float> DISPLAY_WIDTH = register("DISPLAY_WIDTH", "org.bukkit.entity.Display", Float.class);
         MetadataKey<Display, Float> DISPLAY_HEIGHT = register("DISPLAY_HEIGHT", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Float> GLOW_COLOR = register("GLOW_COLOR", "org.bukkit.entity.Display", Float.class);
+        MetadataKey<Display, Integer> GLOW_COLOR = register("GLOW_COLOR", "org.bukkit.entity.Display", Integer.class);
     }
 
     @ApiStatus.NonExtendable
