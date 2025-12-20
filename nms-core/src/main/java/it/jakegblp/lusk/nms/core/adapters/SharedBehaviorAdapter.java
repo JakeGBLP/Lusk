@@ -59,7 +59,8 @@ public interface SharedBehaviorAdapter<
         NMSAttributePacket,
         NMSSetCameraPacket,
         NMSSetPlayerTeamPacket,
-        NMSTeamParameters
+        NMSTeamParameters,
+        NMSEntityEventPacket
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -271,6 +272,18 @@ public interface SharedBehaviorAdapter<
     default boolean isNMSTeamParameters(Object object) {
         return getNMSTeamParametersClass().isInstance(object);
     }
+
+
+    NMSEntityEventPacket toNMSEntityEventPacket(EntityEventPacket from);
+
+    EntityEventPacket fromNMSEntityEventPacket(NMSEntityEventPacket from);
+
+    Class<NMSEntityEventPacket> getNMSEntityEventPacketClass();
+
+    default boolean isNMSEntityEventPacket(Object object) {
+        return getNMSEntityEventPacketClass().isInstance(object);
+    }
+
 
     NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 

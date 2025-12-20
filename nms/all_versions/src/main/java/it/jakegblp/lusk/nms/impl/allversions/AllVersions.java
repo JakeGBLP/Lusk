@@ -62,6 +62,7 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
@@ -108,7 +109,8 @@ public class AllVersions implements
                 ClientboundUpdateAttributesPacket,
                 ClientboundSetCameraPacket,
                 ClientboundSetPlayerTeamPacket,
-                ClientboundSetPlayerTeamPacket.Parameters
+                ClientboundSetPlayerTeamPacket.Parameters,
+                ClientboundEntityEventPacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -595,6 +597,30 @@ public class AllVersions implements
     }
     public Class<ClientboundSetPlayerTeamPacket.Parameters> getNMSTeamParametersClass() {
         return ClientboundSetPlayerTeamPacket.Parameters.class;
+    }
+
+
+
+    @Override
+    public ClientboundEntityEventPacket toNMSEntityEventPacket(EntityEventPacket from) {
+        final FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        friendlyByteBuf.writeInt(from.getEntityID());
+        friendlyByteBuf.writeByte(from.getEventID());
+
+        return ClientboundEntityEventPacket.STREAM_CODEC.decode(friendlyByteBuf);
+    }
+
+    @Override
+    public EntityEventPacket fromNMSEntityEventPacket(ClientboundEntityEventPacket from) {
+        final FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        ClientboundEntityEventPacket.STREAM_CODEC.encode(friendlyByteBuf, from);
+
+        return new EntityEventPacket(friendlyByteBuf.readInt(), from.getEventId());
+    }
+
+    @Override
+    public Class<ClientboundEntityEventPacket> getNMSEntityEventPacketClass() {
+        return ClientboundEntityEventPacket.class;
     }
 
 
