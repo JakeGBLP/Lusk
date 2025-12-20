@@ -202,7 +202,7 @@ public class Types {
 
         // Bukkit
         if (Skript.classExists("org.bukkit.entity.Pose") && Classes.getExactClassInfo(Pose.class) == null) {
-            EnumClassInfoWrapper<Pose> POSE_ENUM = new EnumClassInfoWrapper<>(Pose.class, null, "pose");
+            EnumClassInfoWrapper<Pose> POSE_ENUM = new EnumClassInfoWrapper<>(Pose.class);
             Classes.registerClass(POSE_ENUM.getClassInfo("pose")
                     .user("poses?")
                     .name("Entity - Pose")

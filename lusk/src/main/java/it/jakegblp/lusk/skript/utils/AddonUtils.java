@@ -10,6 +10,11 @@ import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
+import it.jakegblp.lusk.nms.api.NMSApi;
+import it.jakegblp.lusk.nms.core.async.ExecutionMode;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.skript.api.section.SectionParseResult;
 import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
 import net.kyori.adventure.text.Component;
@@ -17,6 +22,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
@@ -30,6 +37,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AddonUtils {
     public static SkriptAdapter skriptAdapter;
@@ -268,6 +277,28 @@ public class AddonUtils {
         }
         return true;
     }
+
+
+    public static void sendEasyMetadata(Player[] players, EntityMetadata metadata, Object[] idsOrEntities){
+        Set<EntityMetadataPacket> packets = Arrays.stream(idsOrEntities)
+                .flatMap(o -> {
+                    if (o instanceof Entity entity)
+                        return Stream.of(new EntityMetadataPacket(entity.getEntityId(), metadata));
+                    if (o instanceof Number number)
+                        return Stream.of(new EntityMetadataPacket(number.intValue(), metadata));
+                    return Stream.empty();
+                })
+                .collect(Collectors.toSet());
+
+        NMSApi.sendPackets(players, packets, ExecutionMode.ASYNCHRONOUS);
+    }
+
+
+
+
+
+
+
 
     /*
     public static <T> ExpressionList<T> asExpressionList(Expression<T> expression, Class<T> type) {

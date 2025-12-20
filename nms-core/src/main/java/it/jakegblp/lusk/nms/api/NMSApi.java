@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -66,6 +67,10 @@ public class NMSApi {
         }
 
         return future;
+    }
+
+    public static @NotNull CompletableFuture<Void> sendPackets(Player[] players, Collection<? extends ClientboundPacket> packets, @Nullable ExecutionMode executionMode) {
+        return sendPackets(players, packets.toArray(ClientboundPacket[]::new), executionMode);
     }
 
     public static @NotNull CompletableFuture<Void> sendPacket(Player[] players, ClientboundPacket packet, @Nullable ExecutionMode executionMode) {
