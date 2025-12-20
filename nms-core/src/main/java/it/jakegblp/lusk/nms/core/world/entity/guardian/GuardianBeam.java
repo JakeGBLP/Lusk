@@ -2,6 +2,7 @@ package it.jakegblp.lusk.nms.core.world.entity.guardian;
 
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.api.NMSApi;
+import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
@@ -24,36 +25,35 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter
-@EqualsAndHashCode
-public class GuardianBeam implements Cloneable, LazyProducer, Displayable {
+@EqualsAndHashCode(callSuper = false)
+public class GuardianBeam extends Displayable implements Cloneable, LazyProducer {
 
-    private static final Prototype<EntityMetadata, Integer> BASE_GUARDIAN_DATA = Prototype.of(
+    private static final Prototype<EntityMetadata, Integer, EntityMetadata> BASE_GUARDIAN_DATA = Prototype.unary(
             new EntityMetadata(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true, MetadataKeys.GuardianKeys.IS_RETRACTING_SPIKES, true)),
             entityMetadata -> entityMetadata,// todo: clone
-            (entityMetadata, id) -> entityMetadata.set(MetadataKeys.GuardianKeys.TARGET_ENTITY_ID, id));
+            (entityMetadata, id) -> entityMetadata.with(MetadataKeys.GuardianKeys.TARGET_ENTITY_ID, id));
 
     // todo: this one shouldn't use unary
-    private static final Prototype<EntityMetadataPacket, Integer> BASE_BAT_PACKET = Prototype.of(
-            new EntityMetadataPacket(-1, Map.of(MetadataKeys.EntityKeys.INVISIBLE, true)),
+    private static final Prototype<EntityMetadata, Integer, EntityMetadataPacket> BASE_BAT_PACKET = Prototype.of(
+            new EntityMetadata(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true)),
             entityMetadataPacket -> entityMetadataPacket,// todo: clone
-            EntityMetadataPacket::setId);
+            ((entityMetadata, integer) -> new EntityMetadataPacket(integer, entityMetadata)));
 
     protected @NotNull Vector start, end;
     protected int id, targetId;
     protected @NotNull UUID uuid, targetUuid;
-    protected boolean persistent;
     protected @NotNull ClientboundPacket[] displayPackets, removePackets;
     protected boolean dirty = true;
 
     @NullMarked
     public GuardianBeam(Vector start, Vector end, int id, int targetId, UUID uuid, UUID targetUuid, boolean persistent) {
+        super(persistent);
         this.start = start.clone();
         this.end = end.clone().add(this.start.clone().subtract(end).normalize());
         this.id = id;
         this.targetId = targetId;
         this.uuid = uuid;
         this.targetUuid = targetUuid;
-        this.persistent = persistent;
     }
 
     @NullMarked
@@ -66,13 +66,13 @@ public class GuardianBeam implements Cloneable, LazyProducer, Displayable {
     }
 
     @Override
-    public void display(Player... players) {
-        NMSApi.sendPackets(players, getDisplayPackets());
+    protected void displayImplementation(Player player) {
+        NMSApi.sendPackets(player, getDisplayPackets(), ExecutionMode.ASYNCHRONOUS);
     }
 
     @Override
-    public void remove(Player... players) {
-        NMSApi.sendPackets(players, getRemovePackets());
+    protected void removeImplementation(Player player) {
+        NMSApi.sendPackets(player, getRemovePackets(), ExecutionMode.ASYNCHRONOUS);
     }
 
     /**
@@ -111,11 +111,6 @@ public class GuardianBeam implements Cloneable, LazyProducer, Displayable {
 
     public void setTargetUuid(@NotNull UUID targetUuid) {
         this.targetUuid = targetUuid;
-        markDirty();
-    }
-
-    public void setPersistent(boolean persistent) {
-        this.persistent = persistent;
         markDirty();
     }
 

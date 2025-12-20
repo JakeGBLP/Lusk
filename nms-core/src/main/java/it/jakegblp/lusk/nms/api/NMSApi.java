@@ -6,7 +6,6 @@ import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientBundlePacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,9 +49,12 @@ public class NMSApi {
         }
     }
 
+    public static @NotNull CompletableFuture<Void> sendPackets(Player player, ClientboundPacket[] packets, @Nullable ExecutionMode executionMode) {
+        return sendPackets(new Player[]{player}, packets, executionMode);
+    }
+
     public static @NotNull CompletableFuture<Void> sendPackets(Player[] players, ClientboundPacket[] packets, @Nullable ExecutionMode executionMode) {
         boolean async = (executionMode != null && executionMode.isAsync()) || ExecutionMode.getAsyncablePrioritizedMode(List.of(packets)).isAsync();
-        Bukkit.getLogger().info("async: "+async);
         CompletableFuture<Void> future = processPacket(packets, async)
                 .thenRun(() -> {
                     for (Player player : players) {
