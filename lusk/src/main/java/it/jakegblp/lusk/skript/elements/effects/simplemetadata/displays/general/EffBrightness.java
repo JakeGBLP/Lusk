@@ -69,7 +69,7 @@ public class EffBrightness extends Effect {
         if (pattern == 0)
             AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BRIGHTNESS, new Display.Brightness(0, numberExpression.getSingle(event).intValue()))), entityOrId.getArray(event));
         else if (pattern == 1)
-                AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BRIGHTNESS, new Display.Brightness(numberExpression.getSingle(event).intValue(), 0))), entityOrId.getArray(event));
+            AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BRIGHTNESS, new Display.Brightness(numberExpression.getSingle(event).intValue(), 0))), entityOrId.getArray(event));
         else
             AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BRIGHTNESS, new Display.Brightness(numberExpression.getSingle(event).intValue(), number2Expression.getSingle(event).intValue()))), entityOrId.getArray(event));
     }

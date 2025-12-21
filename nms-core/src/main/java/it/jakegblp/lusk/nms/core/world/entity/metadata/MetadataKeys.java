@@ -6,7 +6,6 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
-import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
@@ -459,41 +458,41 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface DisplayKeys {
         // todo: skript way to go from and to serializable types, we want timespan for this, not integer
-        MetadataKey<Display, Integer> INTERPOLATION_DELAY = register("INTERPOLATION_DELAY", "org.bukkit.entity.Display", Integer.class);
-        MetadataKey<Display, Integer> INTERPOLATION_DURATION = register("INTERPOLATION_DURATION", "org.bukkit.entity.Display", Integer.class);
-        MetadataKey<Display, Integer> TELEPORT_INTERPOLATION_DURATION = register("TELEPORT_INTERPOLATION_DURATION", "org.bukkit.entity.Display", Integer.class);
-        MetadataKey<Display, Vector3f> TRANSLATION = register("TRANSLATION", "org.bukkit.entity.Display", "org.joml.Vector3f");
-        MetadataKey<Display, Vector3f> SCALE = register("SCALE", "org.bukkit.entity.Display", "org.joml.Vector3f");
-        MetadataKey<Display, Quaternionf> ROTATION_LEFT = register("ROTATION_LEFT", "org.bukkit.entity.Display", "org.joml.Quaternionf");
-        MetadataKey<Display, Quaternionf> ROTATION_RIGHT = register("ROTATION_RIGHT", "org.bukkit.entity.Display", "org.joml.Quaternionf");
-        MetadataKey<Display, Display.Billboard> BILLBOARD = register("BILLBOARD", "org.bukkit.entity.Display", "org.bukkit.entity.Display$Billboard");
-        MetadataKey<Display, Display.Brightness> BRIGHTNESS = register("BRIGHTNESS", "org.bukkit.entity.Display", "org.bukkit.entity.Display$Brightness");
-        MetadataKey<Display, Float> VIEW_RANGE = register("VIEW_RANGE", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Float> SHADOW_RADIUS = register("SHADOW_RADIUS", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Float> SHADOW_STRENGTH = register("SHADOW_STRENGTH", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Float> DISPLAY_WIDTH = register("DISPLAY_WIDTH", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Float> DISPLAY_HEIGHT = register("DISPLAY_HEIGHT", "org.bukkit.entity.Display", Float.class);
-        MetadataKey<Display, Integer> GLOW_COLOR = register("GLOW_COLOR", "org.bukkit.entity.Display", Integer.class);
+        MetadataKey<Display, Integer> INTERPOLATION_DELAY = register("INTERPOLATION_DELAY", Display.class, Integer.class);
+        MetadataKey<Display, Integer> INTERPOLATION_DURATION = register("INTERPOLATION_DURATION", Display.class, Integer.class);
+        MetadataKey<Display, Integer> TELEPORT_INTERPOLATION_DURATION = register("TELEPORT_INTERPOLATION_DURATION", Display.class, Integer.class);
+        MetadataKey<Display, Vector3f> TRANSLATION = register("TRANSLATION", Display.class, Vector3f.class);
+        MetadataKey<Display, Vector3f> SCALE = register("SCALE", Display.class, Vector3f.class);
+        MetadataKey<Display, Quaternionf> ROTATION_LEFT = register("ROTATION_LEFT", Display.class, Quaternionf.class);
+        MetadataKey<Display, Quaternionf> ROTATION_RIGHT = register("ROTATION_RIGHT", Display.class, Quaternionf.class);
+        MetadataKey<Display, Display.Billboard> BILLBOARD = register("BILLBOARD", Display.class, Display.Billboard.class);
+        MetadataKey<Display, Display.Brightness> BRIGHTNESS = register("BRIGHTNESS", Display.class, Display.Brightness.class);
+        MetadataKey<Display, Float> VIEW_RANGE = register("VIEW_RANGE", Display.class, Float.class);
+        MetadataKey<Display, Float> SHADOW_RADIUS = register("SHADOW_RADIUS", Display.class, Float.class);
+        MetadataKey<Display, Float> SHADOW_STRENGTH = register("SHADOW_STRENGTH", Display.class, Float.class);
+        MetadataKey<Display, Float> DISPLAY_WIDTH = register("DISPLAY_WIDTH", Display.class, Float.class);
+        MetadataKey<Display, Float> DISPLAY_HEIGHT = register("DISPLAY_HEIGHT", Display.class, Float.class);
+        MetadataKey<Display, Integer> GLOW_COLOR = register("GLOW_COLOR", Display.class, Integer.class);
     }
 
     @ApiStatus.NonExtendable
     public interface BlockDisplayKeys {
-        MetadataKey<BlockDisplay, BlockState> DISPLAY_BLOCK = register("BLOCK_STATE", "org.bukkit.entity.BlockDisplay", BlockState.class);
+        MetadataKey<BlockDisplay, BlockState> DISPLAY_BLOCK = register("BLOCK_STATE", BlockDisplay.class, BlockState.class);
     }
 
     @ApiStatus.NonExtendable
     public interface ItemDisplayKeys {
-        MetadataKey<ItemDisplay, ItemStack> DISPLAY_ITEM = register("DISPLAY_ITEM", "org.bukkit.entity.ItemDisplay", ItemStack.class);
-        MetadataKey<ItemDisplay, ItemDisplay.ItemDisplayTransform> TRANSFORM = register("TRANSFORM", "org.bukkit.entity.ItemDisplay", "org.bukkit.entity.ItemDisplay$ItemDisplayTransform");
+        MetadataKey<ItemDisplay, ItemStack> DISPLAY_ITEM = register("DISPLAY_ITEM", ItemDisplay.class, ItemStack.class);
+        MetadataKey<ItemDisplay, ItemDisplay.ItemDisplayTransform> TRANSFORM = register("TRANSFORM", ItemDisplay.class, ItemDisplay.ItemDisplayTransform.class);
     }
 
     @ApiStatus.NonExtendable
     public interface TextDisplayKeys {
-        MetadataKey<TextDisplay, Component> TEXT = register("TEXT", "org.bukkit.entity.TextDisplay", Component.class);
-        MetadataKey<TextDisplay, Integer> LINE_WIDTH = register("LINE_WIDTH", "org.bukkit.entity.TextDisplay", Integer.class);
-        MetadataKey<TextDisplay, Integer> BACKGROUND_COLOR = register("BACKGROUND_COLOR", "org.bukkit.entity.TextDisplay", Integer.class);
-        MetadataKey<TextDisplay, Byte> TEXT_OPACITY = register("TEXT_OPACITY", "org.bukkit.entity.TextDisplay", Byte.class);
-        MetadataKey<TextDisplay, TextDisplayFlags> TEXT_FLAGS = register("TEXT_FLAGS", "org.bukkit.entity.TextDisplay", TextDisplayFlags.class);
+        MetadataKey<TextDisplay, Component> TEXT = register("TEXT", TextDisplay.class, Component.class);
+        MetadataKey<TextDisplay, Integer> LINE_WIDTH = register("LINE_WIDTH", TextDisplay.class, Integer.class);
+        MetadataKey<TextDisplay, Integer> BACKGROUND_COLOR = register("BACKGROUND_COLOR", TextDisplay.class, Integer.class);
+        MetadataKey<TextDisplay, Byte> TEXT_OPACITY = register("TEXT_OPACITY", TextDisplay.class, Byte.class);
+        MetadataKey<TextDisplay, TextDisplayFlags> TEXT_FLAGS = register("TEXT_FLAGS", TextDisplay.class, TextDisplayFlags.class);
         MetadataKey<TextDisplay, Boolean> HAS_SHADOW = registerSemi(TEXT_FLAGS, TextDisplayFlag.HAS_SHADOW);
         MetadataKey<TextDisplay, Boolean> SEE_THROUGH = registerSemi(TEXT_FLAGS, TextDisplayFlag.SEE_THROUGH);
         MetadataKey<TextDisplay, Boolean> DEFAULT_BACKGROUND = registerSemi(TEXT_FLAGS, TextDisplayFlag.DEFAULT_BACKGROUND);

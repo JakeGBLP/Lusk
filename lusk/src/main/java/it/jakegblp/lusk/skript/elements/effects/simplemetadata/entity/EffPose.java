@@ -35,7 +35,7 @@ public class EffPose extends Effect {
 
     static {
         Skript.registerEffect(EffPose.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] pose %pose% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] pose %pose% for %players%"
                 );
     }
 
