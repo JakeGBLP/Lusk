@@ -6,7 +6,6 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
-import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import lombok.SneakyThrows;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
@@ -14,6 +13,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
@@ -60,7 +60,9 @@ public interface SharedBehaviorAdapter<
         NMSSetCameraPacket,
         NMSSetPlayerTeamPacket,
         NMSTeamParameters,
-        NMSEntityEventPacket
+        NMSEntityEventPacket,
+        NMSTeleportPacket,
+        NMSBlockUpdatePacket
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -248,7 +250,7 @@ public interface SharedBehaviorAdapter<
 
     Class<NMSLevelParticlePacket> getNMSLevelParticleClass();
 
-    default boolean isNMSLevelParticle(Object object){
+    default boolean isNMSLevelParticle(Object object) {
         return getNMSLevelParticleClass().isInstance(object);
     }
 
@@ -282,6 +284,28 @@ public interface SharedBehaviorAdapter<
 
     default boolean isNMSEntityEventPacket(Object object) {
         return getNMSEntityEventPacketClass().isInstance(object);
+    }
+
+
+    NMSTeleportPacket toNMSTeleportPacket(TeleportPacket from);
+
+    TeleportPacket fromNMSTeleportPacket(NMSTeleportPacket from);
+
+    Class<NMSTeleportPacket> getNMSTeleportPacketClass();
+
+    default boolean isNMSTeleportPacket(Object object) {
+        return getNMSTeleportPacketClass().isInstance(object);
+    }
+
+
+    NMSBlockUpdatePacket toNMSBlockUpdatePacket(BlockUpdatePacket from);
+
+    BlockUpdatePacket fromNMSBlockUpdatePacket(NMSBlockUpdatePacket from);
+
+    Class<NMSBlockUpdatePacket> getNMSBlockUpdatePacketClass();
+
+    default boolean isNMSBlockUpdatePacket(Object object) {
+        return getNMSBlockUpdatePacketClass().isInstance(object);
     }
 
 
@@ -481,8 +505,7 @@ public interface SharedBehaviorAdapter<
                 //todo fix this above (make the event async)
 
 
-
-                if(isNMSLevelParticle(msg)){
+                if (isNMSLevelParticle(msg)) {
                     final LevelParticlePacket packet = fromNMSLevelParticle((NMSLevelParticlePacket) msg);
 
                     final ParticleSendEvent particleSendEvent = new ParticleSendEvent(player, true);
@@ -500,7 +523,25 @@ public interface SharedBehaviorAdapter<
 
                     pluginManager.callEvent(particleSendEvent);
 
-                    if(particleSendEvent.isCancelled())
+                    if (particleSendEvent.isCancelled())
+                        return;
+                } else if (isNMSBlockUpdatePacket(msg)) {
+                    final BlockUpdatePacket packet = fromNMSBlockUpdatePacket((NMSBlockUpdatePacket) msg);
+
+                    final BlockUpdateEvent event = new BlockUpdateEvent(player, true);
+                    final BlockVector blockPos = packet.getBlockPos();
+                    event.setX(blockPos.getBlockX());
+                    event.setY(blockPos.getBlockY());
+                    event.setZ(blockPos.getBlockZ());
+
+                    final BlockData blockData = event.getBlockData();
+                    event.setMaterial(blockData.getMaterial());
+                    event.setBlockData(blockData);
+                    event.setOriginalBlock(event.getLocation().getBlock());
+
+                    pluginManager.callEvent(event);
+
+                    if(event.isCancelled())
                         return;
                 }
 

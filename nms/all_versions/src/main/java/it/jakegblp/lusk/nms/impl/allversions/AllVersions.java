@@ -45,6 +45,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.ProfilePublicKey;
@@ -61,9 +62,9 @@ import org.bukkit.craftbukkit.CraftParticle;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
@@ -110,7 +111,9 @@ public class AllVersions implements
                 ClientboundSetCameraPacket,
                 ClientboundSetPlayerTeamPacket,
                 ClientboundSetPlayerTeamPacket.Parameters,
-                ClientboundEntityEventPacket
+                ClientboundEntityEventPacket,
+                ClientboundEntityPositionSyncPacket, // todo add teleport packet for 1.21.2 and below (the packet changed for higher to this)
+                ClientboundBlockUpdatePacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -310,7 +313,7 @@ public class AllVersions implements
 
     @Override
     public DedicatedServer getDedicatedServer() {
-        return ((CraftServer)Bukkit.getServer()).getServer();
+        return ((CraftServer) Bukkit.getServer()).getServer();
     }
 
     @Override
@@ -481,10 +484,12 @@ public class AllVersions implements
         return TeamPacket.fromMethod(method, from.getName(), fromNMSTeamParameters(from.getParameters().orElse(null)), new HashSet<>(from.getPlayers()));
     }
 
+
     @Override
     public Class<ClientboundSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass() {
         return ClientboundSetPlayerTeamPacket.class;
     }
+
     @Override
     @Contract("null -> null")
     public TeamParameters fromNMSTeamParameters(@Nullable ClientboundSetPlayerTeamPacket.Parameters from) {
@@ -563,6 +568,7 @@ public class AllVersions implements
 
         return new ClientboundUpdateAttributesPacket(from.getId(), instances);
     }
+
     @Override
     public ClientboundSetPlayerTeamPacket.Parameters toNMSTeamParameters(TeamParameters from) {
         var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
@@ -595,10 +601,10 @@ public class AllVersions implements
     public Class<ClientboundUpdateAttributesPacket> getNMSAttributePacketClass() {
         return ClientboundUpdateAttributesPacket.class;
     }
+
     public Class<ClientboundSetPlayerTeamPacket.Parameters> getNMSTeamParametersClass() {
         return ClientboundSetPlayerTeamPacket.Parameters.class;
     }
-
 
 
     @Override
@@ -609,6 +615,7 @@ public class AllVersions implements
 
         return ClientboundEntityEventPacket.STREAM_CODEC.decode(friendlyByteBuf);
     }
+
 
     @Override
     public EntityEventPacket fromNMSEntityEventPacket(ClientboundEntityEventPacket from) {
@@ -621,6 +628,45 @@ public class AllVersions implements
     @Override
     public Class<ClientboundEntityEventPacket> getNMSEntityEventPacketClass() {
         return ClientboundEntityEventPacket.class;
+    }
+
+
+    @Override
+    public ClientboundEntityPositionSyncPacket toNMSTeleportPacket(TeleportPacket from) {
+
+        final PositionMoveRotation positionMoveRotation = new PositionMoveRotation(new Vec3(from.getX(), from.getY(), from.getZ()), new Vec3(0, 0, 0), from.getYaw(), from.getPitch());
+
+        return new ClientboundEntityPositionSyncPacket(from.getEntityID(), positionMoveRotation, from.isOnGround());
+    }
+
+    @Override
+    public TeleportPacket fromNMSTeleportPacket(ClientboundEntityPositionSyncPacket from) {
+        final PositionMoveRotation values = from.values();
+        final Vec3 position = values.position();
+        return new TeleportPacket(from.id(), position.x(), position.y(), position.z(), values.yRot(), values.xRot(), from.onGround());
+    }
+
+
+    @Override
+    public Class<ClientboundEntityPositionSyncPacket> getNMSTeleportPacketClass() {
+        return ClientboundEntityPositionSyncPacket.class;
+    }
+
+
+    @Override
+    public ClientboundBlockUpdatePacket toNMSBlockUpdatePacket(BlockUpdatePacket from) {
+        return new ClientboundBlockUpdatePacket(asNMSBlockVector(from.getBlockPos()), ((CraftBlockData) from.getBlockState()).getState());
+    }
+
+    @Override
+    public BlockUpdatePacket fromNMSBlockUpdatePacket(ClientboundBlockUpdatePacket from) {
+        final BlockPos pos = from.getPos();
+        return new BlockUpdatePacket(new BlockVector(pos.getX(), pos.getY(), pos.getZ()), CraftBlockData.fromData(from.getBlockState()));
+    }
+
+    @Override
+    public Class<ClientboundBlockUpdatePacket> getNMSBlockUpdatePacketClass() {
+        return ClientboundBlockUpdatePacket.class;
     }
 
 
