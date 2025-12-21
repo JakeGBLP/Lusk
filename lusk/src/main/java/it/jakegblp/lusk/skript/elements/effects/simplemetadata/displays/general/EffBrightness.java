@@ -35,9 +35,9 @@ public class EffBrightness extends Effect {
 
     static {
         Skript.registerEffect(EffBrightness.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] sky brightness [to] %number% for %player%",
-                "(make|fake) [display|display with id] %displays/numbers%['s] block brightness [to] %number% for %player%",
-                "(make|fake) [display|display with id] %displays/numbers%['s] block brightness [to] %number% and sky brightness to %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] sky brightness [to] %number% for %players%",
+                "(make|fake) [display|display with id] %displays/numbers%['s] block brightness [to] %number% for %players%",
+                "(make|fake) [display|display with id] %displays/numbers%['s] block brightness [to] %number% and sky brightness to %number% for %players%"
         );
     }
 

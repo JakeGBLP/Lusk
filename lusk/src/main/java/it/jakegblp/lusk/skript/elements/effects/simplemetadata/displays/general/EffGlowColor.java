@@ -35,7 +35,7 @@ public class EffGlowColor extends Effect {
 
     static {
         Skript.registerEffect(EffGlowColor.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] glow override [to] %color/number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] glow override [to] %color/number% for %players%"
         );
     }
 

@@ -33,7 +33,7 @@ public class EffTranslation extends Effect {
 
     static {
         Skript.registerEffect(EffTranslation.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] translation [to] %vector% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] translation [to] %vector% for %players%"
         );
     }
 

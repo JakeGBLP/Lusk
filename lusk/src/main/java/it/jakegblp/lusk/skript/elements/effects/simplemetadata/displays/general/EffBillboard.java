@@ -33,7 +33,7 @@ public class EffBillboard extends Effect {
 
     static {
         Skript.registerEffect(EffBillboard.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] billboard [to] %billboard% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] billboard [to] %billboard% for %players%"
         );
     }
 

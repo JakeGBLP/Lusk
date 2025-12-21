@@ -32,7 +32,7 @@ public class EffHeight extends Effect {
 
     static {
         Skript.registerEffect(EffHeight.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] shadow height [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] shadow height [to] %number% for %players%"
         );
     }
 

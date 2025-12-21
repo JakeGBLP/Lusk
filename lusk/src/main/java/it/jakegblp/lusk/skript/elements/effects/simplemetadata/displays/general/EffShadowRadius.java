@@ -32,7 +32,7 @@ public class EffShadowRadius extends Effect {
 
     static {
         Skript.registerEffect(EffShadowRadius.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] shadow radius [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] shadow radius [to] %number% for %players%"
         );
     }
 

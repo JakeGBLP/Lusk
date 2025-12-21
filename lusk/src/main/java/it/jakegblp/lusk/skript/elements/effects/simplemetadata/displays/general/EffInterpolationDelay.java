@@ -32,7 +32,7 @@ public class EffInterpolationDelay extends Effect {
 
     static {
         Skript.registerEffect(EffInterpolationDelay.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] interpolation delay [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] interpolation delay [to] %number% for %players%"
         );
     }
 

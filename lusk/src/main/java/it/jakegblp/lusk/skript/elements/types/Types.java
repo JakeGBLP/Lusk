@@ -18,6 +18,7 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.util.Displayable;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
+import it.jakegblp.lusk.nms.core.world.entity.events.EntityEvents;
 import it.jakegblp.lusk.nms.core.world.entity.guardian.GuardianBeam;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
@@ -286,6 +287,15 @@ public class Types {
                     .description("An URL, used mainly to fetch skins.") // add example
                     .since("2.0.0"));
         }
+
+        EnumClassInfoWrapper<EntityEvents> entityEventsEnum = new EnumClassInfoWrapper<>(EntityEvents.class);
+        Classes.registerClass(entityEventsEnum.getClassInfo("entityevent")
+                .user("entityevent?")
+                .name("Entity Event")
+                .description("All the entity events.") // add example
+                .since("2.0.0"));
+
+
         /*
         If another addon registers ProfileProperty as a classinfo,
         instances of MutableProfileProperty can be converted to that type.

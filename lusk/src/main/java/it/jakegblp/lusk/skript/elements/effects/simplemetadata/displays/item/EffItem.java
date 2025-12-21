@@ -33,7 +33,7 @@ public class EffItem extends Effect {
 
     static {
         Skript.registerEffect(EffItem.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] item [to] %itemtype% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] item [to] %itemtype% for %players%"
         );
     }
 

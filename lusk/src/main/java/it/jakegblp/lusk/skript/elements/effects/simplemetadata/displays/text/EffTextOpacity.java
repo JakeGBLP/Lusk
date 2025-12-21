@@ -32,7 +32,7 @@ public class EffTextOpacity extends Effect {
 
     static {
         Skript.registerEffect(EffTextOpacity.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] [text] opacity [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] [text] opacity [to] %number% for %players%"
         );
     }
 

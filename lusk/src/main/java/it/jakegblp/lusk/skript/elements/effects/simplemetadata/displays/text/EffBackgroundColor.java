@@ -33,7 +33,7 @@ public class EffBackgroundColor extends Effect {
 
     static {
         Skript.registerEffect(EffBackgroundColor.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] [background] color [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] [background] color [to] %number% for %players%"
         );
     }
 

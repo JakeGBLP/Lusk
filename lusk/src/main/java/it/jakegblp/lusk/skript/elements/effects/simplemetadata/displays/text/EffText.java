@@ -36,7 +36,7 @@ public class EffText extends Effect {
 
     static {
         Skript.registerEffect(EffText.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] text [to] %string% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] text [to] %string% for %players%"
         );
     }
 

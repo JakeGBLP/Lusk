@@ -32,7 +32,7 @@ public class EffWidth extends Effect {
 
     static {
         Skript.registerEffect(EffWidth.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] shadow width [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] shadow width [to] %number% for %players%"
         );
     }
 

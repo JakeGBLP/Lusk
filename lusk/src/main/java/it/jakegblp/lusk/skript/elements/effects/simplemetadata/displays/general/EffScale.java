@@ -34,7 +34,7 @@ public class EffScale extends Effect {
 
     static {
         Skript.registerEffect(EffScale.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] scale [to] %vector% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] scale [to] %vector% for %players%"
         );
     }
 

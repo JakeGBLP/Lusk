@@ -32,7 +32,7 @@ public class EffViewRange extends Effect {
 
     static {
         Skript.registerEffect(EffViewRange.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] view range [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] view range [to] %number% for %players%"
         );
     }
 

@@ -32,7 +32,7 @@ public class EffShadowStrength extends Effect {
 
     static {
         Skript.registerEffect(EffShadowStrength.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] shadow strength [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] shadow strength [to] %number% for %players%"
         );
     }
 

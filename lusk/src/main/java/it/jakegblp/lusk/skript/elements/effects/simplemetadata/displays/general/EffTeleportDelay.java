@@ -32,7 +32,7 @@ public class EffTeleportDelay extends Effect {
 
     static {
         Skript.registerEffect(EffTeleportDelay.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] teleportation duration [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] teleportation duration [to] %number% for %players%"
         );
     }
 

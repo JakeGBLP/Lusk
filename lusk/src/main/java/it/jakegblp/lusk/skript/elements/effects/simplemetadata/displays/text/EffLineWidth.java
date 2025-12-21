@@ -32,7 +32,7 @@ public class EffLineWidth extends Effect {
 
     static {
         Skript.registerEffect(EffLineWidth.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] line width [to] %number% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] line width [to] %number% for %players%"
         );
     }
 

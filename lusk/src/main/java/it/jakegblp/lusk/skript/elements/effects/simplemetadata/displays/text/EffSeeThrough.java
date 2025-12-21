@@ -33,8 +33,8 @@ public class EffSeeThrough extends Effect {
 
     static {
         Skript.registerEffect(EffSeeThrough.class,
-                "make [display|display with id] %displays/numbers%['s] be see through for %player%",
-                "make [display|display with id] %displays/numbers%['s] not be see through for %player%"
+                "make [display|display with id] %displays/numbers%['s] be see through for %players%",
+                "make [display|display with id] %displays/numbers%['s] not be see through for %players%"
         );
     }
 

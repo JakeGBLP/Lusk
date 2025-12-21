@@ -34,8 +34,8 @@ public class EffShadow extends Effect {
 
     static {
         Skript.registerEffect(EffShadow.class,
-                "make [display|display with id] %displays/numbers%['s] have [drop] shadow for %player%",
-                "make [display|display with id] %displays/numbers%['s] not have [drop] shadow for %player%"
+                "make [display|display with id] %displays/numbers%['s] have [drop] shadow for %players%",
+                "make [display|display with id] %displays/numbers%['s] not have [drop] shadow for %players%"
         );
     }
 

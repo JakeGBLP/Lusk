@@ -33,7 +33,7 @@ public class EffAlignment extends Effect {
 
     static {
         Skript.registerEffect(EffAlignment.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] alignment [to] %textalignment% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] alignment [to] %textalignment% for %players%"
         );
     }
 

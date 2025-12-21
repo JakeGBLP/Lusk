@@ -33,7 +33,7 @@ public class EffRightRotation extends Effect {
 
     static {
         Skript.registerEffect(EffRightRotation.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] right rotation [to] %quaternion% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] right rotation [to] %quaternion% for %players%"
         );
     }
 

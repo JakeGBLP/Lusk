@@ -33,7 +33,7 @@ public class EffBlock extends Effect {
 
     static {
         Skript.registerEffect(EffBlock.class,
-                "(make|fake) [display|display with id] %displays/numbers%['s] item [to] %blockdata% for %player%"
+                "(make|fake) [display|display with id] %displays/numbers%['s] item [to] %blockdata% for %players%"
         );
     }
 
