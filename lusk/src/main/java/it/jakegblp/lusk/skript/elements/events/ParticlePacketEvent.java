@@ -1,17 +1,15 @@
 package it.jakegblp.lusk.skript.elements.events;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Keywords;
+import ch.njol.skript.doc.Name;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.util.Getter;
-import it.jakegblp.lusk.nms.core.events.PacketReceiveEvent;
-import it.jakegblp.lusk.nms.core.events.PacketSendEvent;
 import it.jakegblp.lusk.nms.core.events.ParticleSendEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.LevelParticlePacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -19,9 +17,20 @@ import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+@Name("Event - Particle Send")
+@Description("Gets sent when a particle is sent to the player")
+@Examples({"""
+        on particle sent:
+            if event-particle is damage indicator:
+                cancel event
+        """
+})
+@Keywords({
+        "packets", "packet", "protocol", "dispatch", "sync", "async"
+})
 public class ParticlePacketEvent extends SkriptEvent {
     static {
-        Skript.registerEvent("Particle Packet", ParticlePacketEvent.class, ParticleSendEvent.class, "particle (send|sent|received)")
+        Skript.registerEvent("Particle Packet", ParticlePacketEvent.class, ParticleSendEvent.class, "particle (send|sent|received) [packet]")
                 .description("Called when the client receives a particle packet")
                 .examples("""
                         on particle sent:

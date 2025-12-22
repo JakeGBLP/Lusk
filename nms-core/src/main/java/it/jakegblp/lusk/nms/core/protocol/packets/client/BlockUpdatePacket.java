@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BlockVector;
 
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -18,6 +20,6 @@ public class BlockUpdatePacket implements ClientboundPacket {
 
     @Override
     public Object asNMS() {
-        return null;
+        return NMS.toNMSBlockUpdatePacket(this);
     }
 }

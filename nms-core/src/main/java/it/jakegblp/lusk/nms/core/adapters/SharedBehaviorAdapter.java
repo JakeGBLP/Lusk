@@ -551,7 +551,7 @@ public interface SharedBehaviorAdapter<
                     event.setY(blockPos.getBlockY());
                     event.setZ(blockPos.getBlockZ());
 
-                    final BlockData blockData = packet.getBlockState();
+                    final BlockData blockData = packet.getBlockState().clone();
                     event.setMaterial(blockData.getMaterial());
                     event.setBlockData(blockData);
                     event.setOriginalBlock(event.getLocation().getBlock());
@@ -560,6 +560,11 @@ public interface SharedBehaviorAdapter<
 
                     if(event.isCancelled())
                         return;
+
+                    if(!event.getBlockData().equals(blockData)) {
+                        super.write(ctx, new BlockUpdatePacket(packet.getBlockPos(), event.getBlockData().clone()).asNMS(), promise);
+                        return;
+                    }
                 }
                 else if (isNMSEntityMetadataPacket(msg)) {
                     final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);

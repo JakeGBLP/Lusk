@@ -1,6 +1,10 @@
 package it.jakegblp.lusk.skript.elements.events;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Keywords;
+import ch.njol.skript.doc.Name;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
@@ -17,6 +21,21 @@ import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
+@Name("Event - Block Change Event")
+@Description("Gets sent when a block update is sent to the player")
+@Examples({"""
+        on block update packet:
+            if {dontUpdate::*} contains event-location:
+                cancel event
+                
+        on block update packet:
+            if {dontUpdate::*} contains event-location:
+                set block data to stone
+        """
+})
+@Keywords({
+        "packets", "packet", "protocol", "dispatch", "sync", "async"
+})
 public class BlockUpdatePacket extends SkriptEvent {
     static {
         Skript.registerEvent("Block Update Packet", BlockUpdatePacket.class, BlockUpdateEvent.class, "block (send|change|update) [packet]")
