@@ -566,7 +566,7 @@ public interface SharedBehaviorAdapter<
                     final int targetId = packet.getId();
 
                     final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-                    if (entity == null || entity.isGlowing()) {
+                    if (entity != null && entity.isGlowing()) {
                         super.write(ctx, msg, promise);
                         return;
                     }
