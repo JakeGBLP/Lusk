@@ -37,6 +37,7 @@ import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
@@ -194,6 +195,24 @@ public class AllVersions implements
         if(entity == null)
             return null;
         return entity.getBukkitEntity();
+    }
+
+    @Override
+    public Object rewriteMetadataPacketForGlow(Object metadataPacket) {
+        ClientboundSetEntityDataPacket packet = (ClientboundSetEntityDataPacket) metadataPacket;
+
+        final ArrayList<SynchedEntityData.DataValue<?>> dataValues = new ArrayList<>(packet.packedItems());
+        if (dataValues.stream()
+                .map(SynchedEntityData.DataValue::value)
+                .filter(Byte.class::isInstance)
+                .map(Byte.class::cast)
+                .noneMatch(aByte -> aByte == (byte) 0x40))
+
+            dataValues.add(new SynchedEntityData.DataValue<>(
+                    0, EntityDataSerializers.BYTE, (byte) 0x40
+            ));
+
+        return new ClientboundSetEntityDataPacket(packet.id(), dataValues);
     }
 
 

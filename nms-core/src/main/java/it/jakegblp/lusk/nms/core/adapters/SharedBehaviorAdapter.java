@@ -134,6 +134,7 @@ public interface SharedBehaviorAdapter<
 
     Entity getEntityFromId(int id, World world);
 
+    Object rewriteMetadataPacketForGlow(Object metadataPacket);
 
 
     default NMSServerPlayer asServerPlayer(Player player) {
@@ -576,12 +577,9 @@ public interface SharedBehaviorAdapter<
                         return;
                     }
 
-                    final EntityMetadata entityMetadata = packet.getEntityMetadata();
-                    entityMetadata.set(MetadataKeys.EntityKeys.GLOWING, true);
 
-                    //todo FIXXXX
 
-                    super.write(ctx, new EntityMetadataPacket(targetId, entityMetadata), promise);
+                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
                     return;
                 }
 
