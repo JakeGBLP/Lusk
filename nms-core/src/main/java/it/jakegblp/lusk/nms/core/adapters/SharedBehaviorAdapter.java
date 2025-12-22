@@ -6,14 +6,23 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyReference;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
+import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
+import it.jakegblp.lusk.nms.core.world.player.GlowMap;
 import lombok.SneakyThrows;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
@@ -26,6 +35,8 @@ import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 import java.nio.channels.ClosedChannelException;
+import java.util.Map;
+import java.util.Set;
 
 public interface SharedBehaviorAdapter<
         NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,
@@ -120,6 +131,10 @@ public interface SharedBehaviorAdapter<
     Class<NMSPose> getNMSPoseClass();
 
     Player asPlayer(NMSServerPlayer serverPlayer);
+
+    Entity getEntityFromId(int id, World world);
+
+
 
     default NMSServerPlayer asServerPlayer(Player player) {
         return new SimpleClass<>(getCraftPlayerClass()).getMethod("getHandle", false, true).invoke(player);
@@ -308,7 +323,6 @@ public interface SharedBehaviorAdapter<
         return getNMSBlockUpdatePacketClass().isInstance(object);
     }
 
-
     NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 
     SetCameraPacket fromNMSSetCameraPacket(NMSSetCameraPacket from);
@@ -427,6 +441,8 @@ public interface SharedBehaviorAdapter<
 
             private final PluginManager pluginManager = Bukkit.getPluginManager();
 
+
+
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
             }
@@ -534,7 +550,7 @@ public interface SharedBehaviorAdapter<
                     event.setY(blockPos.getBlockY());
                     event.setZ(blockPos.getBlockZ());
 
-                    final BlockData blockData = event.getBlockData();
+                    final BlockData blockData = packet.getBlockState();
                     event.setMaterial(blockData.getMaterial());
                     event.setBlockData(blockData);
                     event.setOriginalBlock(event.getLocation().getBlock());
@@ -544,6 +560,31 @@ public interface SharedBehaviorAdapter<
                     if(event.isCancelled())
                         return;
                 }
+                else if (isNMSEntityMetadataPacket(msg)) {
+                    final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);
+                    final int targetId = packet.getId();
+
+                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
+                    if (entity == null || entity.isGlowing()) {
+                        super.write(ctx, msg, promise);
+                        return;
+                    }
+
+                    final Set<Integer> list = GlowMap.glowMap.get(player);
+                    if (list == null || !list.contains(targetId)) {
+                        super.write(ctx, msg, promise);
+                        return;
+                    }
+
+                    final EntityMetadata entityMetadata = packet.getEntityMetadata();
+                    entityMetadata.set(MetadataKeys.EntityKeys.GLOWING, true);
+
+                    //todo FIXXXX
+
+                    super.write(ctx, new EntityMetadataPacket(targetId, entityMetadata), promise);
+                    return;
+                }
+
 
                 try {
                     super.write(ctx, newMsg, promise);

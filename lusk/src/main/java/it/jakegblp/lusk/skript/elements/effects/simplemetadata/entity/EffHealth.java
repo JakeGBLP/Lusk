@@ -34,7 +34,7 @@ public class EffHealth extends Effect {
 
     static {
         Skript.registerEffect(EffHealth.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] health %number% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] health %number% for %players%"
                 );
     }
 

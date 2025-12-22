@@ -51,18 +51,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Registry;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.CraftParticle;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.util.BlockVector;
@@ -75,6 +74,7 @@ import java.util.*;
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.convertIfNotNull;
 import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
+import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.values;
 
 @Getter
 public class AllVersions implements
@@ -186,6 +186,16 @@ public class AllVersions implements
     public Player asPlayer(ServerPlayer serverPlayer) {
         return serverPlayer.getBukkitEntity();
     }
+
+    @Override
+    @Nullable
+    public Entity getEntityFromId(int id, World world) {
+        final net.minecraft.world.entity.Entity entity = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(id);
+        if(entity == null)
+            return null;
+        return entity.getBukkitEntity();
+    }
+
 
     @Override
     public Class<ServerPlayer> getNMSServerPlayerClass() {
@@ -483,7 +493,6 @@ public class AllVersions implements
             method = 0;
         return TeamPacket.fromMethod(method, from.getName(), fromNMSTeamParameters(from.getParameters().orElse(null)), new HashSet<>(from.getPlayers()));
     }
-
 
     @Override
     public Class<ClientboundSetPlayerTeamPacket> getNMSSetPlayerTeamPacketClass() {

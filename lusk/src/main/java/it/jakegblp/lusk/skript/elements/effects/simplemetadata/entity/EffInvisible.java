@@ -36,8 +36,8 @@ public class EffInvisible extends Effect {
 
     static {
         Skript.registerEffect(EffInvisible.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] invisible for %player%",
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] visible for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] invisible for %players%",
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] visible for %players%"
                 );
     }
 

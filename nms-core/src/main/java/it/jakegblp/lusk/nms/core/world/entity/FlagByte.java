@@ -3,6 +3,7 @@ package it.jakegblp.lusk.nms.core.world.entity;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.entity.Entity;
@@ -18,6 +19,7 @@ public abstract class FlagByte<B extends BitFlag<T>, E extends Entity, T> implem
     protected byte flags;
 
     @Setter
+    @Getter
     public byte raw;
 
     public FlagByte(byte flags){

@@ -34,7 +34,7 @@ public class EffBeeStingers extends Effect {
 
     static {
         Skript.registerEffect(EffBeeStingers.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] bee stingers in body to %number% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] bee stingers in body to %number% for %players%"
                 );
     }
 

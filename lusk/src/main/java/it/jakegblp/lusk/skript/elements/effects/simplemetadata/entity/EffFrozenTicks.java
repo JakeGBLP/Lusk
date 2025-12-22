@@ -34,7 +34,7 @@ public class EffFrozenTicks extends Effect {
 
     static {
         Skript.registerEffect(EffFrozenTicks.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] frozen ticks %number% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] frozen ticks %number% for %players%"
                 );
     }
 

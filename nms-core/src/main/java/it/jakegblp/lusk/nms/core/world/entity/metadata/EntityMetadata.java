@@ -1,3 +1,4 @@
+
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
@@ -60,14 +61,37 @@ public class EntityMetadata implements EntityMetadataView, Cloneable {
         System.out.println("'setBitFlag' with key: " + key + " and value: " + value);
         var parentKey = key.getParentKey();
         F byteFlag = null;
+
         if (has(parentKey)) {
             var item = get(parentKey);
-            byteFlag = item.value();
+            Object existing = item.value();
+
+            if (existing instanceof FlagByte<?, ?, ?> fb) {
+                byteFlag = (F) fb;
+            } else if (existing instanceof Number n) {
+                byteFlag = (F) FlagByte.dynamic(parentKey.valueClass());
+                applyRaw(byteFlag, n.byteValue());
+            }
         }
+
         if (byteFlag == null)
             byteFlag = (F) FlagByte.dynamic(parentKey.valueClass());
+
         byteFlag.setUnsafe(key.getBitFlag(), value);
         return setInternal(parentKey.id(), parentKey.asItem(byteFlag));
+    }
+
+    private static void applyRaw(FlagByte<?, ?, ?> flagByte, byte raw) {
+        try {
+            flagByte.getClass().getMethod("setRaw", byte.class).invoke(flagByte, raw);
+            return;
+        } catch (Throwable ignored) {
+        }
+        try {
+            flagByte.getClass().getMethod("setUnsafe", byte.class).invoke(flagByte, raw);
+        } catch (Throwable t) {
+            throw new IllegalStateException("FlagByte has no compatible raw-byte setter", t);
+        }
     }
 
     public <E extends Entity, T> EntityMetadata with(
@@ -131,9 +155,26 @@ public class EntityMetadata implements EntityMetadataView, Cloneable {
             remove(id);
     }
 
+
     @Override
     public List<MetadataItem<? extends Entity, ?>> items() {
         return items;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Map<MetadataKeyReference<? extends Entity, ?>, Object> toMap() {
+        Map<MetadataKeyReference<? extends Entity, ?>, Object> map = new HashMap<>();
+
+        for (MetadataItem<? extends Entity, ?> item : items) {
+            if (item == null) continue;
+
+            MetadataKeyReference key = item.asKey();
+            Object value = item.value();
+
+            map.put(key, value);
+        }
+
+        return map;
     }
 
     @Override

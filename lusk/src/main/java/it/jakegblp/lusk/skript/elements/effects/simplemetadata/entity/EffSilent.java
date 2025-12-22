@@ -35,8 +35,8 @@ public class EffSilent extends Effect {
 
     static {
         Skript.registerEffect(EffSilent.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] silent for %player%",
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] not silent for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] silent for %players%",
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] not silent for %players%"
                 );
     }
 

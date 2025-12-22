@@ -33,9 +33,9 @@ public class EffFire extends Effect {
 
     static {
         Skript.registerEffect(EffFire.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] on fire for %player%",
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] not on fire for %player%",
-                "extinguish [entity|entity with id] %entities/numbers%['s] for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] on fire for %players%",
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] not on fire for %players%",
+                "extinguish [entity|entity with id] %entities/numbers%['s] for %players%"
                 );
     }
 

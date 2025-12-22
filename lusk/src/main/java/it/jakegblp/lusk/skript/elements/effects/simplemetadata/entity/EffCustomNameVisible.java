@@ -33,9 +33,9 @@ public class EffCustomNameVisible extends Effect {
 
     static {
         Skript.registerEffect(EffCustomNameVisible.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name visible for %player%",
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name not visible for %player%",
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name invisible for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name visible for %players%",
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name not visible for %players%",
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name invisible for %players%"
                 );
     }
 

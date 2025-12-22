@@ -38,7 +38,7 @@ public class EffCustomName extends Effect {
 
     static {
         Skript.registerEffect(EffCustomName.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name [to] %string% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name [to] %string% for %players%"
         );
     }
 

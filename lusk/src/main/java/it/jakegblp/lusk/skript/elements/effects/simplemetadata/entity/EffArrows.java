@@ -34,7 +34,7 @@ public class EffArrows extends Effect {
 
     static {
         Skript.registerEffect(EffArrows.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] arrows in body to %number% for %player%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] arrows in body to %number% for %players%"
                 );
     }
 
