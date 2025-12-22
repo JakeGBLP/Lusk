@@ -17,10 +17,7 @@ import it.jakegblp.lusk.nms.core.world.player.GlowMap;
 import lombok.SneakyThrows;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -136,6 +133,11 @@ public interface SharedBehaviorAdapter<
 
     Object rewriteMetadataPacketForGlow(Object metadataPacket);
 
+    void setPlayerSpinAttack(Player player, int ticks);
+
+    void setCubeFast(Location corner1, Location corner2, BlockData blockData);
+
+    void replaceFast(Location corner1, Location corner2, BlockData oldBlockData, BlockData newBlockData)
 
     default NMSServerPlayer asServerPlayer(Player player) {
         return new SimpleClass<>(getCraftPlayerClass()).getMethod("getHandle", false, true).invoke(player);

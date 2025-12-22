@@ -9,6 +9,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.papermc.paper.adventure.PaperAdventure;
 import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
@@ -53,15 +54,20 @@ import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftParticle;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTeleportEvent;
@@ -192,7 +198,7 @@ public class AllVersions implements
     @Nullable
     public Entity getEntityFromId(int id, World world) {
         final net.minecraft.world.entity.Entity entity = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(id);
-        if(entity == null)
+        if (entity == null)
             return null;
         return entity.getBukkitEntity();
     }
@@ -213,6 +219,143 @@ public class AllVersions implements
             ));
 
         return new ClientboundSetEntityDataPacket(packet.id(), dataValues);
+    }
+
+    @Override
+    public void setPlayerSpinAttack(Player player, int ticks) {
+        ((CraftPlayer) player).getHandle().startAutoSpinAttack(ticks, 0, ItemStack.fromBukkitCopy(new org.bukkit.inventory.ItemStack(Material.TRIDENT)));
+    }
+
+    @Override
+    public void setCubeFast(Location corner1, Location corner2, BlockData blockData) {
+
+        if (corner1 == null || corner2 == null || blockData == null) return;
+        if (corner1.getWorld() == null || corner2.getWorld() == null) return;
+        if (!corner1.getWorld().equals(corner2.getWorld())) return;
+
+        final Map<LevelChunk, List<BlockPos>> chunkMap = getChunkBlockPositions(corner1, corner2);
+        if (chunkMap.isEmpty()) return;
+
+        final BlockState state = ((CraftBlockData) blockData).getState();
+        final World bukkitWorld = corner1.getWorld();
+
+        final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+        final ArrayList<int[]> touched = new ArrayList<>(chunkMap.size());
+
+        for (Map.Entry<LevelChunk, List<BlockPos>> entry : chunkMap.entrySet()) {
+            final LevelChunk chunk = entry.getKey();
+            final List<BlockPos> blockPositions = entry.getValue();
+            if (blockPositions == null || blockPositions.isEmpty()) continue;
+
+            final int cx = chunk.locX;
+            final int cz = chunk.locZ;
+
+            for (int i = 0, size = blockPositions.size(); i < size; i++) {
+                final BlockPos p = blockPositions.get(i);
+                mutable.set(p.getX(), p.getY(), p.getZ());
+                chunk.setBlockState(mutable, state, 206);
+            }
+
+            touched.add(new int[]{cx, cz});
+        }
+
+        for (int i = 0, size = touched.size(); i < size; i++) {
+            final int[] c = touched.get(i);
+            bukkitWorld.refreshChunk(c[0], c[1]);
+        }
+    }
+
+    @Override
+    public void replaceFast(Location corner1, Location corner2, BlockData oldBlockData, BlockData newBlockData) {
+        if (corner1 == null || corner2 == null || oldBlockData == null || newBlockData == null) return;
+        if (corner1.getWorld() == null || corner2.getWorld() == null) return;
+        if (!corner1.getWorld().equals(corner2.getWorld())) return;
+
+        final Map<LevelChunk, List<BlockPos>> chunkMap = getChunkBlockPositions(corner1, corner2);
+        if (chunkMap.isEmpty()) return;
+
+        final BlockState fromState = ((CraftBlockData) oldBlockData).getState();
+        final BlockState toState   = ((CraftBlockData) newBlockData).getState();
+        final World bukkitWorld = corner1.getWorld();
+
+        final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+        for (Map.Entry<LevelChunk, List<BlockPos>> entry : chunkMap.entrySet()) {
+            final LevelChunk chunk = entry.getKey();
+            final List<BlockPos> positions = entry.getValue();
+            if (positions == null || positions.isEmpty()) continue;
+
+            final int cx = chunk.locX;
+            final int cz = chunk.locZ;
+
+            for (int i = 0, size = positions.size(); i < size; i++) {
+                final BlockPos p = positions.get(i);
+
+                if (chunk.getBlockState(p) != fromState) continue;
+
+                mutable.set(p.getX(), p.getY(), p.getZ());
+
+                chunk.setBlockState(mutable, toState, 260);
+            }
+            bukkitWorld.refreshChunk(cx, cz);
+        }
+
+    }
+
+
+    private static Map<LevelChunk, List<BlockPos>> getChunkBlockPositions(Location loc1, Location loc2) {
+        final Map<LevelChunk, List<BlockPos>> chunkMap = new HashMap<>();
+
+        final int x1 = loc1.getBlockX();
+        final int y1 = loc1.getBlockY();
+        final int z1 = loc1.getBlockZ();
+
+        final int x2 = loc2.getBlockX();
+        final int y2 = loc2.getBlockY();
+        final int z2 = loc2.getBlockZ();
+
+        final int minX = Math.min(x1, x2);
+        final int minY = Math.min(y1, y2);
+        final int minZ = Math.min(z1, z2);
+
+        final int maxX = Math.max(x1, x2);
+        final int maxY = Math.max(y1, y2);
+        final int maxZ = Math.max(z1, z2);
+
+        final org.bukkit.World bw = loc1.getWorld();
+        final net.minecraft.world.level.Level nmsLevel = ((org.bukkit.craftbukkit.CraftWorld) bw).getHandle();
+
+        final int minChunkX = minX >> 4;
+        final int maxChunkX = maxX >> 4;
+        final int minChunkZ = minZ >> 4;
+        final int maxChunkZ = maxZ >> 4;
+
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            final int wx0 = Math.max(minX, cx << 4);
+            final int wx1 = Math.min(maxX, (cx << 4) + 15);
+
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                final int wz0 = Math.max(minZ, cz << 4);
+                final int wz1 = Math.min(maxZ, (cz << 4) + 15);
+
+                final net.minecraft.world.level.chunk.LevelChunk chunk =
+                        nmsLevel.getChunk(cx, cz);
+
+                final int cap = Math.max(16, (wx1 - wx0 + 1) * (maxY - minY + 1) * (wz1 - wz0 + 1));
+                final ArrayList<BlockPos> list = new ArrayList<>(cap);
+                chunkMap.put(chunk, list);
+
+                for (int x = wx0; x <= wx1; x++) {
+                    for (int y = minY; y <= maxY; y++) {
+                        for (int z = wz0; z <= wz1; z++) {
+                            list.add(new BlockPos(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+        return chunkMap;
     }
 
 
