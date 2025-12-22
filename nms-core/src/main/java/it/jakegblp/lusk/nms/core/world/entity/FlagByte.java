@@ -4,6 +4,7 @@ import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bukkit.entity.Entity;
 
 @NoArgsConstructor
@@ -16,9 +17,18 @@ public abstract class FlagByte<B extends BitFlag<T>, E extends Entity, T> implem
 
     protected byte flags;
 
+    @Setter
+    public byte raw;
+
+    public FlagByte(byte flags){
+        this.flags = flags;
+    }
+
     public abstract Class<B> getBitFlagClass();
 
     public abstract Class<E> getFlagHolderClass();
+
+
 
     public B[] getConstants() {
         return getBitFlagClass().getEnumConstants();
