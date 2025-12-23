@@ -70,7 +70,9 @@ public interface SharedBehaviorAdapter<
         NMSTeamParameters,
         NMSEntityEventPacket,
         NMSTeleportPacket,
-        NMSBlockUpdatePacket
+        NMSBlockUpdatePacket,
+        NMSSoundPacket,
+        NMSSoundEntityPacket
         > {
 
     String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
@@ -327,6 +329,28 @@ public interface SharedBehaviorAdapter<
 
     default boolean isNMSBlockUpdatePacket(Object object) {
         return getNMSBlockUpdatePacketClass().isInstance(object);
+    }
+
+
+    NMSSoundPacket toNMSSoundPacket(SoundPacket from);
+
+    SoundPacket fromNMSSoundPacket(NMSSoundPacket from);
+
+    Class<NMSSoundPacket> getNMSSoundPacketClass();
+
+    default boolean isNMSSoundPacket(Object object) {
+        return getNMSSoundPacketClass().isInstance(object);
+    }
+
+
+    NMSSoundEntityPacket toNMSSoundEntityPacket(SoundEntityPacket from);
+
+    SoundEntityPacket fromNMSSoundEntityPacket(NMSSoundEntityPacket from);
+
+    Class<NMSSoundEntityPacket> getNMSSoundEntityPacketClass();
+
+    default boolean isNMSSoundEntityPacket(Object object) {
+        return getNMSSoundEntityPacketClass().isInstance(object);
     }
 
 
@@ -594,6 +618,54 @@ public interface SharedBehaviorAdapter<
 
                     super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
                     return;
+                }
+                else if(isNMSSoundPacket(msg)){
+                    final SoundPacket soundPacket = fromNMSSoundPacket((NMSSoundPacket) msg);
+
+                    final SoundEvent event = new SoundEvent(player, true);
+
+                    event.setEntitySound(false);
+
+                    event.setX(soundPacket.getX());
+                    event.setY(soundPacket.getY());
+                    event.setY(soundPacket.getY());
+                    event.setPitch(soundPacket.getPitch());
+                    event.setVolume(soundPacket.getVolume());
+                    event.setSeed(soundPacket.getSeed());
+                    event.setSound(soundPacket.getSound());
+                    event.setSoundSource(soundPacket.getSoundSource());
+
+                    pluginManager.callEvent(event);
+                    if(event.isCancelled())
+                        return;
+                }
+                else if(isNMSSoundEntityPacket(msg)){
+                    final SoundEntityPacket soundPacket = fromNMSSoundEntityPacket((NMSSoundEntityPacket) msg);
+
+                    final SoundEvent event = new SoundEvent(player, true);
+
+                    event.setEntitySound(true);
+
+                    event.setPitch(soundPacket.getPitch());
+                    event.setVolume(soundPacket.getVolume());
+                    event.setSeed(soundPacket.getSeed());
+                    event.setSound(soundPacket.getSound());
+                    event.setSoundSource(soundPacket.getSoundSource());
+
+                    final int id = soundPacket.getId();
+                    final Entity entity = soundPacket.getEntity();
+
+                    if(id != 0)
+                        event.setEntityID(id);
+                    if(entity != null)
+                        event.setEntity(entity);
+                    else
+                        event.setEntity(getEntityFromId(id, player.getWorld()));
+
+
+                    pluginManager.callEvent(event);
+                    if(event.isCancelled())
+                        return;
                 }
 
 

@@ -173,6 +173,8 @@ public abstract class AbstractNMS<
         else if (isNMSSetCameraPacket(object)) return fromNMSSetCameraPacket(object);
         else if (isNMSTeleportPacket(object)) return fromNMSTeleportPacket(object);
         else if (isNMSBlockUpdatePacket(object)) return fromNMSBlockUpdatePacket(object);
+        else if (isNMSSoundPacket(object)) return fromNMSSoundPacket(object);
+        else if (isNMSSoundEntityPacket(object)) return fromNMSSoundEntityPacket(object);
         return null;
     }
 

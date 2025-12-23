@@ -22,6 +22,7 @@ import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -44,6 +45,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
@@ -61,12 +63,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.CraftParticle;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.*;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -120,7 +121,9 @@ public class AllVersions implements
                 ClientboundSetPlayerTeamPacket.Parameters,
                 ClientboundEntityEventPacket,
                 ClientboundEntityPositionSyncPacket, // todo add teleport packet for 1.21.2 and below (the packet changed for higher to this)
-                ClientboundBlockUpdatePacket
+                ClientboundBlockUpdatePacket,
+                ClientboundSoundPacket,
+                ClientboundSoundEntityPacket
                 > {
 
     private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
@@ -842,6 +845,63 @@ public class AllVersions implements
     }
 
 
+
+    @Override
+    public ClientboundSoundPacket toNMSSoundPacket(SoundPacket from) {
+        return new ClientboundSoundPacket(CraftSound.bukkitToMinecraftHolder(from.getSound()),
+                SoundSource.valueOf(from.getSoundSource().name()),
+                from.getX(),
+                from.getY(),
+                from.getZ(),
+                from.getVolume(),
+                from.getPitch(),
+                from.getSeed());
+    }
+
+    @Override
+    public SoundPacket fromNMSSoundPacket(ClientboundSoundPacket from) {
+        return new SoundPacket(CraftSound.minecraftHolderToBukkit(from.getSound()),
+                SoundCategory.valueOf(from.getSource().getName()),
+                from.getX(),
+                from.getY(),
+                from.getZ(),
+                from.getVolume(),
+                from.getPitch(),
+                from.getSeed());
+    }
+
+    @Override
+    public Class<ClientboundSoundPacket> getNMSSoundPacketClass() {
+        return ClientboundSoundPacket.class;
+    }
+
+
+    @Override
+    public ClientboundSoundEntityPacket toNMSSoundEntityPacket(SoundEntityPacket from) {
+        return new ClientboundSoundEntityPacket(CraftSound.bukkitToMinecraftHolder(from.getSound()),
+                SoundSource.valueOf(from.getSoundSource().name()),
+                ((CraftEntity) from.getEntity()).getHandle(),
+                from.getVolume(),
+                from.getPitch(),
+                from.getSeed()
+        );
+    }
+
+    @Override
+    public SoundEntityPacket fromNMSSoundEntityPacket(ClientboundSoundEntityPacket from) {
+        return new SoundEntityPacket(CraftSound.minecraftHolderToBukkit(from.getSound()),
+                SoundCategory.valueOf(from.getSource().getName()),
+                from.getId(),
+                from.getVolume(),
+                from.getPitch(),
+                from.getSeed()
+        );
+    }
+
+    @Override
+    public Class<ClientboundSoundEntityPacket> getNMSSoundEntityPacketClass() {
+        return ClientboundSoundEntityPacket.class;
+    }
 
 
     @Override
