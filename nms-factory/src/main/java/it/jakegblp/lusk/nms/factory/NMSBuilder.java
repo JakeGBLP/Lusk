@@ -2,10 +2,7 @@ package it.jakegblp.lusk.nms.factory;
 
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SetEquipmentPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
+import it.jakegblp.lusk.nms.core.adapters.*;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +12,7 @@ public class NMSBuilder {
     private final int major, minor, patch;
     private JavaPlugin plugin;
     private @SuppressWarnings("rawtypes") SharedBehaviorAdapter sharedBehaviorAdapter;
+    private @SuppressWarnings("rawtypes") SharedBiomeAdapter sharedBiomeAdapter;
     private PlayerRotationPacketAdapter playerRotationPacketAdapter;
     private SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter;
     private PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter;
@@ -32,12 +30,15 @@ public class NMSBuilder {
                 SharedBehaviorAdapter.class,
                 PlayerRotationPacketAdapter.class,
                 SetEquipmentPacketAdapter.class,
-                PlayerPositionPacketAdapter.class).newInstance(
-                        plugin,
-                        sharedBehaviorAdapter,
-                        playerRotationPacketAdapter,
-                        setEquipmentPacketAdapter,
-                        playerPositionPacketAdapter);
+                PlayerPositionPacketAdapter.class,
+                SharedBiomeAdapter.class).newInstance(
+                plugin,
+                sharedBehaviorAdapter,
+                playerRotationPacketAdapter,
+                setEquipmentPacketAdapter,
+                playerPositionPacketAdapter,
+                sharedBiomeAdapter
+        );
     }
 
 }

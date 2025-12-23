@@ -3,6 +3,7 @@ package it.jakegblp.lusk.nms.factory;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
 import it.jakegblp.lusk.nms.impl.allversions.AllVersions;
+import it.jakegblp.lusk.nms.impl.allversions.BiomeAllVersions;
 import it.jakegblp.lusk.nms.impl.from_1_20_6.From_1_20_6;
 import it.jakegblp.lusk.nms.impl.from_1_21_3.From_1_21_3;
 import it.jakegblp.lusk.nms.impl.to_1_20_4.To_1_20_4;
@@ -53,6 +54,8 @@ public class NMSFactory {
             nmsBuilder.setSetEquipmentPacketAdapter(new To_1_20_4());
 
         nmsBuilder.setSharedBehaviorAdapter(new AllVersions());
+        nmsBuilder.setSharedBiomeAdapter(new BiomeAllVersions());
+
 
         return nmsBuilder.build();
     }
