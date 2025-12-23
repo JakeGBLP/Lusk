@@ -34,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BiomeAllVersions implements SharedBiomeAdapter {
 
+    //todo test and adapt for older mc versions (does it work on older? who knows)
 
     @Override
     public void sendBiomePacket(Set<Player> viewers, Location corner1, Location corner2, String biomeName) {
