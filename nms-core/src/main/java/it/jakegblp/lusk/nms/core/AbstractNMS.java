@@ -4,10 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.PlayerRotationPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SetEquipmentPacketAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
+import it.jakegblp.lusk.nms.core.adapters.*;
 import it.jakegblp.lusk.nms.core.injection.InjectionListener;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
@@ -49,6 +46,8 @@ public abstract class AbstractNMS<
     protected final JavaPlugin plugin;
     @Getter
     protected final Version version;
+    @Delegate
+    protected final SharedBiomeAdapter sharedBiomeAdapter;
 
     public AbstractNMS(
             JavaPlugin plugin,
@@ -57,7 +56,7 @@ public abstract class AbstractNMS<
             SharedBehaviorAdapter sharedBehaviorAdapter,
             PlayerRotationPacketAdapter playerRotationPacketAdapter,
             SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter,
-            PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter
+            PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter, SharedBiomeAdapter sharedBiomeAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
@@ -65,6 +64,7 @@ public abstract class AbstractNMS<
         this.playerRotationPacketAdapter = playerRotationPacketAdapter;
         this.setEquipmentPacketAdapter = setEquipmentPacketAdapter;
         this.playerPositionPacketAdapter = playerPositionPacketAdapter;
+        this.sharedBiomeAdapter = sharedBiomeAdapter;
         Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
         init();
     }

@@ -169,6 +169,7 @@ public class AllVersions implements
         return new BlockPos(blockVector.getBlockX(), blockVector.getBlockY(), blockVector.getBlockZ());
     }
 
+
     @Override
     public Class<BlockPos> getNMSBlockVectorClass() {
         return BlockPos.class;
@@ -839,6 +840,8 @@ public class AllVersions implements
     public Class<ClientboundBlockUpdatePacket> getNMSBlockUpdatePacketClass() {
         return ClientboundBlockUpdatePacket.class;
     }
+
+
 
 
     @Override

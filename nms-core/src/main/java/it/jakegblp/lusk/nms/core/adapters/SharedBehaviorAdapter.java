@@ -137,7 +137,10 @@ public interface SharedBehaviorAdapter<
 
     void setCubeFast(Location corner1, Location corner2, BlockData blockData);
 
-    void replaceFast(Location corner1, Location corner2, BlockData oldBlockData, BlockData newBlockData)
+    void replaceFast(Location corner1, Location corner2, BlockData oldBlockData, BlockData newBlockData);
+
+
+
 
     default NMSServerPlayer asServerPlayer(Player player) {
         return new SimpleClass<>(getCraftPlayerClass()).getMethod("getHandle", false, true).invoke(player);
@@ -325,6 +328,9 @@ public interface SharedBehaviorAdapter<
     default boolean isNMSBlockUpdatePacket(Object object) {
         return getNMSBlockUpdatePacketClass().isInstance(object);
     }
+
+
+
 
     NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 
