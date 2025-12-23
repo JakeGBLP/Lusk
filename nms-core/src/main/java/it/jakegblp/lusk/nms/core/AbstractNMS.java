@@ -56,7 +56,8 @@ public abstract class AbstractNMS<
             SharedBehaviorAdapter sharedBehaviorAdapter,
             PlayerRotationPacketAdapter playerRotationPacketAdapter,
             SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter,
-            PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter, SharedBiomeAdapter sharedBiomeAdapter
+            PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter,
+            SharedBiomeAdapter sharedBiomeAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
