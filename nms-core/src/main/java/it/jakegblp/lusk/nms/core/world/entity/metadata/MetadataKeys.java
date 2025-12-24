@@ -465,7 +465,7 @@ public final class MetadataKeys {
         MetadataKey<Display, Vector3f> SCALE = register("SCALE", Display.class, Vector3f.class);
         MetadataKey<Display, Quaternionf> ROTATION_LEFT = register("ROTATION_LEFT", Display.class, Quaternionf.class);
         MetadataKey<Display, Quaternionf> ROTATION_RIGHT = register("ROTATION_RIGHT", Display.class, Quaternionf.class);
-        MetadataKey<Display, Display.Billboard> BILLBOARD = register("BILLBOARD", Display.class, Display.Billboard.class);
+        MetadataKey<Display, Byte> BILLBOARD = register("BILLBOARD", Display.class, Byte.class);
         MetadataKey<Display, Display.Brightness> BRIGHTNESS = register("BRIGHTNESS", Display.class, Display.Brightness.class);
         MetadataKey<Display, Float> VIEW_RANGE = register("VIEW_RANGE", Display.class, Float.class);
         MetadataKey<Display, Float> SHADOW_RADIUS = register("SHADOW_RADIUS", Display.class, Float.class);
