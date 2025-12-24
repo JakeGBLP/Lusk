@@ -41,6 +41,7 @@ dependencies {
     compileOnly("org.apache.commons:commons-text:1.14.0")
     compileOnly("com.github.SkriptLang:Skript:$latestSkriptVersion")
     implementation("org.jspecify:jspecify:1.0.0")
+    compileOnly("io.netty:netty-all:4.2.9.Final")
     compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
@@ -176,8 +177,8 @@ subprojects {
             implementation(project(":skript-core"))
         }
         compileOnly("org.apache.commons:commons-text:1.14.0")
-        compileOnly("com.mojang:datafixerupper:1.0.20")
-        compileOnly("io.netty:netty-all:4.1.87.Final")
+        compileOnly("com.mojang:datafixerupper:8.0.16")
+        compileOnly("io.netty:netty-all:4.2.9.Final")
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("org.jspecify:jspecify:1.0.0")
         compileOnly("org.jetbrains:annotations:20.1.0")

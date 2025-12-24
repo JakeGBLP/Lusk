@@ -12,9 +12,8 @@ public class NMSBuilder {
     private final int major, minor, patch;
     private JavaPlugin plugin;
     private @SuppressWarnings("rawtypes") SharedBehaviorAdapter sharedBehaviorAdapter;
-    private @SuppressWarnings("rawtypes") SharedBiomeAdapter sharedBiomeAdapter;
+    private SharedBiomeAdapter sharedBiomeAdapter;
     private PlayerRotationPacketAdapter playerRotationPacketAdapter;
-    private SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter;
     private PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter;
 
     public NMSBuilder(int major, int minor, int patch) {
@@ -29,13 +28,11 @@ public class NMSBuilder {
                 JavaPlugin.class,
                 SharedBehaviorAdapter.class,
                 PlayerRotationPacketAdapter.class,
-                SetEquipmentPacketAdapter.class,
                 PlayerPositionPacketAdapter.class,
                 SharedBiomeAdapter.class).newInstance(
                 plugin,
                 sharedBehaviorAdapter,
                 playerRotationPacketAdapter,
-                setEquipmentPacketAdapter,
                 playerPositionPacketAdapter,
                 sharedBiomeAdapter
         );

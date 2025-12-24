@@ -1,64 +1,42 @@
 package it.jakegblp.lusk.nms.core.adapters;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.google.common.collect.BiMap;
 import io.netty.channel.*;
-import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
-import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlags;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyReference;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
+import it.jakegblp.lusk.nms.core.util.BufferCodec;
+import it.jakegblp.lusk.nms.core.util.TypedBufferCodec;
 import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import it.jakegblp.lusk.nms.core.world.player.GlowMap;
 import lombok.SneakyThrows;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Pose;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockVector;
-import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.nio.channels.ClosedChannelException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public interface SharedBehaviorAdapter<
-        NMSEquipmentSlot extends Enum<NMSEquipmentSlot>,
-        NMSItemStack,
-        NMSVector,
-        NMSBlockPos,
         NMSServerPlayer,
-        NMSPose,
-        NMSComponent,
         NMSPacket,
-        NMSNamespacedKey,
-        NMSGameMode,
-        NMSPlayerProfile,
         NMSChatSessionData,
-        NMSEntityType,
         NMSServerGamePacketListenerImpl,
         NMSConnection,
         NMSTeamVisibility,
         NMSTeamCollisionRule,
         NMSDedicatedServer,
         NMSClientBundlePacket,
-        NMSBlockDestructionPacket,
-        NMSEntityAnimationPacket,
-        NMSAddEntityPacket,
-        NMSRemoveEntitiesPacket,
         NMSEntityMetadataPacket,
         NMSPlayerInfoUpdatePacket,
         NMSPlayerInfoUpdatePacketAction,
@@ -71,63 +49,74 @@ public interface SharedBehaviorAdapter<
         NMSEntityEventPacket,
         NMSTeleportPacket,
         NMSBlockUpdatePacket,
+        NMSSound,
+        NMSSoundHolder,
         NMSSoundPacket,
-        NMSSoundEntityPacket
+        NMSSoundEntityPacket,
+        NMSSetEquipmentPacket
         > {
 
-    String CRAFT_BUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
+    Map<Class<?>, BufferCodec<?, ?>> fromNms = new HashMap<>();
+    Map<Class<?>, BufferCodec<?, ?>> toNms = new HashMap<>();
+
+    @NullMarked
+    default <F, T> BufferCodec<F, T> registerCodec(
+            Class<F> from,
+            Class<T> to,
+            BufferCodec.Writer<F> writeFrom,
+            BufferCodec.Reader<F> readFrom,
+            BufferCodec.Writer<T> writeTo,
+            BufferCodec.Reader<T> readTo
+    ) {
+        return registerCodec(BufferCodec.of(from, to, writeFrom, readFrom, writeTo, readTo));
+    }
+
+    @NullMarked
+    default <F> BufferCodec<F, F> registerCodec(Class<F> from, BufferCodec<F, F> codec) {
+        fromNms.put(from, codec);
+        toNms.put(from, codec);
+        return codec;
+    }
+
+    @NullMarked
+    default <F, T> BufferCodec<F, T> registerCodec(Class<F> from, Class<T> to, BufferCodec<F, T> codec) {
+        fromNms.put(from, codec);
+        toNms.put(to, codec);
+        return codec;
+    }
+
+    @NullMarked
+    default <C extends TypedBufferCodec<F, T>, F, T> C registerCodec(C codec) {
+        fromNms.put(codec.getFromClass(), codec);
+        toNms.put(codec.getToClass(), codec);
+        return codec;
+    }
+
+    @SuppressWarnings("unchecked")
+    default <F, T> BufferCodec<F, T> getCodec(Class<F> type) {
+        return (BufferCodec<F, T>) fromNms.getOrDefault(type, toNms.get(type));
+    }
+
+
+    @SuppressWarnings("unchecked")
+    default <F, T> @Nullable T fromNMS(@NotNull F f) {
+        BufferCodec<F, T> codec = (BufferCodec<F, T>) fromNms.get(f.getClass());
+        if (codec == null) return null;
+        return codec.encode(f);
+    }
+
+    @SuppressWarnings("unchecked")
+    default <F, T> F toNMS(@NotNull T t) {
+        BufferCodec<F, T> codec = (BufferCodec<F, T>) toNms.get(t.getClass());
+        if (codec == null) return null;
+        return codec.decode(t);
+    }
 
     Class<NMSPacket> getNMSPacketClass();
 
     default boolean isNMSPacket(Object object) {
         return getNMSPacketClass().isInstance(object);
     }
-
-    default NMSEquipmentSlot asNMSEquipmentSlot(EquipmentSlot equipmentSlot) {
-        return Enum.valueOf(getNMSEquipmentSlotClass(), equipmentSlot == EquipmentSlot.HAND ? "MAINHAND" : equipmentSlot.name().replace("_", ""));
-    }
-
-    default EquipmentSlot asEquipmentSlot(NMSEquipmentSlot equipmentSlot) {
-        String name = equipmentSlot.name();
-        if (name.contains("MAIN")) return EquipmentSlot.HAND;
-        return EquipmentSlot.valueOf(equipmentSlot.name().replace("HAND", "_HAND"));
-    }
-
-    default NMSItemStack asNMSItemStack(ItemStack itemStack) {
-        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asNMSCopy", true, true, ItemStack.class).invoke(null, itemStack);
-    }
-
-    default ItemStack asItemStack(NMSItemStack itemStack) {
-        return new SimpleClass<>(getCraftItemStackClass()).getMethod("asBukkitCopy", true, true, getNMSItemStackClass()).invoke(null, itemStack);
-    }
-
-    default Class<? extends ItemStack> getCraftItemStackClass() {
-        return SimpleClass.quickClass(CRAFT_BUKKIT_PACKAGE + ".inventory.CraftItemStack");
-    }
-
-    Class<NMSItemStack> getNMSItemStackClass();
-
-    Class<NMSEquipmentSlot> getNMSEquipmentSlotClass();
-
-    BiMap<Pose, NMSPose> getPoseMap();
-
-    Vector asVector(NMSVector nmsVector);
-
-    NMSVector asNMSVector(Vector vector);
-
-    Class<NMSVector> getNMSVectorClass();
-
-    BlockVector asBlockVector(NMSBlockPos blockPosition);
-
-    NMSBlockPos asNMSBlockVector(BlockVector blockVector);
-
-    Class<NMSBlockPos> getNMSBlockVectorClass();
-
-    Pose asPose(NMSPose nmsPose);
-
-    NMSPose asNMSPose(Pose pose);
-
-    Class<NMSPose> getNMSPoseClass();
 
     Player asPlayer(NMSServerPlayer serverPlayer);
 
@@ -141,18 +130,9 @@ public interface SharedBehaviorAdapter<
 
     void replaceFast(Location corner1, Location corner2, BlockData oldBlockData, BlockData newBlockData);
 
-
-
-
-    default NMSServerPlayer asServerPlayer(Player player) {
-        return new SimpleClass<>(getCraftPlayerClass()).getMethod("getHandle", false, true).invoke(player);
-    }
+    NMSServerPlayer asServerPlayer(Player player);
 
     Class<NMSServerPlayer> getNMSServerPlayerClass();
-
-    default Class<? extends Player> getCraftPlayerClass() {
-        return SimpleClass.quickClass(CRAFT_BUKKIT_PACKAGE + ".entity.CraftPlayer");
-    }
 
     NMSServerGamePacketListenerImpl getPlayerConnection(NMSServerPlayer serverPlayer);
 
@@ -168,46 +148,6 @@ public interface SharedBehaviorAdapter<
 
     default boolean isNMSClientBundlePacket(Object object) {
         return getNMSClientBundlePacketClass().isInstance(object);
-    }
-
-    NMSAddEntityPacket toNMSAddEntityPacket(AddEntityPacket from);
-
-    AddEntityPacket fromNMSAddEntityPacket(NMSAddEntityPacket from);
-
-    Class<NMSAddEntityPacket> getNMSAddEntityPacketClass();
-
-    default boolean isNMSAddEntityPacket(Object object) {
-        return getNMSAddEntityPacketClass().isInstance(object);
-    }
-
-    NMSBlockDestructionPacket toNMSBlockDestructionPacket(BlockDestructionPacket from);
-
-    BlockDestructionPacket fromNMSBlockDestructionPacket(NMSBlockDestructionPacket from);
-
-    Class<NMSBlockDestructionPacket> getNMSBlockDestructionPacketClass();
-
-    default boolean isNMSBlockDestructionPacket(Object object) {
-        return getNMSBlockDestructionPacketClass().isInstance(object);
-    }
-
-    NMSEntityAnimationPacket toNMSEntityAnimationPacket(EntityAnimationPacket from);
-
-    EntityAnimationPacket fromNMSEntityAnimationPacket(NMSEntityAnimationPacket from);
-
-    Class<NMSEntityAnimationPacket> getNMSEntityAnimationPacketClass();
-
-    default boolean isNMSEntityAnimationPacket(Object object) {
-        return getNMSEntityAnimationPacketClass().isInstance(object);
-    }
-
-    NMSRemoveEntitiesPacket toNMSRemoveEntitiesPacket(RemoveEntitiesPacket from);
-
-    RemoveEntitiesPacket fromNMSRemoveEntitiesPacket(NMSRemoveEntitiesPacket from);
-
-    Class<NMSRemoveEntitiesPacket> getNMSRemoveEntitiesPacketClass();
-
-    default boolean isNMSRemoveEntitiesPacket(Object object) {
-        return getNMSRemoveEntitiesPacketClass().isInstance(object);
     }
 
     NMSEntityMetadataPacket toNMSEntityMetadataPacket(EntityMetadataPacket from);
@@ -331,6 +271,20 @@ public interface SharedBehaviorAdapter<
         return getNMSBlockUpdatePacketClass().isInstance(object);
     }
 
+    NMSSound toNMSSound(Sound from);
+
+    Sound fromNMSSound(NMSSound from);
+
+    NMSSoundHolder toNMSSoundHolder(Sound from);
+
+    Sound fromNMSSoundHolder(NMSSoundHolder from);
+
+    Class<NMSSound> getNMSSoundClass();
+
+    default boolean isNMSSound(Object object) {
+        return getNMSSoundClass().isInstance(object);
+    }
+
 
     NMSSoundPacket toNMSSoundPacket(SoundPacket from);
 
@@ -353,8 +307,15 @@ public interface SharedBehaviorAdapter<
         return getNMSSoundEntityPacketClass().isInstance(object);
     }
 
+    NMSSetEquipmentPacket toNMSSetEquipmentPacket(SetEquipmentPacket from);
 
+    SetEquipmentPacket fromNMSSetEquipmentPacket(NMSSetEquipmentPacket from);
 
+    Class<NMSSetEquipmentPacket> getNMSSetEquipmentPacketClass();
+
+    default boolean isNMSSetEquipmentPacket(Object object) {
+        return getNMSSetEquipmentPacketClass().isInstance(object);
+    }
 
     NMSSetCameraPacket toNMSSetCameraPacket(SetCameraPacket from);
 
@@ -366,46 +327,6 @@ public interface SharedBehaviorAdapter<
         return getNMSSetCameraPacketClass().isInstance(object);
     }
 
-    NMSEntityType toNMSEntityType(EntityType from);
-
-    EntityType fromNMSEntityType(NMSEntityType to);
-
-    Class<NMSEntityType> getNMSEntityTypeClass();
-
-    default boolean isNMSEntityType(Object object) {
-        return getNMSEntityTypeClass().isInstance(object);
-    }
-
-    NMSNamespacedKey asNMSNamespacedKey(NamespacedKey key);
-
-    NamespacedKey asNamespacedKey(NMSNamespacedKey nmsNamespacedKey);
-
-    Class<NMSNamespacedKey> getNMSNamespacedKeyClass();
-
-    default boolean isNMSNamespacedKey(Object object) {
-        return getNMSNamespacedKeyClass().isInstance(object);
-    }
-
-    NMSGameMode toNMSGameMode(GameMode from);
-
-    GameMode fromNMSGameMode(NMSGameMode from);
-
-    Class<NMSGameMode> getNMSGameModeClass();
-
-    default boolean isNMSGameMode(Object object) {
-        return getNMSGameModeClass().isInstance(object);
-    }
-
-    NMSPlayerProfile toNMSPlayerProfile(PlayerProfile from);
-
-    PlayerProfile fromNMSPlayerProfile(NMSPlayerProfile from);
-
-    Class<NMSPlayerProfile> getNMSPlayerProfileClass();
-
-    default boolean isNMSPlayerProfile(Object object) {
-        return getNMSPlayerProfileClass().isInstance(object);
-    }
-
     NMSChatSessionData toNMSChatSessionData(ChatSessionData from);
 
     ChatSessionData fromNMSChatSessionData(NMSChatSessionData from);
@@ -414,16 +335,6 @@ public interface SharedBehaviorAdapter<
 
     default boolean isNMSChatSessionData(Object object) {
         return getNMSChatSessionDataClass().isInstance(object);
-    }
-
-    NMSComponent asNMSComponent(Component component);
-
-    Component asComponent(NMSComponent nmsComponent);
-
-    Class<NMSComponent> getNMSComponentClass();
-
-    default boolean isNMSComponent(Object object) {
-        return getNMSComponentClass().isInstance(object);
     }
 
     default void sendPacket(Player player, NMSPacket packet) {
@@ -618,8 +529,7 @@ public interface SharedBehaviorAdapter<
 
                     super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
                     return;
-                }
-                else if(isNMSSoundPacket(msg)){
+                } else if (isNMSSoundPacket(msg)) {
                     final SoundPacket soundPacket = fromNMSSoundPacket((NMSSoundPacket) msg);
 
                     final SoundEvent event = new SoundEvent(player, true);
@@ -636,10 +546,9 @@ public interface SharedBehaviorAdapter<
                     event.setSoundSource(soundPacket.getSoundSource());
 
                     pluginManager.callEvent(event);
-                    if(event.isCancelled())
+                    if (event.isCancelled())
                         return;
-                }
-                else if(isNMSSoundEntityPacket(msg)){
+                } else if (isNMSSoundEntityPacket(msg)) {
                     final SoundEntityPacket soundPacket = fromNMSSoundEntityPacket((NMSSoundEntityPacket) msg);
 
                     final SoundEvent event = new SoundEvent(player, true);

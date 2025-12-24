@@ -13,14 +13,9 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import lombok.Getter;
 import lombok.experimental.Delegate;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Pose;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.BlockVector;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,9 +33,6 @@ public abstract class AbstractNMS<
     protected final PlayerRotationPacketAdapter playerRotationPacketAdapter;
     @Delegate
     @SuppressWarnings("rawtypes")
-    protected final SetEquipmentPacketAdapter setEquipmentPacketAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
     protected final PlayerPositionPacketAdapter playerPositionPacketAdapter;
     @Getter
     protected final JavaPlugin plugin;
@@ -55,7 +47,6 @@ public abstract class AbstractNMS<
             @SuppressWarnings("rawtypes")
             SharedBehaviorAdapter sharedBehaviorAdapter,
             PlayerRotationPacketAdapter playerRotationPacketAdapter,
-            SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter,
             PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter,
             SharedBiomeAdapter sharedBiomeAdapter
     ) {
@@ -63,7 +54,6 @@ public abstract class AbstractNMS<
         this.version = version;
         this.sharedBehaviorAdapter = sharedBehaviorAdapter;
         this.playerRotationPacketAdapter = playerRotationPacketAdapter;
-        this.setEquipmentPacketAdapter = setEquipmentPacketAdapter;
         this.playerPositionPacketAdapter = playerPositionPacketAdapter;
         this.sharedBiomeAdapter = sharedBiomeAdapter;
         Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
@@ -131,22 +121,13 @@ public abstract class AbstractNMS<
     }
 
     public Class<?> getSerializableClass(Class<?> clazz) {
-        if (Component.class.isAssignableFrom(clazz)) return getNMSComponentClass();
-        else if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
-        else if (Pose.class.isAssignableFrom(clazz)) return getNMSPoseClass();
-        else if (BlockVector.class.isAssignableFrom(clazz)) return getNMSBlockVectorClass();
-        else if (Vector.class.isAssignableFrom(clazz)) return getNMSVectorClass();
-        else if (ItemStack.class.isAssignableFrom(clazz)) return getNMSItemStackClass();
+        if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
         return clazz;
     }
 
     public @Nullable Object toNMSObject(@Nullable Object object) {
         if (object instanceof NMSObject<?> nmsObject) return nmsObject.asNMS();
-        else if (object instanceof net.kyori.adventure.text.Component component) return asNMSComponent(component);
-        else if (object instanceof Pose pose) return asNMSPose(pose);
-        else if (object instanceof BlockVector blockVector) return asNMSBlockVector(blockVector);
         else if (object instanceof Player player) return asServerPlayer(player);
-        else if (object instanceof ItemStack itemStack) return asNMSItemStack(itemStack);
         return object;
     }
 
@@ -156,17 +137,13 @@ public abstract class AbstractNMS<
      * @param object an NMS Packet
      * @return the packet in a common form
      */
-    public @Nullable Packet fromNMSPacket(@Nullable Object object) {
-        if (isNMSEntityAnimationPacket(object)) return fromNMSEntityAnimationPacket(object);
-        else if (isNMSSetEquipmentPacket(object)) return fromNMSSetEquipmentPacket(object);
-        else if (isNMSBlockDestructionPacket(object)) return fromNMSBlockDestructionPacket(object);
+    public @NotNull Packet fromNMSPacket(@NotNull Object object) {
+        if (isNMSSetEquipmentPacket(object)) return fromNMSSetEquipmentPacket(object);
         else if (isNMSClientBundlePacket(object)) return fromNMSClientBundlePacket(object);
         else if (isNMSEntityMetadataPacket(object)) return fromNMSEntityMetadataPacket(object);
         else if (isNMSPlayerInfoUpdatePacket(object)) return fromNMSPlayerInfoUpdatePacket(object);
-        else if (isNMSAddEntityPacket(object)) return fromNMSAddEntityPacket(object);
         else if (isNMSPlayerRotationPacket(object)) return fromNMSPlayerRotationPacket(object);
         else if (isNMSPlayerPositionPacket(object)) return fromNMSPlayerPositionPacket(object);
-        else if (isNMSRemoveEntitiesPacket(object)) return fromNMSRemoveEntitiesPacket(object);
         else if (isNMSSystemChatPacket(object)) return fromNMSSystemChatPacket(object);
         else if (isNMSLevelParticle(object)) return fromNMSLevelParticle(object);
         else if (isNMSAttributePacket(object)) return fromNMSAttributePacket(object);
@@ -176,19 +153,15 @@ public abstract class AbstractNMS<
         else if (isNMSBlockUpdatePacket(object)) return fromNMSBlockUpdatePacket(object);
         else if (isNMSSoundPacket(object)) return fromNMSSoundPacket(object);
         else if (isNMSSoundEntityPacket(object)) return fromNMSSoundEntityPacket(object);
-        return null;
+        throw new IllegalArgumentException("Could not convert nms packet " + object.getClass().getName());
     }
 
-    public @Nullable Object fromNMSObject(@Nullable Object object) {
-        if (isNMSEntityType(object)) return fromNMSEntityType(object);
-        else if (isNMSPlayerProfile(object)) return fromNMSPlayerProfile(object);
-        else if (isNMSGameMode(object)) return fromNMSGameMode(object);
-        else if (isNMSComponent(object)) return asComponent(object);
-        else if (isNMSTeamParameters(object)) return fromNMSTeamParameters(object);
-        else if (isNMSNamespacedKey(object)) return asNamespacedKey(object);
+    public @NotNull Object fromNMSObject(@NotNull Object object) {
+        if (isNMSTeamParameters(object)) return fromNMSTeamParameters(object);
         else if (isNMSPlayerInfoUpdatePacketAction(object)) return fromNMSPlayerInfoUpdatePacketAction(object);
         else if (isNMSPacket(object)) return fromNMSPacket(object);
-        return null;
+        throw new IllegalArgumentException("Could not convert nms object " + object.getClass().getName());
+
     }
 
 }

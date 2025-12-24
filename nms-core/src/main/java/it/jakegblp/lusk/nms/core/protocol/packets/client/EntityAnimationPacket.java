@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +20,16 @@ public class EntityAnimationPacket implements ClientboundPacketWithId {
         this(entityId, EntityAnimation.fromId(entityAnimationId));
     }
 
+    public EntityAnimationPacket(SimpleByteBuf buffer) {
+        this(buffer.readVarInt(), buffer.readUnsignedByte());
+    }
+
     public int getEntityAnimationId() {
         return entityAnimation.getActionId();
     }
 
     @Override
     public Object asNMS() {
-        return NMS.toNMSEntityAnimationPacket(this);
+        return NMS.toNMS(this);
     }
 }

@@ -3,11 +3,8 @@ package it.jakegblp.lusk.nms.core.events;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -22,15 +19,15 @@ public class SoundEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
 
-    Sound sound;
-    SoundCategory soundSource;
-    double x,y,z;
-    float pitch,volume;
-    long seed;
+    protected Sound sound;
+    protected SoundCategory soundSource;
+    protected double x,y,z;
+    protected float pitch,volume;
+    protected long seed;
 
-    boolean isEntitySound;
-    int entityID;
-    Entity entity;
+    protected boolean isEntitySound;
+    protected int entityID;
+    protected Entity entity;
 
 
     boolean isCancelled;

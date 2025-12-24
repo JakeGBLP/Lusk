@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.common;
 
+import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,26 @@ public final class CommonUtils {
 
     public static int randomId() {
         return ThreadLocalRandom.current().nextInt(999999, Integer.MAX_VALUE);
+    }
+
+    public static byte packDegrees(float degrees) {
+        return (byte) Math.floor(degrees * 256.0F / 360.0F);
+    }
+
+    public static float unpackDegrees(byte degrees) {
+        return (float) (degrees * 360) / 256.0F;
+    }
+
+    public static long packInts(int x, int y, int z) {
+        return ((long) x & 67108863L) << 38 | (long) y & 4095L | ((long) z & 67108863L) << 12;
+    }
+
+    public static long packBlockVector(BlockVector blockVector) {
+        return packInts(blockVector.getBlockX(), blockVector.getBlockX(), blockVector.getBlockZ());
+    }
+
+    public static BlockVector unpackBlockVector(long packedBlockVector) {
+        return new BlockVector((int) (packedBlockVector >> 38), (int) (packedBlockVector << 52 >> 52), (int) (packedBlockVector << 26 >> 38));
     }
 
     /**

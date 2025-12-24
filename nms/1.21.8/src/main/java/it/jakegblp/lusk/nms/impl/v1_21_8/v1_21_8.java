@@ -37,8 +37,8 @@ public final class v1_21_8 extends AbstractNMS<
         EntityDataSerializer<?>
         > {
 
-    public v1_21_8(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, PlayerRotationPacketAdapter playerRotationPacketAdapter, SetEquipmentPacketAdapter<?> setEquipmentPacketAdapter, PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter, SharedBiomeAdapter sharedBiomeAdapter) {
-        super(plugin, Version.of(1, 21, 8), sharedBehaviorAdapter, playerRotationPacketAdapter, setEquipmentPacketAdapter, playerPositionPacketAdapter, sharedBiomeAdapter);
+    public v1_21_8(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, PlayerRotationPacketAdapter playerRotationPacketAdapter, PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter, SharedBiomeAdapter sharedBiomeAdapter) {
+        super(plugin, Version.of(1, 21, 8), sharedBehaviorAdapter, playerRotationPacketAdapter, playerPositionPacketAdapter, sharedBiomeAdapter);
     }
 
     @Override

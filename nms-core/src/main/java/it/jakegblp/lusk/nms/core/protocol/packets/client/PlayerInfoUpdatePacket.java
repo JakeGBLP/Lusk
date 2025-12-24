@@ -98,7 +98,6 @@ public class PlayerInfoUpdatePacket implements ClientboundPacket, AsyncablesWrap
             return CommonUtils.findFirst(values(), action -> action.propertyName.equals(propertyName));
         }
 
-        @SuppressWarnings("unchecked")
         public static Action<?> valueOf(String name) {
             return (Action<?>) valueOf(Action.class, name);
         }

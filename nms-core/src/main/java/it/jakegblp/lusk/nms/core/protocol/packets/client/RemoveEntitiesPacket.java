@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.SimpleList;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.*;
@@ -28,6 +29,9 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
 
     public RemoveEntitiesPacket() {
         this(new IntArrayList());
+    }
+    public RemoveEntitiesPacket(SimpleByteBuf buffer) {
+        this(buffer.readIntIdList());
     }
 
     @Override
@@ -65,7 +69,7 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
 
     @Override
     public Object asNMS() {
-        return NMS.toNMSRemoveEntitiesPacket(this);
+        return NMS.toNMS(this);
     }
 
     @Override

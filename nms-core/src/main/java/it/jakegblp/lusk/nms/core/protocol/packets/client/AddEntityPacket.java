@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -23,29 +24,50 @@ public class AddEntityPacket implements ClientboundPacketWithId {
     protected int id;
     protected @NotNull UUID entityUUID;
     protected double x, y, z;
-    protected float pitch, yaw;
-    protected double headYaw, xVelocity, yVelocity, zVelocity;
+    protected float pitch, yaw, headYaw;
+    protected @NotNull Vector velocity;
     protected @NotNull EntityType entityType;
     protected int data;
+
+    public AddEntityPacket(SimpleByteBuf buffer) {
+        this(buffer.readVarInt(),
+                buffer.readUUID(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readDouble(),
+                buffer.readPackedDegrees(),
+                buffer.readPackedDegrees(),
+                buffer.readPackedDegrees(),
+                buffer.readVector(),
+                buffer.readEntityType(),
+                buffer.readVarInt());
+    }
+
+    public AddEntityPacket(
+            int id,
+            @NotNull UUID entityUUID,
+            @NotNull Location location,
+            float headYaw,
+            @NotNull Vector velocity,
+            @NotNull EntityType entityType,
+            int data) {
+        this(id, entityUUID, location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw(), headYaw, velocity, entityType, data);
+    }
 
     public AddEntityPacket(
             int id,
             @NotNull UUID entityUUID,
             @NotNull Vector position,
-            double headYaw,
+            float headYaw,
             @NotNull Vector velocity,
             @NotNull EntityType entityType,
             int data) {
-        this(id, entityUUID, position.getX(), position.getY(), position.getZ(), 0, 0, headYaw, velocity.getX(), velocity.getY(), velocity.getZ(), entityType, data);
+        this(id, entityUUID, position.getX(), position.getY(), position.getZ(), 0, 0, headYaw, velocity, entityType, data);
     }
 
     @Override
     public Object asNMS() {
-        return NMS.toNMSAddEntityPacket(this);
-    }
-
-    public Vector getVelocity() {
-        return new Vector(xVelocity, yVelocity, zVelocity);
+        return NMS.toNMS(this);
     }
 
     /**
@@ -55,6 +77,7 @@ public class AddEntityPacket implements ClientboundPacketWithId {
         return new Location(null, x, y, z, yaw, pitch);
     }
 
+    // todo: finish
     @Override
     protected AddEntityPacket clone() throws CloneNotSupportedException {
         return (AddEntityPacket) super.clone();

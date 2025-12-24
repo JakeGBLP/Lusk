@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
 
@@ -85,15 +86,9 @@ public class EffSecSpawnFakeEntity extends OptionallySectionEffect {
                     AddEntityPacket entitySpawnPacket = new AddEntityPacket(
                             id,
                             UUID.randomUUID(),
-                            loc.getX(),
-                            loc.getY(),
-                            loc.getZ(),
-                            loc.getPitch(),
-                            loc.getYaw(),
+                            loc,
                             0,
-                            0,
-                            0,
-                            0,
+                            new Vector(),
                             bukkitEntityType,
                             0);
                     if (hasSection()) {

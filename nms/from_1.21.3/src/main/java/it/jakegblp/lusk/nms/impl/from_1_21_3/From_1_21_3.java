@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundPlayerRotationPacket;
 import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.util.Vector;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
@@ -39,8 +40,8 @@ public class From_1_21_3 implements PlayerRotationPacketAdapter, PlayerPositionP
     public ClientboundPlayerPositionPacket asNMSPlayerPositionPacket(PlayerPositionPacket packet) {
         return new ClientboundPlayerPositionPacket(packet.getTeleportId(),
                 new PositionMoveRotation(
-                        (Vec3) NMS.asNMSVector(packet.getPosition()),
-                        (Vec3) NMS.asNMSVector(packet.getVelocity()),
+                        (Vec3) NMS.toNMS(packet.getPosition()),
+                        (Vec3) NMS.toNMS(packet.getVelocity()),
                         packet.getYaw(),
                         packet.getPitch()
                 ), asNMSRelativeFlags(packet.getRelativeFlags()));
@@ -51,8 +52,8 @@ public class From_1_21_3 implements PlayerRotationPacketAdapter, PlayerPositionP
         var movement = clientboundPlayerPositionPacket.change();
         return new PlayerPositionPacket(
                 clientboundPlayerPositionPacket.id(),
-                NMS.asVector(movement.position()),
-                NMS.asVector(movement.deltaMovement()),
+                (Vector) NMS.fromNMS(movement.position()),
+                (Vector) NMS.fromNMS(movement.deltaMovement()),
                 movement.yRot(),
                 movement.xRot(),
                 fromNMSRelativeFlag(clientboundPlayerPositionPacket.relatives())

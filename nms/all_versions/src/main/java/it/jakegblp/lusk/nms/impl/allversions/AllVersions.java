@@ -2,16 +2,18 @@ package it.jakegblp.lusk.nms.impl.allversions;
 
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
+import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.papermc.paper.adventure.PaperAdventure;
 import it.jakegblp.lusk.common.CommonUtils;
-import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.util.BufferCodec;
+import it.jakegblp.lusk.nms.core.util.CompositeBufferCodec;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
@@ -19,32 +21,35 @@ import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
+import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.VarInt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.RemoteChatSession;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -55,13 +60,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import org.bukkit.*;
+import org.bukkit.Registry;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.*;
 import org.bukkit.craftbukkit.attribute.CraftAttribute;
@@ -69,47 +73,38 @@ import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
+import static it.jakegblp.lusk.common.StructureTranslation.fromMapToPairList;
+import static it.jakegblp.lusk.common.StructureTranslation.fromPairListToMap;
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.convertIfNotNull;
 import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
-import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.values;
+import static net.minecraft.network.codec.ByteBufCodecs.ROTATION_BYTE;
 
 @Getter
 public class AllVersions implements
         SharedBehaviorAdapter<
-                EquipmentSlot,
-                ItemStack,
-                Vec3,
-                BlockPos,
                 ServerPlayer,
-                Pose,
-                Component,
                 Packet,
-                ResourceLocation,
-                GameType,
-                GameProfile,
                 RemoteChatSession.Data,
-                EntityType,
                 ServerGamePacketListenerImpl,
                 Connection,
                 Team.Visibility,
                 Team.CollisionRule,
                 DedicatedServer,
                 ClientboundBundlePacket,
-                ClientboundBlockDestructionPacket,
-                ClientboundAnimatePacket,
-                ClientboundAddEntityPacket,
-                ClientboundRemoveEntitiesPacket,
                 ClientboundSetEntityDataPacket,
                 ClientboundPlayerInfoUpdatePacket,
                 ClientboundPlayerInfoUpdatePacket.Action,
@@ -122,75 +117,178 @@ public class AllVersions implements
                 ClientboundEntityEventPacket,
                 ClientboundEntityPositionSyncPacket, // todo add teleport packet for 1.21.2 and below (the packet changed for higher to this)
                 ClientboundBlockUpdatePacket,
+                SoundEvent,
+                Holder<SoundEvent>,
                 ClientboundSoundPacket,
-                ClientboundSoundEntityPacket
+                ClientboundSoundEntityPacket,
+                ClientboundSetEquipmentPacket
                 > {
 
-    private final BiMap<org.bukkit.entity.Pose, Pose> poseMap;
+    public <T> StreamCodec<SimpleByteBuf, T> registryCodec(final ResourceKey<? extends net.minecraft.core.Registry<T>> registryKey) {
+        return registryCodec(registryKey, (registry) -> registry);
+    }
 
-    public AllVersions() {
-        poseMap = ImmutableBiMap.of(org.bukkit.entity.Pose.SNEAKING, Pose.CROUCHING);
+    public <T, R> StreamCodec<SimpleByteBuf, R> registryCodec(final ResourceKey<? extends net.minecraft.core.Registry<T>> registryKey, final Function<net.minecraft.core.Registry<T>, IdMap<R>> idGetter) {
+        return new StreamCodec<>() {
+            private IdMap<R> getRegistryOrThrow() {
+                return idGetter.apply(AllVersions.this.getDedicatedServer().registryAccess().lookupOrThrow(registryKey));
+            }
+
+            public @NotNull R decode(@NotNull SimpleByteBuf buffer) {
+                return this.getRegistryOrThrow().byIdOrThrow(VarInt.read(buffer.unwrap()));
+            }
+
+            public void encode(@NotNull SimpleByteBuf buffer, @NotNull R value) {
+                VarInt.write(buffer.unwrap(), this.getRegistryOrThrow().getIdOrThrow(value));
+            }
+        };
+    }
+
+    public final BufferCodec<ResourceLocation, NamespacedKey> RESOURCE_LOCATION_256_CODEC =
+            registerCodec(ResourceLocation.class, NamespacedKey.class,
+                    (buffer, rl) -> buffer.writeString(rl.toString()),
+                    buffer -> ResourceLocation.parse(buffer.readString(256)),
+                    (buffer, key) -> buffer.writeString(key.toString()),
+                    buffer -> Preconditions.checkNotNull(NamespacedKey.fromString(buffer.readString(256)), "Invalid namespaced key codec conversion")
+            );
+
+    public final BufferCodec<Pose, org.bukkit.entity.Pose> POSE_CODEC =
+            registerCodec(BufferCodec.simple(
+                    Pose.class, org.bukkit.entity.Pose.class,
+                    nms -> Pose.CROUCHING.equals(nms) ? org.bukkit.entity.Pose.SNEAKING : org.bukkit.entity.Pose.valueOf(nms.name()),
+                    bukkit -> org.bukkit.entity.Pose.SNEAKING.equals(bukkit) ? Pose.CROUCHING : Pose.valueOf(bukkit.name()),
+                    (buffer, value) -> Pose.STREAM_CODEC.encode(buffer.unwrap(), value),
+                    buffer -> Pose.STREAM_CODEC.decode(buffer.unwrap()))
+            );
+    public final BufferCodec<Component, net.kyori.adventure.text.Component> COMPONENT_CODEC =
+            registerCodec(BufferCodec.simple(
+                    Component.class, net.kyori.adventure.text.Component.class,
+                    PaperAdventure::asAdventure,
+                    PaperAdventure::asVanilla,
+                    (buffer, value) -> ComponentSerialization.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), value),
+                    buffer -> ComponentSerialization.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
+            );
+
+    public final BufferCodec<EquipmentSlot, org.bukkit.inventory.EquipmentSlot> EQUIPMENTSLOT_CODEC =
+            registerCodec(BufferCodec.simple(
+                    EquipmentSlot.class, org.bukkit.inventory.EquipmentSlot.class,
+                    CraftEquipmentSlot::getSlot,
+                    CraftEquipmentSlot::getNMS,
+                    (buffer, value) -> EquipmentSlot.STREAM_CODEC.encode(buffer.unwrap(), value),
+                    buffer -> EquipmentSlot.STREAM_CODEC.decode(buffer.unwrap()))
+            );
+
+    public final BufferCodec<EntityType, org.bukkit.entity.EntityType> ENTITY_TYPE_CODEC =
+            BufferCodec.simple(EntityType.class, org.bukkit.entity.EntityType.class,
+                    entityType -> Registry.ENTITY_TYPE.getOrThrow(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.ENTITY_TYPE.getKey(entityType))),
+                    entityType -> BuiltInRegistries.ENTITY_TYPE.getValue(CraftNamespacedKey.toMinecraft(entityType.getKey())),
+                    (buffer, entityType) -> EntityType.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), entityType),
+                    buffer -> EntityType.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer))
+            );
+    public final BufferCodec<GameProfile, PlayerProfile> PLAYER_PROFILE_CODEC =
+            BufferCodec.simple(GameProfile.class, PlayerProfile.class,
+                    CraftPlayerProfile::asBukkitCopy,
+                    CraftPlayerProfile::asAuthlibCopy,
+                    (buffer, profile) ->  ByteBufCodecs.GAME_PROFILE.encode(buffer.unwrap(), profile),
+                    buffer -> ByteBufCodecs.GAME_PROFILE.decode(buffer.unwrap())
+            );
+    public final BufferCodec<Integer, Integer> UNSIGNED_BYTE_CODEC =
+            registerCodec(BufferCodec.identity(Integer.class, SimpleByteBuf::writeUnsignedByte, SimpleByteBuf::readUnsignedByte));
+
+    public final BufferCodec<Byte, Byte> BYTE_CODEC = registerCodec(BufferCodec.identity(Byte.class, SimpleByteBuf::writeByte, SimpleByteBuf::readByte));
+    public final BufferCodec<Integer, Integer> VAR_INT_CODEC = registerCodec(BufferCodec.identity(Integer.class, SimpleByteBuf::writeVarInt, SimpleByteBuf::readVarInt));
+    public final BufferCodec<Long, Long> LONG_CODEC = registerCodec(BufferCodec.identity(Long.class, SimpleByteBuf::writeLong, SimpleByteBuf::readLong));
+    public final BufferCodec<Double, Double> DOUBLE_CODEC = registerCodec(Double.class, Double.class, BufferCodec.identity(SimpleByteBuf::writeDouble, SimpleByteBuf::readDouble));
+    public final BufferCodec<UUID, UUID> UUID_CODEC = registerCodec(UUID.class, UUID.class, BufferCodec.identity(SimpleByteBuf::writeUUID, SimpleByteBuf::readUUID));
+
+    public final BufferCodec<Vec3, Vector> VECTOR_CODEC =
+            registerCodec(Vec3.class, Vector.class, BufferCodec.of(
+                    (buffer, vector) -> FriendlyByteBuf.writeVec3(buffer.unwrap(), vector),
+                    buffer -> FriendlyByteBuf.readVec3(buffer.unwrap()),
+                    SimpleByteBuf::writeVector,
+                    SimpleByteBuf::readVector)
+            );
+
+    public final BufferCodec<BlockPos, BlockVector> BLOCK_VECTOR_CODEC =
+            registerCodec(BlockPos.class, BlockVector.class, BufferCodec.of(
+                    (buffer, vector) -> FriendlyByteBuf.writeBlockPos(buffer.unwrap(), vector),
+                    buffer -> FriendlyByteBuf.readBlockPos(buffer.unwrap()),
+                    SimpleByteBuf::writeBlockVector,
+                    SimpleByteBuf::readBlockVector)
+            );
+
+    public final BufferCodec<Float, Float> DEGREES_CODEC =
+            registerCodec(Float.class, Float.class, BufferCodec.identity((buffer, value) -> ROTATION_BYTE.encode(buffer.unwrap(), value), buffer -> ROTATION_BYTE.decode(buffer.unwrap())));
+    public final BufferCodec<IntList, IntList> INT_LIST_CODEC =
+            registerCodec(IntList.class, IntList.class, BufferCodec.identity(SimpleByteBuf::writeIntIdList, SimpleByteBuf::readIntIdList));
+    public final BufferCodec<ClientboundAddEntityPacket, AddEntityPacket> ADD_ENTITY_PACKET_CODEC = registerCodec(
+            CompositeBufferCodec.builder(ClientboundAddEntityPacket.class, AddEntityPacket.class)
+                    .with(VAR_INT_CODEC, ClientboundAddEntityPacket::getId, AddEntityPacket::getId)
+                    .with(UUID_CODEC, ClientboundAddEntityPacket::getUUID, AddEntityPacket::getEntityUUID)
+                    .with(ENTITY_TYPE_CODEC, ClientboundAddEntityPacket::getType, AddEntityPacket::getEntityType)
+                    .with(DOUBLE_CODEC, ClientboundAddEntityPacket::getX, AddEntityPacket::getX)
+                    .with(DOUBLE_CODEC, ClientboundAddEntityPacket::getY, AddEntityPacket::getY)
+                    .with(DOUBLE_CODEC, ClientboundAddEntityPacket::getZ, AddEntityPacket::getZ)
+                    .with(VECTOR_CODEC, ClientboundAddEntityPacket::getMovement, AddEntityPacket::getVelocity)
+                    .with(DEGREES_CODEC, ClientboundAddEntityPacket::getXRot, AddEntityPacket::getPitch)
+                    .with(DEGREES_CODEC, ClientboundAddEntityPacket::getYRot, AddEntityPacket::getYaw)
+                    .with(DEGREES_CODEC, ClientboundAddEntityPacket::getYHeadRot, AddEntityPacket::getHeadYaw)
+                    .with(VAR_INT_CODEC, ClientboundAddEntityPacket::getData, AddEntityPacket::getData)
+                    .build(buffer -> ClientboundAddEntityPacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)), AddEntityPacket::new)
+            );
+
+    public final BufferCodec<ClientboundBlockDestructionPacket, BlockDestructionPacket> BLOCK_DESTRUCTION_PACKET_CODEC = registerCodec(
+            CompositeBufferCodec.builder(ClientboundBlockDestructionPacket.class, BlockDestructionPacket.class)
+                    .with(VAR_INT_CODEC, ClientboundBlockDestructionPacket::getId, BlockDestructionPacket::getId)
+                    .with(BLOCK_VECTOR_CODEC, ClientboundBlockDestructionPacket::getPos, BlockDestructionPacket::getPosition)
+                    .with(BYTE_CODEC, packet -> (byte)packet.getProgress(), packet -> (byte)packet.getBlockDestructionStage())
+                    .build(buffer -> ClientboundBlockDestructionPacket.STREAM_CODEC.decode(toFriendlyByteBuf(buffer)), BlockDestructionPacket::new)
+    );
+    public final BufferCodec<ClientboundAnimatePacket, EntityAnimationPacket> ENTITY_ANIMATION_PACKET_CODEC = registerCodec(
+            CompositeBufferCodec.builder(ClientboundAnimatePacket.class, EntityAnimationPacket.class)
+                    .with(VAR_INT_CODEC, ClientboundAnimatePacket::getId, EntityAnimationPacket::getId)
+                    .with(UNSIGNED_BYTE_CODEC, ClientboundAnimatePacket::getAction, EntityAnimationPacket::getEntityAnimationId)
+                    .build(buffer -> ClientboundAnimatePacket.STREAM_CODEC.decode(toFriendlyByteBuf(buffer)), EntityAnimationPacket::new)
+    );
+    public final BufferCodec<ClientboundRemoveEntitiesPacket, RemoveEntitiesPacket> REMOVE_ENTITIES_PACKET_CODEC = registerCodec(
+            CompositeBufferCodec.builder(ClientboundRemoveEntitiesPacket.class, RemoveEntitiesPacket.class)
+                    .with(INT_LIST_CODEC, ClientboundRemoveEntitiesPacket::getEntityIds, RemoveEntitiesPacket::getEntityIds)
+                    .build(buffer -> ClientboundRemoveEntitiesPacket.STREAM_CODEC.decode(toFriendlyByteBuf(buffer)), RemoveEntitiesPacket::new)
+    );
+    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> ITEMSTACK_CODEC =
+            registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
+                    CraftItemStack::asBukkitCopy, CraftItemStack::asNMSCopy,
+                    (buffer, value) -> ItemStack.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), value),
+                    buffer -> ItemStack.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
+            );
+    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> OPTIONAL_ITEMSTACK_CODEC =
+            registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
+                    CraftItemStack::asBukkitCopy, CraftItemStack::asNMSCopy,
+                    (buffer, value) -> ItemStack.OPTIONAL_STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), value),
+                    buffer -> ItemStack.OPTIONAL_STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
+            );
+    public final BufferCodec<GameType, GameMode> GAMEMODE_CODEC =
+            registerCodec(BufferCodec.simple(GameType.class, GameMode.class,
+                    gameType -> GameMode.getByValue(gameType.getId()), gameMode -> GameType.byId(gameMode.getValue()),
+                    (buffer, value) -> GameType.STREAM_CODEC.encode(buffer.unwrap(), value),
+                    buffer -> GameType.STREAM_CODEC.decode(buffer.unwrap()))
+            );
+
+    public RegistryFriendlyByteBuf toRegistryFriendlyByteBuf(SimpleByteBuf simpleByteBuf) {
+        return new RegistryFriendlyByteBuf(simpleByteBuf.unwrap(), getDedicatedServer().registryAccess());
+    }
+
+    public RegistryFriendlyByteBuf toRegistryFriendlyByteBuf(FriendlyByteBuf simpleByteBuf) {
+        return new RegistryFriendlyByteBuf(simpleByteBuf.unwrap(), getDedicatedServer().registryAccess());
+    }
+
+    public FriendlyByteBuf toFriendlyByteBuf(SimpleByteBuf simpleByteBuf) {
+        return new FriendlyByteBuf(simpleByteBuf.unwrap());
     }
 
     @Override
     public Class<Packet> getNMSPacketClass() {
         return Packet.class;
-    }
-
-    @Override
-    public Class<ItemStack> getNMSItemStackClass() {
-        return ItemStack.class;
-    }
-
-    @Override
-    public Class<EquipmentSlot> getNMSEquipmentSlotClass() {
-        return EquipmentSlot.class;
-    }
-
-    @Override
-    public Vector asVector(Vec3 vec3) {
-        return new Vector(vec3.x, vec3.y, vec3.z);
-    }
-
-    @Override
-    public Vec3 asNMSVector(Vector vector) {
-        return new Vec3(vector.getX(), vector.getY(), vector.getZ());
-    }
-
-    @Override
-    public Class<Vec3> getNMSVectorClass() {
-        return Vec3.class;
-    }
-
-    @Override
-    public BlockVector asBlockVector(BlockPos blockPosition) {
-        return new BlockVector(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-    }
-
-    @Override
-    public BlockPos asNMSBlockVector(BlockVector blockVector) {
-        return new BlockPos(blockVector.getBlockX(), blockVector.getBlockY(), blockVector.getBlockZ());
-    }
-
-
-    @Override
-    public Class<BlockPos> getNMSBlockVectorClass() {
-        return BlockPos.class;
-    }
-
-    @Override
-    public org.bukkit.entity.Pose asPose(Pose pose) {
-        return getPoseMap().inverse().getOrDefault(pose, org.bukkit.entity.Pose.valueOf(pose.toString()));
-    }
-
-    @Override
-    public Pose asNMSPose(org.bukkit.entity.Pose pose) {
-        return getPoseMap().getOrDefault(pose, Pose.valueOf(pose.toString()));
-    }
-
-    @Override
-    public Class<Pose> getNMSPoseClass() {
-        return Pose.class;
     }
 
     @Override
@@ -307,6 +405,10 @@ public class AllVersions implements
 
     }
 
+    @Override
+    public ServerPlayer asServerPlayer(Player player) {
+        return ((CraftPlayer)player).getHandle();
+    }
 
     private static Map<LevelChunk, List<BlockPos>> getChunkBlockPositions(Location loc1, Location loc2) {
         final Map<LevelChunk, List<BlockPos>> chunkMap = new HashMap<>();
@@ -399,52 +501,6 @@ public class AllVersions implements
     }
 
     @Override
-    @SuppressWarnings("ConstantConditions")
-    public ClientboundAddEntityPacket toNMSAddEntityPacket(AddEntityPacket from) {
-        return new ClientboundAddEntityPacket(
-                from.getId(),
-                from.getEntityUUID(),
-                from.getX(),
-                from.getY(),
-                from.getZ(),
-                from.getPitch(),
-                from.getYaw(),
-                toNMSEntityType(from.getEntityType()),
-                from.getData(),
-                asNMSVector(from.getVelocity()),
-                from.getHeadYaw());
-    }
-
-    @Override
-    public AddEntityPacket fromNMSAddEntityPacket(ClientboundAddEntityPacket from) {
-        return new AddEntityPacket(
-                from.getId(),
-                from.getUUID(),
-                from.getX(),
-                from.getY(),
-                from.getZ(),
-                from.getXRot(),
-                from.getYRot(),
-                from.getYHeadRot(),
-                from.getX(),
-                from.getY(),
-                from.getZ(),
-                fromNMSEntityType(from.getType()),
-                from.getData()
-        );
-    }
-
-    @Override
-    public Class<ClientboundAddEntityPacket> getNMSAddEntityPacketClass() {
-        return ClientboundAddEntityPacket.class;
-    }
-
-    @Override
-    public Class<Component> getNMSComponentClass() {
-        return Component.class;
-    }
-
-    @Override
     public void sendPacketInternal(ServerGamePacketListenerImpl serverGamePacketListener, Packet packet) {
         serverGamePacketListener.send(packet);
     }
@@ -493,54 +549,6 @@ public class AllVersions implements
     }
 
     @Override
-    public ClientboundBlockDestructionPacket toNMSBlockDestructionPacket(BlockDestructionPacket from) {
-        return new ClientboundBlockDestructionPacket(from.getId(), asNMSBlockVector(from.getPosition()), from.getBlockDestructionStage());
-    }
-
-    @Override
-    public BlockDestructionPacket fromNMSBlockDestructionPacket(ClientboundBlockDestructionPacket from) {
-        return new BlockDestructionPacket(from.getId(), asBlockVector(from.getPos()), from.getProgress());
-    }
-
-    @Override
-    public Class<ClientboundBlockDestructionPacket> getNMSBlockDestructionPacketClass() {
-        return ClientboundBlockDestructionPacket.class;
-    }
-
-    @Override
-    public ClientboundAnimatePacket toNMSEntityAnimationPacket(EntityAnimationPacket from) {
-        FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        friendlyByteBuf.writeVarInt(from.getId());
-        friendlyByteBuf.writeByte(from.getEntityAnimationId());
-        return ClientboundAnimatePacket.STREAM_CODEC.decode(friendlyByteBuf);
-    }
-
-    @Override
-    public EntityAnimationPacket fromNMSEntityAnimationPacket(ClientboundAnimatePacket from) {
-        return new EntityAnimationPacket(from.getId(), from.getAction());
-    }
-
-    @Override
-    public Class<ClientboundAnimatePacket> getNMSEntityAnimationPacketClass() {
-        return ClientboundAnimatePacket.class;
-    }
-
-    @Override
-    public ClientboundRemoveEntitiesPacket toNMSRemoveEntitiesPacket(RemoveEntitiesPacket from) {
-        return new ClientboundRemoveEntitiesPacket(from.getEntityIds());
-    }
-
-    @Override
-    public RemoveEntitiesPacket fromNMSRemoveEntitiesPacket(ClientboundRemoveEntitiesPacket from) {
-        return new RemoveEntitiesPacket(from.getEntityIds());
-    }
-
-    @Override
-    public Class<ClientboundRemoveEntitiesPacket> getNMSRemoveEntitiesPacketClass() {
-        return ClientboundRemoveEntitiesPacket.class;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public ClientboundSetEntityDataPacket toNMSEntityMetadataPacket(EntityMetadataPacket from) {
         return new ClientboundSetEntityDataPacket(
@@ -581,11 +589,11 @@ public class AllVersions implements
         return new ClientboundPlayerInfoUpdatePacket(actions,
                 (List<ClientboundPlayerInfoUpdatePacket.Entry>) CommonUtils.map(from.getPlayerInfos(), playerInfo -> new ClientboundPlayerInfoUpdatePacket.Entry(
                         playerInfo.getUUID(),
-                        convertIfNotNull(playerInfo.getPlayerProfile().getPlayerProfile(), this::toNMSPlayerProfile),
+                        convertIfNotNull(playerInfo.getPlayerProfile().getPlayerProfile(), PLAYER_PROFILE_CODEC::decode),
                         playerInfo.isListed(),
                         playerInfo.getLatency(),
-                        convertIfNotNull(playerInfo.getGameMode(), this::toNMSGameMode),
-                        convertIfNotNull(playerInfo.getDisplayName(), this::asNMSComponent),
+                        convertIfNotNull(playerInfo.getGameMode(), GAMEMODE_CODEC::decode),
+                        convertIfNotNull(playerInfo.getDisplayName(), COMPONENT_CODEC::decode),
                         playerInfo.isShowHat(),
                         playerInfo.getListOrder(),
                         convertIfNotNull(playerInfo.getChatSession(), this::toNMSChatSessionData)
@@ -598,11 +606,11 @@ public class AllVersions implements
         var actions = CommonUtils.map(from.actions(), this::fromNMSPlayerInfoUpdatePacketAction);
         return new PlayerInfoUpdatePacket(Set.copyOf(actions), CommonUtils.map(from.entries(), entry -> new PlayerInfo(
                 entry.profileId(),
-                convertIfNotNull(entry.profile(), this::fromNMSPlayerProfile),
+                convertIfNotNull(entry.profile(), PLAYER_PROFILE_CODEC::encode),
                 entry.listed(),
                 entry.latency(),
-                convertIfNotNull(entry.gameMode(), this::fromNMSGameMode),
-                convertIfNotNull(entry.displayName(), this::asComponent),
+                convertIfNotNull(entry.gameMode(), GAMEMODE_CODEC::encode),
+                convertIfNotNull(entry.displayName(), COMPONENT_CODEC::encode),
                 entry.showHat(),
                 entry.listOrder(),
                 convertIfNotNull(entry.chatSession(), this::fromNMSChatSessionData)
@@ -669,9 +677,9 @@ public class AllVersions implements
     @Contract("null -> null")
     public TeamParameters fromNMSTeamParameters(@Nullable ClientboundSetPlayerTeamPacket.Parameters from) {
         return from == null ? null : new TeamParameters(
-                asComponent(from.getDisplayName()),
-                asComponent(from.getPlayerPrefix()),
-                asComponent(from.getPlayerSuffix()),
+                COMPONENT_CODEC.encode(from.getDisplayName()),
+                COMPONENT_CODEC.encode(from.getPlayerPrefix()),
+                COMPONENT_CODEC.encode(from.getPlayerSuffix()),
                 fromNMSTeamVisibility(from.getNametagVisibility()),
                 fromNMSTeamCollisionRule(from.getCollisionRule()),
                 NamedTextColor.NAMES.value(from.getColor().getName()),
@@ -747,13 +755,13 @@ public class AllVersions implements
     @Override
     public ClientboundSetPlayerTeamPacket.Parameters toNMSTeamParameters(TeamParameters from) {
         var registryFriendlyByteBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getDedicatedServer().registryAccess());
-        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getDisplayName()));
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, COMPONENT_CODEC.decode(from.getDisplayName()));
         registryFriendlyByteBuf.writeByte(from.getOptions());
         Team.Visibility.STREAM_CODEC.encode(registryFriendlyByteBuf, toNMSTeamVisibility(from.getNametagVisibility()));
         Team.CollisionRule.STREAM_CODEC.encode(registryFriendlyByteBuf, toNMSTeamCollisionRule(from.getCollisionRule()));
         registryFriendlyByteBuf.writeVarInt(ChatFormatting.getByName(NamedTextColor.NAMES.key(from.getColor())).getId());
-        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getPlayerPrefix()));
-        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, asNMSComponent(from.getPlayerSuffix()));
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, COMPONENT_CODEC.decode(from.getPlayerPrefix()));
+        ComponentSerialization.TRUSTED_STREAM_CODEC.encode(registryFriendlyByteBuf, COMPONENT_CODEC.decode(from.getPlayerSuffix()));
         return new ClientboundSetPlayerTeamPacket.Parameters(registryFriendlyByteBuf);
     }
 
@@ -830,7 +838,7 @@ public class AllVersions implements
 
     @Override
     public ClientboundBlockUpdatePacket toNMSBlockUpdatePacket(BlockUpdatePacket from) {
-        return new ClientboundBlockUpdatePacket(asNMSBlockVector(from.getBlockPos()), ((CraftBlockData) from.getBlockState()).getState());
+        return new ClientboundBlockUpdatePacket(BLOCK_VECTOR_CODEC.decode(from.getBlockPos()), ((CraftBlockData) from.getBlockState()).getState());
     }
 
     @Override
@@ -844,11 +852,35 @@ public class AllVersions implements
         return ClientboundBlockUpdatePacket.class;
     }
 
+    @Override
+    public SoundEvent toNMSSound(Sound from) {
+        return toNMSSoundHolder(from).value();
+    }
 
+    @Override
+    public Sound fromNMSSound(SoundEvent from) {
+        return CraftSound.minecraftToBukkit(from);
+    }
+
+    @Override
+    public Holder<SoundEvent> toNMSSoundHolder(Sound from) {
+        return CraftSound.bukkitToMinecraftHolder(from);
+    }
+
+    @Override
+    public Sound fromNMSSoundHolder(Holder<SoundEvent> from) {
+        return CraftSound.minecraftHolderToBukkit(from);
+    }
+
+    @Override
+    public Class<SoundEvent> getNMSSoundClass() {
+        return SoundEvent.class;
+    }
 
     @Override
     public ClientboundSoundPacket toNMSSoundPacket(SoundPacket from) {
-        return new ClientboundSoundPacket(CraftSound.bukkitToMinecraftHolder(from.getSound()),
+        return new ClientboundSoundPacket(
+                toNMSSoundHolder(from.getSound()),
                 SoundSource.valueOf(from.getSoundSource().name()),
                 from.getX(),
                 from.getY(),
@@ -860,7 +892,8 @@ public class AllVersions implements
 
     @Override
     public SoundPacket fromNMSSoundPacket(ClientboundSoundPacket from) {
-        return new SoundPacket(CraftSound.minecraftHolderToBukkit(from.getSound()),
+        return new SoundPacket(
+                fromNMSSoundHolder(from.getSound()),
                 SoundCategory.valueOf(from.getSource().getName()),
                 from.getX(),
                 from.getY(),
@@ -903,6 +936,22 @@ public class AllVersions implements
         return ClientboundSoundEntityPacket.class;
     }
 
+    @Override
+    public ClientboundSetEquipmentPacket toNMSSetEquipmentPacket(SetEquipmentPacket from) {
+        List<Pair<EquipmentSlot, ItemStack>> list = fromMapToPairList(from.getEquipment(), EQUIPMENTSLOT_CODEC::decode, ITEMSTACK_CODEC::decode);
+        return new ClientboundSetEquipmentPacket(from.getId(), list);
+    }
+
+    @Override
+    public SetEquipmentPacket fromNMSSetEquipmentPacket(ClientboundSetEquipmentPacket from) {
+        return new SetEquipmentPacket(from.getEntity(), fromPairListToMap(from.getSlots(), EQUIPMENTSLOT_CODEC::encode, ITEMSTACK_CODEC::encode));
+    }
+
+    @Override
+    public Class<ClientboundSetEquipmentPacket> getNMSSetEquipmentPacketClass() {
+        return ClientboundSetEquipmentPacket.class;
+    }
+
 
     @Override
     public ClientboundLevelParticlesPacket toNMSLevelParticle(LevelParticlePacket from) {
@@ -912,7 +961,7 @@ public class AllVersions implements
     @Override
     public LevelParticlePacket fromNMSLevelParticle(ClientboundLevelParticlesPacket from) {
         final ParticleType<?> particle = from.getParticle().getType();
-        final Particle bukkitParticle = CraftParticle.minecraftToBukkit(particle); //todo test 1.19.4
+        final Particle bukkitParticle = CraftParticle.minecraftToBukkit(particle);
 
         return new LevelParticlePacket(from.getX(), from.getY(), from.getZ(), from.getXDist(), from.getYDist(), from.getZDist(), from.getMaxSpeed(), from.getCount(), from.isOverrideLimiter(), from.alwaysShow(), new it.jakegblp.lusk.nms.core.world.level.ParticleOptions(bukkitParticle));
     }
@@ -920,67 +969,6 @@ public class AllVersions implements
     @Override
     public Class<ClientboundLevelParticlesPacket> getNMSLevelParticleClass() {
         return ClientboundLevelParticlesPacket.class;
-    }
-
-    @Override
-    public EntityType<?> toNMSEntityType(org.bukkit.entity.EntityType from) {
-        return BuiltInRegistries.ENTITY_TYPE.getOptional(asNMSNamespacedKey(from.getKey())).orElseThrow();
-    }
-
-    @Override
-    public org.bukkit.entity.EntityType fromNMSEntityType(EntityType to) {
-        return Registry.ENTITY_TYPE.get(asNamespacedKey(BuiltInRegistries.ENTITY_TYPE.getKey(to)));
-    }
-
-    @Override
-    public Class<EntityType> getNMSEntityTypeClass() {
-        return EntityType.class;
-    }
-
-    @Override
-    public ResourceLocation asNMSNamespacedKey(NamespacedKey key) {
-        return PaperAdventure.asVanillaNullable(key);
-    }
-
-    @Override
-    public NamespacedKey asNamespacedKey(ResourceLocation resourceLocation) {
-        Key key = PaperAdventure.asAdventure(resourceLocation);
-        return new NamespacedKey(key.namespace(), key.value());
-    }
-
-    @Override
-    public Class<ResourceLocation> getNMSNamespacedKeyClass() {
-        return ResourceLocation.class;
-    }
-
-    @Override
-    public GameType toNMSGameMode(GameMode from) {
-        return GameType.valueOf(from.name());
-    }
-
-    @Override
-    public GameMode fromNMSGameMode(GameType from) {
-        return GameMode.valueOf(from.name());
-    }
-
-    @Override
-    public Class<GameType> getNMSGameModeClass() {
-        return GameType.class;
-    }
-
-    @Override
-    public GameProfile toNMSPlayerProfile(PlayerProfile from) {
-        return CraftPlayerProfile.asAuthlibCopy(from);
-    }
-
-    @Override
-    public PlayerProfile fromNMSPlayerProfile(GameProfile from) {
-        return CraftPlayerProfile.asBukkitCopy(from);
-    }
-
-    @Override
-    public Class<GameProfile> getNMSPlayerProfileClass() {
-        return GameProfile.class;
     }
 
     @Override
@@ -1000,13 +988,4 @@ public class AllVersions implements
         return RemoteChatSession.Data.class;
     }
 
-    @Override
-    public Component asNMSComponent(net.kyori.adventure.text.Component component) {
-        return PaperAdventure.asVanilla(component);
-    }
-
-    @Override
-    public net.kyori.adventure.text.Component asComponent(Component component) {
-        return PaperAdventure.asAdventure(component);
-    }
 }

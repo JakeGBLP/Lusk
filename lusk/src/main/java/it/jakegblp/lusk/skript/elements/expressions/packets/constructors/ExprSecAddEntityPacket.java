@@ -77,7 +77,7 @@ public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
                 getSingleNullable(entityIdExpression, event, NMSApi.generateRandomEntityId()),
                 getSingleNullable(uuidExpression, event, UUID.randomUUID()),
                 position,
-                getSingleNullable(headYawExpression, event, 0).doubleValue(),
+                getSingleNullable(headYawExpression, event, 0).floatValue(),
                 getSingleNullable(velocityExpression, event, new Vector()),
                 EntityUtils.toBukkitEntityType(type.data),
                 getSingleNullable(dataExpression, event, 0).intValue()

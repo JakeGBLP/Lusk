@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.common.annotations.Availability;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.EquipmentSlot;
@@ -16,23 +15,15 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 public class SetEquipmentPacket implements ClientboundPacketWithId {
 
     private int id;
-    @Availability(addedIn = "1.20.5")
     private boolean sanitized;
     private Map<EquipmentSlot, ItemStack> equipment;
 
-    @Availability(addedIn = "1.20.5")
-    public SetEquipmentPacket(int entityId, @Availability(addedIn = "1.20.5") boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
+    public SetEquipmentPacket(int entityId, boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
         this.id = entityId;
         this.sanitized = sanitized;
         this.equipment = equipment;
     }
 
-    @Availability(addedIn = "1.20.5")
-    public boolean isSanitized() {
-        return sanitized;
-    }
-
-    @Availability(addedIn = "1.20.5")
     public SetEquipmentPacket(int id, boolean sanitized) {
         this(id, sanitized, Map.of());
     }
