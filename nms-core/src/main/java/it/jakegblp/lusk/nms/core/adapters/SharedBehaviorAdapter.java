@@ -60,7 +60,7 @@ public interface SharedBehaviorAdapter<
     Map<Class<?>, BufferCodec<?, ?>> toNms = new HashMap<>();
 
     @NullMarked
-    default <F, T> BufferCodec<F, T> registerCodec(
+    default <F, T> TypedBufferCodec<F, T> registerCodec(
             Class<F> from,
             Class<T> to,
             BufferCodec.Writer<F> writeFrom,
@@ -72,20 +72,6 @@ public interface SharedBehaviorAdapter<
     }
 
     @NullMarked
-    default <F> BufferCodec<F, F> registerCodec(Class<F> from, BufferCodec<F, F> codec) {
-        fromNms.put(from, codec);
-        toNms.put(from, codec);
-        return codec;
-    }
-
-    @NullMarked
-    default <F, T> BufferCodec<F, T> registerCodec(Class<F> from, Class<T> to, BufferCodec<F, T> codec) {
-        fromNms.put(from, codec);
-        toNms.put(to, codec);
-        return codec;
-    }
-
-    @NullMarked
     default <C extends TypedBufferCodec<F, T>, F, T> C registerCodec(C codec) {
         fromNms.put(codec.getFromClass(), codec);
         toNms.put(codec.getToClass(), codec);
@@ -93,13 +79,13 @@ public interface SharedBehaviorAdapter<
     }
 
     @SuppressWarnings("unchecked")
-    default <F> BufferCodec<F, ?> getCodecNMS(Class<F> type) {
-        return (BufferCodec<F, ?>) fromNms.get(type);
+    default <F> TypedBufferCodec<F, ?> getCodecNMS(Class<F> type) {
+        return (TypedBufferCodec<F, ?>) fromNms.get(type);
     }
 
     @SuppressWarnings("unchecked")
-    default <To> BufferCodec<?, To> getCodec(Class<To> type) {
-        return (BufferCodec<?, To>) toNms.get(type);
+    default <To> TypedBufferCodec<?, To> getCodec(Class<To> type) {
+        return (TypedBufferCodec<?, To>) toNms.get(type);
     }
 
 

@@ -75,7 +75,6 @@ import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
-import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
@@ -145,24 +144,21 @@ public class AllVersions implements
         };
     }
 
-    public final BufferCodec<ResourceLocation, NamespacedKey> RESOURCE_LOCATION_256_CODEC =
-            registerCodec(ResourceLocation.class, NamespacedKey.class,
+    public final BufferCodec<ResourceLocation, NamespacedKey> RESOURCE_LOCATION_256_CODEC = registerCodec(ResourceLocation.class, NamespacedKey.class,
                     (buffer, rl) -> buffer.writeString(rl.toString()),
                     buffer -> ResourceLocation.parse(buffer.readString(256)),
                     (buffer, key) -> buffer.writeString(key.toString()),
                     buffer -> Preconditions.checkNotNull(NamespacedKey.fromString(buffer.readString(256)), "Invalid namespaced key codec conversion")
             );
 
-    public final BufferCodec<Pose, org.bukkit.entity.Pose> POSE_CODEC =
-            registerCodec(BufferCodec.simple(
+    public final BufferCodec<Pose, org.bukkit.entity.Pose> POSE_CODEC = registerCodec(BufferCodec.simple(
                     Pose.class, org.bukkit.entity.Pose.class,
                     nms -> Pose.CROUCHING.equals(nms) ? org.bukkit.entity.Pose.SNEAKING : org.bukkit.entity.Pose.valueOf(nms.name()),
                     bukkit -> org.bukkit.entity.Pose.SNEAKING.equals(bukkit) ? Pose.CROUCHING : Pose.valueOf(bukkit.name()),
                     (buffer, value) -> Pose.STREAM_CODEC.encode(buffer.unwrap(), value),
                     buffer -> Pose.STREAM_CODEC.decode(buffer.unwrap()))
             );
-    public final BufferCodec<Component, net.kyori.adventure.text.Component> COMPONENT_CODEC =
-            registerCodec(BufferCodec.simple(
+    public final BufferCodec<Component, net.kyori.adventure.text.Component> COMPONENT_CODEC = registerCodec(BufferCodec.simple(
                     Component.class, net.kyori.adventure.text.Component.class,
                     PaperAdventure::asAdventure,
                     PaperAdventure::asVanilla,
@@ -170,8 +166,7 @@ public class AllVersions implements
                     buffer -> ComponentSerialization.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
             );
 
-    public final BufferCodec<EquipmentSlot, org.bukkit.inventory.EquipmentSlot> EQUIPMENTSLOT_CODEC =
-            registerCodec(BufferCodec.simple(
+    public final BufferCodec<EquipmentSlot, org.bukkit.inventory.EquipmentSlot> EQUIPMENTSLOT_CODEC = registerCodec(BufferCodec.simple(
                     EquipmentSlot.class, org.bukkit.inventory.EquipmentSlot.class,
                     CraftEquipmentSlot::getSlot,
                     CraftEquipmentSlot::getNMS,
@@ -179,49 +174,42 @@ public class AllVersions implements
                     buffer -> EquipmentSlot.STREAM_CODEC.decode(buffer.unwrap()))
             );
 
-    public final BufferCodec<EntityType, org.bukkit.entity.EntityType> ENTITY_TYPE_CODEC =
-            BufferCodec.simple(EntityType.class, org.bukkit.entity.EntityType.class,
+    public final BufferCodec<EntityType, org.bukkit.entity.EntityType> ENTITY_TYPE_CODEC = BufferCodec.simple(EntityType.class, org.bukkit.entity.EntityType.class,
                     entityType -> Registry.ENTITY_TYPE.getOrThrow(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.ENTITY_TYPE.getKey(entityType))),
                     entityType -> BuiltInRegistries.ENTITY_TYPE.getValue(CraftNamespacedKey.toMinecraft(entityType.getKey())),
                     (buffer, entityType) -> EntityType.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), entityType),
                     buffer -> EntityType.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer))
             );
-    public final BufferCodec<GameProfile, PlayerProfile> PLAYER_PROFILE_CODEC =
-            BufferCodec.simple(GameProfile.class, PlayerProfile.class,
+    public final BufferCodec<GameProfile, PlayerProfile> PLAYER_PROFILE_CODEC = BufferCodec.simple(GameProfile.class, PlayerProfile.class,
                     CraftPlayerProfile::asBukkitCopy,
                     CraftPlayerProfile::asAuthlibCopy,
                     (buffer, profile) ->  ByteBufCodecs.GAME_PROFILE.encode(buffer.unwrap(), profile),
                     buffer -> ByteBufCodecs.GAME_PROFILE.decode(buffer.unwrap())
             );
-    public final BufferCodec<Integer, Integer> UNSIGNED_BYTE_CODEC =
-            registerCodec(BufferCodec.identity(Integer.class, SimpleByteBuf::writeUnsignedByte, SimpleByteBuf::readUnsignedByte));
+    public final BufferCodec<Integer, Integer> UNSIGNED_BYTE_CODEC = registerCodec(BufferCodec.identity(Integer.class, SimpleByteBuf::writeUnsignedByte, SimpleByteBuf::readUnsignedByte));
 
     public final BufferCodec<Byte, Byte> BYTE_CODEC = registerCodec(BufferCodec.identity(Byte.class, SimpleByteBuf::writeByte, SimpleByteBuf::readByte));
     public final BufferCodec<Integer, Integer> VAR_INT_CODEC = registerCodec(BufferCodec.identity(Integer.class, SimpleByteBuf::writeVarInt, SimpleByteBuf::readVarInt));
     public final BufferCodec<Long, Long> LONG_CODEC = registerCodec(BufferCodec.identity(Long.class, SimpleByteBuf::writeLong, SimpleByteBuf::readLong));
-    public final BufferCodec<Double, Double> DOUBLE_CODEC = registerCodec(Double.class, Double.class, BufferCodec.identity(SimpleByteBuf::writeDouble, SimpleByteBuf::readDouble));
-    public final BufferCodec<UUID, UUID> UUID_CODEC = registerCodec(UUID.class, UUID.class, BufferCodec.identity(SimpleByteBuf::writeUUID, SimpleByteBuf::readUUID));
+    public final BufferCodec<Double, Double> DOUBLE_CODEC = registerCodec(BufferCodec.identity(Double.class, SimpleByteBuf::writeDouble, SimpleByteBuf::readDouble));
+    public final BufferCodec<UUID, UUID> UUID_CODEC = registerCodec(BufferCodec.identity(UUID.class, SimpleByteBuf::writeUUID, SimpleByteBuf::readUUID));
 
-    public final BufferCodec<Vec3, Vector> VECTOR_CODEC =
-            registerCodec(Vec3.class, Vector.class, BufferCodec.of(
+    public final BufferCodec<Vec3, Vector> VECTOR_CODEC = registerCodec(BufferCodec.of(Vec3.class, Vector.class,
                     (buffer, vector) -> FriendlyByteBuf.writeVec3(buffer.unwrap(), vector),
                     buffer -> FriendlyByteBuf.readVec3(buffer.unwrap()),
                     SimpleByteBuf::writeVector,
                     SimpleByteBuf::readVector)
             );
 
-    public final BufferCodec<BlockPos, BlockVector> BLOCK_VECTOR_CODEC =
-            registerCodec(BlockPos.class, BlockVector.class, BufferCodec.of(
+    public final BufferCodec<BlockPos, BlockVector> BLOCK_VECTOR_CODEC = registerCodec(BufferCodec.of(BlockPos.class, BlockVector.class,
                     (buffer, vector) -> FriendlyByteBuf.writeBlockPos(buffer.unwrap(), vector),
                     buffer -> FriendlyByteBuf.readBlockPos(buffer.unwrap()),
                     SimpleByteBuf::writeBlockVector,
                     SimpleByteBuf::readBlockVector)
             );
 
-    public final BufferCodec<Float, Float> DEGREES_CODEC =
-            registerCodec(Float.class, Float.class, BufferCodec.identity((buffer, value) -> ROTATION_BYTE.encode(buffer.unwrap(), value), buffer -> ROTATION_BYTE.decode(buffer.unwrap())));
-    public final BufferCodec<IntList, IntList> INT_LIST_CODEC =
-            registerCodec(IntList.class, IntList.class, BufferCodec.identity(SimpleByteBuf::writeIntIdList, SimpleByteBuf::readIntIdList));
+    public final BufferCodec<Float, Float> DEGREES_CODEC = registerCodec(BufferCodec.identity(Float.class, (buffer, value) -> ROTATION_BYTE.encode(buffer.unwrap(), value), buffer -> ROTATION_BYTE.decode(buffer.unwrap())));
+    public final BufferCodec<IntList, IntList> INT_LIST_CODEC = registerCodec(BufferCodec.identity(IntList.class, SimpleByteBuf::writeIntIdList, SimpleByteBuf::readIntIdList));
     public final BufferCodec<ClientboundAddEntityPacket, AddEntityPacket> ADD_ENTITY_PACKET_CODEC = registerCodec(
             CompositeBufferCodec.builder(ClientboundAddEntityPacket.class, AddEntityPacket.class)
                     .with(VAR_INT_CODEC, ClientboundAddEntityPacket::getId, AddEntityPacket::getId)
@@ -256,20 +244,17 @@ public class AllVersions implements
                     .with(INT_LIST_CODEC, ClientboundRemoveEntitiesPacket::getEntityIds, RemoveEntitiesPacket::getEntityIds)
                     .build(buffer -> ClientboundRemoveEntitiesPacket.STREAM_CODEC.decode(toFriendlyByteBuf(buffer)), RemoveEntitiesPacket::new)
     );
-    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> ITEMSTACK_CODEC =
-            registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
+    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> ITEMSTACK_CODEC = registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
                     CraftItemStack::asBukkitCopy, CraftItemStack::asNMSCopy,
                     (buffer, value) -> ItemStack.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), value),
                     buffer -> ItemStack.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
             );
-    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> OPTIONAL_ITEMSTACK_CODEC =
-            registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
+    public final BufferCodec<ItemStack, org.bukkit.inventory.ItemStack> OPTIONAL_ITEMSTACK_CODEC = registerCodec(BufferCodec.simple(ItemStack.class, org.bukkit.inventory.ItemStack.class,
                     CraftItemStack::asBukkitCopy, CraftItemStack::asNMSCopy,
                     (buffer, value) -> ItemStack.OPTIONAL_STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), value),
                     buffer -> ItemStack.OPTIONAL_STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)))
             );
-    public final BufferCodec<GameType, GameMode> GAMEMODE_CODEC =
-            registerCodec(BufferCodec.simple(GameType.class, GameMode.class,
+    public final BufferCodec<GameType, GameMode> GAMEMODE_CODEC = registerCodec(BufferCodec.simple(GameType.class, GameMode.class,
                     gameType -> GameMode.getByValue(gameType.getId()), gameMode -> GameType.byId(gameMode.getValue()),
                     (buffer, value) -> GameType.STREAM_CODEC.encode(buffer.unwrap(), value),
                     buffer -> GameType.STREAM_CODEC.decode(buffer.unwrap()))
