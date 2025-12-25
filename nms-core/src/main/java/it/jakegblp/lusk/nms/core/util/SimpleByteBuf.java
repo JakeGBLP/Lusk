@@ -239,6 +239,7 @@ public final class SimpleByteBuf {
         NMS.getCodec(EntityType.class).writeTo(entityType, this);
     }
 
+    @SuppressWarnings("all")
     public EntityType readEntityType() {
         return (EntityType) NMS.getCodec(EntityType.class).readTo(this);
     }

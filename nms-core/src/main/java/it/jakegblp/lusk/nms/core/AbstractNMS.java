@@ -122,6 +122,10 @@ public abstract class AbstractNMS<
 
     public Class<?> getSerializableClass(Class<?> clazz) {
         if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
+        else if (clazz == org.bukkit.entity.Display.Billboard.class) return Byte.class;
+        var codec = getCodec(clazz);
+        if (codec == null) return clazz;
+        else return codec.getToClass();
         if (clazz == org.bukkit.entity.Display.Billboard.class)
             return Byte.class;
         if (clazz == org.bukkit.entity.Display.Brightness.class)
