@@ -895,7 +895,7 @@ public class AllVersions implements
     public SoundPacket fromNMSSoundPacket(ClientboundSoundPacket from) {
         return new SoundPacket(
                 fromNMSSoundHolder(from.getSound()),
-                SoundCategory.valueOf(from.getSource().getName()),
+                SoundCategory.valueOf(from.getSource().getName().toUpperCase()),
                 from.getX(),
                 from.getY(),
                 from.getZ(),
@@ -913,7 +913,7 @@ public class AllVersions implements
     @Override
     public ClientboundSoundEntityPacket toNMSSoundEntityPacket(SoundEntityPacket from) {
         return new ClientboundSoundEntityPacket(CraftSound.bukkitToMinecraftHolder(from.getSound()),
-                SoundSource.valueOf(from.getSoundSource().name()),
+                SoundSource.valueOf(from.getSoundSource().toString().toUpperCase()),
                 ((CraftEntity) from.getEntity()).getHandle(),
                 from.getVolume(),
                 from.getPitch(),
@@ -924,7 +924,7 @@ public class AllVersions implements
     @Override
     public SoundEntityPacket fromNMSSoundEntityPacket(ClientboundSoundEntityPacket from) {
         return new SoundEntityPacket(CraftSound.minecraftHolderToBukkit(from.getSound()),
-                SoundCategory.valueOf(from.getSource().getName()),
+                SoundCategory.valueOf(from.getSource().toString().toUpperCase()),
                 from.getId(),
                 from.getVolume(),
                 from.getPitch(),

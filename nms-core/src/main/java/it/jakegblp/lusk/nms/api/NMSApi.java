@@ -62,6 +62,9 @@ public class NMSApi {
                             sendPacketInternal(player, packet);
                         }
                     }
+                }).exceptionally(t -> {
+                    t.printStackTrace();
+                    return null;
                 });
 
         if (!async) {
