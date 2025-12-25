@@ -122,15 +122,14 @@ public abstract class AbstractNMS<
 
     public Class<?> getSerializableClass(Class<?> clazz) {
         if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
-        else if (clazz == org.bukkit.entity.Display.Billboard.class) return Byte.class;
-        var codec = getCodec(clazz);
-        if (codec == null) return clazz;
-        else return codec.getToClass();
+
         if (clazz == org.bukkit.entity.Display.Billboard.class)
             return Byte.class;
         if (clazz == org.bukkit.entity.Display.Brightness.class)
             return Integer.class;
-        return clazz;
+        var codec = getCodec(clazz);
+        if (codec == null) return clazz;
+        else return codec.getToClass();
     }
 
     public @Nullable Object toNMSObject(@Nullable Object object) {
@@ -138,16 +137,6 @@ public abstract class AbstractNMS<
         else if (object instanceof Player player) return asServerPlayer(player);
         if (object instanceof org.bukkit.entity.Display.Billboard bb)
             return (byte) bb.ordinal();
-        if (object instanceof org.bukkit.entity.Display.Brightness brightness) {
-            // If no custom brightness is set
-            if (brightness.getBlockLight() < 0 || brightness.getSkyLight() < 0)
-                return -1;
-
-            int block = brightness.getBlockLight() & 0xF;
-            int sky = brightness.getSkyLight() & 0xF;
-
-            return (block << 4) | sky;
-        }
         return object;
     }
 
