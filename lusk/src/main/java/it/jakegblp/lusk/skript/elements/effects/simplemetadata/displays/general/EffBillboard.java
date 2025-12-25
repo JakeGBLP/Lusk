@@ -54,7 +54,9 @@ public class EffBillboard extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BILLBOARD, billboardExpression.getSingle(event))), entityOrId.getArray(event));
+        final int ordinal = billboardExpression.getSingle(event).ordinal();
+        byte asByte = (byte) ordinal;
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BILLBOARD, asByte)), entityOrId.getArray(event));
     }
 
     @Override
