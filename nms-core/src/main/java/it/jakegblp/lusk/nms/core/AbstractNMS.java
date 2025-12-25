@@ -122,24 +122,24 @@ public abstract class AbstractNMS<
 
     public Class<?> getSerializableClass(Class<?> clazz) {
         if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
-
         if (clazz == org.bukkit.entity.Display.Billboard.class)
             return Byte.class;
         if (clazz == org.bukkit.entity.Display.Brightness.class)
             return Integer.class;
+        if (isSerializableClass(clazz)) return clazz;
         var codec = getCodec(clazz);
         if (codec == null) return clazz;
         else return codec.getFromClass();
     }
 
     public @Nullable Object toNMSObject(@Nullable Object object) {
-        if (object instanceof NMSObject<?> nmsObject) return nmsObject.asNMS();
+        if (object  == null) return null;
+        else if (object instanceof NMSObject<?> nmsObject) return nmsObject.asNMS();
         else if (object instanceof Player player) return asServerPlayer(player);
-        if (object instanceof org.bukkit.entity.Display.Billboard bb)
-            return (byte) bb.ordinal();
-        return object;
+        else if (object instanceof org.bukkit.entity.Display.Billboard bb) return (byte) bb.ordinal();
+        else if (isSerializableClass(object.getClass())) return object;
+        else return toNMS(object);
     }
-
 
     /**
      * This method takes an NMS Packet and returns a non NMS Packet

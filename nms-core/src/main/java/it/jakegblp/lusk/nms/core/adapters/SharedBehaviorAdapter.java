@@ -56,8 +56,8 @@ public interface SharedBehaviorAdapter<
         NMSSetEquipmentPacket
         > {
 
-    Map<Class<?>, BufferCodec<?, ?>> fromNms = new HashMap<>();
-    Map<Class<?>, BufferCodec<?, ?>> toNms = new HashMap<>();
+    Map<Class<?>, TypedBufferCodec<?, ?>> fromNms = new HashMap<>();
+    Map<Class<?>, TypedBufferCodec<?, ?>> toNms = new HashMap<>();
 
     @NullMarked
     default <F, T> TypedBufferCodec<F, T> registerCodec(
@@ -78,15 +78,47 @@ public interface SharedBehaviorAdapter<
         return codec;
     }
 
+    default Set<Class<?>> getSerializableClasses() {
+        return fromNms.keySet();
+    }
+
+    default Set<Class<?>> getToSerializeClasses() {
+        return toNms.keySet();
+    }
+
+    default boolean isSerializableClass(Class<?> type) {
+        for (Class<?> key : fromNms.keySet())
+            if (key.isAssignableFrom(type))
+                return true;
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
     default <F> TypedBufferCodec<F, ?> getCodecNMS(Class<F> type) {
-        return (TypedBufferCodec<F, ?>) fromNms.get(type);
+        TypedBufferCodec<?, ?> exact = fromNms.get(type);
+        if (exact != null) return (TypedBufferCodec<F, ?>) exact;
+        Class<?> best = null;
+        for (Class<?> key : fromNms.keySet()) {
+            if (key.isAssignableFrom(type)) {
+                if (best == null || best.isAssignableFrom(key)) best = key;
+            }
+        }
+        return best == null ? null : (TypedBufferCodec<F, ?>) fromNms.get(best);
     }
 
     @SuppressWarnings("unchecked")
     default <To> TypedBufferCodec<?, To> getCodec(Class<To> type) {
-        return (TypedBufferCodec<?, To>) toNms.get(type);
+        TypedBufferCodec<?, ?> exact = toNms.get(type);
+        if (exact != null) return (TypedBufferCodec<?, To>) exact;
+        Class<?> best = null;
+        for (Class<?> key : toNms.keySet()) {
+            if (type.isAssignableFrom(key)) {
+                if (best == null || best.isAssignableFrom(key)) best = key;
+            }
+        }
+        return best == null ? null : (TypedBufferCodec<?, To>) toNms.get(best);
     }
+
 
 
     @SuppressWarnings("unchecked")
