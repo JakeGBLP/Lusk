@@ -55,12 +55,10 @@ public class EffShadow extends Effect {
     }
 
 
-    private static final EntityMetadata packetDataTrue = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.HAS_SHADOW, true));
-    private static final EntityMetadata packetDataFalse = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.HAS_SHADOW, false));
 
     @Override
     protected void execute(Event event) {
-        EntityMetadata packetData = pattern == 0 ? packetDataTrue : packetDataFalse;
+        EntityMetadata packetData = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.HAS_SHADOW, pattern == 0));
 
         AddonUtils.sendEasyMetadata(playerExpression.getArray(event), packetData, entityOrId.getArray(event));
     }
