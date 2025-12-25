@@ -93,8 +93,13 @@ public interface SharedBehaviorAdapter<
     }
 
     @SuppressWarnings("unchecked")
-    default <F, T> BufferCodec<F, T> getCodec(Class<F> type) {
-        return (BufferCodec<F, T>) fromNms.getOrDefault(type, toNms.get(type));
+    default <F> BufferCodec<F, ?> getCodecNMS(Class<F> type) {
+        return (BufferCodec<F, ?>) fromNms.get(type);
+    }
+
+    @SuppressWarnings("unchecked")
+    default <To> BufferCodec<?, To> getCodec(Class<To> type) {
+        return (BufferCodec<?, To>) toNms.get(type);
     }
 
 

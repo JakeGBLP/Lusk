@@ -240,6 +240,6 @@ public final class SimpleByteBuf {
     }
 
     public EntityType readEntityType() {
-        return NMS.getCodec(EntityType.class).readFrom(this);
+        return (EntityType) NMS.getCodec(EntityType.class).readTo(this);
     }
 }

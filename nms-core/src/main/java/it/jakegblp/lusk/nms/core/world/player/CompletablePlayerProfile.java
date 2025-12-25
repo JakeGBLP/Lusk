@@ -77,7 +77,7 @@ public final class CompletablePlayerProfile implements Cloneable, Asyncable, NMS
 
     @Override
     public Object asNMS() {
-        return NMS.toNMSPlayerProfile(playerProfile);
+        return NMS.toNMS(playerProfile);
     }
 
 }
