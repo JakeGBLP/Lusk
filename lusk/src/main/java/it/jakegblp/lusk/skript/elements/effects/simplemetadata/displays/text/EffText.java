@@ -11,6 +11,7 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;

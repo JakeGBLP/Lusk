@@ -129,11 +129,31 @@ public interface SharedBehaviorAdapter<
     }
 
     @SuppressWarnings("unchecked")
-    default <F, T> F toNMS(@NotNull T t) {
-        BufferCodec<F, T> codec = (BufferCodec<F, T>) toNms.get(t.getClass());
-        if (codec == null) return null;
-        return codec.decode(t);
+    default  <F, T> F toNMS(T t) {
+        if (t == null) return null;
+
+        TypedBufferCodec<F, T> codec =
+                (TypedBufferCodec<F, T>) toNms.get(t.getClass());
+
+        if (codec == null) {
+            for (var entry : toNms.entrySet()) {
+                Class<?> registered = entry.getKey();
+                if (registered.isAssignableFrom(t.getClass())) {
+                    codec = (TypedBufferCodec<F, T>) entry.getValue();
+
+                    toNms.put(
+                            t.getClass(),
+                            codec
+                    );
+                    break;
+                }
+            }
+        }
+
+        return codec == null ? null : codec.decode(t);
     }
+
+
 
     Class<NMSPacket> getNMSPacketClass();
 
@@ -532,27 +552,28 @@ public interface SharedBehaviorAdapter<
                         return;
                     }
                 }
-                else if (isNMSEntityMetadataPacket(msg)) {
-                    final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);
-                    final int targetId = packet.getId();
-
-                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-                    if (entity != null && entity.isGlowing()) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-                    final Set<Integer> list = GlowMap.glowMap.get(player);
-                    if (list == null || !list.contains(targetId)) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-
-
-                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
-                    return;
-                } else if (isNMSSoundPacket(msg)) {
+//                else if (isNMSEntityMetadataPacket(msg)) {
+//                    final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);
+//                    final int targetId = packet.getId();
+//
+//                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
+//                    if (entity != null && entity.isGlowing()) {
+//                        super.write(ctx, msg, promise);
+//                        return;
+//                    }
+//
+//                    final Set<Integer> list = GlowMap.glowMap.get(player);
+//                    if (list == null || !list.contains(targetId)) {
+//                        super.write(ctx, msg, promise);
+//                        return;
+//                    }
+//
+//
+//
+//                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
+//                    return;
+//                }
+                else if (isNMSSoundPacket(msg)) {
                     final SoundPacket soundPacket = fromNMSSoundPacket((NMSSoundPacket) msg);
 
                     final SoundEvent event = new SoundEvent(player, true);
