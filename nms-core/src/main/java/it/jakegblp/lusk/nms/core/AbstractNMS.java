@@ -129,7 +129,7 @@ public abstract class AbstractNMS<
             return Integer.class;
         var codec = getCodec(clazz);
         if (codec == null) return clazz;
-        else return codec.getToClass();
+        else return codec.getFromClass();
     }
 
     public @Nullable Object toNMSObject(@Nullable Object object) {
