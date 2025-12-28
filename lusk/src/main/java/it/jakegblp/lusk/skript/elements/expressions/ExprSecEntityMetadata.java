@@ -13,6 +13,7 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import lombok.Setter;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
 import org.skriptlang.skript.lang.entry.EntryValidator;
@@ -71,6 +72,13 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> {
                 if (container.hasEntry(normalizedName)) {
                     if (type == null || supportedClass.isAssignableFrom(type)) {
                         if (unsupportedProperties.isEmpty()) {
+                            var value = container.getOptional(normalizedName, false);
+                            if (value == null) {
+
+                                System.out.println("---------NULL");
+                                System.out.println(normalizedName);
+                                System.out.println("         ---------NULL");
+                            }
                             expressionMap.put(key, (Expression<?>) container.getOptional(normalizedName, false));
                         }
                     } else {
@@ -97,6 +105,9 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> {
                 Object value = entry.getValue().getSingle(event);
                 if (value != null) {
                     System.out.println("key: "+key+", value: "+value);
+                    // Skript -> API Conversion
+                    if (value instanceof Vector vector) value = vector.toVector3f();
+
                     if (!entityMetadata.setUnsafe(key, value)) {
                         Skript.error("Could not set key "+ Classes.toString(key) + " to value " + Classes.toString(value));
                     }

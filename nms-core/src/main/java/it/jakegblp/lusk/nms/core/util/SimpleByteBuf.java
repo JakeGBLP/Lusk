@@ -201,19 +201,19 @@ public final class SimpleByteBuf {
     }
 
 
-    public <F, T> T readTo(BufferCodec<F, T> bufferCodec) {
+    public <F, T> T readTo(SimpleBufferCodec<F, T> bufferCodec) {
         return bufferCodec.readTo(this);
     }
 
-    public <F, T> F readFrom(BufferCodec<F, T> bufferCodec) {
+    public <F, T> F readFrom(SimpleBufferCodec<F, T> bufferCodec) {
         return bufferCodec.readFrom(this);
     }
 
-    public <T> void writeTo(BufferCodec<?, T> bufferCodec, T value) {
+    public <T> void writeTo(SimpleBufferCodec<?, T> bufferCodec, T value) {
         bufferCodec.writeTo(value, this);
     }
 
-    public <F> void writeFrom(BufferCodec<F, ?> bufferCodec, F value) {
+    public <F> void writeFrom(SimpleBufferCodec<F, ?> bufferCodec, F value) {
         bufferCodec.writeFrom(value, this);
     }
 

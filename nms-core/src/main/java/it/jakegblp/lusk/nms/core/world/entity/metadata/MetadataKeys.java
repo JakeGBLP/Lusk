@@ -63,11 +63,11 @@ import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -461,8 +461,8 @@ public final class MetadataKeys {
         MetadataKey<Display, Integer> INTERPOLATION_DELAY = register("INTERPOLATION_DELAY", Display.class, Integer.class);
         MetadataKey<Display, Integer> INTERPOLATION_DURATION = register("INTERPOLATION_DURATION", Display.class, Integer.class);
         MetadataKey<Display, Integer> TELEPORT_INTERPOLATION_DURATION = register("TELEPORT_INTERPOLATION_DURATION", Display.class, Integer.class);
-        MetadataKey<Display, Vector3f> TRANSLATION = register("TRANSLATION", Display.class, Vector3f.class);
-        MetadataKey<Display, Vector3f> SCALE = register("SCALE", Display.class, Vector3f.class);
+        MetadataKey<Display, Vector> TRANSLATION = register("TRANSLATION", Display.class, Vector.class);
+        MetadataKey<Display, Vector> SCALE = register("SCALE", Display.class, Vector.class);
         MetadataKey<Display, Quaternionf> ROTATION_LEFT = register("ROTATION_LEFT", Display.class, Quaternionf.class);
         MetadataKey<Display, Quaternionf> ROTATION_RIGHT = register("ROTATION_RIGHT", Display.class, Quaternionf.class);
         MetadataKey<Display, Display.Billboard> BILLBOARD = register("BILLBOARD", Display.class, Display.Billboard.class);

@@ -32,6 +32,7 @@ import it.jakegblp.lusk.skript.api.classinfo.EnumClassInfoWrapper;
 import it.jakegblp.lusk.skript.api.classinfo.EnumLikeClassInfoWrapper;
 import it.jakegblp.lusk.skript.api.classinfo.SimpleClassInfo;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
 import org.bukkit.Particle;
@@ -251,13 +252,6 @@ public class Types {
                     .name("Attribute - Modifier")
                     .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
         }
-        if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
-            Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
-                    .toString(AttributeModifier::toString)
-                    .user("attribute ?modifiers?")
-                    .name("Attribute - Modifier")
-                    .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
-        }
 
 
         // Paper
@@ -278,6 +272,24 @@ public class Types {
                     .since("2.0.0"));
         }
 
+        // Kyori
+        if (Classes.getExactClassInfo(Component.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(Component.class, "textcomponent")
+                    .toString(component -> MiniMessage.miniMessage().serialize(component))
+                    .user("text ?components?")
+                    .name("Text Component")
+                    .description("An object representing text with formatting like colors, decorations and events.") // add example
+                    .since("2.0.0"));
+        }
+        if (Classes.getExactClassInfo(ComponentBuilder.class) == null) {
+            Classes.registerClass(new SimpleClassInfo<>(ComponentBuilder.class, "mutabletextcomponent")
+                    .toString(component -> MiniMessage.miniMessage().serialize(component.build()))
+                    .user("mutable ?text ?components?")
+                    .name("Mutable Text Component")
+                    .description("Same as a Text Component, but can be modified.\n\nAll non") // add example
+                    .since("2.0.0"));
+        }
+
         // Other
         if (Classes.getExactClassInfo(URL.class) == null) {
             Classes.registerClass(new SimpleClassInfo<>(URL.class, "url")
@@ -295,7 +307,6 @@ public class Types {
                 .description("All the entity events.") // add example
                 .since("2.0.0"));
 
-
         /*
         If another addon registers ProfileProperty as a classinfo,
         instances of MutableProfileProperty can be converted to that type.
@@ -307,10 +318,11 @@ public class Types {
          */
         Converters.registerConverter(ProfileProperty.class, MutableProfileProperty.class, MutableProfileProperty::new);
 
+        Converters.registerConverter(ComponentBuilder.class, Component.class, ComponentBuilder::build);
         Converters.registerConverter(PlayerProfile.class, CompletablePlayerProfile.class, CompletablePlayerProfile::new);
         Converters.registerConverter(CompletablePlayerProfile.class, PlayerProfile.class, CompletablePlayerProfile::getPlayerProfile);
         Converters.registerConverter(String.class, URL.class, URLUtils::toURL);
-        Converters.registerConverter(String.class, Component.class, string -> MiniMessage.miniMessage().deserialize(string));
+        Converters.registerConverter(String.class, Component.class, string -> string.contains("§") ? Component.text(string) : MiniMessage.miniMessage().deserialize(string));
         Converters.registerConverter(Color.class, DyeColor.class, Color::asDyeColor);
         Converters.registerConverter(DyeColor.class, Color.class, SkriptColor::fromDyeColor);
         Converters.registerConverter(Packet.class, BundlePacket.class, from -> from instanceof BundlePacket<?> bundlePacket ? bundlePacket : null);

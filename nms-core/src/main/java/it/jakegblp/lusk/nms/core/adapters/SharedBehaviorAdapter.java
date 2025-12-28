@@ -4,10 +4,8 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.util.BufferCodec;
-import it.jakegblp.lusk.nms.core.util.TypedBufferCodec;
-import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
+import it.jakegblp.lusk.nms.core.util.SimpleBufferCodec;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
-import it.jakegblp.lusk.nms.core.world.player.GlowMap;
 import lombok.SneakyThrows;
 import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
 import org.bukkit.*;
@@ -18,14 +16,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockVector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.nio.channels.ClosedChannelException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface SharedBehaviorAdapter<
         NMSServerPlayer,
@@ -56,11 +52,10 @@ public interface SharedBehaviorAdapter<
         NMSSetEquipmentPacket
         > {
 
-    Map<Class<?>, TypedBufferCodec<?, ?>> fromNms = new HashMap<>();
-    Map<Class<?>, TypedBufferCodec<?, ?>> toNms = new HashMap<>();
+    List<SimpleBufferCodec<?, ?>> codecs = new ArrayList<>();
 
     @NullMarked
-    default <F, T> TypedBufferCodec<F, T> registerCodec(
+    default <F, T> SimpleBufferCodec<F, T> registerCodec(
             Class<F> from,
             Class<T> to,
             BufferCodec.Writer<F> writeFrom,
@@ -72,88 +67,93 @@ public interface SharedBehaviorAdapter<
     }
 
     @NullMarked
-    default <C extends TypedBufferCodec<F, T>, F, T> C registerCodec(C codec) {
-        fromNms.put(codec.getFromClass(), codec);
-        toNms.put(codec.getToClass(), codec);
+    default <C extends SimpleBufferCodec<?, ?>> C registerCodec(C codec) {
+        codecs.add(codec);
         return codec;
     }
 
-    default Set<Class<?>> getSerializableClasses() {
-        return fromNms.keySet();
-    }
+    Class<?> getSerializableClass(Class<?> clazz);
 
-    default Set<Class<?>> getToSerializeClasses() {
-        return toNms.keySet();
-    }
-
-    default boolean isSerializableClass(Class<?> type) {
-        for (Class<?> key : fromNms.keySet())
-            if (key.isAssignableFrom(type))
+    default boolean isCodecFromClass(Class<?> type) {
+        for (SimpleBufferCodec<?, ?> codec : codecs)
+            if (codec.getFromClass().isAssignableFrom(type))
                 return true;
         return false;
     }
 
+    default boolean isCodecToClass(Class<?> type) {
+        for (SimpleBufferCodec<?, ?> codec : codecs)
+            if (codec.getFromClass().isAssignableFrom(type))
+                return true;
+        return false;
+    }
+
+    default <T> @Nullable SimpleBufferCodec<?, T> getCodec(Class<T> type) {
+        SimpleBufferCodec<?, T>[] codecs = getCodecs(type);
+        return codecs.length == 0 ? null : codecs[0];
+    }
+
+    default <F> @Nullable SimpleBufferCodec<F, ?> getCodecNMS(Class<F> type) {
+        SimpleBufferCodec<F, ?>[] codecs = getNmsCodecs(type);
+        return codecs.length == 0 ? null : codecs[0];
+    }
+
     @SuppressWarnings("unchecked")
-    default <F> TypedBufferCodec<F, ?> getCodecNMS(Class<F> type) {
-        TypedBufferCodec<?, ?> exact = fromNms.get(type);
-        if (exact != null) return (TypedBufferCodec<F, ?>) exact;
-        Class<?> best = null;
-        for (Class<?> key : fromNms.keySet()) {
-            if (key.isAssignableFrom(type)) {
-                if (best == null || best.isAssignableFrom(key)) best = key;
-            }
+    default <T> SimpleBufferCodec<?, T>[] getCodecs(Class<T> type) {
+        List<SimpleBufferCodec<?, T>> list = new ArrayList<>();
+
+        for (SimpleBufferCodec<?, ?> codec : codecs) {
+            Class<?> clazz = codec.getToClass();
+            if (clazz.isAssignableFrom(type))
+                list.add((SimpleBufferCodec<?, T>) codec);
         }
-        return best == null ? null : (TypedBufferCodec<F, ?>) fromNms.get(best);
+
+        list.sort((a, b) -> {
+            Class<?> ac = a.getToClass();
+            Class<?> bc = b.getToClass();
+            if (ac == bc) return 0;
+            return ac.isAssignableFrom(bc) ? 1 : -1;
+        });
+
+        return list.toArray(new SimpleBufferCodec[0]);
     }
 
+
     @SuppressWarnings("unchecked")
-    default <To> TypedBufferCodec<?, To> getCodec(Class<To> type) {
-        TypedBufferCodec<?, ?> exact = toNms.get(type);
-        if (exact != null) return (TypedBufferCodec<?, To>) exact;
-        Class<?> best = null;
-        for (Class<?> key : toNms.keySet()) {
-            if (type.isAssignableFrom(key)) {
-                if (best == null || best.isAssignableFrom(key)) best = key;
-            }
+    default <F> SimpleBufferCodec<F, ?>[] getNmsCodecs(Class<F> type) {
+        List<SimpleBufferCodec<F, ?>> list = new ArrayList<>();
+
+        for (SimpleBufferCodec<?, ?> codec : codecs) {
+            Class<?> clazz = codec.getFromClass();
+            if (clazz.isAssignableFrom(type))
+                list.add((SimpleBufferCodec<F, ?>) codec);
         }
-        return best == null ? null : (TypedBufferCodec<?, To>) toNms.get(best);
+
+        list.sort((a, b) -> {
+            Class<?> ac = a.getFromClass();
+            Class<?> bc = b.getFromClass();
+            if (ac == bc) return 0;
+            return ac.isAssignableFrom(bc) ? 1 : -1;
+        });
+
+        return list.toArray(new SimpleBufferCodec[0]);
     }
 
 
 
     @SuppressWarnings("unchecked")
-    default <F, T> @Nullable T fromNMS(@NotNull F f) {
-        BufferCodec<F, T> codec = (BufferCodec<F, T>) fromNms.get(f.getClass());
-        if (codec == null) return null;
-        return codec.encode(f);
+    default <F, T> @Nullable T fromNMS(@Nullable F f) {
+        if (f == null) return null;
+        SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getCodecNMS(f.getClass());
+        return codec == null ? null : codec.encode(f);
     }
 
     @SuppressWarnings("unchecked")
-    default  <F, T> F toNMS(T t) {
+    default <F, T> @Nullable F toNMS(@Nullable T t) {
         if (t == null) return null;
-
-        TypedBufferCodec<F, T> codec =
-                (TypedBufferCodec<F, T>) toNms.get(t.getClass());
-
-        if (codec == null) {
-            for (var entry : toNms.entrySet()) {
-                Class<?> registered = entry.getKey();
-                if (registered.isAssignableFrom(t.getClass())) {
-                    codec = (TypedBufferCodec<F, T>) entry.getValue();
-
-                    toNms.put(
-                            t.getClass(),
-                            codec
-                    );
-                    break;
-                }
-            }
-        }
-
+        SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getCodec(t.getClass());
         return codec == null ? null : codec.decode(t);
     }
-
-
 
     Class<NMSPacket> getNMSPacketClass();
 

@@ -10,7 +10,6 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -38,34 +37,27 @@ public class EffCustomName extends Effect {
 
     static {
         Skript.registerEffect(EffCustomName.class,
-                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name [to] %string% for %players%"
+                "(make|fake) [entity|entity with id] %entities/numbers%['s] custom name [to] %textcomponent% for %players%"
         );
     }
 
     private Expression<Object> entityOrId;
-    private Expression<String> nameExpression;
+    private Expression<Component> nameExpression;
     private Expression<Player> playerExpression;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int pattern, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         entityOrId = (Expression<Object>) expressions[0];
+        nameExpression = (Expression<Component>) expressions[1];
         playerExpression = (Expression<Player>) expressions[2];
-        nameExpression = (Expression<String>) expressions[1];
         return true;
     }
 
-
-    @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        final String nameString = nameExpression.getSingle(event);
-        Component name;
-        if (nameString.contains("§"))
-            name = Component.text(nameString);
-        else
-            name = MiniMessage.miniMessage().deserialize(nameString);
-
+        Component name = nameExpression.getSingle(event);
+        if (name == null) return;
         AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.EntityKeys.CUSTOM_NAME, name)), entityOrId.getArray(event));
     }
 
@@ -73,6 +65,5 @@ public class EffCustomName extends Effect {
     public String toString(@Nullable Event event, boolean b) {
         return "client custom name";
     }
-
 
 }

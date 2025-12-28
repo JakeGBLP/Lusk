@@ -8,8 +8,6 @@ import it.jakegblp.lusk.nms.core.adapters.*;
 import it.jakegblp.lusk.nms.core.injection.InjectionListener;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
-import it.jakegblp.lusk.nms.core.util.TypedBufferCodec;
-import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
 import lombok.Getter;
@@ -122,21 +120,6 @@ public abstract class AbstractNMS<
         return entityDataSerializerMap.get(EntitySerializerKey.normal(clazz));
     }
 
-    public Class<?> getSerializableClass(Class<?> clazz) {
-        if (FlagByte.class.isAssignableFrom(clazz)) return Byte.class;
-        if (clazz == org.bukkit.entity.Display.Billboard.class)
-            return Byte.class;
-        if (clazz == org.bukkit.entity.Display.Brightness.class)
-            return Integer.class;
-
-
-        final TypedBufferCodec<?, ?> codec = getCodec(clazz);
-        getCodec(clazz);
-        if (codec == null || (isSerializableClass(clazz)) )
-            return clazz;
-        else return codec.getFromClass();
-    }
-
     public @Nullable Object toNMSObject(@Nullable Object object) {
         if (object == null)
             throw new RuntimeException("Object null for toNMSObject");
@@ -146,7 +129,7 @@ public abstract class AbstractNMS<
         else if (object instanceof org.bukkit.entity.Display.Billboard bb) return (byte) bb.ordinal();
         else if (object instanceof Component component)
             return toNMS(component);
-        else if (isSerializableClass(object.getClass())) return object;
+        else if (isCodecFromClass(object.getClass())) return object;
         else return toNMS(object);
     }
 
