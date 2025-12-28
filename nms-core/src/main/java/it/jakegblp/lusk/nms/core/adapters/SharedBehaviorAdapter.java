@@ -552,27 +552,25 @@ public interface SharedBehaviorAdapter<
                         return;
                     }
                 }
-//                else if (isNMSEntityMetadataPacket(msg)) {
-//                    final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);
-//                    final int targetId = packet.getId();
-//
-//                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-//                    if (entity != null && entity.isGlowing()) {
-//                        super.write(ctx, msg, promise);
-//                        return;
-//                    }
-//
-//                    final Set<Integer> list = GlowMap.glowMap.get(player);
-//                    if (list == null || !list.contains(targetId)) {
-//                        super.write(ctx, msg, promise);
-//                        return;
-//                    }
-//
-//
-//
-//                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
-//                    return;
-//                }
+                else if (isNMSEntityMetadataPacket(msg)) {
+                    final EntityMetadataPacket packet = fromNMSEntityMetadataPacket((NMSEntityMetadataPacket) msg);
+                    final int targetId = packet.getId();
+
+                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
+                    if (entity != null && entity.isGlowing()) {
+                        super.write(ctx, msg, promise);
+                        return;
+                    }
+
+                    final Set<Integer> list = GlowMap.glowMap.get(player);
+                    if (list == null || !list.contains(targetId)) {
+                        super.write(ctx, msg, promise);
+                        return;
+                    }
+
+                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
+                    return;
+                }
                 else if (isNMSSoundPacket(msg)) {
                     final SoundPacket soundPacket = fromNMSSoundPacket((NMSSoundPacket) msg);
 

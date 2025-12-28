@@ -892,7 +892,7 @@ public class AllVersions implements
     public ClientboundSoundPacket toNMSSoundPacket(SoundPacket from) {
         return new ClientboundSoundPacket(
                 toNMSSoundHolder(from.getSound()),
-                SoundSource.valueOf(from.getSoundSource().name()),
+                SoundSource.valueOf(from.getSoundSource().toString().toUpperCase()),
                 from.getX(),
                 from.getY(),
                 from.getZ(),
@@ -905,7 +905,7 @@ public class AllVersions implements
     public SoundPacket fromNMSSoundPacket(ClientboundSoundPacket from) {
         return new SoundPacket(
                 fromNMSSoundHolder(from.getSound()),
-                SoundCategory.valueOf(from.getSource().getName().toUpperCase()),
+                SoundCategory.valueOf(from.getSource().toString().toUpperCase()),
                 from.getX(),
                 from.getY(),
                 from.getZ(),

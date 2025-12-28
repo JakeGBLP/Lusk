@@ -53,13 +53,9 @@ public class EffSeeThrough extends Effect {
         return true;
     }
 
-
-    private static final EntityMetadata packetDataTrue = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.SEE_THROUGH, true));
-    private static final EntityMetadata packetDataFalse = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.SEE_THROUGH, false));
-
     @Override
     protected void execute(Event event) {
-        EntityMetadata packetData = pattern == 0 ? packetDataTrue : packetDataFalse;
+        EntityMetadata packetData = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.SEE_THROUGH, pattern == 0));
         
         AddonUtils.sendEasyMetadata(playerExpression.getArray(event), packetData, entityOrId.getArray(event));
     }

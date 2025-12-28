@@ -53,13 +53,11 @@ public class EffFire extends Effect {
     }
 
 
-    private static final EntityMetadata packetDataTrue = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.BURNING, true));
-    private static final EntityMetadata packetDataFalse = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.BURNING, false));
 
 
     @Override
     protected void execute(Event event) {
-        EntityMetadata packetData = pattern == 0 ? packetDataTrue : packetDataFalse;
+        EntityMetadata packetData = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.BURNING, pattern == 0));
 
         AddonUtils.sendEasyMetadata(playerExpression.getArray(event), packetData, entityOrId.getArray(event));
     }
