@@ -17,13 +17,17 @@ public abstract class PseudoEnum {
     protected PseudoEnum(String name) {
         this.name = Objects.requireNonNull(name, "name");
 
-        Map<String, PseudoEnum> map;
-        if (!(this instanceof Validatable<?> validatable) || validatable.check()) {
-            map = REGISTRY.computeIfAbsent(getClass(), k -> new LinkedHashMap<>());
+        if (this instanceof Validatable<?> validatable && !validatable.check())
+            this.ordinal = -1;
+        else {
+            Class<?> clazz = getClass();
+            while (clazz.isAnonymousClass())
+                clazz = clazz.getSuperclass();
+            Map<String, PseudoEnum> map = REGISTRY.computeIfAbsent(clazz, k -> new LinkedHashMap<>());
             this.ordinal = map.size();
             map.put(name, this);
-        } else
-            this.ordinal = -1;
+            REGISTRY.put(clazz, map);
+        }
     }
 
     public final String name() {
@@ -36,6 +40,7 @@ public abstract class PseudoEnum {
 
     @SuppressWarnings("unchecked")
     public static <E extends PseudoEnum> @NotNull E[] values(Class<E> type) {
+        System.out.println("registry: "+REGISTRY);
         Collection<E> values = (Collection<E>) REGISTRY.getOrDefault(type, new LinkedHashMap<>()).values();
         return values.toArray((E[]) Array.newInstance(type, values.size()));
     }
@@ -48,12 +53,7 @@ public abstract class PseudoEnum {
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        return this == obj;
-    }
-
-    @Override
-    public final int hashCode() {
+    public int hashCode() {
         return System.identityHashCode(this);
     }
 
