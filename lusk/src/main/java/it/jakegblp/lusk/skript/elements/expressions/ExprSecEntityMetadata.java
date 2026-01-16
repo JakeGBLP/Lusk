@@ -32,9 +32,8 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> {
         var builder = EntryValidator.builder();
         for (var entry : NAMED_KEYS.entrySet()) {
             String name = entry.getKey().toLowerCase(Locale.ROOT);
-            if (!name.contains("unused")) {
-                builder.addEntryData(new ExpressionEntryData<>(name.replace("_", " "), null, true, entry.getValue().valueClass()));
-            }
+            if (!name.contains("unused"))
+                builder.addEntryData(new ExpressionEntryData<>(name.replace("_", " "), null, true, entry.getValue().rawValueClass()));
         }
         VALIDATOR = builder.build();
         Skript.registerExpression(ExprSecEntityMetadata.class, EntityMetadata.class, ExpressionType.COMBINED,

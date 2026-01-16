@@ -17,12 +17,16 @@ public record SimpleConstructor<T>(@Nullable Constructor<T> constructor) {
         }
     }
 
-    public T newInstance(Object... args) {
+    public boolean isDeprecated() {
+        return constructor != null && constructor.isAnnotationPresent(Deprecated.class);
+    }
+
+    public @Nullable T newInstance(Object... args) {
         if (constructor == null) return null;
         try {
             return constructor.newInstance(args);
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

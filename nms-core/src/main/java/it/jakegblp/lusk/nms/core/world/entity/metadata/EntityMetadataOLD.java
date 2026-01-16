@@ -1,7 +1,7 @@
 //package it.jakegblp.lusk.nms.core.world.entity.metadata;
 //
-//import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
-//import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+//import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
+//import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 //import lombok.EqualsAndHashCode;
 //import org.bukkit.entity.Entity;
 //import org.jetbrains.annotations.NotNull;

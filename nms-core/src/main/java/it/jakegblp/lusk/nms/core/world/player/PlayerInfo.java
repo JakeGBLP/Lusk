@@ -1,10 +1,13 @@
 package it.jakegblp.lusk.nms.core.world.player;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.common.Copyable;
+import it.jakegblp.lusk.common.PseudoEnumSet;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.async.AsyncablesWrapper;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerInfoUpdatePacket;
+import it.jakegblp.lusk.nms.core.util.BufferSerializer;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -13,15 +16,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
-public class PlayerInfo implements AsyncablesWrapper, Cloneable {
+@SuppressWarnings("rawtypes")
+public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnumSet<PlayerInfoUpdatePacket.@NotNull Action>>, Copyable<PlayerInfo> {
     @Setter
-    protected @NotNull UUID UUID;
+    protected @NotNull UUID uuid;
     protected CompletablePlayerProfile playerProfile;
     protected boolean listed;
     protected int latency;
@@ -30,10 +31,23 @@ public class PlayerInfo implements AsyncablesWrapper, Cloneable {
     protected boolean showHat;
     protected int listOrder;
     protected ChatSessionData chatSession;
-    protected @NotNull Set<PlayerInfoUpdatePacket.@NotNull Action<?>> actions;
 
-    public PlayerInfo(@NotNull UUID uuid, @Nullable CompletablePlayerProfile completablePlayerProfile, boolean listed, int latency, @Nullable GameMode gameMode, @Nullable Component displayName, boolean showHat, int listOrder, @Nullable ChatSessionData chatSession) {
-        this.UUID = uuid;
+    @SuppressWarnings("rawtypes")
+    protected PseudoEnumSet<PlayerInfoUpdatePacket.@NotNull Action> actions;
+
+    @SuppressWarnings("rawtypes")
+    public PlayerInfo(@NotNull SimpleByteBuf buffer, Set<PlayerInfoUpdatePacket.@NotNull Action> actions) {
+        this(buffer, PseudoEnumSet.of(actions));
+    }
+
+    @SuppressWarnings("rawtypes")
+    public PlayerInfo(@NotNull SimpleByteBuf buffer, PseudoEnumSet<PlayerInfoUpdatePacket.@NotNull Action> actions) {
+        read(buffer, actions);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public PlayerInfo(@NotNull Collection<PlayerInfoUpdatePacket.@NotNull Action> actions, @NotNull UUID uuid, @Nullable CompletablePlayerProfile completablePlayerProfile, boolean listed, int latency, @Nullable GameMode gameMode, @Nullable Component displayName, boolean showHat, int listOrder, @Nullable ChatSessionData chatSession) {
+        this.uuid = uuid;
         this.playerProfile = completablePlayerProfile;
         this.listed = listed;
         this.latency = latency;
@@ -42,7 +56,11 @@ public class PlayerInfo implements AsyncablesWrapper, Cloneable {
         this.showHat = showHat;
         this.listOrder = listOrder;
         this.chatSession = chatSession;
-        this.actions = CommonUtils.toSet(PlayerInfoUpdatePacket.Action.values());
+        this.actions = PseudoEnumSet.of(actions);
+    }
+
+    public PlayerInfo(@NotNull UUID uuid, @Nullable CompletablePlayerProfile completablePlayerProfile, boolean listed, int latency, @Nullable GameMode gameMode, @Nullable Component displayName, boolean showHat, int listOrder, @Nullable ChatSessionData chatSession) {
+        this(Arrays.asList(PlayerInfoUpdatePacket.Action.values()), uuid, completablePlayerProfile, listed, latency, gameMode, displayName, showHat, listOrder, chatSession);
     }
 
     public PlayerInfo(@NotNull UUID uuid, @Nullable PlayerProfile playerProfile, boolean listed, int latency, @Nullable GameMode gameMode, @Nullable Component displayName, boolean showHat, int listOrder, @Nullable ChatSessionData chatSession) {
@@ -54,12 +72,13 @@ public class PlayerInfo implements AsyncablesWrapper, Cloneable {
     }
 
     public PlayerInfo(@NotNull UUID uuid) {
-        this.UUID = uuid;
-        this.actions = new HashSet<>();
+        this.uuid = uuid;
+        this.actions = PseudoEnumSet.noneOf(PlayerInfoUpdatePacket.Action.class);
     }
 
-    public void setActions(@NotNull Set<PlayerInfoUpdatePacket.@NotNull Action<?>> actions) {
-        this.actions = actions;
+    @SuppressWarnings("rawtypes")
+    public void setActions(@NotNull Set<PlayerInfoUpdatePacket.@NotNull Action> actions) {
+        this.actions = PseudoEnumSet.of(actions);
     }
 
     public void setDisplayName(@Nullable Component displayName) {
@@ -76,6 +95,7 @@ public class PlayerInfo implements AsyncablesWrapper, Cloneable {
         this.actions.add(PlayerInfoUpdatePacket.Action.ADD_PLAYER);
     }
 
+    // todo: not add the action if null? look into this
     public void setChatSession(@Nullable ChatSessionData chatSession) {
         this.chatSession = chatSession;
         this.actions.add(PlayerInfoUpdatePacket.Action.INITIALIZE_CHAT);
@@ -224,11 +244,22 @@ public class PlayerInfo implements AsyncablesWrapper, Cloneable {
     }
 
     @Override
-    public PlayerInfo clone() throws CloneNotSupportedException {
-        PlayerInfo clone = (PlayerInfo) super.clone();
-        clone.actions = new HashSet<>(actions);
-        clone.chatSession = chatSession.clone();
-        clone.playerProfile = playerProfile.clone();
-        return clone;
+    public PlayerInfo copy() {
+        return new PlayerInfo(actions.copy(), uuid, playerProfile.copy(), listed, latency, gameMode, displayName, showHat, listOrder, chatSession);
+    }
+
+    @Override
+    public void write(SimpleByteBuf buffer, PseudoEnumSet<PlayerInfoUpdatePacket.Action> value) {
+        buffer.writeUUID(getUuid());
+        for (PlayerInfoUpdatePacket.Action<?> action : value)
+            action.write(buffer, this);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer, PseudoEnumSet<PlayerInfoUpdatePacket.Action> value) {
+        this.actions = value;
+        this.uuid = buffer.readUUID();
+        for (PlayerInfoUpdatePacket.Action<?> action : value)
+            action.read(buffer, this);
     }
 }

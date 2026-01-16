@@ -54,7 +54,7 @@ public class EffBackgroundColor extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.BACKGROUND_COLOR, colorExpression.getSingle(event).asBukkitColor())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.BACKGROUND_COLOR, colorExpression.getSingle(event).asBukkitColor())), entityOrId.getArray(event));
     }
 
     @Override

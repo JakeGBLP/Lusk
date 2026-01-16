@@ -53,7 +53,7 @@ public class EffLineWidth extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.LINE_WIDTH, widthExpression.getSingle(event).intValue())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.LINE_WIDTH, widthExpression.getSingle(event).intValue())), entityOrId.getArray(event));
     }
 
     @Override

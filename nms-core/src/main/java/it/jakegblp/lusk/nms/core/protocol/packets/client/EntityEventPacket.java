@@ -1,42 +1,69 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.world.entity.events.EntityEvents;
+import it.jakegblp.lusk.common.Either;
+import it.jakegblp.lusk.nms.core.bukkit.BukkitHelper;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.entity.Entity;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
+import org.bukkit.EntityEffect;
 
 @Getter
 @Setter
-public class EntityEventPacket implements ClientboundPacket{
+@AllArgsConstructor
+public class EntityEventPacket implements ClientboundPacketWithId {
+    protected int id;
+    protected byte data;
 
-    int entityID;
-    int eventID;
-    EntityEvents eventEnum;
-
-    public EntityEventPacket(int entityID, int eventID){
-        this.entityID = entityID;
-        this.eventID = eventID;
+    public EntityEventPacket(SimpleByteBuf buffer) {
+        read(buffer);
     }
 
-    public EntityEventPacket(Entity entity, int eventID){
-        this.entityID = entity.getEntityId();
-        this.eventID = eventID;
+    @SuppressWarnings("UnstableApiUsage")
+    public EntityEventPacket(int entityID, EntityEffect entityEffect) {
+        this(entityID, entityEffect.getData());
     }
 
-    public EntityEventPacket(Entity entity, EntityEvents event){
-        this.entityID = entity.getEntityId();
-        this.eventID = event.getId();
+    public EntityEventPacket(int entityID, InternalEntityEffect internalEntityEffect) {
+        this(entityID, internalEntityEffect.getData());
     }
-    public EntityEventPacket(int entityID, EntityEvents event){
-        this.entityID = entityID;
-        this.eventID = event.getId();
+
+    @SuppressWarnings("UnstableApiUsage")
+    public void setEffect(EntityEffect entityEffect) {
+        this.data = entityEffect.getData();
+    }
+
+    public void setEffect(InternalEntityEffect internalEntityEffect) {
+        this.data = internalEntityEffect.getData();
+    }
+
+    public void setEffect(byte data) {
+        this.data = data;
+    }
+
+    public byte getEventId() {
+        return this.data;
+    }
+
+    public Either<EntityEffect, InternalEntityEffect> getEffect() {
+        return BukkitHelper.getEntityEffectById(this.data);
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMSEntityEventPacket(this);
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeInt(id);
+        buffer.writeByte(data);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        id = buffer.readInt();
+        data = buffer.readByte();
+    }
+
+    @Override
+    public EntityEventPacket copy() {
+        return new EntityEventPacket(id, data);
     }
 }

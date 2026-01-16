@@ -56,7 +56,7 @@ public class EffPose extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.EntityKeys.POSE, poseExpression.getSingle(event))), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.POSE, poseExpression.getSingle(event))), entityOrId.getArray(event));
     }
 
     @Override

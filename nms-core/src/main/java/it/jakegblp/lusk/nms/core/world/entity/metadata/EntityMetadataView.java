@@ -8,7 +8,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 
-import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.cloneIfNotNull;
+import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.copyIfNotNull;
 
 // todo: expand simple list api
 public interface EntityMetadataView {
@@ -16,7 +16,7 @@ public interface EntityMetadataView {
     List<MetadataItem<? extends Entity, ?>> items();
 
     default void copy(EntityMetadata to, MetadataKey<? extends Entity, Object> key) {
-        to.set(key, cloneIfNotNull(get(key)));
+        to.set(key, copyIfNotNull(get(key)));
     }
 
     default int size() {

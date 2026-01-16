@@ -1,39 +1,27 @@
 package it.jakegblp.lusk.nms.core;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.adapters.*;
+import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SharedBiomeAdapter;
 import it.jakegblp.lusk.nms.core.injection.InjectionListener;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.Getter;
 import lombok.experimental.Delegate;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractNMS<
-        EntityDataSerializer
-        > {
+import static it.jakegblp.lusk.common.reflection.SimpleClass.classOf;
 
-    public static AbstractNMS<?> NMS;
-    @SuppressWarnings("rawtypes")
-    protected final BiMap<EntitySerializerKey, EntityDataSerializer> entityDataSerializerMap = HashBiMap.create();
+public abstract class AbstractNMS {
+
+    public static AbstractNMS NMS;
     @Delegate
     @SuppressWarnings("rawtypes")
     protected final SharedBehaviorAdapter sharedBehaviorAdapter;
-    @Delegate
-    protected final PlayerRotationPacketAdapter playerRotationPacketAdapter;
-    @Delegate
-    @SuppressWarnings("rawtypes")
-    protected final PlayerPositionPacketAdapter playerPositionPacketAdapter;
     @Getter
     protected final JavaPlugin plugin;
     @Getter
@@ -46,15 +34,11 @@ public abstract class AbstractNMS<
             Version version,
             @SuppressWarnings("rawtypes")
             SharedBehaviorAdapter sharedBehaviorAdapter,
-            PlayerRotationPacketAdapter playerRotationPacketAdapter,
-            PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter,
             SharedBiomeAdapter sharedBiomeAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
         this.sharedBehaviorAdapter = sharedBehaviorAdapter;
-        this.playerRotationPacketAdapter = playerRotationPacketAdapter;
-        this.playerPositionPacketAdapter = playerPositionPacketAdapter;
         this.sharedBiomeAdapter = sharedBiomeAdapter;
         Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
         init();
@@ -62,73 +46,10 @@ public abstract class AbstractNMS<
 
     public abstract void init();
 
-    public void registerEntityDataSerializer(
-            @SuppressWarnings("rawtypes")
-            EntitySerializerKey info,
-            EntityDataSerializer entityDataSerializer
-    ) {
-        entityDataSerializerMap.put(info, entityDataSerializer);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void registerEntityDataSerializer(
-            @NotNull Class<?> serializerClass,
-            @NotNull EntitySerializerKey.Type serializerType,
-            @NotNull EntityDataSerializer entityDataSerializer
-    ) {
-        entityDataSerializerMap.put(new EntitySerializerKey(serializerClass, serializerType), entityDataSerializer);
-    }
-
-    /**
-     * This method must only be used for unimplemented serializers or ones without an easy implementation.<br>
-     * This is not to be kept final.
-     */
-    @SuppressWarnings("rawtypes")
-    public void registerUnknownEntityDataSerializer(
-            EntitySerializerKey info,
-            EntityDataSerializer entityDataSerializer
-    ) {
-        entityDataSerializerMap.put(info, entityDataSerializer);
-    }
-
-    @SuppressWarnings("unchecked")
-    public EntitySerializerKey<?> getEntityDataSerializerKey(Object serializer) {
-        EntitySerializerKey<?> entityDataSerializerInfo = entityDataSerializerMap.inverse().get((EntityDataSerializer) serializer);
-        Preconditions.checkNotNull(entityDataSerializerInfo, "Could not find entityDataSerializerInfo for Serializer " + serializer);
-        return entityDataSerializerInfo;
-    }
-
-    public EntityDataSerializer getEntityDataSerializer(MetadataKey<?, ?> key) {
-        EntityDataSerializer entityDataSerializer = entityDataSerializerMap.get(key.serializerKey());
-        Preconditions.checkNotNull(entityDataSerializer, "Could not find EntityDataSerializer for " + key.serializerType() + " " + key.valueClass().getName());
-        return entityDataSerializer;
-    }
-
-    public EntityDataSerializer getEntityDataSerializer(EntitySerializerKey<?> entitySerializerKey) {
-        EntityDataSerializer entityDataSerializer = entityDataSerializerMap.get(entitySerializerKey);
-        Preconditions.checkNotNull(entityDataSerializer, "Could not find EntityDataSerializer for " + entitySerializerKey.serializerType() + " " + entitySerializerKey.serializeableClass().getName());
-        return entityDataSerializer;
-    }
-
-    public EntityDataSerializer getEntityDataSerializer(Class<?> clazz, EntitySerializerKey.Type type) {
-        EntityDataSerializer entityDataSerializer = entityDataSerializerMap.get(new EntitySerializerKey<>(clazz, type));
-        Preconditions.checkNotNull(entityDataSerializer, "Could not find EntityDataSerializer for " + type + " " + clazz.getName());
-        return entityDataSerializer;
-    }
-
-    public EntityDataSerializer getEntityDataSerializer(Class<?> clazz) {
-        return entityDataSerializerMap.get(EntitySerializerKey.normal(clazz));
-    }
-
     public @Nullable Object toNMSObject(@Nullable Object object) {
         if (object == null)
             throw new RuntimeException("Object null for toNMSObject");
-
         else if (object instanceof NMSObject<?> nmsObject) return nmsObject.asNMS();
-        else if (object instanceof Player player) return asServerPlayer(player);
-        else if (object instanceof org.bukkit.entity.Display.Billboard bb) return (byte) bb.ordinal();
-        else if (object instanceof Component component)
-            return toNMS(component);
         else if (isCodecFromClass(object.getClass())) return object;
         else return toNMS(object);
     }
@@ -140,30 +61,29 @@ public abstract class AbstractNMS<
      * @return the packet in a common form
      */
     public @NotNull Packet fromNMSPacket(@NotNull Object object) {
-        if (isNMSSetEquipmentPacket(object)) return fromNMSSetEquipmentPacket(object);
-        else if (isNMSClientBundlePacket(object)) return fromNMSClientBundlePacket(object);
-        else if (isNMSEntityMetadataPacket(object)) return fromNMSEntityMetadataPacket(object);
-        else if (isNMSPlayerInfoUpdatePacket(object)) return fromNMSPlayerInfoUpdatePacket(object);
-        else if (isNMSPlayerRotationPacket(object)) return fromNMSPlayerRotationPacket(object);
-        else if (isNMSPlayerPositionPacket(object)) return fromNMSPlayerPositionPacket(object);
-        else if (isNMSSystemChatPacket(object)) return fromNMSSystemChatPacket(object);
-        else if (isNMSLevelParticle(object)) return fromNMSLevelParticle(object);
-        else if (isNMSAttributePacket(object)) return fromNMSAttributePacket(object);
-        else if (isNMSSetPlayerTeamPacket(object)) return fromNMSSetPlayerTeamPacket(object);
-        else if (isNMSSetCameraPacket(object)) return fromNMSSetCameraPacket(object);
-        else if (isNMSTeleportPacket(object)) return fromNMSTeleportPacket(object);
-        else if (isNMSBlockUpdatePacket(object)) return fromNMSBlockUpdatePacket(object);
-        else if (isNMSSoundPacket(object)) return fromNMSSoundPacket(object);
-        else if (isNMSSoundEntityPacket(object)) return fromNMSSoundEntityPacket(object);
+        if (isNMSClientBundlePacket(object)) return fromNMSClientBundlePacket(object);
         throw new IllegalArgumentException("Could not convert nms packet " + object.getClass().getName());
     }
 
     public @NotNull Object fromNMSObject(@NotNull Object object) {
-        if (isNMSTeamParameters(object)) return fromNMSTeamParameters(object);
-        else if (isNMSPlayerInfoUpdatePacketAction(object)) return fromNMSPlayerInfoUpdatePacketAction(object);
-        else if (isNMSPacket(object)) return fromNMSPacket(object);
+        if (isNMSPacket(object)) return fromNMSPacket(object);
         throw new IllegalArgumentException("Could not convert nms object " + object.getClass().getName());
 
     }
 
+    public <F> void writeNMS(@NotNull F from, @NotNull SimpleByteBuf buffer) {
+        getFirstNMSCodec(classOf(from)).writeFrom(from, buffer);
+    }
+
+    public <F> F readNMS(@NotNull Class<F> fromClass, @NotNull SimpleByteBuf buffer) {
+        return fromClass.cast(getFirstNMSCodec(fromClass).readFrom(buffer));
+    }
+
+    public <T> void write(@NotNull T to, @NotNull SimpleByteBuf buffer) {
+        getFirstCodec(classOf(to)).writeTo(to, buffer);
+    }
+
+    public <T> T read(@NotNull Class<T> toClass, @NotNull SimpleByteBuf buffer) {
+        return toClass.cast(getFirstCodec(toClass).readTo(buffer));
+    }
 }

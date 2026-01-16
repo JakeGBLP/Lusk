@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.world.entity.guardian;
 
 import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
@@ -26,16 +27,16 @@ import java.util.UUID;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class GuardianBeam extends Displayable implements Cloneable, LazyProducer {
+public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>, LazyProducer {
 
     private static final Prototype<EntityMetadata, Integer, EntityMetadata> BASE_GUARDIAN_DATA = Prototype.unary(
-            new EntityMetadata(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true, MetadataKeys.GuardianKeys.IS_RETRACTING_SPIKES, true)),
+            EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true, MetadataKeys.GuardianKeys.IS_RETRACTING_SPIKES, true)),
             entityMetadata -> entityMetadata,// todo: clone
             (entityMetadata, id) -> entityMetadata.with(MetadataKeys.GuardianKeys.TARGET_ENTITY_ID, id));
 
     // todo: this one shouldn't use unary
     private static final Prototype<EntityMetadata, Integer, EntityMetadataPacket> BASE_BAT_PACKET = Prototype.of(
-            new EntityMetadata(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true)),
+            EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true)),
             entityMetadataPacket -> entityMetadataPacket,// todo: clone
             ((entityMetadata, integer) -> new EntityMetadataPacket(integer, entityMetadata)));
 
@@ -119,15 +120,6 @@ public class GuardianBeam extends Displayable implements Cloneable, LazyProducer
         markDirty();
     }
 
-    @Override
-    public GuardianBeam clone() {
-        try {
-            return (GuardianBeam) super.clone(); // todo: finish
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
-
     public ClientboundPacket[] getDisplayPackets() {
         if (isDirty())
             produce();
@@ -150,11 +142,16 @@ public class GuardianBeam extends Displayable implements Cloneable, LazyProducer
         dirty = false;
         YawPitch yawPitch = YawPitch.between(start, end);
         displayPackets = new ClientboundPacket[] {
-                new AddEntityPacket(id, uuid, start.getX(), start.getY(), start.getZ(), yawPitch.getYaw(), yawPitch.getPitch(), (float) yawPitch.yaw(), new Vector(), EntityType.GUARDIAN, 0),
+                new AddEntityPacket(id, uuid, start, yawPitch.getYaw(), yawPitch.getPitch(), (float) yawPitch.yaw(), new Vector(), EntityType.GUARDIAN, 0),
                 new AddEntityPacket(targetId, targetUuid, end, 0, new Vector(), EntityType.BAT, 0),
                 new EntityMetadataPacket(id, BASE_GUARDIAN_DATA.apply(targetId)),
                 BASE_BAT_PACKET.apply(targetId)
         };
         removePackets = new ClientboundPacket[] {new RemoveEntitiesPacket(id, targetId)};
+    }
+
+    @Override
+    public GuardianBeam copy() {
+        return new GuardianBeam(start.clone(), end.clone(), id, targetId, uuid, targetUuid, isPersistent());
     }
 }

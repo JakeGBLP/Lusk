@@ -11,7 +11,6 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +64,7 @@ public class EffText extends Effect {
         else
             text = MiniMessage.miniMessage().deserialize(nameString);
 
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.TEXT, text)), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.TEXT, text)), entityOrId.getArray(event));
     }
 
     @Override

@@ -1,12 +1,11 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.bukkit.entity.Entity;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 
@@ -17,8 +16,10 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
  */
 @Getter
 @Setter
-@ToString(callSuper = true)
+@NullMarked
 @AllArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public final class EntityMetadataPacket implements ClientboundPacketWithId {
     private int id;
     private Class<? extends Entity> target;
@@ -29,7 +30,7 @@ public final class EntityMetadataPacket implements ClientboundPacketWithId {
             Class<? extends Entity> target,
             Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata
     ) {
-        this(id, target, new EntityMetadata(metadata));
+        this(id, target, EntityMetadata.of(metadata));
     }
 
     public EntityMetadataPacket(
@@ -47,7 +48,20 @@ public final class EntityMetadataPacket implements ClientboundPacketWithId {
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMSEntityMetadataPacket(this);
+    public void write(SimpleByteBuf buffer) {
+        NMS.write(this, buffer);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        var read = NMS.read(getClass(), buffer);
+        id = read.id;
+        target = read.target;
+        entityMetadata = read.entityMetadata;
+    }
+
+    @Override
+    public EntityMetadataPacket copy() {
+        return new EntityMetadataPacket(id, target, entityMetadata.copy());
     }
 }

@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.EventValues;
 import it.jakegblp.lusk.nms.core.events.PacketReceiveEvent;
 import it.jakegblp.lusk.nms.core.events.PacketSendEvent;

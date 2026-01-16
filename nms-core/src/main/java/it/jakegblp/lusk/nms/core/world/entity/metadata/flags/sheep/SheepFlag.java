@@ -1,0 +1,34 @@
+package it.jakegblp.lusk.nms.core.world.entity.metadata.flags.sheep;
+
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.SemiBooleanFlag;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.bukkit.DyeColor;
+
+@Getter
+@AllArgsConstructor
+public enum SheepFlag implements SemiBooleanFlag<Object> {
+    WOOL_COLOR(0x0F, 0) {
+        @Override
+        @SuppressWarnings("UnstableApiUsage")
+        public DyeColor decode(int bits) {
+            return DyeColor.getByWoolData((byte) bits);
+        }
+
+        @Override
+        @SuppressWarnings("UnstableApiUsage")
+        public int encode(Object value) {
+            return ((DyeColor) value).getWoolData();
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Class<Object> getValueClass() {
+            return (Class<Object>)(Class<?>)DyeColor.class;
+        }
+    },
+    IS_SHEARED(0x10, 4);
+
+    private final int mask, shift;
+
+}

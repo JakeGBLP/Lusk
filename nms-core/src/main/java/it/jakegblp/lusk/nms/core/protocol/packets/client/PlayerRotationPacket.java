@@ -3,6 +3,7 @@ package it.jakegblp.lusk.nms.core.protocol.packets.client;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.nms.core.protocol.packets.UnsupportedPacket;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @ToString
 @EqualsAndHashCode
 @Availability(addedIn = "1.21.2")
-public class PlayerRotationPacket implements ClientboundPacket, UnsupportedPacket {
+public class PlayerRotationPacket implements BufferSerializableClientboundPacket, UnsupportedPacket {
     protected float yaw, pitch;
 
     /**
@@ -33,13 +34,8 @@ public class PlayerRotationPacket implements ClientboundPacket, UnsupportedPacke
         this.pitch = pitch;
     }
 
-    /**
-     * @throws UnsupportedOperationException if the server version is below 1.21.2
-     */
-    @Override
-    public Object asNMS() {
-        validate();
-        return NMS.toNMSPlayerRotationPacket(this);
+    public PlayerRotationPacket(SimpleByteBuf buffer) {
+        read(buffer);
     }
 
     @Override
@@ -53,7 +49,19 @@ public class PlayerRotationPacket implements ClientboundPacket, UnsupportedPacke
     }
 
     @Override
-    public PlayerRotationPacket clone() throws CloneNotSupportedException {
-        return (PlayerRotationPacket) super.clone();
+    public void write(SimpleByteBuf buffer) {
+        yaw = buffer.readFloat();
+        pitch = buffer.readFloat();
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        buffer.writeFloat(yaw);
+        buffer.writeFloat(pitch);
+    }
+
+    @Override
+    public PlayerRotationPacket copy() {
+        return new PlayerRotationPacket(yaw, pitch);
     }
 }

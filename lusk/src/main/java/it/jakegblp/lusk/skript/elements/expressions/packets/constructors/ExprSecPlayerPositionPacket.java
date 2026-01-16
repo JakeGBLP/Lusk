@@ -10,7 +10,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
-import it.jakegblp.lusk.nms.core.world.entity.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
 import it.jakegblp.lusk.skript.api.entry.DoubleKeyExpressionEntryData;
 import it.jakegblp.lusk.skript.api.expression.DefaultValueExpression;
 import org.bukkit.Location;

@@ -8,14 +8,12 @@ import lombok.*;
 
 import java.util.List;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integer> {
+public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket, SimpleList<Integer> {
     protected IntList entityIds;
 
     public RemoveEntitiesPacket(List<Integer> entityIds) {
@@ -31,7 +29,7 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
         this(new IntArrayList());
     }
     public RemoveEntitiesPacket(SimpleByteBuf buffer) {
-        this(buffer.readIntIdList());
+        this(buffer.readIntList());
     }
 
     @Override
@@ -68,14 +66,24 @@ public class RemoveEntitiesPacket implements ClientboundPacket, SimpleList<Integ
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMS(this);
-    }
-
-    @Override
     public RemoveEntitiesPacket clone() throws CloneNotSupportedException {
         var clone = (RemoveEntitiesPacket) super.clone();
         clone.set(this.entityIds);
         return clone;
+    }
+
+    @Override
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeIntList(this.entityIds);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        this.entityIds = buffer.readIntList();
+    }
+
+    @Override
+    public RemoveEntitiesPacket copy() {
+        return new RemoveEntitiesPacket(entityIds);
     }
 }

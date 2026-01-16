@@ -1,11 +1,13 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
@@ -14,9 +16,9 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 public class SetEquipmentPacket implements ClientboundPacketWithId {
 
-    private int id;
-    private boolean sanitized;
-    private Map<EquipmentSlot, ItemStack> equipment;
+    protected int id;
+    protected boolean sanitized;
+    protected Map<EquipmentSlot, ItemStack> equipment;
 
     public SetEquipmentPacket(int entityId, boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
         this.id = entityId;
@@ -53,7 +55,22 @@ public class SetEquipmentPacket implements ClientboundPacketWithId {
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMSSetEquipmentPacket(this);
+    public void write(SimpleByteBuf buffer) {
+        NMS.write(this, buffer);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        var read = NMS.read(getClass(), buffer);
+        this.id = read.getId();
+        this.sanitized = read.isSanitized();
+        this.equipment = read.getEquipment();
+    }
+
+    @Override
+    public SetEquipmentPacket copy() {
+        Map<EquipmentSlot, ItemStack> map = new HashMap<>(this.equipment.size());
+        equipment.forEach((key, value) -> map.put(key, value.clone()));
+        return new SetEquipmentPacket(id, sanitized, map);
     }
 }

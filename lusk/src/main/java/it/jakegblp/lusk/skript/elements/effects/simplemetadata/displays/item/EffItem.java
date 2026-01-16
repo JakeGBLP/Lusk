@@ -54,7 +54,7 @@ public class EffItem extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.ItemDisplayKeys.DISPLAY_ITEM, itemExpression.getSingle(event).getRandom())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.ItemDisplayKeys.DISPLAY_ITEM, itemExpression.getSingle(event).getRandom())), entityOrId.getArray(event));
     }
 
     @Override

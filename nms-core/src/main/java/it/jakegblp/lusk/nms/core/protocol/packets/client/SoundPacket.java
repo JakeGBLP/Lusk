@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.AbstractNMS;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,38 +8,68 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NullMarked
-public class SoundPacket implements ClientboundPacket{
+public class SoundPacket implements BufferSerializableClientboundPacket {
 
     protected Sound sound;
-    protected SoundCategory soundSource;
-    protected double x,y,z;
+    protected SoundCategory soundCategory;
+    protected int x,y,z;
     protected float volume, pitch;
     protected long seed;
 
-    public void setLocation(Location location) {
-        this.x = location.getX();
-        this.y = location.getY();
-        this.z = location.getZ();
+    public SoundPacket(SimpleByteBuf buffer) {
+        read(buffer);
     }
 
-    public void setLocation(Vector vector) {
-        this.x = vector.getX();
-        this.y = vector.getY();
-        this.z = vector.getZ();
+    public void setPosition(Location location) {
+        this.x = location.getBlockX();
+        this.y = location.getBlockY();
+        this.z = location.getBlockZ();
     }
 
-    public Vector getLocation() {
+    public void setPosition(Vector vector) {
+        this.x = vector.getBlockX();
+        this.y = vector.getBlockY();
+        this.z = vector.getBlockZ();
+    }
+
+    @Contract(pure = true)
+    public Vector getPosition() {
         return new Vector(x,y,z);
     }
 
     @Override
-    public Object asNMS() {
-        return AbstractNMS.NMS.toNMSSoundPacket(this);
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeSound(sound);
+        buffer.writeSoundCategory(soundCategory);
+        buffer.writeInt(x);
+        buffer.writeInt(y);
+        buffer.writeInt(z);
+        buffer.writeFloat(volume);
+        buffer.writeFloat(pitch);
+        buffer.writeLong(seed);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        this.sound = buffer.readSound();
+        this.soundCategory = buffer.readSoundCategory();
+        this.x = buffer.readInt();
+        this.y = buffer.readInt();
+        this.z = buffer.readInt();
+        this.volume = buffer.readFloat();
+        this.pitch = buffer.readFloat();
+        this.seed = buffer.readLong();
+    }
+
+    @Override
+    public SoundPacket copy() {
+        return new SoundPacket(sound, soundCategory, x, y, z, volume, pitch, seed);
     }
 }

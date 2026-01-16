@@ -20,7 +20,7 @@ import org.skriptlang.skript.lang.entry.util.ExpressionEntryData;
 
 import java.util.List;
 
-public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket.UpdateInfo> {
+public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket> {
 
     public static final EntryValidator VALIDATOR;
 
@@ -36,7 +36,7 @@ public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket.Up
                 .addEntryData(new ExpressionEntryData<>("friendly fire", null, false, Boolean.class))
                 .addEntryData(new ExpressionEntryData<>("can see friendly invisibles", null, false, Boolean.class))
                 .build();
-        Skript.registerExpression(ExprSecTeamUpdateInfoPacket.class, TeamPacket.UpdateInfo.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSecTeamUpdateInfoPacket.class, TeamPacket.class, ExpressionType.COMBINED,
                 "[a] new team (update info|info update) packet"
         );
     }
@@ -69,29 +69,29 @@ public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket.Up
     }
 
     @Override
-    protected TeamPacket.UpdateInfo @Nullable [] get(Event event) {
+    protected TeamPacket @Nullable [] get(Event event) {
         String name = nameExpression.getSingle(event);
-        if (name == null) return new TeamPacket.UpdateInfo[0];
+        if (name == null) return new TeamPacket[0];
         Component displayName = AddonUtils.handleComponent(displayNameExpression, event);
-        if (displayName == null) return new TeamPacket.UpdateInfo[0];
+        if (displayName == null) return new TeamPacket[0];
         Component prefix = AddonUtils.handleComponent(prefixExpression, event);
-        if (prefix == null) return new TeamPacket.UpdateInfo[0];
+        if (prefix == null) return new TeamPacket[0];
         Component suffix = AddonUtils.handleComponent(suffixExpression, event);
-        if (suffix == null) return new TeamPacket.UpdateInfo[0];
+        if (suffix == null) return new TeamPacket[0];
         Team.OptionStatus nameTagVisibility = nameTagVisibilityExpression.getSingle(event);
-        if (nameTagVisibility == null) return new TeamPacket.UpdateInfo[0];
+        if (nameTagVisibility == null) return new TeamPacket[0];
         Team.OptionStatus collisionRule = collisionRuleExpression.getSingle(event);
-        if (collisionRule == null) return new TeamPacket.UpdateInfo[0];
+        if (collisionRule == null) return new TeamPacket[0];
         Color color = styleExpression.getSingle(event);
-        if (color == null) return new TeamPacket.UpdateInfo[0];
+        if (color == null) return new TeamPacket[0];
         NamedTextColor style = AddonUtils.toNamedTextColor(color);
-        if (style == null) return new TeamPacket.UpdateInfo[0];
+        if (style == null) return new TeamPacket[0];
         Boolean friendlyFire = allowFriendlyFireExpression.getSingle(event);
-        if (friendlyFire == null) return new TeamPacket.UpdateInfo[0];
+        if (friendlyFire == null) return new TeamPacket[0];
         Boolean canSeeFriendlyInvisible = canSeeFriendlyInvisiblesExpression.getSingle(event);
-        if (canSeeFriendlyInvisible == null) return new TeamPacket.UpdateInfo[0];
-        return new TeamPacket.UpdateInfo[] {
-                new TeamPacket.UpdateInfo(
+        if (canSeeFriendlyInvisible == null) return new TeamPacket[0];
+        return new TeamPacket[] {
+                TeamPacket.updateInfo(
                         name,
                         new TeamParameters(
                                 displayName,
@@ -113,8 +113,8 @@ public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket.Up
     }
 
     @Override
-    public Class<? extends TeamPacket.UpdateInfo> getReturnType() {
-        return TeamPacket.UpdateInfo.class;
+    public Class<? extends TeamPacket> getReturnType() {
+        return TeamPacket.class;
     }
 
     @Override

@@ -56,7 +56,7 @@ public class EffBillboard extends Effect {
     protected void execute(Event event) {
         final int ordinal = billboardExpression.getSingle(event).ordinal();
         byte asByte = (byte) ordinal;
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.BILLBOARD, asByte)), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.DisplayKeys.BILLBOARD, asByte)), entityOrId.getArray(event));
     }
 
     @Override

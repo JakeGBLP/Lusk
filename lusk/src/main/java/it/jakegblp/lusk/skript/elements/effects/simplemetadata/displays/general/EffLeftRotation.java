@@ -11,7 +11,6 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
@@ -55,7 +54,7 @@ public class EffLeftRotation extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.ROTATION_LEFT, quatExpression.getSingle(event))), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.DisplayKeys.ROTATION_LEFT, quatExpression.getSingle(event))), entityOrId.getArray(event));
     }
 
     @Override

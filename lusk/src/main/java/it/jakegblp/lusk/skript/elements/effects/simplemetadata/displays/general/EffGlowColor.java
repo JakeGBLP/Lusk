@@ -57,14 +57,14 @@ public class EffGlowColor extends Effect {
     protected void execute(Event event) {
         int color;
         final Object single = objectExpression.getSingle(event);
-        if(single instanceof Number number)
+        if (single instanceof Number number)
             color = number.intValue();
-        else if(single instanceof Color c)
+        else if (single instanceof Color c)
             color = c.asARGB();
         else
             return;
 
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.GLOW_COLOR, color)), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.DisplayKeys.GLOW_COLOR, color)), entityOrId.getArray(event));
     }
 
     @Override

@@ -6,4 +6,5 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Instances {
     public static JavaPlugin LUSK;
     public static SkriptAddon SKRIPT_ADDON;
+    // todo: loggers, debug, main, etc
 }

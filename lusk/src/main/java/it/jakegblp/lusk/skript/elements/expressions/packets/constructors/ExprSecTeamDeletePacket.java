@@ -10,10 +10,10 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.TeamPacket;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-public class ExprSecTeamDeletePacket extends SimpleExpression<TeamPacket.Delete> {
+public class ExprSecTeamDeletePacket extends SimpleExpression<TeamPacket> {
 
     static {
-        Skript.registerExpression(ExprSecTeamDeletePacket.class, TeamPacket.Delete.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSecTeamDeletePacket.class, TeamPacket.class, ExpressionType.COMBINED,
                 "[a] new team delet(e|ion) packet for team [named|with name] %string%"
         );
     }
@@ -28,9 +28,9 @@ public class ExprSecTeamDeletePacket extends SimpleExpression<TeamPacket.Delete>
     }
 
     @Override
-    protected TeamPacket.Delete @Nullable [] get(Event event) {
+    protected TeamPacket @Nullable [] get(Event event) {
         String name = nameExpression.getSingle(event);
-        return name == null ? new TeamPacket.Delete[0] : new TeamPacket.Delete[] {new TeamPacket.Delete(name)};
+        return name == null ? new TeamPacket[0] : new TeamPacket[] {TeamPacket.delete(name)};
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ExprSecTeamDeletePacket extends SimpleExpression<TeamPacket.Delete>
     }
 
     @Override
-    public Class<? extends TeamPacket.Delete> getReturnType() {
-        return TeamPacket.Delete.class;
+    public Class<? extends TeamPacket> getReturnType() {
+        return TeamPacket.class;
     }
 
     @Override

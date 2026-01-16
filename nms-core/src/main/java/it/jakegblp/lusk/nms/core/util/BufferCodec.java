@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.util;
 
+import it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Function;
@@ -7,7 +8,7 @@ import java.util.function.Function;
 @NullMarked
 public interface BufferCodec {
 
-    static <F, T> SimpleBufferCodec<F ,T> oneSided(
+    static <F, T> SimpleBufferCodec<F ,T> leftSided(
             Class<F> fromClass,
             Class<T> toClass,
             Function<F, T> toIntermediateFrom,
@@ -24,6 +25,24 @@ public interface BufferCodec {
                 buffer -> toIntermediateFrom.apply(readIntermediate.read(buffer))
         );
     }
+    static <F, T> SimpleBufferCodec<F, T> rightSided(
+            Class<F> fromClass,
+            Class<T> toClass,
+            Function<F, T> toIntermediateFrom,
+            Function<T, F> fromIntermediateFrom,
+            Writer<T> writeIntermediate,
+            Reader<T> readIntermediate
+    ) {
+        return BufferCodec.of(
+                fromClass,
+                toClass,
+                (buffer, from) -> writeIntermediate.write(buffer, toIntermediateFrom.apply(from)),
+                buffer -> fromIntermediateFrom.apply(readIntermediate.read(buffer)),
+                writeIntermediate,
+                readIntermediate
+        );
+    }
+
 
     static <T> IdentityBufferCodec<T> identity(
             Class<T> fromClass,
@@ -31,6 +50,11 @@ public interface BufferCodec {
             Reader<T> reader
     ) {
         return new IdentityBufferCodec<>() {
+            @Override
+            public DataHolderType getHolderType() {
+                return DataHolderType.NORMAL;
+            }
+
             @Override
             public Class<T> getType() {
                 return fromClass;
@@ -57,6 +81,10 @@ public interface BufferCodec {
             Reader<T> readTo
     ) {
         return new SimpleBufferCodec<>() {
+            @Override
+            public DataHolderType getHolderType() {
+                return DataHolderType.NORMAL;
+            }
             @Override
             public Class<F> getFromClass() {
                 return fromClass;
@@ -85,6 +113,47 @@ public interface BufferCodec {
             @Override
             public T readTo(SimpleByteBuf buffer) throws IllegalArgumentException {
                 return readTo.read(buffer);
+            }
+        };
+    }
+
+    static <F extends Enum<F>, T extends Enum<T>> SimpleBufferCodec<F, T> ofEnum(
+            Class<F> fromClass,
+            Class<T> toClass
+    ) {
+        return new SimpleBufferCodec<>() {
+            @Override
+            public DataHolderType getHolderType() {
+                return DataHolderType.NORMAL;
+            }
+            @Override
+            public Class<F> getFromClass() {
+                return fromClass;
+            }
+
+            @Override
+            public Class<T> getToClass() {
+                return toClass;
+            }
+
+            @Override
+            public void writeFrom(F from, SimpleByteBuf buffer) throws IllegalArgumentException {
+                buffer.writeEnum(from);
+            }
+
+            @Override
+            public F readFrom(SimpleByteBuf buffer) throws IllegalArgumentException {
+                return buffer.readEnum(fromClass);
+            }
+
+            @Override
+            public void writeTo(T to, SimpleByteBuf buffer) throws IllegalArgumentException {
+                buffer.writeEnum(to);
+            }
+
+            @Override
+            public T readTo(SimpleByteBuf buffer) throws IllegalArgumentException {
+                return buffer.readEnum(toClass);
             }
         };
     }

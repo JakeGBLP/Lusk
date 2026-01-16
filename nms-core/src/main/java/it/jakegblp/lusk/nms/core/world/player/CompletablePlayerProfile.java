@@ -2,26 +2,37 @@ package it.jakegblp.lusk.nms.core.world.player;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
+import it.jakegblp.lusk.nms.core.util.ProfilePropertySet;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Delegate;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+import java.util.UUID;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @EqualsAndHashCode
 @Getter
-public final class CompletablePlayerProfile implements Cloneable, Asyncable, NMSObject<Object> {
+public final class CompletablePlayerProfile implements Copyable<CompletablePlayerProfile>, Asyncable, NMSObject<Object> {
     @Delegate
     private final @NotNull PlayerProfile playerProfile;
     @Setter
     private boolean shouldComplete;
     @Setter
     private @NotNull ExecutionMode executionMode;
+
+    public <S extends Set<ProfileProperty>> CompletablePlayerProfile(UUID uuid, String name, S properties) {
+        this(Bukkit.createProfile(uuid, name));
+        playerProfile.setProperties(properties);
+    }
 
     public CompletablePlayerProfile(
             @NotNull PlayerProfile playerProfile,
@@ -70,8 +81,12 @@ public final class CompletablePlayerProfile implements Cloneable, Asyncable, NMS
         return null;
     }
 
+    public ProfilePropertySet getProperties() {
+        return new ProfilePropertySet(playerProfile.getProperties());
+    }
+
     @Override
-    public CompletablePlayerProfile clone() throws CloneNotSupportedException {
+    public CompletablePlayerProfile copy() {
         return new CompletablePlayerProfile(playerProfile.clone(), shouldComplete, executionMode);
     }
 

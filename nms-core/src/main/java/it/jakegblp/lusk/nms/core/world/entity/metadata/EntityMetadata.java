@@ -1,37 +1,47 @@
 
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
-import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
-import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+import it.jakegblp.lusk.common.Copyable;
+import it.jakegblp.lusk.nms.core.util.NullabilityUtils;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import lombok.EqualsAndHashCode;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * See: <a href="https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Entity">Minecraft Wiki – Entity Metadata</a>
  */
 @EqualsAndHashCode
-public class EntityMetadata implements EntityMetadataView, Cloneable {
-    // todo: cloning
+public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetadata> {
+
     private final List<MetadataItem<? extends Entity, ?>> items;
 
-    public EntityMetadata(Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata) {
-        this();
-        // temporary solution
-        metadata.forEach((metadataKeyReference, o) ->
-                set((MetadataKeyReference<Entity, Object>)metadataKeyReference, o)
-        );
+    @SuppressWarnings("unchecked")
+    public static EntityMetadata of(Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata) {
+        var entityMetadata = new EntityMetadata();
+        metadata.forEach((metadataKeyReference, o) -> entityMetadata.set((MetadataKeyReference<Entity, Object>)metadataKeyReference, NullabilityUtils.copyIfNotNull(o)));
+        return entityMetadata;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static EntityMetadata of(List<? extends MetadataItem<? extends Entity, ?>> items) {
+        var entityMetadata = new EntityMetadata();
+        items.forEach(item -> {
+            MetadataItem<Entity, Object> copy = (MetadataItem<Entity, Object>) NullabilityUtils.copyIfNotNull(item);
+            entityMetadata.set(copy, copy.value());
+        });
+        return entityMetadata;
     }
 
     public EntityMetadata() {
-        this(List.of());
-    }
-
-    protected EntityMetadata(List<MetadataItem<? extends Entity, ?>>  items) {
-        this.items = new ArrayList<>(items);
+        this.items = new ArrayList<>();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -68,30 +78,14 @@ public class EntityMetadata implements EntityMetadataView, Cloneable {
 
             if (existing instanceof FlagByte<?, ?, ?> fb) {
                 byteFlag = (F) fb;
-            } else if (existing instanceof Number n) {
-                byteFlag = (F) FlagByte.dynamic(parentKey.valueClass());
-                applyRaw(byteFlag, n.byteValue());
             }
         }
 
         if (byteFlag == null)
-            byteFlag = (F) FlagByte.dynamic(parentKey.valueClass());
+            byteFlag = (F) FlagByte.dynamic(parentKey.rawValueClass());
 
         byteFlag.setUnsafe(key.getBitFlag(), value);
         return setInternal(parentKey.id(), parentKey.asItem(byteFlag));
-    }
-
-    private static void applyRaw(FlagByte<?, ?, ?> flagByte, byte raw) {
-        try {
-            flagByte.getClass().getMethod("setRaw", byte.class).invoke(flagByte, raw);
-            return;
-        } catch (Throwable ignored) {
-        }
-        try {
-            flagByte.getClass().getMethod("setUnsafe", byte.class).invoke(flagByte, raw);
-        } catch (Throwable t) {
-            throw new IllegalStateException("FlagByte has no compatible raw-byte setter", t);
-        }
     }
 
     public <E extends Entity, T> EntityMetadata with(
@@ -178,7 +172,7 @@ public class EntityMetadata implements EntityMetadataView, Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone(); // todo: finish
+    public EntityMetadata copy() {
+        return of(items);
     }
 }

@@ -56,7 +56,7 @@ public class EffHealth extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.LivingEntityKeys.HEALTH, healthExpression.getSingle(event).intValue())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.LivingEntityKeys.HEALTH, healthExpression.getSingle(event).intValue())), entityOrId.getArray(event));
     }
 
     @Override

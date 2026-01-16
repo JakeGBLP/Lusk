@@ -5,8 +5,6 @@ import lombok.*;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.Range;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
 @Getter
 @Setter
 @ToString
@@ -18,7 +16,7 @@ public class BlockDestructionPacket implements ClientboundPacketWithId {
     protected @Range(from = -1, to = 9) int blockDestructionStage;
 
     public BlockDestructionPacket(SimpleByteBuf buffer) {
-        this(buffer.readVarInt(), buffer.readBlockVector(), buffer.readByte());
+        read(buffer);
     }
 
     // todo: skript impl
@@ -27,7 +25,21 @@ public class BlockDestructionPacket implements ClientboundPacketWithId {
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMS(this);
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeVarInt(id);
+        buffer.writeBlockVector(position);
+        buffer.writeByte(blockDestructionStage);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        id = buffer.readVarInt();
+        position = buffer.readBlockVector();
+        blockDestructionStage = buffer.readByte();
+    }
+
+    @Override
+    public BlockDestructionPacket copy() {
+        return new BlockDestructionPacket(id, position.clone(), blockDestructionStage);
     }
 }

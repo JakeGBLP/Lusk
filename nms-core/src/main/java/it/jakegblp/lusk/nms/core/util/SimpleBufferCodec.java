@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.util;
 
+import it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -16,6 +17,8 @@ public interface SimpleBufferCodec<From, To> extends BufferCodec {
     void writeTo(To to, SimpleByteBuf buffer) throws IllegalArgumentException;
 
     To readTo(SimpleByteBuf buffer) throws IllegalArgumentException;
+
+    DataHolderType getHolderType();
 
     default To encode(From input) throws IllegalArgumentException {
         SimpleByteBuf buffer = new SimpleByteBuf();

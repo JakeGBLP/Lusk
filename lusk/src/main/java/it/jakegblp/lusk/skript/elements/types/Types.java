@@ -9,6 +9,7 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Color;
 import ch.njol.skript.util.SkriptColor;
+import ch.njol.skript.util.Version;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.common.URLUtils;
@@ -17,8 +18,9 @@ import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
 import it.jakegblp.lusk.nms.core.util.Displayable;
+import it.jakegblp.lusk.nms.core.world.entity.ClientEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
-import it.jakegblp.lusk.nms.core.world.entity.events.EntityEvents;
+import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
 import it.jakegblp.lusk.nms.core.world.entity.guardian.GuardianBeam;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
@@ -35,6 +37,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
+import org.bukkit.EntityEffect;
 import org.bukkit.Particle;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockState;
@@ -166,7 +169,7 @@ public class Types {
                 .description("All the metadata keys.")
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(PlayerInfo.class, "playerinfo")
-                .toString(playerInfo -> "Player Info with UUID " + playerInfo.getUUID())
+                .toString(playerInfo -> "Player Info with UUID " + playerInfo.getUuid())
                 .user("player ?info(rmation)?s?")
                 .name("Player - Info")
                 .description("A player's info.\n\nContains the player's UUID, profile (skin, cape, etc), tab visibility, ping, gamemode, display name, hat visibility, tab list order and chat session data.") // add example
@@ -188,6 +191,18 @@ public class Types {
                 .user("guardian ?beams?")
                 .name("Guardian - Beam")
                 .description("A guardian beam, can be displayed and removed for players.\nNote: the developer is responsible for specifying to whom a guardian beam is displayed.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(ClientEntityReference.class, "entityreference")
+                .toString(entityReference -> "Entity with id " + entityReference.getId() + " for " + entityReference.getPlayer().getName())
+                .user("entity ?references?")
+                .name("Entity - Reference")
+                .description("A reference to an entity for a player.") // add example
+                .since("2.0.0"));
+        EnumClassInfoWrapper<InternalEntityEffect> INTERNAL_ENTITY_EFFECT_ENUM = new EnumClassInfoWrapper<>(InternalEntityEffect.class);
+        Classes.registerClass(INTERNAL_ENTITY_EFFECT_ENUM.getClassInfo("internalentityeffect")
+                .user("internal ?entit(y|ies) ?effects?")
+                .name("Internal Entity Effect")
+                .description("Effects that can be played on entities, this type encompasses all entity effects normally not exposed by bukkit.\n\nInternal Entity Effects are only to be used with packets.") // add example
                 .since("2.0.0"));
 
         // Async
@@ -237,6 +252,7 @@ public class Types {
                         }
                     }));
         }
+        // dubious
         if (Classes.getExactClassInfo(Particle.class) == null) {
             EnumClassInfoWrapper<Particle> PARTICLE_ENUM = new EnumClassInfoWrapper<>(Particle.class);
             Classes.registerClass(PARTICLE_ENUM.getClassInfo("particle")
@@ -251,6 +267,14 @@ public class Types {
                     .user("attribute ?modifiers?")
                     .name("Attribute - Modifier")
                     .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
+        }
+        if (Skript.getVersion().isSmallerThan(new Version(2,14)) && Classes.getExactClassInfo(EntityEffect.class) == null) {
+            EnumClassInfoWrapper<EntityEffect> ENTITY_EFFECT_ENUM = new EnumClassInfoWrapper<>(EntityEffect.class);
+            Classes.registerClass(ENTITY_EFFECT_ENUM.getClassInfo("entityeffect")
+                    .user("entit(y|ies) ?effects?")
+                    .name("Entity Effect")
+                    .description("Effects that can be played on entities.\nAuto-generated\n\nDisabled when running Skript 2.14+") // add example
+                    .since("2.0.0"));
         }
 
 
@@ -299,13 +323,6 @@ public class Types {
                     .description("An URL, used mainly to fetch skins.") // add example
                     .since("2.0.0"));
         }
-
-        EnumClassInfoWrapper<EntityEvents> entityEventsEnum = new EnumClassInfoWrapper<>(EntityEvents.class);
-        Classes.registerClass(entityEventsEnum.getClassInfo("entityevent")
-                .user("entityevent?")
-                .name("Entity Event")
-                .description("All the entity events.") // add example
-                .since("2.0.0"));
 
         /*
         If another addon registers ProfileProperty as a classinfo,

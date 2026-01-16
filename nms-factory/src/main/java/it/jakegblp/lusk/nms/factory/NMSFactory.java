@@ -13,7 +13,7 @@ import static it.jakegblp.lusk.common.Version.of;
 
 public class NMSFactory {
 
-    public static AbstractNMS<?> createNMS(
+    public static AbstractNMS createNMS(
             JavaPlugin javaPlugin,
             Version minecraftVersion
     ) {
@@ -31,18 +31,16 @@ public class NMSFactory {
 
         NMSBuilder nmsBuilder = new NMSBuilder(major, minor, patch);
         nmsBuilder.setPlugin(javaPlugin);
-
-        if (minecraftVersion.isGreaterOrEqual(of(1, 21, 3))) {
-            var from_1_21_3 = new From_1_21_3();
-            nmsBuilder.setPlayerRotationPacketAdapter(from_1_21_3);
-            nmsBuilder.setPlayerPositionPacketAdapter(from_1_21_3);
-        } else
-            nmsBuilder.setPlayerPositionPacketAdapter(new To_1_21_1());
-
         nmsBuilder.setSharedBehaviorAdapter(new AllVersions());
         nmsBuilder.setSharedBiomeAdapter(new BiomeAllVersions()); // todo: spread this across the appropriate versions
+        var nms = nmsBuilder.build();
+
+        if (minecraftVersion.isGreaterOrEqual(of(1, 21, 3)))
+            From_1_21_3.registerCodecs(nms);
+        else
+            To_1_21_1.registerCodecs(nms);
 
 
-        return nmsBuilder.build();
+        return nms;
     }
 }

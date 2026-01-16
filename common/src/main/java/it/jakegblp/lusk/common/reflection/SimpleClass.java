@@ -1,7 +1,6 @@
 package it.jakegblp.lusk.common.reflection;
 
 import it.jakegblp.lusk.common.CommonUtils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +22,11 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
 
     static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
 
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> classOf(@NotNull T object) {
+        return (Class<T>) object.getClass();
+    }
+
     public static <T> @Nullable T quickInstance(Class<T> clazz) {
         return new SimpleClass<>(clazz).getConstructor(false).newInstance();
     }
@@ -39,8 +43,8 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
     public static <T> @Nullable Class<T> quickClass(@NotNull String className) {
         try {
             return (Class<T>) Class.forName(className);
-        } catch (ClassNotFoundException ignored) {
-            return null;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,8 +62,7 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
             try {
                 return Class.forName(key);
             } catch (ClassNotFoundException e) {
-                Bukkit.getLogger().severe("REFLECTION ERROR: " + e.getMessage());
-                return null;
+                throw new RuntimeException(e);
             }
         });
         return new SimpleClass<>(clazz);
@@ -81,8 +84,7 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
                 c.setAccessible(true);
                 return c;
             } catch (Exception e) {
-                Bukkit.getLogger().severe("REFLECTION ERROR: " + e.getMessage());
-                return null;
+                throw new RuntimeException(e);
             }
         };
         Constructor<T> constructor = useCache ? (Constructor<T>) CONSTRUCTOR_CACHE.computeIfAbsent(key, function) : function.apply(key);
@@ -103,8 +105,7 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
                 method.setAccessible(true);
                 return method;
             } catch (Exception e) {
-                Bukkit.getLogger().severe("REFLECTION ERROR: " + e.getMessage());
-                return null;
+                throw new RuntimeException(e);
             }
         });
         return new SimpleMethod(m);
@@ -128,8 +129,7 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
                 field.setAccessible(true);
                 return field;
             } catch (Exception e) {
-                Bukkit.getLogger().severe("REFLECTION ERROR: " + e.getMessage());
-                return null;
+                throw new RuntimeException(e);
             }
         });
         return new SimpleField<>(f);

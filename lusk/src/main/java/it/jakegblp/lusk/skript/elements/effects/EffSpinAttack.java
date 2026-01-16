@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.temporal.TemporalUnit;
-
 @Name("Player - Update Client Vital Stats (Hunger/Health/Saturation)")
 public class EffSpinAttack extends Effect {
 

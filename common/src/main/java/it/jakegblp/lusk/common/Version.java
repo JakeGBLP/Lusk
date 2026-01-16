@@ -1,8 +1,10 @@
 package it.jakegblp.lusk.common;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record Version(int major, int minor, int patch) implements Comparable<Version>, Cloneable {
+// todo: make hyper-optimized version checking
+public record Version(int major, int minor, int patch) implements Comparable<Version>, Copyable<Version> {
     public Version {
         if (major < 0 || minor < 0 || patch < 0)
             throw new IllegalArgumentException("Version numbers must be non-negative");
@@ -16,20 +18,23 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
         this(major, 0);
     }
 
-    public static Version of(int major, int minor, int patch) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static @NotNull Version of(int major, int minor, int patch) {
         return new Version(major, minor, patch);
     }
 
-    public static Version of(int major, int minor) {
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull Version of(int major, int minor) {
         return new Version(major, minor);
     }
 
-    public static Version of(int major) {
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull Version of(int major) {
         return new Version(major);
     }
 
     @Override
-    public int compareTo(Version o) {
+    public int compareTo(@NotNull Version o) {
         int cmp = Integer.compare(major, o.major);
         if (cmp != 0) return cmp;
         cmp = Integer.compare(minor, o.minor);
@@ -58,19 +63,15 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    @Override
     public @NotNull String toString() {
         return major + "." + minor + "." + patch;
     }
 
-    public static Version parse(String s) {
-        String[] parts = s.split("\\.");
+    @Contract("_ -> new")
+    public static @NotNull Version parse(@NotNull String unparsed) {
+        String[] parts = unparsed.split("\\.");
         if (parts.length != 3)
-            throw new IllegalArgumentException("Version must be in format x.x.x, found: " + s);
+            throw new IllegalArgumentException("Version must be in format x.x.x, found: " + unparsed);
         try {
             return new Version(
                     Integer.parseInt(parts[0]),
@@ -78,7 +79,12 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
                     Integer.parseInt(parts[2])
             );
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number: " + s, e);
+            throw new IllegalArgumentException("Invalid number: " + unparsed, e);
         }
+    }
+
+    @Override
+    public Version copy() {
+        return new Version(major, minor, patch);
     }
 }

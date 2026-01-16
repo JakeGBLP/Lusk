@@ -76,14 +76,14 @@ public class EffGlowWithColor extends Effect {
         return true;
     }
 
-    private static final EntityMetadata packetDataTrue = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.GLOWING, true));
-    private static final EntityMetadata packetDataFalse = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.GLOWING, false));
+    private static final EntityMetadata packetDataTrue = EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.GLOWING, true));
+    private static final EntityMetadata packetDataFalse = EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.GLOWING, false));
 
     private static final Set<TeamPacket> deletionTeams = new HashSet<>();
 
     static {
         for (Field field : org.bukkit.Color.class.getFields()) {
-            deletionTeams.add(new TeamPacket.Delete("Lusk-" + field.getName()));
+            deletionTeams.add(TeamPacket.delete("Lusk-" + field.getName()));
         }
     }
 
@@ -126,7 +126,7 @@ public class EffGlowWithColor extends Effect {
                 } else {
                     parameters = new TeamParameters(Component.text("Lusk-" + color.toString()), Component.text(""), Component.text(""), Team.OptionStatus.ALWAYS, Team.OptionStatus.ALWAYS, color, true, false);
                 }
-                final TeamPacket.Create[] create = new TeamPacket.Create[]{new TeamPacket.Create("Lusk-" + color.toString(), parameters, members)};
+                final TeamPacket[] create = new TeamPacket[]{TeamPacket.create("Lusk-" + color.toString(), parameters, members)};
                 NMSApi.sendPackets(player, create, ExecutionMode.ASYNCHRONOUS);
             }
         } else if (pattern == 1) {

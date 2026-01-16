@@ -1,7 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.common.annotations.Availability;
-import it.jakegblp.lusk.nms.core.world.entity.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.util.Vector;
@@ -14,7 +16,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @Setter
-public class PlayerPositionPacket implements ClientboundPacket {
+public class PlayerPositionPacket implements BufferSerializableClientboundPacket {
 
     protected int teleportId;
     protected Vector position;
@@ -22,6 +24,10 @@ public class PlayerPositionPacket implements ClientboundPacket {
     protected Vector velocity;
     protected float yaw, pitch;
     protected Set<@NotNull RelativeFlag> relativeFlags;
+
+    public PlayerPositionPacket(SimpleByteBuf buffer) {
+        read(buffer);
+    }
 
     public PlayerPositionPacket(int teleportId, @Nullable Vector position, @Availability(addedIn = "1.21.2") @Nullable Vector velocity, float yaw, float pitch, Set<@NotNull RelativeFlag> relativeFlags) {
         this.teleportId = teleportId;
@@ -91,16 +97,43 @@ public class PlayerPositionPacket implements ClientboundPacket {
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.asNMSPlayerPositionPacket(this);
+    public void write(SimpleByteBuf buffer) {
+        if (NMS.getVersion().isGreaterOrEqual(Version.of(1,21,2))) {
+            buffer.writeVarInt(teleportId);
+            buffer.writeVector(position);
+            buffer.writeVector(velocity);
+            buffer.writeFloat(yaw);
+            buffer.writeFloat(pitch);
+            buffer.writeInt(RelativeFlag.pack(relativeFlags));
+        } else {
+            buffer.writeVector(position);
+            buffer.writeFloat(yaw);
+            buffer.writeFloat(pitch);
+            buffer.writeByte(RelativeFlag.pack(relativeFlags));
+            buffer.writeVarInt(teleportId);
+        }
     }
 
     @Override
-    public PlayerPositionPacket clone() throws CloneNotSupportedException {
-        var clone = (PlayerPositionPacket) super.clone();
-        clone.setPosition(position.clone());
-        clone.setVelocity(velocity.clone());
-        clone.setRelativeFlags(Set.copyOf(relativeFlags));
-        return clone;
+    public void read(SimpleByteBuf buffer) {
+        if (NMS.getVersion().isGreaterOrEqual(Version.of(1,21,2))) {
+            teleportId = buffer.readVarInt();
+            position = buffer.readVector();
+            velocity = buffer.readVector();
+            yaw = buffer.readFloat();
+            pitch = buffer.readFloat();
+            relativeFlags = RelativeFlag.unpack(buffer.readInt());
+        } else {
+            position = buffer.readVector();
+            yaw = buffer.readFloat();
+            pitch = buffer.readFloat();
+            relativeFlags = RelativeFlag.unpack(buffer.readInt());
+            teleportId = buffer.readVarInt();
+        }
+    }
+
+    @Override
+    public PlayerPositionPacket copy() {
+        return new PlayerPositionPacket(teleportId, position, velocity, yaw, pitch, relativeFlags);
     }
 }

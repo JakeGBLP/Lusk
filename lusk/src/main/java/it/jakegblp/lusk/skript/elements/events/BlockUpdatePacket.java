@@ -10,15 +10,11 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import it.jakegblp.lusk.nms.core.events.BlockUpdateEvent;
-import it.jakegblp.lusk.nms.core.events.ParticleSendEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.Event;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 @Name("Event - Block Change Event")
@@ -27,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
         on block update packet:
             if {dontUpdate::*} contains event-location:
                 cancel event
-                
+        
         on block update packet:
             if {dontUpdate::*} contains event-location:
                 set block data to stone

@@ -2,8 +2,8 @@ package it.jakegblp.lusk.nms.impl.v1_21_5;
 
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.adapters.*;
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
+import it.jakegblp.lusk.nms.core.adapters.SharedBiomeAdapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
@@ -11,7 +11,6 @@ import net.minecraft.core.Rotations;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -31,56 +30,52 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.OptionalInt;
-
 import static net.minecraft.network.syncher.EntityDataSerializers.*;
 
-public final class v1_21_5 extends AbstractNMS<
-        EntityDataSerializer<?>
-        > {
+public final class v1_21_5 extends AbstractNMS {
 
-    public v1_21_5(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, PlayerRotationPacketAdapter playerRotationPacketAdapter, PlayerPositionPacketAdapter<?, ?> playerPositionPacketAdapter, SharedBiomeAdapter sharedBiomeAdapter) {
-        super(plugin, Version.of(1, 21, 5), sharedBehaviorAdapter, playerRotationPacketAdapter, playerPositionPacketAdapter, sharedBiomeAdapter);
+    public v1_21_5(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, SharedBiomeAdapter sharedBiomeAdapter) {
+        super(plugin, Version.of(1, 21, 5), sharedBehaviorAdapter, sharedBiomeAdapter);
     }
 
     @Override
     public void init() {
-        registerEntityDataSerializer(EntitySerializerKey.normal(Byte.class), BYTE);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Integer.class), INT);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Long.class), LONG);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Float.class), FLOAT);
-        registerEntityDataSerializer(EntitySerializerKey.normal(String.class), STRING);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Component.class), COMPONENT);
-        registerEntityDataSerializer(EntitySerializerKey.optional(Component.class), OPTIONAL_COMPONENT);
-        registerEntityDataSerializer(EntitySerializerKey.normal(ItemStack.class), ITEM_STACK);
-        registerEntityDataSerializer(EntitySerializerKey.normal(BlockState.class), BLOCK_STATE);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Boolean.class), BOOLEAN);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Rotations.class), ROTATIONS);
-        registerEntityDataSerializer(EntitySerializerKey.normal(BlockPos.class), BLOCK_POS);
-        registerEntityDataSerializer(EntitySerializerKey.optional(BlockPos.class), OPTIONAL_BLOCK_POS);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Direction.class), DIRECTION);
+        registerEntityDataSerializer(this, Byte.class, BYTE);
+        registerEntityDataSerializer(this, Integer.class, INT);
+        registerEntityDataSerializer(this, Long.class, LONG);
+        registerEntityDataSerializer(this, Float.class, FLOAT);
+        registerEntityDataSerializer(this, String.class, STRING);
+        registerEntityDataSerializer(this, Component.class, COMPONENT);
+        registerOptionalEntityDataSerializer(this, Component.class, OPTIONAL_COMPONENT);
+        registerEntityDataSerializer(this, ItemStack.class, ITEM_STACK);
+        registerEntityDataSerializer(this, BlockState.class, BLOCK_STATE);
+        registerEntityDataSerializer(this, Boolean.class, BOOLEAN);
+        registerEntityDataSerializer(this, Rotations.class, ROTATIONS);
+        registerEntityDataSerializer(this, BlockPos.class, BLOCK_POS);
+        registerOptionalEntityDataSerializer(this, BlockPos.class, OPTIONAL_BLOCK_POS);
+        registerEntityDataSerializer(this, Direction.class, DIRECTION);
         // todo: handle
-        registerUnknownEntityDataSerializer(EntitySerializerKey.optional(EntityReference.class), OPTIONAL_LIVING_ENTITY_REFERENCE);
-        registerEntityDataSerializer(EntitySerializerKey.optional(GlobalPos.class), OPTIONAL_GLOBAL_POS);
-        registerEntityDataSerializer(EntitySerializerKey.optional(BlockState.class), OPTIONAL_BLOCK_STATE);
-        registerEntityDataSerializer(EntitySerializerKey.normal(CompoundTag.class), COMPOUND_TAG);
-        registerEntityDataSerializer(EntitySerializerKey.normal(ParticleOptions.class), PARTICLE);
-        registerEntityDataSerializer(EntitySerializerKey.list(ParticleOptions.class), PARTICLES);
-        registerEntityDataSerializer(EntitySerializerKey.normal(VillagerData.class), VILLAGER_DATA);
-        registerEntityDataSerializer(EntitySerializerKey.normal(OptionalInt.class), OPTIONAL_UNSIGNED_INT);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Pose.class), POSE);
-        registerEntityDataSerializer(EntitySerializerKey.holder(CatVariant.class), CAT_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(ChickenVariant.class), CHICKEN_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(CowVariant.class), COW_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(WolfVariant.class), WOLF_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(WolfSoundVariant.class), WOLF_SOUND_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(FrogVariant.class), FROG_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(PigVariant.class), PIG_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.holder(PaintingVariant.class), PAINTING_VARIANT);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Sniffer.State.class), SNIFFER_STATE);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Armadillo.ArmadilloState.class), ARMADILLO_STATE);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Vector3f.class), VECTOR3);
-        registerEntityDataSerializer(EntitySerializerKey.normal(Quaternionf.class), QUATERNION);
+        registerOptionalEntityDataSerializer(this, EntityReference.class, OPTIONAL_LIVING_ENTITY_REFERENCE);
+        registerOptionalEntityDataSerializer(this, GlobalPos.class, OPTIONAL_GLOBAL_POS);
+        registerOptionalEntityDataSerializer(this, BlockState.class, OPTIONAL_BLOCK_STATE);
+        registerEntityDataSerializer(this, CompoundTag.class, COMPOUND_TAG);
+        registerEntityDataSerializer(this, ParticleOptions.class, PARTICLE);
+        registerListEntityDataSerializer(this, ParticleOptions.class, PARTICLES);
+        registerEntityDataSerializer(this, VillagerData.class, VILLAGER_DATA);
+        registerOptionalEntityDataSerializer(this, Integer.class, OPTIONAL_UNSIGNED_INT);
+        registerEntityDataSerializer(this, Pose.class, POSE);
+        registerHolderEntityDataSerializer(this, CatVariant.class, CAT_VARIANT);
+        registerHolderEntityDataSerializer(this, ChickenVariant.class, CHICKEN_VARIANT);
+        registerHolderEntityDataSerializer(this, CowVariant.class, COW_VARIANT);
+        registerHolderEntityDataSerializer(this, WolfVariant.class, WOLF_VARIANT);
+        registerHolderEntityDataSerializer(this, WolfSoundVariant.class, WOLF_SOUND_VARIANT);
+        registerHolderEntityDataSerializer(this, FrogVariant.class, FROG_VARIANT);
+        registerHolderEntityDataSerializer(this, PigVariant.class, PIG_VARIANT);
+        registerHolderEntityDataSerializer(this, PaintingVariant.class, PAINTING_VARIANT);
+        registerEntityDataSerializer(this, Sniffer.State.class, SNIFFER_STATE);
+        registerEntityDataSerializer(this, Armadillo.ArmadilloState.class, ARMADILLO_STATE);
+        registerEntityDataSerializer(this, Vector3f.class, VECTOR3);
+        registerEntityDataSerializer(this, Quaternionf.class, QUATERNION);
     }
 
 }

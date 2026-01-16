@@ -1,9 +1,8 @@
 package it.jakegblp.lusk.nms.core.protocol.packets;
 
+import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
-import it.jakegblp.lusk.nms.core.util.NMSObject;
+import it.jakegblp.lusk.nms.core.util.PureNMSObject;
 
-@SuppressWarnings("rawtypes")
-public interface Packet extends NMSObject, Asyncable, Cloneable {
-
+public interface Packet extends PureNMSObject<Object>, Asyncable, Copyable<Packet> {
 }

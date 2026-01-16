@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static it.jakegblp.lusk.skript.elements.expressions.packets.constructors.ExprSecTeamCreatePacket.processMembersExpression;
 
-public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket.Remove> {
+public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket> {
 
     public static final EntryValidator VALIDATOR;
 
@@ -31,7 +31,7 @@ public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket
                 .addEntryData(new ExpressionEntryData<>("name", null, false, String.class))
                 .addEntryData(new ExpressionEntryData<>("members", null, false, Entity.class, UUID.class, String.class))
                 .build();
-        Skript.registerExpression(ExprSecTeamMembersRemovePacket.class, TeamPacket.Remove.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSecTeamMembersRemovePacket.class, TeamPacket.class, ExpressionType.COMBINED,
                 "[a] new team members remove packet"
         );
     }
@@ -50,11 +50,11 @@ public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket
     }
 
     @Override
-    protected TeamPacket.Remove @Nullable [] get(Event event) {
+    protected TeamPacket @Nullable [] get(Event event) {
         String name = nameExpression.getSingle(event);
-        if (name == null) return new TeamPacket.Remove[0];
+        if (name == null) return new TeamPacket[0];
         Set<String> members = processMembersExpression(membersExpression, event);
-        return new TeamPacket.Remove[] {new TeamPacket.Remove(name, members)};
+        return new TeamPacket[] {TeamPacket.remove(name, members)};
     }
 
     @Override
@@ -63,8 +63,8 @@ public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket
     }
 
     @Override
-    public Class<? extends TeamPacket.Remove> getReturnType() {
-        return TeamPacket.Remove.class;
+    public Class<? extends TeamPacket> getReturnType() {
+        return TeamPacket.class;
     }
 
     @Override

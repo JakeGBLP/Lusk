@@ -1,12 +1,15 @@
 package it.jakegblp.lusk.common;
 
+import it.jakegblp.lusk.common.reflection.SimpleArray;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
@@ -14,6 +17,18 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class CommonUtils {
+
+    public static <F, C extends Collection<F>> Function<Collection<F>, C> safeCast(Function<Collection<F>, C> castFunction) {
+        return castFunction;
+    }
+
+    public static PublicKey byteToPublicKey(byte[] encodedKey) {
+        try {
+            return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(encodedKey));
+        } catch (Exception var3) {
+            throw new IllegalArgumentException(var3);
+        }
+    }
 
     public static int randomId() {
         return ThreadLocalRandom.current().nextInt(999999, Integer.MAX_VALUE);
@@ -29,6 +44,18 @@ public final class CommonUtils {
 
     public static long packInts(int x, int y, int z) {
         return ((long) x & 67108863L) << 38 | (long) y & 4095L | ((long) z & 67108863L) << 12;
+    }
+
+    public static double lowPrecision(double d) {
+        return Double.isNaN(d) ? 0 : Math.max(-1.7179869183E10, Math.min(d, 1.7179869183E10));
+    }
+
+    public static long pack(double d) {
+        return Math.round((d * 0.5 + 0.5) * 32766.0);
+    }
+
+    public static double unpack(long i) {
+        return Math.min(i & 32767L, 32766.0) * 2.0 / 32766.0 - 1.0;
     }
 
     public static long packBlockVector(BlockVector blockVector) {
@@ -125,13 +152,12 @@ public final class CommonUtils {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> @NotNull T[] nonNull(@NotNull Class<T> tClass, @Nullable T @NotNull [] array) {
         int count = 0;
         for (T value : array)
             if (value != null)
                 count++;
-        T[] result = (T[]) Array.newInstance(tClass, count);
+        T[] result = SimpleArray.create(tClass, count);
         int index = 0;
         for (T value : array)
             if (value != null)
@@ -151,20 +177,18 @@ public final class CommonUtils {
     @SuppressWarnings("unchecked")
     public static <F, T> List<T> filter(Class<T> type, Collection<F> objects) {
         List<T> list = new ArrayList<>(objects.size());
-        for (Object o : objects)
+        for (F o : objects)
             if (type.isInstance(o))
                 list.add((T) o);
         return list;
     }
 
-    @SuppressWarnings("unchecked")
     public static <F, T> T[] filter(Class<T> type, F[] objects) {
         int count = 0;
         for (F obj : objects)
             if (type.isInstance(obj))
                 count++;
-
-        T[] result = (T[]) Array.newInstance(type, count);
+        T[] result = SimpleArray.create(type, count);
         int idx = 0;
         for (F obj : objects)
             if (type.isInstance(obj))
@@ -172,6 +196,22 @@ public final class CommonUtils {
 
         return result;
     }
+
+    public static <F> F[] filter(F[] objects, Predicate<F> predicate) {
+        int count = 0;
+        for (F obj : objects)
+            if (predicate.test(obj))
+                count++;
+
+        F[] result = SimpleArray.create(SimpleArray.getComponentType(objects), count);
+        int i = 0;
+        for (F obj : objects)
+            if (predicate.test(obj))
+                result[i++] = obj;
+
+        return result;
+    }
+
 
     @SuppressWarnings("unchecked")
     public static <F, T> List<T> filterMapToList(
@@ -228,7 +268,6 @@ public final class CommonUtils {
         return newArray;
     }
 
-    @SuppressWarnings("unchecked")
     public static <F, T> @NotNull T[] mapToArray(
             @NotNull Class<T> type,
             @NotNull List<? extends @Nullable F> values,
@@ -239,7 +278,7 @@ public final class CommonUtils {
             if (f != null)
                 count++;
 
-        T[] newArray = (T[]) Array.newInstance(type, count);
+        T[] newArray = SimpleArray.create(type, count);
         int idx = 0;
         for (F f : values)
             if (f != null)
@@ -266,7 +305,7 @@ public final class CommonUtils {
             if (f != null)
                 count++;
 
-        T[] newArray = (T[]) ((type == null || type == Object.class) ? new Object[count] : Array.newInstance(type, count));
+        T[] newArray = (T[]) ((type == null || type == Object.class) ? new Object[count] : SimpleArray.create(type, count));
         int idx = 0;
         for (F f : values)
             if (f != null)
@@ -319,13 +358,12 @@ public final class CommonUtils {
                 if (element == null) continue;
 
                 R mapped = (mapper != null) ? mapper.apply(element) : (R) element;
-                if (type.isInstance(mapped)) {
+                if (type.isInstance(mapped))
                     results.add(mapped);
-                }
             }
         }
 
-        R[] array = (R[]) Array.newInstance(type, results.size());
+        R[] array = SimpleArray.create(type, results.size());
         return results.toArray(array);
     }
 

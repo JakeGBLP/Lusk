@@ -24,11 +24,12 @@ public abstract class BundlePacket<P extends Packet> implements Packet, SimpleLi
     }
 
     public BundlePacket(List<P> packets) {
-        this.packets = packets;
+        this();
+        this.packets.addAll(packets);
     }
 
     public BundlePacket() {
-        this(new ArrayList<>());
+        packets = new ArrayList<>();
     }
 
     public boolean isEmpty() {

@@ -1,24 +1,32 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
 @AllArgsConstructor
 @Setter
 @Getter
-public class SetCameraPacket implements ClientboundPacket {
+public class SetCameraPacket implements BufferSerializableClientboundPacket {
     protected int cameraId;
 
-    @Override
-    public Object asNMS() {
-        return NMS.toNMSSetCameraPacket(this);
+    public SetCameraPacket(SimpleByteBuf buffer) {
+        read(buffer);
     }
 
     @Override
-    public SetCameraPacket clone() throws CloneNotSupportedException {
-        return (SetCameraPacket) super.clone();
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeVarInt(cameraId);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        cameraId = buffer.readVarInt();
+    }
+
+    @Override
+    public SetCameraPacket copy() {
+        return new SetCameraPacket(cameraId);
     }
 }

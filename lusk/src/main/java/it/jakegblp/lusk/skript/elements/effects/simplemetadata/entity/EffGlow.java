@@ -54,8 +54,8 @@ public class EffGlow extends Effect {
     }
 
 
-    private static final EntityMetadata packetDataTrue = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.GLOWING, true));
-    private static final EntityMetadata packetDataFalse = new EntityMetadata(Map.of(MetadataKeys.EntityKeys.GLOWING, false));
+    private static final EntityMetadata packetDataTrue = EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.GLOWING, true));
+    private static final EntityMetadata packetDataFalse = EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.GLOWING, false));
 
 
     @Override

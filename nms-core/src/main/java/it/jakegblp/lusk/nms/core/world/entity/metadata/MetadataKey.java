@@ -1,34 +1,34 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer;
+import lombok.AllArgsConstructor;
 import lombok.ToString;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
+
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @ToString
+@AllArgsConstructor
+@NullMarked
 public class MetadataKey<E extends Entity, T> implements MetadataKeyReference<E, T> {
     private final @Range(from = 0, to = 255) int id;
-    private final @NotNull Class<E> entityClass;
-    private final @NotNull EntitySerializerKey<T> serializerKey;
+    private final Class<E> entityClass;
+    private final EntityDataSerializer<T> serializer;
+    private final Class<T> rawValueClass;
 
     public MetadataKey(
             @Range(from = 0, to = 255) int id,
-            @NotNull Class<E> entityClass,
-            @NotNull EntitySerializerKey<T> serializerKey) {
-        this.id = id;
-        this.entityClass = entityClass;
-        this.serializerKey = serializerKey;
+            Class<E> entityClass,
+            Class<T> valueClass) {
+        this(id, entityClass, NMS.getEntityDataSerializer(valueClass), valueClass);
     }
 
-    public MetadataKey(
-            @Range(from = 0, to = 255) int id,
-            @NotNull Class<E> entityClass,
-            @NotNull Class<T> valueClass,
-            @NotNull EntitySerializerKey.Type serializerType) {
-        this(id, entityClass, new EntitySerializerKey<>(valueClass, serializerType));
+    @Override
+    public Class<T> rawValueClass() {
+        return rawValueClass;
     }
-
 
     @Override
     public @Range(from = 0, to = 255) int id() {
@@ -36,13 +36,13 @@ public class MetadataKey<E extends Entity, T> implements MetadataKeyReference<E,
     }
 
     @Override
-    public @NotNull Class<E> entityClass() {
+    public Class<E> entityClass() {
         return entityClass;
     }
 
     @Override
-    public @NotNull EntitySerializerKey<T> serializerKey() {
-        return serializerKey;
+    public EntityDataSerializer<T> serializer() {
+        return serializer;
     }
 
 }

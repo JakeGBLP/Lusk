@@ -1,43 +1,22 @@
 package it.jakegblp.lusk.nms.impl.to_1_21_1;
 
-import it.jakegblp.lusk.nms.core.adapters.PlayerPositionPacketAdapter;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
+import it.jakegblp.lusk.nms.core.AbstractNMS;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityTeleportPacket;
+import it.jakegblp.lusk.nms.core.util.BufferCodec;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.world.entity.RelativeMovement;
-import org.bukkit.util.Vector;
 
-public class To_1_21_1 implements PlayerPositionPacketAdapter<RelativeMovement, ClientboundPlayerPositionPacket> {
-    @Override
-    public Class<RelativeMovement> getNMSRelativeFlagClass() {
-        return RelativeMovement.class;
-    }
-    @Override
-    public ClientboundPlayerPositionPacket asNMSPlayerPositionPacket(PlayerPositionPacket packet) {
-        var position = packet.getPosition();
-        return new ClientboundPlayerPositionPacket(
-                position.getX(),
-                position.getY(),
-                position.getZ(),
-                packet.getYaw(),
-                packet.getPitch(),
-                asNMSRelativeFlags(packet.getRelativeFlags()),
-                packet.getTeleportId()
+public class To_1_21_1 {
+    public static void registerCodecs(AbstractNMS nms) {
+        nms.registerCodec(
+                ClientboundTeleportEntityPacket.class, EntityTeleportPacket.class,
+                (buffer, packet) -> ClientboundTeleportEntityPacket.STREAM_CODEC.encode(new FriendlyByteBuf(buffer.unwrap()), ((ClientboundTeleportEntityPacket) packet)),
+                buffer -> ClientboundTeleportEntityPacket.STREAM_CODEC.decode(new FriendlyByteBuf(buffer.unwrap())),
+                (buffer, packet) -> ((EntityTeleportPacket) packet).write(buffer),
+                EntityTeleportPacket::new
         );
-    }
-
-    @Override
-    public PlayerPositionPacket fromNMSPlayerPositionPacket(ClientboundPlayerPositionPacket packet) {
-        return new PlayerPositionPacket(
-                packet.getId(),
-                new Vector(packet.getX(), packet.getY(), packet.getZ()),
-                packet.getYRot(),
-                packet.getXRot(),
-                fromNMSRelativeFlag(packet.getRelativeArguments())
-        );
-    }
-
-    @Override
-    public Class<ClientboundPlayerPositionPacket> getNMSPlayerPositionPacketClass() {
-        return ClientboundPlayerPositionPacket.class;
+        nms.registerCodec(BufferCodec.ofEnum(RelativeMovement.class, RelativeFlag.class));
     }
 }

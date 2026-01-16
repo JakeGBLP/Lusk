@@ -1,13 +1,12 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.protocol.packets.BundlePacket;
+import it.jakegblp.lusk.nms.core.util.NullabilityUtils;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @EqualsAndHashCode(callSuper = true)
 @NullMarked
@@ -27,7 +26,9 @@ public class ClientBundlePacket extends BundlePacket<ClientboundPacket> implemen
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMSClientBundlePacket(this);
+    public ClientBundlePacket copy() {
+        var copy = new ClientBundlePacket();
+        getPackets().forEach(clientboundPacket -> copy.add(NullabilityUtils.copyIfNotNull(clientboundPacket)));
+        return copy;
     }
 }

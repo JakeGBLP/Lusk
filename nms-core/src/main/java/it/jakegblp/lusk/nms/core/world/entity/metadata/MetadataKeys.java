@@ -7,47 +7,47 @@ import com.google.common.collect.ListMultimap;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
-import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
-import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
-import it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse.AbstractHorseFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.abstracthorse.AbstractHorseFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.armorstand.ArmorStandFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.armorstand.ArmorStandFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bat.BatFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bat.BatFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bee.BeeFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.bee.BeeFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.blaze.BlazeFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.blaze.BlazeFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.entity.EntityFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.fox.FoxFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.fox.FoxFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.irongolem.IronGolemFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.irongolem.IronGolemFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.livingentity.LivingEntityFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.livingentity.LivingEntityFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.mob.MobFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.mob.MobFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.panda.PandaFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.panda.PandaFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.player.PlayerFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.player.PlayerFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.projectile.arrow.AbstractArrowFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.projectile.arrow.AbstractArrowFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.sheep.SheepFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.sheep.SheepFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.snowgolem.SnowmanFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.snowgolem.SnowmanFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.spider.SpiderFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.spider.SpiderFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.tameable.TameableFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.tameable.TameableFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.textdisplay.TextDisplayFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.textdisplay.TextDisplayFlags;
-import it.jakegblp.lusk.nms.core.world.entity.flags.vex.VexFlag;
-import it.jakegblp.lusk.nms.core.world.entity.flags.vex.VexFlags;
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.world.entity.ServerEntityReference;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.abstracthorse.AbstractHorseFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.abstracthorse.AbstractHorseFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.armorstand.ArmorStandFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.armorstand.ArmorStandFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.bat.BatFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.bat.BatFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.bee.BeeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.bee.BeeFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.blaze.BlazeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.blaze.BlazeFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.EntityFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.EntityFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.fox.FoxFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.fox.FoxFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.irongolem.IronGolemFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.irongolem.IronGolemFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.livingentity.LivingEntityFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.livingentity.LivingEntityFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.mob.MobFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.mob.MobFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.panda.PandaFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.panda.PandaFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.player.PlayerFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.player.PlayerFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.projectile.arrow.AbstractArrowFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.projectile.arrow.AbstractArrowFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.sheep.SheepFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.sheep.SheepFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.snowgolem.SnowmanFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.snowgolem.SnowmanFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.spider.SpiderFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.spider.SpiderFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.tameable.TameableFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.tameable.TameableFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.textdisplay.TextDisplayFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.textdisplay.TextDisplayFlags;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.vex.VexFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.vex.VexFlags;
 import it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -56,7 +56,7 @@ import org.bukkit.Art;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.entity.minecart.PoweredMinecart;
@@ -70,8 +70,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 import java.util.*;
-
-import static it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey.Type.OPTIONAL;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MetadataKeys {
@@ -225,18 +223,9 @@ public final class MetadataKeys {
             Class<E> entityClass,
             @Nullable Class<T> valueClass
     ) {
-        return register(name, entityClass, valueClass, EntitySerializerKey.Type.NORMAL);
-    }
-
-    public static <E extends Entity, T> MetadataKey<E, T> register(
-            String name,
-            Class<E> entityClass,
-            @Nullable Class<T> valueClass,
-            @NotNull EntitySerializerKey.Type type
-    ) {
         if (valueClass == null) return null;
         int nextId = getLastId(entityClass);
-        return register(name, new MetadataKey<>(nextId, entityClass, valueClass, type));
+        return register(name, new MetadataKey<>(nextId, entityClass, valueClass));
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
@@ -251,18 +240,9 @@ public final class MetadataKeys {
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
             Class<E> entityClass,
-            String valueClass
+            String stringClass
     ) {
-        return register(name, entityClass, valueClass, EntitySerializerKey.Type.NORMAL);
-    }
-
-    public static <E extends Entity, T> MetadataKey<E, T> register(
-            String name,
-            Class<E> entityClass,
-            String stringClass,
-            @NotNull EntitySerializerKey.Type type
-    ) {
-        return register(name, entityClass, SimpleClass.quickClass(stringClass), type);
+        return register(name, entityClass, SimpleClass.quickClass(stringClass));
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
@@ -270,25 +250,7 @@ public final class MetadataKeys {
             String entityClass,
             Class<T> valueClass
     ) {
-        return register(name, entityClass, valueClass, EntitySerializerKey.Type.NORMAL);
-    }
-
-    public static <E extends Entity, T> MetadataKey<E, T> register(
-            String name,
-            String entityClass,
-            Class<T> valueClass,
-            @NotNull EntitySerializerKey.Type type
-    ) {
-        return register(name, SimpleClass.quickClass(entityClass), valueClass, type);
-    }
-
-    public static <E extends Entity, T> MetadataKey<E, T> register(
-            String name,
-            String stringEntityClass,
-            String stringValueClass,
-            @NotNull EntitySerializerKey.Type type
-    ) {
-        return register(name, SimpleClass.quickClass(stringEntityClass), SimpleClass.quickClass(stringValueClass), type);
+        return register(name, SimpleClass.quickClass(entityClass), valueClass);
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
@@ -296,7 +258,7 @@ public final class MetadataKeys {
             String stringEntityClass,
             String stringValueClass
     ) {
-        return register(name, stringEntityClass, stringValueClass, EntitySerializerKey.Type.NORMAL);
+        return register(name, SimpleClass.quickClass(stringEntityClass), SimpleClass.quickClass(stringValueClass));
     }
 
     @SuppressWarnings("unchecked")
@@ -335,7 +297,7 @@ public final class MetadataKeys {
         MetadataKey<Entity, Boolean> GLOWING = register(ENTITY_FLAGS, EntityFlag.GLOWING);
         MetadataKey<Entity, Boolean> GLIDING = register(ENTITY_FLAGS, EntityFlag.GLIDING);
         MetadataKey<Entity, Integer> AIR_TICKS = register("AIR_TICKS", Entity.class, Integer.class);
-        MetadataKey<Entity, Component> CUSTOM_NAME = register("CUSTOM_NAME", Entity.class, Component.class, OPTIONAL);
+        MetadataKey<Entity, Component> CUSTOM_NAME = register("CUSTOM_NAME", Entity.class, Component.class/*, OPTIONAL*/);
         MetadataKey<Entity, Boolean> CUSTOM_NAME_VISIBILITY = register("CUSTOM_NAME_VISIBILITY", Entity.class, Boolean.class);
         MetadataKey<Entity, Boolean> SILENT = register("SILENT", Entity.class, Boolean.class);
         MetadataKey<Entity, Boolean> NO_GRAVITY = register("NO_GRAVITY", Entity.class, Boolean.class);
@@ -352,7 +314,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface EnderCrystalKeys {
-        MetadataKey<EnderCrystal, BlockVector> BEAM_TARGET = register("BEAM_TARGET", EnderCrystal.class, BlockVector.class, OPTIONAL);
+        MetadataKey<EnderCrystal, BlockVector> BEAM_TARGET = register("BEAM_TARGET", EnderCrystal.class, BlockVector.class/*, OPTIONAL*/);
         MetadataKey<EnderCrystal, Boolean> SHOW_BOTTOM = register("SHOW_BOTTOM", EnderCrystal.class, Boolean.class);
     }
 
@@ -379,7 +341,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface FireworkKeys {
         MetadataKey<Firework, ItemStack> FIREWORK_INFO = register("FIREWORK_INFO", Firework.class, ItemStack.class);
-        MetadataKey<Firework, Integer> BOOSTER = register("BOOSTER", Firework.class, Integer.class, OPTIONAL);
+        MetadataKey<Firework, Integer> BOOSTER = register("BOOSTER", Firework.class, Integer.class/*, OPTIONAL*/);
         MetadataKey<Firework, Boolean> FROM_CROSSBOW = register("FROM_CROSSBOW", Firework.class, Boolean.class);
     }
 
@@ -421,7 +383,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface TNTPrimedKeys {
         MetadataKey<TNTPrimed, ItemStack> FUSE_TIME = register("FUSE_TIME", TNTPrimed.class, ItemStack.class);
-        MetadataKey<TNTPrimed, BlockState> BLOCK_STATE_ID = register("BLOCK_STATE_ID", TNTPrimed.class, BlockState.class);
+        MetadataKey<TNTPrimed, BlockData> TNT_BLOCK_DATA = register("TNT_BLOCK_DATA", TNTPrimed.class, BlockData.class);
     }
 
     @ApiStatus.NonExtendable
@@ -477,7 +439,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface BlockDisplayKeys {
-        MetadataKey<BlockDisplay, BlockState> DISPLAY_BLOCK = register("BLOCK_STATE", BlockDisplay.class, BlockState.class);
+        MetadataKey<BlockDisplay, BlockData> DISPLAY_BLOCK = register("BLOCK_STATE", BlockDisplay.class, BlockData.class);
     }
 
     @ApiStatus.NonExtendable
@@ -510,7 +472,7 @@ public final class MetadataKeys {
         MetadataKey<LivingEntity, Boolean> POTION_EFFECT_AMBIENT = register("POTION_EFFECT_AMBIENT", LivingEntity.class, Boolean.class);
         MetadataKey<LivingEntity, Integer> ARROW_COUNT = register("ARROW_COUNT", LivingEntity.class, Integer.class);
         MetadataKey<LivingEntity, Integer> BEE_STINGER_COUNT = register("BEE_STINGER_COUNT", LivingEntity.class, Integer.class);
-        MetadataKey<LivingEntity, BlockVector> SLEEPING_BED_LOCATION = register("SLEEPING_BED_LOCATION", LivingEntity.class, BlockVector.class, OPTIONAL);
+        MetadataKey<LivingEntity, BlockVector> SLEEPING_BED_LOCATION = register("SLEEPING_BED_LOCATION", LivingEntity.class, BlockVector.class/*, OPTIONAL*/);
     }
 
     @ApiStatus.NonExtendable
@@ -543,8 +505,8 @@ public final class MetadataKeys {
         MetadataKey<Player, Boolean> HAT = register(PLAYER_FLAGS, PlayerFlag.HAT);
         MetadataKey<Player, Byte> MAIN_HAND = register("MAIN_HAND", Player.class, Byte.class);
         // TODO: implement nbt
-        MetadataKey<Player, Object> LEFT_SHOULDER_DATA = register("LEFT_SHOULDER_DATA", Player.class, Object.class);
-        MetadataKey<Player, Object> RIGHT_SHOULDER_DATA = register("RIGHT_SHOULDER_DATA", Player.class, Object.class);
+        //MetadataKey<Player, Object> LEFT_SHOULDER_DATA = register("LEFT_SHOULDER_DATA", Player.class, Object.class);
+        //MetadataKey<Player, Object> RIGHT_SHOULDER_DATA = register("RIGHT_SHOULDER_DATA", Player.class, Object.class);
     }
 
     @ApiStatus.NonExtendable
@@ -663,14 +625,14 @@ public final class MetadataKeys {
         MetadataKey<Fox, Boolean> IS_SLEEPING = register(FOX_FLAGS, FoxFlag.IS_SLEEPING);
         MetadataKey<Fox, Boolean> IS_FACEPLANTED = register(FOX_FLAGS, FoxFlag.IS_FACEPLANTED);
         MetadataKey<Fox, Boolean> IS_DEFENDING = register(FOX_FLAGS, FoxFlag.IS_DEFENDING);
-        MetadataKey<Fox, UUID> FIRST_TRUSTED_PLAYER = register("FIRST_TRUSTED_PLAYER", Fox.class, UUID.class);
-        MetadataKey<Fox, UUID> SECOND_TRUSTED_PLAYER = register("SECOND_TRUSTED_PLAYER", Fox.class, UUID.class);
+        MetadataKey<Fox, ServerEntityReference> FIRST_TRUSTED_PLAYER = register("FIRST_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class);
+        MetadataKey<Fox, ServerEntityReference> SECOND_TRUSTED_PLAYER = register("SECOND_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class);
     }
 
     @ApiStatus.NonExtendable
     public interface FrogKeys {
         MetadataKey<Frog, Frog.Variant> FROG_VARIANT = register("FROG_VARIANT", "org.bukkit.entity.Frog", "org.bukkit.entity.Frog$Variant");
-        MetadataKey<Frog, Integer> TONGUE_TARGET = register("TONGUE_TARGET", "org.bukkit.entity.Frog", Integer.class, OPTIONAL);
+        MetadataKey<Frog, Integer> TONGUE_TARGET = register("TONGUE_TARGET", "org.bukkit.entity.Frog", Integer.class/*, OPTIONAL*/);
     }
 
     @ApiStatus.NonExtendable
@@ -794,7 +756,7 @@ public final class MetadataKeys {
         MetadataKey<Tameable, TameableFlags> TAMEABLE_FLAGS = register("TAMEABLE_FLAGS", Tameable.class, TameableFlags.class);
         MetadataKey<Tameable, Boolean> IS_SITTING = register(TAMEABLE_FLAGS, TameableFlag.IS_SITTING);
         MetadataKey<Tameable, Boolean> IS_TAMED = register(TAMEABLE_FLAGS, TameableFlag.IS_TAMED);
-        MetadataKey<Tameable, UUID> OWNER = register("OWNER", Tameable.class, UUID.class);
+        MetadataKey<Tameable, ServerEntityReference> OWNER = register("OWNER", Tameable.class, ServerEntityReference.class);
     }
 
     @ApiStatus.NonExtendable
@@ -860,7 +822,7 @@ public final class MetadataKeys {
         MetadataKey<Creaking, Boolean> CAN_MOVE = register("CAN_MOVE", "org.bukkit.entity.Creaking", Boolean.class);
         MetadataKey<Creaking, Boolean> IS_ACTIVE = register("IS_ACTIVE", "org.bukkit.entity.Creaking", Boolean.class);
         MetadataKey<Creaking, Boolean> IS_TEARING_DOWN = register("IS_TEARING_DOWN", "org.bukkit.entity.Creaking", Boolean.class);
-        MetadataKey<Creaking, Location> HOME_POSITION = register("HOME_POSITION", "org.bukkit.entity.Creaking", Location.class, OPTIONAL);
+        MetadataKey<Creaking, Location> HOME_POSITION = register("HOME_POSITION", "org.bukkit.entity.Creaking", Location.class/*, OPTIONAL*/);
     }
 
     @ApiStatus.NonExtendable
@@ -873,7 +835,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface EndermanKeys {
-        MetadataKey<Enderman, BlockState> CARRIED_BLOCK = register("CARRIED_BLOCK", Enderman.class, BlockState.class);
+        MetadataKey<Enderman, BlockData> CARRIED_BLOCK = register("CARRIED_BLOCK", Enderman.class, BlockData.class);
         MetadataKey<Enderman, Boolean> IS_SCREAMING = register("IS_SCREAMING", Enderman.class, Boolean.class);
         MetadataKey<Enderman, Boolean> IS_STARING = register("IS_STARING", Enderman.class, Boolean.class);
     }
@@ -986,7 +948,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface MinecartKeys {
-        MetadataKey<Minecart, BlockState> MINECART_BLOCK = register("MINECART_BLOCK", Minecart.class, BlockState.class);
+        MetadataKey<Minecart, BlockData> MINECART_BLOCK = register("MINECART_BLOCK", Minecart.class, BlockData.class);
         MetadataKey<Minecart, Integer> MINECART_BLOCK_ALTITUDE = register("MINECART_BLOCK_ALTITUDE", Minecart.class, Integer.class);
     }
 

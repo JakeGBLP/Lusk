@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class EntityAnimationPacket implements ClientboundPacketWithId {
     }
 
     public EntityAnimationPacket(SimpleByteBuf buffer) {
-        this(buffer.readVarInt(), buffer.readUnsignedByte());
+        read(buffer);
     }
 
     public int getEntityAnimationId() {
@@ -29,7 +27,19 @@ public class EntityAnimationPacket implements ClientboundPacketWithId {
     }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMS(this);
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeVarInt(entityAnimation.getActionId());
+        buffer.writeUnsignedByte(entityAnimation.getActionId());
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        id = buffer.readVarInt();
+        entityAnimation = EntityAnimation.fromId(buffer.readUnsignedByte());
+    }
+
+    @Override
+    public EntityAnimationPacket copy() {
+        return new EntityAnimationPacket(id, entityAnimation);
     }
 }

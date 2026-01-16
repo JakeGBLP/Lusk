@@ -39,7 +39,7 @@ public interface IdentityBufferCodec<Type> extends SimpleBufferCodec<Type, Type>
         return read(buffer);
     }
 
-    default Type encode(Type input) throws IllegalArgumentException {
+    default Type encode(Type input) {
         SimpleByteBuf buffer = new SimpleByteBuf();
         writeFrom(input, buffer);
         return readTo(buffer);

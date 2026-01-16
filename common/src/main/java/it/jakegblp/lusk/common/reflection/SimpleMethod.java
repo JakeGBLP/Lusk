@@ -13,13 +13,17 @@ public record SimpleMethod(@Nullable Method method) {
 
     public record Key(Class<?> clazz, String name, boolean isStatic, boolean declared, List<Class<?>> params) {}
 
+    public boolean isDeprecated() {
+        return method != null && method.isAnnotationPresent(Deprecated.class);
+    }
+
     @SuppressWarnings("unchecked")
     public <F,T> T invoke(F instance, Object... args) {
         if (method == null) return null;
         try {
             return (T) method.invoke(instance, args);
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 

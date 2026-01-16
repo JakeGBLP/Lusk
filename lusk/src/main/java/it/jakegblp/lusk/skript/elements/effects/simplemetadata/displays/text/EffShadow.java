@@ -5,7 +5,6 @@ import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
@@ -58,7 +57,7 @@ public class EffShadow extends Effect {
 
     @Override
     protected void execute(Event event) {
-        EntityMetadata packetData = new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.HAS_SHADOW, pattern == 0));
+        EntityMetadata packetData = EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.HAS_SHADOW, pattern == 0));
 
         AddonUtils.sendEasyMetadata(playerExpression.getArray(event), packetData, entityOrId.getArray(event));
     }

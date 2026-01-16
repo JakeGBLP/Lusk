@@ -14,18 +14,24 @@ public record SimpleField<F, T>(Field field) {
         }
     }
 
+    public boolean isDeprecated() {
+        return field.isAnnotationPresent(Deprecated.class);
+    }
+
     @SuppressWarnings("unchecked")
     public T get(F instance) {
         try {
             return (T) field.get(instance);
-        } catch (Exception ignored) {
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void set(F instance, T value) {
         try {
             field.set(instance, value);
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

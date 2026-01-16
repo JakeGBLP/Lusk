@@ -53,7 +53,7 @@ public class EffTextOpacity extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.TEXT_OPACITY, opacityExpression.getSingle(event).byteValue())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.TEXT_OPACITY, opacityExpression.getSingle(event).byteValue())), entityOrId.getArray(event));
     }
 
     @Override

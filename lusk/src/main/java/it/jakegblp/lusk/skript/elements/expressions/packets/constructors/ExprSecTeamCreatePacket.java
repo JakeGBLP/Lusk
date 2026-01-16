@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ExprSecTeamCreatePacket extends SectionExpression<TeamPacket.Create> {
+public class ExprSecTeamCreatePacket extends SectionExpression<TeamPacket> {
 
     public static Set<String> processMembersExpression(@NotNull Expression<?> expression, Event event) {
         return expression.streamAll(event).map((Function<Object, String>) object -> {
@@ -55,7 +55,7 @@ public class ExprSecTeamCreatePacket extends SectionExpression<TeamPacket.Create
                 .addEntryData(new ExpressionEntryData<>("friendly fire", null, false, Boolean.class))
                 .addEntryData(new ExpressionEntryData<>("can see friendly invisibles", null, false, Boolean.class))
                 .build();
-        Skript.registerExpression(ExprSecTeamCreatePacket.class, TeamPacket.Create.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSecTeamCreatePacket.class, TeamPacket.class, ExpressionType.COMBINED,
                 "[a] new team create packet"
         );
     }
@@ -89,30 +89,30 @@ public class ExprSecTeamCreatePacket extends SectionExpression<TeamPacket.Create
     }
 
     @Override
-    protected TeamPacket.Create @Nullable [] get(Event event) {
+    protected TeamPacket @Nullable [] get(Event event) {
         String name = nameExpression.getSingle(event);
-        if (name == null) return new TeamPacket.Create[0];
+        if (name == null) return new TeamPacket[0];
         Component displayName = AddonUtils.handleComponent(displayNameExpression, event);
-        if (displayName == null) return new TeamPacket.Create[0];
+        if (displayName == null) return new TeamPacket[0];
         Component prefix = AddonUtils.handleComponent(prefixExpression, event);
-        if (prefix == null) return new TeamPacket.Create[0];
+        if (prefix == null) return new TeamPacket[0];
         Component suffix = AddonUtils.handleComponent(suffixExpression, event);
-        if (suffix == null) return new TeamPacket.Create[0];
+        if (suffix == null) return new TeamPacket[0];
         Team.OptionStatus nameTagVisibility = nameTagVisibilityExpression.getSingle(event);
-        if (nameTagVisibility == null) return new TeamPacket.Create[0];
+        if (nameTagVisibility == null) return new TeamPacket[0];
         Team.OptionStatus collisionRule = collisionRuleExpression.getSingle(event);
-        if (collisionRule == null) return new TeamPacket.Create[0];
+        if (collisionRule == null) return new TeamPacket[0];
         Color color = styleExpression.getSingle(event);
-        if (color == null) return new TeamPacket.Create[0];
+        if (color == null) return new TeamPacket[0];
         NamedTextColor style = AddonUtils.toNamedTextColor(color);
-        if (style == null) return new TeamPacket.Create[0];
+        if (style == null) return new TeamPacket[0];
         Boolean friendlyFire = allowFriendlyFireExpression.getSingle(event);
-        if (friendlyFire == null) return new TeamPacket.Create[0];
+        if (friendlyFire == null) return new TeamPacket[0];
         Boolean canSeeFriendlyInvisible = canSeeFriendlyInvisiblesExpression.getSingle(event);
-        if (canSeeFriendlyInvisible == null) return new TeamPacket.Create[0];
+        if (canSeeFriendlyInvisible == null) return new TeamPacket[0];
         Set<String> members = processMembersExpression(membersExpression, event);
-        return new TeamPacket.Create[] {
-                new TeamPacket.Create(
+        return new TeamPacket[] {
+                TeamPacket.create(
                         name,
                         new TeamParameters(
                                 displayName,
@@ -135,8 +135,8 @@ public class ExprSecTeamCreatePacket extends SectionExpression<TeamPacket.Create
     }
 
     @Override
-    public Class<? extends TeamPacket.Create> getReturnType() {
-        return TeamPacket.Create.class;
+    public Class<? extends TeamPacket> getReturnType() {
+        return TeamPacket.class;
     }
 
     @Override

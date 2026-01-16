@@ -1,25 +1,38 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.api.NMSApi;
+import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BlockVector;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class BlockUpdatePacket implements ClientboundPacket {
+public class BlockUpdatePacket implements BufferSerializableClientboundPacket {
 
-    BlockVector blockPos;
-    BlockData blockState;
+    protected BlockVector position;
+    protected BlockData blockData;
+
+    public BlockUpdatePacket(SimpleByteBuf buffer) {
+        read(buffer);
+    }
 
     @Override
-    public Object asNMS() {
-        return NMS.toNMSBlockUpdatePacket(this);
+    public void write(SimpleByteBuf buffer) {
+        buffer.writeBlockVector(position);
+        buffer.writeBlockData(blockData);
+    }
+
+    @Override
+    public void read(SimpleByteBuf buffer) {
+        position = buffer.readBlockVector();
+        blockData = buffer.readBlockData();
+    }
+
+    @Override
+    public BlockUpdatePacket copy() {
+        return new BlockUpdatePacket(position.clone(), blockData.clone());
     }
 }

@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.util;
 
+import it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -28,8 +29,12 @@ public class CompositeBufferCodec<From, To> implements SimpleBufferCodec<From, T
         this.creatorTo = creatorTo;
     }
 
-    public static <From, To> Builder<From, To> builder(Class<From> fromClass, Class<To> toClass) {
-        return new Builder<>(fromClass, toClass);
+    public static <From, To> SimpleBuilder<From, To> builder(Class<From> fromClass, Class<To> toClass) {
+        return new SimpleBuilder<>(fromClass, toClass);
+    }
+
+    public static <From, To> SimpleBuilder<From, To> builder(Class<From> fromClass, Function<From, SimpleByteBuf> toByteBuffer, Class<To> toClass) {
+        return new SimpleBuilder<>(fromClass, toClass);
     }
 
     @Override
@@ -72,6 +77,11 @@ public class CompositeBufferCodec<From, To> implements SimpleBufferCodec<From, T
         return creatorTo.apply(buffer);
     }
 
+    @Override
+    public DataHolderType getHolderType() {
+        return DataHolderType.NORMAL;
+    }
+
     public record Entry<From, To, FromValue, ToValue>(
             BufferCodec codec,
             Function<From, FromValue> getterFrom,
@@ -79,17 +89,17 @@ public class CompositeBufferCodec<From, To> implements SimpleBufferCodec<From, T
     ) {
     }
 
-    public static class Builder<From, To> {
+    public static final class SimpleBuilder<From, To> {
         private final Class<From> fromClass;
         private final Class<To> toClass;
         private final List<Entry<From, To, ?, ?>> entries = new ArrayList<>();
 
-        public Builder(Class<From> fromClass, Class<To> toClass) {
+        public SimpleBuilder(Class<From> fromClass, Class<To> toClass) {
             this.fromClass = fromClass;
             this.toClass = toClass;
         }
 
-        public <FromValue, ToValue> Builder<From, To> with(
+        public <FromValue, ToValue> SimpleBuilder<From, To> with(
                 SimpleBufferCodec<FromValue, ToValue> codec,
                 Function<From, FromValue> getterFrom,
                 Function<To, ToValue> getterTo

@@ -56,7 +56,7 @@ public class EffBeeStingers extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.LivingEntityKeys.BEE_STINGER_COUNT, bodyExpression.getSingle(event).intValue())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.LivingEntityKeys.BEE_STINGER_COUNT, bodyExpression.getSingle(event).intValue())), entityOrId.getArray(event));
     }
 
     @Override

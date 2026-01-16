@@ -50,17 +50,15 @@ public class EffAlignment extends Effect {
         return true;
     }
 
-
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.TextDisplayKeys.ALIGNMENT, alignmentExpression.getSingle(event))), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.TextDisplayKeys.ALIGNMENT, alignmentExpression.getSingle(event))), entityOrId.getArray(event));
     }
 
     @Override
     public String toString(@Nullable Event event, boolean b) {
         return "client display alignment";
     }
-
 
 }

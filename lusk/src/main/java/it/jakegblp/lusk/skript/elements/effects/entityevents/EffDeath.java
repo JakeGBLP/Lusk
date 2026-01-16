@@ -9,7 +9,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityEventPacket;
-import it.jakegblp.lusk.nms.core.world.entity.events.EntityEvents;
+import org.bukkit.EntityEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -57,9 +57,9 @@ public class EffDeath extends Effect {
 
         for (Object o : entityOrId.getArray(event)) {
             if(o instanceof Entity entity)
-                packets.add(new EntityEventPacket(entity.getEntityId(), EntityEvents.LIVING_DEATH));
+                packets.add(new EntityEventPacket(entity.getEntityId(), EntityEffect.ENTITY_DEATH));
             else if (o instanceof Number number)
-                packets.add(new EntityEventPacket(number.intValue(), EntityEvents.LIVING_DEATH));
+                packets.add(new EntityEventPacket(number.intValue(), EntityEffect.ENTITY_DEATH));
         }
 
         NMSApi.sendPackets(playerExpression.getArray(event), packets.toArray(ClientboundPacket[]::new));

@@ -58,7 +58,7 @@ public class EffCustomName extends Effect {
     protected void execute(Event event) {
         Component name = nameExpression.getSingle(event);
         if (name == null) return;
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.EntityKeys.CUSTOM_NAME, name)), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.CUSTOM_NAME, name)), entityOrId.getArray(event));
     }
 
     @Override

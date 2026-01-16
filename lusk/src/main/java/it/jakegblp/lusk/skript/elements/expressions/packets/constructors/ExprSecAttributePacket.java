@@ -1,19 +1,18 @@
 package it.jakegblp.lusk.skript.elements.expressions.packets.constructors;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.Parser;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.expressions.base.SectionExpression;
-import ch.njol.skript.lang.*;
-import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.AttributePacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.client.UpdateAttributesPacket;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
 import org.skriptlang.skript.lang.entry.EntryValidator;
@@ -24,20 +23,18 @@ import java.util.UUID;
 
 // poa stuff
 
-public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
+public class ExprSecAttributePacket extends SectionExpression<UpdateAttributesPacket> {
 
     public static final EntryValidator VALIDATOR;
 
     static {
-        registerAttributeType();
-
         VALIDATOR = EntryValidator.builder()
                 .addEntryData(new ExpressionEntryData<>("attribute", null, false, Attribute.class))
                 .addEntryData(new ExpressionEntryData<>("value", null, false, Number.class))
                 .addEntryData(new ExpressionEntryData<>("id", null, false, Number.class))
                 .build();
 
-        Skript.registerExpression(ExprSecAttributePacket.class, AttributePacket.class, ExpressionType.COMBINED,
+        Skript.registerExpression(ExprSecAttributePacket.class, UpdateAttributesPacket.class, ExpressionType.COMBINED,
                 "[a] new attribute packet"
         );
     }
@@ -63,16 +60,16 @@ public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
     }
 
     @Override
-    protected AttributePacket @Nullable [] get(Event event) {
+    protected UpdateAttributesPacket @Nullable [] get(Event event) {
         Attribute attribute = attributeExpression.getSingle(event);
         Number value = valueExpression.getSingle(event);
         Number id = idExpression.getSingle(event);
 
-        if (attribute == null || value == null || id == null) return new AttributePacket[0];
+        if (attribute == null || value == null || id == null) return new UpdateAttributesPacket[0];
 
         final double base = value.doubleValue();
-
-        return new AttributePacket[]{new AttributePacket(id.intValue(), List.of(new AttributeSnapshot(attribute, base, List.of(new AttributeModifier(UUID.randomUUID(), "poa", base, AttributeModifier.Operation.ADD_NUMBER)))))};
+        // todo: figure this out and redo it
+        return new UpdateAttributesPacket[]{new UpdateAttributesPacket(id.intValue(), List.of(new AttributeSnapshot(attribute, base, List.of(new AttributeModifier(UUID.randomUUID(), "poa", base, AttributeModifier.Operation.ADD_NUMBER)))))};
     }
 
     @Override
@@ -81,56 +78,12 @@ public class ExprSecAttributePacket extends SectionExpression<AttributePacket> {
     }
 
     @Override
-    public Class<? extends AttributePacket> getReturnType() {
-        return AttributePacket.class;
+    public Class<? extends UpdateAttributesPacket> getReturnType() {
+        return UpdateAttributesPacket.class;
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
         return "new attribute packet";
-    }
-
-    private static void registerAttributeType() {
-        if (Classes.getExactClassInfo(Attribute.class) != null) return;
-
-        Classes.registerClass(new ClassInfo<>(Attribute.class, "attribute")
-                .user("attributes?")
-                .name("Attribute")
-                .description("Bukkit attribute (e.g. scale)")
-                .parser(new Parser<>() {
-                    @Override
-                    public @Nullable Attribute parse(@NotNull String input, @NotNull ParseContext context) {
-                        return parseAttribute(input);
-                    }
-
-                    @Override
-                    public @NotNull String toString(Attribute a, int flags) {
-                        return a.name().toLowerCase();
-                    }
-
-                    @Override
-                    public @NotNull String toVariableNameString(Attribute a) {
-                        return a.name().toLowerCase();
-                    }
-                })
-        );
-    }
-
-    private static Attribute parseAttribute(String input) {
-        String s = input.trim()
-                .toUpperCase()
-                .replace(' ', '_')
-                .replace('-', '_');
-
-        try {
-            return Attribute.valueOf(s);
-        } catch (IllegalArgumentException ignored) {
-        }
-
-        for (Attribute a : Attribute.values()) {
-            if (a.name().endsWith("_" + s)) return a;
-        }
-
-        return null;
     }
 }

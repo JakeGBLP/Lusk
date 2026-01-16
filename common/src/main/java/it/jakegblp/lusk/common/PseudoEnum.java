@@ -3,28 +3,40 @@ package it.jakegblp.lusk.common;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public abstract class PseudoEnum {
-    private static final Map<Class<?>, Map<String, PseudoEnum>> REGISTRY = new HashMap<>();
+    private static final Map<Class<?>, Map<String, PseudoEnum>> REGISTRY = new LinkedHashMap<>();
 
     private final String name;
+    private final int ordinal;
 
     protected PseudoEnum(String name) {
         this.name = Objects.requireNonNull(name, "name");
-        if (!(this instanceof Validatable<?> validatable) || validatable.check())
-            REGISTRY.computeIfAbsent(getClass(), k -> new LinkedHashMap<>()).put(name, this);
+
+        Map<String, PseudoEnum> map;
+        if (!(this instanceof Validatable<?> validatable) || validatable.check()) {
+            map = REGISTRY.computeIfAbsent(getClass(), k -> new LinkedHashMap<>());
+            this.ordinal = map.size();
+            map.put(name, this);
+        } else
+            this.ordinal = -1;
     }
 
     public final String name() {
         return name;
     }
 
+    public final int ordinal() {
+        return ordinal;
+    }
+
     @SuppressWarnings("unchecked")
     public static <E extends PseudoEnum> @NotNull E[] values(Class<E> type) {
-        Collection<E> values = (Collection<E>) REGISTRY
-                .getOrDefault(type, new LinkedHashMap<>())
-                .values();
+        Collection<E> values = (Collection<E>) REGISTRY.getOrDefault(type, new LinkedHashMap<>()).values();
         return values.toArray((E[]) Array.newInstance(type, values.size()));
     }
 

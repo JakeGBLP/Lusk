@@ -1,10 +1,11 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
-import it.jakegblp.lusk.nms.core.world.entity.BitFlag;
-import it.jakegblp.lusk.nms.core.world.entity.FlagByte;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import lombok.Getter;
 import lombok.ToString;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @ToString
@@ -19,19 +20,19 @@ public class MetadataBitFlagKey<
     private final B bitFlag;
 
     public MetadataBitFlagKey(MetadataKey<E, F> parentKey, B bitFlag) {
-        super(parentKey.id(), parentKey.entityClass(), null);
+        super(parentKey.id(), parentKey.entityClass(), (Class<T>) Boolean.class); // todo: check if this is actually needed
         this.parentKey = parentKey;
         this.bitFlag = bitFlag;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Class<T> valueClass() {
+    public @NotNull Class<T> valueClass() {
         return (Class<T>) bitFlag.getValueClass();
     }
 
     @Override
-    public boolean canBeSetTo(Object object) {
+    public boolean canBeSetTo(@NotNull Object object) {
         return object instanceof Boolean;
     }
 }

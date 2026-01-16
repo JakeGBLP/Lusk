@@ -1,30 +1,26 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
-import it.jakegblp.lusk.nms.core.world.entity.serialization.EntitySerializerKey;
+import it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface MetadataKeyReference<E extends Entity, T> {
-    @Range(from = 0, to = 255)
-    int id();
+    @Range(from = 0, to = 255) int id();
 
-    @NotNull Class<E> entityClass();
+    Class<E> entityClass();
 
-    @NotNull EntitySerializerKey<T> serializerKey();
-
-    default EntitySerializerKey.Type serializerType() {
-        return serializerKey().serializerType();
-    }
+    EntityDataSerializer<T> serializer();
 
     default Class<T> valueClass() {
-        return serializerKey().serializeableClass();
+        return serializer().codec().getFromClass();
     }
 
+    Class<T> rawValueClass();
+
     default boolean matches(MetadataKeyReference<? extends Entity, ?> other) {
-        return other != null
-                && other.id() == id()
-                && serializerType().equals(other.serializerType());
+        return other.id() == id() && serializer().equals(other.serializer());
     }
 
     default boolean matchesItem(MetadataItem<? extends Entity, ?> other) {
@@ -38,10 +34,10 @@ public interface MetadataKeyReference<E extends Entity, T> {
     }
 
     default MetadataItem<E, T> asItem(T value) {
-        return new MetadataItem<>(id(), value, entityClass(), serializerKey());
+        return new MetadataItem<>(id(), value, serializer());
     }
 
     default MetadataKey<E, T> asKey() {
-        return new MetadataKey<>(id(), entityClass(), serializerKey());
+        return new MetadataKey<>(id(), entityClass(), serializer(), rawValueClass());
     }
 }

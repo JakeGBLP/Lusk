@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.world.player;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
+import it.jakegblp.lusk.common.Copyable;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MutableProfileProperty implements Cloneable /*, NMSObject<Object> todo: implement, low priority*/{
+public class MutableProfileProperty implements Copyable<MutableProfileProperty> /*, NMSObject<Object> todo: implement, low priority*/{
     protected @NotNull String name;
     protected @NotNull String value;
     protected @Nullable String signature;
@@ -38,6 +39,11 @@ public class MutableProfileProperty implements Cloneable /*, NMSObject<Object> t
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public MutableProfileProperty copy() {
+        return new MutableProfileProperty(name, value, signature);
     }
 
     /*

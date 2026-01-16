@@ -10,42 +10,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
 
 @Getter
 @Setter
-
 public class ParticleSendEvent extends PlayerEvent implements Cancellable {
+
     private static final HandlerList handlers = new HandlerList();
-
-
-    Particle particle;
-    int count;
-    World world;
-    double x;
-    double y;
-    double z;
-    float xOffset;
-    float yOffset;
-    float zOffset;
-    float maxSpeed;
-
-    boolean isCancelled;
-
-    public ParticleSendEvent(@NotNull Player who, boolean async) {
-        super(who, async);
-    }
-
-
-    public Location getLocation() {
-        return new Location(world, x, y, z);
-    }
-
-    public Vector getOffset() {
-        return new Vector(xOffset, yOffset, zOffset);
-    }
-
 
     @Override
     public @NotNull HandlerList getHandlers() {
@@ -56,13 +28,31 @@ public class ParticleSendEvent extends PlayerEvent implements Cancellable {
         return handlers;
     }
 
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
+    protected Particle particle;
+    protected int count;
+    protected World world;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected float xOffset;
+    protected float yOffset;
+    protected float zOffset;
+    protected float maxSpeed;
+
+    protected boolean cancelled;
+
+    public ParticleSendEvent(@NotNull Player who, boolean async) {
+        super(who, async);
     }
 
-    @Override
-    public void setCancelled(boolean b) {
-        isCancelled = b;
+    @Contract(pure = true)
+    public Location getLocation() {
+        return new Location(world, x, y, z);
     }
+
+    @Contract(pure = true)
+    public Vector getOffset() {
+        return new Vector(xOffset, yOffset, zOffset);
+    }
+
 }

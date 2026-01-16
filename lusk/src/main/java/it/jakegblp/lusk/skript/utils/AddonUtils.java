@@ -12,7 +12,6 @@ import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.skript.api.section.SectionParseResult;

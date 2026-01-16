@@ -53,7 +53,7 @@ public class EffViewRange extends Effect {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void execute(Event event) {
-        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), new EntityMetadata(Map.of(MetadataKeys.DisplayKeys.VIEW_RANGE, numberExpression.getSingle(event).floatValue())), entityOrId.getArray(event));
+        AddonUtils.sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(Map.of(MetadataKeys.DisplayKeys.VIEW_RANGE, numberExpression.getSingle(event).floatValue())), entityOrId.getArray(event));
     }
 
     @Override
