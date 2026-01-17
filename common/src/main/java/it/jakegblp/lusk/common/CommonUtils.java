@@ -4,6 +4,7 @@ import it.jakegblp.lusk.common.reflection.SimpleArray;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +18,16 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class CommonUtils {
+
+    @NullMarked
+    public static Class<?> getKnownClass(Object object) {
+        Class<?> clazz = object.getClass();
+        while (clazz.isAnonymousClass()) {
+            clazz = clazz.getSuperclass();
+            if (clazz == null) return Object.class;
+        }
+        return clazz;
+    }
 
     public static <F, C extends Collection<F>> Function<Collection<F>, C> safeCast(Function<Collection<F>, C> castFunction) {
         return castFunction;

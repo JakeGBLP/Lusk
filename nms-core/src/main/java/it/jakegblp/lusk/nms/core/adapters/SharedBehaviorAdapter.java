@@ -10,8 +10,6 @@ import it.jakegblp.lusk.nms.core.util.BufferCodec;
 import it.jakegblp.lusk.nms.core.util.SimpleBufferCodec;
 import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer;
-import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
-import it.jakegblp.lusk.nms.core.world.player.GlowMap;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,7 +27,6 @@ import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 public interface SharedBehaviorAdapter<
@@ -204,7 +201,7 @@ public interface SharedBehaviorAdapter<
 
     @SuppressWarnings("unchecked")
     default <F, T> @NotNull T fromNMS(@NotNull F f) {
-        SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getFirstCodec(f.getClass());
+        SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getFirstNMSCodec(f.getClass());
         return codec.encode(f);
     }
 
@@ -331,7 +328,6 @@ public interface SharedBehaviorAdapter<
                 }
             }
 
-            @SuppressWarnings("ExtractMethodRecommender")
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (inactive(ctx)) {

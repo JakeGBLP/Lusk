@@ -282,13 +282,11 @@ public class SimpleByteBuf {
     }
 
     public void writeBlockVector(@NotNull BlockVector blockVector) {
-        writeInt(blockVector.getBlockX());
-        writeInt(blockVector.getBlockZ());
-        writeInt(blockVector.getBlockZ());
+        writeLong(CommonUtils.packBlockVector(blockVector));
     }
     @Contract(" -> new")
     public @NotNull BlockVector readBlockVector() {
-        return new BlockVector(readInt(), readInt(), readInt());
+        return CommonUtils.unpackBlockVector(readLong());
     }
 
     public void writeEntityType(EntityType entityType) {
@@ -450,12 +448,13 @@ public class SimpleByteBuf {
         writeVarInt(value.ordinal());
     }
 
-    public <E extends PseudoEnum> void writePseudoEnumSet(PseudoEnumSet<E> pseudoEnumSet, Class<E> pseudoEnumClass) {
-        E[] enums = pseudoEnumClass.getEnumConstants();
-        BitSet bitSet = new BitSet(enums.length);
-        for(int i = 0; i < enums.length; ++i)
-            bitSet.set(i, pseudoEnumSet.contains(enums[i]));
-        writeFixedBitSet(bitSet, enums.length);
+    // todo: in the future, make this be able to get the constants from a registry, right now providing them directly is totally fine
+    public <E extends PseudoEnum> void writePseudoEnumSet(PseudoEnumSet<E> pseudoEnumSet, E[] constants) {
+        var totalAmount = constants.length;
+        BitSet bitSet = new BitSet(totalAmount);
+        for(int i = 0; i < totalAmount; ++i)
+            bitSet.set(i, pseudoEnumSet.contains(constants[i]));
+        writeFixedBitSet(bitSet, totalAmount);
     }
 
     public <E extends PseudoEnum> PseudoEnumSet<E> readPseudoEnumSet(Class<E> pseudoEnumClass) {
@@ -525,7 +524,7 @@ public class SimpleByteBuf {
             writeBoolean(false);
     }
 
-    public void writeNullable(@Nullable BufferSerializable value) {
+    public void writeNullable(@Nullable BufferSerializable<?> value) {
         if (value != null) {
             writeBoolean(true);
             value.write(this);
@@ -533,11 +532,11 @@ public class SimpleByteBuf {
             writeBoolean(false);
     }
 
-    public void write(BufferSerializable serializable) {
+    public void write(BufferSerializable<?> serializable) {
         serializable.write(this);
     }
 
-    public <T extends BufferSerializable> T read(T serializable) {
+    public <T extends BufferSerializable<?>> T read(T serializable) {
         serializable.read(this);
         return serializable;
     }
@@ -550,7 +549,7 @@ public class SimpleByteBuf {
         return Instant.ofEpochMilli(this.readLong());
     }
 
-    public static void write(SimpleByteBuf buffer, BufferSerializable bufferSerializable) {
+    public static void write(SimpleByteBuf buffer, BufferSerializable<?> bufferSerializable) {
         bufferSerializable.write(buffer);
     }
 

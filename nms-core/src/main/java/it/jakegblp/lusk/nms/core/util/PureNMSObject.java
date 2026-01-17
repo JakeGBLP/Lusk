@@ -6,6 +6,6 @@ public interface PureNMSObject<T> extends NMSObject<T> {
     @Override
     @SuppressWarnings("unchecked")
     default T asNMS() {
-        return (T) NMS.fromNMS(this);
+        return (T) NMS.toNMS(this);
     }
 }

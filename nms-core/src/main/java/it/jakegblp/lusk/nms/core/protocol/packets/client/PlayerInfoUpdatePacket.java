@@ -82,7 +82,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
 
     @Override
     public void write(SimpleByteBuf buffer) {
-        buffer.writePseudoEnumSet(actions, Action.class);
+        buffer.writePseudoEnumSet(actions, Action.values());
         buffer.writeCollection(playerInfos, (simpleByteBuf, playerInfo) -> playerInfo.write(simpleByteBuf, actions));
     }
 
@@ -104,14 +104,14 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         public static final Action<CompletablePlayerProfile> ADD_PLAYER = new Action<>("ADD_PLAYER", "PROFILE", CompletablePlayerProfile.class) {
             @Override
             public void write(SimpleByteBuf buffer, PlayerInfo value) {
-                 value.setPlayerProfile(new CompletablePlayerProfile(value.getUuid(), buffer.readString(16), buffer.readPlayerProfileProperties()));
+                var profile = value.getPlayerProfile();
+                buffer.writeString(Objects.requireNonNull(profile.getName()), 16);
+                buffer.writePlayerProfileProperties(profile.getProperties());
             }
 
             @Override
             public void read(SimpleByteBuf buffer, PlayerInfo value) {
-                var profile = value.getPlayerProfile();
-                buffer.writeString(Objects.requireNonNull(profile.getName()), 16);
-                buffer.writePlayerProfileProperties(profile.getProperties());
+                value.setPlayerProfile(new CompletablePlayerProfile(value.getUuid(), buffer.readString(16), buffer.readPlayerProfileProperties()));
             }
         };
         public static final Action<ChatSessionData> INITIALIZE_CHAT = new Action<>("INITIALIZE_CHAT", "CHAT_SESSION_DATA", ChatSessionData.class) {

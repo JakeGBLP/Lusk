@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static it.jakegblp.lusk.common.CommonUtils.getKnownClass;
+
 @Getter
 public final class PseudoEnumSet<E extends PseudoEnum> extends AbstractSet<E> implements Iterable<E>, Copyable<PseudoEnumSet<E>> {
 
@@ -39,7 +41,7 @@ public final class PseudoEnumSet<E extends PseudoEnum> extends AbstractSet<E> im
             throw new IllegalArgumentException("Empty PseudoEnumSet.of(collection)");
         Iterator<E> it = elements.iterator();
         E first = it.next();
-        Class<E> type = (Class<E>) first.getClass();
+        Class<E> type = (Class<E>) getKnownClass(first);
         PseudoEnumSet<E> set = noneOf(type);
         set.add(first);
         while (it.hasNext())
@@ -168,7 +170,8 @@ public final class PseudoEnumSet<E extends PseudoEnum> extends AbstractSet<E> im
     }
 
     private void validate(E e) {
-        if (e.getClass() != elementType)
+        System.out.println(e.getClass() + " " + getKnownClass(e));
+        if (!elementType.isAssignableFrom(getKnownClass(e)))
             throw new ClassCastException("Cannot use " + e + " in PseudoEnumSet<" + elementType.getSimpleName() + ">");
     }
 

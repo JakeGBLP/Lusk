@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static it.jakegblp.lusk.common.CommonUtils.getKnownClass;
+
 public abstract class PseudoEnum {
     private static final Map<Class<?>, Map<String, PseudoEnum>> REGISTRY = new LinkedHashMap<>();
 
@@ -20,9 +22,7 @@ public abstract class PseudoEnum {
         if (this instanceof Validatable<?> validatable && !validatable.check())
             this.ordinal = -1;
         else {
-            Class<?> clazz = getClass();
-            while (clazz.isAnonymousClass())
-                clazz = clazz.getSuperclass();
+            Class<?> clazz = getKnownClass(this);
             Map<String, PseudoEnum> map = REGISTRY.computeIfAbsent(clazz, k -> new LinkedHashMap<>());
             this.ordinal = map.size();
             map.put(name, this);
