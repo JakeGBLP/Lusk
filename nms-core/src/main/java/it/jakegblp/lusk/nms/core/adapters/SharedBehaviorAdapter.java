@@ -51,14 +51,17 @@ public interface SharedBehaviorAdapter<
     default void registerEntityDataSerializer(AbstractNMS nms, Class<?> toClass, NMSEntityDataSerializer nmsEntityDataSerializer) {
         registerEntityDataSerializer(EntityDataSerializer.simple(nms, toClass), nmsEntityDataSerializer);
     }
+
     @NullMarked
     default void registerOptionalEntityDataSerializer(AbstractNMS nms, Class<?> toClass, NMSEntityDataSerializer nmsEntityDataSerializer) {
         registerEntityDataSerializer(EntityDataSerializer.optional(nms, toClass), nmsEntityDataSerializer);
     }
+
     @NullMarked
     default void registerListEntityDataSerializer(AbstractNMS nms, Class<?> toClass, NMSEntityDataSerializer nmsEntityDataSerializer) {
         registerEntityDataSerializer(EntityDataSerializer.list(nms, toClass), nmsEntityDataSerializer);
     }
+
     @NullMarked
     default void registerHolderEntityDataSerializer(AbstractNMS nms, Class<?> toClass, NMSEntityDataSerializer nmsEntityDataSerializer) {
         registerEntityDataSerializer(EntityDataSerializer.holder(nms, toClass), nmsEntityDataSerializer);
@@ -199,7 +202,6 @@ public interface SharedBehaviorAdapter<
     }
 
 
-
     @SuppressWarnings("unchecked")
     default <F, T> @NotNull T fromNMS(@NotNull F f) {
         SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getFirstCodec(f.getClass());
@@ -291,7 +293,6 @@ public interface SharedBehaviorAdapter<
             private final PluginManager pluginManager = Bukkit.getPluginManager();
 
 
-
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
             }
@@ -370,29 +371,30 @@ public interface SharedBehaviorAdapter<
                 //todo fix this above (make the event async)
 
 
-                var optionalCodec = getCodec(EntityMetadataPacket.class).findFirst();
-
-                if (isSerializableInstanceOf(msg, LevelParticlesPacket.class)) {
-                    final LevelParticlesPacket packet = fromNMS(msg);
-
-                    final ParticleSendEvent particleSendEvent = new ParticleSendEvent(player, true);
-                    particleSendEvent.setX(packet.getX());
-                    particleSendEvent.setY(packet.getY());
-                    particleSendEvent.setZ(packet.getZ());
-                    particleSendEvent.setCount(packet.getCount());
-                    particleSendEvent.setMaxSpeed(packet.getMaxSpeed());
-                    particleSendEvent.setWorld(player.getWorld());
-                    particleSendEvent.setXOffset(packet.getXOffset());
-                    particleSendEvent.setYOffset(packet.getYOffset());
-                    particleSendEvent.setZOffset(packet.getZOffset());
-
-                    particleSendEvent.setParticle(packet.getParticle());
-
-                    pluginManager.callEvent(particleSendEvent);
-
-                    if (particleSendEvent.isCancelled())
-                        return;
-                } else if (isSerializableInstanceOf(msg, BlockUpdatePacket.class)) {
+  //              var optionalCodec = getCodec(EntityMetadataPacket.class).findFirst();
+//todo fix this
+//                if (isSerializableInstanceOf(msg, LevelParticlesPacket.class)) {
+//                    final LevelParticlesPacket packet = fromNMS(msg);
+//
+//                    final ParticleSendEvent particleSendEvent = new ParticleSendEvent(player, true);
+//                    particleSendEvent.setX(packet.getX());
+//                    particleSendEvent.setY(packet.getY());
+//                    particleSendEvent.setZ(packet.getZ());
+//                    particleSendEvent.setCount(packet.getCount());
+//                    particleSendEvent.setMaxSpeed(packet.getMaxSpeed());
+//                    particleSendEvent.setWorld(player.getWorld());
+//                    particleSendEvent.setXOffset(packet.getXOffset());
+//                    particleSendEvent.setYOffset(packet.getYOffset());
+//                    particleSendEvent.setZOffset(packet.getZOffset());
+//
+//                    particleSendEvent.setParticle(packet.getParticle());
+//
+//                    pluginManager.callEvent(particleSendEvent);
+//
+//                    if (particleSendEvent.isCancelled())
+//                        return;
+//                } else
+                if (isSerializableInstanceOf(msg, BlockUpdatePacket.class)) {
                     final BlockUpdatePacket packet = fromNMS(msg);
 
                     final BlockUpdateEvent event = new BlockUpdateEvent(player, true);
@@ -408,53 +410,55 @@ public interface SharedBehaviorAdapter<
 
                     pluginManager.callEvent(event);
 
-                    if(event.isCancelled())
+                    if (event.isCancelled())
                         return;
 
-                    if(!event.getBlockData().equals(blockData)) {
+                    if (!event.getBlockData().equals(blockData)) {
                         super.write(ctx, new BlockUpdatePacket(packet.getPosition(), event.getBlockData().clone()).asNMS(), promise);
                         return;
                     }
-                } else if (isSerializableInstanceOf(msg, EntityMetadataPacket.class)) {
-                    final EntityMetadataPacket packet = fromNMS(msg);
-                    final int targetId = packet.getId();
 
-                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-                    if (entity != null && entity.isGlowing()) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-                    final Set<Integer> list = GlowMap.glowMap.get(player);
-                    if (list == null || !list.contains(targetId)) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
-                    return;
-                } else if (isSerializableInstanceOf(msg, SoundPacket.class)) {
-                    final SoundPacket soundPacket = fromNMS(msg);
-
-                    final SoundEvent event = new SoundEvent(player, true, soundPacket);
-
-                    pluginManager.callEvent(event);
-                    if (event.isCancelled())
-                        return;
-                } else if (isSerializableInstanceOf(msg, SoundEntityPacket.class)) {
-                    final SoundEntityPacket soundEntityPacket = fromNMS(msg);
-
-                    final SoundEvent event = new SoundEvent(player, true, soundEntityPacket);
-
-                    final int id = soundEntityPacket.getId();
-
-                    if (id != 0)
-                        event.setEntityID(id);
-                    else
-                        event.setEntity(getEntityFromId(id, player.getWorld()));
-                    pluginManager.callEvent(event);
-                    if (event.isCancelled())
-                        return;
+                    //todo fix these
+//                } else if (isSerializableInstanceOf(msg, EntityMetadataPacket.class)) {
+//                    final EntityMetadataPacket packet = fromNMS(msg);
+//                    final int targetId = packet.getId();
+//
+//                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
+//                    if (entity != null && entity.isGlowing()) {
+//                        super.write(ctx, msg, promise);
+//                        return;
+//                    }
+//
+//                    final Set<Integer> list = GlowMap.glowMap.get(player);
+//                    if (list == null || !list.contains(targetId)) {
+//                        super.write(ctx, msg, promise);
+//                        return;
+//                    }
+//
+//                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
+//                    return;
+//                } else if (isSerializableInstanceOf(msg, SoundPacket.class)) {
+//                    final SoundPacket soundPacket = fromNMS(msg);
+//
+//                    final SoundEvent event = new SoundEvent(player, true, soundPacket);
+//
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled())
+//                        return;
+//                } else if (isSerializableInstanceOf(msg, SoundEntityPacket.class)) {
+//                    final SoundEntityPacket soundEntityPacket = fromNMS(msg);
+//
+//                    final SoundEvent event = new SoundEvent(player, true, soundEntityPacket);
+//
+//                    final int id = soundEntityPacket.getId();
+//
+//                    if (id != 0)
+//                        event.setEntityID(id);
+//                    else
+//                        event.setEntity(getEntityFromId(id, player.getWorld()));
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled())
+//                        return;
                 }
                 try {
                     super.write(ctx, newMsg, promise);
