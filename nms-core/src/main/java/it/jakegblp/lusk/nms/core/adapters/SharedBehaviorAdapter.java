@@ -42,8 +42,7 @@ public interface SharedBehaviorAdapter<
         NMSClientBundlePacket
         > {
 
-    // todo: make not static
-    List<SimpleBufferCodec<?, ?>> codecs = new ArrayList<>();
+    @NotNull List<SimpleBufferCodec<?, ?>> getCodecsInternal();
 
     @NullMarked
     void registerEntityDataSerializer(EntityDataSerializer<?> entityDataSerializer, NMSEntityDataSerializer nmsEntityDataSerializer);
@@ -110,7 +109,7 @@ public interface SharedBehaviorAdapter<
 
     @NullMarked
     default <C extends SimpleBufferCodec<?, ?>> C registerCodec(C codec) {
-        codecs.add(codec);
+        getCodecsInternal().add(codec);
         return codec;
     }
 
@@ -125,21 +124,25 @@ public interface SharedBehaviorAdapter<
     }
 
     default boolean isCodecFromClass(Class<?> type) {
-        for (SimpleBufferCodec<?, ?> codec : codecs)
+        for (SimpleBufferCodec<?, ?> codec : getCodecsInternal())
             if (codec.getFromClass().isAssignableFrom(type))
                 return true;
         return false;
     }
 
     default boolean isCodecToClass(Class<?> type) {
-        for (SimpleBufferCodec<?, ?> codec : codecs)
+        for (SimpleBufferCodec<?, ?> codec : getCodecsInternal())
             if (codec.getFromClass().isAssignableFrom(type))
                 return true;
         return false;
     }
 
     default <F> @NotNull SimpleBufferCodec<F, ?> getFirstNMSCodec(Class<F> type) {
-        return getNMSCodec(type).findFirst().orElseThrow();
+        return getNMSCodec(type).findFirst().orElseThrow(() ->
+                new IllegalStateException(
+                        "No codec registered for: " + type.getName() +
+                                " total codecs=" + getCodecsInternal().size()
+                ));
     }
 
     default <F> @NotNull Stream<SimpleBufferCodec<F, ?>> getNMSCodec(Class<F> type) {
@@ -147,7 +150,11 @@ public interface SharedBehaviorAdapter<
     }
 
     default <T> @NotNull SimpleBufferCodec<?, T> getFirstCodec(Class<T> type) {
-        return getCodec(type).findFirst().orElseThrow();
+        return getCodec(type).findFirst().orElseThrow(() ->
+                new IllegalStateException(
+                        "No codec registered for: " + type.getName() +
+                                " total codecs=" + getCodecsInternal().size()
+                ));
     }
 
     default <T> @NotNull Stream<SimpleBufferCodec<?, T>> getCodec(Class<T> type) {
@@ -158,7 +165,7 @@ public interface SharedBehaviorAdapter<
     default <T> SimpleBufferCodec<?, T>[] getCodecs(Class<T> type) {
         List<SimpleBufferCodec<?, T>> list = new ArrayList<>();
 
-        for (SimpleBufferCodec<?, ?> codec : codecs)
+        for (SimpleBufferCodec<?, ?> codec : getCodecsInternal())
             if (codec.getToClass().isAssignableFrom(type))
                 list.add((SimpleBufferCodec<?, T>) codec);
 
@@ -177,7 +184,7 @@ public interface SharedBehaviorAdapter<
     default <F> SimpleBufferCodec<F, ?>[] getNmsCodecs(Class<F> type) {
         List<SimpleBufferCodec<F, ?>> list = new ArrayList<>();
 
-        for (SimpleBufferCodec<?, ?> codec : codecs)
+        for (SimpleBufferCodec<?, ?> codec : getCodecsInternal())
             if (codec.getFromClass().isAssignableFrom(type))
                 list.add((SimpleBufferCodec<F, ?>) codec);
 

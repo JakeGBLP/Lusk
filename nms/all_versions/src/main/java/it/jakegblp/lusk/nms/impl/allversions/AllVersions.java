@@ -127,6 +127,13 @@ public class AllVersions implements
                 ClientboundBundlePacket
                 > {
 
+    private final List<SimpleBufferCodec<?, ?>> codecsInternal = new ArrayList<>();
+
+    @Override
+    public @NotNull List<SimpleBufferCodec<?, ?>> getCodecsInternal() {
+        return codecsInternal;
+    }
+
     @SuppressWarnings("rawtypes")
     public final BiMap<it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?>, EntityDataSerializer> entityDataSerializers = HashBiMap.create();
 
