@@ -209,12 +209,13 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         public static @NotNull Action<Object> @NotNull [] values() {
             return VALUES;
         }
+
         @NotNull
         private final Class<T> type;
         @NotNull
         private final String propertyName;
 
-        // todo: move property name to the addon module
+        // todo: move property name to the addon module?
         Action(@NotNull String name, @NotNull String propertyName, @NotNull Class<T> type) {
             super(name);
             this.type = type;

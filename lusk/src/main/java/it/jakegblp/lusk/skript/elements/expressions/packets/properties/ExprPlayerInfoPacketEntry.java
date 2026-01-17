@@ -45,10 +45,10 @@ public class ExprPlayerInfoPacketEntry extends PropertyExpression<Object, Object
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        action = (PlayerInfoUpdatePacket.Action<? super Object>) PLAYER_INFO_PROPERTY_NAMES.get(parseResult.tags.get(0));
-        if (!LiteralUtils.hasUnparsedLiteral(expressions[0])) {
+        action = (PlayerInfoUpdatePacket.Action<? super Object>) PLAYER_INFO_PROPERTY_NAMES.get(parseResult.tags.getFirst());
+        if (!LiteralUtils.hasUnparsedLiteral(expressions[0]))
             setExpr(expressions[0]);
-        } else {
+        else {
             setExpr(LiteralUtils.defendExpression(expressions[0]));
             return LiteralUtils.canInitSafely(getExpr());
         }
@@ -64,12 +64,7 @@ public class ExprPlayerInfoPacketEntry extends PropertyExpression<Object, Object
     public Class<?> @Nullable [] acceptChange(Changer.ChangeMode mode) {
         var type = action.getType();
         return switch (mode) {
-            case ADD, REMOVE -> {
-                if (Number.class.isAssignableFrom(type))
-                    yield new Class[] {type};
-                else
-                    yield null;
-            }
+            case ADD, REMOVE -> Number.class.isAssignableFrom(type) ? new Class[]{type} : null;
             case SET -> new Class[]{action.getType()};
             case DELETE -> new Class[0];
             default -> null;
@@ -95,9 +90,9 @@ public class ExprPlayerInfoPacketEntry extends PropertyExpression<Object, Object
     @Override
     public void change(Event event, Object @Nullable [] delta, Changer.ChangeMode mode) {
         PlayerInfo[] playerInfos;
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE) {
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE)
             playerInfos = getPlayerInfos(getExpr().getAll(event));
-        } else return;
+        else return;
         if (playerInfos.length == 0) return;
         if (mode == Changer.ChangeMode.DELETE) {
             for (PlayerInfo playerInfo : playerInfos)
@@ -106,10 +101,10 @@ public class ExprPlayerInfoPacketEntry extends PropertyExpression<Object, Object
         }
         if (delta == null || delta.length == 0) return;
         Object value = delta[0];
-        if (mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET)
             for (PlayerInfo playerInfo : playerInfos)
                 playerInfo.set(action, value);
-        } else {
+        else {
             var type = action.getType();
             Operator operator = mode == Changer.ChangeMode.ADD ? Operator.ADDITION : Operator.SUBTRACTION;
             for (PlayerInfo playerInfo : playerInfos)
