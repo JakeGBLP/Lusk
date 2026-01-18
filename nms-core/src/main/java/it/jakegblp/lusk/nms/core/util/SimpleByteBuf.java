@@ -152,6 +152,23 @@ public class SimpleByteBuf {
         buf.writeByte(value);
     }
 
+
+    public void writeVarIntArray(int[] values) {
+        writeVarInt(values.length);
+        for (int value : values) {
+            writeVarInt(value);
+        }
+    }
+
+    public int[] readVarIntArray() {
+        int length = readVarInt();
+        int[] values = new int[length];
+        for (int i = 0; i < length; i++) {
+            values[i] = readVarInt();
+        }
+        return values;
+    }
+
     public @NotNull IntList readIntList() {
         int varInt = this.readVarInt();
         IntList list = new IntArrayList();
@@ -399,6 +416,8 @@ public class SimpleByteBuf {
     public void writeBytes(byte[] source) {
         buf.writeBytes(source);
     }
+
+
 
     public BitSet readFixedBitSet(int size) {
         byte[] bytes = new byte[Math.ceilDiv(size, 8)];
@@ -670,4 +689,7 @@ public class SimpleByteBuf {
         writeFloat(quaternionf.z);
         writeFloat(quaternionf.w);
     }
+
+
+
 }

@@ -356,6 +356,17 @@ public class AllVersions implements
             SetCameraPacket::new
     ));
 
+
+    public final SimpleBufferCodec<ClientboundSetPassengersPacket, SetPassengerPacket> SET_PASSENGER_PACKET = registerCodec(BufferCodec.of(
+            ClientboundSetPassengersPacket.class, SetPassengerPacket.class,
+            (buffer, packet) -> ClientboundSetPassengersPacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), packet),
+            buffer -> ClientboundSetPassengersPacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
+            (buffer, packet) -> packet.write(buffer),
+            SetPassengerPacket::new
+    ));
+
+
+
     public final SimpleBufferCodec<ClientboundSystemChatPacket, SystemChatPacket> SYSTEM_CHAT_PACKET = registerCodec(BufferCodec.of(
             ClientboundSystemChatPacket.class, SystemChatPacket.class,
             (buffer, packet) -> ClientboundSystemChatPacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), packet),

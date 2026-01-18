@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Player - Update Client Vital Stats (Hunger/Health/Saturation)")
+@Name("Player - Spin Attack")
 public class EffSpinAttack extends Effect {
 
     static {
