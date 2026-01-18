@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.events;
 
+import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -28,7 +29,7 @@ public class ParticleSendEvent extends PlayerEvent implements Cancellable {
         return handlers;
     }
 
-    protected Particle particle;
+    protected ParticleWrapper particle;
     protected int count;
     protected World world;
     protected double x;
@@ -40,6 +41,12 @@ public class ParticleSendEvent extends PlayerEvent implements Cancellable {
     protected float maxSpeed;
 
     protected boolean cancelled;
+
+
+    public Particle getBukkitParticle(){
+        return particle.particle();
+    }
+
 
     public ParticleSendEvent(@NotNull Player who, boolean async) {
         super(who, async);

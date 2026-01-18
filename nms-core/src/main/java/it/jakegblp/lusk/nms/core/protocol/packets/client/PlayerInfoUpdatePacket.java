@@ -164,14 +164,15 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         public static final Action<Component> UPDATE_DISPLAY_NAME = new Action<>("UPDATE_DISPLAY_NAME", "DISPLAY_NAME", Component.class) {
             @Override
             public void write(SimpleByteBuf buffer, PlayerInfo value) {
-                buffer.writeComponent(value.getDisplayName());
+                buffer.writeNullable(value.getDisplayName(), SimpleByteBuf::writeComponent);
             }
 
             @Override
             public void read(SimpleByteBuf buffer, PlayerInfo value) {
-                value.setDisplayName(buffer.readComponent());
+                value.setDisplayName(buffer.readNullable(SimpleByteBuf::readComponent));
             }
         };
+
         public static final @Availability(addedIn = "1.21.4") Action<Integer> UPDATE_LIST_ORDER = new Action<>("UPDATE_LIST_ORDER", "TAB_LIST_ORDER", Integer.class) {
             @Override
             public void write(SimpleByteBuf buffer, PlayerInfo value) {

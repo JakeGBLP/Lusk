@@ -39,7 +39,7 @@ public class ParticlePacketEvent extends SkriptEvent {
                         """)
                 .since("1.0.0");
 
-        EventValues.registerEventValue(ParticleSendEvent.class, Particle.class, ParticleSendEvent::getParticle, EventValues.TIME_NOW);
+        EventValues.registerEventValue(ParticleSendEvent.class, Particle.class, ParticleSendEvent::getBukkitParticle, EventValues.TIME_NOW);
         EventValues.registerEventValue(ParticleSendEvent.class, Integer.class, ParticleSendEvent::getCount, EventValues.TIME_NOW);
         EventValues.registerEventValue(ParticleSendEvent.class, Float.class, ParticleSendEvent::getMaxSpeed, EventValues.TIME_NOW);
         EventValues.registerEventValue(ParticleSendEvent.class, Vector.class, ParticleSendEvent::getOffset, EventValues.TIME_NOW);

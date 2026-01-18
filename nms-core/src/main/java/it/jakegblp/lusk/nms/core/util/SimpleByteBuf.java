@@ -10,6 +10,7 @@ import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.PseudoEnum;
 import it.jakegblp.lusk.common.PseudoEnumSet;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
+import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
 import it.jakegblp.lusk.nms.core.world.player.ProfilePublicKey;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -121,6 +122,8 @@ public class SimpleByteBuf {
     public void writeDouble(double value) {
         buf.writeDouble(value);
     }
+
+
 
     public int readVarInt() {
         int value = 0;
@@ -645,11 +648,15 @@ public class SimpleByteBuf {
         NMS.write(soundCategory, this);
     }
 
-    public Particle readParticle() {
-        return NMS.read(Particle.class, this);
+    public ParticleWrapper readParticle() {
+        return NMS.read(ParticleWrapper.class, this);
     }
 
     public void writeParticle(Particle particle) {
+        NMS.write(particle, this);
+    }
+
+    public void writeParticle(ParticleWrapper particle) {
         NMS.write(particle, this);
     }
 

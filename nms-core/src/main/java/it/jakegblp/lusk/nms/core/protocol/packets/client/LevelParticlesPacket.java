@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class LevelParticlesPacket implements BufferSerializableClientboundPacket
     protected int count;
     protected boolean overrideLimiter;
     protected boolean alwaysShow;
-    protected Particle particle;
+    protected ParticleWrapper particle;
 
     public LevelParticlesPacket(SimpleByteBuf buffer) {
         read(buffer);

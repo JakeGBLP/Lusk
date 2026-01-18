@@ -278,6 +278,9 @@ public class AllVersions implements
             (buffer, value) -> GameType.STREAM_CODEC.encode(buffer.unwrap(), value),
             buffer -> GameType.STREAM_CODEC.decode(buffer.unwrap()))
     );
+
+
+
     public final SimpleBufferCodec<PropertyMap, ProfilePropertySet> PROFILE_PROPERTIES_CODEC = registerCodec(
             PropertyMap.class, ProfilePropertySet.class,
             (buffer, propertyMap) -> ByteBufCodecs.GAME_PROFILE_PROPERTIES.encode(buffer.unwrap(), propertyMap),
@@ -780,12 +783,19 @@ public class AllVersions implements
 
     private @Nullable Object processParticleOptions(@NotNull ParticleOptions options) {
         return switch (options) {
+            case SimpleParticleType ignored -> null; // no extra data
+
             case BlockParticleOption block -> CraftBlockData.fromData(block.getState());
             case ItemParticleOption item -> CraftItemStack.asBukkitCopy(item.getItem());
+
             case DustParticleOptions dust -> {
                 var c = dust.getColor();
-                yield new Particle.DustOptions(Color.fromRGB((int) (c.x() * 255), (int) (c.y() * 255), (int) (c.z() * 255)), dust.getScale());
+                yield new Particle.DustOptions(
+                        Color.fromRGB((int) (c.x() * 255), (int) (c.y() * 255), (int) (c.z() * 255)),
+                        dust.getScale()
+                );
             }
+
             case DustColorTransitionOptions dust -> {
                 var from = dust.getFromColor();
                 var to = dust.getToColor();
@@ -795,17 +805,26 @@ public class AllVersions implements
                         dust.getScale()
                 );
             }
+
             case ColorParticleOption c -> Color.fromRGB((int) c.getRed(), (int) c.getGreen(), (int) c.getBlue());
             case PowerParticleOption power -> power.getPower();
             case SculkChargeParticleOptions sculk -> sculk.roll();
             case ShriekParticleOption shriek -> shriek.getDelay();
+
             case TrailParticleOption trail ->
-                    new Particle.Trail(new Location(null, trail.target().x, trail.target().y, trail.target().z), Color.fromRGB(trail.color()), trail.duration());
-            case VibrationParticleOption vib -> // lossy
+                    new Particle.Trail(
+                            new Location(null, trail.target().x, trail.target().y, trail.target().z),
+                            Color.fromRGB(trail.color()),
+                            trail.duration()
+                    );
+
+            case VibrationParticleOption vib ->
                     new Vibration(null, vib.getArrivalInTicks());
+
             default -> throw new IllegalStateException("Unexpected particle options instance: " + options);
         };
     }
+
 
     public RegistryFriendlyByteBuf toRegistryFriendlyByteBuf(@NotNull FriendlyByteBuf simpleByteBuf) {
         return new RegistryFriendlyByteBuf(simpleByteBuf.unwrap(), registryAccess());

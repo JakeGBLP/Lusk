@@ -209,6 +209,21 @@ public interface SharedBehaviorAdapter<
     }
 
     @SuppressWarnings("unchecked")
+    default <T> @NotNull T fromNMS(@NotNull Object msg, @NotNull Class<T> toClass) {
+        for (SimpleBufferCodec<?, T> codec : getCodecs(toClass)) {
+            if (codec.getFromClass().isInstance(msg)) {
+                return ((SimpleBufferCodec<Object, T>) codec).encode(msg);
+            }
+        }
+
+        throw new IllegalStateException(
+                "No codec registered for: " + msg.getClass().getName() +
+                        " : " + toClass.getName() +
+                        " total codecs=" + getCodecsInternal().size()
+        );
+    }
+
+    @SuppressWarnings("unchecked")
     default <F, T> @NotNull F toNMS(@NotNull T t) {
         SimpleBufferCodec<F, T> codec = (SimpleBufferCodec<F, T>) getFirstCodec(t.getClass());
         return codec.decode(t);
@@ -372,7 +387,7 @@ public interface SharedBehaviorAdapter<
 
                 var optionalCodec = getCodec(EntityMetadataPacket.class).findFirst();
                 if (isSerializableInstanceOf(msg, LevelParticlesPacket.class)) {
-                    final LevelParticlesPacket packet = fromNMS(msg);
+                    final LevelParticlesPacket packet = fromNMS(msg, LevelParticlesPacket.class);
 
                     final ParticleSendEvent particleSendEvent = new ParticleSendEvent(player, true);
                     particleSendEvent.setX(packet.getX());
@@ -391,9 +406,8 @@ public interface SharedBehaviorAdapter<
 
                     if (particleSendEvent.isCancelled())
                         return;
-                } else
-                if (isSerializableInstanceOf(msg, BlockUpdatePacket.class)) {
-                    final BlockUpdatePacket packet = fromNMS(msg);
+                } else if (isSerializableInstanceOf(msg, BlockUpdatePacket.class)) {
+                    final BlockUpdatePacket packet = fromNMS(msg, BlockUpdatePacket.class);
 
                     final BlockUpdateEvent event = new BlockUpdateEvent(player, true);
                     final BlockVector blockPos = packet.getPosition();
@@ -416,9 +430,9 @@ public interface SharedBehaviorAdapter<
                         return;
                     }
 
-                    //todo fix these
+
                 } else if (isSerializableInstanceOf(msg, EntityMetadataPacket.class)) {
-                    final EntityMetadataPacket packet = fromNMS(msg);
+                    final EntityMetadataPacket packet = fromNMS(msg, EntityMetadataPacket.class);
                     final int targetId = packet.getId();
 
                     final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
@@ -435,29 +449,31 @@ public interface SharedBehaviorAdapter<
 
                     super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
                     return;
-                } else if (isSerializableInstanceOf(msg, SoundPacket.class)) {
-                    final SoundPacket soundPacket = fromNMS(msg);
-
-                    final SoundEvent event = new SoundEvent(player, true, soundPacket);
-
-                    pluginManager.callEvent(event);
-                    if (event.isCancelled())
-                        return;
-                } else if (isSerializableInstanceOf(msg, SoundEntityPacket.class)) {
-                    final SoundEntityPacket soundEntityPacket = fromNMS(msg);
-
-                    final SoundEvent event = new SoundEvent(player, true, soundEntityPacket);
-
-                    final int id = soundEntityPacket.getId();
-
-                    if (id != 0)
-                        event.setEntityID(id);
-                    else
-                        event.setEntity(getEntityFromId(id, player.getWorld()));
-                    pluginManager.callEvent(event);
-                    if (event.isCancelled())
-                        return;
                 }
+                //todo fix
+//                else if (isSerializableInstanceOf(msg, SoundPacket.class)) {
+//                    final SoundPacket soundPacket = fromNMS(msg, SoundPacket.class);
+//
+//                    final SoundEvent event = new SoundEvent(player, true, soundPacket);
+//
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled())
+//                        return;
+//                } else if (isSerializableInstanceOf(msg, SoundEntityPacket.class)) {
+//                    final SoundEntityPacket soundEntityPacket = fromNMS(msg, SoundEntityPacket.class);
+//
+//                    final SoundEvent event = new SoundEvent(player, true, soundEntityPacket);
+//
+//                    final int id = soundEntityPacket.getId();
+//
+//                    if (id != 0)
+//                        event.setEntityID(id);
+//                    else
+//                        event.setEntity(getEntityFromId(id, player.getWorld()));
+//                    pluginManager.callEvent(event);
+//                    if (event.isCancelled())
+//                        return;
+//                }
                 try {
                     super.write(ctx, newMsg, promise);
                 } catch (Exception e) {
