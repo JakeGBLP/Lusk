@@ -36,7 +36,7 @@ public class EffEntityEffectPacket extends Effect {
 
     static {
         Skript.registerEffect(EffEntityEffectPacket.class,
-                "play entity effect %entityeffect/internalentityeffect% on %entities/numbers% for %players%"
+                "play entity effect %entityeffect/nmsentityeffect% on %entities/numbers% for %players%"
         );
     }
 

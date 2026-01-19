@@ -201,14 +201,14 @@ public class Types {
                 .since("2.0.0"));
         EnumClassInfoWrapper<InternalEntityEffect> INTERNAL_ENTITY_EFFECT_ENUM = new EnumClassInfoWrapper<>(InternalEntityEffect.class);
         Classes.registerClass(INTERNAL_ENTITY_EFFECT_ENUM.getClassInfo("nmsentityeffect")
-                .user("internal ?entit(y|ies) ?effects?")
+                .user("nms ?entit(y|ies) ?effects?")
                 .name("Internal Entity Effect")
                 .description("Effects that can be played on entities, this type encompasses all entity effects normally not exposed by bukkit.\n\nInternal Entity Effects are only to be used with packets.") // add example
                 .since("2.0.0"));
 
         EnumClassInfoWrapper<PlayerActionPacket.Action> INTERNAL_PLAYER_ACTION = new EnumClassInfoWrapper<>(PlayerActionPacket.Action.class);
         Classes.registerClass(INTERNAL_PLAYER_ACTION.getClassInfo("nmsplayeraction")
-                .user("internal ?player ?action?")
+                .user("nms ?player ?action?")
                 .name("Internal Player Action")
                 .description("Actions from the Player Action Packet.\n\nInternal Player Action are only to be used with packets.") // add example
                 .since("2.0.0"));
