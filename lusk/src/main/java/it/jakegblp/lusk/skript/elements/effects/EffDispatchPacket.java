@@ -73,12 +73,16 @@ public class EffDispatchPacket extends Effect implements AsyncableSyntaxesWrappe
 
     @Override
     protected void execute(Event event) {
-        var players = playerExpression.getAll(event);
-        var packets = clientboundPacketExpression.getArray(event);
-        if (bundled)
-            NMSApi.sendBundledPackets(players, packets, initExecutionMode);
-        else
-            NMSApi.sendPackets(players, packets, initExecutionMode);
+        try {
+            var players = playerExpression.getAll(event);
+            var packets = clientboundPacketExpression.getArray(event);
+            if (bundled)
+                NMSApi.sendBundledPackets(players, packets, initExecutionMode);
+            else
+                NMSApi.sendPackets(players, packets, initExecutionMode);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
