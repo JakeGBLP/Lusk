@@ -16,6 +16,7 @@ import io.papermc.paper.world.WeatheringCopperState;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.protocol.packets.server.PlayerActionPacket;
 import it.jakegblp.lusk.nms.core.util.*;
 import it.jakegblp.lusk.nms.core.world.entity.ServerEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
@@ -364,6 +365,18 @@ public class AllVersions implements
             (buffer, packet) -> packet.write(buffer),
             SetPassengerPacket::new
     ));
+
+
+    public final SimpleBufferCodec<ServerboundPlayerActionPacket, PlayerActionPacket> PLAYER_ACTION_PACKET =
+            registerCodec(BufferCodec.<ServerboundPlayerActionPacket, PlayerActionPacket>of(
+                    ServerboundPlayerActionPacket.class, PlayerActionPacket.class,
+                    (buffer, nms) -> ServerboundPlayerActionPacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), nms),
+                    buffer -> ServerboundPlayerActionPacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
+                    (buffer, wrapper) -> wrapper.write(buffer),
+                    PlayerActionPacket::new
+            ));
+
+
 
 
 

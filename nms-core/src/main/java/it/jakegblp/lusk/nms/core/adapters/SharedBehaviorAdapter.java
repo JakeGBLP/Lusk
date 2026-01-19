@@ -6,6 +6,7 @@ import io.netty.channel.*;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
 import it.jakegblp.lusk.nms.core.events.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
+import it.jakegblp.lusk.nms.core.protocol.packets.server.PlayerActionPacket;
 import it.jakegblp.lusk.nms.core.util.BufferCodec;
 import it.jakegblp.lusk.nms.core.util.SimpleBufferCodec;
 import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
@@ -339,6 +340,24 @@ public interface SharedBehaviorAdapter<
 
                 //todo fix this above (make the event async)
 
+                if (isSerializableInstanceOf(msg, PlayerActionPacket.class)) {
+                    final PlayerActionPacket playerActionPacket = fromNMS(msg, PlayerActionPacket.class);
+
+                    final PlayerActionEvent playerActionEvent = new PlayerActionEvent(player, true);
+                    playerActionEvent.setAction(playerActionPacket.getAction());
+                    playerActionEvent.setBlockPos(playerActionPacket.getPos());
+                    playerActionEvent.setSequence(playerActionPacket.getSequence());
+                    playerActionEvent.setDirection(playerActionPacket.getDirection());
+
+                    pluginManager.callEvent(playerActionEvent);
+
+                    if (playerActionEvent.isCancelled())
+                        return;
+
+                    super.channelRead(ctx, msg);
+                    return;
+                }
+
                 try {
                     super.channelRead(ctx, newMsg);
                 } catch (Exception e) {
@@ -450,7 +469,9 @@ public interface SharedBehaviorAdapter<
                     super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
                     return;
                 }
-                //todo fix
+
+
+                //todo fix sound event
 //                else if (isSerializableInstanceOf(msg, SoundPacket.class)) {
 //                    final SoundPacket soundPacket = fromNMS(msg, SoundPacket.class);
 //

@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import io.papermc.paper.math.BlockPosition;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.PseudoEnum;
 import it.jakegblp.lusk.common.PseudoEnumSet;
@@ -22,6 +23,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scoreboard.Team;
@@ -123,7 +125,45 @@ public class SimpleByteBuf {
         buf.writeDouble(value);
     }
 
+    @SuppressWarnings("UnstableApiUsage")
+    public void writeBlockPos(BlockPosition pos) {
+        buf.writeLong(asLong(pos.blockX(), pos.blockY(), pos.blockZ()));
+    }
 
+    @SuppressWarnings("UnstableApiUsage")
+    public BlockPosition readBlockPos() {
+        long val = buf.readLong();
+
+        int x = (int) (val >> 38);
+        int y = (int) (val & 0xFFF);
+        int z = (int) ((val >> 12) & 0x3FFFFFF);
+
+        if (y >= 2048) {
+            y -= 4096;
+        }
+
+        int finalY = y;
+        return new BlockPosition() {
+            @Override
+            public int blockX() {
+                return x;
+            }
+
+            @Override
+            public int blockY() {
+                return finalY;
+            }
+
+            @Override
+            public int blockZ() {
+                return z;
+            }
+        };
+    }
+
+    private static long asLong(int x, int y, int z) {
+        return ((long)x & 67108863L) << 38 | (long)y & 4095L | ((long)z & 67108863L) << 12;
+    }
 
     public int readVarInt() {
         int value = 0;
