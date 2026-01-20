@@ -388,7 +388,7 @@ public interface SharedBehaviorAdapter<
                         return;
                     }
                 }
-                Object newMsg = msg;
+
 //                if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
 //                    PacketSendEvent<ClientboundPacket> event = new PacketSendEvent<>(msg, player);
 //                    pluginManager.callEvent(event);
@@ -404,7 +404,8 @@ public interface SharedBehaviorAdapter<
                 //todo fix this above (make the event async)
 
 
-                var optionalCodec = getCodec(EntityMetadataPacket.class).findFirst();
+
+
                 if (isSerializableInstanceOf(msg, LevelParticlesPacket.class)) {
                     final LevelParticlesPacket packet = fromNMS(msg, LevelParticlesPacket.class);
 
@@ -496,7 +497,7 @@ public interface SharedBehaviorAdapter<
 //                        return;
 //                }
                 try {
-                    super.write(ctx, newMsg, promise);
+                    super.write(ctx, msg, promise);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
