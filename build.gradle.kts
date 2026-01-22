@@ -48,6 +48,7 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.36")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
     paperweight.paperDevBundle("$latestMinecraftVersion-R0.1-SNAPSHOT")
+
 }
 
 tasks {
@@ -110,7 +111,7 @@ subprojects {
                 dependsOn("remap")
             }
         }
-    } else if (!isSkriptModule){
+    } else if (!isSkriptModule) {
         dependencies {
             compileOnly("io.papermc.paper:paper-api:$detectedVersion-R0.1-SNAPSHOT")
         }
@@ -175,6 +176,13 @@ subprojects {
         if (name == "skript-shade") {
             implementation(project(":skript-factory"))
             implementation(project(":skript-core"))
+        }
+        if (name == "nms-core") {
+            dependencies {
+                compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
+                compileOnly("org.apache.logging.log4j:log4j-core:2.25.3")
+
+            }
         }
         compileOnly("org.apache.commons:commons-text:1.14.0")
         compileOnly("com.mojang:datafixerupper:8.0.16")

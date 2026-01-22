@@ -4,6 +4,8 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.common.Version;
+import it.jakegblp.lusk.nms.core.logger.ConsoleLogInjector;
+import it.jakegblp.lusk.nms.core.logger.events.LogEvent;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.factory.SkriptAdapterFactory;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
@@ -98,6 +100,18 @@ public final class Lusk extends JavaPlugin {
         getLogger().info("- Server version: " + serverVersion);
         if (hookedWithSkript)
             getLogger().info("- Skript version: " + skriptVersion);
+
+        ConsoleLogInjector.inject(l -> {
+            boolean async = !getServer().isPrimaryThread();
+
+            it.jakegblp.lusk.nms.core.logger.events.LogEvent event = new it.jakegblp.lusk.nms.core.logger.events.LogEvent(async, l.messageStrippedAnsi());
+
+            getServer().getPluginManager().callEvent(event);
+
+            if (event.isCancelled()) {
+                l.cancel();
+            }
+        });
     }
 
     @Override
@@ -106,6 +120,7 @@ public final class Lusk extends JavaPlugin {
             NMS = null;
         }
         getLogger().info("Lusk has been disabled!");
+        ConsoleLogInjector.uninject();
     }
 
     public String getBuildType() {
