@@ -4,6 +4,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
@@ -48,11 +50,14 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.textdisplay.TextDis
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.textdisplay.TextDisplayFlags;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.vex.VexFlag;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.vex.VexFlags;
+import it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType;
 import it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Art;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -71,115 +76,47 @@ import org.joml.Quaternionf;
 
 import java.util.*;
 
+import static it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType.HOLDER;
+import static it.jakegblp.lusk.nms.core.world.entity.serialization.DataHolderType.OPTIONAL;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MetadataKeys {
+    // todo: make metadata keys a registry, non-static, per nms instance
     public static final BiMap<@NotNull String, @NotNull MetadataKey> NAMED_KEYS = HashBiMap.create();
     public static final ListMultimap<@NotNull Class<? extends @NotNull Entity>, @NotNull MetadataKey<? extends @NotNull Object, ? extends @NotNull Object>> METADATA_ENTRIES = LinkedListMultimap.create();
 
-    static {
-        for (var keysInterface : new Class[]{
-                EntityKeys.class,
-                AreaEffectCloudKeys.class,
-                EnderCrystalKeys.class,
-                ExperienceOrbKeys.class,
-                EnderEyeKeys.class,
-                FallingBlockKeys.class,
-                FireballKeys.class,
-                FireworkKeys.class,
-                InteractionKeys.class,
-                ItemKeys.class,
-                ItemFrameKeys.class,
-                OminousItemSpawnerKeys.class,
-                PaintingKeys.class,
-                SmallFireballKeys.class,
-                TNTPrimedKeys.class,
-                WitherSkullKeys.class,
-                FishHookKeys.class,
-                AbstractArrowKeys.class,
-                ArrowKeys.class,
-                TridentKeys.class,
-                DisplayKeys.class,
-                BlockDisplayKeys.class,
-                ItemDisplayKeys.class,
-                TextDisplayKeys.class,
-                LivingEntityKeys.class,
-                ArmorStandKeys.class,
-                PlayerKeys.class,
-                MobKeys.class,
-                BatKeys.class,
-                EnderDragonKeys.class,
-                GhastKeys.class,
-                PhantomKeys.class,
-                SlimeKeys.class,
-                AllayKeys.class,
-                IronGolemKeys.class,
-                ShulkerKeys.class,
-                SnowmanKeys.class,
-                TadpoleKeys.class,
-                AgeableKeys.class,
-                GlowSquidKeys.class,
-                ArmadilloKeys.class,
-                AxolotlKeys.class,
-                BeeKeys.class,
-                ChickenKeys.class,
-                CowKeys.class,
-                FoxKeys.class,
-                FrogKeys.class,
-                HappyGhastKeys.class,
-                GoatKeys.class,
-                HoglinKeys.class,
-                MushroomCowKeys.class,
-                OcelotKeys.class,
-                PandaKeys.class,
-                PigKeys.class,
-                PolarBearKeys.class,
-                RabbitKeys.class,
-                SheepKeys.class,
-                SnifferKeys.class,
-                StriderKeys.class,
-                TurtleKeys.class,
-                AbstractHorseKeys.class,
-                CamelKeys.class,
-                HorseKeys.class,
-                ChestedHorseKeys.class,
-                LlamaKeys.class,
-                TameableKeys.class,
-                CatKeys.class,
-                ParrotKeys.class,
-                WolfKeys.class,
-                AbstractVillagerKeys.class,
-                VillagerKeys.class,
-                AbstractFishKeys.class,
-                SalmonKeys.class,
-                TropicalFishKeys.class,
-                BlazeKeys.class,
-                BoggedKeys.class,
-                CreakingKeys.class,
-                CreeperKeys.class,
-                EndermanKeys.class,
-                GuardianKeys.class,
-                SkeletonKeys.class,
-                SpiderKeys.class,
-                VexKeys.class,
-                WardenKeys.class,
-                WitherKeys.class,
-                ZoglinKeys.class,
-                ZombieKeys.class,
-                ZombieVillagerKeys.class,
-                PiglinAbstractKeys.class,
-                PiglinKeys.class,
-                RaiderKeys.class,
-                PillagerKeys.class,
-                WitchKeys.class,
-                SpellcasterKeys.class,
-                ThrowableProjectileKeys.class,
-                VehicleKeys.class,
-                BoatKeys.class,
-                MinecartKeys.class,
-                CommandMinecartKeys.class,
-                PoweredMinecartKeys.class}) {
-            SimpleClass.forceInit(keysInterface);
+    public static void bootstrap() {
+        Set<Class<?>> visited = new HashSet<>();
+        Set<Class<?>> roots = new HashSet<>();
+        for (EntityType type : EntityType.values()) {
+            Class<?> impl = type.getEntityClass();
+            if (impl == null) continue;
+            roots.add(impl);
+            for (Class<?> iface : impl.getInterfaces())
+                if (Entity.class.isAssignableFrom(iface))
+                    roots.add(iface);
         }
+
+        roots.add(Entity.class);
+        Deque<Class<?>> stack = new ArrayDeque<>(roots);
+
+        while (!stack.isEmpty()) {
+            Class<?> type = stack.pop();
+            if (!visited.add(type)) continue;
+            String keysName = "it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys$" + type.getSimpleName() + "Keys";
+
+            SimpleClass.forceInit(keysName, null);
+            for (Class<?> parent : type.getInterfaces())
+                if (Entity.class.isAssignableFrom(parent))
+                    stack.push(parent);
+        }
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+
+        String json = gson.toJson(METADATA_ENTRIES);
+        Bukkit.getLogger().info(">> METADATA: " + json);
+        // READ THIS: this is always just "{}", likely because it hasnt finished yet...
     }
 
     @SuppressWarnings("unchecked")
@@ -221,11 +158,20 @@ public final class MetadataKeys {
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
             Class<E> entityClass,
-            @Nullable Class<T> valueClass
+            @Nullable Class<T> valueClass,
+            DataHolderType dataHolderType
     ) {
         if (valueClass == null) return null;
         int nextId = getLastId(entityClass);
-        return register(name, new MetadataKey<>(nextId, entityClass, valueClass));
+        return register(name, new MetadataKey<>(nextId, entityClass, valueClass, dataHolderType));
+    }
+
+    public static <E extends Entity, T> MetadataKey<E, T> register(
+            String name,
+            Class<E> entityClass,
+            @Nullable Class<T> valueClass
+    ) {
+        return register(name, entityClass, valueClass, DataHolderType.NORMAL);
     }
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
@@ -247,6 +193,15 @@ public final class MetadataKeys {
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
+            Class<E> entityClass,
+            String stringClass,
+            DataHolderType dataHolderType
+    ) {
+        return register(name, entityClass, SimpleClass.quickClass(stringClass), dataHolderType);
+    }
+
+    public static <E extends Entity, T> MetadataKey<E, T> register(
+            String name,
             String entityClass,
             Class<T> valueClass
     ) {
@@ -255,10 +210,28 @@ public final class MetadataKeys {
 
     public static <E extends Entity, T> MetadataKey<E, T> register(
             String name,
+            String entityClass,
+            Class<T> valueClass,
+            DataHolderType dataHolderType
+    ) {
+        return register(name, SimpleClass.quickClass(entityClass), valueClass, dataHolderType);
+    }
+
+    public static <E extends Entity, T> MetadataKey<E, T> register(
+            String name,
             String stringEntityClass,
             String stringValueClass
     ) {
         return register(name, SimpleClass.quickClass(stringEntityClass), SimpleClass.quickClass(stringValueClass));
+    }
+
+    public static <E extends Entity, T> MetadataKey<E, T> register(
+            String name,
+            String stringEntityClass,
+            String stringValueClass,
+            DataHolderType dataHolderType
+    ) {
+        return register(name, SimpleClass.quickClass(stringEntityClass), SimpleClass.quickClass(stringValueClass), dataHolderType);
     }
 
     @SuppressWarnings("unchecked")
@@ -273,7 +246,7 @@ public final class MetadataKeys {
             if (Entity.class.isAssignableFrom(current)) {
                 var keys = METADATA_ENTRIES.get((Class<? extends Entity>) current);
                 if (!keys.isEmpty()) {
-                    int last = keys.get(keys.size() - 1).id() + 1;
+                    int last = keys.getLast().id() + 1;
                     if (last > max) max = last;
                 }
             }
@@ -284,7 +257,6 @@ public final class MetadataKeys {
         }
         return max;
     }
-
 
     @ApiStatus.NonExtendable
     public interface EntityKeys {
@@ -297,7 +269,7 @@ public final class MetadataKeys {
         MetadataKey<Entity, Boolean> GLOWING = register(ENTITY_FLAGS, EntityFlag.GLOWING);
         MetadataKey<Entity, Boolean> GLIDING = register(ENTITY_FLAGS, EntityFlag.GLIDING);
         MetadataKey<Entity, Integer> AIR_TICKS = register("AIR_TICKS", Entity.class, Integer.class);
-        MetadataKey<Entity, Component> CUSTOM_NAME = register("CUSTOM_NAME", Entity.class, Component.class/*, OPTIONAL*/);
+        MetadataKey<Entity, Component> CUSTOM_NAME = register("CUSTOM_NAME", Entity.class, Component.class, OPTIONAL);
         MetadataKey<Entity, Boolean> CUSTOM_NAME_VISIBILITY = register("CUSTOM_NAME_VISIBILITY", Entity.class, Boolean.class);
         MetadataKey<Entity, Boolean> SILENT = register("SILENT", Entity.class, Boolean.class);
         MetadataKey<Entity, Boolean> NO_GRAVITY = register("NO_GRAVITY", Entity.class, Boolean.class);
@@ -314,7 +286,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface EnderCrystalKeys {
-        MetadataKey<EnderCrystal, BlockVector> BEAM_TARGET = register("BEAM_TARGET", EnderCrystal.class, BlockVector.class/*, OPTIONAL*/);
+        MetadataKey<EnderCrystal, BlockVector> BEAM_TARGET = register("BEAM_TARGET", EnderCrystal.class, BlockVector.class, OPTIONAL);
         MetadataKey<EnderCrystal, Boolean> SHOW_BOTTOM = register("SHOW_BOTTOM", EnderCrystal.class, Boolean.class);
     }
 
@@ -341,7 +313,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface FireworkKeys {
         MetadataKey<Firework, ItemStack> FIREWORK_INFO = register("FIREWORK_INFO", Firework.class, ItemStack.class);
-        MetadataKey<Firework, Integer> BOOSTER = register("BOOSTER", Firework.class, Integer.class/*, OPTIONAL*/);
+        MetadataKey<Firework, Integer> BOOSTER = register("BOOSTER", Firework.class, Integer.class, OPTIONAL);
         MetadataKey<Firework, Boolean> FROM_CROSSBOW = register("FROM_CROSSBOW", Firework.class, Boolean.class);
     }
 
@@ -354,7 +326,7 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface ItemKeys {
-        MetadataKey<Item, ItemStack> ITEM = register("ITEM", Item.class, ItemStack.class);
+        MetadataKey<Item, ItemStack> ITEM = register("DROPPED_ITEM", Item.class, ItemStack.class);
     }
 
     @ApiStatus.NonExtendable
@@ -372,7 +344,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface PaintingKeys {
         MetadataKey<Painting, BlockFace> PAINTING_BLOCK_FACE = register("PAINTING_BLOCK_FACE", Painting.class, BlockFace.class);
-        MetadataKey<Painting, Art> PAINTING_TYPE = register("PAINTING_TYPE", Painting.class, Art.class);
+        MetadataKey<Painting, Art> PAINTING_TYPE = register("PAINTING_TYPE", Painting.class, Art.class, HOLDER);
     }
 
     @ApiStatus.NonExtendable
@@ -439,12 +411,12 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface BlockDisplayKeys {
-        MetadataKey<BlockDisplay, BlockData> DISPLAY_BLOCK = register("BLOCK_STATE", BlockDisplay.class, BlockData.class);
+        MetadataKey<BlockDisplay, BlockData> DISPLAY_BLOCK = register("BLOCK", BlockDisplay.class, BlockData.class);
     }
 
     @ApiStatus.NonExtendable
     public interface ItemDisplayKeys {
-        MetadataKey<ItemDisplay, ItemStack> DISPLAY_ITEM = register("DISPLAY_ITEM", ItemDisplay.class, ItemStack.class);
+        MetadataKey<ItemDisplay, ItemStack> DISPLAY_ITEM = register("ITEM", ItemDisplay.class, ItemStack.class);
         MetadataKey<ItemDisplay, ItemDisplay.ItemDisplayTransform> TRANSFORM = register("TRANSFORM", ItemDisplay.class, ItemDisplay.ItemDisplayTransform.class);
     }
 
@@ -472,7 +444,7 @@ public final class MetadataKeys {
         MetadataKey<LivingEntity, Boolean> POTION_EFFECT_AMBIENT = register("POTION_EFFECT_AMBIENT", LivingEntity.class, Boolean.class);
         MetadataKey<LivingEntity, Integer> ARROW_COUNT = register("ARROW_COUNT", LivingEntity.class, Integer.class);
         MetadataKey<LivingEntity, Integer> BEE_STINGER_COUNT = register("BEE_STINGER_COUNT", LivingEntity.class, Integer.class);
-        MetadataKey<LivingEntity, BlockVector> SLEEPING_BED_LOCATION = register("SLEEPING_BED_LOCATION", LivingEntity.class, BlockVector.class/*, OPTIONAL*/);
+        MetadataKey<LivingEntity, BlockVector> SLEEPING_BED_LOCATION = register("SLEEPING_BED_LOCATION", LivingEntity.class, BlockVector.class, OPTIONAL);
     }
 
     @ApiStatus.NonExtendable
@@ -606,12 +578,12 @@ public final class MetadataKeys {
 
     @ApiStatus.NonExtendable
     public interface ChickenKeys {
-        MetadataKey<Chicken, Chicken.Variant> CHICKEN_VARIANT = register("CHICKEN_VARIANT", Chicken.class, "org.bukkit.entity.Chicken$Variant");
+        MetadataKey<Chicken, Chicken.Variant> CHICKEN_VARIANT = register("CHICKEN_VARIANT", Chicken.class, "org.bukkit.entity.Chicken$Variant", HOLDER);
     }
 
     @ApiStatus.NonExtendable
     public interface CowKeys {
-        MetadataKey<Cow, Cow.Variant> COW_VARIANT = register("COW_VARIANT", Cow.class, "org.bukkit.entity.Cow$Variant");
+        MetadataKey<Cow, Cow.Variant> COW_VARIANT = register("COW_VARIANT", Cow.class, "org.bukkit.entity.Cow$Variant", HOLDER);
     }
 
     @ApiStatus.NonExtendable
@@ -625,14 +597,14 @@ public final class MetadataKeys {
         MetadataKey<Fox, Boolean> IS_SLEEPING = register(FOX_FLAGS, FoxFlag.IS_SLEEPING);
         MetadataKey<Fox, Boolean> IS_FACEPLANTED = register(FOX_FLAGS, FoxFlag.IS_FACEPLANTED);
         MetadataKey<Fox, Boolean> IS_DEFENDING = register(FOX_FLAGS, FoxFlag.IS_DEFENDING);
-        MetadataKey<Fox, ServerEntityReference> FIRST_TRUSTED_PLAYER = register("FIRST_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class);
-        MetadataKey<Fox, ServerEntityReference> SECOND_TRUSTED_PLAYER = register("SECOND_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class);
+        MetadataKey<Fox, ServerEntityReference> FIRST_TRUSTED_PLAYER = register("FIRST_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class, OPTIONAL);
+        MetadataKey<Fox, ServerEntityReference> SECOND_TRUSTED_PLAYER = register("SECOND_TRUSTED_PLAYER", Fox.class, ServerEntityReference.class, OPTIONAL);
     }
 
     @ApiStatus.NonExtendable
     public interface FrogKeys {
-        MetadataKey<Frog, Frog.Variant> FROG_VARIANT = register("FROG_VARIANT", "org.bukkit.entity.Frog", "org.bukkit.entity.Frog$Variant");
-        MetadataKey<Frog, Integer> TONGUE_TARGET = register("TONGUE_TARGET", "org.bukkit.entity.Frog", Integer.class/*, OPTIONAL*/);
+        MetadataKey<Frog, Frog.Variant> FROG_VARIANT = register("FROG_VARIANT", "org.bukkit.entity.Frog", "org.bukkit.entity.Frog$Variant", HOLDER);
+        MetadataKey<Frog, Integer> TONGUE_TARGET = register("TONGUE_TARGET", "org.bukkit.entity.Frog", Integer.class, OPTIONAL);
     }
 
     @ApiStatus.NonExtendable
@@ -680,7 +652,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface PigKeys {
         MetadataKey<Pig, Integer> CARROT_BOOST_TICKS = register("CARROT_BOOST_TICKS", Pig.class, Integer.class);
-        MetadataKey<Pig, Pig.Variant> PIG_VARIANT = register("PIG_VARIANT", Pig.class, "org.bukkit.entity.Pig$Variant");
+        MetadataKey<Pig, Pig.Variant> PIG_VARIANT = register("PIG_VARIANT", Pig.class, "org.bukkit.entity.Pig$Variant", HOLDER);
     }
 
     @ApiStatus.NonExtendable
@@ -756,12 +728,12 @@ public final class MetadataKeys {
         MetadataKey<Tameable, TameableFlags> TAMEABLE_FLAGS = register("TAMEABLE_FLAGS", Tameable.class, TameableFlags.class);
         MetadataKey<Tameable, Boolean> IS_SITTING = register(TAMEABLE_FLAGS, TameableFlag.IS_SITTING);
         MetadataKey<Tameable, Boolean> IS_TAMED = register(TAMEABLE_FLAGS, TameableFlag.IS_TAMED);
-        MetadataKey<Tameable, ServerEntityReference> OWNER = register("OWNER", Tameable.class, ServerEntityReference.class);
+        MetadataKey<Tameable, ServerEntityReference> OWNER = register("OWNER", Tameable.class, ServerEntityReference.class, OPTIONAL);
     }
 
     @ApiStatus.NonExtendable
     public interface CatKeys {
-        MetadataKey<Cat, Cat.Type> CAT_VARIANT = register("CAT_VARIANT", Cat.class, Cat.Type.class);
+        MetadataKey<Cat, Cat.Type> CAT_VARIANT = register("CAT_VARIANT", Cat.class, Cat.Type.class, HOLDER);
         MetadataKey<Cat, Boolean> IS_LYING = register("IS_LYING", Cat.class, Boolean.class);
         MetadataKey<Cat, Boolean> IS_LOOKING_UP = register("IS_LOOKING_UP", Cat.class, Boolean.class);
         MetadataKey<Cat, DyeColor> CAT_COLLAR_COLOR = register("CAT_COLLAR_COLOR", Cat.class, DyeColor.class);
@@ -777,8 +749,8 @@ public final class MetadataKeys {
         MetadataKey<Wolf, Boolean> IS_INTERESTED = register("IS_WOLF_INTERESTED", Wolf.class, Boolean.class);
         MetadataKey<Wolf, DyeColor> WOLF_COLLAR_COLOR = register("WOLF_COLLAR_COLOR", Wolf.class, DyeColor.class);
         MetadataKey<Wolf, Integer> WOLF_ANGER_TICKS = register("WOLF_ANGER_TICKS", Wolf.class, Integer.class);
-        MetadataKey<Wolf, Wolf.Variant> WOLF_VARIANT = register("WOLF_VARIANT", Wolf.class, Wolf.Variant.class);
-        MetadataKey<Wolf, Wolf.SoundVariant> WOLF_SOUND_VARIANT = register("WOLF_SOUND_VARIANT", Wolf.class, Wolf.SoundVariant.class);
+        MetadataKey<Wolf, Wolf.Variant> WOLF_VARIANT = register("WOLF_VARIANT", Wolf.class, Wolf.Variant.class, HOLDER);
+        MetadataKey<Wolf, Wolf.SoundVariant> WOLF_SOUND_VARIANT = register("WOLF_SOUND_VARIANT", Wolf.class, Wolf.SoundVariant.class, HOLDER);
     }
 
     @ApiStatus.NonExtendable
@@ -822,7 +794,7 @@ public final class MetadataKeys {
         MetadataKey<Creaking, Boolean> CAN_MOVE = register("CAN_MOVE", "org.bukkit.entity.Creaking", Boolean.class);
         MetadataKey<Creaking, Boolean> IS_ACTIVE = register("IS_ACTIVE", "org.bukkit.entity.Creaking", Boolean.class);
         MetadataKey<Creaking, Boolean> IS_TEARING_DOWN = register("IS_TEARING_DOWN", "org.bukkit.entity.Creaking", Boolean.class);
-        MetadataKey<Creaking, Location> HOME_POSITION = register("HOME_POSITION", "org.bukkit.entity.Creaking", Location.class/*, OPTIONAL*/);
+        MetadataKey<Creaking, Location> HOME_POSITION = register("HOME_POSITION", "org.bukkit.entity.Creaking", Location.class, OPTIONAL);
     }
 
     @ApiStatus.NonExtendable
@@ -843,7 +815,7 @@ public final class MetadataKeys {
     @ApiStatus.NonExtendable
     public interface GuardianKeys {
         MetadataKey<Guardian, Boolean> IS_RETRACTING_SPIKES = register("IS_RETRACTING_SPIKES", Guardian.class, Boolean.class);
-        // todo: allow normal entities (converter-ish behavior)
+        // todo: allow normal entities (converter-ish behavior) ------ entity ref!!
         MetadataKey<Guardian, Integer> TARGET_ENTITY_ID = register("TARGET_ENTITY_ID", Guardian.class, Integer.class);
     }
 
