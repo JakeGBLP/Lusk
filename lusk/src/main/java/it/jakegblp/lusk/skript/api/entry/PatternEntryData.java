@@ -27,7 +27,7 @@ public class PatternEntryData<T> extends ExpressionEntryData<T> {
         String key = node.getKey();
         if (key == null)
             return false;
-        key = ScriptLoader.replaceOptions(key);
+        key = ScriptLoader.replaceOptions(key.substring(0, key.indexOf(':')));
         return pattern.match(key) != null;
     }
 }
