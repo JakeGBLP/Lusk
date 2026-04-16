@@ -46,7 +46,7 @@ public class Constants {
 
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.18.2"),
+            VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.19.4"),
             VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
             VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6");
 
