@@ -48,7 +48,7 @@ public class Constants {
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
             VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.19.4"),
             VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
-            VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6");
+            VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.10");
 
     public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT, Lusk.getInstance().getAddonInstance());
     //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);

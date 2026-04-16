@@ -42,10 +42,6 @@ dependencies {
     shadow('junit:junit:3.8.2')
 
     implementation project(":version_adapter")
-    implementation project(":skript_v2_6_4")
-    implementation project(":skript_v2_7_3")
-    implementation project(":skript_v2_8_7")
-    implementation project(":skript_v2_9_5")
     implementation project(":skript_v2_10_0")
     implementation project(":skript_v2_15_0")
 
@@ -147,9 +143,6 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('luskTest_1_19_4_skript_2_6_4', 'Runs tests on Paper 1.19.4 and with Skript 2.6.4.', environments + 'paper-1.19.4_skript-2.6.4.json', java17, -1)
-createTestTask('luskTest_1_19_4_skript_2_7_3', 'Runs tests on Paper 1.19.4 and with Skript 2.7.3.', environments + 'paper-1.19.4_skript-2.7.3.json', java17, -1)
-createTestTask('luskTest_1_19_4_skript_2_8_7', 'Runs tests on Paper 1.19.4 and with Skript 2.8.7.', environments + 'paper-1.19.4_skript-2.8.7.json', java17, -1)
 
 createTestTask('luskTest_1_19_4', 'Runs tests on Paper 1.19.4.', environments + 'paper-1.19.4.json', java17, -1)
 createTestTask('luskTest_1_20_6', 'Runs tests on Paper 1.20.6.', environments + 'paper-1.20.6.json', java21, -1)
@@ -161,12 +154,7 @@ createTestTask('luskTest_1_21_8', 'Runs tests on Paper 1.21.8.', environments + 
 createTestTask('luskTest_1_21_10', 'Runs tests on Paper 1.21.10.', environments + 'paper-1.21.10.json', java21, -1)
 createTestTask('luskTest_1_21_11', 'Runs tests on Paper 1.21.11.', environments + 'paper-1.21.11.json', java21, -1)
 
-tasks.register("luskTestOlderSkriptVersions") {
-    description = 'Runs tests on older skript versions.'
-    dependsOn luskTest_1_19_4_skript_2_6_4, luskTest_1_19_4_skript_2_7_3, luskTest_1_19_4_skript_2_8_7
-}
-
 tasks.register('luskTest') {
     description = 'Runs tests on all environments.'
-    dependsOn luskTestOlderSkriptVersions, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
+    dependsOn luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
 }
