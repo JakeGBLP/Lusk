@@ -15,9 +15,10 @@ version = "1.3.13"
 def java16 = 16
 def java17 = 17
 def java21 = 21
+def java25 = 25
 
 def oldestJava = java16
-def latestJava = java21
+def latestJava = java25
 
 
 repositories {
@@ -162,6 +163,7 @@ createTestTask('luskTest_1_21_7', 'Runs tests on Paper 1.21.7.', environments + 
 createTestTask('luskTest_1_21_8', 'Runs tests on Paper 1.21.8.', environments + 'paper-1.21.8.json', java21, -1)
 createTestTask('luskTest_1_21_10', 'Runs tests on Paper 1.21.10.', environments + 'paper-1.21.10.json', java21, -1)
 createTestTask('luskTest_1_21_11', 'Runs tests on Paper 1.21.11.', environments + 'paper-1.21.11.json', java21, -1)
+createTestTask('luskTest_26_1_2', 'Runs tests on Paper 26.1.2.', environments + 'paper-26.1.2.json', java25, -1)
 
 tasks.register("luskTestOlderSkriptVersions") {
     description = 'Runs tests on older skript versions.'
