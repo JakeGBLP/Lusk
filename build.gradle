@@ -147,11 +147,10 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 }
 
 String environments = 'src/test/environments/'
-createTestTask('luskTest_1_18_2_skript_2_6_4', 'Runs tests on Paper 1.18.2 and with Skript 2.6.4.', environments + 'paper-1.18.2_skript-2.6.4.json', java17, -1)
-createTestTask('luskTest_1_18_2_skript_2_7_3', 'Runs tests on Paper 1.18.2 and with Skript 2.7.3.', environments + 'paper-1.18.2_skript-2.7.3.json', java17, -1)
-createTestTask('luskTest_1_18_2_skript_2_8_7', 'Runs tests on Paper 1.18.2 and with Skript 2.8.7.', environments + 'paper-1.18.2_skript-2.8.7.json', java17, -1)
+createTestTask('luskTest_1_19_4_skript_2_6_4', 'Runs tests on Paper 1.19.4 and with Skript 2.6.4.', environments + 'paper-1.19.4_skript-2.6.4.json', java17, -1)
+createTestTask('luskTest_1_19_4_skript_2_7_3', 'Runs tests on Paper 1.19.4 and with Skript 2.7.3.', environments + 'paper-1.19.4_skript-2.7.3.json', java17, -1)
+createTestTask('luskTest_1_19_4_skript_2_8_7', 'Runs tests on Paper 1.19.4 and with Skript 2.8.7.', environments + 'paper-1.19.4_skript-2.8.7.json', java17, -1)
 
-createTestTask('luskTest_1_18_2', 'Runs tests on Paper 1.18.2.', environments + 'paper-1.18.2.json', java17, -1)
 createTestTask('luskTest_1_19_4', 'Runs tests on Paper 1.19.4.', environments + 'paper-1.19.4.json', java17, -1)
 createTestTask('luskTest_1_20_6', 'Runs tests on Paper 1.20.6.', environments + 'paper-1.20.6.json', java21, -1)
 createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 'paper-1.21.4.json', java21, -1)
@@ -164,10 +163,10 @@ createTestTask('luskTest_1_21_11', 'Runs tests on Paper 1.21.11.', environments 
 
 tasks.register("luskTestOlderSkriptVersions") {
     description = 'Runs tests on older skript versions.'
-    dependsOn luskTest_1_18_2_skript_2_6_4, luskTest_1_18_2_skript_2_7_3, luskTest_1_18_2_skript_2_8_7
+    dependsOn luskTest_1_19_4_skript_2_6_4, luskTest_1_19_4_skript_2_7_3, luskTest_1_19_4_skript_2_8_7
 }
 
 tasks.register('luskTest') {
     description = 'Runs tests on all environments.'
-    dependsOn luskTestOlderSkriptVersions, luskTest_1_18_2, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
+    dependsOn luskTestOlderSkriptVersions, luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
 }
