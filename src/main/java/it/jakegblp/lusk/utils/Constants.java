@@ -11,6 +11,7 @@ import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.Location;
 import org.bukkit.Registry;
@@ -45,13 +46,11 @@ public class Constants {
 
     public static final Semver
             VERSION_SERVER = parseVersion(String.valueOf(Skript.getMinecraftVersion())),
-            VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.16"),
-            VERSION_SERVER_NEWEST_SUPPORTED = parseVersion("1.21.4"),
+            VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.18.2"),
             VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
-            VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6"),
-            VERSION_SKRIPT_NEWEST_SUPPORTED = parseVersion("2.10");
+            VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.6");
 
-    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT);
+    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT, Lusk.getInstance().getAddonInstance());
     //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
 
     public static final List<InventoryAction>

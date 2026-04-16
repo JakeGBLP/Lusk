@@ -76,9 +76,6 @@ public class UpdateChecker implements Listener {
         consoleLog("&oChecking for update...");
         getUpdateVersion(false).thenApply(version -> {
             consoleLog("&cLusk is not up to date!");
-            if (Constants.VERSION_SERVER.isGreaterThan(Constants.VERSION_SERVER_NEWEST_SUPPORTED)) {
-                consoleLog("&cYou're running Minecraft {0} which is not supported by Lusk {1}, please update.", Constants.VERSION_SERVER, this.pluginVersion);
-            }
             consoleLog("&a&lUpdate Available:");
             consoleLog(" &l»&c   {0} &7→&a {1}",this.pluginVersion,version);
             consoleLog(" &l»&7 Download at: https://github.com/JakeGBLP/Lusk/releases");

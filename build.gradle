@@ -47,6 +47,7 @@ dependencies {
     implementation project(":skript_v2_8_7")
     implementation project(":skript_v2_9_5")
     implementation project(":skript_v2_10_0")
+    implementation project(":skript_v2_15_0")
 
     compileOnly 'org.projectlombok:lombok:1.18.44'
     annotationProcessor 'org.projectlombok:lombok:1.18.44'

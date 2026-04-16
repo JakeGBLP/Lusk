@@ -5,4 +5,5 @@ include ':skript_v2_7_3'
 include ':skript_v2_8_7'
 include ':skript_v2_9_5'
 include ':skript_v2_10_0'
+include ':skript_v2_15_0'
 

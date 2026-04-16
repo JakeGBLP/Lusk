@@ -3,14 +3,16 @@ package it.jakegblp.lusk.utils;
 import com.vdurmont.semver4j.Semver;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import it.jakegblp.lusk.version.skript.v2_10_0.Skript_2_10_0;
+import it.jakegblp.lusk.version.skript.v2_15_0.Skript_2_15_0;
 import it.jakegblp.lusk.version.skript.v2_6_4.Skript_2_6_4;
 import it.jakegblp.lusk.version.skript.v2_7_3.Skript_2_7_3;
 import it.jakegblp.lusk.version.skript.v2_8_7.Skript_2_8_7;
 import it.jakegblp.lusk.version.skript.v2_9_5.Skript_2_9_5;
+import org.skriptlang.skript.addon.SkriptAddon;
 
 public class VersionResolver {
 
-    public static SkriptAdapter getSkriptAdapter(Semver version) {
+    public static SkriptAdapter getSkriptAdapter(Semver version, SkriptAddon skriptAddon) {
         int major = version.getMajor(),
             minor = version.getMinor(),
             patch = version.getPatch();
@@ -20,7 +22,8 @@ public class VersionResolver {
                 case 7 -> new Skript_2_7_3();
                 case 8 -> new Skript_2_8_7();
                 case 9 -> new Skript_2_9_5();
-                default -> new Skript_2_10_0();
+                case 10, 11, 12, 13, 14 -> new Skript_2_10_0();
+                default -> new Skript_2_15_0(skriptAddon);
             };
             default -> null;
         };
