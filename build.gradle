@@ -17,7 +17,7 @@ def java21 = 21
 def java25 = 25
 
 def oldestJava = java17
-def latestJava = java25
+def latestJava = java21
 
 
 repositories {
@@ -61,7 +61,7 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(java21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(latestJava))
 }
 
 tasks.withType(JavaCompile).configureEach {
