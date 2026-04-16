@@ -12,6 +12,7 @@ import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent;
 import io.papermc.paper.event.player.PlayerBedFailEnterEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import it.jakegblp.lusk.api.events.PlayerInventorySlotDropEvent;
+import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -40,11 +41,13 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.0");
         }
-        Skript.registerEvent("Player - on Velocity Change", SimpleEvent.class, PlayerVelocityEvent.class, "player velocity [chang(e[d]|ing)]")
-                .description("Called when the velocity of a player changes due to outside circumstances.")
-                .examples("on player velocity change:")
-                .since("1.3");
-        registerEventValue(PlayerVelocityEvent.class, Vector.class, PlayerVelocityEvent::getVelocity, EventValues.TIME_NOW);
+        if (Skript.classExists("org.bukkit.event.player.PlayerVelocityEvent")) {
+            Skript.registerEvent("Player - on Velocity Change", SimpleEvent.class, PlayerVelocityEvent.class, "player velocity [chang(e[d]|ing)]")
+                    .description("Called when the velocity of a player changes due to outside circumstances.")
+                    .examples("on player velocity change:")
+                    .since("1.3");
+            registerEventValue(PlayerVelocityEvent.class, Vector.class, PlayerVelocityEvent::getVelocity, EventValues.TIME_NOW);
+        }
         if (Skript.classExists("io.papermc.paper.event.player.PlayerBedFailEnterEvent")) {
             Skript.registerEvent("Player - on Sleep Fail", SimpleEvent.class, PlayerBedFailEnterEvent.class, "(sleep|bed [enter]) [attempt] fail", "fail[ed] to (sleep|enter [the] bed)")
                     .description("Called when a player attempts to sleep but fails..")
@@ -95,7 +98,7 @@ public class EvtPlayerEvents {
                     .examples("")
                     .since("1.0.4");
         }
-        if (Skript.classExists("org.bukkit.event.player.PlayerHarvestBlockEvent")) {
+        if (Skript.classExists("org.bukkit.event.player.PlayerHarvestBlockEvent") && !Constants.VERSION_SKRIPT.isGreaterThanOrEqualTo("2.12.0")) {
             Skript.registerEvent("Player - on Block Harvest", SimpleEvent.class, PlayerHarvestBlockEvent.class, "[block] harvest")
                     .description("""
                             This event is called whenever a player harvests a block.
