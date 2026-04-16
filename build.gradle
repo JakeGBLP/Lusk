@@ -49,11 +49,11 @@ dependencies {
     implementation project(":skript_v2_9_5")
     implementation project(":skript_v2_10_0")
 
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.projectlombok:lombok:1.18.44'
+    annotationProcessor 'org.projectlombok:lombok:1.18.44'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.36'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+    testCompileOnly 'org.projectlombok:lombok:1.18.44'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.44'
 
     testRuntimeOnly 'com.google.code.gson:gson:2.11.0'
     testRuntimeOnly 'com.google.guava:guava:32.1.2-jre'
