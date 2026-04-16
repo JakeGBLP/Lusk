@@ -29,6 +29,7 @@ repositories {
     maven { url 'https://repo.skriptlang.org/releases' }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://jitpack.io/" }
+    maven { url "https://mvn.wesjd.net/" }
 }
 
 dependencies {
