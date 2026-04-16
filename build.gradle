@@ -61,7 +61,7 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(latestJava))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(java21))
 }
 
 tasks.withType(JavaCompile).configureEach {
