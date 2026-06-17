@@ -1,5 +1,7 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
+import it.jakegblp.lusk.nms.core.serialization.BufferCodec;
+import it.jakegblp.lusk.nms.core.serialization.TypeKey;
 import it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Range;
@@ -13,11 +15,17 @@ public interface MetadataKeyReference<E extends Entity, T> {
 
     EntityDataSerializer<T> serializer();
 
-    default Class<T> valueClass() {
-        return serializer().codec().getFromClass();
+    default BufferCodec<T> codec() {
+        return serializer().codec();
     }
 
-    Class<T> rawValueClass();
+    default TypeKey<T> codecKey() {
+        return codec().key();
+    }
+
+    default Class<T> type() {
+        return codecKey().type();
+    }
 
     default boolean matches(MetadataKeyReference<? extends Entity, ?> other) {
         return other.id() == id() && serializer().equals(other.serializer());
@@ -30,7 +38,7 @@ public interface MetadataKeyReference<E extends Entity, T> {
     }
 
     default boolean canBeSetTo(Object object) {
-        return valueClass().isInstance(object);
+        return type().isInstance(object);
     }
 
     default MetadataItem<E, T> asItem(T value) {
@@ -38,6 +46,6 @@ public interface MetadataKeyReference<E extends Entity, T> {
     }
 
     default MetadataKey<E, T> asKey() {
-        return new MetadataKey<>(id(), entityClass(), serializer(), rawValueClass());
+        return new MetadataKey<>(id(), entityClass(), serializer());
     }
 }

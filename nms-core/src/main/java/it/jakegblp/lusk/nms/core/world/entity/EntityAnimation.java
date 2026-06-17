@@ -2,6 +2,7 @@ package it.jakegblp.lusk.nms.core.world.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @AllArgsConstructor
@@ -14,11 +15,11 @@ public enum EntityAnimation {
 
     private final int actionId;
 
+    @Nullable
     public static EntityAnimation fromId(int id) {
         for (EntityAnimation animation : values())
-            if (animation.actionId == id) {
+            if (animation.actionId == id)
                 return animation;
-            }
         return null;
     }
 }

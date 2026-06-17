@@ -3,7 +3,7 @@ package it.jakegblp.lusk.common;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-// todo: make hyper-optimized version checking
+// make hyper-optimized version checking
 public record Version(int major, int minor, int patch) implements Comparable<Version>, Copyable<Version> {
     public Version {
         if (major < 0 || minor < 0 || patch < 0)
@@ -18,17 +18,17 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
         this(major, 0);
     }
 
-    @Contract(value = "_, _, _ -> new", pure = true)
+    @Contract(value = "_, _, _ -> new")
     public static @NotNull Version of(int major, int minor, int patch) {
         return new Version(major, minor, patch);
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
+    @Contract(value = "_, _ -> new")
     public static @NotNull Version of(int major, int minor) {
         return new Version(major, minor);
     }
 
-    @Contract(value = "_ -> new", pure = true)
+    @Contract(value = "_ -> new")
     public static @NotNull Version of(int major) {
         return new Version(major);
     }

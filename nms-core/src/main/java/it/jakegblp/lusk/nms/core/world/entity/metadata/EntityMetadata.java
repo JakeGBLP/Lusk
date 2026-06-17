@@ -1,27 +1,67 @@
 
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
+import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.Copyable;
+import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.nms.core.util.NullabilityUtils;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * See: <a href="https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Entity">Minecraft Wiki – Entity Metadata</a>
  */
 @EqualsAndHashCode
+@ToString
 public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetadata> {
 
+    @Getter
+    private boolean modified;
+
     private final List<MetadataItem<? extends Entity, ?>> items;
+
+    public static <A, B, C, D, E> EntityMetadata of(
+            MetadataKeyReference<? extends Entity, A> keyA, A valueA,
+            MetadataKeyReference<? extends Entity, B> keyB, B valueB,
+            MetadataKeyReference<? extends Entity, C> keyC, C valueC,
+            MetadataKeyReference<? extends Entity, D> keyD, D valueD,
+            MetadataKeyReference<? extends Entity, E> keyE, E valueE
+    ) {
+        return of(Map.of(keyA, valueA, keyB, valueB, keyC, valueC, keyD, valueD, keyE, valueE));
+    }
+
+    public static <A, B, C, D> EntityMetadata of(
+            MetadataKeyReference<? extends Entity, A> keyA, A valueA,
+            MetadataKeyReference<? extends Entity, B> keyB, B valueB,
+            MetadataKeyReference<? extends Entity, C> keyC, C valueC,
+            MetadataKeyReference<? extends Entity, D> keyD, D valueD
+    ) {
+        return of(Map.of(keyA, valueA, keyB, valueB, keyC, valueC, keyD, valueD));
+    }
+
+    public static <A, B, C> EntityMetadata of(
+            MetadataKeyReference<? extends Entity, A> keyA, A valueA,
+            MetadataKeyReference<? extends Entity, B> keyB, B valueB,
+            MetadataKeyReference<? extends Entity, C> keyC, C valueC
+    ) {
+        return of(Map.of(keyA, valueA, keyB, valueB, keyC, valueC));
+    }
+
+    public static <A, B> EntityMetadata of(MetadataKeyReference<? extends Entity, A> keyA, A valueA, MetadataKeyReference<? extends Entity, B> keyB, B valueB) {
+        return of(Map.of(keyA, valueA, keyB, valueB));
+    }
+
+    public static <A> EntityMetadata of(MetadataKeyReference<? extends Entity, A> keyA, A valueA) {
+        return of(Map.of(keyA, valueA));
+    }
 
     @SuppressWarnings("unchecked")
     public static EntityMetadata of(Map<? extends MetadataKeyReference<? extends Entity, ?>, ?> metadata) {
@@ -33,15 +73,29 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
     @SuppressWarnings("unchecked")
     public static EntityMetadata of(List<? extends MetadataItem<? extends Entity, ?>> items) {
         var entityMetadata = new EntityMetadata();
-        items.forEach(item -> {
+        for (MetadataItem<? extends Entity, ?> item : items) {
+            if (item == null) continue;
             MetadataItem<Entity, Object> copy = (MetadataItem<Entity, Object>) NullabilityUtils.copyIfNotNull(item);
+            if (copy == null) {
+                Instances.LUSK.getLogger().severe("Failed to copy metadata item " + item);
+                continue;
+            }
             entityMetadata.set(copy, copy.value());
-        });
+        }
         return entityMetadata;
+    }
+
+    @SafeVarargs
+    public static EntityMetadata of(MetadataItem<? extends Entity, ?>... items) {
+        return of(Arrays.asList(items));
     }
 
     public EntityMetadata() {
         this.items = new ArrayList<>();
+    }
+
+    public void markAsModified() {
+        this.modified = true;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -49,7 +103,7 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             @NotNull MetadataKeyReference<E, T> key,
             Object value
     ) {
-        System.out.println("'setUnsafe' with key: " + key + " and value: " + value);
+        //System.out.println("'setUnsafe' with key: " + key + " and value: " + value);
         if (key instanceof MetadataBitFlagKey bitFlagKey)
             return setBitFlag(bitFlagKey, value);
         if (key.canBeSetTo(value))
@@ -68,7 +122,7 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             @NotNull MetadataBitFlagKey<E, B, F, T> key,
             T value
     ) {
-        System.out.println("'setBitFlag' with key: " + key + " and value: " + value);
+        //System.out.println("'setBitFlag' with key: " + key + " and value: " + value);
         var parentKey = key.getParentKey();
         F byteFlag = null;
 
@@ -76,13 +130,12 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             var item = get(parentKey);
             Object existing = item.value();
 
-            if (existing instanceof FlagByte<?, ?, ?> fb) {
+            if (existing instanceof FlagByte<?, ?, ?> fb)
                 byteFlag = (F) fb;
-            }
         }
 
         if (byteFlag == null)
-            byteFlag = (F) FlagByte.dynamic(parentKey.rawValueClass());
+            byteFlag = (F) FlagByte.dynamic(parentKey.frontEndClass());
 
         byteFlag.setUnsafe(key.getBitFlag(), value);
         return setInternal(parentKey.id(), parentKey.asItem(byteFlag));
@@ -109,7 +162,7 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             @NotNull MetadataKeyReference<E, T> key,
             T value
     ) {
-        System.out.println("'set' with key reference: " + key + " and value: " + value);
+        //System.out.println("'set' with key reference: " + key + " and value: " + value);
         assert key.canBeSetTo(value);
         if (key instanceof MetadataBitFlagKey e)
             return setBitFlag(e, value);
@@ -121,13 +174,13 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             @Range(from = 0, to = 255) int id,
             @NotNull MetadataItem<E, T> item
     ) {
-        System.out.println("'setInternal' with id: " + id + " and item: " + item);
+        markAsModified();
+        //System.out.println("'setInternal' with id: " + id + " and item: " + item);
         while (items.size() <= id)
             items.add(null);
         items.set(id, item);
         return true;
     }
-
 
     public void remove(@Range(from = 0, to = 255) int id) {
         int lastIndex = items.size() - 1;
@@ -149,10 +202,14 @@ public class EntityMetadata implements EntityMetadataView, Copyable<EntityMetada
             remove(id);
     }
 
-
     @Override
     public List<MetadataItem<? extends Entity, ?>> items() {
         return items;
+    }
+
+    @Override
+    public List<MetadataKey<? extends Entity, ?>> keys() {
+        return CommonUtils.map(items, MetadataKeyReference::asKey);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

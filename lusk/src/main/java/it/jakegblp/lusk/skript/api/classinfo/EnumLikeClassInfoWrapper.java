@@ -3,6 +3,7 @@ package it.jakegblp.lusk.skript.api.classinfo;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.lang.ParseContext;
 import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import it.jakegblp.lusk.skript.api.parser.SimpleParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,6 +12,7 @@ import org.skriptlang.skript.lang.comparator.Relation;
 
 import java.lang.reflect.Array;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,10 +21,36 @@ import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorE
 /**
  * @author Peter Güttinger, ShaneBeee, JakeGBLP
  */
-public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, T> parseMap) {
+public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, @NotNull T> parseMap, @Nullable String prefix, @Nullable String suffix) {
 
     public EnumLikeClassInfoWrapper {
+        BiMap<String, T> newMap = HashBiMap.create(parseMap.size());
+        for (var entry : parseMap.entrySet()) {
+            String key = entry.getKey();
+            T value = entry.getValue();
+            StringBuilder newKey = new StringBuilder();
+            if (prefix != null)
+                newKey.append(prefix).append('_');
+            newKey.append(key.toLowerCase(Locale.ROOT));
+            if (suffix != null)
+                newKey.append('_').append(suffix);
+
+            newMap.put(newKey.toString().replace(" ", "_"), value);
+        }
+        parseMap = newMap;
         registerComparator(listedValueClass);
+    }
+
+    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull Map<@NotNull String, @NotNull T> parseMap, @Nullable String prefix, @Nullable String suffix) {
+        this(listedValueClass, HashBiMap.create(parseMap), prefix, suffix);
+    }
+
+    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, @NotNull T> parseMap) {
+        this(listedValueClass, parseMap, null, null);
+    }
+
+    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull Map<@NotNull String, @NotNull T> parseMap) {
+        this(listedValueClass, HashBiMap.create(parseMap), null, null);
     }
 
     @Nullable
@@ -41,7 +69,7 @@ public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @N
 
     @SuppressWarnings("unused")
     public String toString(final T t, final int flags) {
-        return parseMap.inverse().get(t).toLowerCase(Locale.ROOT).replace("_", " ");
+        return parseMap.inverse().getOrDefault(t, t.toString()).toLowerCase(Locale.ROOT).replace("_", " ");
     }
 
     private String getAllNames() {

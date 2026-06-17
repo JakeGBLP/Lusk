@@ -1,21 +1,26 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
-import it.jakegblp.lusk.nms.core.world.player.TeamParameters;
+import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.nms.core.event.client.*;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.entity.teams.TeamParameters;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class TeamPacket implements BufferSerializableClientboundPacket {
+public class TeamPacket implements BufferSerializableClientboundPacket<TeamPacketEvent> {
 
     @Contract("_, _, _ -> new")
     public static @NotNull TeamPacket create(String name, TeamParameters params, Set<String> members) {
@@ -42,9 +47,9 @@ public class TeamPacket implements BufferSerializableClientboundPacket {
         return new TeamPacket(4, name, null, members);
     }
 
-    @Override
-    public TeamPacket copy() {
-        return new TeamPacket(method, name, parameters.copy(), new HashSet<>(members));
+    @Contract("_ -> new")
+    public static Set<String> getMemberFromEntities(Collection<Entity> entities) {
+        return CommonUtils.mapToSet(entities, entity -> entity instanceof Player player ? player.getName() : entity.getUniqueId().toString());
     }
 
     public enum Type {
@@ -90,5 +95,21 @@ public class TeamPacket implements BufferSerializableClientboundPacket {
         method = Type.fromId(buffer.readByte());
         if (hasMembers()) members = buffer.readSet(SimpleByteBuf::readString);
         if (hasParameters()) parameters = new TeamParameters(buffer);
+    }
+
+    @Override
+    public TeamPacketEvent createEvent(Player player, boolean async) {
+        return switch (method) {
+            case CREATE -> new TeamCreatePacketEvent(this, player, async);
+            case DELETE -> new TeamDeletePacketEvent(this, player, async);
+            case UPDATE_INFO -> new TeamUpdatePacketEvent(this, player, async);
+            case ADD -> new TeamMembersAddPacketEvent(this, player, async);
+            case REMOVE -> new TeamMembersRemovePacketEvent(this, player, async);
+        };
+    }
+
+    @Override
+    public TeamPacket copy() {
+        return new TeamPacket(method, name, parameters.copy(), new HashSet<>(members));
     }
 }

@@ -57,11 +57,9 @@ public class NMSApi {
         boolean async = (executionMode != null && executionMode.isAsync()) || ExecutionMode.getAsyncablePrioritizedMode(List.of(packets)).isAsync();
         CompletableFuture<Void> future = processPacket(packets, async)
                 .thenRun(() -> {
-                    for (Player player : players) {
-                        for (ClientboundPacket packet : packets) {
-                            sendPacketInternal(player, packet);
-                        }
-                    }
+                    for (Player player : players)
+                        for (ClientboundPacket packet : packets)
+                            sendPacketInternal(player, packet.copy());
                 }).exceptionally(t -> {
                     t.printStackTrace();
                     return null;

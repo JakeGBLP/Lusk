@@ -1,12 +1,14 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.SoundAtLocationPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
@@ -15,13 +17,22 @@ import org.jspecify.annotations.NullMarked;
 @Setter
 @AllArgsConstructor
 @NullMarked
-public class SoundPacket implements BufferSerializableClientboundPacket {
+public class SoundPacket implements BufferSerializableClientboundPacket<SoundAtLocationPacketEvent> {
 
     protected Sound sound;
     protected SoundCategory soundCategory;
     protected int x,y,z;
     protected float volume, pitch;
     protected long seed;
+
+    public SoundPacket(Sound sound, SoundCategory soundCategory, Vector position, float volume, float pitch, long seed) {
+        this.sound = sound;
+        this.soundCategory = soundCategory;
+        setPosition(position);
+        this.volume = volume;
+        this.pitch = pitch;
+        this.seed = seed;
+    }
 
     public SoundPacket(SimpleByteBuf buffer) {
         read(buffer);
@@ -39,7 +50,7 @@ public class SoundPacket implements BufferSerializableClientboundPacket {
         this.z = vector.getBlockZ();
     }
 
-    @Contract(pure = true)
+    @Contract("-> new")
     public Vector getPosition() {
         return new Vector(x,y,z);
     }
@@ -66,6 +77,11 @@ public class SoundPacket implements BufferSerializableClientboundPacket {
         this.volume = buffer.readFloat();
         this.pitch = buffer.readFloat();
         this.seed = buffer.readLong();
+    }
+
+    @Override
+    public SoundAtLocationPacketEvent createEvent(Player player, boolean async) {
+        return new SoundAtLocationPacketEvent(this, player, async);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
+import it.jakegblp.lusk.nms.core.AbstractNMS;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.BitFlag;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import lombok.Getter;
 import lombok.ToString;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @ToString
@@ -19,15 +22,18 @@ public class MetadataBitFlagKey<
     private final MetadataKey<E, F> parentKey;
     private final B bitFlag;
 
-    public MetadataBitFlagKey(MetadataKey<E, F> parentKey, B bitFlag) {
-        super(parentKey.id(), parentKey.entityClass(), (Class<T>) Boolean.class); // todo: check if this is actually needed
+    public MetadataBitFlagKey(MetadataKey<E, F> parentKey, B bitFlag, AbstractNMS nms) {
+        super(parentKey.id(), parentKey.entityClass(), (Class<T>) Boolean.class, nms); // todo: check if this is actually needed, same thing below
         this.parentKey = parentKey;
         this.bitFlag = bitFlag;
     }
 
+    public MetadataBitFlagKey(MetadataKey<E, F> parentKey, B bitFlag) {
+        this(parentKey, bitFlag, NMS);
+    }
+
     @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Class<T> valueClass() {
+    public @NotNull Class<T> frontEndClass() {
         return (Class<T>) bitFlag.getValueClass();
     }
 

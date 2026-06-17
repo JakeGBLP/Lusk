@@ -1,10 +1,12 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.SimpleList;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.RemoveEntitiesPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.*;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -13,13 +15,12 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket, SimpleList<Integer> {
+public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket<RemoveEntitiesPacketEvent>, SimpleList<Integer> {
     protected IntList entityIds;
 
     public RemoveEntitiesPacket(List<Integer> entityIds) {
         this(new IntArrayList(entityIds));
     }
-
 
     public RemoveEntitiesPacket(int... entityIds) {
         this(new IntArrayList(entityIds));
@@ -66,13 +67,6 @@ public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket
     }
 
     @Override
-    public RemoveEntitiesPacket clone() throws CloneNotSupportedException {
-        var clone = (RemoveEntitiesPacket) super.clone();
-        clone.set(this.entityIds);
-        return clone;
-    }
-
-    @Override
     public void write(SimpleByteBuf buffer) {
         buffer.writeIntList(this.entityIds);
     }
@@ -80,6 +74,11 @@ public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket
     @Override
     public void read(SimpleByteBuf buffer) {
         this.entityIds = buffer.readIntList();
+    }
+
+    @Override
+    public RemoveEntitiesPacketEvent createEvent(Player player, boolean async) {
+        return new RemoveEntitiesPacketEvent(this, player, async);
     }
 
     @Override

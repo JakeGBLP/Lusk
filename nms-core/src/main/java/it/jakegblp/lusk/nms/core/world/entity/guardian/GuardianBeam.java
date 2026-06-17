@@ -10,43 +10,34 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
 import it.jakegblp.lusk.nms.core.util.Displayable;
 import it.jakegblp.lusk.nms.core.util.LazyProducer;
-import it.jakegblp.lusk.nms.core.util.Prototype;
 import it.jakegblp.lusk.nms.core.world.YawPitch;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeys;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Map;
 import java.util.UUID;
+
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
+@NullMarked
 public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>, LazyProducer {
 
-    private static final Prototype<EntityMetadata, Integer, EntityMetadata> BASE_GUARDIAN_DATA = Prototype.unary(
-            EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true, MetadataKeys.GuardianKeys.IS_RETRACTING_SPIKES, true)),
-            entityMetadata -> entityMetadata,// todo: clone
-            (entityMetadata, id) -> entityMetadata.with(MetadataKeys.GuardianKeys.TARGET_ENTITY_ID, id));
-
-    // todo: this one shouldn't use unary
-    private static final Prototype<EntityMetadata, Integer, EntityMetadataPacket> BASE_BAT_PACKET = Prototype.of(
-            EntityMetadata.of(Map.of(MetadataKeys.EntityKeys.INVISIBLE, true)),
-            entityMetadataPacket -> entityMetadataPacket,// todo: clone
-            ((entityMetadata, integer) -> new EntityMetadataPacket(integer, entityMetadata)));
-
-    protected @NotNull Vector start, end;
+    protected Vector start, end;
     protected int id, targetId;
-    protected @NotNull UUID uuid, targetUuid;
-    protected @NotNull ClientboundPacket[] displayPackets, removePackets;
+    protected UUID uuid, targetUuid;
+    @SuppressWarnings("NotNullFieldNotInitialized")
+    protected ClientboundPacket[] displayPackets;
+    @SuppressWarnings("NotNullFieldNotInitialized")
+    protected ClientboundPacket[] removePackets;
     protected boolean dirty = true;
 
-    @NullMarked
     public GuardianBeam(Vector start, Vector end, int id, int targetId, UUID uuid, UUID targetUuid, boolean persistent) {
         super(persistent);
         this.start = start.clone();
@@ -76,26 +67,22 @@ public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>,
         NMSApi.sendPackets(player, getRemovePackets(), ExecutionMode.ASYNCHRONOUS);
     }
 
-    /**
-     * @return a clone
-     */
-    public @NotNull Vector getStart() {
+    @Contract("-> new")
+    public Vector getStart() {
         return start.clone();
     }
 
-    /**
-     * @return a clone
-     */
-    public @NotNull Vector getEnd() {
+    @Contract("-> new")
+    public Vector getEnd() {
         return end.clone();
     }
 
-    public void setStart(@NotNull Vector start) {
+    public void setStart(Vector start) {
         this.start = start.clone();
         markDirty();
     }
 
-    public void setEnd(@NotNull Vector end) {
+    public void setEnd(Vector end) {
         this.end = end.clone();
         markDirty();
     }
@@ -105,12 +92,12 @@ public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>,
         markDirty();
     }
 
-    public void setUuid(@NotNull UUID uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
         markDirty();
     }
 
-    public void setTargetUuid(@NotNull UUID targetUuid) {
+    public void setTargetUuid(UUID targetUuid) {
         this.targetUuid = targetUuid;
         markDirty();
     }
@@ -144,13 +131,14 @@ public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>,
         displayPackets = new ClientboundPacket[] {
                 new AddEntityPacket(id, uuid, start, yawPitch.getYaw(), yawPitch.getPitch(), (float) yawPitch.yaw(), new Vector(), EntityType.GUARDIAN, 0),
                 new AddEntityPacket(targetId, targetUuid, end, 0, new Vector(), EntityType.BAT, 0),
-                new EntityMetadataPacket(id, BASE_GUARDIAN_DATA.apply(targetId)),
-                BASE_BAT_PACKET.apply(targetId)
+                new EntityMetadataPacket(id, EntityMetadata.of(NMS.getMetadataKeyRegistry().ENTITY.INVISIBLE, true, NMS.getMetadataKeyRegistry().GUARDIAN.IS_RETRACTING_SPIKES, true)),
+                new EntityMetadataPacket(targetId, EntityMetadata.of(NMS.getMetadataKeyRegistry().ENTITY.INVISIBLE, true))
         };
         removePackets = new ClientboundPacket[] {new RemoveEntitiesPacket(id, targetId)};
     }
 
     @Override
+    @Contract("-> new")
     public GuardianBeam copy() {
         return new GuardianBeam(start.clone(), end.clone(), id, targetId, uuid, targetUuid, isPersistent());
     }

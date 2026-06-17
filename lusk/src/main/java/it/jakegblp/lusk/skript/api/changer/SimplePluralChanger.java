@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.skript.api.changer;
 
+import it.jakegblp.lusk.common.SimpleList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +20,16 @@ public interface SimplePluralChanger<C, V> extends GenericSimpleChanger<C, V> {
     default void add(C change, @NotNull V[] delta) {}
     default void remove(C change, @NotNull V[] delta) {}
     default void removeAll(C change, @NotNull V[] delta) {}
+
+    static <C extends SimpleList<V>, V> SimplePluralChanger<C, V> simpleListChanger(Class<C> type, Class<V> valueClass, Class<V[]> valueArrayClass) {
+        return SimplePluralChanger.builder(type, valueClass, valueArrayClass)
+                .set(SimpleList::set)
+                .add(SimpleList::add)
+                .remove(SimpleList::remove)
+                .delete(SimpleList::clear)
+                .removeAll(SimpleList::remove)
+                .build();
+    }
 
     static <C, V> Builder<C, V> builder(Class<C> type, Class<V> valueClass, Class<V[]> valueArrayClass) {
         return new Builder<C, V>()
@@ -41,8 +52,6 @@ public interface SimplePluralChanger<C, V> extends GenericSimpleChanger<C, V> {
             this.valueArrayClass = valueArrayClass;
             return this;
         }
-
-        // region --- Change Handlers ---
 
         public Builder<C, V> add(BiConsumer<C, V[]> handler) {
             return register(ChangeMode.ADD, handler);

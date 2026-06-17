@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
+// I have no clue what most of this does, will need to ask poa
 public final class ConsoleLogInjector {
 
     private static volatile boolean injected = false;
@@ -192,9 +193,7 @@ public final class ConsoleLogInjector {
 
     public static final class AnsiStripper {
         private static final Pattern ANSI = Pattern.compile(
-                "(?:\\u001B\\[[0-9;?]*[ -/]*[@-~])"
-                        + "|(?:\\u001B[@-Z\\\\-_])"
-                        + "|(?:\\u009B[0-9;?]*[ -/]*[@-~])"
+                "(?:\\u001B\\[[0-9;?]*[ -/]*[@-~])|(?:\\u001B[@-Z\\\\-_])|(?:\\u009B[0-9;?]*[ -/]*[@-~])"
         );
 
         private AnsiStripper() {}

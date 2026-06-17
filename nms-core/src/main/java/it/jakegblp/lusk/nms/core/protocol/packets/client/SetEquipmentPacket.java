@@ -1,41 +1,35 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.SetEquipmentPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @Setter
-public class SetEquipmentPacket implements ClientboundPacketWithId {
+public class SetEquipmentPacket implements ClientboundPacketWithEntityId<SetEquipmentPacketEvent> {
 
-    protected int id;
-    protected boolean sanitized;
+    protected int entityId;
     protected Map<EquipmentSlot, ItemStack> equipment;
 
-    public SetEquipmentPacket(int entityId, boolean sanitized, Map<EquipmentSlot, ItemStack> equipment) {
-        this.id = entityId;
-        this.sanitized = sanitized;
-        this.equipment = equipment;
+    public SetEquipmentPacket(SimpleByteBuf buf) {
+        read(buf);
     }
 
-    public SetEquipmentPacket(int id, boolean sanitized) {
-        this(id, sanitized, Map.of());
-    }
-
-    public SetEquipmentPacket(int id, Map<EquipmentSlot, ItemStack> equipment) {
-        this(id, false, equipment);
+    public SetEquipmentPacket(int entityId, Map<EquipmentSlot, ItemStack> equipment) {
+        this.entityId = entityId;
+        this.equipment = new LinkedHashMap<>(equipment);
     }
 
     public SetEquipmentPacket(int id) {
-        this(id, false, Map.of());
+        this(id, new LinkedHashMap<>());
     }
 
     public void set(EquipmentSlot slot, ItemStack item) {
@@ -56,21 +50,47 @@ public class SetEquipmentPacket implements ClientboundPacketWithId {
 
     @Override
     public void write(SimpleByteBuf buffer) {
-        NMS.write(this, buffer);
+        buffer.writeVarInt(entityId);
+        int index = 0;
+        int size = equipment.size();
+        for (Map.Entry<EquipmentSlot, ItemStack> entry : equipment.entrySet()) {
+            EquipmentSlot slot = entry.getKey();
+            ItemStack item = entry.getValue();
+
+            boolean hasNext = index++ != size - 1;
+
+            int slotByte = slot.ordinal();
+            if (hasNext)
+                slotByte |= 0x80;
+            buffer.writeByte(slotByte);
+            buffer.writeOptionalItemStack(item);
+        }
     }
 
     @Override
     public void read(SimpleByteBuf buffer) {
-        var read = NMS.read(getClass(), buffer);
-        this.id = read.getId();
-        this.sanitized = read.isSanitized();
-        this.equipment = read.getEquipment();
+        entityId = buffer.readVarInt();
+        equipment = new LinkedHashMap<>();
+        int slotByte;
+        do {
+            slotByte = buffer.readUnsignedByte();
+
+            EquipmentSlot slot = EquipmentSlot.values()[slotByte & 0x7F];
+            ItemStack item = buffer.readItemStack();
+
+            equipment.put(slot, item);
+        } while ((slotByte & 0x80) != 0);
+    }
+
+    @Override
+    public SetEquipmentPacketEvent createEvent(Player player, boolean async) {
+        return new SetEquipmentPacketEvent(this, player, async);
     }
 
     @Override
     public SetEquipmentPacket copy() {
-        Map<EquipmentSlot, ItemStack> map = new HashMap<>(this.equipment.size());
+        Map<EquipmentSlot, ItemStack> map = new LinkedHashMap<>(this.equipment.size());
         equipment.forEach((key, value) -> map.put(key, value.clone()));
-        return new SetEquipmentPacket(id, sanitized, map);
+        return new SetEquipmentPacket(entityId, map);
     }
 }

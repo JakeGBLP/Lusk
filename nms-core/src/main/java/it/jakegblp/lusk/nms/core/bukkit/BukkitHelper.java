@@ -24,7 +24,7 @@ public final class BukkitHelper {
         NMS.playInternalEntityEffect(entity, internalEntityEffect);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
+    @SuppressWarnings("UnstableApiUsage") // neither?
     public static @Nullable Either<EntityEffect, InternalEntityEffect> getEntityEffectById(byte id) {
         for (InternalEntityEffect value : InternalEntityEffect.values()) {
             if (value.getData() == id) {

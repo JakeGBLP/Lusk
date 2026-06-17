@@ -1,5 +1,7 @@
 package it.jakegblp.lusk.common.reflection;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,7 +21,7 @@ public record SimpleField<F, T>(Field field) {
     }
 
     @SuppressWarnings("unchecked")
-    public T get(F instance) {
+    public T get(@Nullable F instance) {
         try {
             return (T) field.get(instance);
         } catch (Exception e) {
@@ -33,5 +35,13 @@ public record SimpleField<F, T>(Field field) {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Class<T> getType() {
+        return (Class<T>) field.getType();
+    }
+
+    public String getName() {
+        return field.getName();
     }
 }

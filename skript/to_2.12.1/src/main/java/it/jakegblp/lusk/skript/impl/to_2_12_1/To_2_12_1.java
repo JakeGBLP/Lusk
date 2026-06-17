@@ -2,14 +2,14 @@ package it.jakegblp.lusk.skript.impl.to_2_12_1;
 
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.parser.ParserInstance;
-import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
+import it.jakegblp.lusk.skript.core.adapters.SectionContextAdapter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class To_2_12_1 implements SkriptAdapter {
+public class To_2_12_1 implements SectionContextAdapter {
 
     public final Class<ParserInstance.Data> SECTION_CONTEXT_CLASS;
     public final Method SECTION_CONTEXT_MODIFY_METHOD;

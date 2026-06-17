@@ -4,17 +4,20 @@ import it.jakegblp.lusk.common.*;
 import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.async.AsyncablesWrapper;
-import it.jakegblp.lusk.nms.core.util.BufferSerializer;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
-import it.jakegblp.lusk.nms.core.world.player.ChatSessionData;
-import it.jakegblp.lusk.nms.core.world.player.CompletablePlayerProfile;
+import it.jakegblp.lusk.nms.core.event.client.PlayerInfoUpdatePacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.BufferSerializer;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
+import it.jakegblp.lusk.nms.core.world.player.chat.ChatSessionData;
+import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -23,15 +26,11 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @Setter
-public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPacket, AsyncablesWrapper {
+@NullMarked
+public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPacket<PlayerInfoUpdatePacketEvent>, AsyncablesWrapper {
     protected List<PlayerInfo> playerInfos;
     @SuppressWarnings("rawtypes")
     protected PseudoEnumSet<Action> actions;
-
-    @Override
-    public @NotNull List<? extends Asyncable> getAsyncables() {
-        return playerInfos;
-    }
 
     public PlayerInfoUpdatePacket(SimpleByteBuf buffer) {
         read(buffer);
@@ -42,12 +41,18 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         actions = PseudoEnumSet.noneOf(Action.class);
     }
 
+    @Override
+    public List<? extends Asyncable> getAsyncables() {
+        return playerInfos;
+    }
+
     @SuppressWarnings("rawtypes")
     public <S extends Set<Action>> PlayerInfoUpdatePacket(S actions, List<PlayerInfo> playerInfos) {
         this.actions = PseudoEnumSet.of(actions);
         this.playerInfos = new ArrayList<>(playerInfos);
     }
 
+    @Nullable
     public PlayerInfo getPlayerInfoFromUUID(UUID uuid) {
         for (PlayerInfo playerInfo : this.playerInfos)
             if (playerInfo.getUuid().equals(uuid))
@@ -61,6 +66,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
                 playerInfo.set(action, value);
     }
 
+    @Nullable
     public <T> T getAction(UUID uuid, Action<T> action) {
         PlayerInfo info = getPlayerInfoFromUUID(uuid);
         return info != null ? info.get(action) : null;
@@ -90,6 +96,11 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
     public void read(SimpleByteBuf buffer) {
         actions = buffer.readPseudoEnumSet(Action.class);
         playerInfos = buffer.readList(simpleByteBuf -> new PlayerInfo(simpleByteBuf, actions));
+    }
+
+    @Override
+    public PlayerInfoUpdatePacketEvent createEvent(Player player, boolean async) {
+        return new PlayerInfoUpdatePacketEvent(this, player, async);
     }
 
     @Override
@@ -199,6 +210,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         @SuppressWarnings("unchecked")
         private static final Action<Object>[] VALUES = (Action<Object>[])values(Action.class);
 
+        @Nullable
         public static Action<?> fromPropertyName(String propertyName) {
             return CommonUtils.findFirst(values(), action -> action.propertyName.equals(propertyName));
         }
@@ -207,17 +219,15 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
             return (Action<?>) valueOf(Action.class, name);
         }
 
-        public static @NotNull Action<Object> @NotNull [] values() {
+        public static Action<Object>[] values() {
             return VALUES;
         }
 
-        @NotNull
         private final Class<T> type;
-        @NotNull
         private final String propertyName;
 
         // todo: move property name to the addon module?
-        Action(@NotNull String name, @NotNull String propertyName, @NotNull Class<T> type) {
+        Action(String name, String propertyName, Class<T> type) {
             super(name);
             this.type = type;
             this.propertyName = propertyName;

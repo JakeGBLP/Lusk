@@ -30,21 +30,17 @@ public enum RelativeFlag implements Validatable<IllegalArgumentException>, PureN
     DELTA_Z,
     @Availability(addedIn = "1.21.2")
     ROTATE_DELTA;
-
-    @Getter
-    private static final boolean revamped = NMS.getVersion().isGreaterOrEqual(Version.of(1, 21, 2));
     @Getter
     private static final @Unmodifiable List<RelativeFlag> XYZ = List.of(X, Y, Z);
     @Availability(addedIn = "1.21.2")
     private static final @Unmodifiable List<RelativeFlag> DELTA = List.of(DELTA_X, DELTA_Y, DELTA_Z);
-    private static final RelativeFlag[] AVAILABLE_FLAGS = CommonUtils.filter(values(), RelativeFlag::check);
 
     public static @Unmodifiable List<RelativeFlag> getDelta() {
         return DELTA;
     }
 
     public static RelativeFlag[] getAvailableFlags() {
-        return AVAILABLE_FLAGS;
+        return CommonUtils.filter(values(), RelativeFlag::check);
     }
 
     public boolean isAnyDelta() {
@@ -79,7 +75,7 @@ public enum RelativeFlag implements Validatable<IllegalArgumentException>, PureN
 
     @Override
     public boolean check() {
-        return !isAnyDelta() || isRevamped();
+        return !isAnyDelta() || NMS.getVersion().isGreaterOrEqual(Version.of(1, 21, 2));
     }
 
     @Override

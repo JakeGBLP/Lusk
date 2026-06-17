@@ -19,12 +19,25 @@ public interface SimpleList<T> {
         add(values);
     }
 
+    default void set(T[] values) {
+        clear();
+        add(values);
+    }
+
     default void add(List<T> values) {
         get().addAll(values);
+    }
+    default void add(T[] values) {
+        for (T value : values)
+            get().add(value);
     }
 
     default void remove(List<T> values) {
         get().removeAll(values);
+    }
+    default void remove(T[] values) {
+        for (T value : values)
+            get().remove(value);
     }
 
     default void clear() {

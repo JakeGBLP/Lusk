@@ -13,6 +13,4 @@ public class LevelUtil {
         return NMS.getEntityFromId(id, world);
     }
 
-
-
 }

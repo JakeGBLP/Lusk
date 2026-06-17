@@ -1,13 +1,15 @@
 package it.jakegblp.lusk;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.SkriptAddon;
 import it.jakegblp.lusk.common.Instances;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.logger.ConsoleLogInjector;
-import it.jakegblp.lusk.nms.core.logger.events.LogEvent;
+import it.jakegblp.lusk.nms.core.logger.events.ConsoleLogEvent;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.factory.SkriptAdapterFactory;
+import it.jakegblp.lusk.skript.modules.base.BaseModule;
+import it.jakegblp.lusk.skript.modules.packets.PacketsModule;
+import it.jakegblp.lusk.skript.modules.playerprofile.PlayerProfileModule;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
 import org.apache.commons.text.WordUtils;
@@ -16,8 +18,8 @@ import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.skriptlang.skript.addon.SkriptAddon;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,26 +38,21 @@ public final class Lusk extends JavaPlugin {
         return plugin != null && plugin.isEnabled();
     }
 
-    private SkriptAddon addon;
-
     @Override
     public void onEnable() {
         instance = this;
         Instances.LUSK = this;
         serverVersion = Version.parse(Bukkit.getBukkitVersion().split("[^\\d.]")[0]);
         NMS = NMSFactory.createNMS(this, serverVersion);
+
         hookedWithSkript = isPluginEnabled("Skript");
         if (hookedWithSkript) {
             skriptVersion = Version.parse(Skript.getVersion().toString().split("[^\\d.]")[0]);
-            AddonUtils.skriptAdapter = SkriptAdapterFactory.createSkriptAdapter(skriptVersion);
-            addon = Skript.registerAddon(this);
-            addon.setLanguageFileDirectory("lang");
+            AddonUtils.sectionContextAdapter = SkriptAdapterFactory.createSkriptAdapter(skriptVersion);
+            SkriptAddon addon = Skript.instance().registerAddon(getClass(), "Lusk");
+            addon.localizer().setSourceDirectories("lang", null);
+            addon.loadModules(new BaseModule(), new PacketsModule(), new PlayerProfileModule());
             int[] elementCountBefore = getSkriptElementCount();
-            try {
-                addon.loadClasses("it.jakegblp.lusk.skript", "elements");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             int[] elementCountAfter = getSkriptElementCount();
             int[] finish = new int[elementCountBefore.length];
             int total = 0;
@@ -76,6 +73,18 @@ public final class Lusk extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
         rawVersion = getPluginMeta().getVersion();
         String buildType = getBuildType();
+
+        ConsoleLogInjector.inject(l -> {
+            boolean async = !getServer().isPrimaryThread();
+
+            ConsoleLogEvent event = new ConsoleLogEvent(async, l.messageStrippedAnsi());
+
+            getServer().getPluginManager().callEvent(event);
+
+            if (event.isCancelled()) {
+                l.cancel();
+            }
+        });
 
         metrics.addCustomChart(new DrilldownPie("version_type", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -100,18 +109,6 @@ public final class Lusk extends JavaPlugin {
         getLogger().info("- Server version: " + serverVersion);
         if (hookedWithSkript)
             getLogger().info("- Skript version: " + skriptVersion);
-
-        ConsoleLogInjector.inject(l -> {
-            boolean async = !getServer().isPrimaryThread();
-
-            it.jakegblp.lusk.nms.core.logger.events.LogEvent event = new it.jakegblp.lusk.nms.core.logger.events.LogEvent(async, l.messageStrippedAnsi());
-
-            getServer().getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                l.cancel();
-            }
-        });
     }
 
     @Override

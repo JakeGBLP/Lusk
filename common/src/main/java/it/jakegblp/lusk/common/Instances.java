@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.common;
 
-import ch.njol.skript.SkriptAddon;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.skriptlang.skript.addon.SkriptAddon;
 
 public final class Instances {
     public static JavaPlugin LUSK;

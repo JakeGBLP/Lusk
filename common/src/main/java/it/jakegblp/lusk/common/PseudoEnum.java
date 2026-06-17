@@ -40,7 +40,6 @@ public abstract class PseudoEnum {
 
     @SuppressWarnings("unchecked")
     public static <E extends PseudoEnum> @NotNull E[] values(Class<E> type) {
-        System.out.println("registry: "+REGISTRY);
         Collection<E> values = (Collection<E>) REGISTRY.getOrDefault(type, new LinkedHashMap<>()).values();
         return values.toArray((E[]) Array.newInstance(type, values.size()));
     }

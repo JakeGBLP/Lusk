@@ -4,12 +4,12 @@ import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.Section;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.parser.ParserInstance;
-import it.jakegblp.lusk.skript.core.adapters.SkriptAdapter;
+import it.jakegblp.lusk.skript.core.adapters.SectionContextAdapter;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-public class From_2_12_2 implements SkriptAdapter {
+public class From_2_12_2 implements SectionContextAdapter {
 
     @Override
     public Section.SectionContext getSectionContext(Object parserInstance) {

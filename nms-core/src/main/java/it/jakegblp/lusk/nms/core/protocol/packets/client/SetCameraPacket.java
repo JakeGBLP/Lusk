@@ -1,14 +1,16 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.SetCameraPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 
 @AllArgsConstructor
 @Setter
 @Getter
-public class SetCameraPacket implements BufferSerializableClientboundPacket {
+public class SetCameraPacket implements BufferSerializableClientboundPacket<SetCameraPacketEvent> {
     protected int cameraId;
 
     public SetCameraPacket(SimpleByteBuf buffer) {
@@ -23,6 +25,11 @@ public class SetCameraPacket implements BufferSerializableClientboundPacket {
     @Override
     public void read(SimpleByteBuf buffer) {
         cameraId = buffer.readVarInt();
+    }
+
+    @Override
+    public SetCameraPacketEvent createEvent(Player player, boolean async) {
+        return new SetCameraPacketEvent(this, player, async);
     }
 
     @Override

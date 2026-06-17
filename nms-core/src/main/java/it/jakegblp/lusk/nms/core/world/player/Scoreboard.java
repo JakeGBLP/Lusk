@@ -1,5 +1,8 @@
 package it.jakegblp.lusk.nms.core.world.player;
 
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Experimental
 public class Scoreboard {
     //private final Object2ObjectMap<String, Objective> objectivesByName = new Object2ObjectOpenHashMap(16, 0.5F);
     //private final Reference2ObjectMap<ObjectiveCriteria, List<Objective>> objectivesByCriteria = new Reference2ObjectOpenHashMap();

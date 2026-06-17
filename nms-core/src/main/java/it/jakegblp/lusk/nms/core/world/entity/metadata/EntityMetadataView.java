@@ -15,6 +15,8 @@ public interface EntityMetadataView {
 
     List<MetadataItem<? extends Entity, ?>> items();
 
+    List<MetadataKey<? extends Entity, ?>> keys();
+
     default void copy(EntityMetadata to, MetadataKey<? extends Entity, Object> key) {
         to.set(key, copyIfNotNull(get(key)));
     }

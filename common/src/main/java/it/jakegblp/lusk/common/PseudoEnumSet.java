@@ -170,7 +170,6 @@ public final class PseudoEnumSet<E extends PseudoEnum> extends AbstractSet<E> im
     }
 
     private void validate(E e) {
-        System.out.println(e.getClass() + " " + getKnownClass(e));
         if (!elementType.isAssignableFrom(getKnownClass(e)))
             throw new ClassCastException("Cannot use " + e + " in PseudoEnumSet<" + elementType.getSimpleName() + ">");
     }

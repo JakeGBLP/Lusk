@@ -18,6 +18,7 @@ public record SimpleMethod(@Nullable Method method) {
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public <F,T> T invoke(F instance, Object... args) {
         if (method == null) return null;
         try {
@@ -25,6 +26,13 @@ public record SimpleMethod(@Nullable Method method) {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T> Class<T> getReturnType() {
+        if (method == null) return null;
+        return (Class<T>) method.getReturnType();
     }
 
 }

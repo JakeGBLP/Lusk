@@ -1,7 +1,12 @@
 package it.jakegblp.lusk.common;
 
+import ch.njol.skript.Skript;
 import it.jakegblp.lusk.common.reflection.SimpleArray;
+import it.jakegblp.lusk.common.reflection.SimpleClass;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.util.BlockVector;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -14,10 +19,32 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class CommonUtils {
+
+    @SuppressWarnings("unchecked")
+    public static <T> T unwrapOptional(Object object) {
+        return (T) switch (object) {
+            case Optional<?> opt -> opt.orElse(null);
+            case OptionalInt opt -> opt.isPresent() ? opt.getAsInt() : null;
+            case OptionalLong opt -> opt.isPresent() ? opt.getAsLong() : null;
+            case OptionalDouble opt -> opt.isPresent() ? opt.getAsDouble() : null;
+            case null -> null;
+            default -> object;
+        };
+    }
+
+    @Contract("-> new")
+    public static Map<String, EquipmentSlotGroup> getEquipmentSlotGroups() {
+        Map<String, EquipmentSlotGroup> equipmentSlotGroupMap = new HashMap<>();
+        for (var declaredField : SimpleClass.of(EquipmentSlotGroup.class).getDeclaredFields())
+            if (EquipmentSlotGroup.class.isAssignableFrom(declaredField.getType()))
+                equipmentSlotGroupMap.put(declaredField.getName().replace("HAND", "_HAND"), (EquipmentSlotGroup) declaredField.get(null));
+        return equipmentSlotGroupMap;
+    }
 
     @NullMarked
     public static Class<?> getKnownClass(Object object) {
@@ -29,10 +56,7 @@ public final class CommonUtils {
         return clazz;
     }
 
-    public static <F, C extends Collection<F>> Function<Collection<F>, C> safeCast(Function<Collection<F>, C> castFunction) {
-        return castFunction;
-    }
-
+    @Contract("_ -> new")
     public static PublicKey byteToPublicKey(byte[] encodedKey) {
         try {
             return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(encodedKey));
@@ -58,7 +82,7 @@ public final class CommonUtils {
     }
 
     public static double lowPrecision(double d) {
-        return Double.isNaN(d) ? 0 : Math.max(-1.7179869183E10, Math.min(d, 1.7179869183E10));
+        return Double.isNaN(d) ? 0 : Math.clamp(d, -1.7179869183E10, 1.7179869183E10);
     }
 
     public static long pack(double d) {
@@ -73,6 +97,7 @@ public final class CommonUtils {
         return packInts(blockVector.getBlockX(), blockVector.getBlockX(), blockVector.getBlockZ());
     }
 
+    @Contract("_ -> new")
     public static BlockVector unpackBlockVector(long packedBlockVector) {
         return new BlockVector((int) (packedBlockVector >> 38), (int) (packedBlockVector << 52 >> 52), (int) (packedBlockVector << 26 >> 38));
     }
@@ -82,6 +107,7 @@ public final class CommonUtils {
      * @throws IllegalArgumentException if the provided string is not 32 characters long
      * @return the respective UUID
      */
+    @Contract("_ -> new")
     public static @NotNull UUID fromCompactUUID(@NotNull String compactUUID) {
         if (compactUUID.length() != 32)
             throw new IllegalArgumentException("Invalid compact UUID length: " + compactUUID.length());
@@ -102,6 +128,7 @@ public final class CommonUtils {
      * @param uuid a uuid
      * @return the respective compact UUID
      */
+    @Contract("_ -> new")
     public static @NotNull String toCompactUUID(@NotNull UUID uuid) {
         char[] compactChars = new char[32];
         long mostSignificantBits = uuid.getMostSignificantBits();
@@ -148,13 +175,20 @@ public final class CommonUtils {
     }
 
     public static <F> @Nullable F findFirst(@Nullable F @NotNull [] objects, @NotNull Predicate<@NotNull F> predicate) {
-        for (F object : objects) {
+        for (F object : objects)
             if (object != null && predicate.test(object))
                 return object;
-        }
         return null;
     }
 
+    public static <F> @Nullable F findFirst(@NotNull Collection<@Nullable F> objects, @NotNull Predicate<@NotNull F> predicate) {
+        for (F object : objects)
+            if (object != null && predicate.test(object))
+                return object;
+        return null;
+    }
+
+    @Contract("_ -> new")
     public static <T> @NotNull List<@NotNull T> nonNull(@NotNull List<@Nullable T> list) {
         List<T> result = new ArrayList<>(list.size());
         for (T value : list)
@@ -163,7 +197,8 @@ public final class CommonUtils {
         return result;
     }
 
-    public static <T> @NotNull T[] nonNull(@NotNull Class<T> tClass, @Nullable T @NotNull [] array) {
+    @Contract("_, _ -> new")
+    public static <T> @NotNull T @NotNull [] nonNull(@NotNull Class<T> tClass, @Nullable T @NotNull [] array) {
         int count = 0;
         for (T value : array)
             if (value != null)
@@ -177,7 +212,8 @@ public final class CommonUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <F, T> List<T> filterToList(Class<T> type, F[] objects) {
+    @Contract("_, _ -> new")
+    public static <F, T> @NotNull List<T> filterToList(Class<T> type, F @NotNull [] objects) {
         List<T> list = new ArrayList<>(objects.length);
         for (Object o : objects)
             if (type.isInstance(o))
@@ -186,7 +222,8 @@ public final class CommonUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <F, T> List<T> filter(Class<T> type, Collection<F> objects) {
+    @Contract("_, _ -> new")
+    public static <F, T> @NotNull List<T> filter(Class<T> type, @NotNull Collection<F> objects) {
         List<T> list = new ArrayList<>(objects.size());
         for (F o : objects)
             if (type.isInstance(o))
@@ -194,7 +231,8 @@ public final class CommonUtils {
         return list;
     }
 
-    public static <F, T> T[] filter(Class<T> type, F[] objects) {
+    @Contract("_, _ -> new")
+    public static <F, T> T @NotNull [] filter(Class<T> type, F @NotNull [] objects) {
         int count = 0;
         for (F obj : objects)
             if (type.isInstance(obj))
@@ -208,7 +246,8 @@ public final class CommonUtils {
         return result;
     }
 
-    public static <F> F[] filter(F[] objects, Predicate<F> predicate) {
+    @Contract("_, _ -> new")
+    public static <F> F @NotNull [] filter(F @NotNull [] objects, Predicate<F> predicate) {
         int count = 0;
         for (F obj : objects)
             if (predicate.test(obj))
@@ -223,9 +262,21 @@ public final class CommonUtils {
         return result;
     }
 
+    @Contract("_, _, _ -> new")
+    public static <F, T> @NotNull List<T> filterMap(
+            @NotNull Collection<F> objects,
+            Predicate<F> predicate,
+            @NotNull Function<F, T> converter) {
+        List<T> result = new ArrayList<>();
+        for (F obj : objects)
+            if (predicate.test(obj))
+                result.add(converter.apply(obj));
+        return result;
+    }
 
     @SuppressWarnings("unchecked")
-    public static <F, T> List<T> filterMapToList(
+    @Contract("_, _, _ -> new")
+    public static <F, T> @NotNull List<T> filterMapToList(
             @NotNull Class<F> type,
             @Nullable Object @NotNull [] objects,
             @NotNull Function<? super @NotNull F, ? extends T> converter) {
@@ -236,6 +287,7 @@ public final class CommonUtils {
         return list;
     }
 
+    @Contract("_, _ -> new")
     public static <F, T> @NotNull List<@NotNull T> map(
             @NotNull Collection<? extends @Nullable F> values,
             @NotNull Function<? super @NotNull F, ? extends @Nullable T> converter
@@ -250,6 +302,19 @@ public final class CommonUtils {
         return list;
     }
 
+    @Contract("_, _ -> new")
+    public static <F, T> @NotNull Set<T> mapToSet(
+            @NotNull Collection<@Nullable F > values,
+            @NotNull Function<? super @NotNull F, ? extends T> converter
+    ) {
+        var set = new HashSet<T>(values.size());
+        for (F value : values)
+            if (value != null)
+                set.add(converter.apply(value));
+        return set;
+    }
+
+    @Contract("_, _ -> new")
     public static <F, T> @NotNull List<T> mapToList(
             @Nullable F @NotNull [] values,
             @NotNull Function<? super @NotNull F, ? extends T> converter
@@ -261,7 +326,8 @@ public final class CommonUtils {
         return list;
     }
 
-    public static <F, T> @NotNull Object[] mapToObjectArray(
+    @Contract("_, _ -> new")
+    public static <F, T> @NotNull Object @NotNull [] mapToObjectArray(
             @NotNull List<? extends @Nullable F> values,
             @NotNull Function<? super @NotNull F, ? extends T> converter
     ) {
@@ -279,7 +345,8 @@ public final class CommonUtils {
         return newArray;
     }
 
-    public static <F, T> @NotNull T[] mapToArray(
+    @Contract("_, _, _ -> new")
+    public static <F, T> @NotNull T @NotNull [] mapToArray(
             @NotNull Class<T> type,
             @NotNull List<? extends @Nullable F> values,
             @NotNull Function<? super @NotNull F, ? extends T> converter
@@ -298,7 +365,8 @@ public final class CommonUtils {
         return newArray;
     }
 
-    public static <F, T> @NotNull T[] map(
+    @Contract("_, _ -> new")
+    public static <F, T> @NotNull T @NotNull [] map(
             @Nullable F @NotNull [] values,
             @NotNull Function<? super @NotNull F, ? extends T> converter
     ) {
@@ -306,7 +374,8 @@ public final class CommonUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <F, T> @NotNull T[] map(
+    @Contract("_, _, _ -> new")
+    public static <F, T> @NotNull T @NotNull [] map(
             @Nullable Class<T> type,
             @Nullable F @NotNull [] values,
             @NotNull Function<? super @NotNull F, ? extends T> converter
@@ -325,7 +394,7 @@ public final class CommonUtils {
         return newArray;
     }
 
-
+    @Contract("_, _ -> new")
     public static <F, T> @NotNull List<@NotNull T> flatMap(
             @NotNull Collection<? extends @Nullable F> values,
             @NotNull Function<? super @NotNull F, ? extends @Nullable Collection<? extends @Nullable T>> converter
@@ -342,6 +411,7 @@ public final class CommonUtils {
         return list;
     }
 
+    @Contract("_, _ -> new")
     public static <F, T> @NotNull List<@NotNull T> flatMapToList(
             @Nullable F @NotNull [] values,
             @NotNull Function<? super @NotNull F, ? extends @Nullable Collection<? extends @Nullable T>> converter
@@ -350,6 +420,7 @@ public final class CommonUtils {
     }
 
     @SuppressWarnings("unchecked")
+    @Contract("_, _, _, _ -> new")
     public static <F, T, R> @NotNull R[] flatMap(
             @NotNull Class<R> type,
             @Nullable F @NotNull [] values,
@@ -378,12 +449,34 @@ public final class CommonUtils {
         return results.toArray(array);
     }
 
-    public static <F, T> @NotNull T[] flatMap(
+    @Contract("_, _, _ -> new")
+    public static <F, T> @NotNull T @NotNull [] flatMap(
             @NotNull Class<T> type,
             @Nullable F @NotNull [] values,
             @NotNull Function<? super @NotNull F, ? extends @Nullable Collection<? extends @Nullable T>> toCollection
     ) {
         return flatMap(type, values, toCollection, null);
+    }
+
+    @NullMarked
+    public static <T extends Copyable<T>, C extends Collection<T>> C copyCollection(
+            Collection<T> collection,
+            IntFunction<C> createCollectionFunction
+    ) {
+        C copy = createCollectionFunction.apply(collection.size());
+        for (T element : collection)
+            copy.add(element.copy());
+        return copy;
+    }
+
+    @NullMarked
+    public static <T extends Copyable<T>> List<T> copyList(
+            List<T> list
+    ) {
+        List<T> copy = new ArrayList<>(list.size());
+        for (T element : list)
+            copy.add(element.copy());
+        return copy;
     }
 
     public static <T> @NotNull Set<T> toSet(@NotNull T @NotNull [] values) {
@@ -394,6 +487,24 @@ public final class CommonUtils {
 
     public static <E extends Enum<E>> @NotNull EnumSet<E> copyOrEmptyEnumSet(@NotNull Collection<E> c, @NotNull Class<E> enumClass) {
         return c.isEmpty() ? EnumSet.noneOf(enumClass) : EnumSet.copyOf(c);
+    }
+
+
+    @Nullable
+    @Contract("!null -> new")
+    public static NamespacedKey createNamespacedKey(@Nullable String key) {
+        if (key == null) return null;
+        else if (key.length() > Short.MAX_VALUE) {
+            Skript.error("Tried to create a namespaced key, but the key length exceeded " + Short.MAX_VALUE);
+            return null;
+        }
+        key = key.toLowerCase();
+        if (key.contains(" "))
+            key = key.replace(" ", "_");
+        NamespacedKey namespacedKey = NamespacedKey.fromString(key);
+        if (namespacedKey == null)
+            Skript.error("Tried to create a namespaced key but failed. Key: " + key);
+        return namespacedKey;
     }
 
 }

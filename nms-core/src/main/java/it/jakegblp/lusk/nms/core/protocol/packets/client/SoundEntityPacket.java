@@ -1,6 +1,8 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.SoundAtEntityPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +11,16 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class SoundEntityPacket implements ClientboundPacketWithId {
+public class SoundEntityPacket implements ClientboundPacketWithEntityId<SoundAtEntityPacketEvent> {
     protected Sound sound;
     protected SoundCategory soundCategory;
-    protected int id;
+    protected int entityId;
     protected float volume, pitch;
     protected long seed;
 
@@ -31,7 +32,7 @@ public class SoundEntityPacket implements ClientboundPacketWithId {
     public void write(SimpleByteBuf buffer) {
         buffer.writeSound(sound);
         buffer.writeSoundCategory(soundCategory);
-        buffer.writeVarInt(id);
+        buffer.writeVarInt(entityId);
         buffer.writeFloat(volume);
         buffer.writeFloat(pitch);
         buffer.writeLong(seed);
@@ -41,22 +42,14 @@ public class SoundEntityPacket implements ClientboundPacketWithId {
     public void read(SimpleByteBuf buffer) {
         this.sound = buffer.readSound();
         this.soundCategory = buffer.readSoundCategory();
-        this.id = buffer.readVarInt();
+        this.entityId = buffer.readVarInt();
         this.volume = buffer.readFloat();
         this.pitch = buffer.readFloat();
         this.seed = buffer.readLong();
     }
 
-    /**
-     * @return the id of the entity that plays the sound, 0 is none
-     */
-    @Override
-    public int getId() {
-        return id;
-    }
-
     public @Nullable Entity getEntity(World world) {
-        return NMS.getEntityFromId(id, world);
+        return LevelUtil.getEntityFromID(entityId, world);
     }
 
     public @Nullable Location getLocation(World world) {
@@ -65,7 +58,12 @@ public class SoundEntityPacket implements ClientboundPacketWithId {
     }
 
     @Override
+    public SoundAtEntityPacketEvent createEvent(Player player, boolean async) {
+        return new SoundAtEntityPacketEvent(this, player, async);
+    }
+
+    @Override
     public SoundEntityPacket copy() {
-        return new SoundEntityPacket(sound, soundCategory, id, volume, pitch, seed);
+        return new SoundEntityPacket(sound, soundCategory, entityId, volume, pitch, seed);
     }
 }

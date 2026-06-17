@@ -2,12 +2,15 @@ package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.common.annotations.Availability;
+import it.jakegblp.lusk.nms.core.event.client.PlayerRotationPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.UnsupportedPacket;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
@@ -21,7 +24,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @ToString
 @EqualsAndHashCode
 @Availability(addedIn = "1.21.2")
-public class PlayerRotationPacket implements BufferSerializableClientboundPacket, UnsupportedPacket {
+public class PlayerRotationPacket implements BufferSerializableClientboundPacket<PlayerRotationPacketEvent>, GenericRotationPacket, UnsupportedPacket {
     protected float yaw, pitch;
 
     /**
@@ -58,6 +61,11 @@ public class PlayerRotationPacket implements BufferSerializableClientboundPacket
     public void read(SimpleByteBuf buffer) {
         buffer.writeFloat(yaw);
         buffer.writeFloat(pitch);
+    }
+
+    @Override
+    public PlayerRotationPacketEvent createEvent(Player player, boolean async) {
+        return new PlayerRotationPacketEvent(this, player, async);
     }
 
     @Override

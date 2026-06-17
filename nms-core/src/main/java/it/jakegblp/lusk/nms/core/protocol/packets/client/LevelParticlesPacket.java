@@ -1,34 +1,41 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.ParticleSendPacketEvent;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class LevelParticlesPacket implements BufferSerializableClientboundPacket {
+public class LevelParticlesPacket implements BufferSerializableClientboundPacket<ParticleSendPacketEvent> {
 
-    protected double x;
-    protected double y;
-    protected double z;
-    protected float xOffset;
-    protected float yOffset;
-    protected float zOffset;
-    protected float maxSpeed;
+    protected double x, y, z;
+    protected float xOffset, yOffset, zOffset, maxSpeed;
     protected int count;
-    protected boolean overrideLimiter;
-    protected boolean alwaysShow;
+    protected boolean overrideLimiter, alwaysShow;
     protected ParticleWrapper particle;
 
     public LevelParticlesPacket(SimpleByteBuf buffer) {
         read(buffer);
     }
 
+    public LevelParticlesPacket(Vector position, Vector offset, float maxSpeed, int count, boolean overrideLimiter, boolean alwaysShow, ParticleWrapper particle) {
+        setPosition(position);
+        setOffset(offset);
+        this.maxSpeed = maxSpeed;
+        this.count = count;
+        this.overrideLimiter = overrideLimiter;
+        this.alwaysShow = alwaysShow;
+        this.particle = particle;
+    }
+
+    @Contract("-> new")
     public Vector getPosition() {
         return new Vector(x, y, z);
     }
@@ -39,6 +46,7 @@ public class LevelParticlesPacket implements BufferSerializableClientboundPacket
         this.z = position.getZ();
     }
 
+    @Contract("-> new")
     public Vector getOffset() {
         return new Vector(xOffset, yOffset, zOffset);
     }
@@ -77,6 +85,11 @@ public class LevelParticlesPacket implements BufferSerializableClientboundPacket
         maxSpeed = buffer.readFloat();
         count = buffer.readInt();
         particle = buffer.readParticle();
+    }
+
+    @Override
+    public ParticleSendPacketEvent createEvent(Player player, boolean async) {
+        return new ParticleSendPacketEvent(this, player, async);
     }
 
     @Override

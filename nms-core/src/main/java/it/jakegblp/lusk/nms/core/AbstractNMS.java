@@ -1,89 +1,90 @@
 package it.jakegblp.lusk.nms.core;
 
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SharedBiomeAdapter;
+import it.jakegblp.lusk.nms.core.adapter.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.injection.InjectionListener;
-import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
-import it.jakegblp.lusk.nms.core.util.NMSObject;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.SimpleKey;
+import it.jakegblp.lusk.nms.core.serialization.TypeKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyRegistry;
 import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
-import static it.jakegblp.lusk.common.reflection.SimpleClass.classOf;
+import java.util.function.Consumer;
 
 public abstract class AbstractNMS {
 
     public static AbstractNMS NMS;
+
     @Delegate
     @SuppressWarnings("rawtypes")
     protected final SharedBehaviorAdapter sharedBehaviorAdapter;
+    //@Getter
+    //public final List<Class<ClientboundPacket<?>>> implementedClientboundPacketClasses;
     @Getter
     protected final JavaPlugin plugin;
     @Getter
     protected final Version version;
-    @Delegate
-    protected final SharedBiomeAdapter sharedBiomeAdapter;
+    @Getter
+    protected final MetadataKeyRegistry metadataKeyRegistry;
 
     public AbstractNMS(
             JavaPlugin plugin,
             Version version,
-            @SuppressWarnings("rawtypes")
-            SharedBehaviorAdapter sharedBehaviorAdapter,
-            SharedBiomeAdapter sharedBiomeAdapter
+            Consumer<AbstractNMS> abstractNMSConsumer,
+            @SuppressWarnings("rawtypes") SharedBehaviorAdapter sharedBehaviorAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
         this.sharedBehaviorAdapter = sharedBehaviorAdapter;
-        this.sharedBiomeAdapter = sharedBiomeAdapter;
-        Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
+        sharedBehaviorAdapter.init(version);
+        abstractNMSConsumer.accept(this);
         init();
+        Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
+        //implementedClientboundPacketClasses = CommonUtils.filterMap(bufferCodecs.getCodecs(), codec -> ClientboundPacket.class.isAssignableFrom(codec.getToClass()), simpleBufferCodec -> (Class<ClientboundPacket<?>>)simpleBufferCodec.getToClass());
+        metadataKeyRegistry = new MetadataKeyRegistry(this);
+    }
+
+
+    public <F, T> T fromNMS(F f) {
+        return getMappings().map(f);
+    }
+
+    public <F, T> F toNMS(T t) {
+        return getMappings().mapBack(t);
     }
 
     public abstract void init();
 
-    public @Nullable Object toNMSObject(@Nullable Object object) {
-        if (object == null)
-            throw new RuntimeException("Object null for toNMSObject");
-        else if (object instanceof NMSObject<?> nmsObject) return nmsObject.asNMS();
-        else if (isCodecFromClass(object.getClass())) return object;
-        else return toNMS(object);
+    @NullMarked
+    public <T> void write(SimpleByteBuf buffer, T to) {
+        write(buffer, to.getClass(), 0);
     }
 
-    /**
-     * This method takes an NMS Packet and returns a non NMS Packet
-     *
-     * @param object an NMS Packet
-     * @return the packet in a common form
-     */
-    public @NotNull Packet fromNMSPacket(@NotNull Object object) {
-        if (isNMSClientBundlePacket(object)) return fromNMSClientBundlePacket(object);
-        throw new IllegalArgumentException("Could not convert nms packet " + object.getClass().getName());
+    @NullMarked
+    public <T> void write(SimpleByteBuf buffer, T to, int variant) {
+        write(buffer, to, new SimpleKey<>((Class<T>) to.getClass(), variant));
     }
 
-    public @NotNull Object fromNMSObject(@NotNull Object object) {
-        if (isNMSPacket(object)) return fromNMSPacket(object);
-        throw new IllegalArgumentException("Could not convert nms object " + object.getClass().getName());
-
+    public <T> void write(SimpleByteBuf buffer, T to, TypeKey<T> typeKey) {
+        getCodecs().encode(buffer, to, typeKey);
     }
 
-    public <F> void writeNMS(@NotNull F from, @NotNull SimpleByteBuf buffer) {
-        getFirstNMSCodec(classOf(from)).writeFrom(from, buffer);
+    @NullMarked
+    public <T> T read(SimpleByteBuf buffer, TypeKey<T> typeKey) {
+        return getCodecs().decode(buffer, typeKey);
     }
 
-    public <F> F readNMS(@NotNull Class<F> fromClass, @NotNull SimpleByteBuf buffer) {
-        return fromClass.cast(getFirstNMSCodec(fromClass).readFrom(buffer));
+    @NullMarked
+    public <T> T read(SimpleByteBuf buffer, Class<T> type) {
+        return read(buffer, type, 0);
     }
 
-    public <T> void write(@NotNull T to, @NotNull SimpleByteBuf buffer) {
-        getFirstCodec(classOf(to)).writeTo(to, buffer);
-    }
-
-    public <T> T read(@NotNull Class<T> toClass, @NotNull SimpleByteBuf buffer) {
-        return toClass.cast(getFirstCodec(toClass).readTo(buffer));
+    @NullMarked
+    public <T> T read(SimpleByteBuf buffer, Class<T> type, int variant) {
+        return read(buffer, new SimpleKey<>(type, variant));
     }
 }

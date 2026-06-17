@@ -1,12 +1,13 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.server;
 
+import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
-public interface ServerboundPacket extends Packet {
+public interface ServerboundPacket extends Packet, Copyable<Packet> {
 
     default void receive(Player player) {
         if (isAsync())
@@ -25,4 +26,6 @@ public interface ServerboundPacket extends Packet {
                 Bukkit.getScheduler().getMainThreadExecutor(NMS.getPlugin()));
     }
 
+    @Override
+    ServerboundPacket copy();
 }

@@ -5,4 +5,5 @@ import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.util.PureNMSObject;
 
 public interface Packet extends PureNMSObject<Object>, Asyncable, Copyable<Packet> {
+
 }

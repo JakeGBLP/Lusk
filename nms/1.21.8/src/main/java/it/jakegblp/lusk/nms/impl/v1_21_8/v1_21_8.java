@@ -2,8 +2,7 @@ package it.jakegblp.lusk.nms.impl.v1_21_8;
 
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.adapters.SharedBehaviorAdapter;
-import it.jakegblp.lusk.nms.core.adapters.SharedBiomeAdapter;
+import it.jakegblp.lusk.nms.core.adapter.SharedBehaviorAdapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
@@ -30,12 +29,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.function.Consumer;
+
 import static net.minecraft.network.syncher.EntityDataSerializers.*;
 
 public final class v1_21_8 extends AbstractNMS {
 
-    public v1_21_8(JavaPlugin plugin, SharedBehaviorAdapter sharedBehaviorAdapter, SharedBiomeAdapter sharedBiomeAdapter) {
-        super(plugin, Version.of(1, 21, 8), sharedBehaviorAdapter, sharedBiomeAdapter);
+    public v1_21_8(JavaPlugin plugin, Consumer<AbstractNMS> abstractNMSConsumer, SharedBehaviorAdapter sharedBehaviorAdapter) {
+        super(plugin, Version.of(1, 21, 8), abstractNMSConsumer, sharedBehaviorAdapter);
     }
 
     @Override

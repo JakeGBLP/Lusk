@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import io.github.patrick.gradle.remapper.RemapTask
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
@@ -13,8 +12,8 @@ plugins {
 
 group = "it.jakegblp"
 version = "2.0.0-alpha1"
-var latestSkriptVersion = "2.13.2"
-var latestMinecraftVersion = "1.21.10"
+var latestSkriptVersion = "2.14.3"
+var latestMinecraftVersion = "1.21.11"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
@@ -39,9 +38,10 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.2")
     compileOnly(project(":nms-core"))
     compileOnly("org.apache.commons:commons-text:1.14.0")
+    compileOnly("com.google.guava:guava:33.6.0-jre")
     compileOnly("com.github.SkriptLang:Skript:$latestSkriptVersion")
     implementation("org.jspecify:jspecify:1.0.0")
-    compileOnly("io.netty:netty-all:4.2.9.Final")
+    compileOnly("io.netty:netty-all:4.2.13.Final")
     compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
@@ -56,7 +56,7 @@ tasks {
         minecraftVersion(latestMinecraftVersion)
         downloadPlugins {
             url("https://github.com/SkriptLang/Skript/releases/download/$latestSkriptVersion/Skript-$latestSkriptVersion.jar")
-            url("https://github.com/SkriptLang/skript-reflect/releases/download/v2.6.1/skript-reflect-2.6.1.jar")
+            url("https://github.com/SkriptLang/skript-reflect/releases/download/v2.6.3/skript-reflect-2.6.3.jar")
         }
 
     }
@@ -93,23 +93,9 @@ subprojects {
     var isNmsModule = project.path.startsWith(":nms:")
     var isSkriptModule = project.path.startsWith(":skript:")
     if (isNmsModule && project.name != "build") {
-        if (!detectedVersion.contains("1.17")) {
-            apply(plugin = "io.papermc.paperweight.userdev")
-            dependencies {
-                paperweight.paperDevBundle("$detectedVersion-R0.1-SNAPSHOT")
-            }
-        } else {
-            apply(plugin = "io.github.patrick.remapper")
-            dependencies {
-                specialCompileOnly("org.spigotmc:spigot:$detectedVersion-R0.1-SNAPSHOT")
-                specialCompileOnly("io.papermc.paper:paper-api:$detectedVersion-R0.1-SNAPSHOT")
-            }
-            project.tasks.named<RemapTask>("remap") {
-                this.version = detectedVersion
-            }
-            project.tasks.named("build") {
-                dependsOn("remap")
-            }
+        apply(plugin = "io.papermc.paperweight.userdev")
+        dependencies {
+            paperweight.paperDevBundle("$detectedVersion-R0.1-SNAPSHOT")
         }
     } else if (!isSkriptModule) {
         dependencies {
@@ -184,6 +170,7 @@ subprojects {
 
             }
         }
+        compileOnly("com.google.guava:guava:33.6.0-jre")
         compileOnly("org.apache.commons:commons-text:1.14.0")
         compileOnly("com.mojang:datafixerupper:8.0.16")
         compileOnly("io.netty:netty-all:4.2.9.Final")

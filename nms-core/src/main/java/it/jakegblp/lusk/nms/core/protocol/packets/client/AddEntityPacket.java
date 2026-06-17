@@ -1,33 +1,41 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.event.client.AddEntityPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.GenericVelocityPacket;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 /**
- * <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#Spawn_Entity">Entity Spawn Packet</a>
+ * <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#Spawn_Entity">Wiki</a>
+ * {@link AddEntityPacketEvent AddEntityEvent}
  */
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class AddEntityPacket implements ClientboundPacketWithId {
+@NullMarked
+public class AddEntityPacket implements ClientboundPacketWithEntityId<AddEntityPacketEvent>, GenericPositionPacket, GenericRotationPacket, GenericVelocityPacket {
 
-    protected int id;
-    protected @NotNull UUID entityUUID;
-    protected double x, y, z;
+    protected int entityId;
+    protected UUID entityUUID;
+    protected double positionX, positionY, positionZ;
     protected float pitch, yaw, headYaw;
     protected double velocityX, velocityY, velocityZ;
-    protected @NotNull EntityType entityType;
+    protected EntityType entityType;
     protected int data;
 
     public AddEntityPacket(SimpleByteBuf buffer) {
@@ -36,35 +44,35 @@ public class AddEntityPacket implements ClientboundPacketWithId {
 
     public AddEntityPacket(
             int id,
-            @NotNull UUID entityUUID,
-            @NotNull Location location,
+            UUID entityUUID,
+            Location location,
             float headYaw,
-            @NotNull Vector velocity,
-            @NotNull EntityType entityType,
+            Vector velocity,
+            EntityType entityType,
             int data) {
         this(id, entityUUID, location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw(), headYaw, velocity.getX(), velocity.getY(), velocity.getX(), entityType, data);
     }
 
     public AddEntityPacket(
             int id,
-            @NotNull UUID entityUUID,
-            @NotNull Vector position,
+            UUID entityUUID,
+            Vector position,
             float pitch,
             float yaw,
             float headYaw,
-            @NotNull Vector velocity,
-            @NotNull EntityType entityType,
+            Vector velocity,
+            EntityType entityType,
             int data) {
         this(id, entityUUID, position.getX(), position.getY(), position.getZ(), pitch, yaw, headYaw, velocity.getX(), velocity.getY(), velocity.getX(), entityType, data);
     }
 
     public AddEntityPacket(
             int id,
-            @NotNull UUID entityUUID,
-            @NotNull Vector position,
+            UUID entityUUID,
+            Vector position,
             float headYaw,
-            @NotNull Vector velocity,
-            @NotNull EntityType entityType,
+            Vector velocity,
+            EntityType entityType,
             int data) {
         this(id, entityUUID, position.getX(), position.getY(), position.getZ(), 0, 0, headYaw, velocity.getX(), velocity.getY(), velocity.getX(), entityType, data);
     }
@@ -72,24 +80,31 @@ public class AddEntityPacket implements ClientboundPacketWithId {
     /**
      * @return a location where the world is always null
      */
-    public Location getPosition() {
-        return new Location(null, x, y, z, yaw, pitch);
+    @Contract("-> new")
+    public Location getLocation() {
+        return new Location(null, positionX, positionY, positionZ, yaw, pitch);
     }
 
-    public void setPosition(Location location) {
-        this.x = location.getX();
-        this.y = location.getY();
-        this.z = location.getZ();
+    @Contract("-> new")
+    public Vector getPosition() {
+        return new Vector(positionX, positionY, positionZ);
+    }
+
+    public void setLocation(Location location) {
+        this.positionX = location.getX();
+        this.positionY = location.getY();
+        this.positionZ = location.getZ();
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
     }
 
     public void setPosition(Vector position) {
-        this.x = position.getX();
-        this.y = position.getY();
-        this.z = position.getZ();
+        this.positionX = position.getX();
+        this.positionY = position.getY();
+        this.positionZ = position.getZ();
     }
 
+    @Contract("-> new")
     public Vector getVelocity() {
         return new Vector(velocityX, velocityY, velocityZ);
     }
@@ -103,12 +118,12 @@ public class AddEntityPacket implements ClientboundPacketWithId {
     @Override
     public void write(SimpleByteBuf buffer) {
         boolean is1_21_9 = NMS.getVersion().isGreaterOrEqual(Version.of(1,21,9));
-        buffer.writeVarInt(id);
+        buffer.writeVarInt(entityId);
         buffer.writeUUID(entityUUID);
         buffer.writeEntityType(entityType);
-        buffer.writeDouble(x);
-        buffer.writeDouble(y);
-        buffer.writeDouble(z);
+        buffer.writeDouble(positionX);
+        buffer.writeDouble(positionY);
+        buffer.writeDouble(positionZ);
         if (is1_21_9)
             buffer.writeLowPrecisionVector(velocityX, velocityY, velocityZ);
         buffer.writePackedDegrees(pitch);
@@ -125,12 +140,12 @@ public class AddEntityPacket implements ClientboundPacketWithId {
     @Override
     public void read(SimpleByteBuf buffer) {
         boolean is1_21_9 = NMS.getVersion().isGreaterOrEqual(Version.of(1,21,9));
-        id = buffer.readVarInt();
+        entityId = buffer.readVarInt();
         entityUUID = buffer.readUUID();
         entityType = buffer.readEntityType();
-        x = buffer.readDouble();
-        y = buffer.readDouble();
-        z = buffer.readDouble();
+        positionX = buffer.readDouble();
+        positionY = buffer.readDouble();
+        positionZ = buffer.readDouble();
         if (is1_21_9) {
             var velocity = buffer.readLowPrecisionVector();
             velocityX = velocity[0];
@@ -149,7 +164,12 @@ public class AddEntityPacket implements ClientboundPacketWithId {
     }
 
     @Override
+    public AddEntityPacketEvent createEvent(Player player, boolean async) {
+        return new AddEntityPacketEvent(this, player, async);
+    }
+
+    @Override
     public AddEntityPacket copy() {
-        return new AddEntityPacket(id, entityUUID, getPosition(), headYaw, getVelocity(), entityType, data);
+        return new AddEntityPacket(entityId, entityUUID, positionX, positionY, positionZ, pitch, yaw, headYaw, velocityX, velocityY, velocityZ, entityType, data);
     }
 }

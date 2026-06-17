@@ -6,8 +6,10 @@ import it.jakegblp.lusk.common.PseudoEnumSet;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.async.AsyncablesWrapper;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerInfoUpdatePacket;
-import it.jakegblp.lusk.nms.core.util.BufferSerializer;
-import it.jakegblp.lusk.nms.core.util.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.BufferSerializer;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.world.player.chat.ChatSessionData;
+import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -189,7 +191,7 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
             throw new IllegalStateException("An unknown/unsupported action has been provided");
     }
 
-    public <T> void remove(PlayerInfoUpdatePacket.Action<T> action) {
+    public <T> void remove(PlayerInfoUpdatePacket.@NotNull Action<T> action) {
         action.validate();
         if (action == PlayerInfoUpdatePacket.Action.ADD_PLAYER)
             removePlayerProfile();
@@ -213,7 +215,7 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get(PlayerInfoUpdatePacket.Action<T> action) {
+    public <T> T get(PlayerInfoUpdatePacket.@NotNull Action<T> action) {
         action.validate();
         Object value;
         if (action == PlayerInfoUpdatePacket.Action.ADD_PLAYER)
@@ -245,7 +247,7 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
 
     @Override
     public PlayerInfo copy() {
-        return new PlayerInfo(actions.copy(), uuid, playerProfile.copy(), listed, latency, gameMode, displayName, showHat, listOrder, chatSession);
+        return new PlayerInfo(actions.copy(), uuid, playerProfile == null ? null : playerProfile.copy(), listed, latency, gameMode == null ? null : gameMode, displayName == null ? null : displayName, showHat, listOrder, chatSession == null ? null : chatSession);
     }
 
     @Override

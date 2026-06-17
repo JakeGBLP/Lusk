@@ -72,7 +72,7 @@ public final class ServerEntityReference<T extends Entity> implements PureNMSObj
         return null;
     }
 
-    public boolean matches(Entity entity) {
+    public boolean test(Entity entity) {
         return getUUID().equals(entity.getUniqueId());
     }
 

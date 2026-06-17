@@ -4,8 +4,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 public interface PureNMSObject<T> extends NMSObject<T> {
     @Override
-    @SuppressWarnings("unchecked")
     default T asNMS() {
-        return (T) NMS.toNMS(this);
+        return NMS.toNMS(this);
     }
 }
