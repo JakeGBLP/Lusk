@@ -17,33 +17,33 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.3")
 public class ExprSkriptEffectCommand extends EventValueExpression<String> {
 
-	static {
-		SkriptUtils.register(ExprSkriptEffectCommand.class, String.class, "[event-|the ][skript] effect command [string]");
-	}
+    static {
+        SkriptUtils.register(ExprSkriptEffectCommand.class, String.class, "[event-|the ][skript] effect command [string]");
+    }
 
-	public ExprSkriptEffectCommand() {
-		super(String.class,true);
-	}
+    public ExprSkriptEffectCommand() {
+        super(String.class, true);
+    }
 
-	@Override
-	public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-		return switch (mode) {
-            case SET-> new Class[]{String.class};
-			case DELETE, RESET -> new Class[0];
-			case ADD, REMOVE, REMOVE_ALL -> null;
+    @Override
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case SET -> new Class[]{String.class};
+            case DELETE, RESET -> new Class[0];
+            case ADD, REMOVE, REMOVE_ALL -> null;
         };
-	}
+    }
 
-	@Override
-	public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-		if (event instanceof EffectCommandEvent effectCommandEvent) {
-			if (mode == Changer.ChangeMode.SET &&
-					delta != null &&
-					delta[0] instanceof String string) {
-				effectCommandEvent.setCommand(string);
-			} else if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
-				effectCommandEvent.setCommand("");
-			}
-		}
-	}
+    @Override
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        if (event instanceof EffectCommandEvent effectCommandEvent) {
+            if (mode == Changer.ChangeMode.SET &&
+                    delta != null &&
+                    delta[0] instanceof String string) {
+                effectCommandEvent.setCommand(string);
+            } else if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
+                effectCommandEvent.setCommand("");
+            }
+        }
+    }
 }

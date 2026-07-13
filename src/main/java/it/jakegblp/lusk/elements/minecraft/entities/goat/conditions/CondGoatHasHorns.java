@@ -54,9 +54,9 @@ public class CondGoatHasHorns extends Condition {
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         return entityExpression.toString(event, debug) + (isNegated() ? " does not have " : " has ")
                 + (both ? "both horns" : switch (left) {
-                    case TRUE -> "its left horn";
-                    case FALSE -> "its right horn";
-                    case UNKNOWN -> "either horn";
+            case TRUE -> "its left horn";
+            case FALSE -> "its right horn";
+            case UNKNOWN -> "either horn";
         });
     }
 
@@ -64,9 +64,9 @@ public class CondGoatHasHorns extends Condition {
     public boolean check(@NotNull Event event) {
         return test(entityExpression, event, entity -> entity instanceof Goat goat
                 && (both ? goat.hasLeftHorn() && goat.hasRightHorn() : switch (left) {
-                    case TRUE -> goat.hasLeftHorn();
-                    case FALSE -> goat.hasRightHorn();
-                    case UNKNOWN -> goat.hasLeftHorn() || goat.hasRightHorn();
-                }));
+            case TRUE -> goat.hasLeftHorn();
+            case FALSE -> goat.hasRightHorn();
+            case UNKNOWN -> goat.hasLeftHorn() || goat.hasRightHorn();
+        }));
     }
 }

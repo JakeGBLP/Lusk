@@ -17,7 +17,7 @@ public class ExprSignIsWaxed extends SimpleBooleanPropertyExpression<Object> {
 
     static {
         if (MINECRAFT_1_20_1)
-            register(ExprSignIsWaxed.class,Boolean.class,"[sign]","[is] waxed", "blocks/blockstates/itemtypes");
+            register(ExprSignIsWaxed.class, Boolean.class, "[sign]", "[is] waxed", "blocks/blockstates/itemtypes");
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ExprSignIsWaxed extends SimpleBooleanPropertyExpression<Object> {
 
     @Override
     public void reset(Object from) {
-        set(from,true);
+        set(from, true);
     }
 
     @Override

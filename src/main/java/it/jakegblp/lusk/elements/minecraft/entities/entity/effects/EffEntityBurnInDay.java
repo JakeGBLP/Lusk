@@ -31,7 +31,7 @@ public class EffEntityBurnInDay extends Effect {
     @Override
     protected void execute(Event event) {
         for (LivingEntity livingEntity : entity.getAll(event)) {
-            setShouldBurnDuringTheDay(livingEntity,shouldBurn);
+            setShouldBurnDuringTheDay(livingEntity, shouldBurn);
         }
     }
 

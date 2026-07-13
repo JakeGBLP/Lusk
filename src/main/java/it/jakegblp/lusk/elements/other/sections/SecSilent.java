@@ -18,9 +18,9 @@ import java.util.List;
 
 @Name("Run Silently")
 @Description("""
-Executes the effects within this section without making sounds, this currently only supports the changing of an item frame's item.
-
-Note: this is not related to errors or warnings in the console.""")
+        Executes the effects within this section without making sounds, this currently only supports the changing of an item frame's item.
+        
+        Note: this is not related to errors or warnings in the console.""")
 @Examples("""
         silently:
           set item frame item of {_frame} to iron sword # won't play the sound
@@ -40,7 +40,7 @@ public class SecSilent extends Section {
 
     @Override
     protected @Nullable TriggerItem walk(Event event) {
-        return walk(event,true);
+        return walk(event, true);
     }
 
     @Override

@@ -10,8 +10,8 @@ public class VersionResolver {
 
     public static SkriptAdapter getSkriptAdapter(Semver version, SkriptAddon skriptAddon) {
         int major = version.getMajor(),
-            minor = version.getMinor(),
-            patch = version.getPatch();
+                minor = version.getMinor(),
+                patch = version.getPatch();
         SkriptAdapter skriptAdapter = switch (major) {
             case 2 -> minor >= 15 ? new Skript_2_15_0(skriptAddon) : new Skript_2_10_0();
             default -> null;

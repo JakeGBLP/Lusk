@@ -12,10 +12,10 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_PREFIX;
 
 @Name("Armor Stand - can Tick (Property)")
 @Description("""
-Gets and sets the `canTick` property of an armorstand entity or item.
-
-Unlike other Armorstand properties, this one cannot be used on the armorstand item as of 1.21.3.
-""")
+        Gets and sets the `canTick` property of an armorstand entity or item.
+        
+        Unlike other Armorstand properties, this one cannot be used on the armorstand item as of 1.21.3.
+        """)
 @Examples({"set can tick property of target to true", "set can tick state of target to false"})
 @Since("1.0.2")
 @SuppressWarnings("unused")

@@ -24,10 +24,10 @@ public class EvtItemFrameChange extends SkriptEvent {
                     .examples("""
                             on itemframe rotate:
                               broadcast "rotated"
-
+                            
                             on itemframe remove:
                               broadcast "remove"
-
+                            
                             on itemframe place:
                               broadcast "place"
                             """)

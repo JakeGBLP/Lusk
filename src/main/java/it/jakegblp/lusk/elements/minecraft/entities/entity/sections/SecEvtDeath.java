@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 @Name("Entity - on Death Section")
 @Description("""
         Runs the code inside of it when the provided entity dies.
-
+        
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.

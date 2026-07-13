@@ -5,8 +5,6 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Fox - is Leaping (Property)")
 @Description("Gets whether the provided foxed are leaping, can be set and reset.")
 @Examples({"broadcast the fox is leaping property of target"})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class ExprFoxLeaping extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(ExprFoxLeaping.class, Boolean.class, "fox", "[is] leaping","livingentities");
+        register(ExprFoxLeaping.class, Boolean.class, "fox", "[is] leaping", "livingentities");
     }
 
     @Override

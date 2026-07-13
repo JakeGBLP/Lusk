@@ -1,7 +1,6 @@
 package it.jakegblp.lusk.utils;
 
 import it.jakegblp.lusk.api.enums.ArmorStandInteraction;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -13,14 +12,6 @@ import static it.jakegblp.lusk.utils.Constants.*;
 
 @SuppressWarnings("unused")
 public class EventUtils {
-
-    public static boolean willItemsDrop(BlockBreakEvent event) {
-        if (HAS_BLOCK_BREAK_EVENT_DROPS_ITEMS) {
-            return event.isDropItems();
-        } else {
-            return !event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand()).isEmpty();
-        }
-    }
 
     public static boolean matchesDropEvent(
             @Nullable InventoryClickEvent inventoryClickEvent, @NotNull PlayerDropItemEvent dropItemEvent) {

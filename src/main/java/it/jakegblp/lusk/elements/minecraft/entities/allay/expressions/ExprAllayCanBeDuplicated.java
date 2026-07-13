@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprAllayCanBeDuplicated extends SimpleBooleanPropertyExpression<Entity> {
 
     static {
-        register(ExprAllayCanBeDuplicated.class,Boolean.class,"[allay]", "(can be duplicated|duplication)", "livingentities");
+        register(ExprAllayCanBeDuplicated.class, Boolean.class, "[allay]", "(can be duplicated|duplication)", "livingentities");
     }
 
     @Override

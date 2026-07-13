@@ -28,11 +28,11 @@ import static it.jakegblp.lusk.utils.VectorUtils.toVector;
 @Examples({"broadcast rotation of target", "set head rotation of target to vector(45,0,0)\n# looks down a a 45 degrees - sad armor stand :("})
 @Since("1.0.2, 1.3 (Degrees)")
 @SuppressWarnings("unused")
-public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vector> {
+public class ExprArmorStandRotations extends PropertyExpression<LivingEntity, Vector> {
     // todo: allow radians too, perhaps make a reusable system that supports either
     static {
         register(ExprArmorStandRotations.class, Vector.class,
-                ARMOR_STAND_PREFIX +" %bodyparts% (rotation|pose)[s]", "livingentities");
+                ARMOR_STAND_PREFIX + " %bodyparts% (rotation|pose)[s]", "livingentities");
     }
 
     private Expression<BodyPart> bodyPartExpression;
@@ -112,6 +112,6 @@ public class ExprArmorStandRotations extends PropertyExpression<LivingEntity,Vec
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "the armor stand "+bodyPartExpression.toString(event, debug)+" rotations of "+getExpr().toString(event, debug);
+        return "the armor stand " + bodyPartExpression.toString(event, debug) + " rotations of " + getExpr().toString(event, debug);
     }
 }

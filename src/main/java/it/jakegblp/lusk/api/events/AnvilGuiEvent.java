@@ -17,6 +17,10 @@ public class AnvilGuiEvent extends PlayerEvent {
         this.anvil = anvil;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public Inventory getInventory() {
         return anvil.getAnvilGUI().getInventory();
     }
@@ -27,10 +31,6 @@ public class AnvilGuiEvent extends PlayerEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

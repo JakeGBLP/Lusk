@@ -12,9 +12,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
-
 @Name("Enderman - Randomly Teleport")
 @Description("Attempts to teleport an enderman to a random nearby location.\nRequires Spigot 1.20.1+ or Paper, behavior might be slightly different.")
 @Examples({"randomly teleport {_endermen::*}"})
@@ -24,8 +21,7 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
 @SuppressWarnings("unused")
 public class EffEndermanRandomTeleport extends Effect {
     static {
-        if (isPaper() || MINECRAFT_1_20_1)
-            Skript.registerEffect(EffEndermanRandomTeleport.class, "[attempt to] randomly teleport %livingentities%");
+        Skript.registerEffect(EffEndermanRandomTeleport.class, "[attempt to] randomly teleport %livingentities%");
     }
 
     private Expression<LivingEntity> entityExpression;
@@ -46,8 +42,7 @@ public class EffEndermanRandomTeleport extends Effect {
     protected void execute(@NotNull Event event) {
         for (LivingEntity entity : entityExpression.getArray(event)) {
             if (entity instanceof Enderman enderman) {
-                if (isPaper()) enderman.teleportRandomly();
-                else if (MINECRAFT_1_20_1) enderman.teleport();
+                enderman.teleportRandomly();
             }
         }
     }

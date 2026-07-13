@@ -20,17 +20,17 @@ import static it.jakegblp.lusk.utils.ItemUtils.getSingleItemTypeToItemStack;
 
 @Name("Player - Start/Stop Riptiding")
 @Description("""
-Makes a player riptide. (also known as spin attack)
-
-Stopping makes the player riptide for a tick, which stops it a tick later.
-
-The duration must be greater than or equal to 1 tick.
-Attack strength will default to 0
-
-`if player is riptiding:` will return true for the given duration.
-
-""")
-@Examples({"make player riptide for 2 seconds with attack strength 4","make player stop riptiding"})
+        Makes a player riptide. (also known as spin attack)
+        
+        Stopping makes the player riptide for a tick, which stops it a tick later.
+        
+        The duration must be greater than or equal to 1 tick.
+        Attack strength will default to 0
+        
+        `if player is riptiding:` will return true for the given duration.
+        
+        """)
+@Examples({"make player riptide for 2 seconds with attack strength 4", "make player stop riptiding"})
 @Since("1.3")
 @RequiredPlugins("1.21.1")
 public class EffPlayerRiptide extends Effect {
@@ -47,7 +47,7 @@ public class EffPlayerRiptide extends Effect {
     private Expression<Timespan> timespanExpression = null;
     private Expression<ItemType> itemTypeExpression = null;
     private Expression<Number> numberExpression = null;
-    private boolean stop ;
+    private boolean stop;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -69,7 +69,8 @@ public class EffPlayerRiptide extends Effect {
         builder.append(" start riptiding for ");
         if (timespanExpression != null) builder.append(timespanExpression.toString(event, debug));
         if (itemTypeExpression != null) builder.append(" using ").append(itemTypeExpression.toString(event, debug));
-        if (numberExpression != null) builder.append(" with attack damage ").append(numberExpression.toString(event, debug));
+        if (numberExpression != null)
+            builder.append(" with attack damage ").append(numberExpression.toString(event, debug));
         return builder.toString();
     }
 
@@ -87,8 +88,8 @@ public class EffPlayerRiptide extends Effect {
             if (timespan == null) return;
             duration = (int) CompatibilityUtils.getTicks(timespan);
             if (duration < 1) return;
-            attackStrength = numberExpression == null ? 0 : Math.max(numberExpression.getOptionalSingle(event).orElse(0).floatValue(),0);
-            attackItem = getSingleItemTypeToItemStack(itemTypeExpression,event);
+            attackStrength = numberExpression == null ? 0 : Math.max(numberExpression.getOptionalSingle(event).orElse(0).floatValue(), 0);
+            attackItem = getSingleItemTypeToItemStack(itemTypeExpression, event);
         }
         for (Player player : playerExpression.getAll(event)) {
             if (!stop || player.isRiptiding()) {

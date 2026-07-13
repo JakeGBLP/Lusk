@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Description("Returns the network protocol ID for one or more entities.")
 @Examples("broadcast entity id of target")
 @Since("1.3")
-public class ExprEntityId extends SimplePropertyExpression<Entity,Integer> {
+public class ExprEntityId extends SimplePropertyExpression<Entity, Integer> {
 
     static {
         register(ExprEntityId.class, Integer.class, "entity id", "entities");

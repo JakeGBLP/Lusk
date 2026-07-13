@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Ender Signal - Item")
 @Description("""
-Gets the item the provided ender signals will display and drop on death.
-""")
+        Gets the item the provided ender signals will display and drop on death.
+        """)
 @Examples("set ender signal item of {_signal} to iron sword")
 @Since("1.3")
 public class ExprEnderSignalItem extends SimplerPropertyExpression<Entity, ItemType> {

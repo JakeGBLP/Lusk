@@ -40,7 +40,7 @@ public class ExprEntitySnapshotFromString extends SimplePropertyExpression<Strin
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "entity snapshots of string nbt "+getExpr().toString(event, debug);
+        return "entity snapshots of string nbt " + getExpr().toString(event, debug);
     }
 
     @Override

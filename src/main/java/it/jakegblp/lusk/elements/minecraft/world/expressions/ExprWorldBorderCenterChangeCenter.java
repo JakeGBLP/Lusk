@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 
 @Name("Past/Future World Border Center")
 @Description("Returns the past/future center of the world border in the World Border Change events.\nThe future center can be set.")
@@ -24,10 +23,8 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 @SuppressWarnings("unused")
 public class ExprWorldBorderCenterChangeCenter extends SimpleExpression<Location> {
     static {
-        if (PAPER_HAS_WORLD_BORDER_EVENT) {
-            Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, EVENT_OR_SIMPLE,
-                    "[the] [future|:past] world[ ]border center");
-        }
+        Skript.registerExpression(ExprWorldBorderCenterChangeCenter.class, Location.class, EVENT_OR_SIMPLE,
+                "[the] [future|:past] world[ ]border center");
     }
 
     private Boolean past;

@@ -10,8 +10,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_18_2;
 
 @Name("Entity/Block/BlockState/Item - is Collidable")
 @Description("""
@@ -26,16 +24,14 @@ public class CondIsCollidable extends PropertyCondition<Object> {
 
     static {
         register(CondIsCollidable.class,
-                "collidable [with]", "livingentities"+((MINECRAFT_1_18_2 && isPaper()) ? "/blocks/blockstates/itemtypes" : ""));
+                "collidable [with]", "livingentities/blocks/blockstates/itemtypes");
     }
 
     @Override
     public boolean check(Object value) {
         if (value instanceof LivingEntity livingEntity) {
             return livingEntity.isCollidable();
-        }
-        if (!MINECRAFT_1_18_2 || !isPaper()) return false;
-        if (value instanceof BlockState blockState) {
+        } else if (value instanceof BlockState blockState) {
             return blockState.isCollidable();
         } else if (value instanceof Block block) {
             return block.isCollidable();

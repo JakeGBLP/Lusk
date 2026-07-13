@@ -24,55 +24,55 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Since("1.3")
 public class ExprFluidLevelChangeNewBlockData extends SimpleExpression<BlockData> {
 
-	static {
-		Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class, EVENT_OR_SIMPLE,
-				"[the] [new] fluid level [block[ |-]]data");
-	}
+    static {
+        Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class, EVENT_OR_SIMPLE,
+                "[the] [new] fluid level [block[ |-]]data");
+    }
 
-	@Override
-	protected @Nullable BlockData[] get(Event event) {
-		return new BlockData[] {((FluidLevelChangeEvent) event).getNewData()};
-	}
+    @Override
+    protected @Nullable BlockData[] get(Event event) {
+        return new BlockData[]{((FluidLevelChangeEvent) event).getNewData()};
+    }
 
-	@Override
-	public boolean isSingle() {
-		return true;
-	}
+    @Override
+    public boolean isSingle() {
+        return true;
+    }
 
-	@Override
-	public Class<? extends BlockData> getReturnType() {
-		return BlockData.class;
-	}
+    @Override
+    public Class<? extends BlockData> getReturnType() {
+        return BlockData.class;
+    }
 
-	@Override
-	public String toString(@Nullable Event event, boolean debug) {
-		return "the new fluid level block data";
-	}
+    @Override
+    public String toString(@Nullable Event event, boolean debug) {
+        return "the new fluid level block data";
+    }
 
-	@Override
-	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-		return getParser().isCurrentEvent(FluidLevelChangeEvent.class);
-	}
+    @Override
+    public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
+        return getParser().isCurrentEvent(FluidLevelChangeEvent.class);
+    }
 
-	@Override
-	public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-		return switch (mode) {
-            case SET-> new Class[]{BlockData.class};
-			case DELETE, RESET -> new Class[0];
-			case ADD, REMOVE, REMOVE_ALL -> null;
+    @Override
+    public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
+        return switch (mode) {
+            case SET -> new Class[]{BlockData.class};
+            case DELETE, RESET -> new Class[0];
+            case ADD, REMOVE, REMOVE_ALL -> null;
         };
-	}
+    }
 
-	@Override
-	public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
-		if (event instanceof FluidLevelChangeEvent fluidLevelChangeEvent) {
-			if (mode == Changer.ChangeMode.SET
-					&& delta != null && delta[0] instanceof BlockData blockData
-					&& blockData.getMaterial().equals(fluidLevelChangeEvent.getNewData().getMaterial())) {
-				fluidLevelChangeEvent.setNewData(blockData);
-			} else if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
-				fluidLevelChangeEvent.setNewData(Material.AIR.createBlockData());
-			}
-		}
-	}
+    @Override
+    public void change(Event event, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        if (event instanceof FluidLevelChangeEvent fluidLevelChangeEvent) {
+            if (mode == Changer.ChangeMode.SET
+                    && delta != null && delta[0] instanceof BlockData blockData
+                    && blockData.getMaterial().equals(fluidLevelChangeEvent.getNewData().getMaterial())) {
+                fluidLevelChangeEvent.setNewData(blockData);
+            } else if (mode == Changer.ChangeMode.DELETE || mode == Changer.ChangeMode.RESET) {
+                fluidLevelChangeEvent.setNewData(Material.AIR.createBlockData());
+            }
+        }
+    }
 }

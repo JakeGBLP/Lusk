@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprBlockIsWaterLogged extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        register(ExprBlockIsWaterLogged.class, Boolean.class, "[block]","[is] water[ |-]log[ged]","blocks/blockstates/blockdatas/itemtypes");
+        register(ExprBlockIsWaterLogged.class, Boolean.class, "[block]", "[is] water[ |-]log[ged]", "blocks/blockstates/blockdatas/itemtypes");
     }
 
     @Override

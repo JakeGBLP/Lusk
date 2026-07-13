@@ -54,7 +54,7 @@ public class ExprArrowDamage extends SimplerPropertyExpression<Projectile, Doubl
     @Override
     public void add(Projectile from, Double toAdd) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setDamage(abstractArrow.getDamage()+toAdd);
+            abstractArrow.setDamage(abstractArrow.getDamage() + toAdd);
         }
     }
 

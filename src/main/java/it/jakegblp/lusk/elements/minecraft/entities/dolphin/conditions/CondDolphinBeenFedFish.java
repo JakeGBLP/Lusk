@@ -6,8 +6,6 @@ import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Dolphin - Has Been Fed Fish")
 @Description("Checks if a dolphin has a fish.")
 @Examples({"on damage:\n\tif victim has a fish:\n\t\tbroadcast \"It has a fish!\""})
@@ -17,8 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class CondDolphinBeenFedFish extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(CondDolphinBeenFedFish.class, PropertyType.HAVE, "been fed [a] fish", "livingentities");
+        register(CondDolphinBeenFedFish.class, PropertyType.HAVE, "been fed [a] fish", "livingentities");
     }
 
     @Override

@@ -17,7 +17,7 @@ import org.bukkit.entity.Entity;
 public class CondAllayCanBeDuplicated extends PrefixedPropertyCondition<Entity> {
 
     static {
-        register(CondAllayCanBeDuplicated.class, ExtendedPropertyType.CAN,"[allay[s]]","be duplicated","entities");
+        register(CondAllayCanBeDuplicated.class, ExtendedPropertyType.CAN, "[allay[s]]", "be duplicated", "entities");
     }
 
     @Override

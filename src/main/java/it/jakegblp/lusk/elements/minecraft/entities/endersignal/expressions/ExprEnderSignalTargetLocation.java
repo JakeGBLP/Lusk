@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Ender Signal - Target Location")
 @Description("""
-Gets the location the provided ender signals are moving towards.
-When set, the drop chance resets to a random value and the despawn timer gets set back to 0.
-""")
+        Gets the location the provided ender signals are moving towards.
+        When set, the drop chance resets to a random value and the despawn timer gets set back to 0.
+        """)
 @Examples("set ender signal target location of {_signal} to {_location}")
 @Since("1.3")
 public class ExprEnderSignalTargetLocation extends SimplerPropertyExpression<Entity, Location> {

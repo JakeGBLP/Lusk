@@ -20,10 +20,10 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Examples("""
         on pattern select of border:
           set the loom pattern to creeper
-
+        
         on pattern select:
           broadcast loom pattern
-
+        
         on pattern select of bricks:
           broadcast the selected loom pattern
         """)

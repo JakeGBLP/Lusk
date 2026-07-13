@@ -42,7 +42,7 @@ public class ExprBrewingFuel extends SimplerPropertyExpression<Object, ItemType>
 
     @Override
     public void delete(Object from) {
-        set(from,null);
+        set(from, null);
     }
 
     @Override

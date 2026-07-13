@@ -30,7 +30,7 @@ public class ExprNewVelocity extends SimpleExpression<Vector> {
     @Override
     protected @Nullable Vector[] get(Event event) {
         PlayerVelocityEvent playerVelocityEvent = (PlayerVelocityEvent) event;
-        return new Vector[] {playerVelocityEvent.getVelocity()};
+        return new Vector[]{playerVelocityEvent.getVelocity()};
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ExprNewVelocity extends SimpleExpression<Vector> {
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET -> new Class[] { Vector.class };
+            case SET -> new Class[]{Vector.class};
             case DELETE, RESET -> new Class[0];
             default -> null;
         };

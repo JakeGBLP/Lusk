@@ -11,21 +11,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
 
 @SuppressWarnings("unused")
 public class EvtHopperInventorySearch extends SkriptEvent {
     static {
-        if (HAS_HOPPER_INVENTORY_SEARCH_EVENT) {
-            Skript.registerEvent("Hopper - on Inventory Search", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
-                            "hopper inventory search[ing]",
-                            "hopper source search[ing]",
-                            "hopper destination search[ing]")
-                    .description("Called each time a Hopper attempts to find its source/attached containers.")
-                    .examples("on hopper inventory search:\n\tbroadcast event-inventory")
-                    .since("1.0.4");
-            registerEventValue(HopperInventorySearchEvent.class, Inventory.class, HopperInventorySearchEvent::getInventory, 0);
-        }
+        Skript.registerEvent("Hopper - on Inventory Search", EvtHopperInventorySearch.class, HopperInventorySearchEvent.class,
+                        "hopper inventory search[ing]",
+                        "hopper source search[ing]",
+                        "hopper destination search[ing]")
+                .description("Called each time a Hopper attempts to find its source/attached containers.")
+                .examples("on hopper inventory search:\n\tbroadcast event-inventory")
+                .since("1.0.4");
+        registerEventValue(HopperInventorySearchEvent.class, Inventory.class, HopperInventorySearchEvent::getInventory, 0);
     }
 
     private int pattern;

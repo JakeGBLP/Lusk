@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class ItemFrameUtils {
 
     public static Rotation sumRotations(Stream<? extends Rotation> rotations, Rotation rotation, int times) {
-        int total = rotations.mapToInt(Rotation::ordinal).sum()*times+rotation.ordinal();
+        int total = rotations.mapToInt(Rotation::ordinal).sum() * times + rotation.ordinal();
         return Rotation.values()[total % Rotation.values().length];
     }
 

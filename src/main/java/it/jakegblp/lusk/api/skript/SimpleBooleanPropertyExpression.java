@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleBooleanPropertyExpression<F> extends SimplerPropertyExpression<F, Boolean> {
 
+    private boolean isNegated;
+
     /**
      * Registers a property expression that gets or is set to a boolean; includes the following patterns:<br>
      * 1. <code>[the] %prefix% %property% [state|property] of %fromType%</code><br>
@@ -19,11 +21,11 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
      * 4. <code>whether [the] %prefix% %fromType% %property% [or not]</code>
      *
      * @param expressionClass the class of the expression to register
-     * @param type the class of the return type
-     * @param prefix a (usually optional) string that comes before the property to indicate what kind of object it can be used for
-     * @param property a string indicates what this expression will return based on the given object
-     * @param fromType a string containing lowercase classinfos that indicate what this expression can be used against
-     * @param <T> the returned type of the expression
+     * @param type            the class of the return type
+     * @param prefix          a (usually optional) string that comes before the property to indicate what kind of object it can be used for
+     * @param property        a string indicates what this expression will return based on the given object
+     * @param fromType        a string containing lowercase classinfos that indicate what this expression can be used against
+     * @param <T>             the returned type of the expression
      */
     public static <T extends Boolean> void register(
             Class<? extends Expression<T>> expressionClass,
@@ -36,10 +38,8 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
                 "[the] " + prefix + property + " [state|property] of %" + fromType + "%",
                 "%" + fromType + "%'[s] " + prefix + property + " [state|property]"
         };
-        Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY,patterns);
+        Skript.registerExpression(expressionClass, type, ExpressionType.PROPERTY, patterns);
     }
-
-    private boolean isNegated;
 
     /**
      * @return if this boolean property expression is negated.
@@ -50,8 +50,9 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
 
     /**
      * Sets the negated value of this boolean property expression on init, false by default.
+     *
      * @param matchedPattern the matched pattern on init.
-     * @param parseResult the parse result on init.
+     * @param parseResult    the parse result on init.
      * @return the negation value, false if not overridden.
      */
     public boolean setNegated(int matchedPattern, SkriptParser.ParseResult parseResult) {
@@ -85,14 +86,14 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
      */
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        isNegated = setNegated(matchedPattern,parseResult);
+        isNegated = setNegated(matchedPattern, parseResult);
         return super.init(expressions, matchedPattern, isDelayed, parseResult);
     }
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET -> allowSet() ? new Class[] {Boolean.class} : null;
+            case SET -> allowSet() ? new Class[]{Boolean.class} : null;
             case RESET -> allowReset() ? new Class[0] : null;
             case ADD, DELETE, REMOVE, REMOVE_ALL -> null;
         };
@@ -106,7 +107,7 @@ public abstract class SimpleBooleanPropertyExpression<F> extends SimplerProperty
         } else if (mode == Changer.ChangeMode.SET && delta != null && delta[0] instanceof Boolean bool) {
             bool ^= isNegated();
             for (F from : getExpr().getAll(event))
-                set(from,bool);
+                set(from, bool);
         }
     }
 

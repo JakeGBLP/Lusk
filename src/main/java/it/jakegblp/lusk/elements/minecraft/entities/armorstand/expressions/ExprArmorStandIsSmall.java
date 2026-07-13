@@ -10,8 +10,8 @@ import static it.jakegblp.lusk.utils.Constants.ARMOR_STAND_TYPES;
 
 @Name("Armor Stand - is Small (Property)")
 @Description("""
-Gets and sets the `small` property of an armorstand entity or item, to do so with an armorstand item you must have Paper.
-""")
+        Gets and sets the `small` property of an armorstand entity or item, to do so with an armorstand item you must have Paper.
+        """)
 @Examples({"set small property of target to true"})
 @Since("1.0.2, 1.3 (Item)")
 @DocumentationId("9059")

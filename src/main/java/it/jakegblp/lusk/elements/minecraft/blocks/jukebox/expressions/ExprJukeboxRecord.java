@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Since("1.0.3, 1.3 (Plural, Blockstate)")
 @DocumentationId("9162")
 @SuppressWarnings("unused")
-public class ExprJukeboxRecord extends SimplerPropertyExpression<Object,ItemType> {
+public class ExprJukeboxRecord extends SimplerPropertyExpression<Object, ItemType> {
 
     static {
         register(ExprJukeboxRecord.class, ItemType.class, "[jukebox] [music] (disc|record)", "blocks/blockstates/itemtypes");

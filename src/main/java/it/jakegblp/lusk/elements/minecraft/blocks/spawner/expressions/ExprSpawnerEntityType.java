@@ -14,13 +14,13 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20;
 
 @Name("Spawner/Trial Spawner - Entity Type")
 @Description("""
-Gets the spawner entity type of the provided spawners or trial spawners (1.21+).
-
-**Works with Items.**
-**Works with Spawner Minecarts (Requires 1.20+).**
-
-Can be set, reset (sets it to pig), and deleted (requires Minecraft 1.20+).
-""")
+        Gets the spawner entity type of the provided spawners or trial spawners (1.21+).
+        
+        **Works with Items.**
+        **Works with Spawner Minecarts (Requires 1.20+).**
+        
+        Can be set, reset (sets it to pig), and deleted (requires Minecraft 1.20+).
+        """)
 @Examples("set spawner entity type of {_block} to zombie")
 @Since("1.3.4")
 public class ExprSpawnerEntityType extends SimplerPropertyExpression<Object, EntityData> {

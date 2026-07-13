@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 @Name("BlockFace - Between Blocks")
 @Description("""
         Returns the face relation of a block compared to another block.
-
+        
         If the blocks are not connected nothing will be returned.
         """)
 @Examples(
@@ -28,9 +28,9 @@ import org.jetbrains.annotations.Nullable;
                 """
                         set {_A} to block at location(10,10,10,"world")
                         set {_B} to block at location(10,11,10,"world") # 1 block above
-
+                        
                         set {_blockFace} to blockface from {_A} to {_B}
-
+                        
                         broadcast {_blockFace} # 'up face'
                         """
         })

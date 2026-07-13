@@ -11,33 +11,31 @@ import it.jakegblp.lusk.api.BlockWrapper;
 import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.jetbrains.annotations.Nullable;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 import static it.jakegblp.lusk.utils.LuskUtils.getKleenean;
 
 @Name("Block - Liquid Level")
 @Description("""
-Represents the maximum, minimum or current amount of fluid contained within a block, either by itself or inside a cauldron.
-Minimum Level requires Paper and 1.18.2.
-
-This expression includes liquid blocks, cauldron and composters.
-
-For water and lava blocks the levels have special meanings: a level of 0 corresponds to a source block, 1-7 regular fluid heights, and 8-15 to "falling" fluids.
-All falling fluids have the same behaviour, but the level corresponds to that of the block above them, equal to this. level - 8
-
-**Note that counterintuitively, an adjusted level of 1 is the highest level, whilst 7 is the lowest.**
-
-May not be higher than the max level.
-
-Can be set, added to, removed from and reset.
-Reset requires Paper and 1.18.2.
-""")
+        Represents the maximum, minimum or current amount of fluid contained within a block, either by itself or inside a cauldron.
+        Minimum Level requires Paper and 1.18.2.
+        
+        This expression includes liquid blocks, cauldron and composters.
+        
+        For water and lava blocks the levels have special meanings: a level of 0 corresponds to a source block, 1-7 regular fluid heights, and 8-15 to "falling" fluids.
+        All falling fluids have the same behaviour, but the level corresponds to that of the block above them, equal to this. level - 8
+        
+        **Note that counterintuitively, an adjusted level of 1 is the highest level, whilst 7 is the lowest.**
+        
+        May not be higher than the max level.
+        
+        Can be set, added to, removed from and reset.
+        Reset requires Paper and 1.18.2.
+        """)
 @Examples({"broadcast max block level of event-block", "set block level of {_block} to 3"})
 @Since("1.3.2")
-public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integer> {
+public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object, Integer> {
 
     static {
-        register(ExprBlockLiquidLevel.class, Integer.class, "["+(PAPER_1_18_2 ? " (:max|:min)" : "max:max")+"[imum]] block [liquid] level", "blocks/itemtypes/blockdatas/blockstates");
+        register(ExprBlockLiquidLevel.class, Integer.class, "[ (:max|:min)[imum]] block [liquid] level", "blocks/itemtypes/blockdatas/blockstates");
     }
 
     Kleenean max;
@@ -65,7 +63,7 @@ public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integ
 
     @Override
     public boolean allowReset() {
-        return isPaper();
+        return true;
     }
 
     @Override
@@ -97,7 +95,7 @@ public class ExprBlockLiquidLevel extends SimplerPropertyExpression<Object,Integ
     @Override
     public void add(Object from, Integer to) {
         BlockWrapper blockWrapper = new BlockWrapper(from, true);
-        blockWrapper.setLiquidLevel(Math.min(blockWrapper.getLiquidLevel() + to,blockWrapper.getMaxLiquidLevel()));
+        blockWrapper.setLiquidLevel(Math.min(blockWrapper.getLiquidLevel() + to, blockWrapper.getMaxLiquidLevel()));
     }
 
     @Override

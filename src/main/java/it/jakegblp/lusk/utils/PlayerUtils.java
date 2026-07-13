@@ -10,6 +10,7 @@ public class PlayerUtils {
 
     /**
      * Checks whether a player is crawling.
+     *
      * @param player the player to check for
      * @return whether the player is crawling
      */

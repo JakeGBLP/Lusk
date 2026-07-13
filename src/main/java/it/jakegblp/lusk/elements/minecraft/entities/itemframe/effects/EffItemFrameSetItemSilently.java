@@ -38,7 +38,7 @@ public class EffItemFrameSetItemSilently extends Effect {
         ItemStack itemStack = itemType.getRandom();
         for (Entity entity : entityExpression.getAll(event)) {
             if (entity instanceof ItemFrame itemFrame) {
-                itemFrame.setItem(itemStack,false);
+                itemFrame.setItem(itemStack, false);
             }
         }
 
@@ -47,8 +47,8 @@ public class EffItemFrameSetItemSilently extends Effect {
     @Override
     public String toString(@Nullable Event event, boolean debug) {
         return "silently set item frame item of "
-                + entityExpression.toString(event,debug) + " to "
-                + itemTypeExpression.toString(event,debug);
+                + entityExpression.toString(event, debug) + " to "
+                + itemTypeExpression.toString(event, debug);
     }
 
     @Override

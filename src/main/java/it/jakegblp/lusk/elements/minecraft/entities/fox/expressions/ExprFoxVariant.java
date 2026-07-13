@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 @Description("Gets the current type of this fox.\nCan bet set.")
 @Examples("set fox type of {_fox} to red_fox_type")
 @Since("1.3")
-public class ExprFoxVariant extends SimplerPropertyExpression<LivingEntity,Fox.Type> {
+public class ExprFoxVariant extends SimplerPropertyExpression<LivingEntity, Fox.Type> {
 
     static {
-        register(ExprFoxVariant.class, Fox.Type.class,"fox (variant|type)","livingentities");
+        register(ExprFoxVariant.class, Fox.Type.class, "fox (variant|type)", "livingentities");
     }
 
     @Override

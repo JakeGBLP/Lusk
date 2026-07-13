@@ -55,7 +55,7 @@ public class ExprArrowPierceAmount extends SimplerPropertyExpression<Projectile,
     @Override
     public void add(Projectile from, Integer toAdd) {
         if (from instanceof AbstractArrow abstractArrow) {
-            abstractArrow.setPierceLevel(LuskMath.fit(0, abstractArrow.getPierceLevel()+toAdd, 127));
+            abstractArrow.setPierceLevel(LuskMath.fit(0, abstractArrow.getPierceLevel() + toAdd, 127));
         }
     }
 

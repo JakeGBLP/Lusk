@@ -17,5 +17,6 @@ public class ItemComparators {
         }
     }
 
-    public ItemComparators() {}
+    public ItemComparators() {
+    }
 }

@@ -35,8 +35,9 @@ public class LuskUtils {
 
     /**
      * Uses MessageFormat.
+     *
      * @param message the message to send, uses '&' formatting
-     * @param args MessageFormat arguments
+     * @param args    MessageFormat arguments
      */
     public static void consoleLog(String message, Object... args) {
         send(Bukkit.getConsoleSender(), message, args);
@@ -47,8 +48,9 @@ public class LuskUtils {
      * Sends a warning in the console, the warning always starts with "&eWARNING: " and the leading color is yellow ('&e');
      * this should not be changed.<br>
      * Uses MessageFormat.
+     *
      * @param message the message to send, uses '&' formatting
-     * @param args MessageFormat arguments
+     * @param args    MessageFormat arguments
      */
     public static void warning(String message, Object... args) {
         send(Bukkit.getConsoleSender(), "&eWARNING: " + message, args);
@@ -57,13 +59,15 @@ public class LuskUtils {
     /**
      * Uses MessageFormat.
      * For console logging use {@link #consoleLog(String, Object...) the console log method}
-     * @param sender A CommandSender
+     *
+     * @param sender  A CommandSender
      * @param message the message to send, uses '&' formatting
-     * @param args MessageFormat arguments
+     * @param args    MessageFormat arguments
      */
     public static void send(@NotNull CommandSender sender, String message, Object... args) {
-        sendMessage(sender,LUSK_PREFIX + "&7" + MessageFormat.format(message, args));
+        sendMessage(sender, LUSK_PREFIX + "&7" + MessageFormat.format(message, args));
     }
+
     /**
      * Sends a message with `&` color codes to a CommandSender.
      *
@@ -111,6 +115,7 @@ public class LuskUtils {
 
     /**
      * Useful for when a and b can't both be true, and a fallback value is required.
+     *
      * @return a ? TRUE : b ? FALSE : UNKNOWN
      */
     @NotNull

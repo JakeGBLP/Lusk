@@ -17,15 +17,15 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
         
         Can be set.
         """)
-@Examples({"broadcast the should burn under sunlight property of target","set the should burn during the day property of {_entity} to false"})
+@Examples({"broadcast the should burn under sunlight property of target", "set the should burn during the day property of {_entity} to false"})
 @Since("1.0.3, 1.1.1 (Skeleton,Phantom), 1.3 (Safety), 1.3.3 (1.16.5 bug fixes)")
 @RequiredPlugins("Paper")
 @DocumentationId("11901")
 @SuppressWarnings("unused")
 public class ExprEntityShouldBurnInDay extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        register(ExprEntityShouldBurnInDay.class,Boolean.class, "[[living[ |-]]entity]",
-                "(should|will) burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))","livingentities");
+        register(ExprEntityShouldBurnInDay.class, Boolean.class, "[[living[ |-]]entity]",
+                "(should|will) burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))", "livingentities");
     }
 
     @Override

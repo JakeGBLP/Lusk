@@ -45,7 +45,7 @@ public class EvtCreeperIgnite extends SkriptEvent {
 
     @Override
     public @NotNull String toString(@Nullable Event e, boolean debug) {
-        return "creeper "  + switch (ignite) {
+        return "creeper " + switch (ignite) {
             case UNKNOWN -> "ignite toggle";
             case FALSE -> "extinguish";
             case TRUE -> "ignite";

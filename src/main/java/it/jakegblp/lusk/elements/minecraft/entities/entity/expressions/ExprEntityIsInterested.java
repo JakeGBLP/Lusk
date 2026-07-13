@@ -16,7 +16,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.setIsInterested;
 @SuppressWarnings("unused")
 public class ExprEntityIsInterested extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        register(ExprEntityIsInterested.class,Boolean.class,
+        register(ExprEntityIsInterested.class, Boolean.class,
                 "[[living[ |-]]entity]", "[is] interested", "livingentities");
     }
 
@@ -42,11 +42,11 @@ public class ExprEntityIsInterested extends SimpleBooleanPropertyExpression<Livi
 
     @Override
     public void set(LivingEntity from, Boolean bool) {
-        setIsInterested(from,bool);
+        setIsInterested(from, bool);
     }
 
     @Override
     public void reset(LivingEntity from) {
-        setIsInterested(from,false);
+        setIsInterested(from, false);
     }
 }

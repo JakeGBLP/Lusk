@@ -16,6 +16,10 @@ public class AnvilGuiSnapshotEvent extends AnvilGuiEvent {
         this.snapshot = snapshot;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     // todo: add snapshot getter, this is not too relevant
     public AnvilGUI.StateSnapshot getSnapshot() {
         return snapshot;
@@ -39,10 +43,6 @@ public class AnvilGuiSnapshotEvent extends AnvilGuiEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

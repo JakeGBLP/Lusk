@@ -30,66 +30,6 @@ import java.util.List;
 @SuppressWarnings({"unused"})
 public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
 
-    /**
-     * Create a Registry ClassInfo
-     *
-     * @param registry      Registry to wrap
-     * @param registryClass Class of registry
-     * @param codename      Codename for ClassInfo
-     * @return ClassInfo from Registry
-     */
-    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, @NotNull String codename) {
-        return create(registry, registryClass, true, codename, null, null);
-    }
-
-    /**
-     * Create a Registry ClassInfo with optional prefix and suffix
-     *
-     * @param registry      Registry to wrap
-     * @param registryClass Class of registry
-     * @param codename      Codename for ClassInfo
-     * @param prefix        Optional prefix to prepend to items in registry
-     * @param suffix        Optional suffix to append to items in registry
-     * @return ClassInfo from Registry
-     */
-    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, @NotNull String codename, @Nullable String prefix, @Nullable String suffix) {
-        return create(registry, registryClass, true, codename, prefix, suffix);
-    }
-
-    /**
-     * Create a Registry ClassInfo
-     *
-     * @param registry      Registry to wrap
-     * @param registryClass Class of registry
-     * @param usage         Whether to create usage
-     * @param codename      Codename for ClassInfo
-     * @return ClassInfo from Registry
-     */
-    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, boolean usage, @NotNull String codename) {
-        return create(registry, registryClass, usage, codename, null, null);
-    }
-
-    /**
-     * Create a Registry ClassInfo with optional prefix and suffix
-     *
-     * @param registry      Registry to wrap
-     * @param registryClass Class of registry
-     * @param usage         Whether to create usage
-     * @param codename      Codename for ClassInfo
-     * @param prefix        Optional prefix to prepend to items in registry
-     * @param suffix        Optional suffix to append to items in registry
-     * @return ClassInfo from Registry
-     */
-    @SuppressWarnings("ConstantValue")
-    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, boolean usage, @NotNull String codename, @Nullable String prefix, @Nullable String suffix) {
-        // Safety precautions
-        Preconditions.checkArgument(registry != null, "Registry cannot be null");
-        Preconditions.checkArgument(registryClass != null, "RegistryClass cannot be null");
-        Preconditions.checkArgument(!codename.isEmpty(), "Codename cannot be empty");
-        return new RegistryClassInfo<>(registry, registryClass, usage, codename, prefix, suffix);
-    }
-
-
     private final Registry<T> registry;
     @Nullable
     private final String prefix, suffix;
@@ -159,6 +99,65 @@ public class RegistryClassInfo<T extends Keyed> extends ClassInfo<T> {
                 return false;
             }
         });
+    }
+
+    /**
+     * Create a Registry ClassInfo
+     *
+     * @param registry      Registry to wrap
+     * @param registryClass Class of registry
+     * @param codename      Codename for ClassInfo
+     * @return ClassInfo from Registry
+     */
+    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, @NotNull String codename) {
+        return create(registry, registryClass, true, codename, null, null);
+    }
+
+    /**
+     * Create a Registry ClassInfo with optional prefix and suffix
+     *
+     * @param registry      Registry to wrap
+     * @param registryClass Class of registry
+     * @param codename      Codename for ClassInfo
+     * @param prefix        Optional prefix to prepend to items in registry
+     * @param suffix        Optional suffix to append to items in registry
+     * @return ClassInfo from Registry
+     */
+    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, @NotNull String codename, @Nullable String prefix, @Nullable String suffix) {
+        return create(registry, registryClass, true, codename, prefix, suffix);
+    }
+
+    /**
+     * Create a Registry ClassInfo
+     *
+     * @param registry      Registry to wrap
+     * @param registryClass Class of registry
+     * @param usage         Whether to create usage
+     * @param codename      Codename for ClassInfo
+     * @return ClassInfo from Registry
+     */
+    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, boolean usage, @NotNull String codename) {
+        return create(registry, registryClass, usage, codename, null, null);
+    }
+
+    /**
+     * Create a Registry ClassInfo with optional prefix and suffix
+     *
+     * @param registry      Registry to wrap
+     * @param registryClass Class of registry
+     * @param usage         Whether to create usage
+     * @param codename      Codename for ClassInfo
+     * @param prefix        Optional prefix to prepend to items in registry
+     * @param suffix        Optional suffix to append to items in registry
+     * @return ClassInfo from Registry
+     */
+    @SuppressWarnings("ConstantValue")
+    public static <T extends Keyed> RegistryClassInfo<T> create(@NotNull Registry<T> registry, @NotNull Class<T> registryClass, boolean usage, @NotNull String codename, @Nullable String prefix, @Nullable String suffix) {
+        // Safety precautions
+        Preconditions.checkArgument(registry != null, "Registry cannot be null");
+        Preconditions.checkArgument(registryClass != null, "RegistryClass cannot be null");
+        Preconditions.checkArgument(!codename.isEmpty(), "Codename cannot be empty");
+        return new RegistryClassInfo<>(registry, registryClass, usage, codename, prefix, suffix);
     }
 
     /**

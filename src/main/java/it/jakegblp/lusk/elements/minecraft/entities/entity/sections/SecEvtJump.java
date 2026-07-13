@@ -22,9 +22,9 @@ import java.util.function.Consumer;
 @Name("Entity - on Jump Section")
 @Description("""
         Runs the code inside of it when the provided entity jumps.
-
+        
         Only works for horses on Spigot, Paper is required for players and entities.
-
+        
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.

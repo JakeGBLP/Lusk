@@ -16,13 +16,13 @@ public class EvtSkriptEvents {
                 .description("Called when someone uses a skript effect through the chat, also known as effect command, this can be enabled through skript's config.")
                 .examples(
                         """
-                        on effect command:
-                            if the effect command contains "op":
-                                set effect command to "send ""why are you trying to op someone?""\"
-                        """
+                                on effect command:
+                                    if the effect command contains "op":
+                                        set effect command to "send ""why are you trying to op someone?""\"
+                                """
                 )
                 .since("1.3");
-        registerEventValue(EffectCommandEvent.class, String.class, CommandEvent::getCommand,0);
+        registerEventValue(EffectCommandEvent.class, String.class, CommandEvent::getCommand, 0);
         registerEventValue(EffectCommandEvent.class, CommandSender.class, CommandEvent::getSender, 0);
     }
 }

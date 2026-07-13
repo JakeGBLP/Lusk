@@ -81,7 +81,7 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
         }
         getExpr().stream(event)
                 .forEach(entity -> equipmentSlotExpression.stream(event)
-                        .forEach(equipmentSlot -> EntityUtils.setEntityEquipmentSlot(entity,equipmentSlot,itemStack)));
+                        .forEach(equipmentSlot -> EntityUtils.setEntityEquipmentSlot(entity, equipmentSlot, itemStack)));
     }
 
     @Override
@@ -91,6 +91,6 @@ public class ExprEntityEquipmentSlot extends PropertyExpression<LivingEntity, It
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "equipment slots " + equipmentSlotExpression.toString(event,debug) + " of "+getExpr().toString(event,debug);
+        return "equipment slots " + equipmentSlotExpression.toString(event, debug) + " of " + getExpr().toString(event, debug);
     }
 }

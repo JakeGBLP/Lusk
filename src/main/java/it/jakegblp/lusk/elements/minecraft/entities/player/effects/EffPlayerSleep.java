@@ -42,7 +42,7 @@ public class EffPlayerSleep extends Effect {
 
     @Override
     public String toString(@Nullable Event event, boolean b) {
-        return (force ? "forcefully" : "attempt to") + " make "+playersExpression.toString(event,b)+" sleep at "+locationExpression.toString(event,b);
+        return (force ? "forcefully" : "attempt to") + " make " + playersExpression.toString(event, b) + " sleep at " + locationExpression.toString(event, b);
     }
 
     @Override

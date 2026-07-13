@@ -83,9 +83,9 @@ public class EffPlayerFakeExperience extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        String progress = progressExpression.toString(event,debug),
-                player = playerExpression.toString(event,debug),
-                level = levelExpression.toString(event,debug);
+        String progress = progressExpression.toString(event, debug),
+                player = playerExpression.toString(event, debug),
+                level = levelExpression.toString(event, debug);
         StringBuilder string = new StringBuilder("show fake experience");
         if (pattern == 0) string.append("level ").append(level).append(" and progress ").append(progress);
         else if (pattern == 1) string.append("level ").append(level);

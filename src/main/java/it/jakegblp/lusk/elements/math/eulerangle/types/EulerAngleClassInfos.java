@@ -76,6 +76,7 @@ public class EulerAngleClassInfos {
                                     f.getPrimitive("z", double.class)
                             );
                         }
+
                         @Override
                         public boolean mustSyncDeserialization() {
                             return true;

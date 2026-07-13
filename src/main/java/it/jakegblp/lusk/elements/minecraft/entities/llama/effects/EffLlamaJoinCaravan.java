@@ -12,8 +12,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
-
 @Name("Llama - Join Caravan")
 @Description("Makes a llama join another llama's caravan.")
 @Examples("make target join caravan of {llama}")
@@ -22,10 +20,9 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 @SuppressWarnings("unused")
 public class EffLlamaJoinCaravan extends Effect {
     static {
-        if (PAPER_1_19_2)
-            Skript.registerEffect(EffLlamaJoinCaravan.class,
-                    "make %livingentities% join [the] caravan of %livingentity%",
-                    "make %livingentities% join %livingentity%'[s] caravan");
+        Skript.registerEffect(EffLlamaJoinCaravan.class,
+                "make %livingentities% join [the] caravan of %livingentity%",
+                "make %livingentities% join %livingentity%'[s] caravan");
     }
 
     private Expression<LivingEntity> entityExpression;

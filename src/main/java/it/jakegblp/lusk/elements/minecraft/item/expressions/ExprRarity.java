@@ -17,7 +17,7 @@ import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
 @Since("1.0.0, 1.2 (ItemRarity)")
 @RequiredPlugins("1.20.5")
 @SuppressWarnings("unused")
-public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
+public class ExprRarity extends SimplePropertyExpression<ItemType, ItemRarity> {
     //todo: add tests
     static {
         if (SPIGOT_HAS_ITEM_RARITY) {
@@ -44,7 +44,7 @@ public class ExprRarity extends SimplePropertyExpression<ItemType,ItemRarity> {
 
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET ? new Class[] {ItemRarity.class} : null;
+        return mode == Changer.ChangeMode.SET ? new Class[]{ItemRarity.class} : null;
     }
 
     @Override

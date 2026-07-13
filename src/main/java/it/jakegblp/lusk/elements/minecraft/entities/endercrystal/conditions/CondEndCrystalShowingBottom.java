@@ -15,7 +15,7 @@ import org.bukkit.entity.Entity;
 public class CondEndCrystalShowingBottom extends PropertyCondition<Entity> {
 
     static {
-        register(CondEndCrystalShowingBottom.class, "showing [its|the[ir]] (bottom|bedrock) [plate|slate]","entities");
+        register(CondEndCrystalShowingBottom.class, "showing [its|the[ir]] (bottom|bedrock) [plate|slate]", "entities");
     }
 
     @Override

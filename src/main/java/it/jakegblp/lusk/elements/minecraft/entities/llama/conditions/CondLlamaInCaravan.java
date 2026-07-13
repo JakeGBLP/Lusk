@@ -6,8 +6,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
-
 @Name("Llama - is In Caravan")
 @Description("Checks if a llama is in a caravan.")
 @Examples({"if target is in a caravan:"})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 @SuppressWarnings("unused")
 public class CondLlamaInCaravan extends PropertyCondition<LivingEntity> {
     static {
-        if (PAPER_1_19_2)
-            register(CondLlamaInCaravan.class, "in [a] caravan", "livingentities");
+        register(CondLlamaInCaravan.class, "in [a] caravan", "livingentities");
     }
 
     @Override

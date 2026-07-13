@@ -6,7 +6,6 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.Version;
 import it.jakegblp.lusk.api.listeners.*;
 import it.jakegblp.lusk.utils.BorrowedUtils;
-import it.jakegblp.lusk.utils.Constants;
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
@@ -30,6 +29,16 @@ public class Lusk extends JavaPlugin {
     private static Lusk instance;
     private SkriptAddon addon;
 
+    public static void registerListeners(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getPluginManager().registerEvents(listener, instance);
+        }
+    }
+
+    public static void callEvent(Event event) {
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
@@ -43,10 +52,7 @@ public class Lusk extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        if (Constants.PAPER_HAS_PLAYER_JUMP_EVENT && Constants.PAPER_HAS_ENTITY_JUMP_EVENT) {
-            Lusk.registerListeners(new JumpListener.PaperJumpListener());
-        }
+        Lusk.registerListeners(new JumpListener.PaperJumpListener());
         registerListeners(
                 new JumpListener.SpigotJumpListener(),
                 new JumpListener(),
@@ -93,7 +99,7 @@ public class Lusk extends JavaPlugin {
             Map<String, Integer> entry = new HashMap<>();
             entry.put(skriptVersion.toString(), 1);
 
-            map.put(skriptVersion.getMajor()+"."+skriptVersion.getMinor()+"."+skriptVersion.getRevision(), entry);
+            map.put(skriptVersion.getMajor() + "." + skriptVersion.getMinor() + "." + skriptVersion.getRevision(), entry);
 
             return map;
         }));
@@ -118,16 +124,6 @@ public class Lusk extends JavaPlugin {
         new UpdateChecker(this);
         long end = System.currentTimeMillis();
         consoleLog("&aLusk {0} has been enabled! &8[&7{1}&8]", version, new Timespan(end - start));
-    }
-
-    public static void registerListeners(Listener... listeners) {
-        for (Listener listener : listeners) {
-            Bukkit.getPluginManager().registerEvents(listener, instance);
-        }
-    }
-
-    public static void callEvent(Event event) {
-        Bukkit.getPluginManager().callEvent(event);
     }
 
     public SkriptAddon getAddonInstance() {

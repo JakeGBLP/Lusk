@@ -82,6 +82,6 @@ public class ExprCoordinates extends PropertyExpression<Object, Number> {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (list ? "the coordinates of " : "the "+ selectedAxis.name().toLowerCase(Locale.ENGLISH)+" coordinate component of ") + getExpr().toString(event, debug);
+        return (list ? "the coordinates of " : "the " + selectedAxis.name().toLowerCase(Locale.ENGLISH) + " coordinate component of ") + getExpr().toString(event, debug);
     }
 }

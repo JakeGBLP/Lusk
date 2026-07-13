@@ -57,20 +57,20 @@ public class EffItemFrameRotate extends Effect {
         List<ItemFrame> itemFrameList = entityExpression.stream(event).filter(entity -> entity instanceof ItemFrame)
                 .map(entity -> (ItemFrame) entity).toList();
         if (itemFrameList.isEmpty()) return;
-        int times = Math.max(1,numberExpression.stream(event).mapToInt(Number::intValue).max().orElse(1));
+        int times = Math.max(1, numberExpression.stream(event).mapToInt(Number::intValue).max().orElse(1));
         if (rotationExpression == null) {
             itemFrameList.forEach(itemFrame -> rotateItemFrame(itemFrame, clockwise, times));
         } else {
             itemFrameList.forEach(itemFrame -> itemFrame.setRotation(sumRotations(
                     rotationExpression.stream(event),
-                    itemFrame.getRotation(),times)));
+                    itemFrame.getRotation(), times)));
         }
     }
 
     public String toString(@Nullable Event event, boolean debug) {
-        return "rotate item frames "+entityExpression.toString(event,debug)
-                + (rotationExpression == null ? ((clockwise ? " " : " counter ")+"clockwise")
-                : " by " + rotationExpression.toString(event,debug)) + " "+ numberExpression.toString(event,debug)+ " times";
+        return "rotate item frames " + entityExpression.toString(event, debug)
+                + (rotationExpression == null ? ((clockwise ? " " : " counter ") + "clockwise")
+                : " by " + rotationExpression.toString(event, debug)) + " " + numberExpression.toString(event, debug) + " times";
     }
 
 }

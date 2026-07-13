@@ -29,7 +29,7 @@ public class ExprEntityIsScreaming extends SimpleBooleanPropertyExpression<Livin
 
     @Override
     public void set(LivingEntity from, Boolean to) {
-        setIsScreaming(from,to);
+        setIsScreaming(from, to);
     }
 
     @Override

@@ -5,8 +5,6 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Fox - is Sleeping (Property)")
 @Description("""
         Various fox properties.
@@ -22,8 +20,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class ExprFoxSleeping extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(ExprFoxSleeping.class, Boolean.class, "fox", "[is] sleeping","livingentities");
+        register(ExprFoxSleeping.class, Boolean.class, "fox", "[is] sleeping", "livingentities");
     }
 
     @Override

@@ -60,7 +60,7 @@ public class ExprSuspiciousStewCustomPotionEffects extends PropertyExpression<It
             }
             case REMOVE, REMOVE_ALL -> {
                 for (ItemType item : itemTypes)
-                    ItemUtils.removeSuspiciousStewPotionEffects(item,delta);
+                    ItemUtils.removeSuspiciousStewPotionEffects(item, delta);
             }
             case SET -> {
                 for (ItemType item : itemTypes)

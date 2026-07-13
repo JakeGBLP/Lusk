@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CondBlockCanBeWaterLogged extends PropertyCondition<Object> {
     static {
-        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN,"be water[ |-]logged", "blocks/blockstates/blockdatas/itemtypes");
+        register(CondBlockCanBeWaterLogged.class, PropertyType.CAN, "be water[ |-]logged", "blocks/blockstates/blockdatas/itemtypes");
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.bukkit.entity.LivingEntity;
 @SuppressWarnings("unused")
 public class ExprFoxCrouching extends SimpleBooleanPropertyExpression<LivingEntity> {
     static {
-        register(ExprFoxCrouching.class, Boolean.class, "fox", "[is] crouching","livingentities");
+        register(ExprFoxCrouching.class, Boolean.class, "fox", "[is] crouching", "livingentities");
     }
 
     @Override

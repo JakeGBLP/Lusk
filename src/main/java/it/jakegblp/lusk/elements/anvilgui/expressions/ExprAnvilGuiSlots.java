@@ -87,9 +87,9 @@ public class ExprAnvilGuiSlots extends PropertyExpression<AnvilGuiWrapper, ItemS
     public @NotNull String toString(@Nullable Event event, boolean debug) {
         return "lusk anvil gui "
                 + switch (left) {
-                    case TRUE -> "left";
-                    case FALSE -> "right";
-                    case UNKNOWN -> "output";
-                } + " slot of " + getExpr().toString(event, debug);
+            case TRUE -> "left";
+            case FALSE -> "right";
+            case UNKNOWN -> "output";
+        } + " slot of " + getExpr().toString(event, debug);
     }
 }

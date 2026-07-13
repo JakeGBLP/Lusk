@@ -17,11 +17,11 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Ender Signal - Despawn Time/ticks")
 @Description("""
-Gets how long the provided ender signals have been alive for.
-Can be set.
-Either as ticks or a timespan.
-When greater than 80 ticks (or 4 seconds), it will despawn on the next tick.
-""")
+        Gets how long the provided ender signals have been alive for.
+        Can be set.
+        Either as ticks or a timespan.
+        When greater than 80 ticks (or 4 seconds), it will despawn on the next tick.
+        """)
 @Examples("send the ender signal despawn time of {_enderSignal}")
 @Since("1.3")
 public class ExprEnderSignalDespawnTime extends SimplerPropertyExpression<Entity, Object> {
@@ -55,9 +55,9 @@ public class ExprEnderSignalDespawnTime extends SimplerPropertyExpression<Entity
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET) {
             if (usesTicks) {
-                return new Class[] {Integer.class};
+                return new Class[]{Integer.class};
             } else {
-                return new Class[] {Timespan.class};
+                return new Class[]{Timespan.class};
             }
         } else if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
             return new Class[0];

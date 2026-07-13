@@ -12,23 +12,21 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Pose;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_20_1;
-
 @Name("Entity - Pose/Fixed Pose")
 @Description("""
-Returns the provided entities' current pose.
-Note that the pose is only updated at the end of a tick, so it may be inconsistent.
-
-Can be set.
-
-Setting the "Fixed" pose will make it stay until manually changed, this requires Paper 1.20.1+
-""")
+        Returns the provided entities' current pose.
+        Note that the pose is only updated at the end of a tick, so it may be inconsistent.
+        
+        Can be set.
+        
+        Setting the "Fixed" pose will make it stay until manually changed, this requires Paper 1.20.1+
+        """)
 @Examples({"broadcast pose of target", "set fixed pose of target to dying pose"})
 @Since("1.0.2, 1.3 (Plural), 1.3.3 (Changeable and Fixed)")
 public class ExprEntityPose extends SimplerPropertyExpression<Entity, Pose> {
 
     static {
-        register(ExprEntityPose.class, Pose.class, (PAPER_1_20_1 ? "[:fixed] " : "") + "[entity] pose", "entities");
+        register(ExprEntityPose.class, Pose.class, "[:fixed] [entity] pose", "entities");
     }
 
     private boolean fixed;
@@ -46,7 +44,7 @@ public class ExprEntityPose extends SimplerPropertyExpression<Entity, Pose> {
 
     @Override
     public boolean allowSet() {
-        return PAPER_1_20_1;
+        return true;
     }
 
     @Override
@@ -61,6 +59,6 @@ public class ExprEntityPose extends SimplerPropertyExpression<Entity, Pose> {
 
     @Override
     protected @NotNull String getPropertyName() {
-        return (fixed ? "fixed ": "") + "entity pose";
+        return (fixed ? "fixed " : "") + "entity pose";
     }
 }

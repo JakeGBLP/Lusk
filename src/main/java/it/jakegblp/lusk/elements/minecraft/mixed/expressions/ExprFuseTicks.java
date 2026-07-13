@@ -105,12 +105,12 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
         else return;
         ticks = Math.max(ticks, 0);
         if (from instanceof Creeper creeper) {
-            if (max) creeper.setMaxFuseTicks(creeper.getMaxFuseTicks()+ticks);
-            else creeper.setFuseTicks(Math.min(creeper.getFuseTicks()+ticks, creeper.getMaxFuseTicks()));
+            if (max) creeper.setMaxFuseTicks(creeper.getMaxFuseTicks() + ticks);
+            else creeper.setFuseTicks(Math.min(creeper.getFuseTicks() + ticks, creeper.getMaxFuseTicks()));
         } else if (from instanceof TNTPrimed tntPrimed) {
-            tntPrimed.setFuseTicks(tntPrimed.getFuseTicks()+ticks);
+            tntPrimed.setFuseTicks(tntPrimed.getFuseTicks() + ticks);
         } else if (from instanceof ExplosiveMinecart minecart) {
-            minecart.setFuseTicks(ticks+minecart.getFuseTicks());
+            minecart.setFuseTicks(ticks + minecart.getFuseTicks());
         }
     }
 
@@ -130,7 +130,7 @@ public class ExprFuseTicks extends SimplerPropertyExpression<Object, Object> {
 
     @Override
     protected String getPropertyName() {
-        return (max ? "max ": "")+"primed fuse " + (usesTicks ? "ticks" : "timespan");
+        return (max ? "max " : "") + "primed fuse " + (usesTicks ? "ticks" : "timespan");
     }
 
     @Override

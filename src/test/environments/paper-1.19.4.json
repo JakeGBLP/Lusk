@@ -1,7 +1,10 @@
 {
   "name": "paper-1.19.4",
   "resources": [
-    {"source": "server.properties.generic", "target": "server.properties"}
+    {
+      "source": "server.properties.generic",
+      "target": "server.properties"
+    }
   ],
   "paperDownloads": [
     {
@@ -18,6 +21,8 @@
   "luskTarget": "plugins/Lusk.jar",
   "commandLine": [
     "-Dcom.mojang.eula.agree=true",
-    "-jar", "paperclip.jar", "--nogui"
+    "-jar",
+    "paperclip.jar",
+    "--nogui"
   ]
 }

@@ -6,8 +6,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
-
 @Name("Llama - Has Caravan Tail")
 @Description("Checks if another llama is currently following behind this llama.")
 @Examples({"on damage:\n\tif victim has a caravan tail:\n\t\tbroadcast \"the caravan is being disturbed!!\""})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 @SuppressWarnings("unused")
 public class CondLlamaHasCaravanTail extends PropertyCondition<LivingEntity> {
     static {
-        if (PAPER_1_19_2)
-            register(CondLlamaHasCaravanTail.class, PropertyType.HAVE, "[a] caravan tail", "livingentities");
+        register(CondLlamaHasCaravanTail.class, PropertyType.HAVE, "[a] caravan tail", "livingentities");
     }
 
     @Override

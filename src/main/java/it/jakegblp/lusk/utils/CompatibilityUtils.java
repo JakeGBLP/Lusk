@@ -33,7 +33,7 @@ public class CompatibilityUtils {
         return ADAPTER_SKRIPT.test(expr, event, predicate, isNegated);
     }
 
-    public static <T, E extends Event> void registerEventValue(Class<E> event, Class<T> type, Function<E,T> function, int time) {
+    public static <T, E extends Event> void registerEventValue(Class<E> event, Class<T> type, Function<E, T> function, int time) {
         ADAPTER_SKRIPT.registerEventValue(event, type, function, time);
     }
 

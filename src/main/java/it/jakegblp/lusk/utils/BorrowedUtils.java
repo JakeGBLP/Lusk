@@ -42,7 +42,6 @@ public class BorrowedUtils {
      * In order events, effects, expressions, conditions, sections
      *
      * @return Counts of loaded Skript elements
-     *
      * @author ShaneBeee
      */
     public static int[] getElementCount() {

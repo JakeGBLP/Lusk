@@ -36,7 +36,7 @@ public class CondItemFrameVisible extends PrefixedPropertyCondition<Entity> {
 
     @Override
     protected String getPropertyName() {
-        return (invisible ? "in" : "" )+"visible";
+        return (invisible ? "in" : "") + "visible";
     }
 
     @Override

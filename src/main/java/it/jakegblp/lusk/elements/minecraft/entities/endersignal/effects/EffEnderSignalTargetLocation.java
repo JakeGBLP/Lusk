@@ -12,8 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION;
-
 @Name("Ender Signal - Set Target Location Without Updating")
 @Description("Sets the location the provided ender signals are moving towards without changing the drop chance and the despawn timer.")
 @Examples("set the ender signal target location of {_enderSignal} to {_location} without updating")
@@ -22,10 +20,9 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENDER_SIGNAL_SET_TARGET
 public class EffEnderSignalTargetLocation extends Effect {
 
     static {
-        if (PAPER_HAS_ENDER_SIGNAL_SET_TARGET_LOCATION)
-            Skript.registerEffect(EffEnderSignalTargetLocation.class,
-                    "set [the] ender (signal|eye) target location of %entities% to %location% without updating [it]",
-                    "set %entities%'[s] ender (signal|eye) target location to %location% without updating [it]");
+        Skript.registerEffect(EffEnderSignalTargetLocation.class,
+                "set [the] ender (signal|eye) target location of %entities% to %location% without updating [it]",
+                "set %entities%'[s] ender (signal|eye) target location to %location% without updating [it]");
     }
 
     private Expression<Entity> entityExpression;

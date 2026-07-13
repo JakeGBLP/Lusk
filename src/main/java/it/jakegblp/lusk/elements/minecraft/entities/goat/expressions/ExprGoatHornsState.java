@@ -37,7 +37,7 @@ public class ExprGoatHornsState extends SimpleBooleanPropertyExpression<LivingEn
 
     @Override
     protected String getPropertyName() {
-        return "goat has "+(left ? "left" : "right")+ " horn";
+        return "goat has " + (left ? "left" : "right") + " horn";
     }
 
     @Override

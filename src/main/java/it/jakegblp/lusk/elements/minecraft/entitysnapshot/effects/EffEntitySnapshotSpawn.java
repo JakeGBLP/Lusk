@@ -16,8 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 
 /**
-This class is heavily influenced by {@link EffSecSpawn Skript's Spawn effect section}.
-@author JakeGBLP, SkriptLang
+ * This class is heavily influenced by {@link EffSecSpawn Skript's Spawn effect section}.
+ *
+ * @author JakeGBLP, SkriptLang
  */
 @Name("Entity Snapshot - Spawn")
 @Description("Creates an entity using this template and spawns it at the provided location.\nThis is an effect, not a section and can't be used as such.\nThis effect is heavily influenced by Skript's Spawn effect (EffSecSpawn).")

@@ -11,7 +11,7 @@ public class EvtWardenEvents {
             Skript.registerEvent("Warden - on Anger Change", SimpleEvent.class, WardenAngerChangeEvent.class, "warden anger chang(e[d]|ing)")
                     .description("""
                             Called when a Warden's anger level has changed due to another entity.
-
+                            
                             If the event is cancelled, the warden's anger level will not change.""")
                     .examples("")
                     .since("1.0.1")

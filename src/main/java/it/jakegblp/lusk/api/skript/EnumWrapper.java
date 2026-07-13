@@ -81,32 +81,6 @@ public final class EnumWrapper<E extends Enum<E>> {
         return StringUtils.join(names, ", ");
     }
 
-    static class EnumParser<T extends Enum<T>> extends Parser<T> {
-
-        private final EnumWrapper<T> enumWrapper;
-
-        public EnumParser(EnumWrapper<T> enumWrapper) {
-            this.enumWrapper = enumWrapper;
-        }
-
-        @Nullable
-        @Override
-        public T parse(@NotNull String s, @NotNull ParseContext context) {
-            return enumWrapper.parse(s);
-        }
-
-        @Override
-        public @NotNull String toString(T o, int flags) {
-            return enumWrapper.toString(o, flags);
-        }
-
-        @Override
-        public @NotNull String toVariableNameString(T o) {
-            return toString(o, 0);
-        }
-
-    }
-
     /**
      * Create ClassInfo with default parser and usage
      *
@@ -131,6 +105,32 @@ public final class EnumWrapper<E extends Enum<E>> {
     private void registerComparator(Class<E> c) {
         if (CompatibilityUtils.exactComparatorExists(c, c)) return;
         CompatibilityUtils.registerComparator(c, c, (o1, o2) -> GenericRelation.get(o1.equals(o2)));
+    }
+
+    static class EnumParser<T extends Enum<T>> extends Parser<T> {
+
+        private final EnumWrapper<T> enumWrapper;
+
+        public EnumParser(EnumWrapper<T> enumWrapper) {
+            this.enumWrapper = enumWrapper;
+        }
+
+        @Nullable
+        @Override
+        public T parse(@NotNull String s, @NotNull ParseContext context) {
+            return enumWrapper.parse(s);
+        }
+
+        @Override
+        public @NotNull String toString(T o, int flags) {
+            return enumWrapper.toString(o, flags);
+        }
+
+        @Override
+        public @NotNull String toVariableNameString(T o) {
+            return toString(o, 0);
+        }
+
     }
 
 }

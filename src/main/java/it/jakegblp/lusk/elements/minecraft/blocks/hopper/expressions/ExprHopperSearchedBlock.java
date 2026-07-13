@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT;
 
 @Name("Hopper - Searched Block")
 @Description("Searched Block expression for the Hopper Inventory Search Event.")
@@ -25,10 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_HOPPER_INVENTORY_SEARCH_EVENT
 @SuppressWarnings("unused")
 public class ExprHopperSearchedBlock extends SimpleExpression<Block> {
     static {
-        if (HAS_HOPPER_INVENTORY_SEARCH_EVENT) {
-            Skript.registerExpression(ExprHopperSearchedBlock.class, Block.class, EVENT_OR_SIMPLE,
-                    "[the] searched block");
-        }
+        Skript.registerExpression(ExprHopperSearchedBlock.class, Block.class, EVENT_OR_SIMPLE, "[the] searched block");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

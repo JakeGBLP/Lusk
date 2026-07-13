@@ -23,9 +23,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.Constants.*;
 
 public class EvtEntityEvents {
     static {
@@ -61,88 +59,75 @@ public class EvtEntityEvents {
                     .requiredPlugins("Paper")
                     .since("1.0.2");
         }
-        if (PAPER_1_20_6) {
-            Skript.registerEvent("Entity - on Knockback", SimpleEvent.class, EntityKnockbackEvent.class, "entity knockback")
-                    .description("""
-                            Called when an entity receives knockback.""")
-                    .examples("on entity knockback:")
-                    .requiredPlugins("Paper")
-                    .since("1.3.3");
-            registerEventValue(EntityKnockbackEvent.class, Vector.class, EntityKnockbackEvent::getKnockback, EventValues.TIME_NOW);
-        }
+        Skript.registerEvent("Entity - on Knockback", SimpleEvent.class, EntityKnockbackEvent.class, "entity knockback")
+                .description("""
+                        Called when an entity receives knockback.""")
+                .examples("on entity knockback:")
+                .requiredPlugins("Paper")
+                .since("1.3.3");
+        registerEventValue(EntityKnockbackEvent.class, Vector.class, EntityKnockbackEvent::getKnockback, EventValues.TIME_NOW);
         // todo: merge most knockback events, support the deprecated spigot ones,
         //  support deprecated acceleration method.
-        if (isPaper()) {
-            Skript.registerEvent("Entity - on Knockback by Entity", SimpleEvent.class, EntityKnockbackByEntityEvent.class, "entity knockback by entity")
-                    .description("""
-                            Fired when an Entity is knocked back by the hit of another Entity.
-                            The acceleration vector can be modified. If this event is cancelled, the entity is not knocked back.""")
-                    .examples("on entity knockback by entity:")
-                    .requiredPlugins("Paper")
-                    .since("1.3.3");
-        }
-        if (Skript.classExists("org.bukkit.event.entity.EntityShootBowEvent")) {
-            Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot[ing]")
-                    .description("""
-                            Called when a LivingEntity shoots a bow firing an arrow.""")
-                    .examples("")
-                    .since("1.1.1");
-            registerEventValue(EntityShootBowEvent.class, Projectile.class, e -> e.getProjectile() instanceof Projectile projectile ? projectile : null, EventValues.TIME_NOW);
-        }
-        if (Skript.classExists("org.bukkit.event.entity.EntityPlaceEvent")) {
-            Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity [getting] place[d]")
-                    .description("""
-                            Triggered when an entity is created in the world by a player "placing" an item on a block.
-                            Note that this event is currently only fired for four specific placements: armor stands, boats, minecarts, and end crystals.""")
-                    .examples("")
-                    .since("1.1.1");
-            registerEventValue(EntityPlaceEvent.class, Block.class, EntityPlaceEvent::getBlock, EventValues.TIME_NOW);
-            registerEventValue(EntityPlaceEvent.class, Player.class, EntityPlaceEvent::getPlayer, EventValues.TIME_NOW);
-            registerEventValue(EntityPlaceEvent.class, BlockFace.class, EntityPlaceEvent::getBlockFace, EventValues.TIME_NOW);
-            if (MINECRAFT_1_19_2)
-                registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, EntityPlaceEvent::getHand, EventValues.TIME_NOW);
-        }
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityInsideBlockEvent")) {
-            Skript.registerEvent("Entity - on Collide With Block", SimpleEvent.class, EntityInsideBlockEvent.class, "entity ((collide with|in[side]) [a] block)")
-                    .description("""
-                            Called when an entity enters the hitbox of a block. Only called for blocks that react when an entity is inside. If cancelled, any action that would have resulted from that entity being in the block will not happen (such as extinguishing an entity in a cauldron).
-                            Blocks this is currently called for:
-
-                            Big dripleaf
-                            Bubble column
-                            Buttons
-                            Cactus
-                            Campfire
-                            Cauldron
-                            Crops
-                            Ender Portal
-                            Fires
-                            Frogspawn
-                            Honey
-                            Hopper
-                            Detector rails
-                            Nether portals
-                            Powdered snow
-                            Pressure plates
-                            Sweet berry bush
-                            Tripwire
-                            Waterlily
-                            Web
-                            Wither rose""")
-                    .examples("")
-                    .since("1.1.1")
-                    .requiredPlugins("Paper")
-                    .documentationID("11161");
-        }
-        if (PAPER_1_18_2) {
-            Skript.registerEvent("Tameable - on Death Message", SimpleEvent.class, TameableDeathMessageEvent.class, "(tameable|pet) death message")
-                    .description("""
-                            Called when a Tameable dies and sends a death message.""")
-                    .examples("")
-                    .requiredPlugins("Paper 1.18.2+")
-                    .since("1.3.8");
-            registerEventValue(TameableDeathMessageEvent.class, Entity.class, TameableDeathMessageEvent::getEntity, EventValues.TIME_NOW);
-            registerEventValue(TameableDeathMessageEvent.class, String.class, tameableDeathMessageEvent -> LegacyComponentSerializer.legacySection().serialize(tameableDeathMessageEvent.deathMessage()), EventValues.TIME_NOW);
-        }
+        Skript.registerEvent("Entity - on Knockback by Entity", SimpleEvent.class, EntityKnockbackByEntityEvent.class, "entity knockback by entity")
+                .description("""
+                        Fired when an Entity is knocked back by the hit of another Entity.
+                        The acceleration vector can be modified. If this event is cancelled, the entity is not knocked back.""")
+                .examples("on entity knockback by entity:")
+                .requiredPlugins("Paper")
+                .since("1.3.3");
+        Skript.registerEvent("Entity - on Shoot", SimpleEvent.class, EntityShootBowEvent.class, "entity shoot[ing]")
+                .description("""
+                        Called when a LivingEntity shoots a bow firing an arrow.""")
+                .examples("")
+                .since("1.1.1");
+        registerEventValue(EntityShootBowEvent.class, Projectile.class, e -> e.getProjectile() instanceof Projectile projectile ? projectile : null, EventValues.TIME_NOW);
+        Skript.registerEvent("Entity - on Place", SimpleEvent.class, EntityPlaceEvent.class, "entity [getting] place[d]")
+                .description("""
+                        Triggered when an entity is created in the world by a player "placing" an item on a block.
+                        Note that this event is currently only fired for four specific placements: armor stands, boats, minecarts, and end crystals.""")
+                .examples("")
+                .since("1.1.1");
+        registerEventValue(EntityPlaceEvent.class, Block.class, EntityPlaceEvent::getBlock, EventValues.TIME_NOW);
+        registerEventValue(EntityPlaceEvent.class, Player.class, EntityPlaceEvent::getPlayer, EventValues.TIME_NOW);
+        registerEventValue(EntityPlaceEvent.class, BlockFace.class, EntityPlaceEvent::getBlockFace, EventValues.TIME_NOW);
+        registerEventValue(EntityPlaceEvent.class, EquipmentSlot.class, EntityPlaceEvent::getHand, EventValues.TIME_NOW);
+        Skript.registerEvent("Entity - on Collide With Block", SimpleEvent.class, EntityInsideBlockEvent.class, "entity ((collide with|in[side]) [a] block)")
+                .description("""
+                        Called when an entity enters the hitbox of a block. Only called for blocks that react when an entity is inside. If cancelled, any action that would have resulted from that entity being in the block will not happen (such as extinguishing an entity in a cauldron).
+                        Blocks this is currently called for:
+                        
+                        Big dripleaf
+                        Bubble column
+                        Buttons
+                        Cactus
+                        Campfire
+                        Cauldron
+                        Crops
+                        Ender Portal
+                        Fires
+                        Frogspawn
+                        Honey
+                        Hopper
+                        Detector rails
+                        Nether portals
+                        Powdered snow
+                        Pressure plates
+                        Sweet berry bush
+                        Tripwire
+                        Waterlily
+                        Web
+                        Wither rose""")
+                .examples("")
+                .since("1.1.1")
+                .requiredPlugins("Paper")
+                .documentationID("11161");
+        Skript.registerEvent("Tameable - on Death Message", SimpleEvent.class, TameableDeathMessageEvent.class, "(tameable|pet) death message")
+                .description("""
+                        Called when a Tameable dies and sends a death message.""")
+                .examples("")
+                .requiredPlugins("Paper 1.18.2+")
+                .since("1.3.8");
+        registerEventValue(TameableDeathMessageEvent.class, Entity.class, TameableDeathMessageEvent::getEntity, EventValues.TIME_NOW);
+        registerEventValue(TameableDeathMessageEvent.class, String.class, tameableDeathMessageEvent -> LegacyComponentSerializer.legacySection().serialize(tameableDeathMessageEvent.deathMessage()), EventValues.TIME_NOW);
     }
 }

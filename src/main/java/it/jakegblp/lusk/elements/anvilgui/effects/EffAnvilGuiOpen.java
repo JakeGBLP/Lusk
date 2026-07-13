@@ -49,8 +49,8 @@ public class EffAnvilGuiOpen extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return (force ? "force " : "")+"open anvil gui "+
-                anvilGuiWrapperExpression.toString(event,debug)+" to "+playerExpression.toString(event,debug);
+        return (force ? "force " : "") + "open anvil gui " +
+                anvilGuiWrapperExpression.toString(event, debug) + " to " + playerExpression.toString(event, debug);
     }
 
     @Override

@@ -11,19 +11,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT;
 
 @SuppressWarnings("unused")
 public class EvtEntityCrossbowLoad extends SkriptEvent {
     static {
-        if (PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT) {
-            Skript.registerEvent("Crossbow - on Load", EvtEntityCrossbowLoad.class, EntityLoadCrossbowEvent.class, "[entity] (crossbow load[ed]|load [of] crossbow)")
-                    .description("Called when a LivingEntity loads a crossbow with a projectile.")
-                    .examples("")
-                    .since("1.0.1")
-                    .requiredPlugins("Paper");
-            registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, EntityLoadCrossbowEvent::getCrossbow, 0);
-        }
+        Skript.registerEvent("Crossbow - on Load", EvtEntityCrossbowLoad.class, EntityLoadCrossbowEvent.class, "[entity] (crossbow load[ed]|load [of] crossbow)")
+                .description("Called when a LivingEntity loads a crossbow with a projectile.")
+                .examples("")
+                .since("1.0.1")
+                .requiredPlugins("Paper");
+        registerEventValue(EntityLoadCrossbowEvent.class, ItemStack.class, EntityLoadCrossbowEvent::getCrossbow, 0);
     }
 
     @Override

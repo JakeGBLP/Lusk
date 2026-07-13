@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprSignIsEditable extends SimpleBooleanPropertyExpression<Object> {
 
     static {
-        register(ExprSignIsEditable.class,Boolean.class,"[sign]","[is] editable", "blocks/blockstates/itemtypes");
+        register(ExprSignIsEditable.class, Boolean.class, "[sign]", "[is] editable", "blocks/blockstates/itemtypes");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ExprSignIsEditable extends SimpleBooleanPropertyExpression<Object> 
 
     @Override
     public void reset(Object from) {
-        set(from,true);
+        set(from, true);
     }
 
     @Override

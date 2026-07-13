@@ -53,6 +53,6 @@ public class CondEquipmentSlotDisabledArmorStand extends Condition {
     @Override
     public String toString(@Nullable Event event, boolean debug) {
         return equipmentSlotExpression.toString(event, debug) + " are "
-                + (isNegated() ? "not " : "") + "disabled for "+ livingEntityExpression.toString(event, debug);
+                + (isNegated() ? "not " : "") + "disabled for " + livingEntityExpression.toString(event, debug);
     }
 }

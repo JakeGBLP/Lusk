@@ -38,13 +38,14 @@ public class ExprBannerPattern extends SimpleExpression<Pattern> {
         colorExpression = (Expression<SkriptColor>) expressions[1];
         return true;
     }
+
     @Nullable
     @Override
     protected Pattern[] get(Event event) {
         PatternType patternType = patternTypeExpression.getSingle(event);
         SkriptColor color = colorExpression.getSingle(event);
         if (patternType == null || color == null || color.asDyeColor() == null) return new Pattern[0];
-        return new Pattern[]{new Pattern(color.asDyeColor(),patternType)};
+        return new Pattern[]{new Pattern(color.asDyeColor(), patternType)};
     }
 
     @Override
@@ -59,6 +60,6 @@ public class ExprBannerPattern extends SimpleExpression<Pattern> {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "banner pattern "+patternTypeExpression.toString(event, debug) + " with color "+colorExpression.toString(event, debug);
+        return "banner pattern " + patternTypeExpression.toString(event, debug) + " with color " + colorExpression.toString(event, debug);
     }
 }

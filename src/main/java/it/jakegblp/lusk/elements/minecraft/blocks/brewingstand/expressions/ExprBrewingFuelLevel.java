@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"on brewing start:\n\tbroadcast the brewing fuel level of event-block"})
 @Since("1.0.2, 1.3 (Plural, Blockstate, Item)")
 @SuppressWarnings("unused")
-public class ExprBrewingFuelLevel extends SimplerPropertyExpression<Object,Integer> {
+public class ExprBrewingFuelLevel extends SimplerPropertyExpression<Object, Integer> {
 
     static {
-        register(ExprBrewingFuelLevel.class,Integer.class,"brewing [stand] fuel level", "blocks/blockstates/itemtypes");
+        register(ExprBrewingFuelLevel.class, Integer.class, "brewing [stand] fuel level", "blocks/blockstates/itemtypes");
     }
 
     @Override

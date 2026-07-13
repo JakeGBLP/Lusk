@@ -18,7 +18,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 @SuppressWarnings("deprecation")
@@ -26,7 +25,7 @@ public class EvtPlayerInteract extends SkriptEvent {
 
     static {
         Skript.registerEvent("Player - on Interact", EvtPlayerInteract.class,
-                CollectionUtils.array(PlayerInteractEvent.class, PlayerInteractAtEntityEvent.class),
+                        CollectionUtils.array(PlayerInteractEvent.class, PlayerInteractAtEntityEvent.class),
                         "player [[:main|:off][ |-]hand [slot]] interact[ing|ion] [entity:(on|with|at) [an] entity|block:(with|on) [a] block]")
                 .description("""
                         Called when a player interacts with a block or entity by clicking.
@@ -45,18 +44,8 @@ public class EvtPlayerInteract extends SkriptEvent {
 
         registerEventValue(PlayerInteractEvent.class, EquipmentSlot.class, PlayerInteractEvent::getHand, EventValues.TIME_NOW);
         registerEventValue(PlayerInteractEvent.class, Action.class, PlayerInteractEvent::getAction, EventValues.TIME_NOW);
-        registerEventValue(PlayerInteractEvent.class, Vector.class, e -> {
-            if (!isPaper()) return e.getClickedPosition();
-            Location interactionPoint = e.getInteractionPoint();
-            if (interactionPoint == null) return null;
-            return interactionPoint.getDirection().subtract(e.getPlayer().getLocation().getDirection());
-        }, EventValues.TIME_NOW);
-        registerEventValue(PlayerInteractEvent.class, Location.class, e -> {
-                if (isPaper()) return e.getInteractionPoint();
-                Vector offset = e.getClickedPosition();
-                if (offset == null) return null;
-                return e.getPlayer().getLocation().add(offset);
-        }, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractEvent.class, Vector.class, PlayerInteractEvent::getClickedPosition, EventValues.TIME_NOW);
+        registerEventValue(PlayerInteractEvent.class, Location.class, PlayerInteractEvent::getInteractionPoint, EventValues.TIME_NOW);
         registerEventValue(PlayerInteractEntityEvent.class, EquipmentSlot.class, PlayerInteractEntityEvent::getHand, EventValues.TIME_NOW);
         registerEventValue(PlayerInteractAtEntityEvent.class, Location.class, e -> e.getRightClicked().getLocation().add(e.getClickedPosition()), EventValues.TIME_NOW);
         registerEventValue(PlayerInteractAtEntityEvent.class, Vector.class, PlayerInteractAtEntityEvent::getClickedPosition, EventValues.TIME_NOW);

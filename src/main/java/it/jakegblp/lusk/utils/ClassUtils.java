@@ -15,6 +15,7 @@ public class ClassUtils {
                 .map(type -> getClassStringWithoutGenerics(type.getTypeName()))
                 .toArray(String[]::new);
     }
+
     @SuppressWarnings("unchecked")
     public static <T> Class<T[]> getArrayClass(Class<T> clazz) {
         return (Class<T[]>) Array.newInstance(clazz, 0).getClass();

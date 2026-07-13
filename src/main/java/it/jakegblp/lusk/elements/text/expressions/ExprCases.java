@@ -16,11 +16,20 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Small Capital Case")
 @Description("Returns the given string with the small font.\n'Lenient' allows uppercase characters to not be included.")
-@Examples({"broadcast player's name in small caps","set chat format to small caps \"%player%: %message%\""})
+@Examples({"broadcast player's name in small caps", "set chat format to small caps \"%player%: %message%\""})
 @Since("1.0.0, 1.3 (Lenient)")
 @SuppressWarnings("unused")
 public class ExprCases extends SimpleExpression<String> {
     public static Character[] characters = {'ᴀ', 'ʙ', 'ᴄ', 'ᴅ', 'ᴇ', 'ғ', 'ɢ', 'ʜ', 'ɪ', 'ᴊ', 'ᴋ', 'ʟ', 'ᴍ', 'ɴ', 'ᴏ', 'ᴘ', 'ǫ', 'ʀ', 's', 'ᴛ', 'ᴜ', 'ᴠ', 'ᴡ', 'x', 'ʏ', 'ᴢ'};
+
+    static {
+        Skript.registerExpression(ExprCases.class, String.class, ExpressionType.COMBINED,
+                "%string% in [:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
+                "[:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
+    }
+
+    private Expression<String> string;
+    private boolean lenient;
 
     public static String toSmallFont(String string, boolean strict) {
         String regex = strict ? "[a-zA-Z]" : "[a-z]";
@@ -31,16 +40,6 @@ public class ExprCases extends SimpleExpression<String> {
         }
         return string;
     }
-
-    static {
-        Skript.registerExpression(ExprCases.class, String.class, ExpressionType.COMBINED,
-                "%string% in [:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case]))",
-                "[:lenient|strict|fully] small (font|[upper[ ]]case|cap(s|ital[ case])) %string%");
-    }
-
-    private Expression<String> string;
-
-    private boolean lenient;
 
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

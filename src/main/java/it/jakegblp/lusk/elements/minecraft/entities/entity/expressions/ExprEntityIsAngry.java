@@ -10,11 +10,11 @@ import static it.jakegblp.lusk.utils.EntityUtils.setIsAngry;
 
 @Name("Entity - is Angry (Property)")
 @Description("""
-Returns the Angry Property of an entity. (Warden, PigZombie, Wolf, Enderman)
-Can be set for all except wardens.
-
-To use this for endermen `Paper 1.18.2+` is required.
-""")
+        Returns the Angry Property of an entity. (Warden, PigZombie, Wolf, Enderman)
+        Can be set for all except wardens.
+        
+        To use this for endermen `Paper 1.18.2+` is required.
+        """)
 @Examples({"broadcast is angry state of target"})
 @Since("1.0.2")
 @DocumentationId("9070")

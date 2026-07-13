@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExprEndCrystalBeamTarget extends SimplerPropertyExpression<Entity, Location> {
 
     static {
-        register(ExprEndCrystalBeamTarget.class,Location.class,"[end[er] crystal] beam target [location]", "entities");
+        register(ExprEndCrystalBeamTarget.class, Location.class, "[end[er] crystal] beam target [location]", "entities");
     }
 
     @Override

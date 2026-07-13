@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"on brewing start:\n\tbroadcast the brewing time of event-block"})
 @Since("1.0.2, 1.3 (Plural, Blockstate, Item, Ticks)")
 @SuppressWarnings("unused")
-public class ExprBrewingTime extends SimplerPropertyExpression<Object,Object> {
+public class ExprBrewingTime extends SimplerPropertyExpression<Object, Object> {
 
     static {
         register(ExprBrewingTime.class, Object.class, "[remaining] brewing (time[span]|:ticks)", "blocks/blockstates/itemtypes");

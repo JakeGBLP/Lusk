@@ -12,8 +12,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
-
 @Name("Llama - Leave Caravan")
 @Description("Makes a llama leave its caravan.")
 @Examples("make target leave its caravan")
@@ -22,9 +20,8 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_19_2;
 @SuppressWarnings("unused")
 public class EffLlamaLeaveCaravan extends Effect {
     static {
-        if (PAPER_1_19_2)
-            Skript.registerEffect(EffLlamaLeaveCaravan.class,
-                    "make %livingentities% leave [its|the[ir]] caravan");
+        Skript.registerEffect(EffLlamaLeaveCaravan.class,
+                "make %livingentities% leave [its|the[ir]] caravan");
     }
 
     private Expression<LivingEntity> entityExpression;
@@ -38,7 +35,7 @@ public class EffLlamaLeaveCaravan extends Effect {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "make " + entityExpression.toString(event,debug) + "leave caravan";
+        return "make " + entityExpression.toString(event, debug) + "leave caravan";
     }
 
     @Override

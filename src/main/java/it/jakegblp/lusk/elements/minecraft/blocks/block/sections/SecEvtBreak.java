@@ -19,8 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static it.jakegblp.lusk.utils.EventUtils.willItemsDrop;
-
 @Name("Block - on Break Section")
 @Description("""
         Runs the code inside of it when the provided block gets broken.
@@ -56,7 +54,7 @@ public class SecEvtBreak extends Section {
     protected @Nullable TriggerItem walk(@NotNull Event event) {
         Object vars = Variables.copyLocalVariables(event);
         Consumer<BlockBreakEvent> consumer = trigger == null ? null : breakEvent -> {
-            if (!mine || willItemsDrop(breakEvent)) {
+            if (!mine || breakEvent.isDropItems()) {
                 Variables.setLocalVariables(breakEvent, vars);
                 TriggerItem.walk(trigger, breakEvent);
                 Variables.removeLocals(breakEvent);

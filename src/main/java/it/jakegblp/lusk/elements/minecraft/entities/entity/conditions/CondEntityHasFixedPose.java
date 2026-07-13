@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 
 @Name("Entity - has Fixed Pose")
 @Description("""
-Checks whether the provided entities have a fixed pose.""")
+        Checks whether the provided entities have a fixed pose.""")
 @Examples({"if target has a fixed pose:"})
 @Since("1.3.3")
 @RequiredPlugins("Paper 1.20.1+")

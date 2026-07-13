@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 @Name("Entity - on Damage Section")
 @Description("""
         Runs the code inside of it when the provided entity takes damage.
-
+        
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.
@@ -30,13 +30,13 @@ import java.util.function.Consumer;
         """)
 @Examples(
         """
-        command /a:
-          trigger:
-            spawn pig at player:
-              set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
-              on damage of entity:
-                set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
-        """
+                command /a:
+                  trigger:
+                    spawn pig at player:
+                      set display name of entity to "&dPig &7- &c%health of entity%&8/&c%max health of entity%"
+                      on damage of entity:
+                        set display name of victim to "&dPig &7- &c%health of victim - final damage%&8/&c%max health of victim%"
+                """
 )
 @Since("1.1")
 public class SecEvtDamage extends Section {

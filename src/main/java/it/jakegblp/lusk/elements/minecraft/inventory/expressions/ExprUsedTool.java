@@ -72,12 +72,8 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Since("1.1, 1.1.1 (Optimized), 1.2 (Hand and Item, +1 Event, Fixes)")
 @SuppressWarnings("unused")
 public class ExprUsedTool extends SimpleExpression<Object> {
-    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class)) {{
-        if (Constants.PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND) add(PlayerArmSwingEvent.class);
-        if (Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT_HAND) add(EntityLoadCrossbowEvent.class);
+    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class)) {{
         if (Constants.PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND) add(PlayerElytraBoostEvent.class);
-        if (Constants.PAPER_HAS_PLAYER_SHEAR_BLOCK_EVENT_HAND) add(PlayerShearBlockEvent.class);
-        if (Constants.PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND) add(PlayerUseUnknownEntityEvent.class);
     }};
 
     //todo: should this return a skript slot?
@@ -107,72 +103,97 @@ public class ExprUsedTool extends SimpleExpression<Object> {
         org.bukkit.inventory.EquipmentSlot slot = null;
         Player player = null;
         LivingEntity entity = null;
-        if (e instanceof BlockCanBuildEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof BlockPlaceEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof EntityPlaceEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof EntityResurrectEvent event) {
-            slot = event.getHand();
-            entity = event.getEntity();
-        } else if (e instanceof EntityShootBowEvent event) {
-            slot = event.getHand();
-            entity = event.getEntity();
-        } else if (e instanceof PlayerLeashEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof HangingPlaceEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerArmorStandManipulateEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerBucketEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerBucketEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerFishEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerHarvestBlockEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerInteractEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerInteractEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerItemConsumeEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerShearEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (e instanceof PlayerUnleashEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (Constants.PAPER_HAS_PLAYER_SHEAR_BLOCK_EVENT_HAND && e instanceof PlayerShearBlockEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (Constants.PAPER_HAS_ENTITY_LOAD_CROSSBOW_EVENT_HAND && e instanceof EntityLoadCrossbowEvent event) {
-            slot = event.getHand();
-            entity = event.getEntity();
-        } else if (Constants.PAPER_HAS_PLAYER_ARM_SWING_EVENT_HAND && e instanceof PlayerArmSwingEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (Constants.PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND && e instanceof PlayerElytraBoostEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
-        } else if (Constants.PAPER_HAS_PLAYER_USE_UNKNOWN_ENTITY_EVENT_HAND && e instanceof PlayerUseUnknownEntityEvent event) {
-            player = event.getPlayer();
-            slot = event.getHand();
+        switch (e) {
+            case BlockCanBuildEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case BlockPlaceEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case EntityPlaceEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case EntityResurrectEvent event -> {
+                slot = event.getHand();
+                entity = event.getEntity();
+            }
+            case EntityShootBowEvent event -> {
+                slot = event.getHand();
+                entity = event.getEntity();
+            }
+            case PlayerLeashEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case HangingPlaceEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerArmorStandManipulateEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerBucketEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerBucketEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerFishEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerHarvestBlockEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerInteractEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerInteractEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerItemConsumeEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerShearEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerUnleashEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerShearBlockEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case EntityLoadCrossbowEvent event -> {
+                slot = event.getHand();
+                entity = event.getEntity();
+            }
+            case PlayerArmSwingEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerElytraBoostEvent event when Constants.PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            case PlayerUseUnknownEntityEvent event -> {
+                player = event.getPlayer();
+                slot = event.getHand();
+            }
+            default -> {
+            }
         }
         if (slot != null) {
             if (hand) return new EquipmentSlot[]{slot};

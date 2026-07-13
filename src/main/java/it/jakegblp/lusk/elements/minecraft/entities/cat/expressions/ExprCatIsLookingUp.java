@@ -6,8 +6,6 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Cat - is Looking Up (Property)")
 @Description("Returns whether or not a cat is looking up.\nCan be set and reset.")
 @Examples({"broadcast cat looking up state of target"})
@@ -18,8 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class ExprCatIsLookingUp extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(ExprCatIsLookingUp.class, Boolean.class, "cat", "[is] looking up", "livingentities");
+        register(ExprCatIsLookingUp.class, Boolean.class, "cat", "[is] looking up", "livingentities");
     }
 
     @Override

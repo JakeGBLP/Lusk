@@ -24,10 +24,10 @@ import org.jetbrains.annotations.Nullable;
 @Examples({"broadcast carried blockdata of target"})
 @Since("1.0.2, 1.3 (Plural)")
 @SuppressWarnings("unused")
-public class ExprEndermanHeldBlock extends SimplerPropertyExpression<LivingEntity,BlockData> {
+public class ExprEndermanHeldBlock extends SimplerPropertyExpression<LivingEntity, BlockData> {
 
     static {
-        register(ExprEndermanHeldBlock.class,BlockData.class,"[enderman] (held|carried) block[ |-]data","livingentities");
+        register(ExprEndermanHeldBlock.class, BlockData.class, "[enderman] (held|carried) block[ |-]data", "livingentities");
     }
 
     @Override

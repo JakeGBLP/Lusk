@@ -27,7 +27,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 public class ExprAnvilGuiInteractableSlots extends PropertyExpression<AnvilGuiWrapper, Integer> {
 
     static {
-        register(ExprAnvilGuiInteractableSlots.class, Integer.class, "["+ANVIL_GUI_PREFIX + "] interactable slots", "anvilguiinventories");
+        register(ExprAnvilGuiInteractableSlots.class, Integer.class, "[" + ANVIL_GUI_PREFIX + "] interactable slots", "anvilguiinventories");
     }
 
     @SuppressWarnings("unchecked")
@@ -66,12 +66,13 @@ public class ExprAnvilGuiInteractableSlots extends PropertyExpression<AnvilGuiWr
         if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.DELETE) {
             slots = null;
         } else {
-            slots = Arrays.stream((Integer[])delta).mapToInt(Integer::intValue).toArray();
+            slots = Arrays.stream((Integer[]) delta).mapToInt(Integer::intValue).toArray();
         }
         switch (mode) {
             case SET -> anvilGuiStream.forEach(anvilGuiWrapper -> anvilGuiWrapper.setInteractableSlots(slots));
             case ADD -> anvilGuiStream.forEach(anvilGuiWrapper -> anvilGuiWrapper.addInteractableSlots(slots));
-            case REMOVE, REMOVE_ALL -> anvilGuiStream.forEach(anvilGuiWrapper -> anvilGuiWrapper.removeInteractableSlots(slots));
+            case REMOVE, REMOVE_ALL ->
+                    anvilGuiStream.forEach(anvilGuiWrapper -> anvilGuiWrapper.removeInteractableSlots(slots));
             case DELETE, RESET -> anvilGuiStream.forEach(AnvilGuiWrapper::resetInteractableSlots);
         }
     }

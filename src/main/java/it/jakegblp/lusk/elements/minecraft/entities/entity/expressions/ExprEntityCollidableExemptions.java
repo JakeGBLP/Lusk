@@ -19,24 +19,24 @@ import static it.jakegblp.lusk.utils.EntityUtils.getArrayAsUUIDList;
 
 @Name("Entity - Collidable Exemptions")
 @Description("""
-Gets the list of entities (or their UUIDs) which are exempt from the provided entities' collidable rule and whose collision with this entity will behave the opposite of it.
-Can be set, added to, removed from, and deleted.
-
-For example if collidable is true and an entity is in the exemptions then it will not collide with it.
-Similarly if collidable is false and an entity is in this set then it will still collide with it.
-
-Note: **these exemptions are not (currently) persistent.**
-
-Note: **the client may predict the collision between itself and another entity, resulting in those exemptions not being accurate for player collisions.**
- **This expression should therefore only be used to exempt non-player entities.**
- **To exempt collisions for a player, use the Team Collision Rule Option in combination with a Scoreboard and a Team.**
-""")
+        Gets the list of entities (or their UUIDs) which are exempt from the provided entities' collidable rule and whose collision with this entity will behave the opposite of it.
+        Can be set, added to, removed from, and deleted.
+        
+        For example if collidable is true and an entity is in the exemptions then it will not collide with it.
+        Similarly if collidable is false and an entity is in this set then it will still collide with it.
+        
+        Note: **these exemptions are not (currently) persistent.**
+        
+        Note: **the client may predict the collision between itself and another entity, resulting in those exemptions not being accurate for player collisions.**
+         **This expression should therefore only be used to exempt non-player entities.**
+         **To exempt collisions for a player, use the Team Collision Rule Option in combination with a Scoreboard and a Team.**
+        """)
 @Examples("send collidable exemptions of {_entity}")
 @Since("1.3")
 public class ExprEntityCollidableExemptions extends SimplerPluralPropertyExpression<LivingEntity, Object> {
 
     static {
-        register(ExprEntityCollidableExemptions.class,Object.class, "collidable exemptions [uuid:uuid[s]]", "livingentities");
+        register(ExprEntityCollidableExemptions.class, Object.class, "collidable exemptions [uuid:uuid[s]]", "livingentities");
     }
 
     private boolean uuid;
@@ -77,7 +77,7 @@ public class ExprEntityCollidableExemptions extends SimplerPluralPropertyExpress
     @Override
     public void set(LivingEntity from, Object[] to) {
         delete(from);
-        add(from,to);
+        add(from, to);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ExprEntityCollidableExemptions extends SimplerPluralPropertyExpress
 
     @Override
     public void delete(LivingEntity from) {
-        remove(from,from.getCollidableExemptions().toArray());
+        remove(from, from.getCollidableExemptions().toArray());
     }
 
     @Override

@@ -38,7 +38,7 @@ public class UpdateChecker implements Listener {
         }
     } : string -> {
         try {
-            return new URL(null,string);
+            return new URL(null, string);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -63,9 +63,9 @@ public class UpdateChecker implements Listener {
                 if (!player.hasPermission("lusk.update.check")) return;
 
                 Bukkit.getScheduler().runTaskLater(UpdateChecker.this.plugin, () -> getUpdateVersion(true).thenApply(version -> {
-                    send(player,"Lusk is &c&lOUTDATED&f!");
-                    send(player,"New version: {0}", version);
-                    send(player,"Download at: https://github.com/JakeGBLP/Lusk/releases");
+                    send(player, "Lusk is &c&lOUTDATED&f!");
+                    send(player, "New version: {0}", version);
+                    send(player, "Download at: https://github.com/JakeGBLP/Lusk/releases");
                     return true;
                 }), 30);
             }
@@ -77,7 +77,7 @@ public class UpdateChecker implements Listener {
         getUpdateVersion(false).thenApply(version -> {
             consoleLog("&cLusk is not up to date!");
             consoleLog("&a&lUpdate Available:");
-            consoleLog(" &l»&c   {0} &7→&a {1}",this.pluginVersion,version);
+            consoleLog(" &l»&c   {0} &7→&a {1}", this.pluginVersion, version);
             consoleLog(" &l»&7 Download at: https://github.com/JakeGBLP/Lusk/releases");
             return true;
         }).exceptionally(throwable -> {

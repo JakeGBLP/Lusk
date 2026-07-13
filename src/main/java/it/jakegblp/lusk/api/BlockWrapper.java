@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
 import static it.jakegblp.lusk.utils.EntityUtils.toEntityData;
 import static it.jakegblp.lusk.utils.EntityUtils.toEntityType;
@@ -96,6 +95,7 @@ public class BlockWrapper {
     public BlockWrapper(@NotNull Block block, boolean shouldUpdate) {
         this(block, null, null, null, null, null, null, shouldUpdate);
     }
+
     public BlockWrapper(@NotNull Block block) {
         this(block, false);
     }
@@ -103,6 +103,7 @@ public class BlockWrapper {
     public BlockWrapper(@NotNull BlockState blockState, boolean shouldUpdate) {
         this(null, null, null, blockState, null, null, null, shouldUpdate);
     }
+
     public BlockWrapper(@NotNull BlockState blockState) {
         this(blockState, false);
     }
@@ -110,6 +111,7 @@ public class BlockWrapper {
     public BlockWrapper(@NotNull BlockData blockData, boolean shouldUpdate) {
         this(null, null, null, null, null, blockData, null, shouldUpdate);
     }
+
     public BlockWrapper(@NotNull BlockData blockData) {
         this(blockData, false);
     }
@@ -117,6 +119,7 @@ public class BlockWrapper {
     public BlockWrapper(@NotNull ItemType item, boolean shouldUpdate) {
         this(null, item, null, null, null, null, null, shouldUpdate);
     }
+
     public BlockWrapper(@NotNull ItemType item) {
         this(item, false);
     }
@@ -131,8 +134,9 @@ public class BlockWrapper {
                 null,
                 null,
                 shouldUpdate
-                );
+        );
     }
+
     public BlockWrapper(@NotNull ItemMeta itemMeta) {
         this(itemMeta, false);
     }
@@ -140,6 +144,7 @@ public class BlockWrapper {
     public BlockWrapper(@NotNull Entity entity, boolean shouldUpdate) {
         this(null, null, null, null, null, null, entity, shouldUpdate);
     }
+
     public BlockWrapper(@NotNull Entity entity) {
         this(entity, false);
     }
@@ -148,7 +153,8 @@ public class BlockWrapper {
     public Block getBlock() {
         if (block != null) return block;
         else if (blockState != null) return blockState.getBlock();
-        else if (item != null && item.getItemMeta() instanceof BlockStateMeta meta) return meta.getBlockState().getBlock();
+        else if (item != null && item.getItemMeta() instanceof BlockStateMeta meta)
+            return meta.getBlockState().getBlock();
         else return null;
     }
 
@@ -178,6 +184,7 @@ public class BlockWrapper {
      * only valid for {@link Block blocks},
      * {@link ItemType items} whose {@link ItemMeta meta} is an instance of {@link BlockStateMeta} or {@link BlockDataMeta},
      * and {@link ItemMeta item metas} that are instances of the previously mentioned Meta interfaces.
+     *
      * @param blockData the new blockdata
      */
     public void updateBlockData(BlockData blockData) {
@@ -209,6 +216,7 @@ public class BlockWrapper {
      * Updates the inner Block with the given {@link BlockState},
      * only works if {@link #shouldUpdate()} is true,
      * only valid for Items with BlockState.
+     *
      * @param blockState the new blockstate
      */
     public void updateBlockState(BlockState blockState) {
@@ -296,7 +304,15 @@ public class BlockWrapper {
     }
 
     /**
+     * @return whether this block is waterlogged, false if it can't be waterlogged.
+     */
+    public boolean isWaterLogged() {
+        return getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged();
+    }
+
+    /**
      * Sets whether this block is waterlogged.
+     *
      * @param waterLog whether to make this block waterlogged or not
      */
     public void setWaterLogged(boolean waterLog) {
@@ -307,22 +323,19 @@ public class BlockWrapper {
     }
 
     /**
-     * @return whether this block is waterlogged, false if it can't be waterlogged.
-     */
-    public boolean isWaterLogged() {
-        return getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged();
-    }
-
-    /**
      * @return whether this block can be waterlogged.
      */
     public boolean canBeWaterlogged() {
         return getBlockData() instanceof Waterlogged;
     }
 
+    public Integer getLiquidLevel() {
+        return getBlockData() instanceof Levelled levelled ? levelled.getLevel() : null;
+    }
+
     public void setLiquidLevel(int level) {
         if (getBlockData() instanceof Levelled levelled && level <= levelled.getMaximumLevel()
-                && (!PAPER_1_18_2 || level >= levelled.getMinimumLevel())) {
+                && (level >= levelled.getMinimumLevel())) {
             try {
                 levelled.setLevel(level);
             } catch (IllegalArgumentException e) {
@@ -332,16 +345,12 @@ public class BlockWrapper {
         }
     }
 
-    public Integer getLiquidLevel() {
-        return getBlockData() instanceof Levelled levelled ? levelled.getLevel() : null;
-    }
-
     public Integer getMaxLiquidLevel() {
         return getBlockData() instanceof Levelled levelled ? levelled.getMaximumLevel() : null;
     }
 
     public Integer getMinLiquidLevel() {
-        return isPaper() && getBlockData() instanceof Levelled levelled ? levelled.getMinimumLevel() : null;
+        return getBlockData() instanceof Levelled levelled ? levelled.getMinimumLevel() : null;
     }
 
     @Nullable
@@ -451,6 +460,7 @@ public class BlockWrapper {
 
     /**
      * Requires {@link Constants#MINECRAFT_1_20_1} to be true.
+     *
      * @return whether the sign is waxed
      */
     public boolean isSignWaxed() {

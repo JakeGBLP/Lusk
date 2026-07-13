@@ -27,8 +27,8 @@ public abstract class PrefixedPropertyCondition<T> extends PropertyCondition<T> 
             throw new SkriptAPIException("The type argument must not contain any '%'s");
         prefix = prefix != null ? prefix + " " : "";
         Skript.registerCondition(condition,
-                prefix + "%" + type + "% "+propertyType.getPattern(false)+" " + property,
-                prefix + "%" + type + "% "+propertyType.getPattern(true)+" " + property);
+                prefix + "%" + type + "% " + propertyType.getPattern(false) + " " + property,
+                prefix + "%" + type + "% " + propertyType.getPattern(true) + " " + property);
     }
 
     @Nullable

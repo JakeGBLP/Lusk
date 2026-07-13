@@ -24,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.ANVIL_GUI_PREFIX;
 public class ExprOpenAnvilGuis extends SimpleExpression<AnvilGuiWrapper> {
     static {
         Skript.registerExpression(ExprOpenAnvilGuis.class, AnvilGuiWrapper.class, ExpressionType.SIMPLE,
-                "[all [[of] the]|the] open "+ ANVIL_GUI_PREFIX+ "s");
+                "[all [[of] the]|the] open " + ANVIL_GUI_PREFIX + "s");
     }
 
     public boolean init(Expression<?> @NotNull [] expressions, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull SkriptParser.ParseResult parseResult) {

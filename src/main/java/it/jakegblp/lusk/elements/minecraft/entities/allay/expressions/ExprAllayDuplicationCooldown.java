@@ -23,7 +23,7 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.fromTicks;
 @Examples({"broadcast duplication cooldown of target"})
 @Since("1.0.2, 1.3 (Plural, Ticks)")
 @SuppressWarnings("unused")
-public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<LivingEntity,Object> {
+public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<LivingEntity, Object> {
     static {
         register(ExprAllayDuplicationCooldown.class, Object.class,
                 "allay duplication cooldown [time[span]|:ticks]", "livingentities");
@@ -61,8 +61,8 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Livin
         for (LivingEntity entity : getExpr().getAll(event)) {
             if (entity instanceof Allay allay) {
                 switch (mode) {
-                    case REMOVE -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()-ticks);
-                    case ADD -> allay.setDuplicationCooldown(allay.getDuplicationCooldown()+ticks);
+                    case REMOVE -> allay.setDuplicationCooldown(allay.getDuplicationCooldown() - ticks);
+                    case ADD -> allay.setDuplicationCooldown(allay.getDuplicationCooldown() + ticks);
                     case SET, RESET -> allay.setDuplicationCooldown(ticks);
                 }
             }
@@ -72,7 +72,7 @@ public class ExprAllayDuplicationCooldown extends SimplePropertyExpression<Livin
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case ADD, SET, REMOVE -> new Class[] {Timespan.class, Long.class};
+            case ADD, SET, REMOVE -> new Class[]{Timespan.class, Long.class};
             case RESET -> new Class[0];
             default -> null;
         };

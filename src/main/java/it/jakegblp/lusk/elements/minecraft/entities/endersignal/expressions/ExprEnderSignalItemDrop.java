@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Ender Signal - is Going to Drop/Shatter (Property)")
 @Description("""
-Gets the item the provided ender signals will display and drop on death.
-""")
+        Gets the item the provided ender signals will display and drop on death.
+        """)
 @Examples("send ender signal will drop property of {_enderSignal}")
 @Since("1.3")
 public class ExprEnderSignalItemDrop extends SimpleBooleanPropertyExpression<Entity> {
@@ -46,6 +46,6 @@ public class ExprEnderSignalItemDrop extends SimpleBooleanPropertyExpression<Ent
 
     @Override
     protected String getPropertyName() {
-        return "ender signal will "+ (isNegated() ? "shatter" : "drop");
+        return "ender signal will " + (isNegated() ? "shatter" : "drop");
     }
 }

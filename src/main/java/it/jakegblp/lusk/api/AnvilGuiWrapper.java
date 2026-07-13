@@ -65,6 +65,26 @@ public class AnvilGuiWrapper {
         this.interactableSlots = anvilGuiWrapper.interactableSlots;
     }
 
+    public static Map<AnvilGuiWrapper, Set<UUID>> getOpenGuis() {
+        return OPEN_GUIS;
+    }
+
+    public static boolean isViewingAnyAnvilGui(Player... players) {
+        return Arrays.stream(players)
+                .allMatch(player -> OPEN_GUIS
+                        .values()
+                        .stream()
+                        .anyMatch(uuids -> uuids.contains(player.getUniqueId())));
+    }
+
+    public static AnvilGuiWrapper getOpenAnvilGui(Player player) {
+        return OPEN_GUIS.entrySet().stream()
+                .filter(entry -> entry.getValue().contains(player.getUniqueId()))
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
+
     public void open(Player... players) {
         Set<UUID> playerSet = OPEN_GUIS.computeIfAbsent(this, k -> new HashSet<>());
         int length = players.length;
@@ -78,10 +98,6 @@ public class AnvilGuiWrapper {
             playerSet.add(player.getUniqueId());
             Lusk.callEvent(new AnvilGuiOpenEvent(this, player));
         }
-    }
-
-    public static Map<AnvilGuiWrapper, Set<UUID>> getOpenGuis() {
-        return OPEN_GUIS;
     }
 
     public void closeAndOpen(Player... players) {
@@ -109,22 +125,6 @@ public class AnvilGuiWrapper {
         return false;
     }
 
-    public static boolean isViewingAnyAnvilGui(Player... players) {
-        return Arrays.stream(players)
-                .allMatch(player -> OPEN_GUIS
-                        .values()
-                        .stream()
-                        .anyMatch(uuids -> uuids.contains(player.getUniqueId())));
-    }
-
-    public static AnvilGuiWrapper getOpenAnvilGui(Player player) {
-        return OPEN_GUIS.entrySet().stream()
-                .filter(entry -> entry.getValue().contains(player.getUniqueId()))
-                .findFirst()
-                .map(Map.Entry::getKey)
-                .orElse(null);
-    }
-
     // todo: figure out per-player mechanics, not too relevant for now
     //public void closeAndOpen(Player player) {
     //    OPEN_GUIS.forEach((k, v) -> {
@@ -134,11 +134,6 @@ public class AnvilGuiWrapper {
     //    });
     //    open(player);
     //}
-
-    public void setInteractableSlots(int... slots) {
-        interactableSlots = Arrays.stream(slots).distinct().toArray();
-        builder.interactableSlots(interactableSlots);
-    }
 
     public void addInteractableSlots(int... slots) {
         setInteractableSlots(ArrayUtils.addAll(interactableSlots, slots));
@@ -154,6 +149,11 @@ public class AnvilGuiWrapper {
 
     public int @Nullable [] getInteractableSlots() {
         return interactableSlots;
+    }
+
+    public void setInteractableSlots(int... slots) {
+        interactableSlots = Arrays.stream(slots).distinct().toArray();
+        builder.interactableSlots(interactableSlots);
     }
 
     private void removeUUIDs(UUID... uuids) {

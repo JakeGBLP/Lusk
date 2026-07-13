@@ -5,8 +5,6 @@ import ch.njol.skript.doc.*;
 import io.papermc.paper.entity.Bucketable;
 import org.bukkit.entity.LivingEntity;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
-
 @Name("Bucketable - is From a Bucket")
 @Description("Checks whether a living entity was previously in a bucket.")
 @Examples({"if {_fish} is from a bucket:"})
@@ -15,9 +13,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
 public class CondBucketableIsFromBucket extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_1_18) {
-            register(CondBucketableIsFromBucket.class, "from [a] bucket", "livingentities");
-        }
+        register(CondBucketableIsFromBucket.class, "from [a] bucket", "livingentities");
     }
 
     @Override

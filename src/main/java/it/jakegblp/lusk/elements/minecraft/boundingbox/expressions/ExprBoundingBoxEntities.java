@@ -28,8 +28,9 @@ import java.util.function.Predicate;
 public class ExprBoundingBoxEntities extends SimpleExpression<Entity> {
     static {
         Skript.registerExpression(ExprBoundingBoxEntities.class, Entity.class, ExpressionType.COMBINED,
-        "[all [[of] the]|the] %*entitydatas% (of|in|within) [bounding[ ]]box[es] %boundingboxes% in [world[s]] %worlds%");
+                "[all [[of] the]|the] %*entitydatas% (of|in|within) [bounding[ ]]box[es] %boundingboxes% in [world[s]] %worlds%");
     }
+
     private Expression<EntityData<?>> entityDataExpression;
     private Expression<BoundingBox> boundingBoxExpression;
     private Expression<World> worldExpression;
@@ -65,6 +66,6 @@ public class ExprBoundingBoxEntities extends SimpleExpression<Entity> {
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean debug) {
-        return "all of the "+entityDataExpression.toString(event, debug)+" within bounding boxes "+boundingBoxExpression.toString(event, debug)+ " in world "+worldExpression.toString(event, debug);
+        return "all of the " + entityDataExpression.toString(event, debug) + " within bounding boxes " + boundingBoxExpression.toString(event, debug) + " in world " + worldExpression.toString(event, debug);
     }
 }

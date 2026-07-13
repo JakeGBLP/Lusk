@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 public class ExprSupportedEnchantments extends PropertyExpression<ItemStack, Enchantment> {
 
     static {
-        register(ExprSupportedEnchantments.class,Enchantment.class, "(preferred|supported) enchantments", "itemstacks");
+        register(ExprSupportedEnchantments.class, Enchantment.class, "(preferred|supported) enchantments", "itemstacks");
     }
 
     @Override

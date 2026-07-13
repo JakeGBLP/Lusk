@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.getMilliseconds;
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 
 @Name("WorldBorder - Change Duration")
 @Description("Returns the duration of the change in the World Border Start Change event.\nCan be set.\nRequires Paper.")
@@ -25,10 +24,8 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 @SuppressWarnings("unused")
 public class ExprWorldBorderChangeDuration extends SimpleExpression<Object> {
     static {
-        if (PAPER_HAS_WORLD_BORDER_EVENT) {
-            Skript.registerExpression(ExprWorldBorderChangeDuration.class, Object.class, EVENT_OR_SIMPLE,
-                    "[the] world[ |-]border (shift|change) duration [millis:in milliseconds]");
-        }
+        Skript.registerExpression(ExprWorldBorderChangeDuration.class, Object.class, EVENT_OR_SIMPLE,
+                "[the] world[ |-]border (shift|change) duration [millis:in milliseconds]");
     }
 
     private boolean usesMilliseconds;

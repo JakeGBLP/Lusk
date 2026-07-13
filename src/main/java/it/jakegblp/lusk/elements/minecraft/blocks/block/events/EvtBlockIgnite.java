@@ -16,8 +16,8 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 public class EvtBlockIgnite extends SkriptEvent {
 
     static {
-        Skript.registerEvent("Block - on Ignite [Lusk Extension]",EvtBlockIgnite.class, BlockIgniteEvent.class,
-                "[lusk] [:player] block ignit(e|ion) [due to %-*ignitecauses%]")
+        Skript.registerEvent("Block - on Ignite [Lusk Extension]", EvtBlockIgnite.class, BlockIgniteEvent.class,
+                        "[lusk] [:player] block ignit(e|ion) [due to %-*ignitecauses%]")
                 .description("""
                         **THIS IS AN EXTENDED VERSION OF SKRIPT'S IGNITE EVENT.**
                         
@@ -30,7 +30,7 @@ public class EvtBlockIgnite extends SkriptEvent {
                         Called when a block is ignited. If you want to catch when a Player places fire, use the place event.
                         If this event is cancelled, the block will not be ignited.
                         """)
-                .examples("on lusk block ignite due to lava_ignition:","on lusk player block ignition:")
+                .examples("on lusk block ignite due to lava_ignition:", "on lusk player block ignition:")
                 .since("1.3");
 
         registerEventValue(BlockIgniteEvent.class, Entity.class, BlockIgniteEvent::getIgnitingEntity, EventValues.TIME_NOW);
@@ -59,11 +59,11 @@ public class EvtBlockIgnite extends SkriptEvent {
         return (allIgniteCauses
                 || igniteCauseLiterals.getAll().length == 0
                 || igniteCauseLiterals.stream(e).anyMatch(igniteCause -> igniteCause.equals(e.getCause()))
-               ) && (!justPlayer || e.getPlayer() != null);
+        ) && (!justPlayer || e.getPlayer() != null);
     }
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "lusk "+ (justPlayer ? "player " : "")+ "block ignite";
+        return "lusk " + (justPlayer ? "player " : "") + "block ignite";
     }
 }

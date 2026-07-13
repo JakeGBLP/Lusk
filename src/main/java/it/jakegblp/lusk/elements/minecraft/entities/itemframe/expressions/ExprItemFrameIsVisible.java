@@ -47,6 +47,7 @@ public class ExprItemFrameIsVisible extends SimpleBooleanPropertyExpression<Enti
     public boolean allowReset() {
         return true;
     }
+
     @Override
     public @Nullable Boolean convert(Entity from) {
         return from instanceof ItemFrame itemFrame && itemFrame.isVisible() ^ isNegated();

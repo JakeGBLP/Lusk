@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class GenericEntityJumpEvent extends EntityEvent {
 
 
+    private static final HandlerList HANDLERS = new HandlerList();
+
     public GenericEntityJumpEvent(@NotNull Entity what) {
         super(what);
     }
@@ -15,8 +17,6 @@ public class GenericEntityJumpEvent extends EntityEvent {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
-
-    private static final HandlerList HANDLERS = new HandlerList();
 
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;

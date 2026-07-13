@@ -44,9 +44,9 @@ public class ExprBoundingBoxBlocks extends SimpleExpression<Block> {
     @Override
     protected Block @NotNull [] get(@NotNull Event event) {
         return worldExpression.stream(event).flatMap(world -> boundingBoxExpression.stream(event).flatMap(boundingBox ->
-                        Lists.newArrayList(
-                                new AABB(boundingBox.getMin().toLocation(world), boundingBox.getMax().toLocation(world))
-                                        .iterator()).stream())).toArray(Block[]::new);
+                Lists.newArrayList(
+                        new AABB(boundingBox.getMin().toLocation(world), boundingBox.getMax().toLocation(world))
+                                .iterator()).stream())).toArray(Block[]::new);
     }
 
     @Override

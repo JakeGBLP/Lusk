@@ -24,19 +24,19 @@ public class BannerClassInfos {
         }
         if (Classes.getExactClassInfo(Pattern.class) == null) {
             Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerpattern")
-                        .user("banner ?patterns?")
-                        .name("Banner - Pattern")
-                        .description("A Banner Pattern.") // add example
-                        .since("1.3")
+                    .user("banner ?patterns?")
+                    .name("Banner - Pattern")
+                    .description("A Banner Pattern.") // add example
+                    .since("1.3")
                     .parser(new Parser<>() {
                         @Override
                         public String toString(Pattern o, int flags) {
-                            return "banner pattern with pattern type "+o.getPattern()+" and color "+o.getColor();
+                            return "banner pattern with pattern type " + o.getPattern() + " and color " + o.getColor();
                         }
 
                         @Override
                         public String toVariableNameString(Pattern o) {
-                            return toString(o,0) + " banner pattern (" + o + ")";
+                            return toString(o, 0) + " banner pattern (" + o + ")";
                         }
 
                         @Override

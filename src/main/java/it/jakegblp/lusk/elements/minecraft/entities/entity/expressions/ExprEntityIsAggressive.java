@@ -15,7 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_2;
         
         Some mobs will raise their arm(s) when aggressive:
         Drowned, Piglin, Skeleton, Zombie, ZombieVillager, Illusioner, Vindicator, Panda, Pillager, PiglinBrute
-
+        
         Note: This doesn't always return the actual aggressive state as when set, Pandas are always aggressive if their combined Panda Gene is AGGRESSIVE.""")
 @Examples({"broadcast is aggressive state of target"})
 @Since("1.3")

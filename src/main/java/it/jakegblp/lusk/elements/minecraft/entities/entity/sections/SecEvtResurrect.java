@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 @Description("""
         Runs the code inside of it when the provided entity dies and may have the opportunity to be resurrected.
         Will be called in a cancelled state if the entity does not have a totem equipped.
-
+        
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.
@@ -31,11 +31,11 @@ import java.util.function.Consumer;
         """)
 @Examples(
         """
-        command /a:
-          trigger:
-            on resurrection of player:
-              uncancel event
-        """
+                command /a:
+                  trigger:
+                    on resurrection of player:
+                      uncancel event
+                """
 )
 @Since("1.3.1")
 public class SecEvtResurrect extends Section {

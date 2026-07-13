@@ -38,7 +38,8 @@ public class EntitySnapshotClassInfos {
                         public EntitySnapshot parse(final @NotNull String s, final @NotNull ParseContext context) {
                             try {
                                 return Bukkit.getEntityFactory().createEntitySnapshot(s);
-                            } catch (IllegalArgumentException ignored) {}
+                            } catch (IllegalArgumentException ignored) {
+                            }
                             return null;
                         }
 
@@ -49,7 +50,7 @@ public class EntitySnapshotClassInfos {
 
                         @Override
                         public @NotNull String toString(final EntitySnapshot s, final int flags) {
-                            return "entity snapshot of type "+ EntityUtils.toSkriptEntityData(s.getEntityType());
+                            return "entity snapshot of type " + EntityUtils.toSkriptEntityData(s.getEntityType());
                         }
 
                         @Override

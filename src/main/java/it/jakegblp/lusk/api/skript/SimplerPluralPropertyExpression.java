@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import static it.jakegblp.lusk.utils.ClassUtils.getArrayClass;
 
-public abstract class SimplerPluralPropertyExpression<F,T> extends SimplePropertyExpression<F, T> implements Changeable<F,T[]> {
+public abstract class SimplerPluralPropertyExpression<F, T> extends SimplePropertyExpression<F, T> implements Changeable<F, T[]> {
 
     public abstract T[] get(F f);
 
@@ -27,10 +27,10 @@ public abstract class SimplerPluralPropertyExpression<F,T> extends SimplePropert
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET -> allowSet() ? new Class[] {getArrayClass(getReturnType())} : null;
-            case ADD -> allowAdd() ? new Class[] {getArrayClass(getReturnType())} : null;
-            case REMOVE -> allowRemove() ? new Class[] {getArrayClass(getReturnType())} : null;
-            case REMOVE_ALL -> allowRemoveAll() ? new Class[] {getArrayClass(getReturnType())} : null;
+            case SET -> allowSet() ? new Class[]{getArrayClass(getReturnType())} : null;
+            case ADD -> allowAdd() ? new Class[]{getArrayClass(getReturnType())} : null;
+            case REMOVE -> allowRemove() ? new Class[]{getArrayClass(getReturnType())} : null;
+            case REMOVE_ALL -> allowRemoveAll() ? new Class[]{getArrayClass(getReturnType())} : null;
             case RESET -> allowReset() ? new Class[0] : null;
             case DELETE -> allowDelete() ? new Class[0] : null;
         };

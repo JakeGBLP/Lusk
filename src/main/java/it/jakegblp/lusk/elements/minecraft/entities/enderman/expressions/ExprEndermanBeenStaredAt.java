@@ -6,8 +6,6 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Enderman - Has Been Stared At (Property)")
 @Description("Returns whether or not an enderman has been stared at.\nCan be set.")
 @Examples({"broadcast has been stared at state of target"})
@@ -17,9 +15,8 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class ExprEndermanBeenStaredAt extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(ExprEndermanBeenStaredAt.class,Boolean.class,
-                    "[enderman]","[has] been (stared|looked) at", "livingentities");
+        register(ExprEndermanBeenStaredAt.class, Boolean.class,
+                "[enderman]", "[has] been (stared|looked) at", "livingentities");
     }
 
     @Override
@@ -36,7 +33,7 @@ public class ExprEndermanBeenStaredAt extends SimpleBooleanPropertyExpression<Li
 
     @Override
     public void reset(LivingEntity from) {
-        set(from,false);
+        set(from, false);
     }
 
     @Override

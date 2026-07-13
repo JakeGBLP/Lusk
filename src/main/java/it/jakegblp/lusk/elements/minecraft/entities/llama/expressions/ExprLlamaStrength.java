@@ -12,19 +12,19 @@ import org.jetbrains.annotations.Nullable;
 
 @Name("Llama - Strength")
 @Description("""
-Returns the provided llamas' strength.
-A higher strength llama will have more inventory slots and be more threatening to entities.
-
-Can be set.
-
-Must be between 1 and 5.""")
+        Returns the provided llamas' strength.
+        A higher strength llama will have more inventory slots and be more threatening to entities.
+        
+        Can be set.
+        
+        Must be between 1 and 5.""")
 @Examples({"broadcast strength of target"})
 @Since("1.0.3, 1.3 (Plural)")
 @SuppressWarnings("unused")
-public class ExprLlamaStrength extends SimplerPropertyExpression<LivingEntity,Integer> {
+public class ExprLlamaStrength extends SimplerPropertyExpression<LivingEntity, Integer> {
 
     static {
-        register(ExprLlamaStrength.class,Integer.class,"llama strength", "livingentities");
+        register(ExprLlamaStrength.class, Integer.class, "llama strength", "livingentities");
     }
 
     @Override
@@ -57,14 +57,14 @@ public class ExprLlamaStrength extends SimplerPropertyExpression<LivingEntity,In
     @Override
     public void add(LivingEntity from, Integer to) {
         if (from instanceof Llama llama) {
-            llama.setStrength(LuskMath.fit(1, llama.getStrength()+to, 5));
+            llama.setStrength(LuskMath.fit(1, llama.getStrength() + to, 5));
         }
     }
 
     @Override
     public void remove(LivingEntity from, Integer to) {
         if (from instanceof Llama llama) {
-            llama.setStrength(LuskMath.fit(1, llama.getStrength()-to, 5));
+            llama.setStrength(LuskMath.fit(1, llama.getStrength() - to, 5));
         }
     }
 

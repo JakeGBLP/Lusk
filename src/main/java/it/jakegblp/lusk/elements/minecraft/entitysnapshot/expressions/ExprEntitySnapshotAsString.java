@@ -16,7 +16,7 @@ public class ExprEntitySnapshotAsString extends SimplePropertyExpression<EntityS
 
     static {
         if (HAS_ENTITY_SNAPSHOT_GET_AS_STRING)
-           register(ExprEntitySnapshotAsString.class, String.class, "entity[ |-]snapshot (nbt string|string nbt)", "entitysnapshots");
+            register(ExprEntitySnapshotAsString.class, String.class, "entity[ |-]snapshot (nbt string|string nbt)", "entitysnapshots");
     }
 
     @Override

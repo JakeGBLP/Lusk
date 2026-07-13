@@ -10,13 +10,13 @@ compileJava {
     options.encoding = "UTF-8"
 }
 
-version = "1.3.13"
+version = "1.3.14"
 
 def java17 = 17
 def java21 = 21
 def java25 = 25
 
-def oldestJava = java17
+def oldestJava = java21
 def latestJava = java21
 
 

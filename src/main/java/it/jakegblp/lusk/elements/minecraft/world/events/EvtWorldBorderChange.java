@@ -16,29 +16,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
-import static it.jakegblp.lusk.utils.Constants.PAPER_HAS_WORLD_BORDER_EVENT;
 
 @SuppressWarnings("unused")
 public class EvtWorldBorderChange extends SkriptEvent {
     static {
-        if (PAPER_HAS_WORLD_BORDER_EVENT) {
-            Skript.registerEvent("WorldBorder - on Change/Center Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
-                            "world[ ]border start[ing|ed] [to] chang(e|ing)",
-                            "world[ ]border stop chang(e|ing)",
-                            "world[ ]border center chang(e[d]|ing)"
-                    )
-                    .description("Called when a world border's center is changed or when a world border starts (either over time or instantly) or stops moving.")
-                    .examples("""
-                            on world border start changing:
-                              if the world border change is instant:
-                                broadcast "instant"
-                              else:
-                                broadcast "not instant"
-                            """)
-                    .since("1.0.2")
-                    .requiredPlugins("Paper");
-            registerEventValue(WorldBorderEvent.class, World.class, WorldEvent::getWorld, 0);
-        }
+        Skript.registerEvent("WorldBorder - on Change/Center Change", EvtWorldBorderChange.class, CollectionUtils.array(WorldBorderBoundsChangeEvent.class, WorldBorderBoundsChangeFinishEvent.class, WorldBorderCenterChangeEvent.class),
+                        "world[ ]border start[ing|ed] [to] chang(e|ing)",
+                        "world[ ]border stop chang(e|ing)",
+                        "world[ ]border center chang(e[d]|ing)"
+                )
+                .description("Called when a world border's center is changed or when a world border starts (either over time or instantly) or stops moving.")
+                .examples("""
+                        on world border start changing:
+                          if the world border change is instant:
+                            broadcast "instant"
+                          else:
+                            broadcast "not instant"
+                        """)
+                .since("1.0.2")
+                .requiredPlugins("Paper");
+        registerEventValue(WorldBorderEvent.class, World.class, WorldEvent::getWorld, 0);
     }
 
     private int pattern;

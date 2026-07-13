@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 @Examples({
         "send item frame item of {_frame}",
         """
-        silently:
-          set item frame item of {_frame} to stone
-        """
+                silently:
+                  set item frame item of {_frame} to stone
+                """
 })
 public class ExprItemFrameItem extends SimplerPropertyExpression<Entity, ItemType> {
 
@@ -51,13 +51,13 @@ public class ExprItemFrameItem extends SimplerPropertyExpression<Entity, ItemTyp
     @Override
     public void set(Entity from, ItemType to) {
         if (from instanceof ItemFrame itemFrame) {
-            itemFrame.setItem(to == null ? null : to.getRandom(),!silently);
+            itemFrame.setItem(to == null ? null : to.getRandom(), !silently);
         }
     }
 
     @Override
     public void delete(Entity from) {
-        set(from,null);
+        set(from, null);
     }
 
     @Override

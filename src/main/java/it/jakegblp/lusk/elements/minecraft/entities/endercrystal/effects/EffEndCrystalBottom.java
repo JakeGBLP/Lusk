@@ -41,7 +41,7 @@ public class EffEndCrystalBottom extends Effect {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return (show ? "show" : "hide") + " end crystal bedrock plate of " + entityExpression.toString(event,debug);
+        return (show ? "show" : "hide") + " end crystal bedrock plate of " + entityExpression.toString(event, debug);
     }
 
     @Override

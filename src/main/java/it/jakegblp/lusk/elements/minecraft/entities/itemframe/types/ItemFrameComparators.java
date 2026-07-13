@@ -21,5 +21,6 @@ public class ItemFrameComparators {
         });
     }
 
-    public ItemFrameComparators() {}
+    public ItemFrameComparators() {
+    }
 }

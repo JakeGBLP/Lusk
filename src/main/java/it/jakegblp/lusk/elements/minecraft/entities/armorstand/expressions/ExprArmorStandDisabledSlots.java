@@ -85,7 +85,7 @@ public class ExprArmorStandDisabledSlots extends PropertyExpression<LivingEntity
     @Override
     public @Nullable Class<?>[] acceptChange(Changer.ChangeMode mode) {
         return switch (mode) {
-            case SET,ADD,REMOVE -> CollectionUtils.array(EquipmentSlot[].class);
+            case SET, ADD, REMOVE -> CollectionUtils.array(EquipmentSlot[].class);
             case DELETE, RESET -> CollectionUtils.array();
             default -> null;
         };

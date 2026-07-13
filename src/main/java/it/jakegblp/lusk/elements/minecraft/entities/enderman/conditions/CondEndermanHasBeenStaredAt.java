@@ -6,8 +6,6 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Enderman - Has Been Stared At")
 @Description("Checks if an enderman has been stared at.")
 @Examples({"if target has been stared at:"})
@@ -18,8 +16,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class CondEndermanHasBeenStaredAt extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(CondEndermanHasBeenStaredAt.class, PropertyType.HAVE, "been stared at", "livingentities");
+        register(CondEndermanHasBeenStaredAt.class, PropertyType.HAVE, "been stared at", "livingentities");
     }
 
     @Override

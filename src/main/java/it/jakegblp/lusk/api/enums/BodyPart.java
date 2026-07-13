@@ -35,7 +35,7 @@ public enum BodyPart {
      * Sets the pose of the body part for the given ArmorStand.
      *
      * @param armorStand the armor stand whose body part pose is being set.
-     * @param vector the new {@link Vector} degree rotation; if null, the rotation will be reset.
+     * @param vector     the new {@link Vector} degree rotation; if null, the rotation will be reset.
      */
     public void set(@NotNull ArmorStand armorStand, @Nullable Vector vector) {
         poseSetter.accept(armorStand, vector == null ? EulerAngle.ZERO : VectorUtils.toRadiansEulerAngle(vector));

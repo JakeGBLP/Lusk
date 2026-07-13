@@ -14,17 +14,16 @@ public class AnvilGuiClickEvent extends AnvilGuiSnapshotEvent {
         this.slot = slot;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public int getSlot() {
         return slot;
     }
 
-
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

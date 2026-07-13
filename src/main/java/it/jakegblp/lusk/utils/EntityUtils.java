@@ -15,33 +15,44 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static ch.njol.skript.paperlib.PaperLib.isPaper;
 import static it.jakegblp.lusk.utils.Constants.*;
 
 public class EntityUtils {
     // https://github.com/PaperMC/Paper/commit/d714682f8fbcf87edada17b513cf76f499c9b355
 
-    public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
-        if (!isPaper()) return false;
-        if (entity instanceof Zombie zombie) return zombie.shouldBurnInDay();
-        else if (MINECRAFT_1_18_2 && entity instanceof AbstractSkeleton skeleton) return skeleton.shouldBurnInDay();
-        else if (entity instanceof Skeleton skeleton) {
+    public static final Class<?> COW_CLASS;
+    public static final @Nullable Method COW_GET_VARIANT_METHOD;
+    public static final @Nullable Method COW_SET_VARIANT_METHOD;
+
+    static {
+        if (HAS_COW_VARIANT) {
             try {
-                return (boolean) Skeleton.class.getMethod("shouldBurnInDay").invoke(skeleton);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
-        } else if (entity instanceof Phantom phantom) return phantom.shouldBurnInDay();
-        return false;
+                COW_CLASS = Class.forName("org.bukkit.entity.Cow");
+                COW_GET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("getVariant");
+                COW_SET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("setVariant", Cow.Variant.class);
+            } catch (ClassNotFoundException | NoSuchMethodException e) {
+                throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
+            }
+        } else {
+            COW_CLASS = null;
+            COW_GET_VARIANT_METHOD = null;
+            COW_SET_VARIANT_METHOD = null;
+        }
+    }
+
+    public static boolean shouldBurnDuringTheDay(LivingEntity entity) {
+        return switch (entity) {
+            case Zombie zombie -> zombie.shouldBurnInDay();
+            case AbstractSkeleton skeleton -> skeleton.shouldBurnInDay();
+            case Phantom phantom -> phantom.shouldBurnInDay();
+            case null, default -> false;
+        };
     }
 
     public static void setShouldBurnDuringTheDay(LivingEntity entity, boolean value) {
-        if (!isPaper()) return;
         if (entity instanceof Zombie zombie) zombie.setShouldBurnInDay(value);
-        else if (MINECRAFT_1_18_2 && entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
-        else if (entity instanceof Skeleton skeleton) {
-            try {
-                Skeleton.class.getMethod("setShouldBurnInDay", boolean.class).invoke(skeleton, value);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
-        } else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
+        else if (entity instanceof AbstractSkeleton skeleton) skeleton.setShouldBurnInDay(value);
+        else if (entity instanceof Phantom phantom) phantom.setShouldBurnInDay(value);
     }
 
     /**
@@ -65,20 +76,17 @@ public class EntityUtils {
     }
 
     public static boolean isAngry(LivingEntity entity) {
-        if (entity instanceof PigZombie pigZombie) {
-            return pigZombie.isAngry();
-        } else if (entity instanceof Wolf wolf) {
-            return wolf.isAngry();
-        } else if (HAS_WARDEN && entity instanceof Warden warden) {
-            return warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
-        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
-            return enderman.isScreaming();
-        }
-        return false;
+        return switch (entity) {
+            case PigZombie pigZombie -> pigZombie.isAngry();
+            case Wolf wolf -> wolf.isAngry();
+            case Warden warden -> warden.getAngerLevel() == Warden.AngerLevel.ANGRY;
+            case Enderman enderman -> enderman.isScreaming();
+            case null, default -> false;
+        };
     }
 
     public static boolean isInterested(LivingEntity entity) {
-        if (PAPER_1_18_2 && entity instanceof Fox fox) {
+        if (entity instanceof Fox fox) {
             return fox.isInterested();
         } else if (entity instanceof Wolf wolf) {
             return wolf.isInterested();
@@ -87,7 +95,7 @@ public class EntityUtils {
     }
 
     public static void setIsInterested(LivingEntity entity, boolean interested) {
-        if (PAPER_1_18_2 && entity instanceof Fox fox) {
+        if (entity instanceof Fox fox) {
             fox.setInterested(interested);
         } else if (entity instanceof Wolf wolf) {
             wolf.setInterested(interested);
@@ -99,7 +107,7 @@ public class EntityUtils {
             pigZombie.setAngry(bool);
         } else if (entity instanceof Wolf wolf) {
             wolf.setAngry(bool);
-        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
+        } else if (entity instanceof Enderman enderman) {
             enderman.setScreaming(bool);
         }
     }
@@ -115,7 +123,7 @@ public class EntityUtils {
     public static void setIsSitting(Entity entity, boolean sitting) {
         if (entity instanceof Sittable sittable) {
             sittable.setSitting(sitting);
-        } else if (isPaper() && MINECRAFT_1_20_1) {
+        } else if (MINECRAFT_1_20_1) {
             if (sitting && entity.getPose() != Pose.SITTING) {
                 entity.setPose(Pose.SITTING);
             } else if (entity.getPose() == Pose.SITTING) {
@@ -127,7 +135,7 @@ public class EntityUtils {
     public static boolean isScreaming(LivingEntity entity) {
         if (entity instanceof Goat goat) {
             return goat.isScreaming();
-        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
+        } else if (entity instanceof Enderman enderman) {
             return enderman.isScreaming();
         }
         return false;
@@ -136,13 +144,13 @@ public class EntityUtils {
     public static void setIsScreaming(LivingEntity entity, boolean screaming) {
         if (entity instanceof Goat goat) {
             goat.setScreaming(screaming);
-        } else if (PAPER_1_18_2 && entity instanceof Enderman enderman) {
+        } else if (entity instanceof Enderman enderman) {
             enderman.setScreaming(screaming);
         }
     }
 
     public static boolean isRoaring(LivingEntity entity) {
-        if (PAPER_1_19_2 && entity instanceof Ravager ravager)
+        if (entity instanceof Ravager ravager)
             return ravager.getRoarTicks() > 0;
         else if (entity instanceof EnderDragon enderDragon)
             return enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;
@@ -178,26 +186,6 @@ public class EntityUtils {
             else if (o instanceof UUID aUuid) return aUuid;
             return null;
         }).filter(Objects::nonNull).toList();
-    }
-
-    public static final Class<?> COW_CLASS;
-    public static final @Nullable Method COW_GET_VARIANT_METHOD;
-    public static final @Nullable Method COW_SET_VARIANT_METHOD;
-
-    static {
-        if (HAS_COW_VARIANT) {
-            try {
-                COW_CLASS = Class.forName("org.bukkit.entity.Cow");
-                COW_GET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("getVariant");
-                COW_SET_VARIANT_METHOD = COW_CLASS.getDeclaredMethod("setVariant", Cow.Variant.class);
-            } catch (ClassNotFoundException | NoSuchMethodException e) {
-                throw new RuntimeException("Cow Variant couldn't be obtained, please report this.", e);
-            }
-        } else {
-            COW_CLASS = null;
-            COW_GET_VARIANT_METHOD = null;
-            COW_SET_VARIANT_METHOD = null;
-        }
     }
 
     public static void setCowVariant(AbstractCow cow, Cow.Variant variant) {
@@ -295,7 +283,7 @@ public class EntityUtils {
     public static ItemStack getEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot) {
         if (livingEntity instanceof Player player) {
             return player.getInventory().getItem(equipmentSlot);
-        } else if (!PAPER_1_21 || livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 return entityEquipment.getItem(equipmentSlot);
@@ -307,7 +295,7 @@ public class EntityUtils {
     public static void setEntityEquipmentSlot(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack itemStack) {
         if (livingEntity instanceof Player player) {
             player.getInventory().setItem(equipmentSlot, itemStack);
-        } else if (!PAPER_1_21 || livingEntity.canUseEquipmentSlot(equipmentSlot)) {
+        } else if (livingEntity.canUseEquipmentSlot(equipmentSlot)) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             if (entityEquipment != null) {
                 entityEquipment.setItem(equipmentSlot, itemStack);

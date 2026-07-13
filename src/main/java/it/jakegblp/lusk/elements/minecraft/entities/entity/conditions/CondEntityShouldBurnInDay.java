@@ -13,7 +13,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.shouldBurnDuringTheDay;
         Applies to zombies, skeletons (all types), and phantoms
         
         In 1.17.1 this doesn't work with skeleton variants, such as strays, but it does work with base skeletons.
-
+        
         For skeletons, this does not take into account the entity's natural fire immunity.
         """)
 @Examples({"if target should burn in daylight:"})
@@ -24,7 +24,7 @@ public class CondEntityShouldBurnInDay extends PrefixedPropertyCondition<LivingE
 
     static {
         register(CondEntityShouldBurnInDay.class, ExtendedPropertyType.SHOULD, "[[living[ |-]]entity]",
-                "burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))","livingentities");
+                "burn ((during|in) [the] day|(in|under) [the] (sun[light]|daylight))", "livingentities");
     }
 
     @Override

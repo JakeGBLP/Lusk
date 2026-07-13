@@ -6,8 +6,6 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Fox - is Defending")
 @Description("Checks if the fox is defending.")
 @Examples({"on damage of fox:\n\tif victim is defending:\n\t\tcancel event"})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 @SuppressWarnings("unused")
 public class CondFoxDefending extends PrefixedPropertyCondition<LivingEntity> {
     static {
-        if (PAPER_1_18_2)
-            register(CondFoxDefending.class, "fox[es]", "defending", "livingentities");
+        register(CondFoxDefending.class, "fox[es]", "defending", "livingentities");
     }
 
     @Override

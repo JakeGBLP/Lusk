@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 
 @Name("Tameable Death Message Event -  Death Message")
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
@@ -24,9 +23,8 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 @SuppressWarnings("unused")
 public class ExprTameableDeathMessage extends SimpleExpression<String> {
     static {
-        if (PAPER_1_18_2)
-            Skript.registerExpression(ExprTameableDeathMessage.class, String.class, EVENT_OR_SIMPLE,
-                    "[the |event-]tameable death message");
+        Skript.registerExpression(ExprTameableDeathMessage.class, String.class, EVENT_OR_SIMPLE,
+                "[the |event-]tameable death message");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

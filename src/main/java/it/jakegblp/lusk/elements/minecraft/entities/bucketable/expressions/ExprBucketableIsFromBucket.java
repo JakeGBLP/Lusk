@@ -6,8 +6,6 @@ import it.jakegblp.lusk.api.skript.SimpleBooleanPropertyExpression;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
-
 @Name("Bucketable - is From a Bucket (Property)")
 @Description("Gets whether a living entity was previously in a bucket.\nCan be set and reset.")
 @Examples({"send is from a bucket state of {_fish}"})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18;
 public class ExprBucketableIsFromBucket extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18)
-            register(ExprBucketableIsFromBucket.class, Boolean.class, "[bucketable]", "[is] from [a] bucket", "livingentities");
+        register(ExprBucketableIsFromBucket.class, Boolean.class, "[bucketable]", "[is] from [a] bucket", "livingentities");
     }
 
     @Override

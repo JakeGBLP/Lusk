@@ -9,8 +9,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Warden;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_WARDEN;
-
 @Name("Warden - is Agitated")
 @Description("Checks if a Warden is agitated.")
 @Examples({"on damage of warden:\n\tif victim is agitated:\n\t\tbroadcast \"Uh oh\""})
@@ -23,7 +21,7 @@ public class CondWardenAgitated extends PropertyCondition<LivingEntity> {
 
     @Override
     public boolean check(LivingEntity entity) {
-        return HAS_WARDEN && entity instanceof Warden warden && warden.getAngerLevel() == Warden.AngerLevel.AGITATED;
+        return entity instanceof Warden warden && warden.getAngerLevel() == Warden.AngerLevel.AGITATED;
     }
 
     @Override

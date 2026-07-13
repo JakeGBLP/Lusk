@@ -6,8 +6,6 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Cat - is Looking Up")
 @Description("Checks if a cat is looking up")
 @Examples({"on damage:\n\tif victim is looking up:\n\t\tbroadcast \"it's looking up!\""})
@@ -17,8 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class CondCatIsLookingUp extends PropertyCondition<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(CondCatIsLookingUp.class, "looking up", "livingentities");
+        register(CondCatIsLookingUp.class, "looking up", "livingentities");
     }
 
     @Override

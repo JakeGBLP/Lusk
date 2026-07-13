@@ -6,8 +6,6 @@ import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
-
 @Name("Dolphin - Has Been Fish (Property)")
 @Description("Returns whether or not the provided dolphins have been fed a fish.\nCan be set.")
 @Examples({"broadcast has fish state of target"})
@@ -17,8 +15,7 @@ import static it.jakegblp.lusk.utils.Constants.PAPER_1_18_2;
 public class ExprDolphinHasFishState extends SimpleBooleanPropertyExpression<LivingEntity> {
 
     static {
-        if (PAPER_1_18_2)
-            register(ExprDolphinHasFishState.class, Boolean.class, "[dolphin]", "[has] been fed [a] fish", "livingentities");
+        register(ExprDolphinHasFishState.class, Boolean.class, "[dolphin]", "[has] been fed [a] fish", "livingentities");
     }
 
     @Override

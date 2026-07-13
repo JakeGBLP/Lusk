@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 @Name("Entity - on Right Click Section")
 @Description("""
         Runs the code inside of it when the provided entity gets clicked.
-
+        
         Local Variables that are:
         - defined BEFORE this section CAN be used inside of it.
         - defined AFTER this section CANNOT be used inside of it.
@@ -35,13 +35,13 @@ import java.util.function.Consumer;
 )
 @Examples(
         """
-         command /a:
-           trigger:
-             spawn pig at player:
-               set display name of entity to "&dPig"
-               on click on entity:
-                 broadcast "%entity% has been clicked!"
-         """
+                command /a:
+                  trigger:
+                    spawn pig at player:
+                      set display name of entity to "&dPig"
+                      on click on entity:
+                        broadcast "%entity% has been clicked!"
+                """
 )
 @Since("1.1")
 public class SecEvtClick extends Section {

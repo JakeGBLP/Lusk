@@ -23,10 +23,10 @@ public class EvtLoomPatternSelect extends SkriptEvent {
                     .examples("""
                             on pattern select of border:
                               set pattern to creeper
-
+                            
                             on pattern select:
                               broadcast event-patterntype
-
+                            
                             on pattern select of bricks:
                               broadcast the selected pattern
                             """)

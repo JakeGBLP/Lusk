@@ -21,7 +21,7 @@ import static it.jakegblp.lusk.utils.EntityUtils.setIsSitting;
 public class ExprEntityIsSitting extends SimpleBooleanPropertyExpression<Entity> {
 
     static {
-        register(ExprEntityIsSitting.class,Boolean.class,"[is] s(at|it[ting]) [down]", "entities");
+        register(ExprEntityIsSitting.class, Boolean.class, "[is] s(at|it[ting]) [down]", "entities");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ExprEntityIsSitting extends SimpleBooleanPropertyExpression<Entity>
 
     @Override
     public void set(Entity from, Boolean to) {
-        setIsSitting(from,to);
+        setIsSitting(from, to);
     }
 
     @Override

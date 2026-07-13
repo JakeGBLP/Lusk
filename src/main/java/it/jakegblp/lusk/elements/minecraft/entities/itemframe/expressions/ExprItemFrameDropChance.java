@@ -14,15 +14,15 @@ import static it.jakegblp.lusk.utils.NumberUtils.roundFloatPrecision;
 
 @Name("Item Frame - Item Drop Chance")
 @Description("""
-The chance of the item being dropped upon this item frame's destruction.
-Can be set, removed from, added to, reset (1) and deleted (0).
-
-The final value is always clamped between 0 and 1.
-
-1 = always drops; 0 = never drops.""")
+        The chance of the item being dropped upon this item frame's destruction.
+        Can be set, removed from, added to, reset (1) and deleted (0).
+        
+        The final value is always clamped between 0 and 1.
+        
+        1 = always drops; 0 = never drops.""")
 @Examples("set item frame drop chance of {_itemFrame} to 1 # always drops")
 @Since("1.3")
-public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity,Number> {
+public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity, Number> {
 
     static {
         register(ExprItemFrameDropChance.class, Number.class, "item[ |-]frame [item] drop chance", "entities");
@@ -63,14 +63,14 @@ public class ExprItemFrameDropChance extends SimplerPropertyExpression<Entity,Nu
     @Override
     public void add(Entity from, Number to) {
         if (from instanceof ItemFrame itemFrame) {
-            set(from, itemFrame.getItemDropChance()+to.floatValue());
+            set(from, itemFrame.getItemDropChance() + to.floatValue());
         }
     }
 
     @Override
     public void remove(Entity from, Number to) {
         if (from instanceof ItemFrame itemFrame) {
-            set(from, itemFrame.getItemDropChance()-to.floatValue());
+            set(from, itemFrame.getItemDropChance() - to.floatValue());
         }
     }
 
