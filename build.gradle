@@ -144,7 +144,6 @@ void createTestTask(String name, String desc, String environments, int javaVersi
 
 String environments = 'src/test/environments/'
 
-createTestTask('luskTest_1_19_4', 'Runs tests on Paper 1.19.4.', environments + 'paper-1.19.4.json', java17, -1)
 createTestTask('luskTest_1_20_6', 'Runs tests on Paper 1.20.6.', environments + 'paper-1.20.6.json', java21, -1)
 createTestTask('luskTest_1_21_4', 'Runs tests on Paper 1.21.4.', environments + 'paper-1.21.4.json', java21, -1)
 createTestTask('luskTest_1_21_5', 'Runs tests on Paper 1.21.5.', environments + 'paper-1.21.5.json', java21, -1)
@@ -156,5 +155,5 @@ createTestTask('luskTest_1_21_11', 'Runs tests on Paper 1.21.11.', environments 
 
 tasks.register('luskTest') {
     description = 'Runs tests on all environments.'
-    dependsOn luskTest_1_19_4, luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
+    dependsOn luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11
 }
