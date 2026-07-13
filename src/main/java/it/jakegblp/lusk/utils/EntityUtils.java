@@ -221,9 +221,14 @@ public class EntityUtils {
             case Wolf wolf -> wolf.getVariant();
             case Salmon salmon when HAS_SALMON_VARIANT -> salmon.getVariant();
             case Pig pig when HAS_PIG_VARIANT -> pig.getVariant();
-            case AbstractCow abstractCow when HAS_COW_VARIANT -> getCowVariant(abstractCow);
             case Chicken chicken when HAS_CHICKEN_VARIANT -> chicken.getVariant();
-            case null, default -> null;
+            case null -> null;
+            default -> {
+                if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow) {
+                    yield getCowVariant(abstractCow);
+                }
+                yield null;
+            }
         };
     }
 
@@ -246,11 +251,11 @@ public class EntityUtils {
             case Axolotl axolotl when unknownVariant instanceof Axolotl.Variant variant -> axolotl.setVariant(variant);
             case Chicken chicken when HAS_CHICKEN_VARIANT && unknownVariant instanceof Chicken.Variant variant ->
                     chicken.setVariant(variant);
-            case AbstractCow abstractCow when HAS_COW_VARIANT && unknownVariant instanceof Cow.Variant variant ->
-                    setCowVariant(abstractCow, variant);
             case Pig pig when HAS_PIG_VARIANT && unknownVariant instanceof Pig.Variant variant ->
                     pig.setVariant(variant);
             default -> {
+                if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow && unknownVariant instanceof Cow.Variant variant)
+                    setCowVariant(abstractCow, variant);
             }
         }
     }
