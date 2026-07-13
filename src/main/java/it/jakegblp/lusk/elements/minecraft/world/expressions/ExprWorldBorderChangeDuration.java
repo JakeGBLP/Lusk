@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.getMilliseconds;
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("WorldBorder - Change Duration")
 @Description("Returns the duration of the change in the World Border Start Change event.\nCan be set.\nRequires Paper.")
@@ -24,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprWorldBorderChangeDuration extends SimpleExpression<Object> {
     static {
-        Skript.registerExpression(ExprWorldBorderChangeDuration.class, Object.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprWorldBorderChangeDuration.class, Object.class, ExpressionType.EVENT,
                 "[the] world[ |-]border (shift|change) duration [millis:in milliseconds]");
     }
 

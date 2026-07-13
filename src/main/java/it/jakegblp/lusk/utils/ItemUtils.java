@@ -21,21 +21,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_REMOVE_ENCHANTMENTS_METHOD;
 import static it.jakegblp.lusk.utils.LuskUtils.getColorAsRGB;
 
 public class ItemUtils {
-
-    public static final Function<ItemStack, ItemStack> UNENCHANT = HAS_REMOVE_ENCHANTMENTS_METHOD ? itemStack -> {
-        itemStack.removeEnchantments();
-        return itemStack;
-    } : itemStack -> {
-        for (Enchantment enchantment : itemStack.getEnchantments().keySet())
-            itemStack.removeEnchantment(enchantment);
-        return itemStack;
-    };
 
     @Nullable
     public static ItemMeta getItemMetaFromUnknown(@Nullable Object object) {
@@ -76,8 +65,8 @@ public class ItemUtils {
                 .map(itemType -> {
                     ItemStack itemStack = itemType.getRandom();
                     if (itemStack != null) {
-                        ItemStack unenchantItemStack = UNENCHANT.apply(itemStack);
-                        return new ItemType(unenchantItemStack);
+                        itemStack.removeEnchantments();
+                        return new ItemType(itemStack);
                     }
                     return null;
                 })
@@ -245,7 +234,6 @@ public class ItemUtils {
     }
 
     @NullMarked
-    @SuppressWarnings("deprecation")
     public static void addSuspiciousStewPotionEffects(ItemType itemType, PotionEffect... effects) {
         if (itemType.getItemMeta() instanceof SuspiciousStewMeta meta) {
             for (PotionEffect effect : effects) {

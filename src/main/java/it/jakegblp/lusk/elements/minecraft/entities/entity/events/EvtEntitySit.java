@@ -12,23 +12,21 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class EvtEntitySit extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityToggleSitEvent")) {
-            Skript.registerEvent("Entity - on Sit/Stand up", EvtEntitySit.class, EntityToggleSitEvent.class,
-                            "[entity] s(at|it[ting]) [down]",
-                            "[entity] st(ood|and[ing]) [up]",
-                            "[entity] sit toggle[d]")
-                    .description("Called when an entity sits down or stands up.")
-                    .examples("""
-                            on sitting down:
-                            	broadcast "%entity% is taking a seat!"
-                            on stand up:
-                              broadcast "stand up"
-                            on sit toggle:
-                              broadcast "toggle"
-                            """)
-                    .since("1.0.0+, 1.0.2+ (Toggle)")
-                    .requiredPlugins("Paper");
-        }
+        Skript.registerEvent("Entity - on Sit/Stand up", EvtEntitySit.class, EntityToggleSitEvent.class,
+                        "[entity] s(at|it[ting]) [down]",
+                        "[entity] st(ood|and[ing]) [up]",
+                        "[entity] sit toggle[d]")
+                .description("Called when an entity sits down or stands up.")
+                .examples("""
+                        on sitting down:
+                        	broadcast "%entity% is taking a seat!"
+                        on stand up:
+                          broadcast "stand up"
+                        on sit toggle:
+                          broadcast "toggle"
+                        """)
+                .since("1.0.0+, 1.0.2+ (Toggle)")
+                .requiredPlugins("Paper");
     }
 
     private Boolean sit;

@@ -16,28 +16,26 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 @SuppressWarnings("unused")
 public class EvtLecternPageChange extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerLecternPageChangeEvent")) {
-            Skript.registerEvent("Lectern - on Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
-                            "lectern page flip[ping|ped] [to[wards] the] left",
-                            "lectern page flip[ping|ped] [to[wards] the] right",
-                            "lectern page flip[ping|ped] [(in|to[wards]) either direction|on either side]"
-                    )
-                    .description("Called when a player flips the page in a Lectern.")
-                    .examples("""
-                            on lectern page flip to the right:
-                              broadcast "right"
-                            
-                            on lectern page flip to the left:
-                              broadcast "left"
-                            
-                            on lectern page flip:
-                              broadcast "either"
-                            """)
-                    .since("1.0.0")
-                    .requiredPlugins("Paper");
-            registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, PlayerLecternPageChangeEvent::getBook, 0);
-            registerEventValue(PlayerLecternPageChangeEvent.class, Block.class, e -> e.getLectern().getBlock(), 0);
-        }
+        Skript.registerEvent("Lectern - on Page Flip", EvtLecternPageChange.class, PlayerLecternPageChangeEvent.class,
+                        "lectern page flip[ping|ped] [to[wards] the] left",
+                        "lectern page flip[ping|ped] [to[wards] the] right",
+                        "lectern page flip[ping|ped] [(in|to[wards]) either direction|on either side]"
+                )
+                .description("Called when a player flips the page in a Lectern.")
+                .examples("""
+                        on lectern page flip to the right:
+                          broadcast "right"
+                        
+                        on lectern page flip to the left:
+                          broadcast "left"
+                        
+                        on lectern page flip:
+                          broadcast "either"
+                        """)
+                .since("1.0.0")
+                .requiredPlugins("Paper");
+        registerEventValue(PlayerLecternPageChangeEvent.class, ItemStack.class, PlayerLecternPageChangeEvent::getBook, 0);
+        registerEventValue(PlayerLecternPageChangeEvent.class, Block.class, e -> e.getLectern().getBlock(), 0);
     }
 
     private PlayerLecternPageChangeEvent.PageChangeDirection action;

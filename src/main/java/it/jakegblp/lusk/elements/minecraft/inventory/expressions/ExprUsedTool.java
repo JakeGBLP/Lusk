@@ -6,6 +6,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.log.ErrorQuality;
@@ -17,7 +18,6 @@ import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.PlayerArmSwingEvent;
-import it.jakegblp.lusk.utils.Constants;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -40,7 +40,6 @@ import java.util.List;
 
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.OFF_HAND;
 import static ch.njol.skript.util.slot.EquipmentSlot.EquipSlot.TOOL;
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Used Tool/Used Hand/Used Equipment Slot")
 @Description("""
@@ -72,15 +71,13 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @Since("1.1, 1.1.1 (Optimized), 1.2 (Hand and Item, +1 Event, Fixes)")
 @SuppressWarnings("unused")
 public class ExprUsedTool extends SimpleExpression<Object> {
-    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class)) {{
-        if (Constants.PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND) add(PlayerElytraBoostEvent.class);
-    }};
+    private static final ArrayList<Class<? extends Event>> CLASSES = new ArrayList<>(List.of(PlayerElytraBoostEvent.class, PlayerUseUnknownEntityEvent.class, PlayerShearBlockEvent.class, EntityLoadCrossbowEvent.class, PlayerArmSwingEvent.class, BlockCanBuildEvent.class, BlockPlaceEvent.class, EntityPlaceEvent.class, EntityResurrectEvent.class, EntityShootBowEvent.class, PlayerLeashEntityEvent.class, PlayerArmorStandManipulateEvent.class, PlayerBucketEntityEvent.class, PlayerBucketEvent.class, PlayerFishEvent.class, PlayerHarvestBlockEvent.class, PlayerInteractEntityEvent.class, PlayerInteractEvent.class, PlayerItemConsumeEvent.class, PlayerShearEntityEvent.class, PlayerUnleashEntityEvent.class, HangingPlaceEvent.class));
 
     //todo: should this return a skript slot?
     // an equipment slot?
     // i should make multiple patterns and an extensive description about this.
     static {
-        Skript.registerExpression(ExprUsedTool.class, Object.class, EVENT_OR_SIMPLE, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
+        Skript.registerExpression(ExprUsedTool.class, Object.class, ExpressionType.EVENT, "[the] used (tool|[held] item|weapon)", "[[the] [used] |event-](hand [slot]|equipment[ ]slot)");
     }
 
     boolean hand;
@@ -184,7 +181,7 @@ public class ExprUsedTool extends SimpleExpression<Object> {
                 player = event.getPlayer();
                 slot = event.getHand();
             }
-            case PlayerElytraBoostEvent event when Constants.PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND -> {
+            case PlayerElytraBoostEvent event -> {
                 player = event.getPlayer();
                 slot = event.getHand();
             }

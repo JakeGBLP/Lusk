@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -16,8 +17,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.FluidLevelChangeEvent;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("Fluid Level Change Event - new Block Data")
 @Description({"Can be set, reset and deleted.\nWhen set, the new blockdata must be of the same material as the one you're replacing;\nwhen reset and deleted, an empty blockdata of that material will be used."})
 @Examples({"set new fluid level to water[level=3]"})
@@ -25,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 public class ExprFluidLevelChangeNewBlockData extends SimpleExpression<BlockData> {
 
     static {
-        Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprFluidLevelChangeNewBlockData.class, BlockData.class, ExpressionType.EVENT,
                 "[the] [new] fluid level [block[ |-]]data");
     }
 

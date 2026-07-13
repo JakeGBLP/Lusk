@@ -25,10 +25,8 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class CondPlacingFlower extends Condition {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
-            Skript.registerCondition(CondPlacingFlower.class, "[the] (flower|plant|item) is being (:placed|picked up)",
-                    "[the] (flower|plant|item) is(n't| not) being (:placed|picked up)");
-        }
+        Skript.registerCondition(CondPlacingFlower.class, "[the] (flower|plant|item) is being (:placed|picked up)",
+                "[the] (flower|plant|item) is(n't| not) being (:placed|picked up)");
     }
 
     private boolean placed;

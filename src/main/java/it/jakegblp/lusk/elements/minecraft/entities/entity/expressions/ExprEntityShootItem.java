@@ -6,6 +6,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -15,8 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("Entity Shoot - Bow/Item")
 @Description("The bow used to fire the arrow and the consumed arrow in the Entity Shoot Event.\nBoth can be null.")
 @Examples("on entity shoot:\n\tbroadcast the used bow")
@@ -24,7 +23,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprEntityShootItem extends SimpleExpression<ItemStack> {
     static {
-        Skript.registerExpression(ExprEntityShootItem.class, ItemStack.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprEntityShootItem.class, ItemStack.class, ExpressionType.EVENT,
                 "[the |event-]used bow",
                 "[the |event-](consumed|shot) item");
     }

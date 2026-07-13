@@ -4,12 +4,10 @@ import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumWrapper;
 import org.bukkit.inventory.ItemRarity;
 
-import static it.jakegblp.lusk.utils.Constants.SPIGOT_HAS_ITEM_RARITY;
-
 @SuppressWarnings("unused")
 public class ItemClassInfos {
     static {
-        if (SPIGOT_HAS_ITEM_RARITY && Classes.getExactClassInfo(ItemRarity.class) == null) {
+        if (Classes.getExactClassInfo(ItemRarity.class) == null) {
             EnumWrapper<ItemRarity> ITEM_RARITY_ENUM = new EnumWrapper<>(ItemRarity.class);
             Classes.registerClass(ITEM_RARITY_ENUM.getClassInfo("itemrarity")
                     .user("item ?rarit(y|ies)")

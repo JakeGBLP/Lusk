@@ -18,23 +18,21 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 @SuppressWarnings("unused")
 public class EvtFlowerPotManipulate extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent")) {
-            Skript.registerEvent("Flower Pot - on Manipulate", EvtFlowerPotManipulate.class, PlayerFlowerPotManipulateEvent.class,
-                            "[flower] pot[ting)| manipulat(e|ing)] [of %itemtype%]"
-                    )
-                    .description("Called when a player places an item in or takes an item out of a flowerpot.")
-                    .examples("""
-                            on potting of cornflower:
-                              if the plant is being placed:
-                                broadcast "placed"
-                              else if the plant is being picked up:
-                                broadcast "picked up"
-                            """)
-                    .requiredPlugins("Paper")
-                    .since("1.0.0");
-            registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, PlayerFlowerPotManipulateEvent::getItem, 0);
-            registerEventValue(PlayerFlowerPotManipulateEvent.class, Block.class, PlayerFlowerPotManipulateEvent::getFlowerpot, 0);
-        }
+        Skript.registerEvent("Flower Pot - on Manipulate", EvtFlowerPotManipulate.class, PlayerFlowerPotManipulateEvent.class,
+                        "[flower] pot[ting)| manipulat(e|ing)] [of %itemtype%]"
+                )
+                .description("Called when a player places an item in or takes an item out of a flowerpot.")
+                .examples("""
+                        on potting of cornflower:
+                          if the plant is being placed:
+                            broadcast "placed"
+                          else if the plant is being picked up:
+                            broadcast "picked up"
+                        """)
+                .requiredPlugins("Paper")
+                .since("1.0.0");
+        registerEventValue(PlayerFlowerPotManipulateEvent.class, ItemStack.class, PlayerFlowerPotManipulateEvent::getItem, 0);
+        registerEventValue(PlayerFlowerPotManipulateEvent.class, Block.class, PlayerFlowerPotManipulateEvent::getFlowerpot, 0);
     }
 
     private ItemType flower;

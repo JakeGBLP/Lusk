@@ -14,13 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.StreamCorruptedException;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
-import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT_GET_AS_STRING;
-
 @SuppressWarnings("UnstableApiUsage")
 public class EntitySnapshotClassInfos {
     static {
-        if (HAS_ENTITY_SNAPSHOT && Classes.getExactClassInfo(EntitySnapshot.class) == null) {
+        if (Classes.getExactClassInfo(EntitySnapshot.class) == null) {
             Classes.registerClass(new ClassInfo<>(EntitySnapshot.class, "entitysnapshot")
                     .user("entity ?snapshots?")
                     .name("Entity Snapshot")
@@ -45,7 +42,7 @@ public class EntitySnapshotClassInfos {
 
                         @Override
                         public boolean canParse(final @NotNull ParseContext context) {
-                            return HAS_ENTITY_SNAPSHOT_GET_AS_STRING;
+                            return true;
                         }
 
                         @Override
@@ -91,7 +88,7 @@ public class EntitySnapshotClassInfos {
 
                         @Override
                         protected boolean canBeInstantiated() {
-                            return HAS_ENTITY_SNAPSHOT_GET_AS_STRING;
+                            return true;
                         }
                     }));
         }

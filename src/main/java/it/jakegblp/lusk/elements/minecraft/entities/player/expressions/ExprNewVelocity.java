@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -15,8 +16,6 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("on Velocity Change - New Velocity Vector")
 @Description("The velocity vector in the Player Velocity Change Event, can be set, deleted and reset.")
 @Examples("set the new player velocity to vector(4,6,3)")
@@ -24,7 +23,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 public class ExprNewVelocity extends SimpleExpression<Vector> {
 
     static {
-        Skript.registerExpression(ExprNewVelocity.class, Vector.class, EVENT_OR_SIMPLE, "[the] (new|[new] player) velocity [vector]");
+        Skript.registerExpression(ExprNewVelocity.class, Vector.class, ExpressionType.EVENT, "[the] (new|[new] player) velocity [vector]");
     }
 
     @Override

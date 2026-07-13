@@ -17,23 +17,21 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 @SuppressWarnings("unused")
 public class EvtLoomPatternSelect extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerLoomPatternSelectEvent")) {
-            Skript.registerEvent("Loom - on Pattern Select", EvtLoomPatternSelect.class, PlayerLoomPatternSelectEvent.class, "[loom] pattern select [of %-bannerpatterntypes%]")
-                    .description("This Event requires Paper.\n\nCalled when a player selects a banner pattern in a loom inventory.")
-                    .examples("""
-                            on pattern select of border:
-                              set pattern to creeper
-                            
-                            on pattern select:
-                              broadcast event-patterntype
-                            
-                            on pattern select of bricks:
-                              broadcast the selected pattern
-                            """)
-                    .requiredPlugins("Paper")
-                    .since("1.0.0");
-            registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, PlayerLoomPatternSelectEvent::getPatternType, 0);
-        }
+        Skript.registerEvent("Loom - on Pattern Select", EvtLoomPatternSelect.class, PlayerLoomPatternSelectEvent.class, "[loom] pattern select [of %-bannerpatterntypes%]")
+                .description("This Event requires Paper.\n\nCalled when a player selects a banner pattern in a loom inventory.")
+                .examples("""
+                        on pattern select of border:
+                          set pattern to creeper
+                        
+                        on pattern select:
+                          broadcast event-patterntype
+                        
+                        on pattern select of bricks:
+                          broadcast the selected pattern
+                        """)
+                .requiredPlugins("Paper")
+                .since("1.0.0");
+        registerEventValue(PlayerLoomPatternSelectEvent.class, PatternType.class, PlayerLoomPatternSelectEvent::getPatternType, 0);
     }
 
     @Nullable

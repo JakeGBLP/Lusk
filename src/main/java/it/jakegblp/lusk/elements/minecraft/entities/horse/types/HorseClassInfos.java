@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.elements.minecraft.entities.horse.types;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.entity.Horse;
@@ -8,7 +7,7 @@ import org.bukkit.entity.Horse;
 @SuppressWarnings("unused")
 public class HorseClassInfos {
     static {
-        if (Skript.classExists("org.bukkit.entity.Horse$Color") && Classes.getExactClassInfo(Horse.Color.class) == null) {
+        if (Classes.getExactClassInfo(Horse.Color.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(Horse.Color.class, null, "horse_color")
                             .getClassInfo("horsecolor")
@@ -18,7 +17,7 @@ public class HorseClassInfos {
                             .since("1.3")
                             .documentationId("HorseColor"));
         }
-        if (Skript.classExists("org.bukkit.entity.Horse$Style") && Classes.getExactClassInfo(Horse.Style.class) == null) {
+        if (Classes.getExactClassInfo(Horse.Style.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(Horse.Style.class, null, "horse_style")
                             .getClassInfo("horsestyle")

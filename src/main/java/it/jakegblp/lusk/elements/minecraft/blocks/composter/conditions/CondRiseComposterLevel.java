@@ -24,10 +24,8 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class CondRiseComposterLevel extends Condition {
     static {
-        if (Skript.classExists("io.papermc.paper.event.block.CompostItemEvent")) {
-            Skript.registerCondition(CondRiseComposterLevel.class, "[the] composter level will be raised",
-                    "[the] composter level w(ill no|on')t be raised");
-        }
+        Skript.registerCondition(CondRiseComposterLevel.class, "[the] composter level will be raised",
+                "[the] composter level w(ill no|on')t be raised");
     }
 
     @Override

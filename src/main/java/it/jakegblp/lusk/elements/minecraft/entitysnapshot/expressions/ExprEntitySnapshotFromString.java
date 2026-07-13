@@ -9,8 +9,6 @@ import org.bukkit.entity.EntitySnapshot;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT_GET_AS_STRING;
-
 @Name("Entity Snapshot - From String")
 @Description("Attempts to create an entity snapshots from a previously created string nbt of one.")
 @Examples("send entity snapshot of string nbt {_stringNBT}")
@@ -20,8 +18,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT_GET_AS_STRING
 public class ExprEntitySnapshotFromString extends SimplePropertyExpression<String, EntitySnapshot> {
 
     static {
-        if (HAS_ENTITY_SNAPSHOT_GET_AS_STRING)
-            Skript.registerExpression(ExprEntitySnapshotFromString.class, EntitySnapshot.class, ExpressionType.PROPERTY, "entity[ |-]snapshot[s] (of|from|using) (nbt string|string nbt) %strings%");
+        Skript.registerExpression(ExprEntitySnapshotFromString.class, EntitySnapshot.class, ExpressionType.PROPERTY, "entity[ |-]snapshot[s] (of|from|using) (nbt string|string nbt) %strings%");
     }
 
     @Override

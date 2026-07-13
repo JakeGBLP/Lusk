@@ -30,6 +30,7 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://jitpack.io/" }
     maven { url "https://mvn.wesjd.net/" }
+    maven { url"https://repo.viaversion.com" }
 }
 
 dependencies {
@@ -39,6 +40,7 @@ dependencies {
     implementation('org.bstats:bstats-bukkit:3.0.2')
     implementation('com.vdurmont:semver4j:3.1.0')
     implementation('net.wesjd:anvilgui:1.10.11-SNAPSHOT')
+    compileOnly("com.viaversion:viaversion-api:5.11.0")
     shadow('junit:junit:3.8.2')
 
     implementation project(":version_adapter")

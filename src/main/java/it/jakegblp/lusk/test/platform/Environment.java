@@ -1,8 +1,6 @@
 package it.jakegblp.lusk.test.platform;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.jakegblp.lusk.test.utils.TestResults;
 import lombok.Getter;
@@ -61,6 +59,7 @@ public class Environment {
      * Added after platform's own JVM flags.
      */
     private final String[] commandLine;
+
     public Environment(String name, List<Resource> resources, @Nullable List<Resource> downloads, @Nullable List<PaperResource> paperDownloads, @Nullable List<SkriptResource> skriptDownloads, String luskTarget, String... commandLine) {
         this.name = name;
         this.resources = resources;

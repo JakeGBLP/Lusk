@@ -3,6 +3,7 @@ package it.jakegblp.lusk.elements.minecraft.entities.player.expressions;
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -11,8 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Pusher")
 @Description("Gets the entity which pushed the affected entity in a Damage Push event")
@@ -25,10 +24,8 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprPusher extends SimpleExpression<Entity> {
     static {
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
-            Skript.registerExpression(ExprPusher.class, Entity.class, EVENT_OR_SIMPLE,
-                    "[the] pusher");
-        }
+        Skript.registerExpression(ExprPusher.class, Entity.class, ExpressionType.EVENT,
+                "[the] pusher");
     }
 
     public boolean init(Expression<?> @NotNull [] exprs, int matchedPattern, @NotNull Kleenean isDelayed, @NotNull ParseResult parseResult) {

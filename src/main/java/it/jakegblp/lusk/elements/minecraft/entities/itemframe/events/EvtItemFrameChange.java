@@ -16,26 +16,24 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 @SuppressWarnings("unused")
 public class EvtItemFrameChange extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerItemFrameChangeEvent")) {
-            Skript.registerEvent("Item Frame - on Change", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
-                            "item[ |-]frame [item] [place:(insert|place)|:remove|:rotate|interact|change]"
-                    )
-                    .description("Called when an ItemFrame is having an item rotated, added, or removed from it.")
-                    .examples("""
-                            on itemframe rotate:
-                              broadcast "rotated"
-                            
-                            on itemframe remove:
-                              broadcast "remove"
-                            
-                            on itemframe place:
-                              broadcast "place"
-                            """)
-                    .since("1.0.0")
-                    .requiredPlugins("Paper");
-            registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, PlayerItemFrameChangeEvent::getItemFrame, 0);
-            registerEventValue(PlayerItemFrameChangeEvent.class, ItemStack.class, PlayerItemFrameChangeEvent::getItemStack, 0);
-        }
+        Skript.registerEvent("Item Frame - on Change", EvtItemFrameChange.class, PlayerItemFrameChangeEvent.class,
+                        "item[ |-]frame [item] [place:(insert|place)|:remove|:rotate|interact|change]"
+                )
+                .description("Called when an ItemFrame is having an item rotated, added, or removed from it.")
+                .examples("""
+                        on itemframe rotate:
+                          broadcast "rotated"
+                        
+                        on itemframe remove:
+                          broadcast "remove"
+                        
+                        on itemframe place:
+                          broadcast "place"
+                        """)
+                .since("1.0.0")
+                .requiredPlugins("Paper");
+        registerEventValue(PlayerItemFrameChangeEvent.class, Entity.class, PlayerItemFrameChangeEvent::getItemFrame, 0);
+        registerEventValue(PlayerItemFrameChangeEvent.class, ItemStack.class, PlayerItemFrameChangeEvent::getItemStack, 0);
     }
 
     private String action;

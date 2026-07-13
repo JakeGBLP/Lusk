@@ -13,14 +13,12 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtGrindstoneEvents {
     static {
-        if (Skript.classExists("org.bukkit.event.inventory.PrepareGrindstoneEvent")) {
-            Skript.registerEvent("Grindstone - on Prepare", SimpleEvent.class, PrepareGrindstoneEvent.class, "grindstone prepar(e[d]|ing)")
-                    .description("Called when an item is put in a slot for repair or unenchanting in a grindstone.")
-                    .examples("")
-                    .since("1.0.0 (Paper), 1.0.3 (Spigot)");
-            registerEventValue(PrepareGrindstoneEvent.class, Inventory.class, PrepareGrindstoneEvent::getInventory, EventValues.TIME_NOW);
-            registerEventValue(PrepareGrindstoneEvent.class, Location.class, e -> e.getInventory().getLocation(), EventValues.TIME_NOW);
-            registerEventValue(PrepareGrindstoneEvent.class, Slot.class, e -> new InventorySlot(e.getInventory(), 2), EventValues.TIME_NOW);
-        }
+        Skript.registerEvent("Grindstone - on Prepare", SimpleEvent.class, PrepareGrindstoneEvent.class, "grindstone prepar(e[d]|ing)")
+                .description("Called when an item is put in a slot for repair or unenchanting in a grindstone.")
+                .examples("")
+                .since("1.0.0 (Paper), 1.0.3 (Spigot)");
+        registerEventValue(PrepareGrindstoneEvent.class, Inventory.class, PrepareGrindstoneEvent::getInventory, EventValues.TIME_NOW);
+        registerEventValue(PrepareGrindstoneEvent.class, Location.class, e -> e.getInventory().getLocation(), EventValues.TIME_NOW);
+        registerEventValue(PrepareGrindstoneEvent.class, Slot.class, e -> new InventorySlot(e.getInventory(), 2), EventValues.TIME_NOW);
     }
 }

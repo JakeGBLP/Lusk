@@ -10,8 +10,6 @@ import it.jakegblp.lusk.api.skript.SimplerPropertyExpression;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20;
-
 @Name("Spawner/Trial Spawner - Entity Type")
 @Description("""
         Gets the spawner entity type of the provided spawners or trial spawners (1.21+).
@@ -26,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20;
 public class ExprSpawnerEntityType extends SimplerPropertyExpression<Object, EntityData> {
 
     static {
-        register(ExprSpawnerEntityType.class, EntityData.class, "spawner (entity|creature) type", "itemtypes/blocks/blockstates" + (MINECRAFT_1_20 ? "/entities" : ""));
+        register(ExprSpawnerEntityType.class, EntityData.class, "spawner (entity|creature) type", "itemtypes/blocks/blockstates/entities");
     }
 
     @Override
@@ -46,7 +44,7 @@ public class ExprSpawnerEntityType extends SimplerPropertyExpression<Object, Ent
 
     @Override
     public boolean allowDelete() {
-        return MINECRAFT_1_20;
+        return true;
     }
 
     @Override

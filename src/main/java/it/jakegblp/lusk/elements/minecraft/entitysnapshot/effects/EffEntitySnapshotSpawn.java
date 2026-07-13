@@ -13,8 +13,6 @@ import org.bukkit.entity.EntitySnapshot;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
-
 /**
  * This class is heavily influenced by {@link EffSecSpawn Skript's Spawn effect section}.
  *
@@ -28,10 +26,9 @@ import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 public class EffEntitySnapshotSpawn extends Effect {
 
     static {
-        if (HAS_ENTITY_SNAPSHOT)
-            Skript.registerEffect(EffEntitySnapshotSpawn.class,
-                    "(spawn|summon) [entity[ |-]]snapshot[s] %entitysnapshots% [%directions% %locations%]",
-                    "(spawn|summon) %number% of [entity[ |-]]snapshot[s] %entitysnapshots% [%directions% %locations%]");
+        Skript.registerEffect(EffEntitySnapshotSpawn.class,
+                "(spawn|summon) [entity[ |-]]snapshot[s] %entitysnapshots% [%directions% %locations%]",
+                "(spawn|summon) %number% of [entity[ |-]]snapshot[s] %entitysnapshots% [%directions% %locations%]");
     }
 
     @Nullable

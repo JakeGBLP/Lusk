@@ -20,10 +20,8 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class CondWillBeDamaged extends Condition {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PrePlayerAttackEntityEvent")) {
-            Skript.registerCondition(CondWillBeDamaged.class, "[the] entity will be (damaged|attacked)",
-                    "[the] entity w(ill not|on't) be (damaged|attacked)");
-        }
+        Skript.registerCondition(CondWillBeDamaged.class, "[the] entity will be (damaged|attacked)",
+                "[the] entity w(ill not|on't) be (damaged|attacked)");
     }
 
     @Override

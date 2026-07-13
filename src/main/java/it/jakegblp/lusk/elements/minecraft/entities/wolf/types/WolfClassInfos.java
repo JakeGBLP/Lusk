@@ -4,12 +4,10 @@ import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumRegistryWrapper;
 import org.bukkit.entity.Wolf;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_WOLF_VARIANT;
-
 @SuppressWarnings("unused")
 public class WolfClassInfos {
     static {
-        if (HAS_WOLF_VARIANT && Classes.getExactClassInfo(Wolf.Variant.class) == null) {
+        if (Classes.getExactClassInfo(Wolf.Variant.class) == null) {
             Classes.registerClass(
                     new EnumRegistryWrapper(Wolf.Variant.class, null, "wolf_variant")
                             .getClassInfo("wolfvariant")

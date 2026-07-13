@@ -25,6 +25,7 @@ public class PlayerInventorySlotDropEvent extends PlayerEvent implements Cancell
     private final boolean dropsFromCursor;
     private final boolean dropsAll;
     private final boolean dropsFromInventory;
+
     public PlayerInventorySlotDropEvent(
             @Nullable InventoryClickEvent inventoryClickEvent,
             @NotNull PlayerDropItemEvent playerDropItemEvent) {

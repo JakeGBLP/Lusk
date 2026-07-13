@@ -27,38 +27,32 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 
 public class EvtEntityEvents {
     static {
-        if (Skript.classExists("org.bukkit.event.entity.EntityEnterLoveModeEvent")) {
-            Skript.registerEvent("Entity - on Love Mode Enter", SimpleEvent.class, EntityEnterLoveModeEvent.class, "love [mode] (enter|start)[ed|ing]")
-                    .description("""
-                            Called when an entity enters love mode.
-                            This can be cancelled but the used item will still be consumed.""")
-                    .examples("")
-                    .since("1.0.2");
-            registerEventValue(EntityEnterLoveModeEvent.class, CommandSender.class, EntityEnterLoveModeEvent::getHumanEntity, EventValues.TIME_NOW);
-        }
-        if (Skript.classExists("org.bukkit.event.entity.EntityPoseChangeEvent")) {
-            Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "[entity] pose change[d]")
-                    .description("""
-                            Called when an entity changes its pose.
-                            
-                            Note: **`past event-pose` is the same as `pose of event-entity`, due to this it's not guaranteed that it will always work correctly.**
-                            """)
-                    .examples("")
-                    .since("1.0.2, 1.3 (past event-pose)");
-            registerEventValue(EntityPoseChangeEvent.class, Pose.class, e -> e.getEntity().getPose(), EventValues.TIME_PAST);
-            registerEventValue(EntityPoseChangeEvent.class, Pose.class, EntityPoseChangeEvent::getPose, EventValues.TIME_NOW);
-        }
-        if (Skript.classExists("io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent")) {
-            Skript.registerEvent("Entity - on Push by Entity Attack", SimpleEvent.class, EntityPushedByEntityAttackEvent.class, "(entity attack push|push by [entity] attack)")
-                    .description("""
-                            Fired when an entity is pushed by another entity's attack.
-                            The acceleration vector can be modified. If this event is cancelled, the entity will not get pushed.
-                            
-                            Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
-                    .examples("on entity attack push:")
-                    .requiredPlugins("Paper")
-                    .since("1.0.2");
-        }
+        Skript.registerEvent("Entity - on Love Mode Enter", SimpleEvent.class, EntityEnterLoveModeEvent.class, "love [mode] (enter|start)[ed|ing]")
+                .description("""
+                        Called when an entity enters love mode.
+                        This can be cancelled but the used item will still be consumed.""")
+                .examples("")
+                .since("1.0.2");
+        registerEventValue(EntityEnterLoveModeEvent.class, CommandSender.class, EntityEnterLoveModeEvent::getHumanEntity, EventValues.TIME_NOW);
+        Skript.registerEvent("Entity - on Pose Change", SimpleEvent.class, EntityPoseChangeEvent.class, "[entity] pose change[d]")
+                .description("""
+                        Called when an entity changes its pose.
+                        
+                        Note: **`past event-pose` is the same as `pose of event-entity`, due to this it's not guaranteed that it will always work correctly.**
+                        """)
+                .examples("")
+                .since("1.0.2, 1.3 (past event-pose)");
+        registerEventValue(EntityPoseChangeEvent.class, Pose.class, e -> e.getEntity().getPose(), EventValues.TIME_PAST);
+        registerEventValue(EntityPoseChangeEvent.class, Pose.class, EntityPoseChangeEvent::getPose, EventValues.TIME_NOW);
+        Skript.registerEvent("Entity - on Push by Entity Attack", SimpleEvent.class, EntityPushedByEntityAttackEvent.class, "(entity attack push|push by [entity] attack)")
+                .description("""
+                        Fired when an entity is pushed by another entity's attack.
+                        The acceleration vector can be modified. If this event is cancelled, the entity will not get pushed.
+                        
+                        Note: Some entities might trigger this multiple times on the same entity as multiple acceleration calculations are done.""")
+                .examples("on entity attack push:")
+                .requiredPlugins("Paper")
+                .since("1.0.2");
         Skript.registerEvent("Entity - on Knockback", SimpleEvent.class, EntityKnockbackEvent.class, "entity knockback")
                 .description("""
                         Called when an entity receives knockback.""")

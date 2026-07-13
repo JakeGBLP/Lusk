@@ -20,16 +20,14 @@ import static it.jakegblp.lusk.utils.CompatibilityUtils.registerEventValue;
 @SuppressWarnings("unused")
 public class EvtEntityRename extends SkriptEvent {
     static {
-        if (Skript.classExists("io.papermc.paper.event.player.PlayerNameEntityEvent")) {
-            Skript.registerEvent("Entity - on Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]", "[entity] %-entitydatas% renam(e[d]|ing)")
-                    .description("Called when the player is attempting to rename a mob.")
-                    .examples("""
-                            on entity rename of pig:
-                              broadcast entity's display name""")
-                    .since("1.0.0")
-                    .requiredPlugins("Paper");
-            registerEventValue(PlayerNameEntityEvent.class, Entity.class, PlayerNameEntityEvent::getEntity, 0);
-        }
+        Skript.registerEvent("Entity - on Rename", EvtEntityRename.class, PlayerNameEntityEvent.class, "entity rename [of %-entitydatas%]", "[entity] %-entitydatas% renam(e[d]|ing)")
+                .description("Called when the player is attempting to rename a mob.")
+                .examples("""
+                        on entity rename of pig:
+                          broadcast entity's display name""")
+                .since("1.0.0")
+                .requiredPlugins("Paper");
+        registerEventValue(PlayerNameEntityEvent.class, Entity.class, PlayerNameEntityEvent::getEntity, 0);
     }
 
     @Nullable

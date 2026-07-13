@@ -4,8 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ExpressionType;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 public class SkriptUtils {
     /**
      * Copied from {@link EventValueExpression}
@@ -18,6 +16,6 @@ public class SkriptUtils {
      * @param pattern    The pattern for this syntax.
      */
     public static <T> void register(Class<? extends EventValueExpression<T>> expression, Class<T> type, String pattern) {
-        Skript.registerExpression(expression, type, EVENT_OR_SIMPLE, "[the] " + pattern);
+        Skript.registerExpression(expression, type, ExpressionType.EVENT, "[the] " + pattern);
     }
 }

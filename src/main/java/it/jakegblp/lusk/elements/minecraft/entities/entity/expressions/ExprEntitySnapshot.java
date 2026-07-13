@@ -6,8 +6,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntitySnapshot;
 import org.jetbrains.annotations.NotNull;
 
-import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
-
 @Name("Entity - Snapshot")
 @Description("Creates an EntitySnapshot representing the current state of this entity.")
 @Examples({"broadcast entity snapshot of target"})
@@ -16,8 +14,7 @@ import static it.jakegblp.lusk.utils.Constants.HAS_ENTITY_SNAPSHOT;
 @SuppressWarnings({"unused", "UnstableApiUsage"})
 public class ExprEntitySnapshot extends SimplePropertyExpression<Entity, EntitySnapshot> {
     static {
-        if (HAS_ENTITY_SNAPSHOT)
-            register(ExprEntitySnapshot.class, EntitySnapshot.class, "entity snapshot", "entities");
+        register(ExprEntitySnapshot.class, EntitySnapshot.class, "entity snapshot", "entities");
     }
 
     @Override

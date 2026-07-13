@@ -16,10 +16,7 @@ public class RegistryUtils {
 
     public static ImmutableMap<Class<?>, Registry<?>> generateRegistries() {
         HashMap<Class<?>, Registry<?>> registries = new HashMap<>();
-        for (Class<?> clazz
-                : Constants.PAPER_HAS_PAPER_REGISTRY_KEY
-                ? new Class[]{RegistryKey.class, Registry.class}
-                : new Class[]{Registry.class}) {
+        for (Class<?> clazz : new Class[]{RegistryKey.class, Registry.class}) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getType() == clazz
                         && Modifier.isStatic(field.getModifiers())
@@ -46,7 +43,7 @@ public class RegistryUtils {
     @Nullable
     public static Registry<?> getRegistryFromField(Field field) throws IllegalAccessException {
         Object object = field.get(null);
-        if (Constants.PAPER_HAS_PAPER_REGISTRY_KEY && object instanceof RegistryKey registryKey) {
+        if (object instanceof RegistryKey registryKey) {
             return RegistryAccess.registryAccess().getRegistry(registryKey);
         } else if (object instanceof Registry<?> registry) {
             return registry;

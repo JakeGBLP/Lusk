@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class PlatformMain {
 
-    public static void main(String... args) throws IOException, InterruptedException {
+    static void main(String... args) throws IOException, InterruptedException {
         System.out.println("Initializing Lusk test platform...");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

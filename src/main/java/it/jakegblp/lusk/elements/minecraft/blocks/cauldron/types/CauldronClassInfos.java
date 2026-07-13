@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.elements.minecraft.blocks.cauldron.types;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.Classes;
 import it.jakegblp.lusk.api.skript.EnumWrapper;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
@@ -8,7 +7,7 @@ import org.bukkit.event.block.CauldronLevelChangeEvent;
 @SuppressWarnings("unused")
 public class CauldronClassInfos {
     static {
-        if (Skript.classExists("org.bukkit.event.block.CauldronLevelChangeEvent$ChangeReason") && Classes.getExactClassInfo(CauldronLevelChangeEvent.ChangeReason.class) == null) {
+        if (Classes.getExactClassInfo(CauldronLevelChangeEvent.ChangeReason.class) == null) {
             EnumWrapper<CauldronLevelChangeEvent.ChangeReason> CAULDRON_CHANGE_REASON_ENUM = new EnumWrapper<>(CauldronLevelChangeEvent.ChangeReason.class);
             Classes.registerClass(CAULDRON_CHANGE_REASON_ENUM.getClassInfo("cauldronchangereason")
                     .user("cauldron ?change ?reasons?")

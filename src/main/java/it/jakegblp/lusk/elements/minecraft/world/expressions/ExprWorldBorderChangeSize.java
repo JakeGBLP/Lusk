@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -13,8 +14,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("WorldBorder - New/Old Size")
 @Description("Returns the new/old anger of the warden in the World Border Change events.\nCan be set only within the Start variant of the event.")
 @Examples({""})
@@ -23,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprWorldBorderChangeSize extends SimpleExpression<Double> {
     static {
-        Skript.registerExpression(ExprWorldBorderChangeSize.class, Double.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprWorldBorderChangeSize.class, Double.class, ExpressionType.EVENT,
                 "[the] [future|:past] world[ ]border size");
     }
 

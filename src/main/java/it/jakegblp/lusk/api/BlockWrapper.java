@@ -25,7 +25,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.jakegblp.lusk.utils.Constants.*;
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_20_1;
+import static it.jakegblp.lusk.utils.Constants.MINECRAFT_1_21;
 import static it.jakegblp.lusk.utils.EntityUtils.toEntityData;
 import static it.jakegblp.lusk.utils.EntityUtils.toEntityType;
 import static it.jakegblp.lusk.utils.ItemUtils.getNullableItemStack;
@@ -566,7 +567,7 @@ public class BlockWrapper {
     @SuppressWarnings("UnstableApiUsage")
     public void setSpawnerEntityType(@Nullable EntityType entityType) {
         BlockState blockState = getBlockState();
-        if (entityType == null && !MINECRAFT_1_20) return;
+        if (entityType == null) return;
         if (blockState instanceof CreatureSpawner spawner) {
             spawner.setSpawnedType(entityType);
             spawner.update();

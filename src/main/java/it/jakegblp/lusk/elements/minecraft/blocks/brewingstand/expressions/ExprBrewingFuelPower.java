@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -14,8 +15,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.inventory.BrewingStandFuelEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 
 @Name("Brewing Stand Fuel Power")
 @Description("Returns the fuel power for the fuel in the Brewing Stand Fuel event.\n Can be set.")
@@ -25,7 +24,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprBrewingFuelPower extends SimpleExpression<Integer> {
     static {
-        Skript.registerExpression(ExprBrewingFuelPower.class, Integer.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprBrewingFuelPower.class, Integer.class, ExpressionType.EVENT,
                 "[the] brewing fuel power");
     }
 

@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -13,8 +14,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("Tameable Death Message Event -  Death Message")
 @Description("Returns the applied color in the Dye event.\n This expression can be set to another dye color.")
 @Examples({"on dye:\n\tbroadcast the entity dye color"})
@@ -23,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprTameableDeathMessage extends SimpleExpression<String> {
     static {
-        Skript.registerExpression(ExprTameableDeathMessage.class, String.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprTameableDeathMessage.class, String.class, ExpressionType.EVENT,
                 "[the |event-]tameable death message");
     }
 

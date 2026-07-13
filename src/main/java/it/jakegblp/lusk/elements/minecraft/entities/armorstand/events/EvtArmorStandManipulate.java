@@ -27,33 +27,31 @@ import static it.jakegblp.lusk.utils.EventUtils.getInteraction;
 public class EvtArmorStandManipulate extends SkriptEvent {
 
     static {
-        if (Skript.classExists("org.bukkit.event.player.PlayerArmorStandManipulateEvent")) {
-            Skript.registerEvent("Armor Stand - on Manipulate", EvtArmorStandManipulate.class, PlayerArmorStandManipulateEvent.class,
-                            "armor[ |-]stand [%-*equipmentslots%] %*armorstandinteractions%")
-                    .description("""
-                            Called when a player interacts with an armor stand and will either swap, retrieve, place an item.
-                            
-                            `event-equipmentslot` is the clicked slot of the armor stand, to get the hand use the Used Hand expression
-                            `event-entity` is the armor stand
-                            
-                            `past event-item` is the item the armor stand is holding
-                            `future event-item` (or `event-item`) is the item the player is holding
-                            
-                            `event-armorstand interaction` is the type of manipulation that's happening during the event
-                            (NOTE: this will only ever return `Place`, `Retrieve` or `Change`)
-                            """)
-                    .examples("""
-                            on armor stand chest slot retrieve;
-                                broadcast event-item and event-equipmentslot
-                            """)
-                    .since("1.1.1");
-            registerEventValue(PlayerArmorStandManipulateEvent.class, EquipmentSlot.class, PlayerArmorStandManipulateEvent::getSlot, EventValues.TIME_NOW);
-            registerEventValue(PlayerArmorStandManipulateEvent.class, Entity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
-            registerEventValue(PlayerArmorStandManipulateEvent.class, LivingEntity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
-            registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getPlayerItem()), EventValues.TIME_FUTURE);
-            registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getArmorStandItem()), EventValues.TIME_NOW);
-            registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStandInteraction.class, EventUtils::getInteraction, EventValues.TIME_NOW);
-        }
+        Skript.registerEvent("Armor Stand - on Manipulate", EvtArmorStandManipulate.class, PlayerArmorStandManipulateEvent.class,
+                        "armor[ |-]stand [%-*equipmentslots%] %*armorstandinteractions%")
+                .description("""
+                        Called when a player interacts with an armor stand and will either swap, retrieve, place an item.
+                        
+                        `event-equipmentslot` is the clicked slot of the armor stand, to get the hand use the Used Hand expression
+                        `event-entity` is the armor stand
+                        
+                        `past event-item` is the item the armor stand is holding
+                        `future event-item` (or `event-item`) is the item the player is holding
+                        
+                        `event-armorstand interaction` is the type of manipulation that's happening during the event
+                        (NOTE: this will only ever return `Place`, `Retrieve` or `Change`)
+                        """)
+                .examples("""
+                        on armor stand chest slot retrieve;
+                            broadcast event-item and event-equipmentslot
+                        """)
+                .since("1.1.1");
+        registerEventValue(PlayerArmorStandManipulateEvent.class, EquipmentSlot.class, PlayerArmorStandManipulateEvent::getSlot, EventValues.TIME_NOW);
+        registerEventValue(PlayerArmorStandManipulateEvent.class, Entity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
+        registerEventValue(PlayerArmorStandManipulateEvent.class, LivingEntity.class, PlayerArmorStandManipulateEvent::getRightClicked, EventValues.TIME_NOW);
+        registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getPlayerItem()), EventValues.TIME_FUTURE);
+        registerEventValue(PlayerArmorStandManipulateEvent.class, ItemType.class, e -> new ItemType(e.getArmorStandItem()), EventValues.TIME_NOW);
+        registerEventValue(PlayerArmorStandManipulateEvent.class, ArmorStandInteraction.class, EventUtils::getInteraction, EventValues.TIME_NOW);
     }
 
     private Literal<EquipmentSlot> slots;

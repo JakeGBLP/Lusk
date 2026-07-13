@@ -19,8 +19,6 @@ import java.io.StreamCorruptedException;
 import java.util.stream.Collectors;
 
 import static it.jakegblp.lusk.utils.CompatibilityUtils.registerConverter;
-import static it.jakegblp.lusk.utils.Constants.HAS_GENERATED_STRUCTURE;
-import static it.jakegblp.lusk.utils.Constants.HAS_STRUCTURE_PIECE;
 import static it.jakegblp.lusk.utils.LuskUtils.toSkriptConfigNumberAccuracy;
 
 @SuppressWarnings("unused")
@@ -102,10 +100,8 @@ public class BoundingBoxClassInfos {
                     }));
             registerConverter(Block.class, BoundingBox.class, Block::getBoundingBox);
             registerConverter(Entity.class, BoundingBox.class, Entity::getBoundingBox);
-            if (HAS_STRUCTURE_PIECE)
-                registerConverter(StructurePiece.class, BoundingBox.class, StructurePiece::getBoundingBox);
-            if (HAS_GENERATED_STRUCTURE)
-                registerConverter(GeneratedStructure.class, BoundingBox.class, GeneratedStructure::getBoundingBox);
+            registerConverter(StructurePiece.class, BoundingBox.class, StructurePiece::getBoundingBox);
+            registerConverter(GeneratedStructure.class, BoundingBox.class, GeneratedStructure::getBoundingBox);
         }
         if (Classes.getExactClassInfo(VoxelShape.class) == null)
             Classes.registerClass(new ClassInfo<>(VoxelShape.class, "voxelshape")
@@ -140,8 +136,5 @@ public class BoundingBoxClassInfos {
                             return toString(s, 0) + " voxel shape (" + s + ")";
                         }
                     }));
-    }
-
-    public BoundingBoxClassInfos() {
     }
 }

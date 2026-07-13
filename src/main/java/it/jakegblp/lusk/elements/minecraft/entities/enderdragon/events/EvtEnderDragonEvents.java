@@ -7,11 +7,9 @@ import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 @SuppressWarnings("unused")
 public class EvtEnderDragonEvents {
     static {
-        if (Skript.classExists("org.bukkit.event.entity.EnderDragonChangePhaseEvent")) {
-            Skript.registerEvent("Ender Dragon - on Phase Change", SimpleEvent.class, EnderDragonChangePhaseEvent.class, "ender dragon phase chang(e[d]|ing)")
-                    .description("Called when an EnderDragon changes phase.")
-                    .examples("")
-                    .since("1.0.2");
-        }
+        Skript.registerEvent("Ender Dragon - on Phase Change", SimpleEvent.class, EnderDragonChangePhaseEvent.class, "ender dragon phase chang(e[d]|ing)")
+                .description("Called when an EnderDragon changes phase.")
+                .examples("")
+                .since("1.0.2");
     }
 }

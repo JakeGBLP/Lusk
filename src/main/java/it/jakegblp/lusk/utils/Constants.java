@@ -1,16 +1,11 @@
 package it.jakegblp.lusk.utils;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.lang.ExpressionType;
-import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import com.google.common.collect.ImmutableMap;
 import com.vdurmont.semver4j.Semver;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import it.jakegblp.lusk.Lusk;
 import it.jakegblp.lusk.api.SkriptAdapter;
 import org.bukkit.Registry;
-import org.bukkit.entity.EntitySnapshot;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
@@ -43,36 +38,11 @@ public class Constants {
             VERSION_SERVER_OLDEST_SUPPORTED = parseVersion("1.19.4"),
             VERSION_SKRIPT = parseVersionTruncated(Skript.getVersion().toString()),
             VERSION_SKRIPT_OLDEST_SUPPORTED = parseVersion("2.10");
-
-    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT, Lusk.getInstance().getAddonInstance());
-    //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
-
-    public static final List<InventoryAction>
-            DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
-            PICKUP_ACTION_DATA = List.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_SOME),
-            PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
-    public static final String
-            ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
-            ARMOR_STAND_PREFIX = "[armor[ |-]stand]",
-            ARMOR_STAND_TYPES = "livingentity/itemtypes",
-            LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);    public static final boolean
-            HAS_ENTITY_SNAPSHOT = classExists("org.bukkit.entity.EntitySnapshot"),
-            HAS_ENTITY_SNAPSHOT_GET_AS_STRING = HAS_ENTITY_SNAPSHOT && methodExists(EntitySnapshot.class, "getAsString"),
-            HAS_STRUCTURE_PIECE = classExists("org.bukkit.generator.structure.StructurePiece"),
-            HAS_GENERATED_STRUCTURE = classExists("org.bukkit.generator.structure.GeneratedStructure"),
-            SPIGOT_HAS_ITEM_RARITY = classExists("org.bukkit.inventory.ItemRarity"),
+    public static final boolean
             HAS_SALMON_VARIANT = classExists("org.bukkit.entity.Salmon$Variant"),
-            HAS_WOLF_VARIANT = classExists("org.bukkit.entity.Wolf$Variant"),
             HAS_COW_VARIANT = classExists("org.bukkit.entity.Cow$Variant"),
             HAS_PIG_VARIANT = classExists("org.bukkit.entity.Pig$Variant"),
             HAS_CHICKEN_VARIANT = classExists("org.bukkit.entity.Chicken$Variant"),
-            HAS_FROG_VARIANT = classExists("org.bukkit.entity.Frog$Variant"),
-            HAS_AXOLOTL_VARIANT = classExists("org.bukkit.entity.Axolotl$Variant"),
-            HAS_REMOVE_ENCHANTMENTS_METHOD = methodExists(ItemStack.class, "removeEnchantments"),
-    /**
-     * Whether the current server version is greater than or equal to 1.20
-     */
-    MINECRAFT_1_20 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20")),
     /**
      * Whether the current server version is greater than or equal to 1.20.1
      */
@@ -90,10 +60,6 @@ public class Constants {
      */
     MINECRAFT_1_20_5 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.5")),
     /**
-     * Whether the current server version is greater than or equal to 1.20.6
-     */
-    MINECRAFT_1_20_6 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.20.6")),
-    /**
      * Whether the current server version is greater than or equal to 1.21
      */
     MINECRAFT_1_21 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21")),
@@ -105,13 +71,18 @@ public class Constants {
      * Whether the current server version is greater than or equal to 1.21.5
      */
     MINECRAFT_1_21_5 = VERSION_SERVER.isGreaterThanOrEqualTo(parseVersion("1.21.5")),
-            SKRIPT_HAS_TIMESPAN_TIMEPERIOD = classExists("ch.njol.skript.util.Timespan$TimePeriod"),
-            HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class),
-
-    PAPER_HAS_PLAYER_ELYTRA_BOOST_EVENT_HAND = methodExists(PlayerElytraBoostEvent.class, "getHand"),
-            PAPER_HAS_PAPER_REGISTRY_ACCESS = classExists("io.papermc.paper.registry.RegistryAccess") && methodExists(RegistryAccess.class, "registryAccess"),
-            PAPER_HAS_PAPER_REGISTRY_KEY = PAPER_HAS_PAPER_REGISTRY_ACCESS && classExists("io.papermc.paper.registry.RegistryKey") && methodExists(RegistryAccess.class, "getRegistry", RegistryKey.class);
-    public static final ExpressionType EVENT_OR_SIMPLE = ExpressionType.EVENT;
+            HAS_START_RIPTIDE_ATTACK = methodExists(HumanEntity.class, "startRiptideAttack", int.class, float.class, ItemStack.class);
+    //public static final MinecraftAdapter ADAPTER_MINECRAFT = VersionResolver.getMinecraftAdapter(VERSION_SERVER);
+    public static final SkriptAdapter ADAPTER_SKRIPT = VersionResolver.getSkriptAdapter(VERSION_SKRIPT, Lusk.getInstance().getAddonInstance());
+    public static final List<InventoryAction>
+            DROP_ACTION_DATA = List.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ONE_CURSOR),
+            PICKUP_ACTION_DATA = List.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_SOME),
+            PLACE_ACTION_DATA = List.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_ALL, InventoryAction.PLACE_SOME);
+    public static final String
+            ANVIL_GUI_PREFIX = "[lusk] anvil[(-| )gui]",
+            ARMOR_STAND_PREFIX = "[armor[ |-]stand]",
+            ARMOR_STAND_TYPES = "livingentity/itemtypes",
+            LUSK_PREFIX = MessageFormat.format("{0}[{1}Lusk{0}] ", LUSK_COLORS[0], LUSK_COLORS[1]);
     public static final ImmutableMap<Class<?>, Registry<?>> REGISTRIES = generateRegistries();
     public static final Map<Integer, Semver> versions = Map.ofEntries(
             entry(4, parseVersion("1.7.5")),

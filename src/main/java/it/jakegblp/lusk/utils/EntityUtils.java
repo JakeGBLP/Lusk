@@ -45,7 +45,7 @@ public class EntityUtils {
             case Zombie zombie -> zombie.shouldBurnInDay();
             case AbstractSkeleton skeleton -> skeleton.shouldBurnInDay();
             case Phantom phantom -> phantom.shouldBurnInDay();
-            case null, default -> false;
+            default -> false;
         };
     }
 
@@ -86,12 +86,11 @@ public class EntityUtils {
     }
 
     public static boolean isInterested(LivingEntity entity) {
-        if (entity instanceof Fox fox) {
-            return fox.isInterested();
-        } else if (entity instanceof Wolf wolf) {
-            return wolf.isInterested();
-        }
-        return false;
+        return switch (entity) {
+            case Fox fox -> fox.isInterested();
+            case Wolf wolf -> wolf.isInterested();
+            default -> false;
+        };
     }
 
     public static void setIsInterested(LivingEntity entity, boolean interested) {
@@ -133,12 +132,11 @@ public class EntityUtils {
     }
 
     public static boolean isScreaming(LivingEntity entity) {
-        if (entity instanceof Goat goat) {
-            return goat.isScreaming();
-        } else if (entity instanceof Enderman enderman) {
-            return enderman.isScreaming();
-        }
-        return false;
+        return switch (entity) {
+            case Goat goat -> goat.isScreaming();
+            case Enderman enderman -> enderman.isScreaming();
+            default -> false;
+        };
     }
 
     public static void setIsScreaming(LivingEntity entity, boolean screaming) {
@@ -150,23 +148,21 @@ public class EntityUtils {
     }
 
     public static boolean isRoaring(LivingEntity entity) {
-        if (entity instanceof Ravager ravager)
-            return ravager.getRoarTicks() > 0;
-        else if (entity instanceof EnderDragon enderDragon)
-            return enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;
-        else return entity.getPose() == Pose.ROARING;
+        return switch (entity) {
+            case Ravager ravager -> ravager.getRoarTicks() > 0;
+            case EnderDragon enderDragon -> enderDragon.getPhase() == EnderDragon.Phase.ROAR_BEFORE_ATTACK;
+            default -> entity.getPose() == Pose.ROARING;
+        };
     }
 
     public static boolean isConverting(LivingEntity entity) {
-        if (entity instanceof PiglinAbstract piglinAbstract)
-            return piglinAbstract.isConverting();
-        else if (entity instanceof Skeleton skeleton)
-            return skeleton.isConverting();
-        else if (entity instanceof Hoglin hoglin)
-            return hoglin.isConverting();
-        else if (entity instanceof Zombie zombie)
-            return zombie.isConverting();
-        else return false;
+        return switch (entity) {
+            case PiglinAbstract piglinAbstract -> piglinAbstract.isConverting();
+            case Skeleton skeleton -> skeleton.isConverting();
+            case Hoglin hoglin -> hoglin.isConverting();
+            case Zombie zombie -> zombie.isConverting();
+            case null, default -> false;
+        };
     }
 
     public static boolean isDancing(LivingEntity entity) {
@@ -211,71 +207,51 @@ public class EntityUtils {
 
     @Nullable
     public static Object getVariant(LivingEntity livingEntity) {
-        if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl) {
-            return axolotl.getVariant();
-        } else if (HAS_FROG_VARIANT && livingEntity instanceof Frog frog) {
-            return frog.getVariant();
-        } else if (livingEntity instanceof MushroomCow mushroomCow) {
-            return mushroomCow.getVariant();
-        } else if (livingEntity instanceof Parrot parrot) {
-            return parrot.getVariant();
-        } else if (livingEntity instanceof Llama llama) {
-            return llama.getColor();
-        } else if (livingEntity instanceof Fox fox) {
-            return fox.getFoxType();
-        } else if (livingEntity instanceof Cat cat) {
-            return cat.getCatType();
-        } else if (livingEntity instanceof Rabbit rabbit) {
-            return rabbit.getRabbitType();
-        } else if (livingEntity instanceof Panda panda) {
-            return panda.getMainGene();
-        } else if (livingEntity instanceof TropicalFish tropicalFish) {
-            return tropicalFish.getPattern();
-        } else if (HAS_FROG_VARIANT && livingEntity instanceof Wolf wolf) {
-            return wolf.getVariant();
-        } else if (HAS_SALMON_VARIANT && livingEntity instanceof Salmon salmon) {
-            return salmon.getVariant();
-        } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig) {
-            return pig.getVariant();
-        } else if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow) {
-            return getCowVariant(abstractCow);
-        } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken) {
-            return chicken.getVariant();
-        }
-        return null;
+        return switch (livingEntity) {
+            case Axolotl axolotl -> axolotl.getVariant();
+            case Frog frog -> frog.getVariant();
+            case MushroomCow mushroomCow -> mushroomCow.getVariant();
+            case Parrot parrot -> parrot.getVariant();
+            case Llama llama -> llama.getColor();
+            case Fox fox -> fox.getFoxType();
+            case Cat cat -> cat.getCatType();
+            case Rabbit rabbit -> rabbit.getRabbitType();
+            case Panda panda -> panda.getMainGene();
+            case TropicalFish tropicalFish -> tropicalFish.getPattern();
+            case Wolf wolf -> wolf.getVariant();
+            case Salmon salmon when HAS_SALMON_VARIANT -> salmon.getVariant();
+            case Pig pig when HAS_PIG_VARIANT -> pig.getVariant();
+            case AbstractCow abstractCow when HAS_COW_VARIANT -> getCowVariant(abstractCow);
+            case Chicken chicken when HAS_CHICKEN_VARIANT -> chicken.getVariant();
+            case null, default -> null;
+        };
     }
 
     public static void setVariant(LivingEntity livingEntity, Object unknownVariant) {
-        if (livingEntity instanceof MushroomCow mushroomCow && unknownVariant instanceof MushroomCow.Variant variant) {
-            mushroomCow.setVariant(variant);
-        } else if (livingEntity instanceof Parrot parrot && unknownVariant instanceof Parrot.Variant variant) {
-            parrot.setVariant(variant);
-        } else if (livingEntity instanceof Llama llama && unknownVariant instanceof Llama.Color color) {
-            llama.setColor(color);
-        } else if (livingEntity instanceof Fox fox && unknownVariant instanceof Fox.Type type) {
-            fox.setFoxType(type);
-        } else if (livingEntity instanceof Cat cat && unknownVariant instanceof Cat.Type type) {
-            cat.setCatType(type);
-        } else if (livingEntity instanceof Rabbit rabbit && unknownVariant instanceof Rabbit.Type type) {
-            rabbit.setRabbitType(type);
-        } else if (livingEntity instanceof Panda panda && unknownVariant instanceof Panda.Gene gene) {
-            panda.setMainGene(gene);
-        } else if (livingEntity instanceof TropicalFish tropicalFish && unknownVariant instanceof TropicalFish.Pattern pattern) {
-            tropicalFish.setPattern(pattern);
-        } else if (HAS_FROG_VARIANT && livingEntity instanceof Frog frog && unknownVariant instanceof Frog.Variant variant) {
-            frog.setVariant(variant);
-        } else if (HAS_WOLF_VARIANT && livingEntity instanceof Wolf wolf && unknownVariant instanceof Wolf.Variant variant) {
-            wolf.setVariant(variant);
-        } else if (HAS_SALMON_VARIANT && livingEntity instanceof Salmon salmon && unknownVariant instanceof Salmon.Variant variant) {
-            salmon.setVariant(variant);
-        } else if (HAS_AXOLOTL_VARIANT && livingEntity instanceof Axolotl axolotl && unknownVariant instanceof Axolotl.Variant variant) {
-            axolotl.setVariant(variant);
-        } else if (HAS_CHICKEN_VARIANT && livingEntity instanceof Chicken chicken && unknownVariant instanceof Chicken.Variant variant) {
-            chicken.setVariant(variant);
-        } else if (HAS_COW_VARIANT && livingEntity instanceof AbstractCow abstractCow && unknownVariant instanceof Cow.Variant variant) {
-            setCowVariant(abstractCow, variant);
-        } else if (HAS_PIG_VARIANT && livingEntity instanceof Pig pig && unknownVariant instanceof Pig.Variant variant) {
-            pig.setVariant(variant);
+        switch (livingEntity) {
+            case MushroomCow mushroomCow when unknownVariant instanceof MushroomCow.Variant variant ->
+                    mushroomCow.setVariant(variant);
+            case Parrot parrot when unknownVariant instanceof Parrot.Variant variant -> parrot.setVariant(variant);
+            case Llama llama when unknownVariant instanceof Llama.Color color -> llama.setColor(color);
+            case Fox fox when unknownVariant instanceof Fox.Type type -> fox.setFoxType(type);
+            case Cat cat when unknownVariant instanceof Cat.Type type -> cat.setCatType(type);
+            case Rabbit rabbit when unknownVariant instanceof Rabbit.Type type -> rabbit.setRabbitType(type);
+            case Panda panda when unknownVariant instanceof Panda.Gene gene -> panda.setMainGene(gene);
+            case TropicalFish tropicalFish when unknownVariant instanceof TropicalFish.Pattern pattern ->
+                    tropicalFish.setPattern(pattern);
+            case Frog frog when unknownVariant instanceof Frog.Variant variant -> frog.setVariant(variant);
+            case Wolf wolf when unknownVariant instanceof Wolf.Variant variant -> wolf.setVariant(variant);
+            case Salmon salmon when HAS_SALMON_VARIANT && unknownVariant instanceof Salmon.Variant variant ->
+                    salmon.setVariant(variant);
+            case Axolotl axolotl when unknownVariant instanceof Axolotl.Variant variant -> axolotl.setVariant(variant);
+            case Chicken chicken when HAS_CHICKEN_VARIANT && unknownVariant instanceof Chicken.Variant variant ->
+                    chicken.setVariant(variant);
+            case AbstractCow abstractCow when HAS_COW_VARIANT && unknownVariant instanceof Cow.Variant variant ->
+                    setCowVariant(abstractCow, variant);
+            case Pig pig when HAS_PIG_VARIANT && unknownVariant instanceof Pig.Variant variant ->
+                    pig.setVariant(variant);
+            default -> {
+            }
         }
     }
 

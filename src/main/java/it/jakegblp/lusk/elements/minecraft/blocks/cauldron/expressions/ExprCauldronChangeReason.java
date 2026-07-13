@@ -6,6 +6,7 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
@@ -14,8 +15,6 @@ import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
-
 @Name("Cauldron - Change Reason")
 @Description("Returns the Change Reason in a Cauldron Level Change Event.")
 @Examples({"on cauldron level change:\n\tbroadcast the cauldron change reason"})
@@ -23,7 +22,7 @@ import static it.jakegblp.lusk.utils.Constants.EVENT_OR_SIMPLE;
 @SuppressWarnings("unused")
 public class ExprCauldronChangeReason extends SimpleExpression<CauldronLevelChangeEvent.ChangeReason> {
     static {
-        Skript.registerExpression(ExprCauldronChangeReason.class, CauldronLevelChangeEvent.ChangeReason.class, EVENT_OR_SIMPLE,
+        Skript.registerExpression(ExprCauldronChangeReason.class, CauldronLevelChangeEvent.ChangeReason.class, ExpressionType.EVENT,
                 "(the |event-)cauldron change reason");
     }
 
