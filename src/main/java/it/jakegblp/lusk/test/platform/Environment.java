@@ -250,30 +250,14 @@ public class Environment {
         private void generateSource() throws IOException {
             if (source != null)
                 return;
-
-            String stringUrl = "https://api.papermc.io/v2/projects/paper/versions/" + version;
+            String stringUrl = "https://fill.papermc.io/v3/projects/paper/versions/" + version + "/builds/latest";
             URL url = new URL(stringUrl);
             JsonObject jsonObject;
             try (InputStream is = url.openStream()) {
                 InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
                 jsonObject = gson.fromJson(reader, JsonObject.class);
             }
-
-            JsonArray jsonArray = jsonObject.get("builds").getAsJsonArray();
-
-            int latestBuild = -1;
-            for (JsonElement jsonElement : jsonArray) {
-                int build = jsonElement.getAsInt();
-                if (build > latestBuild) {
-                    latestBuild = build;
-                }
-            }
-
-            if (latestBuild == -1)
-                throw new IllegalStateException("No builds for this version");
-
-            source = "https://api.papermc.io/v2/projects/paper/versions/" + version + "/builds/" + latestBuild
-                    + "/downloads/paper-" + version + "-" + latestBuild + ".jar";
+            source = jsonObject.get("downloads").getAsJsonObject().get("server:default").getAsJsonObject().get("url").getAsString();
         }
     }
 
