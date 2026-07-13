@@ -132,7 +132,10 @@ public class Constants {
             entry(770, parseVersion("1.21.5")),
             entry(771, parseVersion("1.21.6")),
             entry(772, parseVersion("1.21.8")),
-            entry(773, parseVersion("1.21.10"))
+            entry(773, parseVersion("1.21.10")),
+            entry(774, parseVersion("1.21.11")),
+            entry(775, parseVersion("26.1.2")),
+            entry(776, parseVersion("26.2"))
     );
 
 
