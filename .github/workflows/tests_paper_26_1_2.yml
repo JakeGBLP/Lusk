@@ -1,4 +1,4 @@
-name: Paper 26.1
+name: Paper 26.1.2
 
 on:
   - push
@@ -21,7 +21,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Skript and run test scripts
-        run: ./gradlew clean luskTest_26_1
+        run: ./gradlew clean luskTest_26_1_2
       - name: Upload Nightly Build
         uses: actions/upload-artifact@v4
         if: success()

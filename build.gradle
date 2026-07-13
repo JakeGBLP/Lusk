@@ -154,9 +154,9 @@ createTestTask('luskTest_1_21_7', 'Runs tests on Paper 1.21.7.', environments + 
 createTestTask('luskTest_1_21_8', 'Runs tests on Paper 1.21.8.', environments + 'paper-1.21.8.json', java21, -1)
 createTestTask('luskTest_1_21_10', 'Runs tests on Paper 1.21.10.', environments + 'paper-1.21.10.json', java21, -1)
 createTestTask('luskTest_1_21_11', 'Runs tests on Paper 1.21.11.', environments + 'paper-1.21.11.json', java21, -1)
-createTestTask('luskTest_26_1', 'Runs tests on Paper 26.1.', environments + 'paper-26.1.json', java25, -1)
+createTestTask('luskTest_26_1_2', 'Runs tests on Paper 26.1.2.', environments + 'paper-26.1.2.json', java25, -1)
 
 tasks.register('luskTest') {
     description = 'Runs tests on all environments.'
-    dependsOn luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11, luskTest_26_1
+    dependsOn luskTest_1_20_6, luskTest_1_21_4, luskTest_1_21_5, luskTest_1_21_6, luskTest_1_21_7, luskTest_1_21_8, luskTest_1_21_10, luskTest_1_21_11, luskTest_26_1_2
 }
