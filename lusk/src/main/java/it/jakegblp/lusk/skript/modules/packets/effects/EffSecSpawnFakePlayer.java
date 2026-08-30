@@ -10,7 +10,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.util.Direction;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.optional.OptionallySectionEffect;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityMetadata;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
@@ -54,7 +54,7 @@ public class EffSecSpawnFakePlayer extends OptionallySectionEffect {
     private Expression<Number> idExpression;
     private Expression<Location> locationExpression;
     private Expression<Player> playersExpression;
-    private Map<MetadataKey<? extends Entity, ?>, Expression<?>> expressionMap;
+    private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
 
     @Override
     public String toString(@Nullable Event event, boolean b) {

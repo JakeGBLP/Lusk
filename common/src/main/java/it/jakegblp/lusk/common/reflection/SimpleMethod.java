@@ -17,6 +17,12 @@ public record SimpleMethod(@Nullable Method method) {
         return method != null && method.isAnnotationPresent(Deprecated.class);
     }
 
+    public SimpleMethod accessible() {
+        if (method == null) throw new NullPointerException("Method is null");
+        method.setAccessible(true);
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
     @Nullable
     public <F,T> T invoke(F instance, Object... args) {

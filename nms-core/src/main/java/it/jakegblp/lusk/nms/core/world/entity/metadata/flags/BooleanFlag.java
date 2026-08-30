@@ -1,30 +1,38 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata.flags;
 
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
-public interface BooleanFlag extends OrdinalBitFlag<Boolean> {
+@NullMarked
+public abstract class BooleanFlag<H extends Entity> extends Flag<H, Boolean, BooleanFlag<H>> {
 
-    static boolean decodeBoolean(int bits) {
-        return (bits & 0x1) != 0;
+    public BooleanFlag(String name) {
+        this(name, false);
     }
 
-    static int encodeBoolean(boolean value) {
-        return value ? 1 : 0;
-    }
-
-    @Override
-    @NotNull
-    default Boolean decode(int bits) {
-        return decodeBoolean(bits);
+    public BooleanFlag(String name, boolean defaultValue) {
+        super(name, defaultValue, 1);
     }
 
     @Override
-    default int encode(Boolean value) {
-        return encodeBoolean(value);
+    public int getWidth() {
+        return 1;
     }
 
     @Override
-    default Class<Boolean> getValueClass() {
+    public @Nullable Boolean decode(int bits) {
+        return bits != 0;
+    }
+
+    @Override
+    public int encode(@Nullable Boolean value) {
+        return (value == null ? getDefaultValue() : value) ? 1 : 0;
+    }
+
+    @Override
+    public Class<Boolean> getValueClass() {
         return Boolean.class;
     }
+
 }

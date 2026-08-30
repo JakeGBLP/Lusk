@@ -13,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.function.Consumer;
-
 public abstract class AbstractNMS {
 
     public static AbstractNMS NMS;
@@ -29,25 +27,21 @@ public abstract class AbstractNMS {
     @Getter
     protected final Version version;
     @Getter
-    protected final MetadataKeyRegistry metadataKeyRegistry;
+    protected MetadataKeyRegistry metadataKeyRegistry;
 
     public AbstractNMS(
             JavaPlugin plugin,
             Version version,
-            Consumer<AbstractNMS> abstractNMSConsumer,
             @SuppressWarnings("rawtypes") SharedBehaviorAdapter sharedBehaviorAdapter
     ) {
         this.plugin = plugin;
         this.version = version;
         this.sharedBehaviorAdapter = sharedBehaviorAdapter;
         sharedBehaviorAdapter.init(version);
-        abstractNMSConsumer.accept(this);
         init();
         Bukkit.getPluginManager().registerEvents(new InjectionListener(), plugin);
         //implementedClientboundPacketClasses = CommonUtils.filterMap(bufferCodecs.getCodecs(), codec -> ClientboundPacket.class.isAssignableFrom(codec.getToClass()), simpleBufferCodec -> (Class<ClientboundPacket<?>>)simpleBufferCodec.getToClass());
-        metadataKeyRegistry = new MetadataKeyRegistry(this);
     }
-
 
     public <F, T> T fromNMS(F f) {
         return getMappings().map(f);
@@ -59,12 +53,17 @@ public abstract class AbstractNMS {
 
     public abstract void init();
 
-    @NullMarked
-    public <T> void write(SimpleByteBuf buffer, T to) {
-        write(buffer, to.getClass(), 0);
+    public void createMetadataRegistry() {
+        metadataKeyRegistry = new MetadataKeyRegistry(this);
     }
 
     @NullMarked
+    public <T> void write(SimpleByteBuf buffer, T to) {
+        write(buffer, to, 0);
+    }
+
+    @NullMarked
+    @SuppressWarnings("unchecked")
     public <T> void write(SimpleByteBuf buffer, T to, int variant) {
         write(buffer, to, new SimpleKey<>((Class<T>) to.getClass(), variant));
     }

@@ -31,7 +31,7 @@ public class EntityAnimationPacket implements ClientboundPacketWithEntityId<Enti
     @Override
     public void write(SimpleByteBuf buffer) {
         buffer.writeVarInt(entityId);
-        buffer.writeUnsignedByte(getEntityAnimationId());
+        buffer.writeUnsignedByte((short) getEntityAnimationId());
     }
 
     @Override

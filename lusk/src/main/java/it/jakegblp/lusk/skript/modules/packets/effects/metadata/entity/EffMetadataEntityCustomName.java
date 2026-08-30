@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.skript.modules.packets.effects.metadata.entity;
 
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.effect.SimpleMetadataEffect;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,7 @@ public class EffMetadataEntityCustomName extends SimpleMetadataEffect<Optional<C
     }
 
     @Override
-    public MetadataKey<? extends Entity, Optional<Component>> getMetadataKey() {
+    public EntityDataKey<? extends Entity, Optional<Component>, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.CUSTOM_NAME;
     }
 

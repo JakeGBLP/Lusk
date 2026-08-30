@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.common;
 
 import ch.njol.skript.Skript;
+import com.google.common.base.CaseFormat;
 import it.jakegblp.lusk.common.reflection.SimpleArray;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
 import org.bukkit.NamespacedKey;
@@ -24,6 +25,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class CommonUtils {
+
+    @NullMarked
+    public static String toSentence(String string) {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, string).replace('_', ' ');
+    }
 
     @SuppressWarnings("unchecked")
     public static <T> T unwrapOptional(Object object) {

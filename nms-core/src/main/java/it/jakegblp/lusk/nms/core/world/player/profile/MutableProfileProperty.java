@@ -13,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @ToString
 @EqualsAndHashCode
 public class MutableProfileProperty implements Copyable<MutableProfileProperty>, Mutable<ProfileProperty>/*, NMSObject<Object> todo: implement, low priority*/{
-    protected @NotNull String name;
-    protected @NotNull String value;
+    protected @NotNull String name, value;
     protected @Nullable String signature;
 
     public MutableProfileProperty(@NotNull TexturesPayload texturesPayload, @Nullable String signature) {

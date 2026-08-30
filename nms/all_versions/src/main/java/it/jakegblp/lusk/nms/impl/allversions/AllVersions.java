@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
+import com.destroystokyo.paper.SkinParts;
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
@@ -14,10 +15,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.papermc.paper.adventure.PaperAdventure;
 import io.papermc.paper.datacomponent.item.PaperResolvableProfile;
+import io.papermc.paper.registry.PaperRegistries;
+import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.world.WeatheringCopperState;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.common.reflection.SimpleClass;
+import it.jakegblp.lusk.common.reflection.SimpleField;
 import it.jakegblp.lusk.nms.core.adapter.SharedBehaviorAdapter;
 import it.jakegblp.lusk.nms.core.event.PacketWrapperEvent;
 import it.jakegblp.lusk.nms.core.event.client.PacketPreSendEvent;
@@ -34,8 +38,7 @@ import it.jakegblp.lusk.nms.core.serialization.RegistryMapper;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.ServerEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import it.jakegblp.lusk.nms.core.world.player.chat.ChatSessionData;
@@ -50,12 +53,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.VarInt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
@@ -74,14 +75,26 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.animal.chicken.ChickenSoundVariant;
+import net.minecraft.world.entity.animal.chicken.ChickenVariant;
+import net.minecraft.world.entity.animal.cow.CowSoundVariant;
+import net.minecraft.world.entity.animal.cow.CowVariant;
+import net.minecraft.world.entity.animal.feline.CatSoundVariant;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
 import net.minecraft.world.entity.animal.golem.CopperGolemState;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariant;
+import net.minecraft.world.entity.animal.pig.PigSoundVariant;
+import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.world.entity.npc.villager.VillagerData;
 import net.minecraft.world.entity.player.ProfilePublicKey;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
@@ -92,26 +105,31 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.TeamColor;
 import org.bukkit.*;
+import org.bukkit.Registry;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.*;
 import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.craftbukkit.entity.CraftEntityType;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.*;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.potion.CraftPotionUtil;
 import org.bukkit.craftbukkit.util.CraftBlockVector;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.bukkit.entity.*;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.inventory.MainHand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +142,6 @@ import org.jspecify.annotations.NullMarked;
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.util.*;
-import java.util.function.Function;
 
 import static net.minecraft.network.codec.ByteBufCodecs.ROTATION_BYTE;
 
@@ -141,12 +158,14 @@ public class AllVersions implements
             SimpleClass.firstInPackage("net.minecraft.resources", "Identifier", "ResourceLocation");
     @SuppressWarnings("rawtypes")
     @Getter
-    public final BiMap<it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?>, EntityDataSerializer> entityDataSerializers = HashBiMap.create();
+    public final BiMap<it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?, ?>, EntityDataSerializer> entityDataSerializers = HashBiMap.create();
 
     @Getter
     private final MappingsImpl mappings = new MappingsImpl(this);
     @Getter
     private final BufferCodecsImpl codecs = new BufferCodecsImpl(this);
+
+    public ParticleWrapper AREA_EFFECT_CLOUD_DEFAULT_PARTICLE;
 
     public BufferCodec<NamespacedKey> NAMESPACED_KEY_CODEC;
     public BufferCodec<NamespacedKey> NAMESPACED_KEY_256_CODEC;
@@ -154,16 +173,16 @@ public class AllVersions implements
     public BufferCodec<org.bukkit.entity.Pose> POSE_CODEC;
     public Mapper<Pose, org.bukkit.entity.Pose> POSE_MAPPER;
     public BufferCodec<NamedTextColor> NAMED_TEXT_COLOR_CODEC;
-    public Mapper<ChatFormatting, NamedTextColor> NAMED_TEXT_COLOR_MAPPER;
+    public Mapper<TeamColor, NamedTextColor> NAMED_TEXT_COLOR_MAPPER;
     public BufferCodec<org.bukkit.DyeColor> DYE_COLOR_CODEC;
     public Mapper<DyeColor, org.bukkit.DyeColor> DYE_COLOR_MAPPER;
     public BufferCodec<net.kyori.adventure.text.Component> COMPONENT_CODEC;
     public Mapper<Component, net.kyori.adventure.text.Component> COMPONENT_MAPPER;
     public BufferCodec<Optional<net.kyori.adventure.text.Component>> OPTIONAL_COMPONENT_CODEC;
     @SuppressWarnings("rawtypes")
-    public BufferCodec<MetadataItem> METADATA_ITEM_CODEC;
+    public BufferCodec<MetadataEntry> METADATA_ITEM_CODEC;
     @SuppressWarnings("rawtypes")
-    public Mapper<SynchedEntityData.DataValue, MetadataItem> METADATA_ITEM_MAPPER;
+    public Mapper<SynchedEntityData.DataValue, MetadataEntry> METADATA_ITEM_MAPPER;
     public BufferCodec<org.bukkit.inventory.EquipmentSlot> EQUIPMENT_SLOT_CODEC;
     public Mapper<EquipmentSlot, org.bukkit.inventory.EquipmentSlot> EQUIPMENT_SLOT_MAPPER;
     public BufferCodec<org.bukkit.inventory.EquipmentSlotGroup> EQUIPMENT_SLOT_GROUP_CODEC;
@@ -202,9 +221,10 @@ public class AllVersions implements
     public BufferCodec<EntityEventPacket> ENTITY_EVENT_PACKET_CODEC;
     public Mapper<ClientboundSetEquipmentPacket, SetEquipmentPacket> SET_EQUIPMENT_PACKET_MAPPER;
     public BufferCodec<SetEquipmentPacket> SET_EQUIPMENT_PACKET_CODEC;
-    public BufferCodec<Integer> UNSIGNED_BYTE_CODEC;
+    public BufferCodec<Short> UNSIGNED_BYTE_CODEC;
     public BufferCodec<Boolean> BOOLEAN_CODEC;
     public BufferCodec<String> STRING_CODEC;
+    public BufferCodec<Float> FLOAT_CODEC;
     public BufferCodec<Byte> BYTE_CODEC;
     public BufferCodec<Integer> VAR_INT_CODEC;
     public BufferCodec<Optional<Integer>> OPTIONAL_VAR_INT_CODEC;
@@ -281,7 +301,7 @@ public class AllVersions implements
     public BufferCodec<Armadillo.State> ARMADILLO_STATE_CODEC;
     public Mapper<HumanoidArm, MainHand> HUMANOID_ARM_MAPPER;
     public BufferCodec<MainHand> HUMANOID_ARM_CODEC;
-    public Mapper<ClientboundBundlePacket, ClientBundlePacket> CLIENT_BUNDLE_PACKET_MAPPER; // no codec, we don't serialize this one
+    public Mapper<ClientboundBundlePacket, ClientBundlePacket> CLIENT_BUNDLE_PACKET_MAPPER; // no codec, Minecraft doesn't serialize this one
     public Mapper<ClientboundMoveEntityPacket.Pos, MoveEntityPacket.Position> MOVE_ENTITY_POSITION_PACKET_MAPPER;
     public BufferCodec<MoveEntityPacket.Position> MOVE_ENTITY_POSITION_PACKET_CODEC;
     public Mapper<ClientboundMoveEntityPacket.Rot, MoveEntityPacket.Rotation> MOVE_ENTITY_ROTATION_PACKET_MAPPER;
@@ -291,6 +311,7 @@ public class AllVersions implements
     public Mapper<GlobalPos, Location> LOCATION_MAPPER;
     public BufferCodec<Location> LOCATION_CODEC;
     public BufferCodec<Optional<Location>> OPTIONAL_LOCATION__CODEC;
+    public Mapper<VillagerData, it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData> VILLAGER_DATA_MAPPER;
 
     private Version serverVersion;
 
@@ -317,15 +338,17 @@ public class AllVersions implements
         POSE_CODEC = codecs.register(org.bukkit.entity.Pose.class);
         POSE_MAPPER = mappings.register(Pose.class, org.bukkit.entity.Pose.class);
 
+        boolean v26_2 = this.serverVersion.isGreaterOrEqual(Version.of(26, 2));
+        Class<TeamColor> nmsColorClass = v26_2 ? TeamColor.class : (Class<TeamColor>) (Class) ChatFormatting.class;
         NAMED_TEXT_COLOR_MAPPER = mappings.register(
-                ChatFormatting.class, NamedTextColor.class,
-                color -> (NamedTextColor) PaperAdventure.asAdventure(color),
-                PaperAdventure::asVanilla
+                nmsColorClass, NamedTextColor.class,
+                color -> SimpleClass.of(PaperAdventure.class).getMethod("asVanilla", nmsColorClass).invoke(color),
+                color -> SimpleClass.of(PaperAdventure.class).getMethod("asAdventure", NamedTextColor.class).invoke(color)
         );
         NAMED_TEXT_COLOR_CODEC = codecs.register(
                 NamedTextColor.class,
                 (buf, namedTextColor) -> buf.writeEnum(NAMED_TEXT_COLOR_MAPPER.from(namedTextColor)),
-                buf -> NAMED_TEXT_COLOR_MAPPER.to(buf.readEnum(ChatFormatting.class))
+                buf -> NAMED_TEXT_COLOR_MAPPER.to(buf.readEnum(nmsColorClass))
         );
 
         DYE_COLOR_CODEC = codecs.register(
@@ -351,20 +374,20 @@ public class AllVersions implements
         );
         OPTIONAL_COMPONENT_CODEC = codecs.register(COMPONENT_CODEC.optional());
 
-        METADATA_ITEM_MAPPER = mappings.register(
-                SynchedEntityData.DataValue.class,
-                MetadataItem.class,
-                dataValue -> new MetadataItem<>(dataValue.id(), mappings.map(dataValue.value()), getEntityDataSerializers().inverse().get(dataValue.serializer())),
-                item -> new SynchedEntityData.DataValue<>(item.id(), getEntityDataSerializers().get(item.serializer()), mappings.mapBack(item.value()))
-        );
-        METADATA_ITEM_CODEC = codecs.register(BufferCodec.of(MetadataItem.class, buf -> new MetadataItem(buf)));
-        //METADATA_ITEM_CODEC = codecs.register(BufferCodec.of(MetadataItem.class, buf -> new MetadataItem(buf)));
         //METADATA_ITEM_MAPPER = mappings.register(
         //        SynchedEntityData.DataValue.class,
-        //        (buffer, nms) -> nms.write(toRegistryFriendlyByteBuf(buffer)),
-        //        buffer -> SynchedEntityData.DataValue.read(toRegistryFriendlyByteBuf(buffer), buffer.readByte()),
-        //        METADATA_ITEM_CODEC
+        //        MetadataEntry.class,
+        //        dataValue -> new MetadataEntry<>(dataValue.id(), mappings.map(dataValue.value()), getEntityDataSerializers().inverse().get(dataValue.serializer())),
+        //        item -> new SynchedEntityData.DataValue<>(item.id(), getEntityDataSerializers().get(item.serializer()), mappings.mapBack(item.value()))
         //);
+        //METADATA_ITEM_CODEC = codecs.register(BufferCodec.of(MetadataEntry.class, buf -> new MetadataEntry(buf)));
+        METADATA_ITEM_CODEC = codecs.register(BufferCodec.of(MetadataEntry.class, buf -> new MetadataEntry(buf)));
+        METADATA_ITEM_MAPPER = mappings.register(
+                SynchedEntityData.DataValue.class,
+                (buffer, nms) -> nms.write(toRegistryFriendlyByteBuf(buffer)),
+                buffer -> SynchedEntityData.DataValue.read(toRegistryFriendlyByteBuf(buffer), buffer.readByte()),
+                METADATA_ITEM_CODEC
+        );
 
         EQUIPMENT_SLOT_CODEC = codecs.register(org.bukkit.inventory.EquipmentSlot.class);
         EQUIPMENT_SLOT_MAPPER = mappings.register(EquipmentSlot.class, org.bukkit.inventory.EquipmentSlot.class);
@@ -433,7 +456,7 @@ public class AllVersions implements
         BLOCK_DATA_MAPPER = mappings.register(
                 BlockState.class,
                 BlockData.class,
-                CraftBlockData::fromData,
+                CraftBlockData::createData,
                 bukkit -> ((CraftBlockData) bukkit).getState()
         );
         var blockDataCodec = ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY);
@@ -503,39 +526,39 @@ public class AllVersions implements
                 PROFILE_PROPERTIES_CODEC
         );
 
-        ENTITY_METADATA_PACKET_MAPPER = mappings.register(
-                ClientboundSetEntityDataPacket.class,
-                EntityMetadataPacket.class,
-                packet -> {
-                    List<SynchedEntityData.DataValue<?>> dataValueList = packet.packedItems();
-                    EntityMetadata entityMetadata = new EntityMetadata();
-                    for (SynchedEntityData.DataValue<?> dataValue : dataValueList)
-                        entityMetadata.setInternal(dataValue.id(), METADATA_ITEM_MAPPER.to(dataValue));
-                    return new EntityMetadataPacket(packet.id(), entityMetadata);
-                },
-                packet -> new ClientboundSetEntityDataPacket(
-                        packet.getEntityId(),
-                        CommonUtils.map(packet.getEntityMetadata().items(),
-                                item -> METADATA_ITEM_MAPPER.from(item))
-                )
+        //ENTITY_METADATA_PACKET_MAPPER = mappings.register(
+        //        ClientboundSetEntityDataPacket.class,
+        //        EntityMetadataPacket.class,
+        //        packet -> {
+        //            List<SynchedEntityData.DataValue<?>> dataValueList = packet.packedItems();
+        //            EntityMetadata entityMetadata = new EntityMetadata();
+        //            for (SynchedEntityData.DataValue<?> dataValue : dataValueList)
+        //                entityMetadata.setInternal(dataValue.id(), METADATA_ITEM_MAPPER.to(dataValue));
+        //            return new EntityMetadataPacket(packet.id(), entityMetadata);
+        //        },
+        //        packet -> new ClientboundSetEntityDataPacket(
+        //                packet.getEntityId(),
+        //                CommonUtils.map(packet.getEntityMetadata().items(),
+        //                        item -> METADATA_ITEM_MAPPER.from(item))
+        //        )
 
-        );
-        ENTITY_METADATA_PACKET_CODEC = codecs.register(
-                EntityMetadataPacket.class,
-                (buf, entityMetadataPacket) -> entityMetadataPacket.write(buf),
-                EntityMetadataPacket::new
-        );
+        //);
         //ENTITY_METADATA_PACKET_CODEC = codecs.register(
         //        EntityMetadataPacket.class,
         //        (buf, entityMetadataPacket) -> entityMetadataPacket.write(buf),
         //        EntityMetadataPacket::new
         //);
-        //ENTITY_METADATA_PACKET_MAPPER = mappings.register(
-        //        ClientboundSetEntityDataPacket.class,
-        //        (buffer, nms) -> ClientboundSetEntityDataPacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), nms),
-        //        (buffer) -> ClientboundSetEntityDataPacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
-        //        ENTITY_METADATA_PACKET_CODEC
-        //);
+        ENTITY_METADATA_PACKET_CODEC = codecs.register(
+                EntityMetadataPacket.class,
+                (buf, entityMetadataPacket) -> entityMetadataPacket.write(buf),
+                EntityMetadataPacket::new
+        );
+        ENTITY_METADATA_PACKET_MAPPER = mappings.register(
+                ClientboundSetEntityDataPacket.class,
+                (buffer, nms) -> ClientboundSetEntityDataPacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), nms),
+                (buffer) -> ClientboundSetEntityDataPacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
+                ENTITY_METADATA_PACKET_CODEC
+        );
 
         PLAYER_INFO_UPDATE_PACKET_CODEC = codecs.register(
                 PlayerInfoUpdatePacket.class,
@@ -621,9 +644,10 @@ public class AllVersions implements
                 SET_EQUIPMENT_PACKET_CODEC
         );
 
-        UNSIGNED_BYTE_CODEC = codecs.register(Integer.class, SimpleByteBuf::writeUnsignedByte, SimpleByteBuf::readUnsignedByte);
+        UNSIGNED_BYTE_CODEC = codecs.register(Short.class, SimpleByteBuf::writeUnsignedByte, SimpleByteBuf::readUnsignedByte);
         BOOLEAN_CODEC = codecs.register(Boolean.class, SimpleByteBuf::writeBoolean, SimpleByteBuf::readBoolean);
         STRING_CODEC = codecs.register(String.class, SimpleByteBuf::writeString, SimpleByteBuf::readString);
+        FLOAT_CODEC = codecs.register(Float.class, SimpleByteBuf::writeFloat, SimpleByteBuf::readFloat);
         BYTE_CODEC = codecs.register(Byte.class, (buffer, value) -> buffer.writeByte(value), SimpleByteBuf::readByte);
         VAR_INT_CODEC = codecs.register(Integer.class, SimpleByteBuf::writeVarInt, SimpleByteBuf::readVarInt);
         OPTIONAL_VAR_INT_CODEC = codecs.register(VAR_INT_CODEC.optional());
@@ -879,6 +903,7 @@ public class AllVersions implements
                 options -> new ParticleWrapper(CraftParticle.minecraftToBukkit(options.getType()), processParticleOptions(options)),
                 wrapper -> CraftParticle.createParticleParam(wrapper.particle(), wrapper.data())
         );
+        AREA_EFFECT_CLOUD_DEFAULT_PARTICLE = PARTICLE_MAPPER.to(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, -1));
         PARTICLE_CODEC = codecs.register(
                 PARTICLE_MAPPER,
                 (buffer, options) -> ParticleTypes.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), options),
@@ -955,7 +980,7 @@ public class AllVersions implements
                         bundle.add((ClientboundPacket<?>) mappings.map(subPacket));
                     return bundle;
                 },
-                packet -> new ClientboundBundlePacket(CommonUtils.map(packet.getPackets(), mappings::map))
+                packet -> new ClientboundBundlePacket(CommonUtils.map(packet.getPackets(), mappings::mapBack))
         );
 
         MOVE_ENTITY_POSITION_PACKET_CODEC = codecs.register(
@@ -1006,20 +1031,74 @@ public class AllVersions implements
         );
         OPTIONAL_LOCATION__CODEC = codecs.register(LOCATION_CODEC.optional());
 
-        if (serverVersion.isGreaterOrEqual(Version.of(1,21,9))) {
-            var copperGolemStateMapper = mappings.register(CopperGolemState.class, it.jakegblp.lusk.nms.core.world.entity.coppergolem.CopperGolemState.class);
-            codecs.register(
-                    copperGolemStateMapper,
-                    (buffer, value) -> CopperGolemState.STREAM_CODEC.encode(buffer.unwrap(), value),
-                    buffer -> CopperGolemState.STREAM_CODEC.decode(buffer.unwrap())
-            );
-        }
+        var copperGolemStateMapper = mappings.register(CopperGolemState.class, it.jakegblp.lusk.nms.core.world.entity.coppergolem.CopperGolemState.class);
+        codecs.register(
+                copperGolemStateMapper,
+                (buffer, value) -> CopperGolemState.STREAM_CODEC.encode(buffer.unwrap(), value),
+                buffer -> CopperGolemState.STREAM_CODEC.decode(buffer.unwrap())
+        );
 
-        var catVariantMapper = mappings.registerRegistryUnsafe(CatVariant.class, Cat.Type.class, Registries.CAT_VARIANT);
-        codecs.registerUnsafe(catVariantMapper, CatVariant.STREAM_CODEC);
+        var catVariantMapper = mappings.register(CatVariant.class, Cat.Type.class, Registries.CAT_VARIANT);
+        codecs.register(catVariantMapper, CatVariant.STREAM_CODEC);
 
-        var paintingVariantMapper = mappings.registerRegistryUnsafe(PaintingVariant.class, Art.class, Registries.PAINTING_VARIANT);
-        codecs.registerUnsafe(paintingVariantMapper, PaintingVariant.STREAM_CODEC);
+        var catSoundVariantMapper = mappings.register(CatSoundVariant.class, Cat.SoundVariant.class, Registries.CAT_SOUND_VARIANT);
+        codecs.register(catSoundVariantMapper, CatSoundVariant.STREAM_CODEC);
+
+        var paintingVariantMapper = mappings.register(PaintingVariant.class, Art.class, Registries.PAINTING_VARIANT);
+        codecs.register(paintingVariantMapper, PaintingVariant.STREAM_CODEC);
+
+        VILLAGER_DATA_MAPPER = mappings.register(
+                VillagerData.class, it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData.class,
+                villagerData -> {
+                    Mapper<Identifier, NamespacedKey> mapper = (Mapper<Identifier, NamespacedKey>) mappings.getMapperFromForwardClass(NamespacedKey.class);
+                    //System.out.println("type key = " + villagerData.type().unwrapKey().orElse(null));
+                    //System.out.println("profession key = " + villagerData.profession().unwrapKey().orElse(null));
+                    //System.out.println("nms before api: " + new GsonBuilder().setPrettyPrinting().create().toJson(villagerData));
+                    return new it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData(
+                            Registry.VILLAGER_TYPE.getOrThrow(mapper.to(villagerData.type().unwrapKey().orElseThrow().identifier())),
+                            Registry.VILLAGER_PROFESSION.getOrThrow(mapper.to(villagerData.profession().unwrapKey().orElseThrow().identifier())),
+                            villagerData.level());
+                    //System.out.println("nms -> api: " + new GsonBuilder().setPrettyPrinting().create().toJson(a));
+                    //System.out.println("back to nms villager type: " + registryAccess.lookupOrThrow(Registries.VILLAGER_TYPE).getOrThrow(ResourceKey.create(Registries.VILLAGER_TYPE, codec.decode(a.type().getKey()))));
+                    //System.out.println("back to nms villager profession: " + registryAccess.lookupOrThrow(Registries.VILLAGER_PROFESSION).getOrThrow(ResourceKey.create(Registries.VILLAGER_PROFESSION, codec.decode(a.profession().getKey()))));
+                    //return a;
+                },
+                villagerData -> {
+                    //System.out.println("before nms: " + new GsonBuilder().setPrettyPrinting().create().toJson(villagerData));
+                    Mapper<Identifier, NamespacedKey> mapper = (Mapper<Identifier, NamespacedKey>) mappings.getMapperFromForwardClass(NamespacedKey.class);
+                    return new VillagerData(
+                            registryAccess().lookupOrThrow(Registries.VILLAGER_TYPE).getOrThrow(ResourceKey.create(Registries.VILLAGER_TYPE, mapper.from(villagerData.type().getKey()))),
+                            registryAccess().lookupOrThrow(Registries.VILLAGER_PROFESSION).getOrThrow(ResourceKey.create(Registries.VILLAGER_PROFESSION, mapper.from(villagerData.profession().getKey()))),
+                            villagerData.level());
+                    //System.out.println("api -> nms: " + new GsonBuilder().setPrettyPrinting().create().toJson(a));
+                    //return a;
+                });
+        codecs.register(
+                VILLAGER_DATA_MAPPER,
+                (buffer, value) -> VillagerData.STREAM_CODEC.encode(new RegistryFriendlyByteBuf(buffer.unwrap(), registryAccess()), value),
+                buffer -> VillagerData.STREAM_CODEC.decode(new RegistryFriendlyByteBuf(buffer.unwrap(), registryAccess()))
+        );
+
+        var chickenVariantMapper = mappings.register(ChickenVariant.class, Chicken.Variant.class, Registries.CHICKEN_VARIANT);
+        codecs.register(chickenVariantMapper, ChickenVariant.STREAM_CODEC);
+
+        var chickenSoundVariantMapper = mappings.register(ChickenSoundVariant.class, Chicken.SoundVariant.class, Registries.CHICKEN_SOUND_VARIANT);
+        codecs.register(chickenSoundVariantMapper, ChickenSoundVariant.STREAM_CODEC);
+
+        var cowVariantMapper = mappings.register(CowVariant.class, Cow.Variant.class, Registries.COW_VARIANT);
+        codecs.register(cowVariantMapper, CowVariant.STREAM_CODEC);
+
+        var cowSoundVariantMapper = mappings.register(CowSoundVariant.class, Cow.SoundVariant.class, Registries.COW_SOUND_VARIANT);
+        codecs.register(cowSoundVariantMapper, CowSoundVariant.STREAM_CODEC);
+
+        var pigVariantMapper = mappings.register(PigVariant.class, Pig.Variant.class, Registries.PIG_VARIANT);
+        codecs.register(pigVariantMapper, PigVariant.STREAM_CODEC);
+
+        var pigSoundVariantMapper = mappings.register(PigSoundVariant.class, Pig.SoundVariant.class, Registries.PIG_SOUND_VARIANT);
+        codecs.register(pigSoundVariantMapper, PigSoundVariant.STREAM_CODEC);
+
+        var zombieNautilusVariantMapper = mappings.register(ZombieNautilusVariant.class, ZombieNautilus.Variant.class, Registries.ZOMBIE_NAUTILUS_VARIANT);
+        codecs.register(zombieNautilusVariantMapper, ZombieNautilusVariant.STREAM_CODEC);
 
     }
 
@@ -1065,37 +1144,15 @@ public class AllVersions implements
                 final ArrayList<BlockPos> list = new ArrayList<>(cap);
                 chunkMap.put(chunk, list);
 
-                for (int x = wx0; x <= wx1; x++) {
-                    for (int y = minY; y <= maxY; y++) {
-                        for (int z = wz0; z <= wz1; z++) {
+                for (int x = wx0; x <= wx1; x++)
+                    for (int y = minY; y <= maxY; y++)
+                        for (int z = wz0; z <= wz1; z++)
                             list.add(new BlockPos(x, y, z));
-                        }
-                    }
-                }
             }
         }
         return chunkMap;
     }
 
-    public <T> StreamCodec<SimpleByteBuf, T> registryCodec(final ResourceKey<? extends net.minecraft.core.Registry<T>> registryKey) {
-        return registryCodec(registryKey, (registry) -> registry);
-    }
-
-    public <T, R> StreamCodec<SimpleByteBuf, R> registryCodec(final ResourceKey<? extends net.minecraft.core.Registry<T>> registryKey, final Function<net.minecraft.core.Registry<T>, IdMap<R>> idGetter) {
-        return new StreamCodec<>() {
-            private IdMap<R> getRegistryOrThrow() {
-                return idGetter.apply(AllVersions.this.getDedicatedServer().registryAccess().lookupOrThrow(registryKey));
-            }
-
-            public @NotNull R decode(@NotNull SimpleByteBuf buffer) {
-                return this.getRegistryOrThrow().byIdOrThrow(VarInt.read(buffer.unwrap()));
-            }
-
-            public void encode(@NotNull SimpleByteBuf buffer, @NotNull R value) {
-                VarInt.write(buffer.unwrap(), this.getRegistryOrThrow().getIdOrThrow(value));
-            }
-        };
-    }
 
     public RegistryFriendlyByteBuf toRegistryFriendlyByteBuf(@NotNull SimpleByteBuf simpleByteBuf) {
         return new RegistryFriendlyByteBuf(simpleByteBuf.unwrap(), registryAccess());
@@ -1105,7 +1162,7 @@ public class AllVersions implements
         return switch (options) {
             case SimpleParticleType ignored -> null; // no extra data
 
-            case BlockParticleOption block -> CraftBlockData.fromData(block.getState());
+            case BlockParticleOption block -> CraftBlockData.createData(block.getState());
             case ItemParticleOption item -> CraftItemStack.asBukkitCopy(item.getItem());
 
             case DustParticleOptions dust -> {
@@ -1153,7 +1210,7 @@ public class AllVersions implements
 
     @NullMarked
     @SuppressWarnings("rawtypes")
-    public void registerEntityDataSerializer(it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?> entityDataSerializer, EntityDataSerializer nmsEntityDataSerializer) {
+    public void registerEntityDataSerializer(it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?, ?> entityDataSerializer, EntityDataSerializer nmsEntityDataSerializer) {
         entityDataSerializers.put(entityDataSerializer, nmsEntityDataSerializer);
     }
 
@@ -1200,6 +1257,534 @@ public class AllVersions implements
     public Entity getEntityFromId(int id, World world) {
         final net.minecraft.world.entity.Entity entity = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(id);
         return entity == null ? null : entity.getBukkitEntity();
+    }
+
+    @Override
+    public boolean isSprinting(Entity entity) {
+        return ((CraftEntity)entity).getHandle().isSprinting();
+    }
+
+    @Override
+    public void setSprinting(Entity entity, boolean sprinting) {
+        ((CraftEntity)entity).getHandle().setSprinting(sprinting);
+    }
+
+    @Override
+    public boolean isSwimming(Entity entity) {
+        return ((CraftEntity)entity).getHandle().isSwimming();
+    }
+
+    @Override
+    public void setSwimming(Entity entity, boolean swimming) {
+        ((CraftEntity)entity).getHandle().setSwimming(swimming);
+    }
+
+    @Override
+    public boolean hasBred(AbstractHorse abstractHorse) {
+        return ((CraftAbstractHorse) abstractHorse).getHandle().isBred();
+    }
+
+    @Override
+    public void setBred(AbstractHorse abstractHorse, boolean bred) {
+        ((CraftAbstractHorse) abstractHorse).getHandle().setBred(bred);
+    }
+
+    @Override
+    public boolean isBurning(Blaze blaze) {
+        return ((CraftBlaze) blaze).getHandle().isOnFire();
+    }
+
+    @Override
+    public void setBurning(Blaze blaze, boolean burning) {
+        var nmsBlaze = ((CraftBlaze) blaze).getHandle();
+        SimpleClass.of(nmsBlaze.getClass()).getMethod("setCharged", boolean.class).accessible().invoke(nmsBlaze, burning);
+    }
+
+    @Override
+    public void setHandActive(LivingEntity livingEntity, boolean active) {
+        ((CraftLivingEntity) livingEntity).getHandle().setLivingEntityFlag(1, active); // doesn't start at 0
+    }
+
+    @Override
+    public void setActiveItemHand(LivingEntity livingEntity, org.bukkit.inventory.EquipmentSlot slot) {
+        ((CraftLivingEntity) livingEntity).getHandle().setLivingEntityFlag(2, slot == org.bukkit.inventory.EquipmentSlot.OFF_HAND);
+    }
+
+    @Override
+    public void setSkinParts(LivingEntity livingEntity, SkinParts skinParts) {
+        if (livingEntity instanceof Player || livingEntity instanceof Mannequin)
+            ((CraftLivingEntity) livingEntity).getHandle().getEntityData().set(Avatar.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw());
+    }
+
+    @Override
+    public int getAirTicks(Entity entity) {
+        return ((CraftEntity) entity).getHandle().getAirSupply();
+    }
+
+    @Override
+    public void setAirTicks(Entity entity, int ticks) {
+        ((CraftEntity) entity).getHandle().setAirSupply(ticks);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean> DATA_WAITING = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.AreaEffectCloud.class).getField("DATA_WAITING", true).get(null);
+
+    @Override
+    public boolean isSinglePoint(AreaEffectCloud areaEffectCloud) {
+        return ((CraftAreaEffectCloud) areaEffectCloud).getHandle().isWaiting();
+    }
+
+    @Override
+    public void setSinglePoint(AreaEffectCloud areaEffectCloud, boolean singlePoint) {
+        ((CraftAreaEffectCloud) areaEffectCloud).getHandle().getEntityData().set(DATA_WAITING, singlePoint);
+    }
+
+    @Override
+    public ParticleWrapper getParticleWrapper(AreaEffectCloud areaEffectCloud) {
+        return PARTICLE_MAPPER.to(((CraftAreaEffectCloud) areaEffectCloud).getHandle().getParticle());
+    }
+
+    @Override
+    public void setParticleWrapper(AreaEffectCloud areaEffectCloud, ParticleWrapper particleWrapper) {
+        ((CraftAreaEffectCloud) areaEffectCloud).getHandle().setCustomParticle(PARTICLE_MAPPER.from(particleWrapper));
+    }
+
+    @Override
+    public BlockVector getStartingPosition(FallingBlock fallingBlock) {
+        return BLOCK_VECTOR_MAPPER.to(((CraftFallingBlock) fallingBlock).getHandle().getStartPos());
+    }
+
+    @Override
+    public void setStartingPosition(FallingBlock fallingBlock, BlockVector startingPosition) {
+        ((CraftFallingBlock) fallingBlock).getHandle().setStartPos(BLOCK_VECTOR_MAPPER.from(startingPosition));
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<OptionalInt> DATA_ATTACHED_TO_TARGET = (net.minecraft.network.syncher.EntityDataAccessor<OptionalInt>) SimpleClass.of(FireworkRocketEntity.class).getField("DATA_ATTACHED_TO_TARGET", true).get(null);
+
+    @Override
+    public @Nullable Integer getBooster(Firework firework) {
+        var data = ((CraftFirework) firework).getHandle().getEntityData().get(DATA_ATTACHED_TO_TARGET);
+        return data.isPresent() ? data.getAsInt() : null;
+    }
+
+    @Override
+    public void setBooster(Firework firework, Integer booster) {
+        ((CraftFirework) firework).getHandle().getEntityData().set(DATA_ATTACHED_TO_TARGET, booster == null ? OptionalInt.empty() : OptionalInt.of(booster));
+    }
+
+    @SuppressWarnings("unchecked")
+    public SimpleField<FishingHook, Boolean> BITING_FIELD = (SimpleField<FishingHook, Boolean>) SimpleClass.of(FishingHook.class).getField("biting");
+
+    @Override
+    public boolean isBiting(FishHook fishHook) {
+        return BITING_FIELD.get(((CraftFishHook) fishHook).getHandle());
+    }
+
+    @Override
+    public void setBiting(FishHook fishHook, boolean biting) {
+        BITING_FIELD.set(((CraftFishHook) fishHook).getHandle(), biting);
+    }
+
+    @Override
+    public void setRolling(Bee bee, boolean rolling) {
+        ((CraftBee) bee).getHandle().setRolling(rolling);
+
+    }
+
+    @Override
+    public void setClimbing(Spider spider, boolean climbing) {
+        ((CraftSpider) spider).getHandle().setClimbing(climbing);
+    }
+
+    @Override
+    public boolean isSitting(Tameable tameable) {
+        return ((CraftTameableAnimal) tameable).isSitting();
+    }
+
+    @Override
+    public void setSitting(Tameable tameable, boolean sitting) {
+        ((CraftTameableAnimal) tameable).setSitting(sitting);
+    }
+
+    @Override
+    public ParticleWrapper getAreaEffectCloudDefaultParticle() {
+        return AREA_EFFECT_CLOUD_DEFAULT_PARTICLE;
+    }
+
+    @Override
+    public ParticleWrapper getParticleOptions(PotionEffect potionEffect) {
+        return PARTICLE_MAPPER.to(CraftPotionUtil.fromBukkit(potionEffect).getParticleOptions());
+    }
+
+    @Override
+    @Nullable
+    public BlockVector getSleepingPosition(LivingEntity livingEntity) {
+        return ((CraftLivingEntity) livingEntity).getHandle().getSleepingPos().map(blockPos -> BLOCK_VECTOR_MAPPER.to(blockPos)).orElse(null);
+    }
+
+    @Override
+    public void setSleepingPosition(LivingEntity livingEntity, @Nullable BlockVector sleepingPosition) {
+        var handle = ((CraftLivingEntity) livingEntity).getHandle();
+        if (sleepingPosition != null) handle.setSleepingPos(BLOCK_VECTOR_MAPPER.from(sleepingPosition));
+        else handle.clearSleepingPos();
+    }
+
+    @Override
+    public MainHand getMainHand(LivingEntity livingEntity) {
+        return HUMANOID_ARM_MAPPER.to(((CraftLivingEntity) livingEntity).getHandle().getMainArm());
+    }
+
+    @Override
+    public void setMainHand(LivingEntity livingEntity, MainHand mainHand) {
+        if (((CraftLivingEntity) livingEntity).getHandle() instanceof Avatar avatar) avatar.setMainArm(HUMANOID_ARM_MAPPER.from(mainHand));
+        else throw new IllegalStateException("Can't set main hand for non-avatar entity");
+    }
+
+    @Override
+    public void setArmadilloState(Armadillo armadillo, Armadillo.State state) {
+        ((CraftArmadillo) armadillo).getHandle().switchToState(ARMADILLO_STATE_MAPPER.from(state));
+    }
+
+    @Override
+    public long getBeePersistentAngerEndTime(Bee bee) {
+        return ((CraftBee) bee).getHandle().getPersistentAngerEndTime();
+    }
+
+    @Override
+    public void setBeePersistentAngerEndTime(Bee bee, long time) {
+        ((CraftBee) bee).getHandle().setPersistentAngerEndTime(time);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean>
+            IS_LEASH_HOLDER = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.animal.happyghast.HappyGhast.class).getField("IS_LEASH_HOLDER", true).get(null),
+            STAYS_STILL = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.animal.happyghast.HappyGhast.class).getField("STAYS_STILL", true).get(null);
+
+    @Override
+    public boolean isLeashHolder(HappyGhast happyGhast) {
+        return ((CraftHappyGhast) happyGhast).getHandle().getEntityData().get(IS_LEASH_HOLDER);
+    }
+
+    @Override
+    public void setLeashHolder(HappyGhast happyGhast, boolean leashHolder) {
+        ((CraftHappyGhast) happyGhast).getHandle().getEntityData().set(IS_LEASH_HOLDER, leashHolder);
+    }
+
+    @Override
+    public boolean staysStill(HappyGhast happyGhast) {
+        return ((CraftHappyGhast) happyGhast).getHandle().getEntityData().get(STAYS_STILL);
+    }
+
+    @Override
+    public void setStaysStill(HappyGhast happyGhast, boolean staysStill) {
+        ((CraftHappyGhast) happyGhast).getHandle().getEntityData().set(STAYS_STILL, staysStill);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Integer>
+            DROP_SEED_AT_TICK = (net.minecraft.network.syncher.EntityDataAccessor<Integer>) SimpleClass.of(net.minecraft.world.entity.animal.sniffer.Sniffer.class).getField("DATA_DROP_SEED_AT_TICK", true).get(null);
+
+    @Override
+    public int getDropSeedAtTick(org.bukkit.entity.Sniffer sniffer) {
+        return ((CraftSniffer) sniffer).getHandle().getEntityData().get(DROP_SEED_AT_TICK);
+    }
+
+    @Override
+    public void setDropSeedAtTick(org.bukkit.entity.Sniffer sniffer, int ticks) {
+        ((CraftSniffer) sniffer).getHandle().getEntityData().set(DROP_SEED_AT_TICK, ticks);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean>
+            LAYING_EGG = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.animal.turtle.Turtle.class).getField("LAYING_EGG", true).get(null);
+
+    @Override
+    public void setLayingEgg(Turtle turtle, boolean layingEgg) {
+        ((CraftTurtle) turtle).getHandle().getEntityData().set(LAYING_EGG, layingEgg);
+    }
+
+    @Override
+    public long getLastPoseChangeTick(Camel camel) {
+        return ((CraftCamel) camel).getHandle().getPoseTime();
+    }
+
+    @Override
+    public void setLastPoseChangeTick(Camel camel, long tick) {
+        ((CraftCamel) camel).getHandle().getEntityData().set(net.minecraft.world.entity.animal.camel.Camel.LAST_POSE_CHANGE_TICK, tick);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Integer>
+            DATA_ID_TYPE_VARIANT = (net.minecraft.network.syncher.EntityDataAccessor<Integer>) SimpleClass.of(net.minecraft.world.entity.animal.equine.Horse.class).getField("DATA_ID_TYPE_VARIANT", true).get(null);
+
+    @Override
+    public int getVariant(Horse horse) {
+        return ((CraftHorse) horse).getHandle().getEntityData().get(DATA_ID_TYPE_VARIANT);
+    }
+
+    @Override
+    public void setVariant(Horse horse, int variant) {
+        ((CraftHorse) horse).getHandle().getEntityData().set(DATA_ID_TYPE_VARIANT, variant);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Long>
+            DATA_ANGER_END_TIME = (net.minecraft.network.syncher.EntityDataAccessor<Long>) SimpleClass.of(net.minecraft.world.entity.animal.wolf.Wolf.class).getField("DATA_ANGER_END_TIME", true).get(null);
+
+    @Override
+    public long getAngerEndTime(Wolf wolf) {
+        return ((CraftWolf) wolf).getHandle().getEntityData().get(DATA_ANGER_END_TIME);
+    }
+
+    @Override
+    public void setAngerEndTime(Wolf wolf, long time) {
+        ((CraftWolf) wolf).getHandle().getEntityData().set(DATA_ANGER_END_TIME, time);
+    }
+
+    @Override
+    public boolean isDashing(AbstractNautilus nautilus) {
+        return ((CraftAbstractNautilus) nautilus).getHandle().isDashing();
+    }
+
+    @Override
+    public void setDashing(AbstractNautilus nautilus, boolean dashing) {
+        ((CraftAbstractNautilus) nautilus).getHandle().setDashing(dashing);
+    }
+
+    @Override
+    public int getHeadShakeTicks(AbstractVillager villager) {
+        return ((CraftAbstractVillager) villager).getHandle().getUnhappyCounter();
+    }
+
+    @Override
+    public void setHeadShakeTicks(AbstractVillager villager, int ticks) {
+        ((CraftAbstractVillager) villager).getHandle().setUnhappyCounter(ticks);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean>
+            CAN_MOVE = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.monster.creaking.Creaking.class).getField("CAN_MOVE", true).get(null);
+
+    @Override
+    public boolean canMove(Creaking creaking) {
+        return ((CraftCreaking) creaking).getHandle().canMove();
+    }
+
+    @Override
+    public void setCanMove(Creaking creaking, boolean canMove) {
+        ((CraftCreaking) creaking).getHandle().getEntityData().set(CAN_MOVE, canMove);
+    }
+
+    @Override
+    public void setActive(Creaking creaking, boolean active) {
+        ((CraftCreaking) creaking).getHandle().setIsActive(active);
+    }
+
+    @Override
+    public void setHome(Creaking creaking, @Nullable BlockVector home) {
+        ((CraftCreaking) creaking).getHandle().setHomePos(BLOCK_VECTOR_MAPPER.from(home));
+    }
+
+    @Override
+    public boolean isTearingDown(Creaking creaking) {
+        return ((CraftCreaking) creaking).getHandle().isTearingDown();
+    }
+
+    @Override
+    public void setTearingDown(Creaking creaking, boolean tearingDown) {
+        ((CraftCreaking) creaking).getHandle().setTearingDown();
+    }
+
+    @Override
+    public int getState(Creeper creeper) {
+        return ((CraftCreeper) creeper).getHandle().getSwellDir();
+    }
+
+    @Override
+    public void setState(Creeper creeper, int state) {
+        ((CraftCreeper) creeper).getHandle().setSwellDir(state);
+    }
+
+    @Override
+    public void setMoving(Guardian guardian, boolean moving) {
+        ((CraftGuardian) guardian).getHandle().setMoving(moving);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Integer>
+            DATA_ID_ATTACK_TARGET = (net.minecraft.network.syncher.EntityDataAccessor<Integer>) SimpleClass.of(net.minecraft.world.entity.monster.Guardian.class).getField("DATA_ID_ATTACK_TARGET", true).get(null);
+
+    @Override
+    public int getLaserTargetId(Guardian guardian) {
+        return ((CraftGuardian) guardian).getHandle().getEntityData().get(DATA_ID_ATTACK_TARGET);
+    }
+
+    @Override
+    public void setLaserTargetId(Guardian guardian, int targetId) {
+        ((CraftGuardian) guardian).getHandle().getEntityData().set(DATA_ID_ATTACK_TARGET, targetId);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Integer>
+            CLIENT_ANGER_LEVEL = (net.minecraft.network.syncher.EntityDataAccessor<Integer>) SimpleClass.of(net.minecraft.world.entity.monster.warden.Warden.class).getField("CLIENT_ANGER_LEVEL", true).get(null);
+
+    @Override
+    public void setClientAngerLevel(Warden warden, int angerLevel) {
+        ((CraftWarden) warden).getHandle().getEntityData().set(CLIENT_ANGER_LEVEL, angerLevel);
+    }
+
+    @Override
+    public int getWitherHeadTargetId(Wither wither, Wither.Head head) {
+        return ((CraftWither) wither).getHandle().getAlternativeTarget(head.ordinal());
+    }
+
+    @Override
+    public void setWitherHeadTargetId(Wither wither, Wither.Head head, int targetId) {
+        ((CraftWither) wither).getHandle().setAlternativeTarget(head.ordinal(), targetId);
+    }
+
+    @Override
+    public void setVillagerData(ZombieVillager zombieVillager, it.jakegblp.lusk.nms.core.world.entity.villager.VillagerData villagerData) {
+        ((CraftVillagerZombie) zombieVillager).getHandle().setVillagerData(VILLAGER_DATA_MAPPER.from(villagerData));
+    }
+
+    @Override
+    public boolean isChargingCrossbow(Pillager pillager) {
+        return ((CraftPillager) pillager).getHandle().isChargingCrossbow();
+    }
+
+    @Override
+    public void setChargingCrossbow(Pillager pillager, boolean charging) {
+        ((CraftPillager) pillager).getHandle().setChargingCrossbow(charging);
+    }
+
+    @Override
+    public void setWitchUsingItem(Witch witch, boolean usingItem) {
+        ((CraftWitch) witch).getHandle().setUsingItem(usingItem);
+    }
+
+    @Override
+    public int getVehicleShakingPower(Vehicle vehicle) {
+        return ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).getHurtTime();
+    }
+
+    @Override
+    public void setVehicleShakingPower(Vehicle vehicle, int shakingPower) {
+        ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).setHurtTime(shakingPower);
+    }
+
+    @Override
+    public int getVehicleShakingDirection(Vehicle vehicle) {
+        return ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).getHurtDir();
+    }
+
+    @Override
+    public void setVehicleShakingDirection(Vehicle vehicle, int shakingDirection) {
+        ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).setHurtDir(shakingDirection);
+    }
+
+    @Override
+    public float getVehicleShakingMultiplier(Vehicle vehicle) {
+        return ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).getDamage();
+    }
+
+    @Override
+    public void setVehicleShakingMultiplier(Vehicle vehicle, float shakingMultiplier) {
+        ((VehicleEntity) ((CraftVehicle) vehicle).getHandle()).setDamage(shakingMultiplier);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean>
+            DATA_ID_PADDLE_LEFT = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class).getField("DATA_ID_PADDLE_LEFT", true).get(null),
+            DATA_ID_PADDLE_RIGHT = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class).getField("DATA_ID_PADDLE_RIGHT", true).get(null);
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Integer>
+            DATA_ID_BUBBLE_TIME = (net.minecraft.network.syncher.EntityDataAccessor<Integer>) SimpleClass.of(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class).getField("DATA_ID_BUBBLE_TIME", true).get(null);
+
+    @Override
+    public boolean isTurningLeftPaddle(Boat boat) {
+        return ((CraftBoat) boat).getHandle().getEntityData().get(DATA_ID_PADDLE_LEFT);
+    }
+
+    @Override
+    public void setTurningLeftPaddle(Boat boat, boolean turning) {
+        ((CraftBoat) boat).getHandle().getEntityData().set(DATA_ID_PADDLE_LEFT, turning);
+    }
+
+    @Override
+    public boolean isTurningRightPaddle(Boat boat) {
+        return ((CraftBoat) boat).getHandle().getEntityData().get(DATA_ID_PADDLE_RIGHT);
+    }
+
+    @Override
+    public void setTurningRightPaddle(Boat boat, boolean turning) {
+        ((CraftBoat) boat).getHandle().getEntityData().set(DATA_ID_PADDLE_RIGHT, turning);
+    }
+
+    @Override
+    public int getSplashTicks(Boat boat) {
+        return ((CraftBoat) boat).getHandle().getEntityData().get(DATA_ID_BUBBLE_TIME);
+    }
+
+    @Override
+    public void setSplashTicks(Boat boat, int splashTimer) {
+        ((CraftBoat) boat).getHandle().getEntityData().set(DATA_ID_BUBBLE_TIME, splashTimer);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<Boolean>
+            DATA_ID_FUEL = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) SimpleClass.of(net.minecraft.world.entity.vehicle.minecart.MinecartFurnace.class).getField("DATA_ID_FUEL", true).get(null);
+
+    @Override
+    public boolean hasFuel(PoweredMinecart poweredMinecart) {
+        return ((CraftMinecartFurnace) poweredMinecart).getHandle().getEntityData().get(DATA_ID_FUEL);
+    }
+
+    @Override
+    public void setHasFuel(PoweredMinecart poweredMinecart, boolean hasFuel) {
+        ((CraftMinecartFurnace) poweredMinecart).getHandle().getEntityData().set(DATA_ID_FUEL, hasFuel);
+    }
+
+    @SuppressWarnings("unchecked")
+    public net.minecraft.network.syncher.EntityDataAccessor<OptionalInt>
+            DATA_SHOULDER_PARROT_LEFT = (net.minecraft.network.syncher.EntityDataAccessor<OptionalInt>) SimpleClass.of(net.minecraft.world.entity.player.Player.class).getField("DATA_SHOULDER_PARROT_LEFT", true).get(null),
+            DATA_SHOULDER_PARROT_RIGHT = (net.minecraft.network.syncher.EntityDataAccessor<OptionalInt>) SimpleClass.of(net.minecraft.world.entity.player.Player.class).getField("DATA_SHOULDER_PARROT_RIGHT", true).get(null);
+
+    @Override
+    public @Nullable Integer getLeftShoulderParrotVariantId(Player player) {
+        var optional = ((CraftPlayer) player).getHandle().getEntityData().get(DATA_SHOULDER_PARROT_LEFT);
+        return optional.isPresent() ? optional.getAsInt() : null;
+    }
+
+    @Override
+    public void setLeftShoulderParrotVariantId(Player player, @Nullable Integer variantId) {
+        ((CraftPlayer) player).getHandle().getEntityData().set(DATA_SHOULDER_PARROT_LEFT, variantId == null ? OptionalInt.empty() : OptionalInt.of(variantId));
+    }
+
+    @Override
+    public @Nullable Integer getRightShoulderParrotVariantId(Player player) {
+        var optional = ((CraftPlayer) player).getHandle().getEntityData().get(DATA_SHOULDER_PARROT_RIGHT);
+        return optional.isPresent() ? optional.getAsInt() : null;
+    }
+
+    @Override
+    public void setRightShoulderParrotVariantId(Player player, @Nullable Integer variantId) {
+        ((CraftPlayer) player).getHandle().getEntityData().set(DATA_SHOULDER_PARROT_RIGHT, variantId == null ? OptionalInt.empty() : OptionalInt.of(variantId));
+    }
+
+    @Override
+    @NullMarked
+    public <T extends Keyed> int getKeyedId(RegistryKey<T> registryKey, T value) {
+        return CraftRegistry.getMinecraftRegistry(PaperRegistries.registryToNms(registryKey)).getIdOrThrow(mappings.mapBack(value));
+    }
+
+    @Override
+    @NullMarked
+    public Keyed getKeyedById(RegistryKey<? extends Keyed> registryKey, int id) {
+        var resourceKey = PaperRegistries.registryToNms(registryKey);
+        return CraftRegistry.minecraftHolderToBukkit(CraftRegistry.getMinecraftRegistry(resourceKey).get(id).orElseThrow(), resourceKey);
     }
 
     @Override
@@ -1392,68 +1977,52 @@ public class AllVersions implements
                     }
                 }
 
+                boolean shouldSkip = nmsPacket instanceof ClientboundSoundPacket || msg instanceof ClientboundSoundEntityPacket;
                 var newNmsPacket = nmsPacket;
-                if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                    ClientboundPacket<?> packet = mappings.map(msg);
-                    PacketSendEvent<?> event = new PacketSendEvent<>(packet.copy(), player, true);
-                    pluginManager.callEvent(event);
-                    if (event.isCancelled()) {
-                        promise.setSuccess();
-                        return;
-                    } else if (!packet.equals(event.getPacket())) newNmsPacket = (Packet<?>) event.getPacket().asNMS();
-                }
-
-                for (Mapper<?, ?> mapper : mappings.getMappers()) {
-                    if (mapper.fromClass().isInstance(msg)) {
-                        if (msg instanceof ClientboundSoundPacket || msg instanceof ClientboundSoundEntityPacket)
-                            continue;
-                        Mapper<Packet<?>, ClientboundPacket<?>> packetMapper = (Mapper<Packet<?>, ClientboundPacket<?>>) mapper;
-                        var packet = packetMapper.to(nmsPacket);
-                        PacketWrapperEvent<?> event = packet.createEvent(player, true);
-                        pluginManager.callEvent(event);
-                        if (event.isCancelled()) {
-                            promise.setSuccess();
-                            return;
-                        } else if (event.isModified()) {
-                            newNmsPacket = (Packet<?>) event.createPacket().asNMS();
-                            System.out.println(newNmsPacket);
-                            break;
+                if (!shouldSkip && nmsPacket instanceof ClientboundSetEntityDataPacket) {
+                    var optional = mappings.getMapperFromBackwardClassOptional(nmsPacket.getClass());
+                    if (optional.isPresent()) {
+                        var packetMapper = (Mapper<Packet<?>, ClientboundPacket<?>>) optional.get();
+                        ClientboundPacket<?> packet = packetMapper.to(nmsPacket);
+                        if (PacketSendEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                            PacketSendEvent<?> event = new PacketSendEvent<>(packet.copy(), player, true);
+                            pluginManager.callEvent(event);
+                            if (event.isCancelled()) {
+                                promise.setSuccess();
+                                return;
+                            } else if (!packet.equals(event.getPacket()))
+                                newNmsPacket = (Packet<?>) event.getPacket().asNMS();
                         }
-
+                        PacketWrapperEvent<?> event = packet.createEvent(player, true);
+                        if (event.getHandlers().getRegisteredListeners().length > 0) {
+                            pluginManager.callEvent(event);
+                            if (event.isCancelled()) {
+                                promise.setSuccess();
+                                return;
+                            } else if (event.isModified()) {
+                                newNmsPacket = (Packet<?>) event.createPacket().asNMS();
+                            }
+                        }
                     }
                 }
-                    /*
-                    int targetId = packet.getId();
+                /*
+                int targetId = packet.getId();
 
-                    final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-                    if (entity != null && entity.isGlowing()) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-                    final Set<Integer> list = GlowMap.glowMap.get(player);
-                    if (list == null || !list.contains(targetId)) {
-                        super.write(ctx, msg, promise);
-                        return;
-                    }
-
-                    super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
+                final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
+                if (entity != null && entity.isGlowing()) {
+                    super.write(ctx, msg, promise);
                     return;
-                    */
-                //} else if (nms.isSerializableInstanceOf(msg, SoundPacket.class)) {
-                //    SoundPacket soundPacket = nms.fromNMS(msg, SoundPacket.class);
-                //    SoundAtLocationEvent event = new SoundAtLocationEvent(soundPacket, player, true);
-//
-                //    pluginManager.callEvent(event);
-                //    if (event.isCancelled())
-                //        return;
-                //} else if (nms.isSerializableInstanceOf(msg, SoundEntityPacket.class)) {
-                //    SoundEntityPacket soundEntityPacket = nms.fromNMS(msg, SoundEntityPacket.class);
-                //    SoundAtEntityEvent event = new SoundAtEntityEvent(soundEntityPacket, player, true);
-//
-                //    pluginManager.callEvent(event);
-                //    if (event.isCancelled())
-                //        return;
+                }
+
+                final Set<Integer> list = GlowMap.glowMap.get(player);
+                if (list == null || !list.contains(targetId)) {
+                    super.write(ctx, msg, promise);
+                    return;
+                }
+
+                super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
+                return;
+                 */
 
                 try {
                     super.write(ctx, newNmsPacket, promise);

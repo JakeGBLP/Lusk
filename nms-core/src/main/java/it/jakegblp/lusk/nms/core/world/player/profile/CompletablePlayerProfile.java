@@ -80,11 +80,7 @@ public final class CompletablePlayerProfile implements Copyable<CompletablePlaye
     }
 
     public @Nullable TexturesPayload getTextures() {
-        if (!playerProfile.hasProperty("textures")) return null;
-        for (ProfileProperty property : playerProfile.getProperties())
-            if ("textures".equals(property.getName()))
-                return TexturesPayload.fromBase64(property.getValue(), property.getSignature());
-        return null;
+        return TexturesPayload.fromProfile(playerProfile);
     }
 
     @Contract(" -> new")

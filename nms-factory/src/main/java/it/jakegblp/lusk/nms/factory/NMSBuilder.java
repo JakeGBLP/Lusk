@@ -6,14 +6,12 @@ import it.jakegblp.lusk.nms.core.adapter.SharedBehaviorAdapter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.function.Consumer;
-
 @Setter
 public class NMSBuilder {
 
     protected final int major, minor, patch;
     protected JavaPlugin plugin;
-    protected Consumer<AbstractNMS> abstractNMSConsumer;
+    @SuppressWarnings("rawtypes")
     protected SharedBehaviorAdapter sharedBehaviorAdapter;
 
     public NMSBuilder(int major, int minor, int patch) {
@@ -25,8 +23,8 @@ public class NMSBuilder {
     public AbstractNMS build() {
         String version = "v" + major + "_" + minor + (patch == 0 ? "" : "_" + patch);
         return (AbstractNMS) SimpleClass.of("it.jakegblp.lusk.nms.impl." + version + "." + version).getConstructor(
-                JavaPlugin.class, Consumer.class, SharedBehaviorAdapter.class)
-                .newInstance(plugin, abstractNMSConsumer, sharedBehaviorAdapter);
+                JavaPlugin.class, SharedBehaviorAdapter.class)
+                .newInstance(plugin, sharedBehaviorAdapter);
     }
 
 }

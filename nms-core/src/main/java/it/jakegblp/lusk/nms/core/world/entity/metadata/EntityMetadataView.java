@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.world.entity.metadata;
 
 import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -11,13 +12,12 @@ import java.util.List;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.copyIfNotNull;
 
 // todo: expand simple list api
+// todo: do we even need this?
 public interface EntityMetadataView {
 
-    List<MetadataItem<? extends Entity, ?>> items();
+    List<MetadataEntry<? extends Entity, ?>> items();
 
-    List<MetadataKey<? extends Entity, ?>> keys();
-
-    default void copy(EntityMetadata to, MetadataKey<? extends Entity, Object> key) {
+    default void copy(EntityMetadata to, EntityDataKey<? extends Entity, Object, ?, ?, ?> key) {
         to.set(key, copyIfNotNull(get(key)));
     }
 
@@ -33,24 +33,23 @@ public interface EntityMetadataView {
         return items().get(id) != null;
     }
 
-    default boolean has(@NotNull MetadataKeyReference<?, ?> key) {
-        int id = key.id();
+    default boolean has(@NotNull EntityDataKey<? extends Entity, ?, ?, ?, ?> key) {
+        int id = key.getId();
         if (size() <= id) return false;
-        MetadataItem<? extends Entity, ?> item = get(id);
-        if (item == null) return false;
-        return item.matches(key);
+        MetadataEntry<? extends Entity, ?> item = get(id);
+        return item != null && item.getKey().equals(key);
     }
 
     @SuppressWarnings("unchecked")
     @UnknownNullability
-    default <E extends Entity, T> MetadataItem<E, T> get(MetadataKeyReference<E, T> key) {
-        var value = get(key.id());
-        if (!key.matches(value))
+    default <E extends Entity, T> MetadataEntry<E, T> get(EntityDataKey<E, T, ?, ?, ?> key) {
+        var value = get(key.getId());
+        if (!key.canBeSetTo(value))
             return null;
-        return (MetadataItem<E, T>) value;
+        return (MetadataEntry<E, T>) value;
     }
 
-    default MetadataItem<?, ?> get(@Range(from = 0, to = 255) int id) {
+    default MetadataEntry<?, ?> get(@Range(from = 0, to = 255) int id) {
         return items().get(id);
     }
 

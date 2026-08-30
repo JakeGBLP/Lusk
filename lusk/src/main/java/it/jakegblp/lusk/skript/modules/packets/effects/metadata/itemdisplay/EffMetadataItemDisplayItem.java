@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.skript.modules.packets.effects.metadata.itemdisplay;
 
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.effect.SimpleMetadataEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ public class EffMetadataItemDisplayItem extends SimpleMetadataEffect<ItemStack> 
     }
 
     @Override
-    public MetadataKey<? extends Entity, ItemStack> getMetadataKey() {
+    public EntityDataKey<? extends Entity, ItemStack, ?, ?, ?> getMetadataKey(){
         return metadataKeyRegistry().ITEM_DISPLAY.DISPLAY_ITEM;
     }
 

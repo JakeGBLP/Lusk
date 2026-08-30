@@ -4,19 +4,18 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     java
     `maven-publish`
-    id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
-    id("io.github.patrick.remapper") version "1.4.2"
-    id("com.gradleup.shadow") version "8.3.3"
+    id("xyz.jpenilla.run-paper") version "3.1.0"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 group = "it.jakegblp"
 version = "2.0.0-alpha1"
-var latestSkriptVersion = "2.14.3"
-var latestMinecraftVersion = "1.21.11"
+var latestSkriptVersion = "2.16.1"
+var latestMinecraftVersion = "26.2"
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 repositories {
@@ -37,17 +36,17 @@ dependencies {
     }
     implementation("org.bstats:bstats-bukkit:3.0.2")
     compileOnly(project(":nms-core"))
-    compileOnly("org.apache.commons:commons-text:1.14.0")
+    compileOnly("org.apache.commons:commons-text:1.15.0")
     compileOnly("com.google.guava:guava:33.6.0-jre")
     compileOnly("com.github.SkriptLang:Skript:$latestSkriptVersion")
     implementation("org.jspecify:jspecify:1.0.0")
     compileOnly("io.netty:netty-all:4.2.13.Final")
     compileOnly("org.jetbrains:annotations:20.1.0")
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
-    testCompileOnly("org.projectlombok:lombok:1.18.36")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
-    paperweight.paperDevBundle("$latestMinecraftVersion-R0.1-SNAPSHOT")
+    compileOnly("org.projectlombok:lombok:1.18.46")
+    annotationProcessor("org.projectlombok:lombok:1.18.46")
+    testCompileOnly("org.projectlombok:lombok:1.18.46")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.46")
+    paperweight.paperDevBundle("$latestMinecraftVersion.build.+")
 
 }
 
@@ -71,13 +70,13 @@ tasks {
         filter<ReplaceTokens>("tokens" to mapOf("version" to project.version.toString()))
     }
 }
-tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
-    javaLauncher = javaToolchains.launcherFor {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
-}
+//tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
+//    javaLauncher = javaToolchains.launcherFor {
+//        vendor = JvmVendorSpec.JETBRAINS
+//        languageVersion = JavaLanguageVersion.of(25)
+//    }
+//    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
+//}
 subprojects {
     apply(plugin = "java")
 
@@ -95,20 +94,20 @@ subprojects {
     if (isNmsModule && project.name != "build") {
         apply(plugin = "io.papermc.paperweight.userdev")
         dependencies {
-            paperweight.paperDevBundle("$detectedVersion-R0.1-SNAPSHOT")
+            paperweight.paperDevBundle(properVersion(detectedVersion))
         }
     } else if (!isSkriptModule) {
         dependencies {
-            compileOnly("io.papermc.paper:paper-api:$detectedVersion-R0.1-SNAPSHOT")
+            compileOnly("io.papermc.paper:paper-api:${properVersion(detectedVersion)}")
         }
     } else if (project.name != "build") {
         dependencies {
-            specialCompileOnly("com.github.SkriptLang:Skript:$detectedVersion")
+            specialCompileOnly("com.github.SkriptLang:Skript:${properVersion(detectedVersion)}")
         }
     }
 
     java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     }
 
     repositories {
@@ -130,8 +129,6 @@ subprojects {
         if (name == "lusk") {
             compileOnly("com.github.SkriptLang:Skript:$latestSkriptVersion")
             compileOnly(project(":nms-core"))
-            compileOnly(project(":skript-core"))
-            compileOnly(project(":skript-factory"))
         }
 
         if (name == "nms-factory" || isNmsModule) {
@@ -148,21 +145,6 @@ subprojects {
             implementation(project(":nms-factory"))
             implementation(project(":nms-core"))
         }
-
-        if (name == "skript-factory" || isSkriptModule) {
-            compileOnly(project(":skript-core"))
-        }
-        if (name == "skript-factory") {
-            rootProject.subprojects.forEach {
-                if (it.path.startsWith(":skript:")) {
-                    specialCompileOnly(project(it.path))
-                }
-            }
-        }
-        if (name == "skript-shade") {
-            implementation(project(":skript-factory"))
-            implementation(project(":skript-core"))
-        }
         if (name == "nms-core") {
             dependencies {
                 compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
@@ -171,16 +153,16 @@ subprojects {
             }
         }
         compileOnly("com.google.guava:guava:33.6.0-jre")
-        compileOnly("org.apache.commons:commons-text:1.14.0")
+        compileOnly("org.apache.commons:commons-text:1.15.0")
         compileOnly("com.mojang:datafixerupper:8.0.16")
         compileOnly("io.netty:netty-all:4.2.9.Final")
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("org.jspecify:jspecify:1.0.0")
         compileOnly("org.jetbrains:annotations:20.1.0")
-        compileOnly("org.projectlombok:lombok:1.18.36")
-        annotationProcessor("org.projectlombok:lombok:1.18.36")
-        testCompileOnly("org.projectlombok:lombok:1.18.36")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
+        compileOnly("org.projectlombok:lombok:1.18.46")
+        annotationProcessor("org.projectlombok:lombok:1.18.46")
+        testCompileOnly("org.projectlombok:lombok:1.18.46")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.46")
     }
 
     tasks.compileJava {
@@ -225,35 +207,6 @@ project(":nms-shade") {
     }
 }
 
-project(":skript-shade") {
-    apply(plugin = "java")
-    apply(plugin = "maven-publish")
-    apply(plugin = "com.gradleup.shadow")
-
-    dependencies {
-        rootProject.subprojects.forEach {
-            if (it.path.startsWith(":skript:")) {
-                implementation(project(it.path))
-            }
-        }
-    }
-
-    tasks.named<ShadowJar>("shadowJar") {
-        archiveClassifier.set("")
-    }
-
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                groupId = "it.jakegblp"
-                artifactId = "skript-shade"
-                version = rootProject.version.toString()
-
-                artifact(tasks.named("shadowJar"))
-            }
-        }
-        repositories {
-            mavenLocal()
-        }
-    }
+fun properVersion(version: String): String {
+    return if (version == "1.21.11") "1.21.11-R0.1-SNAPSHOT" else "$version.build.+"
 }

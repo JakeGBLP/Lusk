@@ -1,105 +1,112 @@
 package it.jakegblp.lusk.nms.core.world.entity.serialization;
 
-import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.nms.core.serialization.BufferCodec;
+import it.jakegblp.lusk.nms.core.serialization.*;
+import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
-
 @NullMarked
-public interface EntityDataSerializer<T> {
+public interface EntityDataSerializer<T, K extends TypeKey<?>> {
+
+    static <T> Simple<T> simple(BufferCodecs bufferCodecs, Class<T> type) {
+        return new Simple<>(bufferCodecs, type);
+    }
+
+    static <T> Optional<T> optional(BufferCodecs bufferCodecs, Class<T> type) {
+        return new Optional<>(bufferCodecs, type);
+    }
+
+    static <T> List<T> list(BufferCodecs bufferCodecs, Class<T> type) {
+        return new List<>(bufferCodecs, type);
+    }
+
+    static <T> Holder<T> holder(BufferCodecs bufferCodecs, Class<T> type) {
+        return new Holder<>(bufferCodecs, type);
+    }
+
+
     BufferCodec<T> codec();
 
     default EntityDataAccessor<T> createAccessor(int id) {
         return new EntityDataAccessor<>(id, this);
     }
 
-    static <T> EntityDataSerializer<T> simple(AbstractNMS nms, Class<T> type) {
-        return new EntityDataSerializer<>() {
-            private final BufferCodec<T> codec = nms.getCodecs().get(type);
+    K key();
 
-            @Override
-            public String toString() {
-                return "simple EntityDataSerializer{" +
-                        "codec=" + codec.key() +
-                        '}';
-            }
+    @ToString
+    final class Simple<T> implements EntityDataSerializer<T, SimpleKey<T>> {
+        private final BufferCodec<T> codec;
 
-            @Override
-            public BufferCodec<T> codec() {
-                return codec;
-            }
+        private Simple(BufferCodecs bufferCodecs, Class<T> type) {
+            this.codec = bufferCodecs.get(type);
+        }
+        @Override
+        public BufferCodec<T> codec() {
+            return codec;
+        }
 
-        };
+        @Override
+        public SimpleKey<T> key() {
+            return (SimpleKey<T>) codec.key();
+        }
     }
 
-    static <T> EntityDataSerializer<T> optional(AbstractNMS nms, Class<T> type) {
-        return new EntityDataSerializer<>() {
-            private final BufferCodec<T> codec = nms.getCodecs().getOptional(type);
+    @ToString
+    final class Optional<T> implements EntityDataSerializer<T, OptionalKey<T>> {
+        private final BufferCodec<T> codec;
 
-            @Override
-            public String toString() {
-                return "optional EntityDataSerializer{" +
-                        "codec=" + codec.key() +
-                        '}';
-            }
+        private Optional(BufferCodecs bufferCodecs, Class<T> type) {
+            this.codec = bufferCodecs.getOptional(type);
+        }
 
-            @Override
-            public BufferCodec<T> codec() {
-                return codec;
-            }
+        @Override
+        public BufferCodec<T> codec() {
+            return codec;
+        }
 
-        };
+        @Override
+        @SuppressWarnings("unchecked")
+        public OptionalKey<T> key() {
+            return (OptionalKey<T>) codec.key();
+        }
     }
 
-    static <T> EntityDataSerializer<T> list(AbstractNMS nms, Class<T> type) {
-        return new EntityDataSerializer<>() {
-            private final BufferCodec<T> codec = nms.getCodecs().getList(type);
+    @ToString
+    final class List<T> implements EntityDataSerializer<T, ListKey<T>> {
+        private final BufferCodec<T> codec;
 
-            @Override
-            public String toString() {
-                return "list EntityDataSerializer{" +
-                        "codec=" + codec.key() +
-                        '}';
-            }
+        private List(BufferCodecs bufferCodecs, Class<T> type) {
+            this.codec = bufferCodecs.getList(type);
+        }
 
-            @Override
-            public BufferCodec<T> codec() {
-                return codec;
-            }
+        @Override
+        public BufferCodec<T> codec() {
+            return codec;
+        }
 
-        };
+        @Override
+        @SuppressWarnings("unchecked")
+        public ListKey<T> key() {
+            return (ListKey<T>) codec.key();
+        }
     }
 
-    static <T> EntityDataSerializer<T> holder(AbstractNMS nms, Class<T> type) {
-        return new EntityDataSerializer<>() {
-            private final BufferCodec<T> codec = nms.getCodecs().getHolder(type);
+    @ToString
+    final class Holder<T> implements EntityDataSerializer<T, HolderKey<T>> {
+        private final BufferCodec<T> codec;
 
-            @Override
-            public String toString() {
-                return "holder EntityDataSerializer{" +
-                        "codec=" + codec.key() +
-                        '}';
-            }
+        private Holder(BufferCodecs bufferCodecs, Class<T> type) {
+            this.codec = bufferCodecs.getHolder(type);
+        }
 
-            @Override
-            public BufferCodec<T> codec() {
-                return codec;
-            }
+        @Override
+        public BufferCodec<T> codec() {
+            return codec;
+        }
 
-        };
-    }
-
-    static <F> EntityDataSerializer<F> list(Class<F> toClass) {
-        return list(NMS, toClass);
-    }
-
-    static <F> EntityDataSerializer<F> simple(Class<F> toClass) {
-        return simple(NMS, toClass);
-    }
-
-    static <F> EntityDataSerializer<F> optional(Class<F> toClass) {
-        return optional(NMS, toClass);
+        @Override
+        public HolderKey<T> key() {
+            return (HolderKey<T>) codec.key();
+        }
     }
 
 }

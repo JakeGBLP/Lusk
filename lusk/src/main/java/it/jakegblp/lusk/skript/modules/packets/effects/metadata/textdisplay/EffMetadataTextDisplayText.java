@@ -1,24 +1,24 @@
 package it.jakegblp.lusk.skript.modules.packets.effects.metadata.textdisplay;
 
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.effect.SimpleMetadataEffect;
-import org.bukkit.block.data.BlockData;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
-public class EffMetadataTextDisplayText extends SimpleMetadataEffect<BlockData> {
+public class EffMetadataTextDisplayText extends SimpleMetadataEffect<Component> {
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        registerSimple(syntaxRegistry, EffMetadataTextDisplayText.class, EffMetadataTextDisplayText::new, "[display[ed]] block[[ |-]data]", "blockdata");
+        registerSimple(syntaxRegistry, EffMetadataTextDisplayText.class, EffMetadataTextDisplayText::new, "[display[ed]] text [component]", "textcomponent");
     }
 
     @Override
-    public MetadataKey<? extends Entity, BlockData> getMetadataKey() {
-        return metadataKeyRegistry().BLOCK_DISPLAY.DISPLAY_BLOCK;
+    public EntityDataKey<? extends Entity, Component, ?, ?, ?> getMetadataKey() {
+        return metadataKeyRegistry().TEXT_DISPLAY.TEXT;
     }
 
     @Override
     public String getMetadataPropertyName() {
-        return "displayed block data";
+        return "displayed text";
     }
 }

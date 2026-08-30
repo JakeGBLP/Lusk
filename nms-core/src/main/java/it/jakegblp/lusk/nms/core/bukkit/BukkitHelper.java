@@ -26,16 +26,12 @@ public final class BukkitHelper {
 
     @SuppressWarnings("UnstableApiUsage") // neither?
     public static @Nullable Either<EntityEffect, InternalEntityEffect> getEntityEffectById(byte id) {
-        for (InternalEntityEffect value : InternalEntityEffect.values()) {
-            if (value.getData() == id) {
+        for (InternalEntityEffect value : InternalEntityEffect.values())
+            if (value.getData() == id)
                 return Either.right(value);
-            }
-        }
-        for (EntityEffect value : EntityEffect.values()) {
-            if (value.getData() == id && !SimpleClass.of(EntityEffect.class).getField(value.name()).isDeprecated()) {
+        for (EntityEffect value : EntityEffect.values())
+            if (value.getData() == id && !SimpleClass.of(EntityEffect.class).getField(value.name()).isDeprecated())
                 return Either.left(value);
-            }
-        }
         return null;
     }
 

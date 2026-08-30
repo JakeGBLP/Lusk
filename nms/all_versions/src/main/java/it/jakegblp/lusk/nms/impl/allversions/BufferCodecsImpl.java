@@ -142,10 +142,9 @@ public final class BufferCodecsImpl implements BufferCodecs {
     @SuppressWarnings("unchecked")
     public <T> T decode(SimpleByteBuf buffer, TypeKey<T> key) {
         BufferCodec<T> codec = (BufferCodec<T>) bufferCodecs.get(key);
-
         if (codec == null)
             throw new IllegalArgumentException("No BufferCodec found for key " + key);
-
+        //System.out.println("decoded typekey " + key + " -> " + value);
         return codec.read(buffer);
     }
 }

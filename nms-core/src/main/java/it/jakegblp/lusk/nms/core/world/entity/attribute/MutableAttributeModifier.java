@@ -1,8 +1,8 @@
 package it.jakegblp.lusk.nms.core.world.entity.attribute;
 
+import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.common.Mutable;
 import lombok.*;
-import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlotGroup;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 @ToString
 @EqualsAndHashCode
 @NullMarked
-public class MutableAttributeModifier implements Keyed, Mutable<AttributeModifier> {
+public class MutableAttributeModifier implements Mutable<AttributeModifier>, Copyable<MutableAttributeModifier> {
     private NamespacedKey key;
     private double amount;
     private AttributeModifier.Operation operation;
@@ -36,4 +36,8 @@ public class MutableAttributeModifier implements Keyed, Mutable<AttributeModifie
         return new AttributeModifier(key, amount, operation, slotGroup);
     }
 
+    @Override
+    public MutableAttributeModifier copy() {
+        return new MutableAttributeModifier(key, amount, operation, slotGroup, isTransient);
+    }
 }

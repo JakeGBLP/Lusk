@@ -32,9 +32,9 @@ public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>,
     protected Vector start, end;
     protected int id, targetId;
     protected UUID uuid, targetUuid;
-    @SuppressWarnings("NotNullFieldNotInitialized")
+    @SuppressWarnings({"NotNullFieldNotInitialized", "rawtypes"})
     protected ClientboundPacket[] displayPackets;
-    @SuppressWarnings("NotNullFieldNotInitialized")
+    @SuppressWarnings({"NotNullFieldNotInitialized", "rawtypes"})
     protected ClientboundPacket[] removePackets;
     protected boolean dirty = true;
 
@@ -107,12 +107,14 @@ public class GuardianBeam extends Displayable implements Copyable<GuardianBeam>,
         markDirty();
     }
 
+    @SuppressWarnings("rawtypes")
     public ClientboundPacket[] getDisplayPackets() {
         if (isDirty())
             produce();
         return displayPackets;
     }
 
+    @SuppressWarnings("rawtypes")
     public ClientboundPacket[] getRemovePackets() {
         if (isDirty())
             produce();

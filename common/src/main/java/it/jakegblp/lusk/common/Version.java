@@ -3,8 +3,7 @@ package it.jakegblp.lusk.common;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-// make hyper-optimized version checking
-public record Version(int major, int minor, int patch) implements Comparable<Version>, Copyable<Version> {
+public record Version(int major, int minor, int patch) implements Comparable<Version>, Immutable<Version> {
     public Version {
         if (major < 0 || minor < 0 || patch < 0)
             throw new IllegalArgumentException("Version numbers must be non-negative");
@@ -64,27 +63,23 @@ public record Version(int major, int minor, int patch) implements Comparable<Ver
 
     @Override
     public @NotNull String toString() {
-        return major + "." + minor + "." + patch;
+        return patch == 0 ? major + "." + minor : major + "." + minor + "." + patch;
     }
 
     @Contract("_ -> new")
     public static @NotNull Version parse(@NotNull String unparsed) {
         String[] parts = unparsed.split("\\.");
-        if (parts.length != 3)
-            throw new IllegalArgumentException("Version must be in format x.x.x, found: " + unparsed);
+
+        if (parts.length != 2 && parts.length != 3)
+            throw new IllegalArgumentException("Version must be in format x.x or x.x.x, found: " + unparsed);
         try {
-            return new Version(
-                    Integer.parseInt(parts[0]),
-                    Integer.parseInt(parts[1]),
-                    Integer.parseInt(parts[2])
-            );
+            return switch (parts.length) {
+                case 2 -> new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                case 3 -> new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                default -> throw new AssertionError();
+            };
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid number: " + unparsed, e);
         }
-    }
-
-    @Override
-    public Version copy() {
-        return new Version(major, minor, patch);
     }
 }

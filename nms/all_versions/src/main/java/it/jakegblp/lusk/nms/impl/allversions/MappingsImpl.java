@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public final class MappingsImpl implements Mappings {
+public final class MappingsImpl implements Mappers {
     private final List<Mapper<?, ?>> mappers = new ArrayList<>();
 
     private final AllVersions allVersions;
@@ -116,20 +116,22 @@ public final class MappingsImpl implements Mappings {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public <F, T> T map(F f) {
         if (f == null) return null;
-        if (f instanceof Holder<?> holder)
-            f = (F) holder.value();
         Class<F> type = (Class<F>) f.getClass();
         if (allVersions.isSimpleType(type)) return (T) f;
         for (Mapper mapper : mappers) {
             //System.out.println("map: " + mapper + ", from: " + mapper.fromClass() + ", to: " + mapper.toClass() + ", value: " + f);
-            if (mapper.fromClass() == type)
-                return (T) mapper.to(f);
+            if (mapper.fromClass() == type) {
+                if (mapper instanceof RegistryMapperImpl<?,?> registryMapper && f instanceof Holder<?> holder) {
+                    return (T) ((RegistryMapperImpl<F, ?>)registryMapper).to((Holder<F>)holder);
+                }
+                return (T) mapper.to(f instanceof Holder<?> holder ? holder.value() : f);
+            }
         }
-        throw new IllegalArgumentException("No forward mapping implementation found for type " + type);
+        throw new IllegalArgumentException("No forward mapping implementation found for " + type);
     }
 
     @SuppressWarnings("unchecked")
@@ -138,10 +140,15 @@ public final class MappingsImpl implements Mappings {
         if (t == null) return null;
         var type = t.getClass();
         if (allVersions.isSerializable(type)) return (F) t;
+        //System.out.println("\n\n\t\t\tmapBack:");
         for (Mapper<?, ?> mapper : mappers)
-            if (mapper.toClass().isAssignableFrom(type))
-                return ((Mapper<F, T>)mapper).from(t);
-        throw new IllegalArgumentException("No backward mapping implementation found for type " + type);
+            if (mapper.toClass().isAssignableFrom(type)) {
+                //System.out.println("\n\t\t\tof type: " + type);
+                //System.out.println("\n\t\t\tT value: " + t);
+                //System.out.println("\n\t\t\tF value: " + f);
+                return ((Mapper<F, T>) mapper).from(t);
+            }
+        throw new IllegalArgumentException("No backward mapping implementation found for " + type);
 
     }
 }

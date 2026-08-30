@@ -6,23 +6,25 @@ import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.logger.ConsoleLogInjector;
 import it.jakegblp.lusk.nms.core.logger.events.ConsoleLogEvent;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
-import it.jakegblp.lusk.skript.factory.SkriptAdapterFactory;
 import it.jakegblp.lusk.skript.modules.base.BaseModule;
 import it.jakegblp.lusk.skript.modules.packets.PacketsModule;
 import it.jakegblp.lusk.skript.modules.playerprofile.PlayerProfileModule;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
-import org.apache.commons.text.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.skriptlang.skript.addon.SkriptAddon;
+import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.registration.SyntaxInfo;
+import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntConsumer;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
@@ -39,34 +41,33 @@ public final class Lusk extends JavaPlugin {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onEnable() {
         instance = this;
         Instances.LUSK = this;
         serverVersion = Version.parse(Bukkit.getBukkitVersion().split("[^\\d.]")[0]);
         NMS = NMSFactory.createNMS(this, serverVersion);
-
+        NMS.createMetadataRegistry();
         hookedWithSkript = isPluginEnabled("Skript");
         if (hookedWithSkript) {
             skriptVersion = Version.parse(Skript.getVersion().toString().split("[^\\d.]")[0]);
-            AddonUtils.sectionContextAdapter = SkriptAdapterFactory.createSkriptAdapter(skriptVersion);
             SkriptAddon addon = Skript.instance().registerAddon(getClass(), "Lusk");
-            addon.localizer().setSourceDirectories("lang", null);
-            addon.loadModules(new BaseModule(), new PacketsModule(), new PlayerProfileModule());
-            int[] elementCountBefore = getSkriptElementCount();
-            int[] elementCountAfter = getSkriptElementCount();
-            int[] finish = new int[elementCountBefore.length];
-            int total = 0;
-            for (int i = 0; i < elementCountBefore.length; i++) {
-                finish[i] = elementCountAfter[i] - elementCountBefore[i];
-                total += finish[i];
-            }
-            String[] elementNames = new String[]{"event", "effect", "expression", "condition", "type", "section", "structure"};
-
-            getLogger().info("Loaded "+total+" elements:");
-            for (int i = 0; i < finish.length; i++) {
-                getLogger().info(" - "+finish[i]+" "+elementNames[i]+(finish[i] == 1 ? "" : "s"));
-            }
             Instances.SKRIPT_ADDON = addon;
+            addon.localizer().setSourceDirectories("lang", null);
+            AtomicInteger atomicClassInfoAmount = new AtomicInteger();
+            IntConsumer adder = atomicClassInfoAmount::addAndGet;
+            addon.loadModules(new BaseModule(adder), new PacketsModule(adder), new PlayerProfileModule(adder));
+            SyntaxRegistry.Key<? extends SyntaxInfo<?>>[] syntaxRegistryKeys = new SyntaxRegistry.Key<?>[] {
+                    BukkitSyntaxInfos.Event.KEY, SyntaxRegistry.EXPRESSION, SyntaxRegistry.CONDITION, SyntaxRegistry.EFFECT, SyntaxRegistry.SECTION//, SyntaxRegistry.STRUCTURE
+            };
+            var syntaxRegistry = addon.syntaxRegistry();
+            int classInfoAmount = atomicClassInfoAmount.get();
+            getLogger().info("Loaded " + (syntaxRegistry.elements().stream().filter(syntaxInfo -> syntaxInfo.origin().name().equals("Lusk")).count() + classInfoAmount) + " elements:");
+            getLogger().info(" - Types: " + classInfoAmount);
+            for (var key : syntaxRegistryKeys) {
+                long amount = syntaxRegistry.syntaxes(key).stream().filter(syntaxInfo -> syntaxInfo.origin().name().equals("Lusk")).count();
+                getLogger().info(" - " + WordUtils.capitalizeFully(key.name()) + (amount == 1 ? "" : "s") + ": " + amount);
+            }
             getLogger().info("Hooked with Skript!");
         }
         int pluginId = 17730;
@@ -76,11 +77,8 @@ public final class Lusk extends JavaPlugin {
 
         ConsoleLogInjector.inject(l -> {
             boolean async = !getServer().isPrimaryThread();
-
             ConsoleLogEvent event = new ConsoleLogEvent(async, l.messageStrippedAnsi());
-
             getServer().getPluginManager().callEvent(event);
-
             if (event.isCancelled()) {
                 l.cancel();
             }
@@ -130,19 +128,5 @@ public final class Lusk extends JavaPlugin {
             return "alpha";
         }
         return "release";
-    }
-
-    public int[] getSkriptElementCount() {
-        int[] i = new int[7];
-        i[0] = Skript.getEvents().size();
-        i[1] = Skript.getEffects().size();
-        AtomicInteger exprs = new AtomicInteger();
-        Skript.getExpressions().forEachRemaining(e -> exprs.getAndIncrement());
-        i[2] = exprs.get();
-        i[3] = Skript.getConditions().size();
-        i[4] = 0;//Classes.getClassInfos().size();
-        i[5] = Skript.getSections().size();
-        i[6] = Skript.getStructures().size();
-        return i;
     }
 }

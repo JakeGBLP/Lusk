@@ -110,7 +110,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
 
     @Getter
     @ApiStatus.NonExtendable
-    public static abstract class Action<T> extends PseudoEnum implements Validatable<IllegalStateException>, BufferSerializer<PlayerInfo> {
+    public static abstract class Action<T> extends PseudoEnum<Action<T>> implements Validatable<IllegalStateException>, BufferSerializer<PlayerInfo> {
 
         public static final Action<CompletablePlayerProfile> ADD_PLAYER = new Action<>("ADD_PLAYER", "PROFILE", CompletablePlayerProfile.class) {
             @Override
@@ -226,7 +226,6 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
         private final Class<T> type;
         private final String propertyName;
 
-        // todo: move property name to the addon module?
         Action(String name, String propertyName, Class<T> type) {
             super(name);
             this.type = type;

@@ -26,15 +26,3 @@ file('nms').listFiles()?.each { dir ->
         project(":nms:$name").projectDir = dir
     }
 }
-
-include ':skript-core'
-include ':skript-factory'
-include ':skript-shade'
-
-file('skript').listFiles()?.each { dir ->
-    if (dir.isDirectory()) {
-        def name = dir.name
-        include ":skript:$name"
-        project(":skript:$name").projectDir = dir
-    }
-}

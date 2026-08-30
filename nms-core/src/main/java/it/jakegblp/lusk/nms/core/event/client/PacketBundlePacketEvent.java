@@ -19,23 +19,17 @@ public class PacketBundlePacketEvent extends ClientPacketEvent<ClientBundlePacke
 
     public PacketBundlePacketEvent(ClientBundlePacket packet, Player player, boolean async) {
         super(player, async);
-        var packets = NullabilityUtils.copyIfNotNull(packet.getPackets());
-        assert packets != null;
-        this.packets = packets;
+        this.packets = NullabilityUtils.copyIfNotNull(packet.getPackets());
     }
 
     @Contract("-> new")
     public List<ClientboundPacket<?>> getPackets() {
-        var packets = NullabilityUtils.copyIfNotNull(this.packets);
-        assert packets != null;
-        return packets;
+        return NullabilityUtils.copyIfNotNull(this.packets);
     }
 
     public void setPackets(List<ClientboundPacket<?>> packets) {
         markModified();
-        var copiedPackets = NullabilityUtils.copyIfNotNull(packets);
-        assert copiedPackets != null;
-        this.packets = copiedPackets;
+        this.packets = NullabilityUtils.copyIfNotNull(packets);
     }
 
     @Override

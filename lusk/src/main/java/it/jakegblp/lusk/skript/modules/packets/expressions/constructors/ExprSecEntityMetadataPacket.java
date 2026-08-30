@@ -9,7 +9,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityMetadata;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Entity;
@@ -33,7 +33,7 @@ public class ExprSecEntityMetadataPacket extends SectionExpression<EntityMetadat
 
     private Expression<ProtocolEntityReference> entityReferenceExpression;
     private Expression<EntityType> entityTypeExpression;
-    private Map<MetadataKey<? extends Entity, ?>, Expression<?>> expressionMap;
+    private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
 
     @Override
     @SuppressWarnings("unchecked")

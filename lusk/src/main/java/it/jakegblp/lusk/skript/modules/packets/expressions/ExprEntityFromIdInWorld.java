@@ -6,7 +6,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
+import it.jakegblp.lusk.nms.core.world.level.LevelUtils;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -39,7 +39,7 @@ public class ExprEntityFromIdInWorld extends SimpleExpression<Entity> {
     protected Entity @Nullable [] get(Event event) {
         World world = worldExpression.getSingle(event);
         if (world == null) return new Entity[0];
-        return CommonUtils.map(Entity.class, protocolEntityReferenceExpression.getArray(event), protocolEntityReference -> LevelUtil.getEntityFromID(protocolEntityReference.getId(), world));
+        return CommonUtils.map(Entity.class, protocolEntityReferenceExpression.getArray(event), protocolEntityReference -> LevelUtils.getEntityFromID(protocolEntityReference.getId(), world));
     }
 
     @Override

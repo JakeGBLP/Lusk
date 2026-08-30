@@ -10,7 +10,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKeyReference;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -29,12 +29,12 @@ public class ExprEntityMetadataEntry extends PropertyExpression<EntityMetadata, 
                 "(entity metadata|metadata property) %entitymetadatakeys%", "entitymetadatas", true);
     }
 
-    private Expression<MetadataKeyReference<?,?>> keyExpression;
+    private Expression<EntityDataKey<?, ?, ?, ?, ?>> keyExpression;
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        keyExpression = (Expression<MetadataKeyReference<?,?>>) expressions[matchedPattern];
+        keyExpression = (Expression<EntityDataKey<?, ?, ?, ?, ?>>) expressions[matchedPattern];
         int metadataIndex = Math.abs(matchedPattern-1);
         if (!LiteralUtils.hasUnparsedLiteral(expressions[metadataIndex])) {
             setExpr((Expression<? extends EntityMetadata>) expressions[metadataIndex]);
@@ -48,12 +48,12 @@ public class ExprEntityMetadataEntry extends PropertyExpression<EntityMetadata, 
     @Override
     protected Object[] get(Event event, EntityMetadata[] source) {
         List<Object> values = new ArrayList<>();
-        MetadataKeyReference<?, ?>[] keys = keyExpression.getAll(event);
+        EntityDataKey<?, ?, ?, ?, ?>[] keys = keyExpression.getAll(event);
         if (keys == null || keys.length == 0) return new Object[0];
         for (EntityMetadata entityMetadata : source)
-            for (MetadataKeyReference<?, ?> key : keys)
+            for (EntityDataKey<?, ?, ?, ?, ?> key : keys)
                 if (entityMetadata.has(key))
-                    values.add(entityMetadata.get(key).value());
+                    values.add(entityMetadata.get(key).getValue());
         return values.toArray();
     }
 
@@ -68,7 +68,7 @@ public class ExprEntityMetadataEntry extends PropertyExpression<EntityMetadata, 
             }
         }
         var literals = AddonUtils.getLiterals(keyExpression);
-        Set<Class<?>> types = Set.copyOf(CommonUtils.map(literals, lit -> lit.getSingle().type()));
+        Set<Class<?>> types = Set.copyOf(CommonUtils.map(literals, lit -> lit.getSingle().getPrettyType()));
 
         if (types.size() != 1) {
             Skript.error("You cannot set multiple metadata entries of different values at once.");
@@ -122,13 +122,12 @@ public class ExprEntityMetadataEntry extends PropertyExpression<EntityMetadata, 
             else continue;
             for (var key : keys) {
                 if (entityMetadata.has(key)) {
-                    Object finalValue = entityMetadata.get(key).value();
+                    Object finalValue = entityMetadata.get(key).getValue();
                     if (finalValue == null) finalValue = 0;
                     entityMetadata.setUnsafe(key, Arithmetics.calculateUnsafe(operator, finalValue, number));
                 }
             }
         }
-
     }
 
     @Override

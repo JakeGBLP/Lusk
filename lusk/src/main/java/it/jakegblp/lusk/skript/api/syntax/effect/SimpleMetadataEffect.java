@@ -6,7 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SyntaxStringBuilder;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.NMSSyntax;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Entity;
@@ -40,7 +40,7 @@ public abstract class SimpleMetadataEffect<T> extends Effect implements NMSSynta
     protected Expression<T> valueExpression;
     protected Expression<Player> playerExpression;
 
-    public abstract MetadataKey<? extends Entity, T> getMetadataKey();
+    public abstract EntityDataKey<? extends Entity, T, ?, ?, ?> getMetadataKey();
 
     @Override
     protected void execute(Event event) {

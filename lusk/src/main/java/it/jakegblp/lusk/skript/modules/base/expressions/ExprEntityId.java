@@ -15,11 +15,11 @@ public class ExprEntityId extends SimplePropertyExpression<Object, Integer> {
 
     @Override
     public @Nullable Integer convert(Object from) {
-        if (from instanceof Entity entity)
-            return entity.getEntityId();
-        else if (from instanceof ClientboundPacketWithEntityId packet)
-            return packet.getEntityId();
-        return null;
+        return switch (from) {
+            case Entity entity -> entity.getEntityId();
+            case ClientboundPacketWithEntityId<?> packet -> packet.getEntityId();
+            case null, default -> null;
+        };
     }
 
     @Override

@@ -2,7 +2,7 @@ package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.SoundAtEntityPacketEvent;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
-import it.jakegblp.lusk.nms.core.world.level.LevelUtil;
+import it.jakegblp.lusk.nms.core.world.level.LevelUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +49,7 @@ public class SoundEntityPacket implements ClientboundPacketWithEntityId<SoundAtE
     }
 
     public @Nullable Entity getEntity(World world) {
-        return LevelUtil.getEntityFromID(entityId, world);
+        return LevelUtils.getEntityFromID(entityId, world);
     }
 
     public @Nullable Location getLocation(World world) {

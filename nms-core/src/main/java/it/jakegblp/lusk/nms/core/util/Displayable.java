@@ -23,7 +23,7 @@ public abstract class Displayable {
         return taskID != -2;
     }
 
-    public boolean isDisplayed(Player player) {
+    public boolean isDisplayedTo(Player player) {
         return viewers.contains(player.getUniqueId());
     }
 

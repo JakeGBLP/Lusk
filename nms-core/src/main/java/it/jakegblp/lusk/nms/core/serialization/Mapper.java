@@ -1,11 +1,12 @@
 package it.jakegblp.lusk.nms.core.serialization;
 
+import it.jakegblp.lusk.common.Mapping;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface Mapper<F, T> {
+public interface Mapper<F, T> extends Mapping<F, T> {
 
     static <F, T> Mapper<F, T> of(
             Class<F> fromClass,
@@ -16,22 +17,22 @@ public interface Mapper<F, T> {
     ) {
         return new Mapper<>() {
             @Override
-            public Class<F> fromClass() {
+            public @NotNull Class<F> fromClass() {
                 return fromClass;
             }
 
             @Override
-            public Class<T> toClass() {
+            public @NotNull Class<T> toClass() {
                 return toClass;
             }
 
             @Override
-            public T to(@NotNull F fromValue) {
+            public @NotNull T to(@NotNull F fromValue) {
                 return to.apply(fromValue);
             }
 
             @Override
-            public F from(@NotNull T toValue) {
+            public @NotNull F from(@NotNull T toValue) {
                 return from.apply(toValue);
             }
 
@@ -55,27 +56,27 @@ public interface Mapper<F, T> {
         return Mapper.of(fromClass(), toClass(), this::to, this::from, variant);
     }
 
-    @SuppressWarnings("unchecked") // todo: make standalone class
+    @SuppressWarnings("unchecked")
     default Mapper<Optional<F>, Optional<T>> optional() {
         Mapper<F, T> self = this;
         return new Mapper<>() {
             @Override
-            public Class<Optional<F>> fromClass() {
+            public @NotNull Class<Optional<F>> fromClass() {
                 return (Class<Optional<F>>) (Class<?>) Optional.class;
             }
 
             @Override
-            public Class<Optional<T>> toClass() {
+            public @NotNull Class<Optional<T>> toClass() {
                 return (Class<Optional<T>>) (Class<?>) Optional.class;
             }
 
             @Override
-            public Optional<T> to(@NotNull Optional<F> from) {
+            public @NotNull Optional<T> to(@NotNull Optional<F> from) {
                 return from.map(self::to);
             }
 
             @Override
-            public Optional<F> from(@NotNull Optional<T> to) {
+            public @NotNull Optional<F> from(@NotNull Optional<T> to) {
                 return to.map(self::from);
             }
 
@@ -85,14 +86,6 @@ public interface Mapper<F, T> {
             }
         };
     }
-
-    Class<F> fromClass();
-
-    Class<T> toClass();
-
-    T to(@NotNull F from);
-
-    F from(@NotNull T to);
 
     int variant();
 }

@@ -11,7 +11,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag;
 import it.jakegblp.lusk.skript.api.entry.PatternEntryData;
 import it.jakegblp.lusk.skript.api.syntax.expression.DefaultValueExpression;
 import it.jakegblp.lusk.skript.api.syntax.expression.ExpressionResult;
@@ -31,6 +31,7 @@ import java.util.Set;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ExprSecPlayerPositionPacket extends SectionExpression<PlayerPositionPacket> {
 
     public static final EntryValidator VALIDATOR;
@@ -92,7 +93,6 @@ public class ExprSecPlayerPositionPacket extends SectionExpression<PlayerPositio
     private PositionExpressionResult<Double> xExpression, yExpression, zExpression, xVelocityExpression, yVelocityExpression, zVelocityExpression;
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
         EntryContainer container = VALIDATOR.validate(node);
         if (container == null) return false;

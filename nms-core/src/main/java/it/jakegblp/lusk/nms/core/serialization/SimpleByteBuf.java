@@ -271,11 +271,11 @@ public class SimpleByteBuf {
         buf.writeLong(uuid.getLeastSignificantBits());
     }
 
-    public int readUnsignedByte() {
+    public short readUnsignedByte() {
         return buf.readUnsignedByte();
     }
 
-    public void writeUnsignedByte(int value) {
+    public void writeUnsignedByte(short value) {
         buf.writeByte(value & 0xFF);
     }
 

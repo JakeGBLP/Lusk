@@ -16,7 +16,7 @@ public class ExprPlayerProfilePropertyData extends SimplePropertyExpression<Obje
 
     public static void register(SyntaxRegistry syntaxRegistry) {
         AddonUtils.registerPropertyExpression(syntaxRegistry, ExprPlayerProfilePropertyData.class, ExprPlayerProfilePropertyData::new, String.class,
-                "[player] profile property (:name|:value|signature)", "playerproperty/mutableplayerproperty", true);
+                "[player] profile property (:name|:value|signature)", "profileproperty/mutableprofileproperty", true);
     }
 
     private Kleenean data;

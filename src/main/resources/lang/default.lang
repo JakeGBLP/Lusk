@@ -15,5 +15,33 @@ types:
   entitymetadata: entity metadata¦s @an
   entitymetadatakey: entity metadata key¦s @an
   entityanimation: entity animation¦s @an
-  byteflag: byteflag¦s @a
   pose: pose¦s @a
+  equipmentslotgroup: equipment slot group¦s @an
+  texturepayload: texture payload¦s @a
+  protocolentityreference: protocol entity reference¦s @a
+  completableplayerprofile: completable player profile¦s @a
+  namespacedkey: namespaced key¦s @a
+  attributemodifier: attribute modifier¦s @an
+  mutableattributemodifier: mutable attribute modifier¦s @a
+  attributesnapshot: attribute snapshot¦s @an
+  keyed: keyed¦s @a
+  blockstate: block state¦s @a
+  playerprofile: player profile¦s @a
+  playerprofileproperty: player profile property¦s @a
+  mutabletextcomponent: mutable text component¦s @a
+  path: path¦s @a
+  entityremovepacket: entity remove packet¦s @an
+  genericrotationpacket: generic rotation packet¦s @a
+  genericpositionpacket: generic position packet¦s @a
+  genericvelocitypacket: generic velocity packet¦s @a
+  genericmovementpacket: generic movement packet¦s @a
+  entityteleportpacket: entity teleport packet¦s @an
+  setpassengerspacket: set passengers packet¦s @a
+  playerinfopacket: player info packet¦s @a
+  entitymetadataentry: entity metadata entry¦s @an
+  displayable: displayable¦s @a
+  guardianbeam: guardian beam¦s @a
+  villagerdata: villager data¦s @a
+  playerinfo: player info¦s @a
+  playeraction: player action¦s @a
+  internalentityeffect: internal entity effect¦s @an

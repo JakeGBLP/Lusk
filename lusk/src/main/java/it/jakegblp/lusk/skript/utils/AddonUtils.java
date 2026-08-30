@@ -7,6 +7,7 @@ import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.parser.ParserInstance;
+import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
@@ -17,9 +18,8 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
 import it.jakegblp.lusk.skript.api.syntax.section.SectionParseResult;
-import it.jakegblp.lusk.skript.core.adapters.SectionContextAdapter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -45,6 +45,15 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class AddonUtils {
+
+    /**
+    Note: '*' indicates that there is no skript type (classinfo) for this class.<br>
+    While one should be added, converters can handle going from a more skript friendly type to the missing one and the other way around
+     */
+    public static @NotNull String toExactClassInfoStringOrSimpleClassName(@NotNull Class<?> clazz) {
+        var exactClassInfo = Classes.getExactClassInfo(clazz);
+        return exactClassInfo == null ? "*" + CommonUtils.toSentence(clazz.getSimpleName()) : Classes.toString(exactClassInfo);
+    }
 
     public static <C extends Condition> void registerCondition(
             SyntaxRegistry syntaxRegistry,
@@ -169,8 +178,6 @@ public class AddonUtils {
         );
     }
 
-    public static SectionContextAdapter sectionContextAdapter;
-
     public static NamedTextColor toNamedTextColor(Color color) {
         DyeColor dyeColor = color.asDyeColor();
         if (dyeColor == null) return null;
@@ -236,28 +243,16 @@ public class AddonUtils {
         return true;
     }
 
-    public static Object getSectionContext(ParserInstance parserInstance) {
-        return sectionContextAdapter.getSectionContext(parserInstance);
-    }
-
-    public static <T> T modifySectionContext(Object sectionContext, SectionNode sectionNode, List<TriggerItem> triggerItems, Supplier<? extends T> supplier) {
-        return sectionContextAdapter.modifySectionContext(sectionContext, sectionNode, List.copyOf(triggerItems), supplier);
-    }
-
-    public static <T> T modifySectionContext(ParserInstance parserInstance, SectionNode sectionNode, List<TriggerItem> triggerItems, Supplier<? extends T> supplier) {
-        return modifySectionContext(getSectionContext(parserInstance), sectionNode, List.copyOf(triggerItems), supplier);
-    }
 
     @SuppressWarnings("unchecked")
     @NotNull
     public static SectionParseResult<?> parseSectionNodes(Section parentSection, SectionNode mainNode, Class<?> returnType, @Nullable BiConsumer<Node, String> failure, Class<?> @Nullable ... types) {
-        Bukkit.getLogger().info("full parseSectionNodes(...) call");
         ParserInstance parserInstance = ParserInstance.get();
         List<TriggerSection> previousSections = parserInstance.getCurrentSections();
         List<TriggerSection> sections = new ArrayList<>(previousSections);
         sections.add(parentSection);
         parserInstance.setCurrentSections(sections);
-        Object sectionContext = getSectionContext(parserInstance);
+        var sectionContext = parserInstance.getData(Section.SectionContext.class);
         List<Expression<?>> expressionList = new ArrayList<>();
         Class<?>[] possibleReturnTypes;
         if (types == null || types.length == 0)
@@ -275,7 +270,7 @@ public class AddonUtils {
                 Skript.debug("Lusk --- key is not null");
                 Supplier<Expression<?>> supplier = () -> new SkriptParser(key).parseExpression(possibleReturnTypes);
                 Skript.debug("Lusk --- pre section context modification for key: " + key + " and sub node: " + subNode.getClass().getSimpleName());
-                Expression<?> expression = modifySectionContext(sectionContext, subNode instanceof SectionNode sectionNode ? sectionNode : null, List.of(), supplier);
+                Expression<?> expression = sectionContext.modify(subNode instanceof SectionNode sectionNode ? sectionNode : null, List.of(), supplier);
                 Skript.debug("Lusk --- post section context modification for key: " + key + " and sub node: " + subNode.getClass().getSimpleName());
                 if (expression != null) {
                     expressionList.add(expression);
@@ -373,7 +368,7 @@ public class AddonUtils {
 
     @Contract("null, _ -> null")
     public static String getUnformattedString(Expression<String> expression, @NotNull Event event) {
-        if (expression instanceof VariableString variableString) return variableString.toUnformattedString(event);
+        if (expression instanceof VariableString variableString) return variableString.toString(event);
         else if (expression != null) return expression.getSingle(event);
         else return null;
     }
@@ -383,7 +378,7 @@ public class AddonUtils {
         NMSApi.sendPackets(players, packets, ExecutionMode.ASYNCHRONOUS);
     }
 
-    public static void sendEasyMetadata(Event event, Expression<Player> playerExpression, Expression<ProtocolEntityReference> protocolEntityReferenceExpression, MetadataItem<?,?>... items){
+    public static void sendEasyMetadata(Event event, Expression<Player> playerExpression, Expression<ProtocolEntityReference> protocolEntityReferenceExpression, MetadataEntry<?,?>... items){
         sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(items), protocolEntityReferenceExpression.getArray(event));
     }
 }

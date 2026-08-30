@@ -37,6 +37,7 @@ public record SimpleField<F, T>(Field field) {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Class<T> getType() {
         return (Class<T>) field.getType();
     }

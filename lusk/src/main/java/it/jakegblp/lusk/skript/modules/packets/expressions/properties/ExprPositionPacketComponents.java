@@ -8,7 +8,7 @@ import ch.njol.skript.lang.SyntaxStringBuilder;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag;
 import it.jakegblp.lusk.skript.modules.packets.expressions.constructors.ExprSecPlayerPositionPacket;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
@@ -19,7 +19,7 @@ import org.skriptlang.skript.lang.arithmetic.Operator;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import static ch.njol.skript.classes.Changer.ChangeMode.*;
-import static it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag.*;
+import static it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag.*;
 
 public class ExprPositionPacketComponents extends PropertyExpression<PlayerPositionPacket, Object> {
 

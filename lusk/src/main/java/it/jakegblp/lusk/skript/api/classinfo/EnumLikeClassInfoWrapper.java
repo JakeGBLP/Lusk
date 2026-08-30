@@ -5,8 +5,8 @@ import ch.njol.skript.lang.ParseContext;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.jakegblp.lusk.skript.api.parser.SimpleParser;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
 
@@ -21,8 +21,10 @@ import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorE
 /**
  * @author Peter Güttinger, ShaneBeee, JakeGBLP
  */
-public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, @NotNull T> parseMap, @Nullable String prefix, @Nullable String suffix) {
+@NullMarked
+public record EnumLikeClassInfoWrapper<T>(Class<T> listedValueClass, BiMap<String, T> parseMap, @Nullable String prefix, @Nullable String suffix) {
 
+    @SuppressWarnings("NullableProblems")
     public EnumLikeClassInfoWrapper {
         BiMap<String, T> newMap = HashBiMap.create(parseMap.size());
         for (var entry : parseMap.entrySet()) {
@@ -41,15 +43,17 @@ public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @N
         registerComparator(listedValueClass);
     }
 
-    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull Map<@NotNull String, @NotNull T> parseMap, @Nullable String prefix, @Nullable String suffix) {
+    @SuppressWarnings("NullableProblems")
+    public EnumLikeClassInfoWrapper(Class<T> listedValueClass, Map<String, T> parseMap, @Nullable String prefix, @Nullable String suffix) {
         this(listedValueClass, HashBiMap.create(parseMap), prefix, suffix);
     }
 
-    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull BiMap<@NotNull String, @NotNull T> parseMap) {
+    public EnumLikeClassInfoWrapper(Class<T> listedValueClass, BiMap<String, T> parseMap) {
         this(listedValueClass, parseMap, null, null);
     }
 
-    public EnumLikeClassInfoWrapper(@NotNull Class<T> listedValueClass, @NotNull Map<@NotNull String, @NotNull T> parseMap) {
+    @SuppressWarnings("NullableProblems")
+    public EnumLikeClassInfoWrapper(Class<T> listedValueClass, Map<String, T> parseMap) {
         this(listedValueClass, HashBiMap.create(parseMap), null, null);
     }
 
@@ -79,7 +83,7 @@ public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @N
     @SuppressWarnings("unchecked")
     public ClassInfo<T> getClassInfo(String codeName) {
         Set<T> values = parseMap.values();
-        return new ClassInfo<>(listedValueClass, codeName).usage(getAllNames()).supplier(values.toArray(value -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
+        return new ClassInfo<>(listedValueClass, codeName).usage(getAllNames()).supplier(values.toArray(_ -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
     }
 
     /**
@@ -91,7 +95,7 @@ public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @N
     @SuppressWarnings("unchecked")
     public ClassInfo<T> getClassInfoWithoutUsage(String codeName) {
         Set<T> values = parseMap.values();
-        return new ClassInfo<>(listedValueClass, codeName).supplier(values.toArray(value -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
+        return new ClassInfo<>(listedValueClass, codeName).supplier(values.toArray(_ -> (T[]) Array.newInstance(listedValueClass, values.size()))).parser(new SimpleListParser<>(this));
     }
 
     private void registerComparator(Class<T> typeClass) {
@@ -110,12 +114,12 @@ public record EnumLikeClassInfoWrapper<T>(@NotNull Class<T> listedValueClass, @N
 
         @Nullable
         @Override
-        public T parse(@NotNull String s, @NotNull ParseContext context) {
+        public T parse(String s, ParseContext context) {
             return wrapper.parse(s);
         }
 
         @Override
-        public @NotNull String toString(T t) {
+        public String toString(T t) {
             return wrapper.toString(t, 0);
         }
 

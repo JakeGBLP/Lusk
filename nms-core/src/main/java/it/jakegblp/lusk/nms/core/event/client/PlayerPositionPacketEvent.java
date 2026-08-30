@@ -2,7 +2,7 @@ package it.jakegblp.lusk.nms.core.event.client;
 
 import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerPositionPacket;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.World;

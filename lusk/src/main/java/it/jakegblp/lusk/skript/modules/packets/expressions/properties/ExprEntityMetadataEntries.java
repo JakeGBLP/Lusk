@@ -6,16 +6,17 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataItem;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
-public class ExprEntityMetadataEntries extends PropertyExpression<EntityMetadata, MetadataItem> {
+@SuppressWarnings("rawtypes")
+public class ExprEntityMetadataEntries extends PropertyExpression<EntityMetadata, MetadataEntry> {
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprEntityMetadataEntries.class, ExprEntityMetadataEntries::new, MetadataItem.class,
+        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprEntityMetadataEntries.class, ExprEntityMetadataEntries::new, MetadataEntry.class,
                 "[entity] metadata entries", "entitymetadatas", true);
     }
 
@@ -28,12 +29,11 @@ public class ExprEntityMetadataEntries extends PropertyExpression<EntityMetadata
 
     @Override
     @SuppressWarnings("rawtypes")
-    protected MetadataItem[] get(Event event, EntityMetadata[] source) {
-        return CommonUtils.flatMap(MetadataItem.class, source, EntityMetadata::items);
+    protected MetadataEntry[] get(Event event, EntityMetadata[] source) {
+        return CommonUtils.flatMap(MetadataEntry.class, source, EntityMetadata::items);
     }
 
-    // change modes?
-
+    // todo: change modes?
 
     @Override
     public boolean isSingle() {
@@ -42,8 +42,8 @@ public class ExprEntityMetadataEntries extends PropertyExpression<EntityMetadata
 
     @Override
     @SuppressWarnings("rawtypes")
-    public Class<? extends MetadataItem> getReturnType() {
-        return MetadataItem.class;
+    public Class<? extends MetadataEntry> getReturnType() {
+        return MetadataEntry.class;
     }
 
     @Override

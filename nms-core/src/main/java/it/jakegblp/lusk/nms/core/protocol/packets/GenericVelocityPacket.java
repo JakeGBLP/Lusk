@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Contract;
 
 public interface GenericVelocityPacket {
 
-    // TODO: these need to be nullable... find workaround
     double getVelocityX();
     double getVelocityY();
     double getVelocityZ();

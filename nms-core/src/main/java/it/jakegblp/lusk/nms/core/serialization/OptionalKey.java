@@ -5,6 +5,7 @@ import java.util.Optional;
 public record OptionalKey<T>(TypeKey<T> inner, int variant) implements TypeKey<Optional<T>>, WrapperKey<T> {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Class<Optional<T>> type() {
         return (Class<Optional<T>>) (Class<?>) Optional.class;
     }

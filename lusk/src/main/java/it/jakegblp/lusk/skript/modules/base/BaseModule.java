@@ -12,7 +12,6 @@ import ch.njol.skript.util.SkriptColor;
 import ch.njol.skript.util.Version;
 import ch.njol.yggdrasil.Fields;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.URIUtils;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
@@ -27,6 +26,7 @@ import it.jakegblp.lusk.skript.api.classinfo.SimpleClassInfo;
 import it.jakegblp.lusk.skript.api.module.LuskModule;
 import it.jakegblp.lusk.skript.api.parser.SimpleParser;
 import it.jakegblp.lusk.skript.modules.base.effects.EffApplyAttribute;
+import it.jakegblp.lusk.skript.modules.base.effects.EffClientSidedHealthHungerSaturation;
 import it.jakegblp.lusk.skript.modules.base.expressions.*;
 import it.jakegblp.lusk.skript.modules.base.sections.SecClientSidedHealthHungerSaturation;
 import net.kyori.adventure.text.Component;
@@ -49,18 +49,27 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.io.StreamCorruptedException;
 import java.net.URI;
+import java.util.function.IntConsumer;
 
 public class BaseModule extends LuskModule {
 
+    public BaseModule(IntConsumer adder) {
+        super(adder);
+    }
+
     @Override
     protected void registration(SyntaxRegistry registry) {
-        ExprSecList.register(registry);
+        EffApplyAttribute.register(registry);
+        EffClientSidedHealthHungerSaturation.register(registry);
+
+        ExprAttributeModifier.register(registry);
+        ExprAttributeSnapshot.register(registry);
         ExprEntityId.register(registry);
         ExprNamespacedKeyFrom.register(registry);
+        ExprProtocolEntityReference.register(registry);
+        ExprSecEnchantedBook.register(registry);
+        ExprSecList.register(registry);
         SecClientSidedHealthHungerSaturation.register(registry);
-        ExprAttributeSnapshot.register(registry);
-        ExprAttributeModifier.register(registry);
-        EffApplyAttribute.register(registry);
     }
 
     @Override
@@ -72,6 +81,7 @@ public class BaseModule extends LuskModule {
                     .name("Equipment Slot Group")
                     .description("All the Equipment Slot Groups.\n\nEquipment Slot Groups represent groups of equipment slots.")
                     .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
         Classes.registerClass(new SimpleClassInfo<>(TexturesPayload.class, "texturepayload")
                 .toString(texturesPayload -> (texturesPayload.getSignature() != null ? "Signed " : "") + "Texture Payload with name " + texturesPayload.getProfileName())
@@ -125,6 +135,7 @@ public class BaseModule extends LuskModule {
                             return false;
                         }
                     }));
+            increaseClassInfoCount(1);
         }
         if (Classes.getExactClassInfo(AttributeModifier.class) == null) {
             Classes.registerClass(new SimpleClassInfo<>(AttributeModifier.class, "attributemodifier")
@@ -137,6 +148,7 @@ public class BaseModule extends LuskModule {
                     .user("attribute ?modifiers?")
                     .name("Attribute - Modifier")
                     .description("Modifies the base value of an attribute by using certain operations. The resulting value after modification is capped by the attribute's minimum and maximum limits. \n\nModifiers have a namespaced identifiers to uniquely identify them."));
+            increaseClassInfoCount(1);
         }
 
         Classes.registerClass(new SimpleClassInfo<>(MutableAttributeModifier.class, "mutableattributemodifier")
@@ -171,14 +183,16 @@ public class BaseModule extends LuskModule {
                     .name("Keyed")
                     .description("An object with a namespaced key attached to it.") // add example
                     .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
-        if (Skript.classExists("org.bukkit.entity.Pose") && Classes.getExactClassInfo(Pose.class) == null) {
+        if (Classes.getExactClassInfo(Pose.class) == null) {
             EnumClassInfoWrapper<Pose> POSE_ENUM = new EnumClassInfoWrapper<>(Pose.class);
             Classes.registerClass(POSE_ENUM.getClassInfo("pose")
                     .user("poses?")
                     .name("Entity - Pose")
                     .description("All the Poses.") // add example
                     .since("1.0.2, 1.3.3 (Suffix)"));
+            increaseClassInfoCount(1);
         }
         if (Classes.getExactClassInfo(BlockState.class) == null) {
             Classes.registerClass(new ClassInfo<>(BlockState.class, "blockstate")
@@ -205,6 +219,7 @@ public class BaseModule extends LuskModule {
                             return toString(blockState, 0);
                         }
                     }));
+            increaseClassInfoCount(1);
         }
         if (Skript.getVersion().isSmallerThan(new Version(2,14)) && Classes.getExactClassInfo(EntityEffect.class) == null) {
             EnumClassInfoWrapper<EntityEffect> ENTITY_EFFECT_ENUM = new EnumClassInfoWrapper<>(EntityEffect.class);
@@ -213,24 +228,7 @@ public class BaseModule extends LuskModule {
                     .name("Entity Effect")
                     .description("Effects that can be played on entities.\nAuto-generated\n\nDisabled when running Skript 2.14+") // add example
                     .since("2.0.0"));
-        }
-
-        // Paper
-        if (Classes.getExactClassInfo(PlayerProfile.class) == null) {
-            Classes.registerClass(new SimpleClassInfo<>(PlayerProfile.class, "playerprofile")
-                    .toString(playerProfile -> "Player Profile with name " + playerProfile.getName() + " and UUID " + playerProfile.getId())
-                    .user("(player ?)?profiles?")
-                    .name("Player - Profile")
-                    .description("A player's profile.\n\nContains the player's UUID, name, skin, cape, player model (alex/steve) and profile properties.") // add example
-                    .since("2.0.0"));
-        }
-        if (Classes.getExactClassInfo(ProfileProperty.class) == null) {
-            Classes.registerClass(new SimpleClassInfo<>(ProfileProperty.class, "playerprofileproperty")
-                    .toString(profileProperty -> "Player Profile Property named " + profileProperty.getName() + " with value " + profileProperty.getValue() + (profileProperty.isSigned() ? " and signature " + profileProperty.getSignature() : ""))
-                    .user("(player ?)?profile ?propert(y|ies)")
-                    .name("Player Profile - Property")
-                    .description("A property of a player profile.\nUsed for skin and cape textures.") // add example
-                    .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
 
         // Kyori
@@ -241,6 +239,7 @@ public class BaseModule extends LuskModule {
                     .name("Text Component")
                     .description("An object representing text with formatting like colors, decorations and events.") // add example
                     .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
         if (Classes.getExactClassInfo(ComponentBuilder.class) == null) {
             Classes.registerClass(new SimpleClassInfo<>(ComponentBuilder.class, "mutabletextcomponent")
@@ -249,6 +248,7 @@ public class BaseModule extends LuskModule {
                     .name("Mutable Text Component")
                     .description("Same as a Text Component, but can be modified.") // add example
                     .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
 
         // Other
@@ -258,6 +258,7 @@ public class BaseModule extends LuskModule {
                     .name("Resource Path/URL")
                     .description("Represents a path to something, such as a relative file path or an internet URL.\n\nCopied from skript-io, skript-io's will always have priority.")
                     .since("2.0.0"));
+            increaseClassInfoCount(1);
         }
 
         Converters.registerConverter(EquipmentSlot.class, EquipmentSlotGroup.class, EquipmentSlot::getGroup);
@@ -273,6 +274,8 @@ public class BaseModule extends LuskModule {
             Converters.registerConverter(String.class, Component.class, string -> string.contains("§") ? Component.text(string) : MiniMessage.miniMessage().deserialize(string));
         Converters.registerConverter(Color.class, DyeColor.class, Color::asDyeColor);
         Converters.registerConverter(DyeColor.class, Color.class, SkriptColor::fromDyeColor);
+
+        increaseClassInfoCount(5);
     }
 
     @Override

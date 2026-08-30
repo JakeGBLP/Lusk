@@ -64,7 +64,8 @@ public interface BufferCodec<T> {
 
             @Override
             public void write(SimpleByteBuf buf, @NotNull T value) {
-                Preconditions.checkNotNull(value);
+                if (!key.isOptional())
+                    Preconditions.checkNotNull(value, "value for key " + key + " is null");
                 writer.accept(buf, value);
             }
 
@@ -73,6 +74,10 @@ public interface BufferCodec<T> {
                 return Preconditions.checkNotNull(reader.apply(buf));
             }
 
+            @Override
+            public String toString() {
+                return "BufferCodec(" + key() + ")";
+            }
         };
     }
 
@@ -96,6 +101,11 @@ public interface BufferCodec<T> {
                 return Preconditions.checkNotNull(reader.apply(buf));
             }
 
+            @Override
+            public String toString() {
+                return "BufferCodec(" + key() + ")";
+            }
+
         };
     }
 
@@ -108,12 +118,18 @@ public interface BufferCodec<T> {
 
             @Override
             public void write(SimpleByteBuf buf, @NotNull T value) {
+                //System.out.println(">>with variant: " + BufferCodec.this.key());
                 BufferCodec.this.write(buf, value);
             }
 
             @Override
             public T read(SimpleByteBuf buf) {
                 return BufferCodec.this.read(buf);
+            }
+
+            @Override
+            public String toString() {
+                return "BufferCodec(" + key() + ")";
             }
         };
     }
@@ -138,6 +154,11 @@ public interface BufferCodec<T> {
                 return buf.readBoolean()
                         ? Optional.of(BufferCodec.this.read(buf))
                         : Optional.empty();
+            }
+
+            @Override
+            public String toString() {
+                return "BufferCodec(" + key() + ")";
             }
         };
     }
@@ -164,6 +185,11 @@ public interface BufferCodec<T> {
                 for (int i = 0; i < size; i++)
                     list.add(BufferCodec.this.read(buf));
                 return list;
+            }
+
+            @Override
+            public String toString() {
+                return "BufferCodec(" + key() + ")";
             }
         };
     }

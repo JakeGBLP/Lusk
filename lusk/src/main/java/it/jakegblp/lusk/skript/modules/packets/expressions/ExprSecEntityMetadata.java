@@ -11,11 +11,10 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
 import it.jakegblp.lusk.skript.api.syntax.NMSSyntax;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -35,11 +34,11 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
 
     static {
         var builder = EntryValidator.builder();
-        for (var entry : NMS.getMetadataKeyRegistry().namedKeys().entrySet()) {
-            String name = entry.getKey().toLowerCase(Locale.ROOT);
+        for (var entry : NMS.getMetadataKeyRegistry().metadataEntries().values()) {
+            String name = entry.getName().toLowerCase(Locale.ROOT);
             if (!name.contains("unused")) {
-                Bukkit.getLogger().info("lusk: registered metadata key: " + name);
-                builder.addEntryData(new ExpressionEntryData<>(name.replace("_", " "), null, true, entry.getValue().type()));
+                //Bukkit.getLogger().info("lusk: registered metadata key: " + name);
+                builder.addEntryData(new ExpressionEntryData<>(name.replace("_", " "), null, true, entry.getPrettyType()));
             }
         }
         VALIDATOR = builder.build();
@@ -51,13 +50,13 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
     }
 
     private Expression<EntityType> entityTypeExpression;
-    private Map<MetadataKey<? extends Entity, ?>, Expression<?>> expressionMap;
+    private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
 
-    public static Map<MetadataKey<? extends Entity, ?>, Expression<?>> getMetadataExpressionMap(
+    public static Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> getMetadataExpressionMap(
             Expression<EntityType> entityTypeExpression,
             EntryContainer container
     ) {
-        Map<MetadataKey<? extends Entity, ?>, Expression<?>> expressionMap = new HashMap<>();
+        Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap = new HashMap<>();
         List<String> unsupportedProperties = new ArrayList<>();
 
         Class<? extends Entity> type = null;
@@ -72,15 +71,14 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
         }
 
         var metadataKeyRegistry = NMS.getMetadataKeyRegistry();
-        var inverseNameMap = metadataKeyRegistry.namedKeys().inverse();
         for (var entry : metadataKeyRegistry.metadataEntries().asMap().entrySet()) {
-            Class<?> supportedClass = entry.getKey();
+            var entityClasses = entry.getKey();
             var namedMetadataKeyList = entry.getValue();
             for (var key : namedMetadataKeyList) {
-                String name = inverseNameMap.get(key);
+                String name = key.getName();
                 String normalizedName = name.toLowerCase().replace("_", " ");
                 if (container.hasEntry(normalizedName)) {
-                    if ((type == null || supportedClass.isAssignableFrom(type)) && unsupportedProperties.isEmpty())
+                    if ((type == null || entityClasses.isAssignableFrom(type)) && unsupportedProperties.isEmpty())
                         expressionMap.put(key, (Expression<?>) container.getOptional(normalizedName, false));
                     else
                         unsupportedProperties.add(name);
@@ -96,12 +94,11 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
         return expressionMap;
     }
 
-    public static EntityMetadata getMetadata(Event event, Class<? extends Entity> type, Map<MetadataKey<? extends Entity, ?>, Expression<?>> expressionMap) {
+    public static EntityMetadata getMetadata(Event event, Class<? extends Entity> type, Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap) {
         EntityMetadata entityMetadata = new EntityMetadata();
         for (var entry : expressionMap.entrySet()) {
-            MetadataKey<? extends Entity, ?> key = entry.getKey();
-            Class<? extends Entity> entityClass = key.entityClass();
-            if (entityClass.isAssignableFrom(type)) {
+            EntityDataKey<? extends Entity, ?, ?, ?, ?> key = entry.getKey();
+            if (key.getEntityClasses().isAssignableFrom(type)) {
                 Object value = entry.getValue().getSingle(event);
                 if (value != null) {
                     if (!entityMetadata.setUnsafe(key, value)) {

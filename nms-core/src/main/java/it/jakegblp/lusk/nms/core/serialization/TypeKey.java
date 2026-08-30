@@ -22,7 +22,7 @@ public sealed interface TypeKey<T> permits SimpleKey, OptionalKey, ListKey, Hold
     }
 
     @Contract("_ -> new")
-    static <T> @NotNull TypeKey<T> simple(Class<T> type) {
+    static <T> @NotNull SimpleKey<T> simple(Class<T> type) {
         return new SimpleKey<>(type, 0);
     }
     @Contract("_ -> new")
@@ -34,7 +34,7 @@ public sealed interface TypeKey<T> permits SimpleKey, OptionalKey, ListKey, Hold
         return new ListKey<>(simple(type), 0);
     }
     @Contract("_ -> new")
-    static <T> @NotNull TypeKey<T> holder(Class<T> type) {
+    static <T> @NotNull HolderKey<T> holder(Class<T> type) {
         return new HolderKey<>(simple(type), 0);
     }
     @Contract("_ -> new")
@@ -58,7 +58,5 @@ public sealed interface TypeKey<T> permits SimpleKey, OptionalKey, ListKey, Hold
             case HolderKey<?> holder -> new HolderKey<>(holder.inner(), variant);
         };
     }
-
-
 
 }

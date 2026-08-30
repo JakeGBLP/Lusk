@@ -7,7 +7,7 @@ import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.GenericVelocityPacket;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
-import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entity.RelativeFlag;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
