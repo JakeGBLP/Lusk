@@ -35,10 +35,12 @@ public class NMSApi {
         return randomTeleportId;
     }
 
+    @SuppressWarnings("rawtypes")
     public static void sendPacketInternal(Player player, @NotNull ClientboundPacket packet) {
         NMS.sendPacket(player, packet.asNMS());
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> processPacket(ClientboundPacket[] packets, boolean async) {
         if (async) {
             return CompletableFuture.allOf(CommonUtils.map(CompletableFuture.class, packets, Asyncable::processAsync));
@@ -49,10 +51,12 @@ public class NMSApi {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendPackets(Player player, ClientboundPacket[] packets, @Nullable ExecutionMode executionMode) {
         return sendPackets(new Player[]{player}, packets, executionMode);
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendPackets(Player[] players, ClientboundPacket[] packets, @Nullable ExecutionMode executionMode) {
         boolean async = (executionMode != null && executionMode.isAsync()) || ExecutionMode.getAsyncablePrioritizedMode(List.of(packets)).isAsync();
         CompletableFuture<Void> future = processPacket(packets, async)
@@ -72,22 +76,27 @@ public class NMSApi {
         return future;
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendPackets(Player[] players, Collection<? extends ClientboundPacket> packets, @Nullable ExecutionMode executionMode) {
         return sendPackets(players, packets.toArray(ClientboundPacket[]::new), executionMode);
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendPacket(Player[] players, ClientboundPacket packet, @Nullable ExecutionMode executionMode) {
         return sendPackets(players, new ClientboundPacket[]{packet}, executionMode);
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendPackets(Player[] players, ClientboundPacket... packets) {
         return sendPackets(players, packets, null);
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendBundledPackets(Player[] players, ClientboundPacket[] packets, @Nullable ExecutionMode executionMode) {
         return sendPackets(players, new ClientboundPacket[]{new ClientBundlePacket(packets)}, executionMode);
     }
 
+    @SuppressWarnings("rawtypes")
     public static @NotNull CompletableFuture<Void> sendBundledPackets(Player[] players, ClientboundPacket... packets) {
         return sendPackets(players, new ClientBundlePacket(packets));
     }
