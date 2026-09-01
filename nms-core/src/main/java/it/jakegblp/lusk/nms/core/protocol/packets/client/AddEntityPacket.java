@@ -1,6 +1,5 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.event.client.AddEntityPacketEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
@@ -15,8 +14,6 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 /**
  * <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#Spawn_Entity">Wiki</a>
@@ -117,50 +114,35 @@ public class AddEntityPacket implements ClientboundPacketWithEntityId<AddEntityP
 
     @Override
     public void write(SimpleByteBuf buffer) {
-        boolean is1_21_9 = NMS.getVersion().isGreaterOrEqual(Version.of(1,21,9));
         buffer.writeVarInt(entityId);
         buffer.writeUUID(entityUUID);
         buffer.writeEntityType(entityType);
         buffer.writeDouble(positionX);
         buffer.writeDouble(positionY);
         buffer.writeDouble(positionZ);
-        if (is1_21_9)
-            buffer.writeLowPrecisionVector(velocityX, velocityY, velocityZ);
+        buffer.writeLowPrecisionVector(velocityX, velocityY, velocityZ);
         buffer.writePackedDegrees(pitch);
         buffer.writePackedDegrees(yaw);
         buffer.writePackedDegrees(headYaw);
         buffer.writeVarInt(data);
-        if (!is1_21_9) {
-            buffer.writeShort((short) velocityX);
-            buffer.writeShort((short) velocityY);
-            buffer.writeShort((short) velocityZ);
-        }
     }
 
     @Override
     public void read(SimpleByteBuf buffer) {
-        boolean is1_21_9 = NMS.getVersion().isGreaterOrEqual(Version.of(1,21,9));
         entityId = buffer.readVarInt();
         entityUUID = buffer.readUUID();
         entityType = buffer.readEntityType();
         positionX = buffer.readDouble();
         positionY = buffer.readDouble();
         positionZ = buffer.readDouble();
-        if (is1_21_9) {
-            var velocity = buffer.readLowPrecisionVector();
-            velocityX = velocity[0];
-            velocityY = velocity[1];
-            velocityZ = velocity[2];
-        }
+        var velocity = buffer.readLowPrecisionVector();
+        velocityX = velocity[0];
+        velocityY = velocity[1];
+        velocityZ = velocity[2];
         pitch = buffer.readPackedDegrees();
         yaw = buffer.readPackedDegrees();
         headYaw = buffer.readPackedDegrees();
         data = buffer.readVarInt();
-        if (!is1_21_9) {
-            velocityX = buffer.readShort();
-            velocityY = buffer.readShort();
-            velocityZ = buffer.readShort();
-        }
     }
 
     @Override

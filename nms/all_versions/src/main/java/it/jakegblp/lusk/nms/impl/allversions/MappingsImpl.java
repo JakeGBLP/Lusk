@@ -1,6 +1,8 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
 import it.jakegblp.lusk.nms.core.serialization.*;
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
+import it.jakegblp.lusk.nms.core.serialization.mapper.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;

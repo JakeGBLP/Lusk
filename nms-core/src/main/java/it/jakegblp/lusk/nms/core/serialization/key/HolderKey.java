@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.key;
 
 public record HolderKey<T>(TypeKey<T> inner, int variant) implements TypeKey<T>, WrapperKey<T> {
 

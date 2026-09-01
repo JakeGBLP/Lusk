@@ -1,6 +1,8 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.mapper;
 
 import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
 import org.bukkit.Keyed;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

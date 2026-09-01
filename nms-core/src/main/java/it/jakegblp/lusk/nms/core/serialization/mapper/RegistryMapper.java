@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.mapper;
 
 import org.bukkit.Keyed;
 import org.jspecify.annotations.NullMarked;

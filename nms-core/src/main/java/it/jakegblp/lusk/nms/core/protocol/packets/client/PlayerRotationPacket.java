@@ -1,20 +1,13 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.common.Version;
-import it.jakegblp.lusk.common.annotations.Availability;
 import it.jakegblp.lusk.nms.core.event.client.PlayerRotationPacketEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.UnsupportedPacket;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.entity.Player;
-
-import java.util.function.Supplier;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 /**
  * <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#Player_Rotation">Player Rotation Packet</a>
@@ -23,32 +16,16 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Availability(addedIn = "1.21.2")
-public class PlayerRotationPacket implements BufferSerializableClientboundPacket<PlayerRotationPacketEvent>, GenericRotationPacket, UnsupportedPacket {
+public class PlayerRotationPacket implements BufferSerializableClientboundPacket<PlayerRotationPacketEvent>, GenericRotationPacket {
     protected float yaw, pitch;
 
-    /**
-     * @throws UnsupportedOperationException if the server version is below 1.21.2
-     */
-    @Availability(addedIn = "1.21.2")
     public PlayerRotationPacket(float yaw, float pitch) {
-        validate();
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
     public PlayerRotationPacket(SimpleByteBuf buffer) {
         read(buffer);
-    }
-
-    @Override
-    public boolean check() {
-        return NMS.getVersion().isGreaterOrEqual(Version.of(1,21,2));
-    }
-
-    @Override
-    public Supplier<UnsupportedOperationException> getExceptionSupplier() {
-        return () -> new UnsupportedOperationException("The 'Player Rotation' packet requires 1.21.2!");
     }
 
     @Override

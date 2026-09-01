@@ -1,5 +1,7 @@
 package it.jakegblp.lusk.nms.core.serialization;
 
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
+
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 public interface BufferSerializable<T extends BufferSerializable<T>> {

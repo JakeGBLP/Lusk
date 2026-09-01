@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.key;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

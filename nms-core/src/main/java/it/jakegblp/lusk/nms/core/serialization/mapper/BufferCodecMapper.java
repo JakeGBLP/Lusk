@@ -1,5 +1,7 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.mapper;
 
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.BiConsumer;

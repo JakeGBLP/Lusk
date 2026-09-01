@@ -1,8 +1,8 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
-import it.jakegblp.lusk.nms.core.serialization.RegistryMapper;
-import it.jakegblp.lusk.nms.core.serialization.TypeKey;
-import it.jakegblp.lusk.nms.core.serialization.WrapperKey;
+import it.jakegblp.lusk.nms.core.serialization.mapper.RegistryMapper;
+import it.jakegblp.lusk.nms.core.serialization.key.TypeKey;
+import it.jakegblp.lusk.nms.core.serialization.key.WrapperKey;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

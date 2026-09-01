@@ -6,7 +6,6 @@ import ch.njol.skript.lang.util.SimpleEvent;
 import it.jakegblp.lusk.nms.core.event.client.*;
 import it.jakegblp.lusk.nms.core.event.server.PacketReceiveEvent;
 import it.jakegblp.lusk.nms.core.event.server.PlayerActionPacketEvent;
-import it.jakegblp.lusk.nms.core.logger.events.ConsoleLogEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.PlayerActionPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
@@ -51,11 +50,6 @@ public class SimplePacketEvents {
         SimpleEventValues.registerEventValue(BlockDestructionPacketEvent.class, Byte.class, BlockDestructionPacketEvent::getBlockDestructionStage, BlockDestructionPacketEvent::setBlockDestructionStage);
         SimpleEventValues.registerEventValue(BlockDestructionPacketEvent.class, Location.class, BlockDestructionPacketEvent::getLocation, BlockDestructionPacketEvent::setLocation);
         SimpleEventValues.registerEventValue(BlockDestructionPacketEvent.class, Vector.class, BlockDestructionPacketEvent::getPosition, (event, vector) -> event.setPosition(vector.toBlockVector()));
-
-        AddonUtils.registerEvent(syntaxRegistry, SimpleEvent.class, ConsoleLogEvent.class,
-                "Console Log", "Called when the server's console is used to log something.", "on console log:",
-                "2.0.0", new String[]{"log", "logging", "console"}, "(console|server) log");
-        SimpleEventValues.registerEventValue(ConsoleLogEvent.class, String.class, ConsoleLogEvent::getMessage );
 
         AddonUtils.registerEvent(syntaxRegistry, SimpleEvent.class, ParticleSendPacketEvent.class,
                 "Particle Send (Packet)", "Called when the server sends a particle to the client.", "on console log:",

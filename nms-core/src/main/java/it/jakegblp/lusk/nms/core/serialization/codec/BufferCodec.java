@@ -1,6 +1,11 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.codec;
 
 import com.google.common.base.Preconditions;
+import it.jakegblp.lusk.nms.core.serialization.*;
+import it.jakegblp.lusk.nms.core.serialization.key.ListKey;
+import it.jakegblp.lusk.nms.core.serialization.key.OptionalKey;
+import it.jakegblp.lusk.nms.core.serialization.key.TypeKey;
+import it.jakegblp.lusk.nms.core.serialization.mapper.Mapper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

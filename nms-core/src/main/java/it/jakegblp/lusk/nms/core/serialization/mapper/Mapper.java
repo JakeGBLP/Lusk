@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.mapper;
 
 import it.jakegblp.lusk.common.Mapping;
 import org.jetbrains.annotations.NotNull;

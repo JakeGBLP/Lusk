@@ -1,4 +1,4 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.key;
 
 import java.util.Optional;
 

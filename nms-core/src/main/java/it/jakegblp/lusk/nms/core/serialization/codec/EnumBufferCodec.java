@@ -1,5 +1,7 @@
-package it.jakegblp.lusk.nms.core.serialization;
+package it.jakegblp.lusk.nms.core.serialization.codec;
 
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.key.SimpleKey;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

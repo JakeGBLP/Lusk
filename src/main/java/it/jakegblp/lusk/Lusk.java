@@ -7,6 +7,7 @@ import it.jakegblp.lusk.nms.core.logger.ConsoleLogInjector;
 import it.jakegblp.lusk.nms.core.logger.events.ConsoleLogEvent;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.modules.base.BaseModule;
+import it.jakegblp.lusk.skript.modules.console.ConsoleModule;
 import it.jakegblp.lusk.skript.modules.packets.PacketsModule;
 import it.jakegblp.lusk.skript.modules.playerprofile.PlayerProfileModule;
 import lombok.Getter;
@@ -56,7 +57,7 @@ public final class Lusk extends JavaPlugin {
             addon.localizer().setSourceDirectories("lang", null);
             AtomicInteger atomicClassInfoAmount = new AtomicInteger();
             IntConsumer adder = atomicClassInfoAmount::addAndGet;
-            addon.loadModules(new BaseModule(adder), new PacketsModule(adder), new PlayerProfileModule(adder));
+            addon.loadModules(new BaseModule(adder), new PacketsModule(adder), new PlayerProfileModule(adder), new ConsoleModule(adder));
             SyntaxRegistry.Key<? extends SyntaxInfo<?>>[] syntaxRegistryKeys = new SyntaxRegistry.Key<?>[] {
                     BukkitSyntaxInfos.Event.KEY, SyntaxRegistry.EXPRESSION, SyntaxRegistry.CONDITION, SyntaxRegistry.EFFECT, SyntaxRegistry.SECTION//, SyntaxRegistry.STRUCTURE
             };
@@ -79,9 +80,7 @@ public final class Lusk extends JavaPlugin {
             boolean async = !getServer().isPrimaryThread();
             ConsoleLogEvent event = new ConsoleLogEvent(async, l.messageStrippedAnsi());
             getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled()) {
-                l.cancel();
-            }
+            if (event.isCancelled()) l.cancel();
         });
 
         metrics.addCustomChart(new DrilldownPie("version_type", () -> {
@@ -111,9 +110,8 @@ public final class Lusk extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (NMS != null) {
+        if (NMS != null)
             NMS = null;
-        }
         getLogger().info("Lusk has been disabled!");
         ConsoleLogInjector.uninject();
     }

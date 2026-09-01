@@ -1,6 +1,8 @@
 package it.jakegblp.lusk.nms.core.world.entity.serialization;
 
-import it.jakegblp.lusk.nms.core.serialization.*;
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
+import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodecs;
+import it.jakegblp.lusk.nms.core.serialization.key.*;
 import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 

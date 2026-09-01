@@ -10,6 +10,7 @@ import io.papermc.paper.math.Rotations;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.PseudoEnum;
 import it.jakegblp.lusk.common.PseudoEnumSet;
+import it.jakegblp.lusk.nms.core.serialization.key.TypeKey;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
 import it.jakegblp.lusk.nms.core.world.player.chat.ChatSessionData;
@@ -372,9 +373,8 @@ public class SimpleByteBuf {
         writeByte((byte) (finalPacked >> 8));
         writeInt((int) (finalPacked >> 16));
 
-        if (hasFlag) {
+        if (hasFlag)
             writeVarInt((int) (magnitude >> 2));
-        }
     }
 
     public void writeUnsignedInt(long value) {
@@ -400,11 +400,7 @@ public class SimpleByteBuf {
         if ((first & 4) == 4)
             k |= ((long) readVarInt() & 0xFFFFFFFFL) << 2;
 
-        return new double[]{
-                unpack(j >> 3) * k,
-                unpack(j >> 18) * k,
-                unpack(j >> 33) * k
-        };
+        return new double[]{unpack(j >> 3) * k, unpack(j >> 18) * k, unpack(j >> 33) * k};
     }
 
     public void readBytes(byte[] destination) {
