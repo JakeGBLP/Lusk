@@ -154,8 +154,6 @@ public class AllVersions implements
                 Connection
                 > {
 
-    public final Class<Identifier> NMS_NAMESPACED_KEY_CLASS =
-            SimpleClass.firstInPackage("net.minecraft.resources", "Identifier", "ResourceLocation");
     @SuppressWarnings("rawtypes")
     @Getter
     public final BiMap<it.jakegblp.lusk.nms.core.world.entity.serialization.EntityDataSerializer<?, ?>, EntityDataSerializer> entityDataSerializers = HashBiMap.create();
@@ -330,7 +328,7 @@ public class AllVersions implements
                 buf -> NamespacedKey.fromString(buf.readString(256))
         );
         NAMESPACED_KEY_MAPPER = mappings.register(
-                NMS_NAMESPACED_KEY_CLASS, NamespacedKey.class,
+                Identifier.class, NamespacedKey.class,
                 CraftNamespacedKey::fromMinecraft,
                 CraftNamespacedKey::toMinecraft
         );
