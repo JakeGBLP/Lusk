@@ -7,6 +7,8 @@ import it.jakegblp.lusk.nms.core.logger.ConsoleLogInjector;
 import it.jakegblp.lusk.nms.core.logger.events.ConsoleLogEvent;
 import it.jakegblp.lusk.nms.factory.NMSFactory;
 import it.jakegblp.lusk.skript.modules.base.BaseModule;
+import it.jakegblp.lusk.skript.modules.boundingbox.BoundingBoxModule;
+import it.jakegblp.lusk.skript.modules.citizens.CitizensModule;
 import it.jakegblp.lusk.skript.modules.console.ConsoleModule;
 import it.jakegblp.lusk.skript.modules.packets.PacketsModule;
 import it.jakegblp.lusk.skript.modules.playerprofile.PlayerProfileModule;
@@ -57,7 +59,14 @@ public final class Lusk extends JavaPlugin {
             addon.localizer().setSourceDirectories("lang", null);
             AtomicInteger atomicClassInfoAmount = new AtomicInteger();
             IntConsumer adder = atomicClassInfoAmount::addAndGet;
-            addon.loadModules(new BaseModule(adder), new PacketsModule(adder), new PlayerProfileModule(adder), new ConsoleModule(adder));
+            addon.loadModules(
+                    new BaseModule(adder),
+                    new BoundingBoxModule(adder),
+                    new PacketsModule(adder),
+                    new PlayerProfileModule(adder),
+                    new CitizensModule(adder),
+                    new ConsoleModule(adder)
+            );
             SyntaxRegistry.Key<? extends SyntaxInfo<?>>[] syntaxRegistryKeys = new SyntaxRegistry.Key<?>[] {
                     BukkitSyntaxInfos.Event.KEY, SyntaxRegistry.EXPRESSION, SyntaxRegistry.CONDITION, SyntaxRegistry.EFFECT, SyntaxRegistry.SECTION//, SyntaxRegistry.STRUCTURE
             };
@@ -78,7 +87,7 @@ public final class Lusk extends JavaPlugin {
 
         ConsoleLogInjector.inject(l -> {
             boolean async = !getServer().isPrimaryThread();
-            ConsoleLogEvent event = new ConsoleLogEvent(async, l.messageStrippedAnsi());
+            ConsoleLogEvent event = new ConsoleLogEvent(async, l.getMessageStrippedAnsi());
             getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) l.cancel();
         });

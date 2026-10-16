@@ -3,11 +3,15 @@ package it.jakegblp.lusk.skript.modules.playerprofile;
 import ch.njol.skript.registrations.Classes;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
+import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
+import it.jakegblp.lusk.nms.core.world.player.profile.TexturesPayload;
 import it.jakegblp.lusk.skript.api.classinfo.SimpleClassInfo;
 import it.jakegblp.lusk.skript.api.module.LuskModule;
 import it.jakegblp.lusk.skript.modules.playerprofile.effects.EffPlayerProfileMakeCompletable;
 import it.jakegblp.lusk.skript.modules.playerprofile.expressions.*;
+import org.bukkit.Bukkit;
 import org.skriptlang.skript.addon.SkriptAddon;
 import org.skriptlang.skript.lang.converter.Converters;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -63,8 +67,20 @@ public class PlayerProfileModule extends LuskModule {
                 .name("Player Profile - Mutable Property")
                 .description("A property for player profiles. Contains a name, value and optionally a signature. Can be modified.")
                 .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(TexturesPayload.class, "texturepayload")
+                .toString(texturesPayload -> (texturesPayload.getSignature() != null ? "Signed " : "") + "Texture Payload with name " + texturesPayload.getProfileName())
+                .user("texture ?payloads?")
+                .name("Player - Texture Payload")
+                .description("Contains all the texture data of a player.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(CompletablePlayerProfile.class, "completableplayerprofile")
+                .toString(playerProfile -> "Completable Player Profile with name " + playerProfile.getName() + " and UUID " + playerProfile.getId())
+                .user("completable ?(player ?)?profiles?")
+                .name("Player - Completable Profile")
+                .description("A player's profile that's completable.\n\nContains the player's UUID, name, skin, cape, player model (alex/steve) and profile properties.") // add example
+                .since("2.0.0"));
 
-        increaseClassInfoCount(1);
+        increaseClassInfoCount(3);
 
         /*
         Mutability and cross-addon support: if another addon registers the immutable object as a classinfo,
@@ -72,6 +88,16 @@ public class PlayerProfileModule extends LuskModule {
          */
         Converters.registerConverter(MutableProfileProperty.class, ProfileProperty.class, MutableProfileProperty::immutable);
         Converters.registerConverter(ProfileProperty.class, MutableProfileProperty.class, MutableProfileProperty::new);
+        Converters.registerConverter(CompletablePlayerProfile.class, PlayerProfile.class, CompletablePlayerProfile::getPlayerProfile);
+        Converters.registerConverter(PlayerProfile.class, CompletablePlayerProfile.class, CompletablePlayerProfile::new);
+        Converters.registerConverter(CompletablePlayerProfile.class, ResolvableProfile.class, profile -> ResolvableProfile.resolvableProfile(profile.shouldComplete() ? Bukkit.createProfileExact(profile.getId(), null) : profile.getPlayerProfile()));
+        Converters.registerConverter(PlayerProfile.class, ResolvableProfile.class, ResolvableProfile::resolvableProfile);
+        Converters.registerConverter(ResolvableProfile.class, PlayerProfile.class, resolvableProfile -> {
+            PlayerProfile profile = Bukkit.createProfileExact(resolvableProfile.uuid(), resolvableProfile.name());
+            profile.getProperties().clear();
+            profile.getProperties().addAll(resolvableProfile.properties());
+            return profile;
+        });
     }
 
     @Override

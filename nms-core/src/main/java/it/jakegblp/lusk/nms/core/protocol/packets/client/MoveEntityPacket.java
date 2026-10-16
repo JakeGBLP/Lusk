@@ -1,8 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.EntityMovePacketEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericMovementPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithMovement;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 @Setter
 @NullMarked
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class MoveEntityPacket implements ClientboundPacketWithEntityId<EntityMovePacketEvent> {
+public abstract class MoveEntityPacket implements ClientboundPacket<EntityMovePacketEvent>, PacketWithEntityId {
 
     protected int entityId;
     protected boolean onGround;
@@ -34,8 +35,6 @@ public abstract class MoveEntityPacket implements ClientboundPacketWithEntityId<
         return new EntityMovePacketEvent(this, player, async);
     }
 
-    
-
     @Override
     public MoveEntityPacket copy() {
         throw new RuntimeException("Missing copying implementation.");
@@ -44,7 +43,7 @@ public abstract class MoveEntityPacket implements ClientboundPacketWithEntityId<
     @Getter
     @Setter
     @NullMarked
-    public static class Position extends MoveEntityPacket implements GenericMovementPacket {
+    public static class Position extends MoveEntityPacket implements PacketWithMovement {
 
         protected double movementX, movementY, movementZ;
 
@@ -113,7 +112,7 @@ public abstract class MoveEntityPacket implements ClientboundPacketWithEntityId<
     @Getter
     @Setter
     @NullMarked
-    public static class Rotation extends MoveEntityPacket implements GenericRotationPacket {
+    public static class Rotation extends MoveEntityPacket implements PacketWithRotation {
 
         protected float yaw, pitch;
 
@@ -162,7 +161,7 @@ public abstract class MoveEntityPacket implements ClientboundPacketWithEntityId<
     @Getter
     @Setter
     @NullMarked
-    public static class PositionRotation extends MoveEntityPacket implements GenericRotationPacket, GenericMovementPacket {
+    public static class PositionRotation extends MoveEntityPacket implements PacketWithRotation, PacketWithMovement {
 
         protected double movementX, movementY, movementZ;
 

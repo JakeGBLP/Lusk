@@ -433,26 +433,19 @@ public final class CommonUtils {
             @NotNull Function<? super @NotNull F, ? extends @Nullable Collection<? extends @Nullable T>> toCollection,
             @Nullable Function<? super @NotNull T, ? extends @Nullable R> mapper
     ) {
-        int len = values.length;
-        List<R> results = new ArrayList<>(len);
-
+        List<R> results = new ArrayList<>(values.length);
         for (F v : values) {
             if (v == null) continue;
-
             Collection<? extends @Nullable T> collection = toCollection.apply(v);
             if (collection == null || collection.isEmpty()) continue;
-
             for (T element : collection) {
                 if (element == null) continue;
-
                 R mapped = (mapper != null) ? mapper.apply(element) : (R) element;
                 if (type.isInstance(mapped))
                     results.add(mapped);
             }
         }
-
-        R[] array = SimpleArray.create(type, results.size());
-        return results.toArray(array);
+        return results.toArray(SimpleArray.create(type, results.size()));
     }
 
     @Contract("_, _, _ -> new")

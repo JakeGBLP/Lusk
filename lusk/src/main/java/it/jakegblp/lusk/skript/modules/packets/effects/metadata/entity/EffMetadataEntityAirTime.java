@@ -7,18 +7,18 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffMetadataEntityAirTime extends SimpleTimeMetadataEffect {
 
+    public EffMetadataEntityAirTime(String firstTypePropertyName, String secondTypePropertyName) {
+        super(firstTypePropertyName, secondTypePropertyName);
+    }
+
     public static void register(SyntaxRegistry syntaxRegistry) {
         register(syntaxRegistry, EffMetadataEntityAirTime.class, EffMetadataEntityAirTime::new,
                 "remaining air ticks",
                 "remaining air [time]");
     }
 
-    public EffMetadataEntityAirTime(String firstTypePropertyName, String secondTypePropertyName) {
-        super(firstTypePropertyName, secondTypePropertyName);
-    }
-
     @Override
-    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.AIR_TICKS;
     }
 

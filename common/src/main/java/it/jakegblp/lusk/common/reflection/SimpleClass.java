@@ -29,7 +29,11 @@ public record SimpleClass<T>(@Nullable Class<T> type) {
     }
 
     public static <T> @Nullable T quickInstance(Class<T> clazz, Object @NotNull ... args) {
-        return new SimpleClass<>(clazz).getConstructor(false, true, CommonUtils.map(args, Object::getClass)).newInstance(args);
+        return new SimpleClass<>(clazz).getConstructor(false, true, CommonUtils.map(Class.class, args, Object::getClass)).newInstance(args);
+    }
+
+    public static <T> @Nullable T quickInstance(Class<T> clazz, Class<?>[] argClasses, Object @NotNull ... args) {
+        return new SimpleClass<>(clazz).getConstructor(false, true, argClasses).newInstance(args);
     }
 
     public static <T> @Nullable T quickInstance(Class<T> clazz, boolean useCache, Object @NotNull ... args) {

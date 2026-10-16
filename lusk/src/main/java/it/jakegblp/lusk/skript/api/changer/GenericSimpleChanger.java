@@ -97,6 +97,9 @@ public interface GenericSimpleChanger<C, V> extends Changer<C> {
         }
     }
 
-    default void delete(C change) {}
-    default void reset(C change) {}
+    default void delete(C change) {
+    }
+
+    default void reset(C change) {
+    }
 }

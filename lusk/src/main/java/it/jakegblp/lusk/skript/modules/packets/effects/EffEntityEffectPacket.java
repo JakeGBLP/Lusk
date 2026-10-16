@@ -13,7 +13,7 @@ import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityEventPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -35,14 +35,15 @@ import java.util.Set;
 })
 public class EffEntityEffectPacket extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffEntityEffectPacket.class, EffEntityEffectPacket::new,
-                "play entity effect %entityeffect/internalentityeffect% on %protocolentityreferences% for %players%");
-    }
-
     private Expression<Object> effectExpression;
     private Expression<ProtocolEntityReference> entityOrIDExpression;
     private Expression<Player> playerExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffEntityEffectPacket.class, EffEntityEffectPacket::new)
+                .patterns("play entity effect %entityeffect/internalentityeffect% on %protocolentityreferences% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

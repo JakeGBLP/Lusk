@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SystemChatPacket implements BufferSerializableClientboundPacket<SystemChatPacketEvent> {
+public class SystemChatPacket implements ClientboundPacket<SystemChatPacketEvent> {
 
     protected Component component;
     protected boolean overlay;

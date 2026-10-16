@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.PlayerRotationPacketEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class PlayerRotationPacket implements BufferSerializableClientboundPacket<PlayerRotationPacketEvent>, GenericRotationPacket {
+public class PlayerRotationPacket implements ClientboundPacket<PlayerRotationPacketEvent>, PacketWithRotation {
     protected float yaw, pitch;
 
     public PlayerRotationPacket(float yaw, float pitch) {

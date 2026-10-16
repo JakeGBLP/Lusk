@@ -11,7 +11,7 @@ plugins {
 
 group = "it.jakegblp"
 version = "2.0.0-alpha1"
-var latestSkriptVersion = "2.16.1"
+var latestSkriptVersion = "2.16.2"
 var latestMinecraftVersion = "26.2"
 
 java {

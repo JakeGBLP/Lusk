@@ -13,7 +13,7 @@ public class EffMetadataDisplayBillboard extends SimpleMetadataEffect<Display.Bi
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Display.Billboard, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Display.Billboard, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().DISPLAY.BILLBOARD;
     }
 

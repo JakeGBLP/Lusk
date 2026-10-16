@@ -9,7 +9,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -19,8 +19,10 @@ import java.util.List;
 public class ExprPlayerProfileProperties extends PropertyExpression<PlayerProfile, MutableProfileProperty> {
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprPlayerProfileProperties.class, ExprPlayerProfileProperties::new, MutableProfileProperty.class,
-                "[player] profile properties", "playerprofiles", true);
+        Registrations.propertyExpression(ExprPlayerProfileProperties.class, ExprPlayerProfileProperties::new, MutableProfileProperty.class)
+                .propertyOf("[player] profile properties", "playerprofiles")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class ExprPlayerProfileProperties extends PropertyExpression<PlayerProfil
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "player profile properties of "+getExpr().toString(event, debug);
+        return "player profile properties of " + getExpr().toString(event, debug);
     }
 
     @Override

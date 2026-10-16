@@ -12,7 +12,7 @@ public class EffMetadataEntitySilent extends SimpleExpandedBooleanMetadataEffect
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.SILENT;
     }
 

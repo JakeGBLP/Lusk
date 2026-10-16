@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.Event;
@@ -14,17 +14,19 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprAttributeModifier extends SimpleExpression<AttributeModifier> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprAttributeModifier.class, ExprAttributeModifier::new, AttributeModifier.class,
-                "[an] increase (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]",
-                "[a] base multiplier (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]",
-                "[a] total multiplier (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]");
-    }
-
     private AttributeModifier.Operation operation;
     private Expression<Number> baseExpression;
     private Expression<NamespacedKey> keyExpression;
     private Expression<EquipmentSlotGroup> equipmentSlotGroupExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprAttributeModifier.class, ExprAttributeModifier::new, AttributeModifier.class)
+                .patterns(
+                        "[an] increase (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]",
+                        "[a] base multiplier (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]",
+                        "[a] total multiplier (by|of) %number% with key %namespacedkey% [in [the] %-equipmentslotgroup%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

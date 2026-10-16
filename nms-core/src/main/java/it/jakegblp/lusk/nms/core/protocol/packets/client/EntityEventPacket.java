@@ -3,6 +3,7 @@ package it.jakegblp.lusk.nms.core.protocol.packets.client;
 import it.jakegblp.lusk.common.Either;
 import it.jakegblp.lusk.nms.core.bukkit.BukkitHelper;
 import it.jakegblp.lusk.nms.core.event.client.EntityStatusPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.effect.InternalEntityEffect;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 @Setter
 @AllArgsConstructor
 @NullMarked
-public class EntityEventPacket implements ClientboundPacketWithEntityId<EntityStatusPacketEvent> {
+public class EntityEventPacket implements ClientboundPacket<EntityStatusPacketEvent>, PacketWithEntityId {
     protected int entityId;
     // todo: properly implement, but keep method to get/set byte value
     protected byte data;

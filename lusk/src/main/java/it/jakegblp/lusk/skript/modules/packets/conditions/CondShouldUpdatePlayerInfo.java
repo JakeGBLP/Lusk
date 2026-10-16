@@ -5,20 +5,22 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerInfoUpdatePacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.util.Locale;
 
-import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoPacketEntry.PLAYER_INFO_PROPERTY_CHOICE;
+import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoUpdatePacketEntry.PLAYER_INFO_PROPERTY_CHOICE;
 
 public class CondShouldUpdatePlayerInfo extends PropertyCondition<PlayerInfoUpdatePacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyCondition(syntaxRegistry,  CondShouldUpdatePlayerInfo.class, CondShouldUpdatePlayerInfo::new, PropertyType.WILL, "update [the] player'[s] "+PLAYER_INFO_PROPERTY_CHOICE, "playerinfopackets");
-    }
-
     private PlayerInfoUpdatePacket.Action<?> action;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.propertyCondition(CondShouldUpdatePlayerInfo.class, CondShouldUpdatePlayerInfo::new)
+                .property("playerinfoupdatepackets", PropertyType.WILL, "update [the] player'[s] " + PLAYER_INFO_PROPERTY_CHOICE)
+                .register(syntaxRegistry);
+    }
 
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
@@ -33,6 +35,6 @@ public class CondShouldUpdatePlayerInfo extends PropertyCondition<PlayerInfoUpda
 
     @Override
     protected String getPropertyName() {
-        return "update the player'[s] "+action.getPropertyName();
+        return "update the player'[s] " + action.getPropertyName();
     }
 }

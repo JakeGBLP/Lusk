@@ -8,7 +8,7 @@ import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.SetPassengersPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -16,16 +16,16 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.util.List;
 
-// todo: redo whole class
 public class EffSetPassengerPacket extends Effect {
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffSetPassengerPacket.class, EffSetPassengerPacket::new,
-                "make [entit(y|ies)] %protocolentityreferences% ride %protocolentityreference% for %players%");
-    }
 
     private Expression<ProtocolEntityReference> passengersExpression, vehicleExpression;
     private Expression<Player> playersExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffSetPassengerPacket.class, EffSetPassengerPacket::new)
+                .patterns("make [entit(y|ies)] %protocolentityreferences% ride %protocolentityreference% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

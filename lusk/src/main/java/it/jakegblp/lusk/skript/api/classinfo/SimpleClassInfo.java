@@ -39,5 +39,4 @@ public class SimpleClassInfo<T, C extends SimpleClassInfo<T, C>> extends ClassIn
     }
 
 
-
 }

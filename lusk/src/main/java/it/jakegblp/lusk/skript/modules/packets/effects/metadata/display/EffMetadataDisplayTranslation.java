@@ -13,7 +13,7 @@ public class EffMetadataDisplayTranslation extends SimpleMetadataEffect<Vector> 
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Vector, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Vector, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().DISPLAY.TRANSLATION;
     }
 

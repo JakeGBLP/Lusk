@@ -11,9 +11,9 @@ import ch.njol.skript.util.Direction;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.optional.OptionallySectionEffect;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityMetadata;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,16 +45,17 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.getSingleDefaultOrNull;
 @Since("2.0.0")
 public class EffSecSpawnFakePlayer extends OptionallySectionEffect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerSection(syntaxRegistry, EffSecSpawnFakePlayer.class, EffSecSpawnFakePlayer::new,
-                "spawn [a] (fake|client[-| ]sided) player %directions% %location% for %players%");
-    }
-
     private Expression<EntityType> entityTypeExpression;
     private Expression<Number> idExpression;
     private Expression<Location> locationExpression;
     private Expression<Player> playersExpression;
     private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.section(EffSecSpawnFakePlayer.class, EffSecSpawnFakePlayer::new)
+                .patterns("spawn [a] (fake|client[-| ]sided) player %directions% %location% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     public String toString(@Nullable Event event, boolean b) {

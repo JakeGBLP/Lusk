@@ -6,7 +6,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.SetPassengersPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -15,12 +15,13 @@ import java.util.List;
 
 public class ExprSetPassengersPacket extends SimpleExpression<SetPassengersPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSetPassengersPacket.class, ExprSetPassengersPacket::new, SetPassengersPacket.class,
-                "[a] new [set] passengers packet with vehicle %protocolentityreference% [and [with] passenger[s] %-protocolentityreferences%]");
-    }
-
     protected Expression<ProtocolEntityReference> vehicleExpression, passengersExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSetPassengersPacket.class, ExprSetPassengersPacket::new, SetPassengersPacket.class)
+                .patterns("[a] new [set] passengers packet with vehicle %protocolentityreference% [and [with] passenger[s] %-protocolentityreferences%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -37,9 +38,9 @@ public class ExprSetPassengersPacket extends SimpleExpression<SetPassengersPacke
         if (passengersExpression != null) {
             var passengers = passengersExpression.getArray(event);
             if (passengers.length == 0) return new SetPassengersPacket[0];
-            return new SetPassengersPacket[] {new SetPassengersPacket(vehicle, List.of(passengers))};
+            return new SetPassengersPacket[]{new SetPassengersPacket(vehicle, List.of(passengers))};
         }
-        return new SetPassengersPacket[] {new SetPassengersPacket(vehicle)};
+        return new SetPassengersPacket[]{new SetPassengersPacket(vehicle)};
     }
 
     @Override

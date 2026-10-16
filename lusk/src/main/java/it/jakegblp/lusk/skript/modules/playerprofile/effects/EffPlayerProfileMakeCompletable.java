@@ -6,23 +6,22 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffPlayerProfileMakeCompletable extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffPlayerProfileMakeCompletable.class, EffPlayerProfileMakeCompletable::new,
-                "make %completableplayerprofiles% completable [sync:[async:a]sync[hronously]]",
-                "make %completableplayerprofiles% not completable"
-        );
-    }
-
-
     private Expression<CompletablePlayerProfile> completablePlayerProfileExpression;
     private @Nullable ExecutionMode executionMode;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffPlayerProfileMakeCompletable.class, EffPlayerProfileMakeCompletable::new)
+                .patterns("make %completableplayerprofiles% completable [sync:[async:a]sync[hronously]]",
+                        "make %completableplayerprofiles% not completable")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -10,6 +10,7 @@ import io.papermc.paper.math.Rotations;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.common.PseudoEnum;
 import it.jakegblp.lusk.common.PseudoEnumSet;
+import it.jakegblp.lusk.nms.core.serialization.key.SimpleKey;
 import it.jakegblp.lusk.nms.core.serialization.key.TypeKey;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.level.particles.ParticleWrapper;
@@ -317,7 +318,11 @@ public class SimpleByteBuf {
     }
 
     public void writeComponent(Component component) {
-        NMS.write(this, component);
+        NMS.write(this, component, TypeKey.simple(Component.class));
+    }
+
+    public void writeTrustedComponent(Component component) {
+        NMS.write(this, component, new SimpleKey<>(Component.class, 1));
     }
 
     public ProfilePropertySet readPlayerProfileProperties() {
@@ -330,6 +335,10 @@ public class SimpleByteBuf {
 
     public Component readComponent() {
         return NMS.read(this, Component.class);
+    }
+
+    public Component readTrustedComponent() {
+        return NMS.read(this, Component.class, 1);
     }
 
     public void writeNamedTextColor(NamedTextColor color) {
@@ -479,7 +488,7 @@ public class SimpleByteBuf {
         writeVarInt(value.ordinal());
     }
 
-    // todo: in the future, make this be able to get the constants from a registry, right now providing them directly is totally fine
+    // todo: in the future, make this be able to get the constants from a registry, right now providing them directly is good enough
     public <E extends PseudoEnum> void writePseudoEnumSet(PseudoEnumSet<E> pseudoEnumSet, E[] constants) {
         var totalAmount = constants.length;
         BitSet bitSet = new BitSet(totalAmount);
@@ -633,7 +642,7 @@ public class SimpleByteBuf {
     }
 
     public void writeBlockData(BlockData blockData) {
-        NMS.write(this, blockData);
+        NMS.write(this, blockData, TypeKey.simple(BlockData.class));
     }
 
     public BlockFace readBlockFace() {
@@ -728,7 +737,7 @@ public class SimpleByteBuf {
     }
 
     public void writeOptionalItemStack(ItemStack itemStack) {
-        NMS.write(this, itemStack, 1);
+        NMS.write(this, itemStack, new SimpleKey<>(ItemStack.class, 1));
     }
 
     public Rotations readRotations() {

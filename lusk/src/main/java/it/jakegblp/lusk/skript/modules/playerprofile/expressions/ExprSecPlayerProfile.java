@@ -9,10 +9,10 @@ import ch.njol.util.Kleenean;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.api.syntax.expression.NoInitExpression;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -30,11 +30,6 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.*;
 
 public class ExprSecPlayerProfile extends SectionExpression<CompletablePlayerProfile> implements AsyncableSyntaxesWrapper {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecPlayerProfile.class, ExprSecPlayerProfile::new, CompletablePlayerProfile.class,
-                "[a] new [player] profile");
-    }
-
     public static final EntryValidator VALIDATOR = EntryValidator.builder()
             .addEntryData(new ExpressionEntryData<>("player", null, true, OfflinePlayer.class))
             .addEntryData(new ExpressionEntryData<>("uuid", null, true, UUID.class, String.class))
@@ -43,6 +38,47 @@ public class ExprSecPlayerProfile extends SectionExpression<CompletablePlayerPro
             .addEntryData(new ExpressionEntryData<>("complete sync", null, true, Boolean.class))
             .addEntryData(new ExpressionEntryData<>("complete async", null, true, Boolean.class))
             .build();
+    @Getter
+    private PlayerProfileExpression playerProfileExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecPlayerProfile.class, ExprSecPlayerProfile::new, CompletablePlayerProfile.class)
+                .patterns("[a] new [player] profile")
+                .register(syntaxRegistry);
+    }
+
+    @Override
+    public List<AsyncableSyntax> getAsyncableSyntaxes() {
+        return List.of(playerProfileExpression);
+    }
+
+    @Override
+    public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
+        EntryContainer container = VALIDATOR.validate(node);
+        if (container == null) return false;
+        playerProfileExpression = new PlayerProfileExpression(container);
+        return !playerProfileExpression.isError();
+    }
+
+    @Override
+    protected CompletablePlayerProfile @Nullable [] get(Event event) {
+        return playerProfileExpression.get(event);
+    }
+
+    @Override
+    public boolean isSingle() {
+        return true;
+    }
+
+    @Override
+    public Class<? extends CompletablePlayerProfile> getReturnType() {
+        return CompletablePlayerProfile.class;
+    }
+
+    @Override
+    public String toString(@Nullable Event event, boolean debug) {
+        return "a new player profile";
+    }
 
     @Getter
     public static class PlayerProfileExpression extends NoInitExpression<CompletablePlayerProfile> implements AsyncableSyntax {
@@ -123,8 +159,7 @@ public class ExprSecPlayerProfile extends SectionExpression<CompletablePlayerPro
                     finalUuid = parser.parse(string, ParseContext.DEFAULT);
                     if (finalUuid == null)
                         return new CompletablePlayerProfile[0];
-                }
-                else return new CompletablePlayerProfile[0];
+                } else return new CompletablePlayerProfile[0];
                 profile = Bukkit.createProfile(finalUuid);
             } else if (nameExpression != null)
                 profile = Bukkit.createProfile(getUnformattedString(nameExpression, event));
@@ -146,41 +181,5 @@ public class ExprSecPlayerProfile extends SectionExpression<CompletablePlayerPro
             }
             return new CompletablePlayerProfile[]{new CompletablePlayerProfile(profile, shouldComplete, finalExecutionMode)};
         }
-    }
-
-    @Override
-    public List<AsyncableSyntax> getAsyncableSyntaxes() {
-        return List.of(playerProfileExpression);
-    }
-
-    @Getter
-    private PlayerProfileExpression playerProfileExpression;
-
-    @Override
-    public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
-        EntryContainer container = VALIDATOR.validate(node);
-        if (container == null) return false;
-        playerProfileExpression = new PlayerProfileExpression(container);
-        return !playerProfileExpression.isError();
-    }
-
-    @Override
-    protected CompletablePlayerProfile @Nullable [] get(Event event) {
-        return playerProfileExpression.get(event);
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public Class<? extends CompletablePlayerProfile> getReturnType() {
-        return CompletablePlayerProfile.class;
-    }
-
-    @Override
-    public String toString(@Nullable Event event, boolean debug) {
-        return "a new player profile";
     }
 }

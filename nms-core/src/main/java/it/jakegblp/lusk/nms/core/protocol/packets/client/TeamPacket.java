@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TeamPacket implements BufferSerializableClientboundPacket<TeamPacketEvent> {
+public class TeamPacket implements ClientboundPacket<TeamPacketEvent> {
 
     @Contract("_, _, _ -> new")
     public static @NotNull TeamPacket create(String name, TeamParameters params, Set<String> members) {
@@ -53,6 +53,7 @@ public class TeamPacket implements BufferSerializableClientboundPacket<TeamPacke
     }
 
     public enum Type {
+
         CREATE, DELETE, UPDATE_INFO, ADD, REMOVE;
 
         public static @Nullable Type fromId(int id) {
@@ -85,16 +86,16 @@ public class TeamPacket implements BufferSerializableClientboundPacket<TeamPacke
     public void write(@NotNull SimpleByteBuf buffer) {
         buffer.writeString(name);
         buffer.writeByte(method.ordinal());
-        if (hasMembers()) buffer.writeCollection(members, SimpleByteBuf::writeString);
         if (hasParameters()) parameters.write(buffer);
+        if (hasMembers()) buffer.writeCollection(members, SimpleByteBuf::writeString);
     }
 
     @Override
     public void read(@NotNull SimpleByteBuf buffer) {
         name = buffer.readString();
         method = Type.fromId(buffer.readByte());
-        if (hasMembers()) members = buffer.readSet(SimpleByteBuf::readString);
         if (hasParameters()) parameters = new TeamParameters(buffer);
+        if (hasMembers()) members = buffer.readSet(SimpleByteBuf::readString);
     }
 
     @Override

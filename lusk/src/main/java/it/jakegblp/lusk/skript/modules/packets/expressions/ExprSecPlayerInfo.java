@@ -10,10 +10,10 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerInfoUpdatePacket;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
 import it.jakegblp.lusk.skript.api.entry.DynamicEntryData;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.modules.playerprofile.expressions.ExprSecPlayerProfile;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -25,14 +25,9 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.util.*;
 
-import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoPacketEntry.PLAYER_INFO_PROPERTY_NAMES;
+import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoUpdatePacketEntry.PLAYER_INFO_PROPERTY_NAMES;
 
 public class ExprSecPlayerInfo extends SectionExpression<PlayerInfo> implements AsyncableSyntaxesWrapper {
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecPlayerInfo.class, ExprSecPlayerInfo::new, PlayerInfo.class,
-                "[a] new player info");
-    }
 
     public static final EntryValidator VALIDATOR;
 
@@ -51,6 +46,12 @@ public class ExprSecPlayerInfo extends SectionExpression<PlayerInfo> implements 
 
     private Expression<?> playerExpression;
     private Map<PlayerInfoUpdatePacket.Action<?>, Expression<?>> actionExpressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecPlayerInfo.class, ExprSecPlayerInfo::new, PlayerInfo.class)
+                .patterns("[a] new player info")
+                .register(syntaxRegistry);
+    }
 
     @SuppressWarnings("unchecked")
     public <T> Expression<T> getActionExpression(PlayerInfoUpdatePacket.Action<T> action) {
@@ -111,9 +112,9 @@ public class ExprSecPlayerInfo extends SectionExpression<PlayerInfo> implements 
         actionExpressionMap.forEach((key, expression) -> {
             Object value = expression.getSingle(event);
             if (value != null)
-                playerInfo.set((PlayerInfoUpdatePacket.Action<Object>)key, value);
+                playerInfo.set((PlayerInfoUpdatePacket.Action<Object>) key, value);
         });
-        return new PlayerInfo[] {playerInfo};
+        return new PlayerInfo[]{playerInfo};
     }
 
     @Override

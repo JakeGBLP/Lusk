@@ -12,6 +12,7 @@ import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.TextureType;
 import it.jakegblp.lusk.nms.core.world.player.profile.TexturesPayload;
 import it.jakegblp.lusk.skript.api.entry.DynamicEntryData;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.expression.DefaultValueExpression;
 import it.jakegblp.lusk.skript.api.syntax.expression.NoInitExpression;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
@@ -32,11 +33,6 @@ import java.util.UUID;
 
 public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecTexturePayLoad.class, ExprSecTexturePayLoad::new, TexturesPayload.class,
-                "[a] new [player] [profile] texture payload");
-    }
-
     public static final EntryValidator TEXTURE_VALIDATOR = EntryValidator.builder()
             .addEntryData(new ExpressionEntryData<>("url", null, false, String.class))
             .addEntryData(new ExpressionEntryData<>("slim", new DefaultValueExpression<>(Boolean.class, false), true, Boolean.class))
@@ -47,14 +43,14 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
         var builder = EntryValidator.builder()
                 .addEntryData(new ExpressionEntryData<>("timestamp", new DefaultValueExpression<>(Long.class, 0L), true, Long.class, Date.class))
                 .addEntryData(new ExpressionEntryData<>("uuid", null, true, UUID.class))
-                .addEntryData(new ExpressionEntryData<>("player name", null, true, String.class))
+                .addEntryData(new ExpressionEntryData<>("name", null, true, String.class))
                 .addEntryData(new ExpressionEntryData<>("signature", null, true, String.class))
-                .addEntryData(new ExpressionEntryData<>("is signature required", null, true, Boolean.class));
+                .addEntryData(new ExpressionEntryData<>("is signature required", new DefaultValueExpression<>(Boolean.class, true), true, Boolean.class)); // todo: figure out of this is a good idea (the default value)
         for (TextureType textureType : TextureType.values()) {
             var key = textureType.name().toLowerCase();
             builder.addEntryData(textureType == TextureType.SKIN
-                            ? new DynamicEntryData(key, String.class, TEXTURE_VALIDATOR, true) :
-                            new ExpressionEntryData<>(key, null, false, String.class));
+                    ? new DynamicEntryData(key, String.class, TEXTURE_VALIDATOR, true) :
+                    new ExpressionEntryData<>(key, null, false, String.class));
         }
         VALIDATOR = builder.build();
     }
@@ -68,29 +64,10 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
     private Expression<Boolean> isSignatureRequiredExpression;
     private List<TextureEntryExpression> textureEntryExpressions;
 
-    @Getter
-    @AllArgsConstructor
-    public static class TextureEntryExpression extends NoInitExpression<TexturesPayload.TextureEntry> {
-
-        private TextureType textureType;
-        private Expression<String> urlExpression;
-        private Expression<Boolean> slimExpression;
-
-        @SuppressWarnings("unchecked")
-        public TextureEntryExpression(@NotNull TextureType textureType, @NotNull EntryContainer entryContainer) {
-            this(textureType, (Expression<String>) entryContainer.getOptional("url", false), (Expression<Boolean>) entryContainer.getOptional("slim", false));
-        }
-
-        @Override
-        public TexturesPayload.TextureEntry[] get(Event event) {
-            var textureEntry = new TexturesPayload.TextureEntry(textureType, urlExpression.getSingle(event));
-            if (textureType == TextureType.SKIN && slimExpression != null) {
-                Boolean isSlim = slimExpression.getSingle(event);
-                if (isSlim != null)
-                    textureEntry.setMetadata(new TexturesPayload.TextureEntry.TextureMetadata(isSlim ? PlayerTextures.SkinModel.SLIM : PlayerTextures.SkinModel.CLASSIC));
-            }
-            return new TexturesPayload.TextureEntry[] {textureEntry};
-        }
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecTexturePayLoad.class, ExprSecTexturePayLoad::new, TexturesPayload.class)
+                .patterns("[a] new [player] [profile] texture payload")
+                .register(syntaxRegistry);
     }
 
     @Override
@@ -98,7 +75,7 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
     public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
         EntryContainer container = VALIDATOR.validate(node);
         if (container == null) return false;
-        playerNameExpression = (Expression<String>) container.get("player name", false);
+        playerNameExpression = (Expression<String>) container.get("name", false);
         uuidExpression = (Expression<UUID>) container.get("uuid", false);
         if (playerNameExpression == null && uuidExpression == null) {
             Skript.error("You must provide at least a name or uuid.");
@@ -110,13 +87,11 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
             return false;
         }
         timestampExpression = (Expression<Object>) container.get("timestamp", true);
-        isSignatureRequiredExpression = (Expression<Boolean>) container.get("is signature required", false);
+        isSignatureRequiredExpression = (Expression<Boolean>) container.get("is signature required", true);
         textureEntryExpressions = Arrays.stream(TextureType.values()).map(textureType -> {
             Object value = container.get(textureType.name().toLowerCase(), false);
-            if (textureType == TextureType.SKIN && value instanceof SectionNode sectionNode) {
-                EntryContainer textureContainer = TEXTURE_VALIDATOR.validate(sectionNode);
-                if (textureContainer == null) return null;
-                else return new TextureEntryExpression(textureType, textureContainer);
+            if (textureType == TextureType.SKIN && value instanceof EntryContainer entryContainer) {
+                return new TextureEntryExpression(textureType, entryContainer);
             } else
                 return new TextureEntryExpression(textureType, (Expression<String>) value, null);
         }).toList();
@@ -136,7 +111,7 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
             error("Provided invalid timestamp: " + timestampObject);
             return new TexturesPayload[0];
         }
-        return new TexturesPayload[] {
+        return new TexturesPayload[]{
                 new TexturesPayload(
                         timestamp,
                         uuidExpression.getSingle(event),
@@ -161,5 +136,30 @@ public class ExprSecTexturePayLoad extends SectionExpression<TexturesPayload> {
     @Override
     public String toString(@Nullable Event event, boolean debug) {
         return "a new player profile texture payload";
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class TextureEntryExpression extends NoInitExpression<TexturesPayload.TextureEntry> {
+
+        private TextureType textureType;
+        private Expression<String> urlExpression;
+        private Expression<Boolean> slimExpression;
+
+        @SuppressWarnings("unchecked")
+        public TextureEntryExpression(@NotNull TextureType textureType, @NotNull EntryContainer entryContainer) {
+            this(textureType, (Expression<String>) entryContainer.getOptional("url", false), (Expression<Boolean>) entryContainer.getOptional("slim", false));
+        }
+
+        @Override
+        public TexturesPayload.TextureEntry[] get(Event event) {
+            var textureEntry = new TexturesPayload.TextureEntry(textureType, urlExpression.getSingle(event));
+            if (textureType == TextureType.SKIN && slimExpression != null) {
+                Boolean isSlim = slimExpression.getSingle(event);
+                if (isSlim != null)
+                    textureEntry.setMetadata(new TexturesPayload.TextureEntry.TextureMetadata(isSlim ? PlayerTextures.SkinModel.SLIM : PlayerTextures.SkinModel.CLASSIC));
+            }
+            return new TexturesPayload.TextureEntry[]{textureEntry};
+        }
     }
 }

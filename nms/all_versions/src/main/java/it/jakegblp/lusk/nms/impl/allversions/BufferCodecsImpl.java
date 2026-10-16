@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
 import io.netty.buffer.ByteBuf;
-import it.jakegblp.lusk.nms.core.serialization.*;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
 import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodecs;
 import it.jakegblp.lusk.nms.core.serialization.codec.EnumBufferCodec;
@@ -54,9 +54,8 @@ public final class BufferCodecsImpl implements BufferCodecs {
     public <T> BufferCodec<T> getOptional(Class<T> type) {
         var key = TypeKey.optional(type);
         var codec = (BufferCodec<T>) bufferCodecs.get(key);
-        if (codec == null) {
+        if (codec == null)
             throw new IllegalArgumentException("No optional codec found for type " + type);
-        }
         return codec;
     }
 
@@ -64,9 +63,8 @@ public final class BufferCodecsImpl implements BufferCodecs {
     @SuppressWarnings("unchecked")
     public <T> BufferCodec<T> getList(Class<T> type) {
         var codec = (BufferCodec<T>) bufferCodecs.get(TypeKey.list(type));
-        if (codec == null) {
+        if (codec == null)
             throw new IllegalArgumentException("No list codec found for type " + type);
-        }
         return codec;
     }
 
@@ -74,9 +72,8 @@ public final class BufferCodecsImpl implements BufferCodecs {
     @SuppressWarnings("unchecked")
     public <T> BufferCodec<T> getHolder(Class<T> type) {
         var codec = (BufferCodec<T>) bufferCodecs.get(TypeKey.holder(type));
-        if (codec == null) {
+        if (codec == null)
             throw new IllegalArgumentException("No holder codec found for type " + type);
-        }
         return codec;
     }
 
@@ -137,10 +134,8 @@ public final class BufferCodecsImpl implements BufferCodecs {
     @SuppressWarnings("unchecked")
     public <T> void encode(SimpleByteBuf buffer, T value, TypeKey<T> key) {
         BufferCodec<T> codec = (BufferCodec<T>) bufferCodecs.get(key);
-
         if (codec == null)
             throw new IllegalArgumentException("No BufferCodec found for key " + key);
-
         codec.write(buffer, value);
     }
 
@@ -150,7 +145,6 @@ public final class BufferCodecsImpl implements BufferCodecs {
         BufferCodec<T> codec = (BufferCodec<T>) bufferCodecs.get(key);
         if (codec == null)
             throw new IllegalArgumentException("No BufferCodec found for key " + key);
-        //System.out.println("decoded typekey " + key + " -> " + value);
         return codec.read(buffer);
     }
 }

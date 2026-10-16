@@ -11,6 +11,7 @@ import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.TeamPacket;
 import it.jakegblp.lusk.nms.core.world.entity.teams.TeamParameters;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -37,17 +38,17 @@ public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket> {
             .addEntryData(new ExpressionEntryData<>("friendly fire", null, false, Boolean.class))
             .addEntryData(new ExpressionEntryData<>("can see friendly invisibles", null, false, Boolean.class))
             .build();
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecTeamUpdateInfoPacket.class, ExprSecTeamUpdateInfoPacket::new, TeamPacket.class,
-                "[a] new team (update info|info update) packet");
-    }
-
     private Expression<String> nameExpression;
     private Expression<Object> displayNameExpression, prefixExpression, suffixExpression;
     private Expression<Team.OptionStatus> nameTagVisibilityExpression, collisionRuleExpression;
     private Expression<Color> styleExpression;
     private Expression<Boolean> allowFriendlyFireExpression, canSeeFriendlyInvisiblesExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecTeamUpdateInfoPacket.class, ExprSecTeamUpdateInfoPacket::new, TeamPacket.class)
+                .patterns("[a] new team (update info|info update) packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -92,7 +93,7 @@ public class ExprSecTeamUpdateInfoPacket extends SectionExpression<TeamPacket> {
         if (friendlyFire == null) return new TeamPacket[0];
         Boolean canSeeFriendlyInvisible = canSeeFriendlyInvisiblesExpression.getSingle(event);
         if (canSeeFriendlyInvisible == null) return new TeamPacket[0];
-        return new TeamPacket[] {
+        return new TeamPacket[]{
                 TeamPacket.updateInfo(
                         name,
                         new TeamParameters(

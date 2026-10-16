@@ -22,7 +22,8 @@ import static org.skriptlang.skript.lang.comparator.Comparators.exactComparatorE
  * @author Peter Güttinger, ShaneBeee, JakeGBLP
  */
 @NullMarked
-public record EnumLikeClassInfoWrapper<T>(Class<T> listedValueClass, BiMap<String, T> parseMap, @Nullable String prefix, @Nullable String suffix) {
+public record EnumLikeClassInfoWrapper<T>(Class<T> listedValueClass, BiMap<String, T> parseMap, @Nullable String prefix,
+                                          @Nullable String suffix) {
 
     @SuppressWarnings("NullableProblems")
     public EnumLikeClassInfoWrapper {

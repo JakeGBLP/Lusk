@@ -23,6 +23,16 @@ import org.skriptlang.skript.lang.entry.EntryValidator;
 @Getter
 public class PatternEntryData<T> extends EntryData<ExpressionResult<? extends T>> {
 
+    protected static final Message M_IS = new Message("is");
+    protected final Class<? extends T> returnType;
+    protected final SkriptPattern pattern;
+    protected MatchResult matchResult;
+    public PatternEntryData(String key, String pattern, boolean optional, Class<? extends T> returnType) {
+        super(key, null, optional);
+        this.returnType = returnType;
+        this.pattern = PatternCompiler.compile(pattern);
+    }
+
     @Nullable
     @SuppressWarnings("unchecked")
     public static <T> Expression<T> getSimpleOptional(EntryContainer entryContainer, String key, boolean useDefaultValue) {
@@ -34,18 +44,6 @@ public class PatternEntryData<T> extends EntryData<ExpressionResult<? extends T>
     @Nullable
     public static <T> Expression<T> getSimpleOptional(EntryContainer entryContainer, String key) {
         return getSimpleOptional(entryContainer, key, false);
-    }
-
-    protected static final Message M_IS = new Message("is");
-
-    protected final Class<? extends T> returnType;
-    protected final SkriptPattern pattern;
-    protected MatchResult matchResult;
-
-    public PatternEntryData(String key, String pattern, boolean optional, Class<? extends T> returnType) {
-        super(key, null, optional);
-        this.returnType = returnType;
-        this.pattern = PatternCompiler.compile(pattern);
     }
 
     @NotNull

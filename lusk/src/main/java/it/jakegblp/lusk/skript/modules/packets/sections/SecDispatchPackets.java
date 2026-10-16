@@ -7,6 +7,7 @@ import ch.njol.util.coll.CollectionUtils;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.api.syntax.expression.DefaultValueExpression;
@@ -32,17 +33,18 @@ public class SecDispatchPackets extends Section implements AsyncableSyntaxesWrap
             .addEntryData(new ExpressionEntryData<>("bundled", new DefaultValueExpression<>(Boolean.class, false), true, Boolean.class))
             .addSection("then run", true)
             .build();
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerSection(syntaxRegistry, SecDispatchPackets.class, SecDispatchPackets::new, "[sync:[async:a]sync[hronous]] packet dispatch");
-    }
-
     private Expression<ClientboundPacket> clientboundPacketExpression;
     private Expression<Player> playerExpression;
     private Expression<Boolean> bundledExpression;
     @Getter
     private ExecutionMode initExecutionMode;
     private Trigger trigger;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.section(SecDispatchPackets.class, SecDispatchPackets::new)
+                .patterns("[sync:[async:a]sync[hronous]] packet dispatch")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -32,10 +32,10 @@ import it.jakegblp.lusk.nms.core.event.server.PlayerActionPacketEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.*;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.PlayerActionPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.server.ServerboundPacket;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
 import it.jakegblp.lusk.nms.core.serialization.mapper.Mapper;
 import it.jakegblp.lusk.nms.core.serialization.mapper.RegistryMapper;
-import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.ServerEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
@@ -174,7 +174,7 @@ public class AllVersions implements
     public Mapper<TeamColor, NamedTextColor> NAMED_TEXT_COLOR_MAPPER;
     public BufferCodec<org.bukkit.DyeColor> DYE_COLOR_CODEC;
     public Mapper<DyeColor, org.bukkit.DyeColor> DYE_COLOR_MAPPER;
-    public BufferCodec<net.kyori.adventure.text.Component> COMPONENT_CODEC;
+    public BufferCodec<net.kyori.adventure.text.Component> COMPONENT_CODEC, TRUSTED_COMPONENT_CODEC;
     public Mapper<Component, net.kyori.adventure.text.Component> COMPONENT_MAPPER;
     public BufferCodec<Optional<net.kyori.adventure.text.Component>> OPTIONAL_COMPONENT_CODEC;
     @SuppressWarnings("rawtypes")
@@ -207,6 +207,8 @@ public class AllVersions implements
     public BufferCodec<EntityMetadataPacket> ENTITY_METADATA_PACKET_CODEC;
     public Mapper<ClientboundPlayerInfoUpdatePacket, PlayerInfoUpdatePacket> PLAYER_INFO_UPDATE_PACKET_MAPPER;
     public BufferCodec<PlayerInfoUpdatePacket> PLAYER_INFO_UPDATE_PACKET_CODEC;
+    public Mapper<ClientboundPlayerInfoRemovePacket, PlayerInfoRemovePacket> PLAYER_INFO_REMOVE_PACKET_MAPPER;
+    public BufferCodec<PlayerInfoRemovePacket> PLAYER_INFO_REMOVE_PACKET_CODEC;
     public Mapper<ClientboundSetCameraPacket, SetCameraPacket> SET_CAMERA_PACKET_MAPPER;
     public BufferCodec<SetCameraPacket> SET_CAMERA_PACKET_CODEC;
     public Mapper<ClientboundSetPassengersPacket, SetPassengersPacket> SET_PASSENGER_PACKET_MAPPER;
@@ -340,8 +342,8 @@ public class AllVersions implements
         Class<TeamColor> nmsColorClass = v26_2 ? TeamColor.class : (Class<TeamColor>) (Class) ChatFormatting.class;
         NAMED_TEXT_COLOR_MAPPER = mappings.register(
                 nmsColorClass, NamedTextColor.class,
-                color -> SimpleClass.of(PaperAdventure.class).getMethod("asVanilla", nmsColorClass).invoke(color),
-                color -> SimpleClass.of(PaperAdventure.class).getMethod("asAdventure", NamedTextColor.class).invoke(color)
+                color -> SimpleClass.of(PaperAdventure.class).getMethod("asAdventure", true, true, nmsColorClass).invoke(null, color),
+                color -> SimpleClass.of(PaperAdventure.class).getMethod("asVanilla", true, true, NamedTextColor.class).invoke(null, color)
         );
         NAMED_TEXT_COLOR_CODEC = codecs.register(
                 NamedTextColor.class,
@@ -369,6 +371,11 @@ public class AllVersions implements
                 COMPONENT_MAPPER,
                 (buf, component) -> ComponentSerialization.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buf), component),
                 buf -> ComponentSerialization.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buf))
+        );
+        TRUSTED_COMPONENT_CODEC = codecs.register(
+                COMPONENT_MAPPER,
+                (buf, component) -> ComponentSerialization.TRUSTED_STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buf), component),
+                buf -> ComponentSerialization.TRUSTED_STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buf))
         );
         OPTIONAL_COMPONENT_CODEC = codecs.register(COMPONENT_CODEC.optional());
 
@@ -568,6 +575,18 @@ public class AllVersions implements
                 (buffer, packet) -> ClientboundPlayerInfoUpdatePacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), packet),
                 buffer -> ClientboundPlayerInfoUpdatePacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
                 PLAYER_INFO_UPDATE_PACKET_CODEC
+        );
+
+        PLAYER_INFO_REMOVE_PACKET_CODEC = codecs.register(
+                PlayerInfoRemovePacket.class,
+                (buf, packet) -> packet.write(buf),
+                PlayerInfoRemovePacket::new
+        );
+        PLAYER_INFO_REMOVE_PACKET_MAPPER = mappings.register(
+                ClientboundPlayerInfoRemovePacket.class,
+                (buffer, packet) -> ClientboundPlayerInfoRemovePacket.STREAM_CODEC.encode(toRegistryFriendlyByteBuf(buffer), packet),
+                buffer -> ClientboundPlayerInfoRemovePacket.STREAM_CODEC.decode(toRegistryFriendlyByteBuf(buffer)),
+                PLAYER_INFO_REMOVE_PACKET_CODEC
         );
 
         SET_CAMERA_PACKET_CODEC = codecs.register(
@@ -952,17 +971,12 @@ public class AllVersions implements
         QUATERNIONF_CODEC = codecs.register(Quaternionf.class, SimpleByteBuf::writeQuaternion, SimpleByteBuf::readQuaternion);
         QUATERNIONFC_CODEC = codecs.register(Quaternionfc.class, SimpleByteBuf::writeQuaternion, SimpleByteBuf::readQuaternion);
 
-        if (serverVersion.isGreaterOrEqual(Version.of(1,21,3))) {
-            RESOLVABLE_PROFILE_MAPPER = mappings.register(
-                    ResolvableProfile.class, io.papermc.paper.datacomponent.item.ResolvableProfile.class,
-                    PaperResolvableProfile::new,
-                    profile -> ((PaperResolvableProfile) profile).getHandle()
-            );
-            RESOLVABLE_PROFILE_CODEC = codecs.register(RESOLVABLE_PROFILE_MAPPER, ResolvableProfile.STREAM_CODEC);
-        } else {
-            RESOLVABLE_PROFILE_MAPPER = null;
-            RESOLVABLE_PROFILE_CODEC = null;
-        }
+        RESOLVABLE_PROFILE_MAPPER = mappings.register(
+                ResolvableProfile.class, io.papermc.paper.datacomponent.item.ResolvableProfile.class,
+                PaperResolvableProfile::new,
+                profile -> ((PaperResolvableProfile) profile).getHandle()
+        );
+        RESOLVABLE_PROFILE_CODEC = codecs.register(RESOLVABLE_PROFILE_MAPPER, ResolvableProfile.STREAM_CODEC);
 
         ARMADILLO_STATE_MAPPER = mappings.register(net.minecraft.world.entity.animal.armadillo.Armadillo.ArmadilloState.class, Armadillo.State.class);
         ARMADILLO_STATE_CODEC = codecs.register(Armadillo.State.class); // stream codec?
@@ -1029,7 +1043,7 @@ public class AllVersions implements
         );
         OPTIONAL_LOCATION__CODEC = codecs.register(LOCATION_CODEC.optional());
 
-        var copperGolemStateMapper = mappings.register(CopperGolemState.class, it.jakegblp.lusk.nms.core.world.entity.coppergolem.CopperGolemState.class);
+        var copperGolemStateMapper = mappings.register(CopperGolemState.class, CopperGolem.State.class);
         codecs.register(
                 copperGolemStateMapper,
                 (buffer, value) -> CopperGolemState.STREAM_CODEC.encode(buffer.unwrap(), value),
@@ -1905,11 +1919,9 @@ public class AllVersions implements
 
             private final PluginManager pluginManager = Bukkit.getPluginManager();
 
-
             private boolean inactive(ChannelHandlerContext ctx) {
                 return !ctx.channel().isActive() || Bukkit.isStopping();
             }
-
 
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -1943,12 +1955,7 @@ public class AllVersions implements
                     if (event.isCancelled()) return;
                     else if (event.isModified()) newNmsPacket = (Packet<?>) event.createPacket().asNMS();
                 }
-
-                try {
-                    super.channelRead(ctx, newNmsPacket);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                super.channelRead(ctx, newNmsPacket);
             }
 
             @Override
@@ -1958,7 +1965,7 @@ public class AllVersions implements
                     return;
                 }
                 if (!(msg instanceof Packet<?> nmsPacket && nmsPacket.type().flow().equals(PacketFlow.CLIENTBOUND))) {
-                    super.channelRead(ctx, msg);
+                    super.write(ctx, msg, promise);
                     return;
                 }
                 if (inactive(ctx)) {
@@ -1977,7 +1984,7 @@ public class AllVersions implements
 
                 boolean shouldSkip = nmsPacket instanceof ClientboundSoundPacket || msg instanceof ClientboundSoundEntityPacket;
                 var newNmsPacket = nmsPacket;
-                if (!shouldSkip && nmsPacket instanceof ClientboundSetEntityDataPacket) {
+                if (!shouldSkip) {
                     var optional = mappings.getMapperFromBackwardClassOptional(nmsPacket.getClass());
                     if (optional.isPresent()) {
                         var packetMapper = (Mapper<Packet<?>, ClientboundPacket<?>>) optional.get();
@@ -2003,30 +2010,7 @@ public class AllVersions implements
                         }
                     }
                 }
-                /*
-                int targetId = packet.getId();
-
-                final Entity entity = LevelUtil.getEntityFromID(targetId, player.getWorld());
-                if (entity != null && entity.isGlowing()) {
-                    super.write(ctx, msg, promise);
-                    return;
-                }
-
-                final Set<Integer> list = GlowMap.glowMap.get(player);
-                if (list == null || !list.contains(targetId)) {
-                    super.write(ctx, msg, promise);
-                    return;
-                }
-
-                super.write(ctx, rewriteMetadataPacketForGlow(msg), promise);
-                return;
-                 */
-
-                try {
-                    super.write(ctx, newNmsPacket, promise);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                super.write(ctx, newNmsPacket, promise);
             }
 
             @Override

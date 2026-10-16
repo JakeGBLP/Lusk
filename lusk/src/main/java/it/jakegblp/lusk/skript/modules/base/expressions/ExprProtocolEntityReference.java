@@ -5,7 +5,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -13,14 +13,15 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprProtocolEntityReference extends SimpleExpression<ProtocolEntityReference> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprProtocolEntityReference.class, ExprProtocolEntityReference::new, ProtocolEntityReference.class,
-                "[protocol] entity reference (with|from) id %number%",
-                "[protocol] entity reference of %entity%");
-    }
-
     protected Expression<Object> referenceExpression;
     protected boolean fromEntity;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprProtocolEntityReference.class, ExprProtocolEntityReference::new, ProtocolEntityReference.class)
+                .patterns("[protocol] entity reference (with|from) id %number%",
+                        "[protocol] entity reference of %entity%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -33,8 +34,10 @@ public class ExprProtocolEntityReference extends SimpleExpression<ProtocolEntity
     @Override
     protected ProtocolEntityReference @Nullable [] get(Event event) {
         Object reference = referenceExpression.getSingle(event);
-        if (fromEntity && reference instanceof Entity entity) return new ProtocolEntityReference[] {ProtocolEntityReference.of(entity)};
-        else if (!fromEntity && reference instanceof Number number) return new ProtocolEntityReference[] {ProtocolEntityReference.of(number.intValue())};
+        if (fromEntity && reference instanceof Entity entity)
+            return new ProtocolEntityReference[]{ProtocolEntityReference.of(entity)};
+        else if (!fromEntity && reference instanceof Number number)
+            return new ProtocolEntityReference[]{ProtocolEntityReference.of(number.intValue())};
         else return new ProtocolEntityReference[0];
     }
 

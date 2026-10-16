@@ -8,7 +8,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.UpdateAttributesPacket;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
@@ -20,18 +20,18 @@ import java.util.List;
 
 public class ExprSecAttributePacket extends SectionExpression<UpdateAttributesPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecAttributePacket.class, ExprSecAttributePacket::new, UpdateAttributesPacket.class,
-                "[a] new [update] attribute[s] packet");
-    }
-
     public static final EntryValidator VALIDATOR = EntryValidator.builder()
             .addEntryData(new ExpressionEntryData<>("entity id", null, false, Integer.class))
             .addEntryData(new ExpressionEntryData<>("attributes", null, false, AttributeSnapshot.class))
             .build();
-
     private Expression<Integer> entityIdExpression;
     private Expression<AttributeSnapshot> attributeSnapshotExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecAttributePacket.class, ExprSecAttributePacket::new, UpdateAttributesPacket.class)
+                .patterns("[a] new [update] attribute[s] packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

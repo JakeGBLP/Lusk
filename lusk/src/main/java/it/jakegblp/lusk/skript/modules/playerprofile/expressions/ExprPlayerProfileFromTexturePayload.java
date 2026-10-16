@@ -7,19 +7,20 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
 import it.jakegblp.lusk.nms.core.world.player.profile.TexturesPayload;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfileFromTexturePayload extends SimpleExpression<CompletablePlayerProfile> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprPlayerProfileFromTexturePayload.class, ExprPlayerProfileFromTexturePayload::new, CompletablePlayerProfile.class,
-                "player profile[s] from %texturepayloads%");
-    }
-
     private Expression<TexturesPayload> texturesPayloadExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprPlayerProfileFromTexturePayload.class, ExprPlayerProfileFromTexturePayload::new, CompletablePlayerProfile.class)
+                .patterns("player profile[s] from %texturepayloads%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -30,7 +31,7 @@ public class ExprPlayerProfileFromTexturePayload extends SimpleExpression<Comple
 
     @Override
     protected CompletablePlayerProfile @Nullable [] get(Event event) {
-        return CommonUtils.map(texturesPayloadExpression.getAll(event), CompletablePlayerProfile::new);
+        return CommonUtils.map(CompletablePlayerProfile.class, texturesPayloadExpression.getArray(event), CompletablePlayerProfile::new);
     }
 
     @Override

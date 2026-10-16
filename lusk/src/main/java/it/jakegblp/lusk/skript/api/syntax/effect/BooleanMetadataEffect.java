@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.skript.api.syntax.effect;
 
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,20 +11,20 @@ import java.util.function.Supplier;
 
 public abstract class BooleanMetadataEffect extends SimpleMetadataEffect<Boolean> {
 
+    @Getter
+    @Setter
+    protected boolean inverted = false;
+
     public static <E extends BooleanMetadataEffect> void register(
             SyntaxRegistry syntaxRegistry,
             Class<E> effectClass,
             Supplier<E> supplier,
             String metadataProperty
     ) {
-        AddonUtils.registerEffect(syntaxRegistry, effectClass, supplier,
-                "(set [fake]|fake) " + metadataProperty + " of %protocolentityreferences% to %boolean% for %players%"
-        );
+        Registrations.effect(effectClass, supplier)
+                .patterns("(set [fake]|fake) " + metadataProperty + " of %protocolentityreferences% to %boolean% for %players%")
+                .register(syntaxRegistry);
     }
-
-    @Getter
-    @Setter
-    protected boolean inverted = false;
 
     @Override
     protected final void execute(Event event) {

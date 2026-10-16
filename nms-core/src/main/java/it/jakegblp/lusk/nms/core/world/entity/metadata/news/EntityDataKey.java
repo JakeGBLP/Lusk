@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -97,7 +98,7 @@ public abstract class EntityDataKey<BaseEntity extends Entity, PrettyType, Inter
 
     @SuppressWarnings("unchecked")
     public InternalType asInternal(PrettyType pretty) {
-        return typeConverter == null ? (InternalType) pretty : typeConverter.asFirst(pretty);
+        return typeConverter == null ? (InternalType) pretty : typeConverter.asFirst(pretty);//((internalType != null && internalType.isInstance(pretty)) ? (InternalType) pretty : typeConverter.asFirst(pretty));
     }
 
     public InternalType getInternalValue(BaseEntity entity) {
@@ -129,7 +130,10 @@ public abstract class EntityDataKey<BaseEntity extends Entity, PrettyType, Inter
     }
 
     public boolean canBeSetTo(Object object) {
-        return prettyType.isInstance(object);
+        if (this instanceof OptionalEntityDataKey) {
+            var optional = (Optional<?>) object;
+            return optional.map(prettyType::isInstance).orElse(true);
+        } else return prettyType.isInstance(object);
     }
 
     @Contract("-> new")

@@ -12,7 +12,7 @@ import java.util.List;
 import static it.jakegblp.lusk.nms.core.util.NullabilityUtils.copyIfNotNull;
 
 // todo: expand simple list api
-// todo: do we even need this?
+// todo: is this even needed?
 public interface EntityMetadataView {
 
     List<MetadataEntry<? extends Entity, ?>> items();

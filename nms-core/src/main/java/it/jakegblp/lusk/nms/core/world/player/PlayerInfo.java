@@ -170,7 +170,6 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
 
 
     public <T> void set(PlayerInfoUpdatePacket.Action<T> action, T value) {
-        action.validate();
         if (action == PlayerInfoUpdatePacket.Action.ADD_PLAYER)
             setPlayerProfile((CompletablePlayerProfile) value);
         else if (action == PlayerInfoUpdatePacket.Action.INITIALIZE_CHAT)
@@ -192,7 +191,6 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
     }
 
     public <T> void remove(PlayerInfoUpdatePacket.@NotNull Action<T> action) {
-        action.validate();
         if (action == PlayerInfoUpdatePacket.Action.ADD_PLAYER)
             removePlayerProfile();
         else if (action == PlayerInfoUpdatePacket.Action.INITIALIZE_CHAT)
@@ -211,12 +209,10 @@ public class PlayerInfo implements AsyncablesWrapper, BufferSerializer<PseudoEnu
             removeShowHat();
         } else
             throw new IllegalStateException("An unknown/unsupported action has been provided");
-
     }
 
     @SuppressWarnings("unchecked")
     public <T> T get(PlayerInfoUpdatePacket.@NotNull Action<T> action) {
-        action.validate();
         Object value;
         if (action == PlayerInfoUpdatePacket.Action.ADD_PLAYER)
             value = getPlayerProfile();

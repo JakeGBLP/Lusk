@@ -7,21 +7,22 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.world.player.profile.CompletablePlayerProfile;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfileCompletable extends SimpleExpression<CompletablePlayerProfile> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprPlayerProfileCompletable.class, ExprPlayerProfileCompletable::new, CompletablePlayerProfile.class,
-                "[sync:[async:a]sync[hronously]] completable %completableplayerprofiles%",
-                "uncompletable %completableplayerprofiles%");
-    }
-
     private Expression<CompletablePlayerProfile> completablePlayerProfileExpression;
     private @Nullable ExecutionMode executionMode;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprPlayerProfileCompletable.class, ExprPlayerProfileCompletable::new, CompletablePlayerProfile.class)
+                .patterns("[sync:[async:a]sync[hronously]] completable %completableplayerprofiles%",
+                        "uncompletable %completableplayerprofiles%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

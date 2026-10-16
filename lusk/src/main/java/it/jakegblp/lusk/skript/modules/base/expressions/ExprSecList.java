@@ -8,6 +8,7 @@ import ch.njol.skript.lang.*;
 import ch.njol.skript.util.LiteralUtils;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.reflection.SimpleArray;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
@@ -22,13 +23,14 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.parseSectionNodes;
 
 public class ExprSecList extends SectionExpression<Object> implements AsyncableSyntaxesWrapper {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecList.class, ExprSecList::new, Object.class,
-                "[a[n]] [%-classinfos%] list [of|containing]");
-    }
-
     private ExpressionList<?> objectExpressionList;
     private Expression<ClassInfo<?>> classInfoExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecList.class, ExprSecList::new, Object.class)
+                .patterns("[a[n]] [%-classinfos%] list [of|containing]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -121,7 +123,7 @@ public class ExprSecList extends SectionExpression<Object> implements AsyncableS
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return (classInfoExpression == null ? "" : classInfoExpression.toString(event, debug) + " ")+"list containing";
+        return (classInfoExpression == null ? "" : classInfoExpression.toString(event, debug) + " ") + "list containing";
     }
 
     @Override

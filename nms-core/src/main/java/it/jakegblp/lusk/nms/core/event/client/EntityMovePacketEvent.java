@@ -1,7 +1,7 @@
 package it.jakegblp.lusk.nms.core.event.client;
 
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericMovementPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithMovement;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.MoveEntityPacket;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -30,12 +30,12 @@ public class EntityMovePacketEvent extends ClientPacketEvent<MoveEntityPacket> {
         this.entityId = packet.getEntityId();
         this.onGround = packet.isOnGround();
         if (packet.hasMovement()) {
-            var positionPacket = (GenericMovementPacket) packet;
+            var positionPacket = (PacketWithMovement) packet;
             this.hasMovement = true;
             this.movement = positionPacket.getMovement();
         }
         if (packet.hasRotation()) {
-            var positionPacket = (GenericRotationPacket) packet;
+            var positionPacket = (PacketWithRotation) packet;
             this.hasRotation = true;
             this.yaw = positionPacket.getYaw();
             this.pitch = positionPacket.getPitch();

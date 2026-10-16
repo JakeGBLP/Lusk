@@ -9,7 +9,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.BlockDestructionPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
@@ -25,25 +25,25 @@ import java.util.List;
 public class ExprSecBlockDestructionPacket extends SectionExpression<BlockDestructionPacket> {
 
     public static final EntryValidator VALIDATOR = EntryValidator.builder()
-            .addEntryData(new ExpressionEntryData<>("id", null, false, Integer.class))
+            .addEntryData(new ExpressionEntryData<>("entity id", null, false, Integer.class))
             .addEntryData(new ExpressionEntryData("location", null, false, Location.class, Vector.class))
             .addEntryData(new ExpressionEntryData<>("stage", null, false, Integer.class))
             .build();
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecBlockDestructionPacket.class, ExprSecBlockDestructionPacket::new, BlockDestructionPacket.class,
-                "[a] new block ((dig[ging]|break[ing]|min(e|ing)) stage|destruction [stage]) packet");
-    }
-
     private Expression<?> locationExpression;
     private Expression<Integer> idExpression, stageExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecBlockDestructionPacket.class, ExprSecBlockDestructionPacket::new, BlockDestructionPacket.class)
+                .patterns("[a] new block ((dig[ging]|break[ing]|min(e|ing)) stage|destruction [stage]) packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
         EntryContainer container = VALIDATOR.validate(node);
         if (container == null) return false;
-        idExpression = (Expression<Integer>) container.getOptional("id", false);
+        idExpression = (Expression<Integer>) container.getOptional("entity id", false);
         if (idExpression == null) return false;
         locationExpression = (Expression<?>) container.getOptional("location", false);
         if (locationExpression == null) return false;
@@ -52,7 +52,7 @@ public class ExprSecBlockDestructionPacket extends SectionExpression<BlockDestru
             Integer stage = literal.getSingle();
             if (stage == null) return false;
             if (stage > 10 || stage < 0) {
-                Skript.warning("The block destruction stage '"+stage+"' is not within 0 (removal) and 10 (maximum destruction).");
+                Skript.warning("The block destruction stage '" + stage + "' is not within 0 (removal) and 10 (maximum destruction).");
             }
             return true;
         } else return stageExpression != null;
@@ -71,7 +71,7 @@ public class ExprSecBlockDestructionPacket extends SectionExpression<BlockDestru
         if (stage == null) return new BlockDestructionPacket[0];
         Integer id = idExpression.getSingle(event);
         if (id == null) return new BlockDestructionPacket[0];
-        return new BlockDestructionPacket[] {new BlockDestructionPacket(id, processedLocation.toBlockVector(), (byte) (Math.clamp(stage,0,10) - 1))};
+        return new BlockDestructionPacket[]{new BlockDestructionPacket(id, processedLocation.toBlockVector(), (byte) (Math.clamp(stage, 0, 10) - 1))};
     }
 
     @Override

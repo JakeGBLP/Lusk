@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.SoundAtEntityPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.level.LevelUtils;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SoundEntityPacket implements ClientboundPacketWithEntityId<SoundAtEntityPacketEvent> {
+public class SoundEntityPacket implements ClientboundPacket<SoundAtEntityPacketEvent>, PacketWithEntityId {
     protected Sound sound;
     protected SoundCategory soundCategory;
     protected int entityId;

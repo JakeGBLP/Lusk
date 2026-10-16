@@ -13,7 +13,7 @@ public class EffMetadataBlockDisplayBlockData extends SimpleMetadataEffect<Block
     }
 
     @Override
-    public EntityDataKey<? extends Entity, BlockData, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, BlockData, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().BLOCK_DISPLAY.DISPLAY_BLOCK;
     }
 

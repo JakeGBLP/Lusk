@@ -34,6 +34,4 @@ public final class BukkitHelper {
                 return Either.left(value);
         return null;
     }
-
-    // todo: copper golem state
 }

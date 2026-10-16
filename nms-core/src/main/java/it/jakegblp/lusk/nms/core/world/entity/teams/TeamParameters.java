@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.world.entity.teams;
 
 import it.jakegblp.lusk.common.Copyable;
+import it.jakegblp.lusk.common.Version;
 import it.jakegblp.lusk.nms.core.serialization.BufferSerializable;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.util.PureNMSObject;
@@ -11,10 +12,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.scoreboard.Team;
 
+import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
+
 @AllArgsConstructor
 @Getter
 @Setter
 public class TeamParameters implements PureNMSObject<Object>, BufferSerializable<TeamParameters>, Copyable<TeamParameters> {
+    public static final boolean v26_2 = NMS.getVersion().isGreaterOrEqual(Version.of(26, 2));
 
     protected Component displayName, playerPrefix, playerSuffix;
     protected Team.OptionStatus nametagVisibility, collisionRule;
@@ -58,23 +62,43 @@ public class TeamParameters implements PureNMSObject<Object>, BufferSerializable
 
     @Override
     public void write(SimpleByteBuf buffer) {
-        buffer.writeComponent(displayName);
-        buffer.writeEnum(nametagVisibility);
-        buffer.writeByte(getOptions());
-        buffer.writeEnum(collisionRule);
-        buffer.writeNamedTextColor(color);
-        buffer.writeComponent(playerPrefix);
-        buffer.writeComponent(playerSuffix);
+        if (v26_2) {
+            buffer.writeTrustedComponent(displayName);
+            buffer.writeTrustedComponent(playerPrefix);
+            buffer.writeTrustedComponent(playerSuffix);
+            buffer.writeEnum(nametagVisibility);
+            buffer.writeEnum(collisionRule);
+            buffer.writeNullable(color, SimpleByteBuf::writeNamedTextColor);
+            buffer.writeByte(getOptions());
+        } else {
+            buffer.writeTrustedComponent(displayName);
+            buffer.writeEnum(nametagVisibility);
+            buffer.writeByte(getOptions());
+            buffer.writeEnum(collisionRule);
+            buffer.writeNamedTextColor(color);
+            buffer.writeTrustedComponent(playerPrefix);
+            buffer.writeTrustedComponent(playerSuffix);
+        }
     }
 
     @Override
     public void read(SimpleByteBuf buffer) {
-        displayName = buffer.readComponent();
-        nametagVisibility = buffer.readEnum(Team.OptionStatus.class);
-        setOptions(buffer.readByte());
-        collisionRule = buffer.readEnum(Team.OptionStatus.class);
-        color = buffer.readNamedTextColor();
-        playerPrefix = buffer.readComponent();
-        playerSuffix = buffer.readComponent();
+        if (v26_2) {
+            displayName = buffer.readTrustedComponent();
+            playerPrefix = buffer.readTrustedComponent();
+            playerSuffix = buffer.readTrustedComponent();
+            nametagVisibility = buffer.readEnum(Team.OptionStatus.class);
+            collisionRule = buffer.readEnum(Team.OptionStatus.class);
+            color = buffer.readNullable(SimpleByteBuf::readNamedTextColor);
+            setOptions(buffer.readByte());
+        } else {
+            displayName = buffer.readTrustedComponent();
+            nametagVisibility = buffer.readEnum(Team.OptionStatus.class);
+            setOptions(buffer.readByte());
+            collisionRule = buffer.readEnum(Team.OptionStatus.class);
+            color = buffer.readNamedTextColor();
+            playerPrefix = buffer.readTrustedComponent();
+            playerSuffix = buffer.readTrustedComponent();
+        }
     }
 }

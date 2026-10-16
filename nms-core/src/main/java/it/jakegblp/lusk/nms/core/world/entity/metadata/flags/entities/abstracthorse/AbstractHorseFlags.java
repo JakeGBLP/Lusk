@@ -8,7 +8,6 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.FlagByte;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Tameable;
 
-// todo: remove usage of unused flag EVERYWHERE and delete it
 public class AbstractHorseFlags extends FlagByte<AbstractHorse> implements Copyable<AbstractHorseFlags> {
     public static final BooleanFlag<AbstractHorse> UNUSED_1 = Flag.unusedBooleanFlag("UNUSED_1");
     public static final BooleanFlag<AbstractHorse> IS_TAME = Flag.booleanFlag("IS_TAME", Tameable::isTamed, Tameable::setTamed);

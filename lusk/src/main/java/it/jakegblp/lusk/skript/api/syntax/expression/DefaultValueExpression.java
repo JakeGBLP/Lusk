@@ -66,7 +66,7 @@ public class DefaultValueExpression<T> extends SimpleExpression<T> implements De
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "default value expressions "+getReturnType().getSimpleName();
+        return "default value expressions " + getReturnType().getSimpleName();
     }
 
     @Override

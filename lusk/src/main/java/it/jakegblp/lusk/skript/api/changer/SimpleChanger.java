@@ -7,8 +7,15 @@ public interface SimpleChanger<C, V> extends GenericSimpleChanger<C, V> {
         return true;
     }
 
-    default void set(C change, V delta) {}
-    default void add(C change, V delta) {}
-    default void remove(C change, V delta) {}
-    default void removeAll(C change, V delta) {}
+    default void set(C change, V delta) {
+    }
+
+    default void add(C change, V delta) {
+    }
+
+    default void remove(C change, V delta) {
+    }
+
+    default void removeAll(C change, V delta) {
+    }
 }

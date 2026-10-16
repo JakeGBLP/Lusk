@@ -1,7 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.EntityMetadataPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
+import it.jakegblp.lusk.nms.core.serialization.key.HolderKey;
 import it.jakegblp.lusk.nms.core.util.NMSObject;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
@@ -29,7 +31,7 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 @NullMarked
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class EntityMetadataPacket implements ClientboundPacketWithEntityId<EntityMetadataPacketEvent> {
+public final class EntityMetadataPacket implements ClientboundPacket<EntityMetadataPacketEvent>, PacketWithEntityId {
     private int entityId;
     private Class<? extends Entity> target;
     @SuppressWarnings("NotNullFieldNotInitialized")
@@ -92,8 +94,13 @@ public final class EntityMetadataPacket implements ClientboundPacketWithEntityId
                 assert item.getValue() != null;
                 Object prettyValue = componentEntityDataKey.createParentObject(item.getValue());
                 value = prettyValue instanceof NMSObject nmsObject ? nmsObject.asNMS() : NMS.toNMS(prettyValue);
+            } else if (key.getSerializer().key() instanceof HolderKey) {
+                value = item.getValue();
             } else
                 value = item.getSerializableValue();
+            //System.out.println("value: " + value);
+            //System.out.println("key: " + key.getName());
+            //System.out.println("codec key: " + serializer.codec().key());
             serializer.codec().write(buffer, value);
         }
 

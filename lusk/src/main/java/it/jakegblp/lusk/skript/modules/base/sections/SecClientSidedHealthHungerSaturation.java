@@ -11,6 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.skript.api.entry.PatternEntryData;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -40,18 +41,18 @@ public class SecClientSidedHealthHungerSaturation extends Section {
             .addEntryData(new PatternEntryData<>("(food|hunger) [level|bar]", "hunger", true, Integer.class))
             .addEntryData(new ExpressionEntryData<>("saturation", null, true, Float.class))
             .build();
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerSection(syntaxRegistry, SecClientSidedHealthHungerSaturation.class, SecClientSidedHealthHungerSaturation::new,
-                "make %players% see (their|its) (vitals|vital stats) as",
-                "update %players%'[s] (vitals|vital stats)",
-                "update (vitals|vital stats) (of|for) %players%");
-    }
-
     private Expression<Player> playerExpression;
     private Expression<Number> healthExpression;
     private Expression<Number> hungerExpression;
     private Expression<Number> saturationExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.section(SecClientSidedHealthHungerSaturation.class, SecClientSidedHealthHungerSaturation::new)
+                .patterns("make %players% see (their|its) (vitals|vital stats) as",
+                        "update %players%'[s] (vitals|vital stats)",
+                        "update (vitals|vital stats) (of|for) %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -82,7 +83,7 @@ public class SecClientSidedHealthHungerSaturation extends Section {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "update vitals for "+playerExpression.toString(event, debug);
+        return "update vitals for " + playerExpression.toString(event, debug);
     }
 
 }

@@ -7,7 +7,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -16,8 +16,10 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 public class ExprEntityMetadataEntries extends PropertyExpression<EntityMetadata, MetadataEntry> {
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprEntityMetadataEntries.class, ExprEntityMetadataEntries::new, MetadataEntry.class,
-                "[entity] metadata entries", "entitymetadatas", true);
+        Registrations.propertyExpression(ExprEntityMetadataEntries.class, ExprEntityMetadataEntries::new, MetadataEntry.class)
+                .propertyOf("[entity] metadata entries", "entitymetadatas")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
     }
 
     @Override

@@ -9,18 +9,8 @@ import java.util.function.Function;
 
 public abstract class SimpleParser<T> extends Parser<T> {
 
-    public static <T> SimpleParser<T> simple() {
-        return new SimpleParser<>() {
-            @Override
-            public @NotNull String toString(T t) {
-                return t.toString();
-            }
-        };
-    }
-
     private final boolean canParse;
     private final Function<String, T> parseFunction;
-
     public SimpleParser(boolean canParse) {
         this.canParse = canParse;
         this.parseFunction = null;
@@ -33,6 +23,15 @@ public abstract class SimpleParser<T> extends Parser<T> {
 
     public SimpleParser() {
         this(false);
+    }
+
+    public static <T> SimpleParser<T> simple() {
+        return new SimpleParser<>() {
+            @Override
+            public @NotNull String toString(T t) {
+                return t.toString();
+            }
+        };
     }
 
     @Override

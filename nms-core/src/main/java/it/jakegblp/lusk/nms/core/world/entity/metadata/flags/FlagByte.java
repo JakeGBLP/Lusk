@@ -20,7 +20,7 @@ public abstract class FlagByte<E extends Entity> implements NMSObject<Byte> {
     }
 
     public static <E extends Entity, F extends FlagByte<E>> F dynamic(Class<F> byteFlagClass, byte flags) {
-        return SimpleClass.quickInstance(byteFlagClass, flags);
+        return SimpleClass.quickInstance(byteFlagClass, new Class[] {byte.class}, flags);
     }
 
     public static <E extends Entity, F extends FlagByte<E>> F dynamic(Class<F> byteFlagClass, E entity) {

@@ -3,6 +3,7 @@ package it.jakegblp.lusk.nms.core.world.entity.metadata;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import io.papermc.paper.command.CommandBlockHolder;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.entity.Bucketable;
 import io.papermc.paper.math.Rotations;
 import io.papermc.paper.registry.RegistryKey;
@@ -103,6 +104,8 @@ public final class MetadataKeyRegistry {
     public final TextDisplayKeys TEXT_DISPLAY;
     public final LivingEntityKeys LIVINGENTITY;
     public final ArmorStandKeys ARMORSTAND;
+    public final AvatarKeys AVATAR;
+    public final MannequinKeys MANNEQUIN;
     public final PlayerKeys PLAYER;
     public final MobKeys MOB;
     public final BatKeys BAT;
@@ -146,6 +149,8 @@ public final class MetadataKeyRegistry {
     public final CatKeys CAT;
     public final ParrotKeys PARROT;
     public final WolfKeys WOLF;
+    public final AbstractNautilusKeys ABSTRACT_NAUTILUS;
+    public final ZombieNautilusKeys ZOMBIE_NAUTILUS;
     public final AbstractVillagerKeys ABSTRACT_VILLAGER;
     public final VillagerKeys VILLAGER;
     public final AbstractFishKeys ABSTRACT_FISH;
@@ -208,6 +213,8 @@ public final class MetadataKeyRegistry {
         TEXT_DISPLAY = new TextDisplayKeys(this);
         LIVINGENTITY = new LivingEntityKeys(this);
         ARMORSTAND = new ArmorStandKeys(this);
+        AVATAR = new AvatarKeys(this);
+        MANNEQUIN = new MannequinKeys(this);
         PLAYER = new PlayerKeys(this);
         MOB = new MobKeys(this);
         BAT = new BatKeys(this);
@@ -251,6 +258,8 @@ public final class MetadataKeyRegistry {
         CAT = new CatKeys(this);
         PARROT = new ParrotKeys(this);
         WOLF = new WolfKeys(this);
+        ABSTRACT_NAUTILUS = new AbstractNautilusKeys(this);
+        ZOMBIE_NAUTILUS = new ZombieNautilusKeys(this);
         ABSTRACT_VILLAGER = new AbstractVillagerKeys(this);
         VILLAGER = new VillagerKeys(this);
         ABSTRACT_FISH = new AbstractFishKeys(this);
@@ -343,6 +352,25 @@ public final class MetadataKeyRegistry {
                 name,
                 getNextId(entityClass),
                 new EntityClasses<>(entityClass),
+                nms.getEntityDataSerializerSimple(Byte.class),
+                type
+        ));
+    }
+
+    @NullMarked
+    @Contract("_, _, _ -> new")
+    public <E extends Entity,
+            T extends FlagByte<E>
+            >
+    FlagsEntityDataKey<E, T> registerFlags(
+            String name,
+            List<Class<? extends E>> entityClasses,
+            Class<T> type
+    ) {
+        return register(new FlagsEntityDataKey<>(
+                name,
+                getNextId(entityClasses),
+                new EntityClasses<>(entityClasses),
                 nms.getEntityDataSerializerSimple(Byte.class),
                 type
         ));
@@ -1494,8 +1522,9 @@ public final class MetadataKeyRegistry {
         public final FlagEntityDataKey<LivingEntity, AvatarFlags, Boolean> HAT;
 
         public AvatarKeys(MetadataKeyRegistry r) {
-            MAIN_HAND = r.registerMapped("MAIN_HAND", LivingEntity.class, MainHand.class, Byte.class, EntityUtils::getMainHand, EntityUtils::setMainHand, aByte -> MainHand.values()[aByte], mainHand -> (byte) mainHand.ordinal(), MainHand.RIGHT);
-            PLAYER_FLAGS = r.registerFlags("PLAYER_FLAGS", LivingEntity.class, AvatarFlags.class);
+            var classes = List.of(Player.class, Mannequin.class);
+            MAIN_HAND = r.registerMapped("MAIN_HAND", classes, MainHand.class, Byte.class, EntityUtils::getMainHand, EntityUtils::setMainHand, aByte -> MainHand.values()[aByte], mainHand -> (byte) mainHand.ordinal(), MainHand.RIGHT);
+            PLAYER_FLAGS = r.registerFlags("PLAYER_FLAGS", classes, AvatarFlags.class);
             CAPE = r.registerFlag(PLAYER_FLAGS, AvatarFlags.CAPE);
             JACKET = r.registerFlag(PLAYER_FLAGS, AvatarFlags.JACKET);
             LEFT_SLEEVE = r.registerFlag(PLAYER_FLAGS, AvatarFlags.LEFT_SLEEVE);
@@ -1504,7 +1533,18 @@ public final class MetadataKeyRegistry {
             RIGHT_PANTS = r.registerFlag(PLAYER_FLAGS, AvatarFlags.RIGHT_PANTS);
             HAT = r.registerFlag(PLAYER_FLAGS, AvatarFlags.HAT);
         }
+    }
 
+    public static final class MannequinKeys {
+        public final SimpleEntityDataKey<Mannequin, ResolvableProfile> PROFILE;
+        public final BooleanEntityDataKey<Mannequin> IMMOVABLE;
+        public final OptionalEntityDataKey<Mannequin, Component> DESCRIPTION;
+
+        public MannequinKeys(MetadataKeyRegistry r) {
+            PROFILE = r.register("PROFILE", Mannequin.class, ResolvableProfile.class, Mannequin::getProfile, Mannequin::setProfile, Mannequin.defaultProfile());
+            IMMOVABLE = r.registerBoolean("IMMOVABLE", Mannequin.class, Mannequin::isImmovable, Mannequin::setImmovable);
+            DESCRIPTION = r.registerOptional("DESCRIPTION", Mannequin.class, Component.class, Mannequin::getDescription, Mannequin::setDescription);
+        }
     }
 
     public static final class PlayerKeys {
@@ -1519,7 +1559,6 @@ public final class MetadataKeyRegistry {
             LEFT_SHOULDER_DATA = r.registerOptional("LEFT_SHOULDER_DATA", Player.class, Integer.class, EntityUtils::getLeftShoulderParrotVariantId, EntityUtils::setLeftShoulderParrotVariantId);
             RIGHT_SHOULDER_DATA = r.registerOptional("RIGHT_SHOULDER_DATA", Player.class, Integer.class, EntityUtils::getRightShoulderParrotVariantId, EntityUtils::setRightShoulderParrotVariantId);
         }
-
     }
 
     public static final class MobKeys {
@@ -2129,6 +2168,7 @@ public final class MetadataKeyRegistry {
 
     public static final class VillagerKeys {
         public final SimpleEntityDataKey<Villager, VillagerData> VILLAGER_DATA;
+        // todo: villager data finalized boolean
 
         public VillagerKeys(MetadataKeyRegistry r) {
             VILLAGER_DATA = r.register("VILLAGER_DATA", Villager.class, VillagerData.class, VillagerData::new, (villager, villagerData) -> villagerData.apply(villager), new VillagerData());

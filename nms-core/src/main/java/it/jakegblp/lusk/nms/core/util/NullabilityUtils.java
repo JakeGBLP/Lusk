@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.nms.core.util;
 
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import it.jakegblp.lusk.common.Copyable;
 import it.jakegblp.lusk.common.PseudoEnum;
 import net.kyori.adventure.text.Component;
@@ -28,12 +29,15 @@ public class NullabilityUtils {
         return (T) switch (value) {
             case Copyable<?> copyable -> copyable.copy();
             case Keyed ignored -> value;
+            case Component ignored -> value;
             case ItemStack item -> item.clone();
             case Vector vector -> vector.clone();
             case BlockData blockData -> blockData.clone();
             case BoundingBox boundingBox -> boundingBox.clone();
             case Location location -> location.clone();
-            case Component ignored -> value;
+            case Optional<?> optional -> optional.map(NullabilityUtils::copyIfNotNull);
+            case ResolvableProfile profile ->
+                    ResolvableProfile.resolvableProfile().name(profile.name()).uuid(profile.uuid()).addProperties(profile.properties()).skinPatch(profile.skinPatch()).build();
             case Quaternionf quaternionf -> {
                 try {
                     yield quaternionf.clone();

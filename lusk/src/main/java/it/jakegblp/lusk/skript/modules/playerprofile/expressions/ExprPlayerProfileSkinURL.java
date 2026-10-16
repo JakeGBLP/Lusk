@@ -7,7 +7,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
@@ -20,16 +20,14 @@ import java.net.URL;
 
 public class ExprPlayerProfileSkinURL extends SimplePropertyExpression<Object, URL> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprPlayerProfileSkinURL.class, ExprPlayerProfileSkinURL::new, URL.class,
-                "[player] [profile] (:skin|cape) url", "players/playerprofiles/itemtypes/blocks/blockstates");
-    }
-
-    static {
-        register(ExprPlayerProfileSkinURL.class, URL.class, "[player] [profile] (:skin|cape) url", "players/playerprofiles/itemtypes/blocks/blockstates");
-    }
-
     private boolean skin;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.propertyExpression(ExprPlayerProfileSkinURL.class, ExprPlayerProfileSkinURL::new, URL.class)
+                .propertyOf("[player] [profile] (:skin|cape) url", "players/playerprofiles/itemtypes/blocks/blockstates")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
+    }
 
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
@@ -43,7 +41,8 @@ public class ExprPlayerProfileSkinURL extends SimplePropertyExpression<Object, U
         PlayerProfile profile = switch (from) {
             case PlayerProfile profile1 -> profile1;
             case Player player -> player.getPlayerProfile();
-            case ItemType itemType when itemType.getItemMeta() instanceof SkullMeta skullMeta -> skullMeta.getPlayerProfile();
+            case ItemType itemType when itemType.getItemMeta() instanceof SkullMeta skullMeta ->
+                    skullMeta.getPlayerProfile();
             case Block block when block.getState() instanceof Skull skull -> skull.getPlayerProfile();
             case Skull skull -> skull.getPlayerProfile();
             case null, default -> null;
@@ -61,7 +60,8 @@ public class ExprPlayerProfileSkinURL extends SimplePropertyExpression<Object, U
                 PlayerProfile profile = switch (object) {
                     case PlayerProfile playerProfile -> playerProfile;
                     case Player player -> player.getPlayerProfile();
-                    case ItemType itemType when itemType.getItemMeta() instanceof SkullMeta skullMeta -> skullMeta.getPlayerProfile();
+                    case ItemType itemType when itemType.getItemMeta() instanceof SkullMeta skullMeta ->
+                            skullMeta.getPlayerProfile();
                     case Block block when block.getState() instanceof Skull skull -> skull.getPlayerProfile();
                     case Skull skull -> skull.getPlayerProfile();
                     case null, default -> null;

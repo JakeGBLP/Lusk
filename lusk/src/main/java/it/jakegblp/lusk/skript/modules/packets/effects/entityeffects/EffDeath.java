@@ -9,7 +9,7 @@ import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityEventPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -33,12 +33,14 @@ import java.util.Set;
 @Since("2.0.0")
 public class EffDeath extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffDeath.class, EffDeath::new, "kill %protocolentityreferences% for %players%");
-    }
-
     private Expression<ProtocolEntityReference> protocolEntityReferenceExpression;
     private Expression<Player> playerExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffDeath.class, EffDeath::new)
+                .patterns("kill %protocolentityreferences% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -47,7 +49,6 @@ public class EffDeath extends Effect {
         playerExpression = (Expression<Player>) expressions[1];
         return true;
     }
-
 
     @Override
     protected void execute(Event event) {

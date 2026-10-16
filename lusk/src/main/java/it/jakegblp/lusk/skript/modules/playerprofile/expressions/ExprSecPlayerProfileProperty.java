@@ -9,6 +9,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -21,18 +22,18 @@ import java.util.List;
 
 public class ExprSecPlayerProfileProperty extends SectionExpression<MutableProfileProperty> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecPlayerProfileProperty.class, ExprSecPlayerProfileProperty::new, MutableProfileProperty.class,
-                "[a] new [player] profile property");
-    }
-
     public static final EntryValidator VALIDATOR = EntryValidator.builder()
             .addEntryData(new ExpressionEntryData<>("name", null, false, String.class))
             .addEntryData(new ExpressionEntryData<>("value", null, false, String.class))
             .addEntryData(new ExpressionEntryData<>("signature", null, true, String.class))
             .build();
-
     private Expression<String> nameExpression, valueExpression, signatureExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecPlayerProfileProperty.class, ExprSecPlayerProfileProperty::new, MutableProfileProperty.class)
+                .patterns("[a] new [player] profile property")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -64,7 +65,7 @@ public class ExprSecPlayerProfileProperty extends SectionExpression<MutableProfi
         String value = valueExpression.getSingle(event);
         if (value == null) return new MutableProfileProperty[0];
         String signature = AddonUtils.getSingleNullable(signatureExpression, event);
-        return new MutableProfileProperty[] {new MutableProfileProperty(name, value, signature)};
+        return new MutableProfileProperty[]{new MutableProfileProperty(name, value, signature)};
     }
 
     @Override

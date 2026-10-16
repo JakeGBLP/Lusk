@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.BlockDestructionPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 @ToString
 @EqualsAndHashCode
 @NullMarked
-public class BlockDestructionPacket implements ClientboundPacketWithEntityId<BlockDestructionPacketEvent> {
+public class BlockDestructionPacket implements ClientboundPacket<BlockDestructionPacketEvent>, PacketWithEntityId {
 
     protected int entityId;
     @SuppressWarnings("NotNullFieldNotInitialized")

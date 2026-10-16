@@ -11,6 +11,7 @@ import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -24,18 +25,20 @@ import java.util.Set;
 
 public class ExprEntityMetadataEntry extends PropertyExpression<EntityMetadata, Object> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprEntityMetadataEntry.class, ExprEntityMetadataEntry::new, Object.class,
-                "(entity metadata|metadata property) %entitymetadatakeys%", "entitymetadatas", true);
-    }
-
     private Expression<EntityDataKey<?, ?, ?, ?, ?>> keyExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.propertyExpression(ExprEntityMetadataEntry.class, ExprEntityMetadataEntry::new, Object.class)
+                .propertyOf("(entity metadata|metadata property) %entitymetadatakeys%", "entitymetadatas")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         keyExpression = (Expression<EntityDataKey<?, ?, ?, ?, ?>>) expressions[matchedPattern];
-        int metadataIndex = Math.abs(matchedPattern-1);
+        int metadataIndex = Math.abs(matchedPattern - 1);
         if (!LiteralUtils.hasUnparsedLiteral(expressions[metadataIndex])) {
             setExpr((Expression<? extends EntityMetadata>) expressions[metadataIndex]);
         } else {

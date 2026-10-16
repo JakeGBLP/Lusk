@@ -6,7 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SyntaxStringBuilder;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.AbstractNMS;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.Event;
@@ -15,16 +15,16 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffQuicklySetBlocks extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffQuicklySetBlocks.class, EffQuicklySetBlocks::new,
-                "quickly set [all [[of] the]|the] blocks within %location% and %location% to %blockdata%",
-                "quickly replace [all] %blockdata% within %location% and %location% with %blockdata%"
-        );
-    }
-
     private Expression<Location> corner1Expression, corner2Expression;
     private Expression<BlockData> replacementExpression, toBeReplacedExpression;
     private boolean replace;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffQuicklySetBlocks.class, EffQuicklySetBlocks::new)
+                .patterns("quickly set [all [[of] the]|the] blocks within %location% and %location% to %blockdata%",
+                        "quickly replace [all] %blockdata% within %location% and %location% with %blockdata%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.guardian.GuardianBeam;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -30,17 +31,16 @@ public class ExprSecGuardianBeam extends SectionExpression<GuardianBeam> {
             .addEntryData(new ExpressionEntryData<>("start", null, false, Vector.class, Location.class))
             .addEntryData(new ExpressionEntryData<>("end", null, false, Vector.class, Location.class))
             .build();
-
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecGuardianBeam.class, ExprSecGuardianBeam::new, GuardianBeam.class,
-                "[a] new [:persistent] [virtual] guardian beam");
-    }
-
     private Expression<Integer> idExpression, targetIdExpression;
     private Expression<UUID> uuidExpression, targetUuidExpression;
     private Expression<Object> startExpression, endExpression;
     private boolean persistent;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecGuardianBeam.class, ExprSecGuardianBeam::new, GuardianBeam.class)
+                .patterns("[a] new [:persistent] [virtual] guardian beam")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

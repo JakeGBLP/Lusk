@@ -1,18 +1,20 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.server;
 
+import it.jakegblp.lusk.nms.core.event.server.PlayerActionPacketEvent;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.util.BlockVector;
 
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
-public class PlayerActionPacket implements BufferSerializableServerboundPacket {
+public class PlayerActionPacket implements ServerboundPacket<PlayerActionPacketEvent> {
 
     protected BlockVector position;
     protected BlockFace blockFace;
@@ -21,6 +23,11 @@ public class PlayerActionPacket implements BufferSerializableServerboundPacket {
 
     public PlayerActionPacket(SimpleByteBuf buffer) {
         read(buffer);
+    }
+
+    @Override
+    public PlayerActionPacketEvent createEvent(Player player, boolean async) {
+        return new PlayerActionPacketEvent(this, player, async);
     }
 
     @Override

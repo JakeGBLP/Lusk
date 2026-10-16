@@ -1,9 +1,9 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.PlayerPositionPacketEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericVelocityPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithPosition;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithVelocity;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.flags.entities.entity.RelativeFlag;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NullMarked
-public class PlayerPositionPacket implements BufferSerializableClientboundPacket<PlayerPositionPacketEvent>, GenericPositionPacket, GenericVelocityPacket, GenericRotationPacket {
+public class PlayerPositionPacket implements ClientboundPacket<PlayerPositionPacketEvent>, PacketWithPosition, PacketWithVelocity, PacketWithRotation {
 
     protected int teleportId;
     protected double positionX, positionY, positionZ;

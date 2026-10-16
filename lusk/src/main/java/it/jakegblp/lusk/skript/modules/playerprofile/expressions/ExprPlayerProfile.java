@@ -8,6 +8,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.TexturesPayload;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -16,12 +17,13 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfile extends SimpleExpression<PlayerProfile> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprPlayerProfile.class, ExprPlayerProfile::new, PlayerProfile.class,
-                "[a] [new] [player] profile from base64 %string% [and signature %-string%]");
-    }
-
     private Expression<String> base64Expression, signatureExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprPlayerProfile.class, ExprPlayerProfile::new, PlayerProfile.class)
+                .patterns("[a] [new] [player] profile from base64 %string% [and signature %-string%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

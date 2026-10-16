@@ -7,7 +7,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -16,13 +16,14 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffRemoveEntities extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffRemoveEntities.class, EffRemoveEntities::new,
-                "remove entit(y|ies) %entities/integers% for %players%");
-    }
-
     private Expression<Object> entityExpression;
     private Expression<Player> playerExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffRemoveEntities.class, EffRemoveEntities::new)
+                .patterns("remove entit(y|ies) %entities/integers% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -48,6 +49,6 @@ public class EffRemoveEntities extends Effect {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "remove "+entityExpression.toString(event, debug) + " for "+playerExpression.toString(event, debug);
+        return "remove " + entityExpression.toString(event, debug) + " for " + playerExpression.toString(event, debug);
     }
 }

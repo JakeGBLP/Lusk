@@ -13,9 +13,9 @@ import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.optional.OptionallySectionEffect;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityMetadata;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -49,16 +49,17 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.getSingleDefaultOrNull;
 @Since("2.0.0")
 public class EffSecSpawnFakeEntity extends OptionallySectionEffect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerSection(syntaxRegistry, EffSecSpawnFakeEntity.class, EffSecSpawnFakeEntity::new,
-                "spawn [a] (fake|client[-| ]sided) %entitytype% [with id %-number%] %directions% %location% for %players%");
-    }
-
     private Expression<EntityType> entityTypeExpression;
     private Expression<Number> idExpression;
     private Expression<Location> locationExpression;
     private Expression<Player> playersExpression;
     private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.section(EffSecSpawnFakeEntity.class, EffSecSpawnFakeEntity::new)
+                .patterns("spawn [a] (fake|client[-| ]sided) %entitytype% [with id %-number%] %directions% %location% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     public String toString(@Nullable Event event, boolean b) {

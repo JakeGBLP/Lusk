@@ -11,16 +11,6 @@ import java.util.function.Consumer;
 
 public interface SimplePluralChanger<C, V> extends GenericSimpleChanger<C, V> {
 
-    @Override
-    default boolean isSingle() {
-        return false;
-    }
-
-    default void set(C change, @NotNull V[] delta) {}
-    default void add(C change, @NotNull V[] delta) {}
-    default void remove(C change, @NotNull V[] delta) {}
-    default void removeAll(C change, @NotNull V[] delta) {}
-
     static <C extends SimpleList<V>, V> SimplePluralChanger<C, V> simpleListChanger(Class<C> type, Class<V> valueClass, Class<V[]> valueArrayClass) {
         return SimplePluralChanger.builder(type, valueClass, valueArrayClass)
                 .set(SimpleList::set)
@@ -37,11 +27,27 @@ public interface SimplePluralChanger<C, V> extends GenericSimpleChanger<C, V> {
                 .valueArrayClass(valueArrayClass);
     }
 
+    @Override
+    default boolean isSingle() {
+        return false;
+    }
+
+    default void set(C change, @NotNull V[] delta) {
+    }
+
+    default void add(C change, @NotNull V[] delta) {
+    }
+
+    default void remove(C change, @NotNull V[] delta) {
+    }
+
+    default void removeAll(C change, @NotNull V[] delta) {
+    }
+
     class Builder<C, V> {
+        private final EnumMap<ChangeMode, Object> handlers = new EnumMap<>(ChangeMode.class);
         private @Nullable Class<V> valueClass;
         private @Nullable Class<V[]> valueArrayClass;
-
-        private final EnumMap<ChangeMode, Object> handlers = new EnumMap<>(ChangeMode.class);
 
         public Builder<C, V> valueClass(Class<V> valueClass) {
             this.valueClass = valueClass;

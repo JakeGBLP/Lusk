@@ -4,13 +4,14 @@ import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.event.PacketWrapperEvent;
 import it.jakegblp.lusk.nms.core.protocol.packets.Packet;
+import it.jakegblp.lusk.nms.core.serialization.BufferSerializable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
-public interface ClientboundPacket<E extends PacketWrapperEvent<?>> extends Packet {
+public interface ClientboundPacket<E extends PacketWrapperEvent<?>> extends Packet, BufferSerializable<ClientboundPacket<E>> {
 
     @Contract("_, _ -> new")
     E createEvent(Player player, boolean async);

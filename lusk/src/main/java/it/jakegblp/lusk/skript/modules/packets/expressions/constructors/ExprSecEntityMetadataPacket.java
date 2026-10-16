@@ -10,8 +10,8 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityMetadata;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -26,14 +26,15 @@ import static it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecEntityM
 
 public class ExprSecEntityMetadataPacket extends SectionExpression<EntityMetadataPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecEntityMetadataPacket.class, ExprSecEntityMetadataPacket::new, EntityMetadataPacket.class,
-                "[a] new %entitytype% metadata packet for %protocolentityreference%");
-    }
-
     private Expression<ProtocolEntityReference> entityReferenceExpression;
     private Expression<EntityType> entityTypeExpression;
     private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecEntityMetadataPacket.class, ExprSecEntityMetadataPacket::new, EntityMetadataPacket.class)
+                .patterns("[a] new %entitytype% metadata packet for %protocolentityreference%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -7,18 +7,18 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffMetadataEntityFreezeTime extends SimpleTimeMetadataEffect {
 
+    public EffMetadataEntityFreezeTime(String firstTypePropertyName, String secondTypePropertyName) {
+        super(firstTypePropertyName, secondTypePropertyName);
+    }
+
     public static void register(SyntaxRegistry syntaxRegistry) {
         register(syntaxRegistry, EffMetadataEntityFreezeTime.class, EffMetadataEntityFreezeTime::new,
                 "freeze ticks",
                 "freeze time");
     }
 
-    public EffMetadataEntityFreezeTime(String firstTypePropertyName, String secondTypePropertyName) {
-        super(firstTypePropertyName, secondTypePropertyName);
-    }
-
     @Override
-    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.TICKS_FROZEN;
     }
 

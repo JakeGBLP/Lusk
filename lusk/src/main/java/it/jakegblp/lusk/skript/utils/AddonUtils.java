@@ -1,10 +1,8 @@
 package it.jakegblp.lusk.skript.utils;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.conditions.base.PropertyCondition;
 import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
-import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.registrations.Classes;
@@ -22,7 +20,6 @@ import it.jakegblp.lusk.nms.core.world.entity.metadata.MetadataEntry;
 import it.jakegblp.lusk.skript.api.syntax.section.SectionParseResult;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,11 +28,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
 import org.skriptlang.skript.log.runtime.SyntaxRuntimeErrorProducer;
-import org.skriptlang.skript.registration.DefaultSyntaxInfos;
-import org.skriptlang.skript.registration.SyntaxInfo;
-import org.skriptlang.skript.registration.SyntaxRegistry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,139 +36,29 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 public class AddonUtils {
+    public static final Pattern REGEX_NUMBER_WITH_DECIMAL = Pattern.compile("(\\d+.\\d+)");
 
     /**
-    Note: '*' indicates that there is no skript type (classinfo) for this class.<br>
-    While one should be added, converters can handle going from a more skript friendly type to the missing one and the other way around
+     * Replaces numbers in a string and truncates the number of decimals to the one specified in Skript's own config.
+     * (Number Accuracy)
+     *
+     * @param string The string to replace numbers in.
+     * @return The provided string with all numbers replaced with themselves limited to Skript's number accuracy from its config file.
+     */
+    public static String withSkriptNumberAccuracy(String string) {
+        return REGEX_NUMBER_WITH_DECIMAL.matcher(string).replaceAll(result -> Skript.toString(Double.parseDouble(result.group())));
+    }
+
+    /**
+     * Note: '*' indicates that there is no skript type (classinfo) for this class.<br>
+     * While one should be added, converters can handle going from a more skript friendly type to the missing one and the other way around
      */
     public static @NotNull String toExactClassInfoStringOrSimpleClassName(@NotNull Class<?> clazz) {
         var exactClassInfo = Classes.getExactClassInfo(clazz);
         return exactClassInfo == null ? "*" + CommonUtils.toSentence(clazz.getSimpleName()) : Classes.toString(exactClassInfo);
-    }
-
-    public static <C extends Condition> void registerCondition(
-            SyntaxRegistry syntaxRegistry,
-            Class<C> conditionClass,
-            Supplier<C> supplier,
-            String... patterns
-    ) {
-        syntaxRegistry.register(SyntaxRegistry.CONDITION, SyntaxInfo.builder(conditionClass)
-                .addPatterns(patterns)
-                .supplier(supplier)
-                .build()
-        );
-    }
-
-    public static <C extends Condition> void registerPropertyCondition(
-            SyntaxRegistry syntaxRegistry,
-            Class<C> conditionClass,
-            Supplier<C> supplier,
-            PropertyCondition.PropertyType propertyType,
-            String property,
-            String type
-    ) {
-        syntaxRegistry.register(SyntaxRegistry.CONDITION, PropertyCondition.infoBuilder(conditionClass, propertyType, property, type)
-                .supplier(supplier)
-                .build()
-        );
-    }
-
-    public static <E extends Expression<T>, T> void registerExpression(
-            SyntaxRegistry syntaxRegistry,
-            Class<E> expressionClass,
-            Supplier<E> supplier,
-            Class<T> returnType,
-            String... patterns
-    ) {
-        syntaxRegistry.register(SyntaxRegistry.EXPRESSION, DefaultSyntaxInfos.Expression.builder(expressionClass, returnType)
-                .addPatterns(patterns)
-                .supplier(supplier)
-                .build()
-        );
-    }
-
-    public static <E extends PropertyExpression<?, T>, T> void registerPropertyExpression(
-            SyntaxRegistry syntaxRegistry,
-            Class<E> expressionClass,
-            Supplier<E> supplier,
-            Class<T> returnType,
-            String property,
-            String type,
-            boolean isDefault
-    ) {
-        syntaxRegistry.register(SyntaxRegistry.EXPRESSION, PropertyExpression.infoBuilder(expressionClass, returnType, property, type, isDefault)
-                .supplier(supplier)
-                .build());
-    }
-
-    public static <E extends PropertyExpression<?, T>, T> void registerPropertyExpression(
-            SyntaxRegistry syntaxRegistry,
-            Class<E> expressionClass,
-            Supplier<E> supplier,
-            Class<T> returnType,
-            String property,
-            String type
-    ) {
-        registerPropertyExpression(syntaxRegistry, expressionClass, supplier, returnType, property, type, false);
-    }
-
-    public static <S extends Section> void registerSection(
-            SyntaxRegistry syntaxRegistry,
-            Class<S> sectionClass,
-            Supplier<S> supplier,
-            String... patterns
-    ) {
-        syntaxRegistry.register(SyntaxRegistry.SECTION, SyntaxInfo.builder(sectionClass)
-                .addPatterns(patterns)
-                .supplier(supplier)
-                .build()
-        );
-    }
-
-    public static <E extends Effect> SyntaxInfo<E> registerEffect(
-            SyntaxRegistry syntaxRegistry,
-            Class<E> effectClass,
-            Supplier<E> supplier,
-            String... patterns
-    ) {
-        var syntaxInfo = createEffect(effectClass, supplier, patterns);
-        syntaxRegistry.register(SyntaxRegistry.EFFECT, syntaxInfo);
-        return syntaxInfo;
-    }
-
-    public static <E extends Effect> SyntaxInfo<E> createEffect(
-            Class<E> effectClass,
-            Supplier<E> supplier,
-            String... patterns
-    ) {
-        return SyntaxInfo.builder(effectClass)
-                .addPatterns(patterns)
-                .supplier(supplier)
-                .build();
-    }
-
-    public static <SE extends SkriptEvent, E extends Event> void registerEvent(
-            SyntaxRegistry syntaxRegistry,
-            Class<SE> skriptEventClass,
-            Class<E> eventClass,
-            String name,
-            String description,
-            String example,
-            String since,
-            String[] keywords,
-            String... patterns
-    ) {
-        syntaxRegistry.register(BukkitSyntaxInfos.Event.KEY, BukkitSyntaxInfos.Event.builder(skriptEventClass, name)
-                .addEvent(eventClass)
-                .addDescription(description)
-                .addExample(example)
-                .addKeywords(keywords)
-                .addSince(since)
-                .addPatterns(patterns)
-                .build()
-        );
     }
 
     public static NamedTextColor toNamedTextColor(Color color) {
@@ -291,7 +174,7 @@ public class AddonUtils {
     @SuppressWarnings("unchecked")
     @NotNull
     public static <T> SectionParseResult<T> parseSectionNodesVerbose(Section parentSection, SectionNode mainNode, Class<T> returnType, Class<?> @Nullable ... types) {
-        return (SectionParseResult<T>) parseSectionNodes(parentSection, mainNode, returnType, (node, key) -> errorForNode(node, "Unexpected expression: "+key), types);
+        return (SectionParseResult<T>) parseSectionNodes(parentSection, mainNode, returnType, (node, key) -> errorForNode(node, "Unexpected expression: " + key), types);
     }
 
     @NotNull
@@ -357,6 +240,7 @@ public class AddonUtils {
 
     /**
      * Useful for when a and b can't both be true, and a fallback value is required.
+     *
      * @return a ? TRUE : b ? FALSE : UNKNOWN
      */
     @NotNull
@@ -373,12 +257,12 @@ public class AddonUtils {
         else return null;
     }
 
-    public static void sendEasyMetadata(Player[] players, EntityMetadata metadata, ProtocolEntityReference[] entities){
+    public static void sendEasyMetadata(Player[] players, EntityMetadata metadata, ProtocolEntityReference[] entities) {
         var packets = CommonUtils.map(ClientboundPacket.class, entities, reference -> new EntityMetadataPacket(reference.getId(), metadata));
         NMSApi.sendPackets(players, packets, ExecutionMode.ASYNCHRONOUS);
     }
 
-    public static void sendEasyMetadata(Event event, Expression<Player> playerExpression, Expression<ProtocolEntityReference> protocolEntityReferenceExpression, MetadataEntry<?,?>... items){
+    public static void sendEasyMetadata(Event event, Expression<Player> playerExpression, Expression<ProtocolEntityReference> protocolEntityReferenceExpression, MetadataEntry<?, ?>... items) {
         sendEasyMetadata(playerExpression.getArray(event), EntityMetadata.of(items), protocolEntityReferenceExpression.getArray(event));
     }
 }

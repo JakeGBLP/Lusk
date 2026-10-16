@@ -1,7 +1,8 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
-import it.jakegblp.lusk.common.*;
-import it.jakegblp.lusk.common.annotations.Availability;
+import it.jakegblp.lusk.common.CommonUtils;
+import it.jakegblp.lusk.common.PseudoEnum;
+import it.jakegblp.lusk.common.PseudoEnumSet;
 import it.jakegblp.lusk.nms.core.async.Asyncable;
 import it.jakegblp.lusk.nms.core.async.AsyncablesWrapper;
 import it.jakegblp.lusk.nms.core.event.client.PlayerInfoUpdatePacketEvent;
@@ -20,14 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
-import java.util.function.Supplier;
-
-import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @Getter
 @Setter
 @NullMarked
-public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPacket<PlayerInfoUpdatePacketEvent>, AsyncablesWrapper {
+public class PlayerInfoUpdatePacket implements ClientboundPacket<PlayerInfoUpdatePacketEvent>, AsyncablesWrapper {
     protected List<PlayerInfo> playerInfos;
     @SuppressWarnings("rawtypes")
     protected PseudoEnumSet<Action> actions;
@@ -110,7 +108,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
 
     @Getter
     @ApiStatus.NonExtendable
-    public static abstract class Action<T> extends PseudoEnum<Action<T>> implements Validatable<IllegalStateException>, BufferSerializer<PlayerInfo> {
+    public static abstract class Action<T> extends PseudoEnum<Action<T>> implements BufferSerializer<PlayerInfo> {
 
         public static final Action<CompletablePlayerProfile> ADD_PLAYER = new Action<>("ADD_PLAYER", "PROFILE", CompletablePlayerProfile.class) {
             @Override
@@ -184,7 +182,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
             }
         };
 
-        public static final @Availability(addedIn = "1.21.4") Action<Integer> UPDATE_LIST_ORDER = new Action<>("UPDATE_LIST_ORDER", "TAB_LIST_ORDER", Integer.class) {
+        public static final Action<Integer> UPDATE_LIST_ORDER = new Action<>("UPDATE_LIST_ORDER", "TAB_LIST_ORDER", Integer.class) {
             @Override
             public void write(SimpleByteBuf buffer, PlayerInfo value) {
                 buffer.writeVarInt(value.getListOrder());
@@ -195,7 +193,7 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
                 value.setListOrder(buffer.readVarInt());
             }
         };
-        public static final @Availability(addedIn = "1.21.4") Action<Boolean> UPDATE_HAT = new Action<>("UPDATE_HAT", "SHOW_HAT", Boolean.class) {
+        public static final Action<Boolean> UPDATE_HAT = new Action<>("UPDATE_HAT", "SHOW_HAT", Boolean.class) {
             @Override
             public void write(SimpleByteBuf buffer, PlayerInfo value) {
                 buffer.writeBoolean(value.isShowHat());
@@ -230,16 +228,6 @@ public class PlayerInfoUpdatePacket implements BufferSerializableClientboundPack
             super(name);
             this.type = type;
             this.propertyName = propertyName;
-        }
-
-        @Override
-        public boolean check() {
-            return NMS.getVersion().isGreaterOrEqual(Version.of(1,21,4)) || (this != UPDATE_LIST_ORDER && this != UPDATE_HAT);
-        }
-
-        @Override
-        public Supplier<IllegalStateException> getExceptionSupplier() {
-            return () -> new IllegalStateException("This action was added in 1.21.4");
         }
 
     }

@@ -15,7 +15,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public class RemoveEntitiesPacket implements BufferSerializableClientboundPacket<RemoveEntitiesPacketEvent>, SimpleList<Integer> {
+public class RemoveEntitiesPacket implements ClientboundPacket<RemoveEntitiesPacketEvent>, SimpleList<Integer> {
     protected IntList entityIds;
 
     public RemoveEntitiesPacket(List<Integer> entityIds) {

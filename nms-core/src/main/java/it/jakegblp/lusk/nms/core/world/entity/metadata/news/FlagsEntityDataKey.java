@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 public class FlagsEntityDataKey<BaseEntity extends Entity, FlagsType extends FlagByte<BaseEntity>> extends EntityDataKey<BaseEntity, FlagsType, Byte, FlagsType, Byte> {
 
     public FlagsEntityDataKey(String name, @Range(from = 0, to = 255) int id, EntityClasses<BaseEntity> entityClasses, EntityDataSerializer<?, ?> serializer, Class<FlagsType> prettyType, FlagsType defaultValue) {
-        super(name, id, entityClasses, serializer, prettyType, Byte.class, entity -> FlagByte.dynamic(prettyType, entity).asNMS(), (entity, aByte) -> FlagByte.dynamic(prettyType, aByte).apply(entity), aByte -> FlagByte.dynamic(prettyType, aByte), FlagByte::asNMS, defaultValue);
+        super(name, id, entityClasses, serializer, prettyType, Byte.class, entity -> FlagByte.dynamic(prettyType, entity).asNMS(), (entity, aByte) -> FlagByte.dynamic(prettyType, aByte).apply(entity), aByte -> FlagByte.dynamic(prettyType, aByte), FlagByte::asNMS, defaultValue); // todo: replace the dynamic method with proper constructor?
     }
 
     public FlagsEntityDataKey(String name, @Range(from = 0, to = 255) int id, EntityClasses<BaseEntity> entityClasses, EntityDataSerializer<?, ?> serializer, Class<FlagsType> prettyType) {

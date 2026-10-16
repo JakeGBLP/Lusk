@@ -12,7 +12,7 @@ public class EffMetadataEntityCustomNameVisibility extends BooleanMetadataEffect
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.CUSTOM_NAME_VISIBILITY;
     }
 

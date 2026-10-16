@@ -10,6 +10,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.AddEntityPacket;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -27,11 +28,6 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.getSingleNullable;
 
 public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecAddEntityPacket.class, ExprSecAddEntityPacket::new, AddEntityPacket.class,
-                "[a] new (entity (spawn|add)|add entity) packet");
-    }
-
     private static final EntryValidator VALIDATOR = EntryValidator.builder()
             .addEntryData(new ExpressionEntryData<>("id", null, true, Integer.class))
             .addEntryData(new ExpressionEntryData<>("uuid", null, true, UUID.class))
@@ -41,7 +37,6 @@ public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
             .addEntryData(new ExpressionEntryData<>("location", null, false, Location.class, Vector.class))
             .addEntryData(new ExpressionEntryData<>("entity type", null, false, EntityType.class))
             .build();
-
     private Expression<Integer> entityIdExpression;
     private Expression<UUID> uuidExpression;
     private Expression<Object> locationExpression;
@@ -49,6 +44,12 @@ public class ExprSecAddEntityPacket extends SectionExpression<AddEntityPacket> {
     private Expression<Vector> velocityExpression;
     private Expression<Number> dataExpression;
     private Expression<Number> headYawExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecAddEntityPacket.class, ExprSecAddEntityPacket::new, AddEntityPacket.class)
+                .patterns("[a] new (entity (spawn|add)|add entity) packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

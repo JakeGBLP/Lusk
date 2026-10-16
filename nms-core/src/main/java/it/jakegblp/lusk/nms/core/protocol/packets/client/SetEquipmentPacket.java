@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.SetEquipmentPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class SetEquipmentPacket implements ClientboundPacketWithEntityId<SetEquipmentPacketEvent> {
+public class SetEquipmentPacket implements ClientboundPacket<SetEquipmentPacketEvent>, PacketWithEntityId {
 
     protected int entityId;
     protected Map<EquipmentSlot, ItemStack> equipment;

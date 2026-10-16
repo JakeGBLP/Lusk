@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +15,15 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfilePropertyData extends SimplePropertyExpression<Object, String> {
 
+    private Kleenean data;
+
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprPlayerProfilePropertyData.class, ExprPlayerProfilePropertyData::new, String.class,
-                "[player] profile property (:name|:value|signature)", "profileproperty/mutableprofileproperty", true);
+        Registrations.propertyExpression(ExprPlayerProfilePropertyData.class, ExprPlayerProfilePropertyData::new, String.class)
+                .propertyOf("[player] profile property (:name|:value|signature)", "profileproperty/mutableprofileproperty")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
     }
 
-    private Kleenean data;
-    
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         data = AddonUtils.getKleenean(parseResult.hasTag("name"), parseResult.hasTag("value"));

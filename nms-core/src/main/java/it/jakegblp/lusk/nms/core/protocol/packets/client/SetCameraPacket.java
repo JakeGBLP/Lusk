@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 @Setter
 @Getter
-public class SetCameraPacket implements BufferSerializableClientboundPacket<SetCameraPacketEvent> {
+public class SetCameraPacket implements ClientboundPacket<SetCameraPacketEvent> {
     protected int cameraId;
 
     public SetCameraPacket(SimpleByteBuf buffer) {

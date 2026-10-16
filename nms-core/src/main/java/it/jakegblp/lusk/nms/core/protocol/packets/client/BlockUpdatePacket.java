@@ -12,7 +12,7 @@ import org.bukkit.util.BlockVector;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BlockUpdatePacket implements BufferSerializableClientboundPacket<BlockUpdatePacketEvent> {
+public class BlockUpdatePacket implements ClientboundPacket<BlockUpdatePacketEvent> {
 
     protected BlockVector position;
     protected BlockData blockData;

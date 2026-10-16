@@ -39,6 +39,7 @@ import it.jakegblp.lusk.skript.modules.packets.expressions.properties.*;
 import it.jakegblp.lusk.skript.modules.packets.sections.SecDispatchPackets;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.scoreboard.Team;
 import org.skriptlang.skript.addon.SkriptAddon;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
@@ -53,6 +54,8 @@ import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 public class PacketsModule extends LuskModule {
 
+    public static final Changer<? super RemoveEntitiesPacket> REMOVE_ENTITIES_PACKET_CHANGER = SimplePluralChanger.simpleListChanger(RemoveEntitiesPacket.class, Integer.class, Integer[].class);
+
     public PacketsModule(IntConsumer adder) {
         super(adder);
     }
@@ -65,8 +68,6 @@ public class PacketsModule extends LuskModule {
     @Override
     protected void registration(SyntaxRegistry registry) {
         CondShouldUpdatePlayerInfo.register(registry);
-
-        ExprEntityMetadataPacket.register(registry);
 
         EffDeath.register(registry);
 
@@ -111,6 +112,7 @@ public class PacketsModule extends LuskModule {
 
         ExprClientBundlePacket.register(registry);
         ExprEntityMetadataPacket.register(registry);
+        ExprPlayerInfoRemovePacket.register(registry);
         ExprPlayerInfoUpdatePacket.register(registry);
         ExprPlayerRotationPacket.register(registry);
         ExprRemoveEntitiesPacket.register(registry);
@@ -118,6 +120,7 @@ public class PacketsModule extends LuskModule {
         ExprSecAttributePacket.register(registry);
         ExprSecBlockDestructionPacket.register(registry);
         ExprSecEntityMetadataPacket.register(registry);
+        ExprSecEntityTeleportPacket.register(registry);
         ExprSecEquipmentPacket.register(registry);
         ExprSecPlayerPositionPacket.register(registry);
         ExprSecPlayerRotationPacket.register(registry);
@@ -125,19 +128,21 @@ public class PacketsModule extends LuskModule {
         ExprSecTeamMembersAddPacket.register(registry);
         ExprSecTeamMembersRemovePacket.register(registry);
         ExprSecTeamUpdateInfoPacket.register(registry);
+        ExprSetCameraPacket.register(registry);
         ExprSetPassengersPacket.register(registry);
         ExprTeamDeletePacket.register(registry);
 
-        ExprBundlePackets.register(registry);
+        ExprBundledPackets.register(registry);
         ExprEntityMetadataEntry.register(registry);
         ExprEntityMetadataEntries.register(registry);
         ExprEntityRemovePacketIds.register(registry);
-        ExprEquipmentOfPacket.register(registry);
-        ExprPlayerInfoPacketEntry.register(registry);
-        ExprPlayerInfos.register(registry);
-        ExprPositionPacketComponents.register(registry);
+        ExprPacketEquipment.register(registry);
+        ExprPlayerInfoUpdatePacketEntry.register(registry);
+        ExprPacketPlayerInfos.register(registry);
+        ExprPacketPlayerInfoUUIDs.register(registry);
+        ExprPlayerPositionPacketComponents.register(registry);
         ExprRotationPacketComponents.register(registry);
-        ExprTeleportId.register(registry);
+        ExprPacketTeleportId.register(registry);
         ExprEntityFromIdInWorld.register(registry);
         ExprGuardianBeam.register(registry);
         ExprSecEntityMetadata.register(registry);
@@ -145,8 +150,6 @@ public class PacketsModule extends LuskModule {
         ExprSecPlayerInfo.register(registry);
         SecDispatchPackets.register(registry);
     }
-
-    public static final Changer<? super RemoveEntitiesPacket> REMOVE_ENTITIES_PACKET_CHANGER = SimplePluralChanger.simpleListChanger(RemoveEntitiesPacket.class, Integer.class, Integer[].class);
 
     @Override
     public void init(SkriptAddon addon) {
@@ -190,6 +193,12 @@ public class PacketsModule extends LuskModule {
                 .name("Block Destruction Packet")
                 .description("A packet that dictates the destruction stage shown to the client.") // add example
                 .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(SystemChatPacket.class, "systemchatpacket")
+                .toString(packet -> (packet.isOverlay() ? "System Action Bar Message Packet" : "System Chat Message Packet") + " with text " + Classes.toString(packet.getComponent()))
+                .user("system ?chat ?packets?")
+                .name("System Chat Packet")
+                .description("A packet that sends the client a raw system message.") // add example
+                .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(SetEquipmentPacket.class, "equipmentpacket")
                 .toString(equipmentPacket -> "Equipment Set Packet with id " + equipmentPacket.getEntityId() + " and " + equipmentPacket.getEquipment().size() + " equipments")
                 .user("(client ?)?(equipment ?(set ?)?|set ?equipment ?)packets?")
@@ -218,25 +227,31 @@ public class PacketsModule extends LuskModule {
                 .description("An entity remove packet, can remove multiple entities at once.") // add example
                 .since("2.0.0")
                 .changer(REMOVE_ENTITIES_PACKET_CHANGER));
-        Classes.registerClass(new SimpleClassInfo<>(GenericRotationPacket.class, "genericrotationpacket")
+        Classes.registerClass(new SimpleClassInfo<>(SetCameraPacket.class, "setcamerapacket")
+                .toString(setCameraPacket -> "Set Camera Packet with id " + setCameraPacket.getCameraId())
+                .user("set ?camera ?packets?")
+                .name("Set Camera Packet")
+                .description("A set camera packet, normally used when the player left clicks an entity while in spectator mode.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(PacketWithRotation.class, "genericrotationpacket")
                 .toString(packet -> "Generic Rotation Packet with yaw " + packet.getYaw() + " and pitch " + packet.getPitch())
                 .user("generic ?rotation? packets?")
                 .name("Generic Rotation Packet")
                 .description("Any packet that includes yaw and pitch as rotation of an entity or player.") // add example
                 .since("2.0.0"));
-        Classes.registerClass(new SimpleClassInfo<>(GenericPositionPacket.class, "genericpositionpacket")
+        Classes.registerClass(new SimpleClassInfo<>(PacketWithPosition.class, "genericpositionpacket")
                 .toString(packet -> "Generic Position Packet with x " + packet.getPositionX() + ", y " + packet.getPositionY() + " and z " + packet.getPositionZ())
                 .user("generic ?position? packets?")
                 .name("Generic Position Packet")
                 .description("Any packet that includes x, y and z as position of an entity or player.") // add example
                 .since("2.0.0"));
-        Classes.registerClass(new SimpleClassInfo<>(GenericVelocityPacket.class, "genericvelocitypacket")
+        Classes.registerClass(new SimpleClassInfo<>(PacketWithVelocity.class, "genericvelocitypacket")
                 .toString(packet -> "Generic Velocity Packet with x " + packet.getVelocityX() + ", y " + packet.getVelocityY() + " and z " + packet.getVelocityZ())
                 .user("generic ?velocity? packets?")
                 .name("Generic Velocity Packet")
                 .description("Any packet that includes x, y and z as velocity of an entity or player.") // add example
                 .since("2.0.0"));
-        Classes.registerClass(new SimpleClassInfo<>(GenericMovementPacket.class, "genericmovementpacket")
+        Classes.registerClass(new SimpleClassInfo<>(PacketWithMovement.class, "genericmovementpacket")
                 .toString(packet -> "Generic Movement Packet with x " + packet.getMovementX() + ", y " + packet.getMovementY() + " and z " + packet.getMovementZ())
                 .user("generic ?movement? packets?")
                 .name("Generic Movement Packet")
@@ -272,11 +287,23 @@ public class PacketsModule extends LuskModule {
                 .name("Set Passengers Packet")
                 .description("A packet that makes entities ride other entities for the client.") // add example
                 .since("2.0.0"));
-        Classes.registerClass(new SimpleClassInfo<>(PlayerInfoUpdatePacket.class, "playerinfopacket")
-                .toString(packet -> "Player Info Packet with " + packet.getPlayerInfos().size() + " entries and " + packet.getActions().size() + " actions")
-                .user("entity ?metadata? packets?")
-                .name("Entity Metadata Packet")
-                .description("An entity metadata packet.") // add example
+        Classes.registerClass(new SimpleClassInfo<>(UpdateAttributesPacket.class, "updateattributespacket")
+                .toString(updateAttributesPacket -> "Update Attributes Packet with entity id " + updateAttributesPacket.getEntityId() + " and attributes " + Classes.toString(updateAttributesPacket.getAttributeSnapshots().toArray()))
+                .user("(update ?)?attributes ?packets?")
+                .name("Update Attributes Packet")
+                .description("A packet that changes the attributes of an entity.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(PlayerInfoUpdatePacket.class, "playerinfoupdatepacket")
+                .toString(packet -> "Player Info Update Packet with " + packet.getPlayerInfos().size() + " entries and " + packet.getActions().size() + " actions")
+                .user("player ?info ?update ?packets?")
+                .name("Player Info Update Packet")
+                .description("A packet used to add or update players on the client's player list.") // add example
+                .since("2.0.0"));
+        Classes.registerClass(new SimpleClassInfo<>(PlayerInfoRemovePacket.class, "playerinforemovepacket")
+                .toString(packet -> "Player Info Remove Packet with " + packet.getPlayers().size() + " uuids")
+                .user("player ?info ?remove ?packets?")
+                .name("Player Info Remove Packet")
+                .description("A packet used to remove players from a player's player list") // add example
                 .since("2.0.0"));
         Classes.registerClass(new SimpleClassInfo<>(EntityMetadata.class, "entitymetadata")
                 .toString(entityMetadata -> "Entity Metadata with " + entityMetadata.size() + " entries")
@@ -318,7 +345,8 @@ public class PacketsModule extends LuskModule {
                     };
                     var value = metadataItem.getValue();
                     var valueDescription = switch (value) {
-                        case List<?> list -> list.isEmpty() ? "no values" : "values " + Classes.toString(list.toArray());
+                        case List<?> list ->
+                                list.isEmpty() ? "no values" : "values " + Classes.toString(list.toArray());
                         case null -> "no value";
                         default -> "value " + Classes.toString(value);
                     };
@@ -367,6 +395,15 @@ public class PacketsModule extends LuskModule {
                 .name("Internal Entity Effect")
                 .description("Entity effects not normally available.") // add example
                 .since("2.0.0"));
+
+        if (Classes.getExactClassInfo(Team.OptionStatus.class) == null) {
+            EnumClassInfoWrapper<Team.OptionStatus> TEAM_OPTION_STATUS_ENUM = new EnumClassInfoWrapper<>(Team.OptionStatus.class);
+            Classes.registerClass(TEAM_OPTION_STATUS_ENUM.getClassInfo("teamoptionstatus")
+                    .user("team ?option ?status(es)?")
+                    .name("Team Option Status")
+                    .description("The status of a team option.") // add example
+                    .since("2.0.0"));
+        }
         Converters.registerConverter(EntityMetadataPacket.class, EntityMetadata.class, EntityMetadataPacket::getEntityMetadata);
         Converters.registerConverter(Packet.class, BundlePacket.class, from -> from instanceof BundlePacket<?> bundlePacket ? bundlePacket : null);
         Converters.registerConverter(Packet.class, ClientboundPacket.class, from -> from instanceof ClientboundPacket clientboundPacket ? clientboundPacket : null);

@@ -7,7 +7,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.level.LevelUtils;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -16,15 +16,16 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprEntityFromIdInWorld extends SimpleExpression<Entity> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprEntityFromIdInWorld.class, ExprEntityFromIdInWorld::new, Entity.class,
-                "entit(y|ies) (with id|from [id|protocol]) %protocolentityreferences% [in %world%]",
-                "entit(y|ies) from protocol [%protocolentityreferences%] [in %world%]");
-    }
-
     private Expression<ProtocolEntityReference> protocolEntityReferenceExpression;
     private Expression<World> worldExpression;
     private boolean firstPattern;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprEntityFromIdInWorld.class, ExprEntityFromIdInWorld::new, Entity.class)
+                .patterns("entit(y|ies) (with id|from [id|protocol]) %protocolentityreferences% [in %world%]",
+                        "entit(y|ies) from protocol [%protocolentityreferences%] [in %world%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -44,7 +45,7 @@ public class ExprEntityFromIdInWorld extends SimpleExpression<Entity> {
 
     @Override
     public boolean isSingle() {
-        return true;
+        return protocolEntityReferenceExpression.isSingle();
     }
 
     @Override

@@ -12,7 +12,7 @@ public class EffMetadataEntityInvisible extends SimpleExpandedBooleanMetadataEff
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Boolean, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.SWIMMING;
     }
 

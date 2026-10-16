@@ -1,9 +1,10 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.AddEntityPacketEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericVelocityPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithPosition;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithVelocity;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.*;
 import org.bukkit.Location;
@@ -25,7 +26,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NullMarked
-public class AddEntityPacket implements ClientboundPacketWithEntityId<AddEntityPacketEvent>, GenericPositionPacket, GenericRotationPacket, GenericVelocityPacket {
+public class AddEntityPacket implements ClientboundPacket<AddEntityPacketEvent>,
+        PacketWithPosition, PacketWithRotation, PacketWithVelocity, PacketWithEntityId {
 
     protected int entityId;
     protected UUID entityUUID;

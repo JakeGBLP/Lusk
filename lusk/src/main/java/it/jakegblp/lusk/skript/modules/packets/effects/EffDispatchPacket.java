@@ -9,9 +9,9 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.api.NMSApi;
 import it.jakegblp.lusk.nms.core.async.ExecutionMode;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -34,13 +34,22 @@ import static it.jakegblp.lusk.skript.utils.AddonUtils.warningForElement;
 @Since("2.0.0")
 public class EffDispatchPacket extends Effect implements AsyncableSyntaxesWrapper {
 
+    private Expression<? extends ClientboundPacket> clientboundPacketExpression;
+    private Expression<Player> playerExpression;
+    private boolean bundled;
+    @Getter
+    private ExecutionMode initExecutionMode;
+
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffDispatchPacket.class, EffDispatchPacket::new, "[sync:[async:a]sync[hronously]] (dispatch|send) [:bundled] packet[s] %clientpackets% to %players%");
+        Registrations.effect(EffDispatchPacket.class, EffDispatchPacket::new)
+                .patterns("[sync:[async:a]sync[hronously]] (dispatch|send) [:bundled] packet[s] %clientpackets% to %players%")
+                .register(syntaxRegistry);
     }
 
     public static void scanPackets(AsyncableSyntaxesWrapper asyncableSyntaxesWrapper) {
         var executionMode = asyncableSyntaxesWrapper.getInitExecutionMode();
-        scan: for (int i = 0; i < 2; i++) {
+        scan:
+        for (int i = 0; i < 2; i++) {
             for (AsyncableSyntax asyncableSyntax : asyncableSyntaxesWrapper.getAsyncableSyntaxes()) {
                 var currentExecutionMode = asyncableSyntax.getInitExecutionMode();
                 if (i == 0 && executionMode.isInherited()) {
@@ -49,16 +58,10 @@ public class EffDispatchPacket extends Effect implements AsyncableSyntaxesWrappe
                         if (currentExecutionMode.isAsync()) continue scan;
                     }
                 } else if (i == 1 && (currentExecutionMode != null && !currentExecutionMode.isInherited() && executionMode != currentExecutionMode))
-                    warningForElement(asyncableSyntax, "You're trying to send packets " + executionMode.name().toLowerCase(Locale.ROOT) + "ly but this "+ asyncableSyntax.getSyntaxTypeName()+" is defined as "+currentExecutionMode.name().toLowerCase(Locale.ROOT)+", inner definitions will be ignored, to remove this warning simply make the inner element not specify whether it's synchronous or asynchronous.");
+                    warningForElement(asyncableSyntax, "You're trying to send packets " + executionMode.name().toLowerCase(Locale.ROOT) + "ly but this " + asyncableSyntax.getSyntaxTypeName() + " is defined as " + currentExecutionMode.name().toLowerCase(Locale.ROOT) + ", inner definitions will be ignored, to remove this warning simply make the inner element not specify whether it's synchronous or asynchronous.");
             }
         }
     }
-
-    private Expression<? extends ClientboundPacket> clientboundPacketExpression;
-    private Expression<Player> playerExpression;
-    private boolean bundled;
-    @Getter
-    private ExecutionMode initExecutionMode;
 
     @Override
     @SuppressWarnings("unchecked")

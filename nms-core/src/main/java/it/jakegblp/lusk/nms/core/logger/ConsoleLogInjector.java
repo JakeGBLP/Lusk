@@ -10,6 +10,8 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
+@NullMarked
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConsoleLogInjector {
 
@@ -44,6 +47,8 @@ public final class ConsoleLogInjector {
         private final ConcurrentHashMap<Key, CachedDecision> decisions = new ConcurrentHashMap<>();
 
         private Consumer<CancellableLogLine> handler = NO_OP;
+
+        @Nullable
         private Filter filter;
         private boolean injected;
 
@@ -173,12 +178,12 @@ public final class ConsoleLogInjector {
         }
     }
 
+    @Getter
     public static final class CancellableLogLine {
 
         private final LogEvent event;
         private final String message;
 
-        @Getter
         private boolean cancelled;
 
         private CancellableLogLine(LogEvent event, String message) {
@@ -186,15 +191,7 @@ public final class ConsoleLogInjector {
             this.message = message;
         }
 
-        public LogEvent event() {
-            return event;
-        }
-
-        public String message() {
-            return message;
-        }
-
-        public String messageStrippedAnsi() {
+        public String getMessageStrippedAnsi() {
             return AnsiStripper.strip(message);
         }
 
@@ -205,9 +202,7 @@ public final class ConsoleLogInjector {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class AnsiStripper {
-        private static final Pattern ANSI = Pattern.compile(
-                "\\u001B\\[[0-9;?]*[ -/]*[@-~]|\\u001B[@-Z\\\\-_]|\\u009B[0-9;?]*[ -/]*[@-~]"
-        );
+        private static final Pattern ANSI = Pattern.compile("\\u001B\\[[0-9;?]*[ -/]*[@-~]|\\u001B[@-Z\\\\-_]|\\u009B[0-9;?]*[ -/]*[@-~]");
 
         private static String strip(String message) {
             return message.isEmpty() ? message : ANSI.matcher(message).replaceAll("");

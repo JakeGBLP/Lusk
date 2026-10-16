@@ -6,9 +6,8 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerRotationPacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.TeamPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -29,14 +28,14 @@ public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket
             .addEntryData(new ExpressionEntryData<>("name", null, false, String.class))
             .addEntryData(new ExpressionEntryData<>("members", null, false, Entity.class, UUID.class, String.class))
             .build();
-
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecPlayerRotationPacket.class, ExprSecPlayerRotationPacket::new, PlayerRotationPacket.class,
-                "[a] new player rotation packet with");
-    }
-
     private Expression<String> nameExpression;
     private Expression<Object> membersExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecTeamMembersRemovePacket.class, ExprSecTeamMembersRemovePacket::new, TeamPacket.class)
+                .patterns("[a] new team members remove packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -53,7 +52,7 @@ public class ExprSecTeamMembersRemovePacket extends SectionExpression<TeamPacket
         String name = nameExpression.getSingle(event);
         if (name == null) return new TeamPacket[0];
         Set<String> members = processMembersExpression(membersExpression, event);
-        return new TeamPacket[] {TeamPacket.remove(name, members)};
+        return new TeamPacket[]{TeamPacket.remove(name, members)};
     }
 
     @Override

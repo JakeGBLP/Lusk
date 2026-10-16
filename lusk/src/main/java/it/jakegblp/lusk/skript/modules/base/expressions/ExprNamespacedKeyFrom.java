@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -14,12 +14,13 @@ import static it.jakegblp.lusk.common.CommonUtils.createNamespacedKey;
 
 public class ExprNamespacedKeyFrom extends SimpleExpression<NamespacedKey> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprNamespacedKeyFrom.class, ExprNamespacedKeyFrom::new, NamespacedKey.class,
-                "[[a] new] namespaced[ ]key from %string%");
-    }
-
     private Expression<String> stringExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprNamespacedKeyFrom.class, ExprNamespacedKeyFrom::new, NamespacedKey.class)
+                .patterns("[[a] new] namespaced[ ]key from %string%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -27,9 +28,10 @@ public class ExprNamespacedKeyFrom extends SimpleExpression<NamespacedKey> {
         stringExpression = (Expression<String>) expressions[0];
         return true;
     }
+
     @Override
     protected NamespacedKey @Nullable [] get(Event event) {
-        return new NamespacedKey[] {createNamespacedKey(stringExpression.getSingle(event))};
+        return new NamespacedKey[]{createNamespacedKey(stringExpression.getSingle(event))};
     }
 
     @Override

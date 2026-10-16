@@ -14,6 +14,7 @@ public class DynamicEntryData extends EntryData<Object> {
     public DynamicEntryData(String key, Class<?> entryClass, EntryValidator entryValidator) {
         this(key, entryClass, entryValidator, false);
     }
+
     public DynamicEntryData(String key, Class<?> entryClass, EntryValidator entryValidator, boolean optional) {
         super(key, null, optional);
         this.expressionEntryData = new ExpressionEntryData<>(key, null, optional, entryClass);

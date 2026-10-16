@@ -12,7 +12,7 @@ public class EffMetadataDisplayWidth extends SimpleMetadataEffect<Float> {
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Float, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Float, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().DISPLAY.DISPLAY_WIDTH;
     }
 

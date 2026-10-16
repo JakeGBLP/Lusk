@@ -9,7 +9,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.SetEquipmentPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -36,13 +36,14 @@ public class ExprSecEquipmentPacket extends SectionExpression<SetEquipmentPacket
         VALIDATOR = builder.build();
     }
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecEquipmentPacket.class, ExprSecEquipmentPacket::new, SetEquipmentPacket.class,
-                "[a] new ([set] equipment|equipment set) packet");
-    }
-
     private Expression<Integer> idExpression;
     private Map<EquipmentSlot, Expression<ItemType>> expressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecEquipmentPacket.class, ExprSecEquipmentPacket::new, SetEquipmentPacket.class)
+                .patterns("[a] new ([set] equipment|equipment set) packet")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -78,7 +79,7 @@ public class ExprSecEquipmentPacket extends SectionExpression<SetEquipmentPacket
                 map.put(key, itemType.getRandom());
             }
         });
-        return new SetEquipmentPacket[] {new SetEquipmentPacket(id, map)};
+        return new SetEquipmentPacket[]{new SetEquipmentPacket(id, map)};
     }
 
     @Override

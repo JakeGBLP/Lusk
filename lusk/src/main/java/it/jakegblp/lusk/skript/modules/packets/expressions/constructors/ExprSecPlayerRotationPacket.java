@@ -7,8 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerRotationPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.client.TeamPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.entry.EntryContainer;
@@ -24,13 +23,13 @@ public class ExprSecPlayerRotationPacket extends SectionExpression<PlayerRotatio
             .addEntryData(new ExpressionEntryData<>("yaw", null, false, Float.class))
             .addEntryData(new ExpressionEntryData<>("pitch", null, false, Float.class))
             .build();
+    private Expression<Number> yawExpression, pitchExpression;
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecTeamMembersRemovePacket.class, ExprSecTeamMembersRemovePacket::new, TeamPacket.class,
-                "[a] new team members remove packet");
+        Registrations.expression(ExprSecPlayerRotationPacket.class, ExprSecPlayerRotationPacket::new, PlayerRotationPacket.class)
+                .patterns("[a] new player rotation packet with")
+                .register(syntaxRegistry);
     }
-
-    private Expression<Number> yawExpression, pitchExpression;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -50,8 +49,9 @@ public class ExprSecPlayerRotationPacket extends SectionExpression<PlayerRotatio
         if (yaw == null) return new PlayerRotationPacket[0];
         Number pitch = pitchExpression.getSingle(event);
         if (pitch == null) return new PlayerRotationPacket[0];
-        return new PlayerRotationPacket[] { new PlayerRotationPacket(yaw.floatValue(), pitch.floatValue()) };
+        return new PlayerRotationPacket[]{new PlayerRotationPacket(yaw.floatValue(), pitch.floatValue())};
     }
+
     @Override
     public boolean isSingle() {
         return true;

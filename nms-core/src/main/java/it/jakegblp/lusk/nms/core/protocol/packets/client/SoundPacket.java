@@ -17,7 +17,7 @@ import org.jspecify.annotations.NullMarked;
 @Setter
 @AllArgsConstructor
 @NullMarked
-public class SoundPacket implements BufferSerializableClientboundPacket<SoundAtLocationPacketEvent> {
+public class SoundPacket implements ClientboundPacket<SoundAtLocationPacketEvent> {
 
     protected Sound sound;
     protected SoundCategory soundCategory;

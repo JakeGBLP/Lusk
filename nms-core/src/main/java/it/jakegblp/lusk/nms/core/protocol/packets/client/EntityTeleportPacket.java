@@ -1,12 +1,14 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.EntityTeleportPacketEvent;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericPositionPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericRotationPacket;
-import it.jakegblp.lusk.nms.core.protocol.packets.GenericVelocityPacket;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithPosition;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithRotation;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithVelocity;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
@@ -15,7 +17,8 @@ import org.jspecify.annotations.NullMarked;
 @Getter
 @Setter
 @NullMarked
-public class EntityTeleportPacket implements ClientboundPacketWithEntityId<EntityTeleportPacketEvent>, GenericPositionPacket, GenericVelocityPacket, GenericRotationPacket {
+public class EntityTeleportPacket implements ClientboundPacket<EntityTeleportPacketEvent>,
+        PacketWithPosition, PacketWithVelocity, PacketWithRotation, PacketWithEntityId {
 
     protected int entityId;
     protected double positionX, positionY, positionZ;
@@ -53,6 +56,10 @@ public class EntityTeleportPacket implements ClientboundPacketWithEntityId<Entit
 
     public EntityTeleportPacket(int entityId, Vector position, float yaw, float pitch, Vector velocity, boolean onGround) {
         this(entityId, position.getX(), position.getY(), position.getZ(), yaw, pitch, velocity.getX(), velocity.getY(), velocity.getZ(), onGround);
+    }
+
+    public EntityTeleportPacket(int entityId, Location location, Vector velocity, boolean onGround) {
+        this(entityId, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), velocity.getX(), velocity.getY(), velocity.getZ(), onGround);
     }
 
     @Contract("-> new")

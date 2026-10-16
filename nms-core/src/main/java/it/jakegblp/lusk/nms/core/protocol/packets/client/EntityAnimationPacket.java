@@ -1,6 +1,7 @@
 package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.nms.core.event.client.EntityAnimationPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.EntityAnimation;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 @Getter
 @Setter
 @AllArgsConstructor
-public class EntityAnimationPacket implements ClientboundPacketWithEntityId<EntityAnimationPacketEvent> {
+public class EntityAnimationPacket implements ClientboundPacket<EntityAnimationPacketEvent>, PacketWithEntityId {
 
     protected int entityId;
     protected EntityAnimation entityAnimation;

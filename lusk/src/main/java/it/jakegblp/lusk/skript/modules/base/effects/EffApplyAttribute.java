@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -14,13 +14,14 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffApplyAttribute extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffApplyAttribute.class, EffApplyAttribute::new,
-                "apply (attribute[s]|attribute snapshot[s]) %attributesnapshots% to %livingentities%");
-    }
-
     private Expression<AttributeSnapshot> attributeSnapshotExpression;
     private Expression<LivingEntity> livingEntityExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffApplyAttribute.class, EffApplyAttribute::new)
+                .patterns("apply (attribute[s]|attribute snapshot[s]) %attributesnapshots% to %livingentities%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

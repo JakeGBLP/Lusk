@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -14,17 +14,18 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 @Name("Player - Update Client Vital Stats (Hunger/Health/Saturation)")
 public class EffClientSidedHealthHungerSaturation extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffClientSidedHealthHungerSaturation.class, EffClientSidedHealthHungerSaturation::new,
-                "make %players% see (their|its) health as %number%",
-                "make %players% see (their|its) (food|hunger) [level|bar] as %number%",
-                "make %players% see (their|its) saturation as %number%"
-        );
-    }
-
+    int pattern;
     private Expression<Player> playerExpression;
     private Expression<Number> numberExpression;
-    int pattern;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffClientSidedHealthHungerSaturation.class, EffClientSidedHealthHungerSaturation::new)
+                .patterns(
+                        "make %players% see (their|its) health as %number%",
+                        "make %players% see (their|its) (food|hunger) [level|bar] as %number%",
+                        "make %players% see (their|its) saturation as %number%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -49,10 +50,10 @@ public class EffClientSidedHealthHungerSaturation extends Effect {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "make players " + playerExpression.toString(event,debug) + " see their " + switch (pattern){
+        return "make players " + playerExpression.toString(event, debug) + " see their " + switch (pattern) {
             case 0 -> "health";
             case 1 -> "hunger";
             default -> "saturation";
-        } + " as " + numberExpression.toString(event,debug);
+        } + " as " + numberExpression.toString(event, debug);
     }
 }

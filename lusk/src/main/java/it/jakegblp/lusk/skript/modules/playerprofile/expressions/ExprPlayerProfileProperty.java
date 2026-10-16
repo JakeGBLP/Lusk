@@ -8,6 +8,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -15,12 +16,13 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfileProperty extends SimpleExpression<MutableProfileProperty> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprPlayerProfileProperty.class, ExprPlayerProfileProperty::new, MutableProfileProperty.class,
-                "[a] [new] [player] profile property named %-string% with value %-string% [and [with] signature %-string%]");
-    }
-
     private Expression<String> nameExpression, valueExpression, signatureExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprPlayerProfileProperty.class, ExprPlayerProfileProperty::new, MutableProfileProperty.class)
+                .patterns("[a] [new] [player] profile property named %-string% with value %-string% [and [with] signature %-string%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -50,7 +52,7 @@ public class ExprPlayerProfileProperty extends SimpleExpression<MutableProfilePr
         String value = valueExpression.getSingle(event);
         if (value == null) return new MutableProfileProperty[0];
         String signature = AddonUtils.getSingleNullable(signatureExpression, event);
-        return new MutableProfileProperty[] {new MutableProfileProperty(name, value, signature)};
+        return new MutableProfileProperty[]{new MutableProfileProperty(name, value, signature)};
     }
 
     @Override

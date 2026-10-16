@@ -12,7 +12,7 @@ public class EffMetadataTextDisplayLineWidth extends SimpleMetadataEffect<Intege
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Integer, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().TEXT_DISPLAY.LINE_WIDTH;
     }
 

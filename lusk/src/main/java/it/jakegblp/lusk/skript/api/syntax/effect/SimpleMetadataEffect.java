@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SyntaxStringBuilder;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.NMSSyntax;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
 import org.bukkit.entity.Entity;
@@ -20,9 +21,13 @@ import java.util.function.Supplier;
 /**
  * Handles the repeating parts of a simple metadata effect.<br>
  * For this to work the pattern(s) must have the {@link ProtocolEntityReference Protocol Entity References} as first expression,
- *  the value as the second and {@link Player players} as the third.
+ * the value as the second and {@link Player players} as the third.
  */
 public abstract class SimpleMetadataEffect<T> extends Effect implements NMSSyntax {
+
+    protected Expression<ProtocolEntityReference> protocolEntityReferenceExpression;
+    protected Expression<T> valueExpression;
+    protected Expression<Player> playerExpression;
 
     public static <E extends SimpleMetadataEffect<?>> void registerSimple(
             SyntaxRegistry syntaxRegistry,
@@ -31,14 +36,10 @@ public abstract class SimpleMetadataEffect<T> extends Effect implements NMSSynta
             String metadataProperty,
             String requiredType
     ) {
-        AddonUtils.registerEffect(syntaxRegistry, effectClass, supplier,
-                "(set [fake]|fake) " + metadataProperty + " of %protocolentityreferences% to %" + requiredType + "% for %players%"
-        );
+        Registrations.effect(effectClass, supplier)
+                .patterns("(set [fake]|fake) " + metadataProperty + " of %protocolentityreferences% to %" + requiredType + "% for %players%")
+                .register(syntaxRegistry);
     }
-
-    protected Expression<ProtocolEntityReference> protocolEntityReferenceExpression;
-    protected Expression<T> valueExpression;
-    protected Expression<Player> playerExpression;
 
     public abstract EntityDataKey<? extends Entity, T, ?, ?, ?> getMetadataKey();
 

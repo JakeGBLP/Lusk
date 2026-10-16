@@ -8,19 +8,21 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.world.player.profile.MutableProfileProperty;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprPlayerProfilePropertyOf extends PropertyExpression<PlayerProfile, MutableProfileProperty> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprPlayerProfilePropertyOf.class, ExprPlayerProfilePropertyOf::new, MutableProfileProperty.class,
-                "[player] profile property named %string%", "playerprofiles", true);
-    }
-
     private Expression<String> nameExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.propertyExpression(ExprPlayerProfilePropertyOf.class, ExprPlayerProfilePropertyOf::new, MutableProfileProperty.class)
+                .propertyOf("[player] profile property named %string%", "playerprofiles")
+                .defaultExpression(true)
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

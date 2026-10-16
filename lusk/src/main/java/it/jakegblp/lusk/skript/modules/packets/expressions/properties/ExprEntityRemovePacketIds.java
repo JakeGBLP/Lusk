@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -17,8 +17,9 @@ import static it.jakegblp.lusk.skript.modules.packets.PacketsModule.REMOVE_ENTIT
 public class ExprEntityRemovePacketIds extends PropertyExpression<RemoveEntitiesPacket, Integer> {
 
     public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerPropertyExpression(syntaxRegistry, ExprEntityRemovePacketIds.class, ExprEntityRemovePacketIds::new, Integer.class,
-                "entity ids", "entityremovepackets");
+        Registrations.propertyExpression(ExprEntityRemovePacketIds.class, ExprEntityRemovePacketIds::new, Integer.class)
+                .propertyOf("entity ids", "entityremovepackets")
+                .register(syntaxRegistry);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ExprEntityRemovePacketIds extends PropertyExpression<RemoveEntities
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "bundle packets of "+getExpr().toString(event, debug);
+        return "bundle packets of " + getExpr().toString(event, debug);
     }
 
     @Override

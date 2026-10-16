@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NullMarked
-public class SetPassengersPacket implements BufferSerializableClientboundPacket<SetPassengersPacketEvent> {
+public class SetPassengersPacket implements ClientboundPacket<SetPassengersPacketEvent> {
 
     protected ProtocolEntityReference vehicle;
     protected List<ProtocolEntityReference> passengers;

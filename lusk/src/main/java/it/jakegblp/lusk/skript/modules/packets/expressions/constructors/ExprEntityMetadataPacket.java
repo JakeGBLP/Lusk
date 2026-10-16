@@ -8,21 +8,22 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.EntityMetadataPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprEntityMetadataPacket extends SimpleExpression<EntityMetadataPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprEntityMetadataPacket.class, ExprEntityMetadataPacket::new, EntityMetadataPacket.class,
-                "[a] new %entitytype% metadata packet for %protocolentityreference% with %entitymetadata%");
-    }
-
     private Expression<ProtocolEntityReference> entityReferenceExpression;
     private Expression<EntityType> entityTypeExpression;
     private Expression<EntityMetadata> entityMetadataExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprEntityMetadataPacket.class, ExprEntityMetadataPacket::new, EntityMetadataPacket.class)
+                .patterns("[a] new %entitytype% metadata packet for %protocolentityreference% with %entitymetadata%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

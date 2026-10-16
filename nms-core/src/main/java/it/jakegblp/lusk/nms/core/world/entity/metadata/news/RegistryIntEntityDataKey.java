@@ -12,11 +12,11 @@ import java.util.function.Function;
 import static it.jakegblp.lusk.nms.core.AbstractNMS.NMS;
 
 @NullMarked
-public class RegistryIntEntityDataKey<BaseEntity extends Entity, Type extends Keyed> extends RegistryEntityDataKey<BaseEntity, Type, Integer> {
+public class RegistryIntEntityDataKey<BaseEntity extends Entity, Type extends Keyed> extends RegistryEntityDataKey<BaseEntity, Type, Object> {
 
     @SuppressWarnings("unchecked")
     public RegistryIntEntityDataKey(String name, @Range(from = 0, to = 255) int id, EntityClasses<BaseEntity> entityClasses, EntityDataSerializer<?, ?> serializer, Class<Type> prettyType, Function<BaseEntity, Type> getter, BiConsumer<BaseEntity, Type> setter, io.papermc.paper.registry.RegistryKey<Type> registryKey, Type defaultValue) {
-        super(name, id, entityClasses, serializer, prettyType, Integer.class, getter, setter, integer -> (Type) NMS.getKeyedById(registryKey, integer), type -> NMS.getKeyedId(registryKey, type), registryKey, defaultValue);
+        super(name, id, entityClasses, serializer, prettyType, Object.class, getter, setter, integer -> (Type) NMS.fromNMS(integer), type -> NMS.toNMS(type), registryKey, defaultValue);
     }
 
     @Override

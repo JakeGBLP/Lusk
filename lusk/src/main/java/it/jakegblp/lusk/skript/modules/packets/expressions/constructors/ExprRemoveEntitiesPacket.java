@@ -7,24 +7,25 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.RemoveEntitiesPacket;
 import it.jakegblp.lusk.nms.core.world.entity.ProtocolEntityReference;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class ExprRemoveEntitiesPacket extends SimpleExpression<RemoveEntitiesPacket> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprRemoveEntitiesPacket.class, ExprRemoveEntitiesPacket::new, RemoveEntitiesPacket.class,
-                "[a|[a] new] remove entit(ies|y) packet (with|using) %protocolentityreference%",
-                "[an|[a] new] entit(ies|y) remov(e|al) packet (with|using) %protocolentityreference%");
-    }
-
     private Expression<ProtocolEntityReference> protocolEntityReferenceExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprRemoveEntitiesPacket.class, ExprRemoveEntitiesPacket::new, RemoveEntitiesPacket.class)
+                .patterns("[a|[a] new] remove entit(ies|y) packet (with|using) %protocolentityreference%",
+                        "[an|[a] new] entit(ies|y) remov(e|al) packet (with|using) %protocolentityreference%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     protected RemoveEntitiesPacket @Nullable [] get(Event event) {
-        return new RemoveEntitiesPacket[] { new RemoveEntitiesPacket(CommonUtils.mapToList(
+        return new RemoveEntitiesPacket[]{new RemoveEntitiesPacket(CommonUtils.mapToList(
                 protocolEntityReferenceExpression.getArray(event),
                 ProtocolEntityReference::getId))
         };

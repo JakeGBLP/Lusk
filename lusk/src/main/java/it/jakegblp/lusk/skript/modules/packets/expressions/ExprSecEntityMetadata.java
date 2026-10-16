@@ -12,8 +12,9 @@ import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.EntityMetadata;
 import it.jakegblp.lusk.nms.core.world.entity.metadata.news.EntityDataKey;
+import it.jakegblp.lusk.nms.core.world.entity.metadata.news.OptionalEntityDataKey;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.NMSSyntax;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
 import lombok.Setter;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -44,13 +45,14 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
         VALIDATOR = builder.build();
     }
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprSecEntityMetadata.class, ExprSecEntityMetadata::new, EntityMetadata.class,
-                "[a] new %entitytype% metadata [object]");
-    }
-
     private Expression<EntityType> entityTypeExpression;
     private Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> expressionMap;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprSecEntityMetadata.class, ExprSecEntityMetadata::new, EntityMetadata.class)
+                .patterns("[a] new %entitytype% metadata [object]")
+                .register(syntaxRegistry);
+    }
 
     public static Map<EntityDataKey<? extends Entity, ?, ?, ?, ?>, Expression<?>> getMetadataExpressionMap(
             Expression<EntityType> entityTypeExpression,
@@ -100,10 +102,14 @@ public class ExprSecEntityMetadata extends SectionExpression<EntityMetadata> imp
             EntityDataKey<? extends Entity, ?, ?, ?, ?> key = entry.getKey();
             if (key.getEntityClasses().isAssignableFrom(type)) {
                 Object value = entry.getValue().getSingle(event);
-                if (value != null) {
-                    if (!entityMetadata.setUnsafe(key, value)) {
-                        Skript.error("Could not set key "+ Classes.toString(key) + " to value " + Classes.toString(value));
-                    }
+                if (key instanceof OptionalEntityDataKey)
+                    value = Optional.ofNullable(value);
+                else if (value == null) {
+                    Skript.error("A value has to be passed for the following key: " + Classes.toString(key));
+                    continue;
+                }
+                if (!entityMetadata.setUnsafe(key, value)) {
+                    Skript.error("Could not set key " + Classes.toString(key) + " to value " + Classes.toString(value));
                 }
             }
         }

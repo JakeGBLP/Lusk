@@ -13,7 +13,7 @@ public class EffMetadataEntityPose extends SimpleMetadataEffect<Pose> {
     }
 
     @Override
-    public EntityDataKey<? extends Entity, Pose, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, Pose, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ENTITY.POSE;
     }
 

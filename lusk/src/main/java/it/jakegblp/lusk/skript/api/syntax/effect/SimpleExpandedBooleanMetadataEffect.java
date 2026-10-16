@@ -1,5 +1,6 @@
 package it.jakegblp.lusk.skript.api.syntax.effect;
 
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.event.Event;
 import org.skriptlang.skript.registration.SyntaxRegistry;
 
@@ -14,10 +15,11 @@ public abstract class SimpleExpandedBooleanMetadataEffect extends ExpandedBoolea
             String makePropertyName,
             String statePropertyName
     ) {
-        register(syntaxRegistry, effectClass, supplier,
-                "(set [fake]|fake) " + statePropertyName + " [state] of %protocolentityreferences% to %boolean% for %players%",
-                "make %protocolentityreferences% " + makePropertyName + " for %players%",
-                "make %protocolentityreferences% not " + makePropertyName + " for %players%");
+        Registrations.effect(effectClass, supplier)
+                .patterns("(set [fake]|fake) " + statePropertyName + " [state] of %protocolentityreferences% to %boolean% for %players%",
+                        "make %protocolentityreferences% " + makePropertyName + " for %players%",
+                        "make %protocolentityreferences% not " + makePropertyName + " for %players%")
+                .register(syntaxRegistry);
     }
 
     @Override
@@ -26,6 +28,7 @@ public abstract class SimpleExpandedBooleanMetadataEffect extends ExpandedBoolea
     }
 
     public abstract String getMakePropertyName();
+
     public abstract String getStatePropertyName();
 
     @Override

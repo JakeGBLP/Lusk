@@ -82,7 +82,8 @@ public final class MetadataEntry<BaseEntity extends Entity, Type> implements Buf
             //System.out.println("loop: " + metadataKey.getId() + " " + metadataKey.getSerializer().key() + ", name: " + metadataKey.getName() + ", entity classes: " + entry.getValue().getEntityClasses());
             if (metadataKey.getId() == id && metadataKey.getSerializer().equals(serializer)) {
                 this.key = (EntityDataKey<BaseEntity, Type, ?, ?, ?>) metadataKey;
-                this.value = (Type) serializer.codec().read(buffer);
+                var readValue = serializer.codec().read(buffer);
+                this.value = key.canBeSetTo(readValue) ? (Type) readValue : (Type) ((EntityDataKey) key).asPretty(readValue);
                 return;
             }
         }

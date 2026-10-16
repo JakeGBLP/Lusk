@@ -5,7 +5,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.Event;
@@ -16,14 +16,15 @@ import java.util.List;
 
 public class ExprAttributeSnapshot extends SimpleExpression<AttributeSnapshot> {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprAttributeSnapshot.class, ExprAttributeSnapshot::new, AttributeSnapshot.class,
-                "[[a] new|a[n]] %attributetype% attribute with base [value] %number% [and [with] %-attributemodifiers%]");
-    }
-
     private Expression<Attribute> attributeExpression;
     private Expression<Number> baseExpression;
     private Expression<AttributeModifier> attributeModifierExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprAttributeSnapshot.class, ExprAttributeSnapshot::new, AttributeSnapshot.class)
+                .patterns("[[a] new|a[n]] %attributetype% attribute with base [value] %number% [and [with] %-attributemodifiers%]")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -41,8 +42,9 @@ public class ExprAttributeSnapshot extends SimpleExpression<AttributeSnapshot> {
         Number base = baseExpression.getSingle(event);
         if (base == null) return new AttributeSnapshot[0];
         var modifiers = attributeModifierExpression.getArray(event);
-        return new AttributeSnapshot[] {
-                modifiers == null ? new AttributeSnapshot(attribute, base.doubleValue()) : new AttributeSnapshot(attribute, base.doubleValue(), List.of(modifiers))
+        return new AttributeSnapshot[]{
+                modifiers == null ? new AttributeSnapshot(attribute, base.doubleValue())
+                        : new AttributeSnapshot(attribute, base.doubleValue(), List.of(modifiers))
         };
     }
 

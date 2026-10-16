@@ -6,6 +6,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientBundlePacket;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.ClientboundPacket;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.utils.AddonUtils;
@@ -17,14 +18,15 @@ import java.util.List;
 
 public class ExprClientBundlePacket extends SimpleExpression<ClientBundlePacket> implements AsyncableSyntaxesWrapper {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprClientBundlePacket.class, ExprClientBundlePacket::new, ClientBundlePacket.class,
-                "[a(n| new)] empty client (bundle packet|packet bundle)",
-                "[a] [new] [client] (bundle packet|packet bundle) (with|containing|from) %clientpackets%");
-    }
-
     private boolean empty;
     private Expression<? extends ClientboundPacket> packetExpression;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprClientBundlePacket.class, ExprClientBundlePacket::new, ClientBundlePacket.class)
+                .patterns("[a(n| new)] empty client (bundle packet|packet bundle)",
+                        "[a] [new] [client] (bundle packet|packet bundle) (with|containing|from) %clientpackets%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -36,9 +38,9 @@ public class ExprClientBundlePacket extends SimpleExpression<ClientBundlePacket>
 
     @Override
     protected ClientBundlePacket @Nullable [] get(Event event) {
-        if (empty) return new ClientBundlePacket[] {new ClientBundlePacket()};
+        if (empty) return new ClientBundlePacket[]{new ClientBundlePacket()};
         else if (packetExpression == null) return new ClientBundlePacket[0];
-        return new ClientBundlePacket[] {new ClientBundlePacket(packetExpression.getAll(event))};
+        else return new ClientBundlePacket[]{new ClientBundlePacket(packetExpression.getAll(event))};
     }
 
     @Override

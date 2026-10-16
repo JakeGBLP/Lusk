@@ -2,6 +2,7 @@ package it.jakegblp.lusk.nms.core.protocol.packets.client;
 
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.event.client.UpdateAttributesPacketEvent;
+import it.jakegblp.lusk.nms.core.protocol.packets.PacketWithEntityId;
 import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.world.entity.attribute.AttributeSnapshot;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UpdateAttributesPacket implements ClientboundPacketWithEntityId<UpdateAttributesPacketEvent> {
+public class UpdateAttributesPacket implements ClientboundPacket<UpdateAttributesPacketEvent>, PacketWithEntityId {
 
     protected int entityId;
     protected List<AttributeSnapshot> attributeSnapshots;

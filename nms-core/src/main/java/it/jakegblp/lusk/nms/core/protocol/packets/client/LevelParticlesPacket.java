@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Contract;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LevelParticlesPacket implements BufferSerializableClientboundPacket<ParticleSendPacketEvent> {
+public class LevelParticlesPacket implements ClientboundPacket<ParticleSendPacketEvent> {
 
     protected double x, y, z;
     protected float xOffset, yOffset, zOffset, maxSpeed;

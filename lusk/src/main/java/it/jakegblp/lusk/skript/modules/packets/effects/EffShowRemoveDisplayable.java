@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.nms.core.util.Displayable;
-import it.jakegblp.lusk.skript.utils.AddonUtils;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -13,15 +13,15 @@ import org.skriptlang.skript.registration.SyntaxRegistry;
 
 public class EffShowRemoveDisplayable extends Effect {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerEffect(syntaxRegistry, EffShowRemoveDisplayable.class, EffShowRemoveDisplayable::new,
-                "display %displayables% (to|for) %players%",
-                "(conceal|undisplay) %displayables% for %players%");
-    }
-
     private Expression<Displayable> displayableExpression;
     private Expression<Player> playerExpression;
     private boolean undisplay;
+
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.effect(EffShowRemoveDisplayable.class, EffShowRemoveDisplayable::new)
+                .patterns("display %displayables% (to|for) %players%", "(conceal|undisplay) %displayables% for %players%")
+                .register(syntaxRegistry);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

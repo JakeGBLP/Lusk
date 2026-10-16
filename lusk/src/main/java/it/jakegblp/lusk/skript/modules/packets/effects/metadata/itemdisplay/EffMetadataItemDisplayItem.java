@@ -13,7 +13,7 @@ public class EffMetadataItemDisplayItem extends SimpleMetadataEffect<ItemStack> 
     }
 
     @Override
-    public EntityDataKey<? extends Entity, ItemStack, ?, ?, ?> getMetadataKey(){
+    public EntityDataKey<? extends Entity, ItemStack, ?, ?, ?> getMetadataKey() {
         return metadataKeyRegistry().ITEM_DISPLAY.DISPLAY_ITEM;
     }
 

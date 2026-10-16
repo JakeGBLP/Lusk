@@ -1,6 +1,6 @@
 package it.jakegblp.lusk.nms.impl.allversions;
 
-import it.jakegblp.lusk.nms.core.serialization.*;
+import it.jakegblp.lusk.nms.core.serialization.SimpleByteBuf;
 import it.jakegblp.lusk.nms.core.serialization.codec.BufferCodec;
 import it.jakegblp.lusk.nms.core.serialization.mapper.*;
 import net.minecraft.core.Holder;
@@ -39,8 +39,8 @@ public final class MappingsImpl implements Mappers {
     public <F, T> Mapper<F, T> register(
             Class<F> fromClass,
             Class<T> toClass,
-            Function<@NotNull F, T> to,
-            Function<@NotNull T, F> from
+            Function<@NotNull F, @NotNull T> to,
+            Function<@NotNull T, @NotNull F> from
     ) {
         return register(Mapper.of(fromClass, toClass, to, from, 0));
     }

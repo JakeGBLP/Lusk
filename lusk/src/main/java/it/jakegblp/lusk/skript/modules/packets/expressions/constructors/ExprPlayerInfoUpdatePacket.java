@@ -9,6 +9,7 @@ import ch.njol.util.Kleenean;
 import it.jakegblp.lusk.common.CommonUtils;
 import it.jakegblp.lusk.nms.core.protocol.packets.client.PlayerInfoUpdatePacket;
 import it.jakegblp.lusk.nms.core.world.player.PlayerInfo;
+import it.jakegblp.lusk.skript.api.registration.Registrations;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntax;
 import it.jakegblp.lusk.skript.api.syntax.async.AsyncableSyntaxesWrapper;
 import it.jakegblp.lusk.skript.modules.packets.expressions.ExprSecPlayerInfo;
@@ -25,59 +26,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoPacketEntry.PLAYER_INFO_PROPERTY_NAMES;
+import static it.jakegblp.lusk.skript.modules.packets.expressions.properties.ExprPlayerInfoUpdatePacketEntry.PLAYER_INFO_PROPERTY_NAMES;
 import static it.jakegblp.lusk.skript.utils.AddonUtils.errorForElement;
 
 @Getter
 public class ExprPlayerInfoUpdatePacket extends SimpleExpression<PlayerInfoUpdatePacket> implements AsyncableSyntaxesWrapper {
 
-    public static void register(SyntaxRegistry syntaxRegistry) {
-        AddonUtils.registerExpression(syntaxRegistry, ExprPlayerInfoUpdatePacket.class, ExprPlayerInfoUpdatePacket::new, PlayerInfoUpdatePacket.class,
-                "[a] new player info update packet (with|containing|from) %playerinfos%");
-    }
-
     private Expression<? extends PlayerInfo> playerInfoExpression;
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result) {
-        playerInfoExpression = (Expression<? extends PlayerInfo>) expressions[0];
-        return playerInfoExpression != null && validatePlayerInfos(playerInfoExpression);
-    }
-
-    @Override
-    protected PlayerInfoUpdatePacket @Nullable [] get(Event event) {
-        var playerInfos = playerInfoExpression.getAll(event);
-        var actions = new HashSet<>(CommonUtils.flatMapToList(playerInfos, PlayerInfo::getActions));
-        boolean error = false;
-        for (var action : actions)
-            for (var info : playerInfos)
-                if (!info.getActions().contains(action)) {
-                    error("Player Info "+Classes.toString(info)+" does not have the action "+PLAYER_INFO_PROPERTY_NAMES.inverse().get(action));
-                    if (!error)
-                        error = true;
-                }
-        return error ? new PlayerInfoUpdatePacket[0] : new PlayerInfoUpdatePacket[] {new PlayerInfoUpdatePacket(actions, List.of(playerInfos))};
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public Class<? extends PlayerInfoUpdatePacket> getReturnType() {
-        return PlayerInfoUpdatePacket.class;
-    }
-
-    @Override
-    public String toString(@Nullable Event event, boolean debug) {
-        return "a new player info update packet with player infos " + playerInfoExpression.toString(event, debug);
-    }
-
-    @Override
-    public List<AsyncableSyntax> getAsyncableSyntaxes() {
-        return AsyncableSyntaxesWrapper.filterAsyncableSyntaxes(playerInfoExpression);
+    public static void register(SyntaxRegistry syntaxRegistry) {
+        Registrations.expression(ExprPlayerInfoUpdatePacket.class, ExprPlayerInfoUpdatePacket::new, PlayerInfoUpdatePacket.class)
+                .patterns("[a] new player info update packet (with|containing|from) %playerinfos%")
+                .register(syntaxRegistry);
     }
 
     public static boolean validatePlayerInfos(@NotNull Expression<? extends PlayerInfo> playerInfoExpressionList) {
@@ -127,5 +87,47 @@ public class ExprPlayerInfoUpdatePacket extends SimpleExpression<PlayerInfoUpdat
             }
         }
         return true;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, SkriptParser.ParseResult result) {
+        playerInfoExpression = (Expression<? extends PlayerInfo>) expressions[0];
+        return playerInfoExpression != null && validatePlayerInfos(playerInfoExpression);
+    }
+
+    @Override
+    protected PlayerInfoUpdatePacket @Nullable [] get(Event event) {
+        var playerInfos = playerInfoExpression.getAll(event);
+        var actions = new HashSet<>(CommonUtils.flatMapToList(playerInfos, PlayerInfo::getActions));
+        boolean error = false;
+        for (var action : actions)
+            for (var info : playerInfos)
+                if (!info.getActions().contains(action)) {
+                    error("Player Info " + Classes.toString(info) + " does not have the action " + PLAYER_INFO_PROPERTY_NAMES.inverse().get(action));
+                    if (!error)
+                        error = true;
+                }
+        return error ? new PlayerInfoUpdatePacket[0] : new PlayerInfoUpdatePacket[]{new PlayerInfoUpdatePacket(actions, List.of(playerInfos))};
+    }
+
+    @Override
+    public boolean isSingle() {
+        return true;
+    }
+
+    @Override
+    public Class<? extends PlayerInfoUpdatePacket> getReturnType() {
+        return PlayerInfoUpdatePacket.class;
+    }
+
+    @Override
+    public String toString(@Nullable Event event, boolean debug) {
+        return "a new player info update packet with player infos " + playerInfoExpression.toString(event, debug);
+    }
+
+    @Override
+    public List<AsyncableSyntax> getAsyncableSyntaxes() {
+        return AsyncableSyntaxesWrapper.filterAsyncableSyntaxes(playerInfoExpression);
     }
 }
