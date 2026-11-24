@@ -1,18 +1,28 @@
-> [!IMPORTANT]
-> # » [CLICK HERE TO DOWNLOAD](https://modrinth.com/plugin/lusk) «
-> Since Lusk 1.3, all official releases of Lusk will only be available on Modrinth; Modrinth grants developers 75% of the ad revenue and this can REALLY help a ton when making updates!
+# Lusk » [CLICK HERE TO DOWNLOAD](https://modrinth.com/plugin/lusk) «
 
-# [Click Here](https://discord.gg/XmBfsfzudJ) to join the Official Lusk Support Discord Server
+Lusk is a Misc Skript Addon that adds a lot of useful (_and sometimes unpopular_) features to Skript!
 
-In this server, you will receive support for Lusk among other things!
+A full list of features can be found in the documentation (check below!)
 
-# Lusk
+# ❤️ Support Lusk
+## Realistic Node Hosting:
+<h3 align="center" width="100%">
+<b>Get 10% off at <a href="https://realisticnode.com/lusk">RealisticNode</a> by clicking on this banner:</b>
+  <br>
+  <a href="https://realisticnode.com/lusk">
+    <img width="800" height="133" alt="RealisticNode" src="https://github.com/user-attachments/assets/de596927-1593-4654-925e-07902a33c911" />
+  </a>
+</h3>
 
-Lusk is a Misc Skript Addon that adds a lot of useful features to Skript!
+## Modrinth:
+Modrinth gives developers 75% of the net ad revenue, for that reason all official Lusk Jars are hosted there!
 
-# Support
+# Discord & Support
+[Click Here](https://discord.gg/XmBfsfzudJ) to join the Official Lusk Support Discord Server.
 
-For anything, reach out to me on Discord (@JakeGBLP) or open an Issue about it.
+Here you will receive support for Lusk amongst other things!
+
+You can also [contact me on Discord](https://discord.com/users/842074156405358652) directly!
 
 # Documentation
 
